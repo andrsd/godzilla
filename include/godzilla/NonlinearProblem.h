@@ -17,7 +17,6 @@ namespace godzilla {
 class NonlinearProblem : public Problem, public RestartInterface {
 public:
     explicit NonlinearProblem(const Parameters & parameters);
-    ~NonlinearProblem() override;
 
     void create() override;
     void run() override;

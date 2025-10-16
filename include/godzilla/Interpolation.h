@@ -15,8 +15,6 @@ public:
     /// Construct an interpolation object
     Interpolation();
 
-    ~Interpolation();
-
     /// Creates an interpolation object
     void create(MPI_Comm comm);
 

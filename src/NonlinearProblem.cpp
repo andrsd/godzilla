@@ -58,11 +58,6 @@ NonlinearProblem::NonlinearProblem(const Parameters & parameters) :
                   "or 'shell'.");
 }
 
-NonlinearProblem::~NonlinearProblem()
-{
-    CALL_STACK_MSG();
-}
-
 const Matrix &
 NonlinearProblem::get_jacobian() const
 {

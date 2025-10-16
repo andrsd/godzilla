@@ -51,11 +51,6 @@ ImplicitFENonlinearProblem::ImplicitFENonlinearProblem(const Parameters & params
         log_error("The 'scheme' parameter can be either 'beuler' or 'cn'.");
 }
 
-ImplicitFENonlinearProblem::~ImplicitFENonlinearProblem()
-{
-    CALL_STACK_MSG();
-}
-
 Real
 ImplicitFENonlinearProblem::get_time() const
 {

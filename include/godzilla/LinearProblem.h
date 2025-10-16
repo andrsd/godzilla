@@ -17,7 +17,7 @@ namespace godzilla {
 class LinearProblem : public Problem, public RestartInterface {
 public:
     explicit LinearProblem(const Parameters & parameters);
-    ~LinearProblem() override;
+
     void create() override;
     void run() override;
     void write_restart_file(RestartFile & file) const override;

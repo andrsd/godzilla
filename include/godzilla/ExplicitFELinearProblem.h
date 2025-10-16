@@ -13,7 +13,6 @@ class ResidualFunc;
 class ExplicitFELinearProblem : public FENonlinearProblem, public ExplicitProblemInterface {
 public:
     explicit ExplicitFELinearProblem(const Parameters & params);
-    ~ExplicitFELinearProblem() override;
 
     Real get_time() const override;
     Int get_step_num() const override;

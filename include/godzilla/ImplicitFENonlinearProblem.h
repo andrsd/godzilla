@@ -11,7 +11,6 @@ namespace godzilla {
 class ImplicitFENonlinearProblem : public FENonlinearProblem, public TransientProblemInterface {
 public:
     explicit ImplicitFENonlinearProblem(const Parameters & params);
-    ~ImplicitFENonlinearProblem() override;
 
     void create() override;
     void solve();
