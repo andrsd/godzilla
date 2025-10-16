@@ -54,7 +54,7 @@ private:
     /// Problem
     const Problem * problem;
     /// Function expressions
-    const std::vector<std::string> & expression;
+    const std::vector<std::string> expression;
     /// Time derivatives of `expression`
     const std::vector<std::string> expression_t;
     /// Number of parsed function expressions

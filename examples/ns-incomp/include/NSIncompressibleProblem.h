@@ -26,7 +26,7 @@ protected:
     FieldID pressure_id;
     FieldID ffn_aid;
     /// Reynolds number
-    const Real & Re;
+    const Real Re;
     PCFieldSplit fsplit;
 
 public:

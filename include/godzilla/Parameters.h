@@ -15,11 +15,6 @@ namespace godzilla {
 /// Class for user-defined parameters
 ///
 class Parameters {
-public:
-    Parameters() = default;
-    Parameters(const Parameters & p);
-    virtual ~Parameters();
-
 protected:
     /// Base class for parameter values
     class Value {
@@ -49,7 +44,7 @@ protected:
     class Parameter : public Value {
     public:
         /// @returns A read-only reference to the parameter value.
-        const T &
+        T
         get() const
         {
             return this->value;
@@ -85,6 +80,21 @@ protected:
     };
 
 public:
+    Parameters() = default;
+    virtual ~Parameters();
+
+    /// Copy operator
+    Parameters(const Parameters & other);
+
+    /// Move operator
+    Parameters(Parameters && other) noexcept;
+
+    /// Assignment operator
+    Parameters & operator=(const Parameters & other);
+
+    /// Move assignment
+    Parameters & operator=(Parameters && other) noexcept;
+
     /// Check if parameter exist
     template <typename T>
     bool
@@ -101,11 +111,22 @@ public:
 
     /// Get parameter value
     template <typename T>
-    inline const T &
+    inline T
     get(const std::string & name) const
     {
         if (!this->has<T>(name))
             throw Exception("No parameter '{}' found.", name);
+
+        auto it = this->params.find(name);
+        return dynamic_cast<Parameter<T> *>(it->second)->get();
+    }
+
+    template <typename T>
+    inline T
+    get(const std::string & name, T default_value) const
+    {
+        if (!this->has<T>(name))
+            return default_value;
 
         auto it = this->params.find(name);
         return dynamic_cast<Parameter<T> *>(it->second)->get();
@@ -128,7 +149,20 @@ public:
     /// object that will be extracted from the input file.  If the parameter is
     /// missing in the input file, and error will be thrown
     template <typename T>
-    Parameters & add_required_param(const std::string & name, const std::string & doc_string);
+    Parameters &
+    add_required_param(const std::string & name, const std::string & doc_string)
+    {
+        if (!this->has<T>(name)) {
+            auto * param = new Parameter<T>;
+            param->required = true;
+            param->is_private = false;
+            param->doc_string = doc_string;
+            param->set_by_add_param = false;
+            param->valid = false;
+            this->params[name] = param;
+        }
+        return *this;
+    }
 
     ///@{
     /// These methods add an option parameter and a documentation string to the Parameters
@@ -137,9 +171,36 @@ public:
     /// uninitialized but can be checked with "is_param_valid" before use.
     template <typename T, typename S>
     Parameters &
-    add_param(const std::string & name, const S & value, const std::string & doc_string);
+    add_param(const std::string & name, const S & value, const std::string & doc_string)
+    {
+        if (!this->has<T>(name)) {
+            auto * param = new Parameter<T>;
+            param->required = false;
+            param->value = value;
+            param->is_private = false;
+            param->doc_string = doc_string;
+            param->set_by_add_param = true;
+            param->valid = true;
+            this->params[name] = param;
+        }
+        return *this;
+    }
+
     template <typename T>
-    Parameters & add_param(const std::string & name, const std::string & doc_string);
+    Parameters &
+    add_param(const std::string & name, const std::string & doc_string)
+    {
+        if (!this->has<T>(name)) {
+            auto * param = new Parameter<T>;
+            param->required = false;
+            param->is_private = false;
+            param->doc_string = doc_string;
+            param->set_by_add_param = false;
+            param->valid = false;
+            this->params[name] = param;
+        }
+        return *this;
+    }
     ///@}
 
     ///@{
@@ -148,48 +209,35 @@ public:
     /// page dump so does not take a documentation string.  The first version of this function takes
     /// an optional default value.
     template <typename T>
-    Parameters & add_private_param(const std::string & name, const T & value);
+    Parameters &
+    add_private_param(const std::string & name, const T & value)
+    {
+        auto * param = new Parameter<T>;
+        param->value = value;
+        param->required = false;
+        param->is_private = true;
+        param->set_by_add_param = true;
+        param->valid = true;
+        this->params[name] = param;
+        return *this;
+    }
     ///@}
 
     /// Returns a boolean indicating whether the specified parameter is required or not
-    bool
-    is_param_required(const std::string & name) const
-    {
-        return this->params.count(name) > 0 && this->params.at(name)->required;
-    }
+    bool is_param_required(const std::string & name) const;
 
     /// This method returns parameters that have been initialized in one fashion or another,
     /// i.e. The value was supplied as a default argument or read and properly converted from
     /// the input file
-    bool
-    is_param_valid(const std::string & name) const
-    {
-        return this->params.count(name) > 0 && this->params.at(name)->valid;
-    }
+    bool is_param_valid(const std::string & name) const;
 
-    bool
-    is_private(const std::string & name) const
-    {
-        return this->params.count(name) > 0 && this->params.at(name)->is_private;
-    }
+    bool is_private(const std::string & name) const;
 
     ///
-    std::string
-    type(const std::string & name) const
-    {
-        return this->params.at(name)->type();
-    }
+    std::string type(const std::string & name) const;
 
     ///
-    std::string
-    get_doc_string(const std::string & name) const
-    {
-        auto it = this->params.find(name);
-        if (it != this->params.end())
-            return it->second->doc_string;
-        else
-            return {};
-    }
+    std::string get_doc_string(const std::string & name) const;
 
     /// Parameter map iterator.
     using iterator = std::map<std::string, Parameters::Value *>::iterator;
@@ -198,124 +246,26 @@ public:
     using const_iterator = std::map<std::string, Parameters::Value *>::const_iterator;
 
     /// Iterator pointing to the beginning of the set of parameters.
-    Parameters::iterator
-    begin()
-    {
-        return this->params.begin();
-    }
+    Parameters::iterator begin();
 
     /// Iterator pointing to the beginning of the set of parameters.
-    Parameters::const_iterator
-    begin() const
-    {
-        return this->params.begin();
-    }
+    Parameters::const_iterator begin() const;
 
     /// Iterator pointing to the end of the set of parameters
-    Parameters::iterator
-    end()
-    {
-        return this->params.end();
-    }
+    Parameters::iterator end();
 
     /// Iterator pointing to the end of the set of parameters
-    Parameters::const_iterator
-    end() const
-    {
-        return this->params.end();
-    }
+    Parameters::const_iterator end() const;
 
-    /// Assignment operator
-    Parameters & operator=(const Parameters & rhs);
+    /// Add `other` Parameters into this Parameters object
+    Parameters & operator+=(const Parameters & other);
 
-    /// Add `rhs` Parameters into this Parameters object
-    Parameters &
-    operator+=(const Parameters & rhs)
-    {
-        for (const auto & [name, value] : rhs) {
-            auto jt = this->params.find(name);
-            if (jt != this->params.end())
-                delete jt->second;
-            this->params[name] = value->copy();
-        }
-        return *this;
-    }
-
-    void
-    clear()
-    {
-        for (auto & [_, value] : this->params)
-            delete value;
-        this->params.clear();
-    }
+    void clear();
 
 private:
     /// The actual parameter data. Each Metadata object contains attributes for the corresponding
     /// parameter.
     std::map<std::string, Value *> params;
 };
-
-template <typename T>
-Parameters &
-Parameters::add_required_param(const std::string & name, const std::string & doc_string)
-{
-    if (!this->has<T>(name)) {
-        auto * param = new Parameter<T>;
-        param->required = true;
-        param->is_private = false;
-        param->doc_string = doc_string;
-        param->set_by_add_param = false;
-        param->valid = false;
-        this->params[name] = param;
-    }
-    return *this;
-}
-
-template <typename T>
-Parameters &
-Parameters::add_param(const std::string & name, const std::string & doc_string)
-{
-    if (!this->has<T>(name)) {
-        auto * param = new Parameter<T>;
-        param->required = false;
-        param->is_private = false;
-        param->doc_string = doc_string;
-        param->set_by_add_param = false;
-        param->valid = false;
-        this->params[name] = param;
-    }
-    return *this;
-}
-
-template <typename T, typename S>
-Parameters &
-Parameters::add_param(const std::string & name, const S & value, const std::string & doc_string)
-{
-    if (!this->has<T>(name)) {
-        auto * param = new Parameter<T>;
-        param->required = false;
-        param->value = value;
-        param->is_private = false;
-        param->doc_string = doc_string;
-        param->set_by_add_param = true;
-        param->valid = true;
-        this->params[name] = param;
-    }
-    return *this;
-}
-
-template <typename T>
-Parameters &
-Parameters::add_private_param(const std::string & name, const T & value)
-{
-    auto * param = new Parameter<T>;
-    param->value = value;
-    param->required = false;
-    param->is_private = true;
-    param->set_by_add_param = true;
-    param->valid = true;
-    this->params[name] = param;
-    return *this;
-}
 
 } // namespace godzilla

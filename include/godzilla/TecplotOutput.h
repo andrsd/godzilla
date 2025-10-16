@@ -50,7 +50,7 @@ private:
     Int n_zones;
 #endif
     /// Variable names to be stored
-    const std::vector<std::string> & variable_names;
+    const std::vector<std::string> variable_names;
     /// List of field variable names to output
     std::vector<std::string> field_var_names;
     /// List of nodal variable field IDs

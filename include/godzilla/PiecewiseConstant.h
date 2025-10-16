@@ -30,9 +30,9 @@ protected:
 private:
     enum Continuity { LEFT, RIGHT } continuity;
     /// Independent values
-    const std::vector<Real> & x;
+    const std::vector<Real> x;
     /// Dependent values
-    const std::vector<Real> & y;
+    const std::vector<Real> y;
 
 public:
     static Parameters parameters();

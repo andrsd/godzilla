@@ -22,9 +22,9 @@ private:
     /// Discrete problem this object is part of
     DiscreteProblemInterface * dpi;
     /// Axis vector
-    const std::vector<Real> & axis;
+    const std::vector<Real> axis;
     /// Axis point
-    const std::vector<Real> & pt;
+    const std::vector<Real> pt;
 
 public:
     static Parameters parameters();

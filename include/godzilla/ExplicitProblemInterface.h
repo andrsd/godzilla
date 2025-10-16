@@ -63,7 +63,7 @@ private:
     /// Inverse of the lumped mass matrix
     Vector M_lumped_inv;
     /// Time stepping scheme
-    const std::string & scheme;
+    std::string scheme;
 
 public:
     static Parameters parameters();

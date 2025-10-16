@@ -24,7 +24,7 @@ TEST(ParametersTest, has_value)
 {
     Parameters params;
     params.add_param<Real>("param", 12.34, "doco");
-    EXPECT_EQ(params.has<Real>("param"), true);
+    EXPECT_TRUE(params.has<Real>("param"));
     params.clear();
     EXPECT_EQ(params.has<Real>("param"), false);
 }
@@ -35,7 +35,7 @@ TEST(ParametersTest, assign)
     params1.add_param<Real>("param", 12.34, "doco");
 
     Parameters params2 = params1;
-    EXPECT_EQ(params2.has<Real>("param"), true);
+    EXPECT_TRUE(params2.has<Real>("param"));
     EXPECT_EQ(params2.get<Real>("param"), 12.34);
     EXPECT_EQ(params2.get_doc_string("param"), std::string("doco"));
 }
@@ -84,4 +84,31 @@ TEST(ParametersTest, set_non_existing_param)
     params.set<double>("d", 1.23);
 
     EXPECT_EQ(params.get<double>("d"), 1.23);
+}
+
+TEST(ParametersTest, get_non_existing_param_with_default)
+{
+    auto params = Object::parameters();
+    auto val = params.get<double>("d", 1.23);
+
+    EXPECT_EQ(val, 1.23);
+}
+
+TEST(ParametersTest, chained_set)
+{
+    Parameters params;
+    params.set<Int>("num", 1234)
+        .set<double>("float", 12.34)
+        .set<std::string>("text", "some long text");
+}
+
+TEST(ParametersTest, move_oper)
+{
+    Parameters params1;
+    params1.set<Int>("i", 1);
+
+    Parameters params2 = std::move(params1);
+    EXPECT_TRUE(params2.has<Int>("i"));
+
+    EXPECT_FALSE(params1.has<Int>("i"));
 }

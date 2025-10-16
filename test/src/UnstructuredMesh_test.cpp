@@ -114,9 +114,9 @@ public:
         return m;
     }
 
-    const Int & nx;
-    const Int & ny;
-    const Int & nz;
+    Int nx;
+    Int ny;
+    Int nz;
 };
 
 } // namespace

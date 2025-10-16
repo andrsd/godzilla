@@ -197,11 +197,10 @@ TransientProblemInterface::parameters()
 TransientProblemInterface::TransientProblemInterface(Problem * problem, const Parameters & params) :
     ts(nullptr),
     problem(problem),
-    tpi_params(params),
     ts_adaptor(nullptr),
     start_time(params.get<Real>("start_time")),
-    end_time(params.get<Real>("end_time")),
-    num_steps(params.get<Int>("num_steps")),
+    // end_time(params.get<Real>("end_time")),
+    // num_steps(params.get<Int>("num_steps")),
     dt_initial(params.get<Real>("dt")),
     step_num(0)
 {
@@ -210,12 +209,16 @@ TransientProblemInterface::TransientProblemInterface(Problem * problem, const Pa
     PETSC_CHECK(TSSetApplicationContext(this->ts, this));
     this->time_step_adapt = TimeStepAdapt::from_ts(this->ts);
 
-    if (this->tpi_params.is_param_valid("end_time") && this->tpi_params.is_param_valid("num_steps"))
+    if (params.is_param_valid("end_time") && params.is_param_valid("num_steps"))
         this->problem->log_error(
             "Cannot provide 'end_time' and 'num_steps' together. Specify one or the other.");
-    if (!this->tpi_params.is_param_valid("end_time") &&
-        !this->tpi_params.is_param_valid("num_steps"))
+    if (!params.is_param_valid("end_time") && !params.is_param_valid("num_steps"))
         this->problem->log_error("You must provide either 'end_time' or 'num_steps' parameter.");
+
+    if (params.is_param_valid("end_time"))
+        this->end_time = params.get<Real>("end_time");
+    if (params.is_param_valid("num_steps"))
+        this->end_time = params.get<Int>("num_steps");
 }
 
 TransientProblemInterface::~TransientProblemInterface()
@@ -340,11 +343,11 @@ TransientProblemInterface::create()
 {
     CALL_STACK_MSG();
     set_up_time_scheme();
-    PETSC_CHECK(TSSetTime(this->ts, this->start_time));
-    if (this->tpi_params.is_param_valid("end_time"))
-        set_max_time(this->end_time);
-    if (this->tpi_params.is_param_valid("num_steps"))
-        PETSC_CHECK(TSSetMaxSteps(this->ts, this->num_steps));
+    set_time(this->start_time);
+    if (this->end_time.has_value())
+        set_max_time(this->end_time.value());
+    if (this->num_steps.has_value())
+        PETSC_CHECK(TSSetMaxSteps(this->ts, this->num_steps.value()));
     set_time_step(this->dt_initial);
     PETSC_CHECK(TSSetStepNumber(this->ts, this->step_num));
     PETSC_CHECK(TSSetExactFinalTime(this->ts, TS_EXACTFINALTIME_MATCHSTEP));

@@ -30,17 +30,17 @@ protected:
 
 private:
     /// Minimum in the x direction
-    const Real & xmin;
+    Real xmin;
     /// Maximum in the x direction
-    const Real & xmax;
+    Real xmax;
     /// Minimum in the y direction
-    const Real & ymin;
+    Real ymin;
     /// Maximum in the y direction
-    const Real & ymax;
+    Real ymax;
     /// Number of mesh point in the x direction
-    const Int & nx;
+    Int nx;
     /// Number of mesh point in the y direction
-    const Int & ny;
+    Int ny;
     /// True for simplices, False for tensor cells
     PetscBool simplex;
     /// create intermediate mesh pieces (edges, faces)

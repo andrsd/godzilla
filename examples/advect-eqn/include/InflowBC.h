@@ -16,7 +16,7 @@ public:
 
 protected:
     /// Inlet velocity
-    const Real & inlet_vel;
+    const Real inlet_vel;
     std::vector<Int> components;
 
 public:

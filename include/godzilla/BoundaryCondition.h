@@ -47,7 +47,7 @@ private:
     DiscreteProblemInterface * dpi;
 
     /// List of boundary names
-    const std::vector<std::string> & boundary;
+    const std::vector<std::string> boundary;
 
 public:
     /// Method for building Parameters for this class

@@ -19,7 +19,7 @@ protected:
     void set_up_weak_form() override;
 
     FieldID u_id;
-    const Real & viscosity;
+    const Real viscosity;
 
 public:
     static Parameters parameters();

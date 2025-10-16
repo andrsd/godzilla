@@ -71,7 +71,7 @@ private:
     bool cont;
     bool discont;
     /// Variable names to be stored
-    const std::vector<std::string> & variable_names;
+    std::vector<std::string> variable_names;
     /// DG problem interface
     DGProblemInterface * dgpi;
     /// Unstructured mesh

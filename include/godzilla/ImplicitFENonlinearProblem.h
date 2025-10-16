@@ -74,7 +74,7 @@ private:
     void compute_boundary_fem(Real time, Vector & x, Vector & x_t);
 
     /// Time stepping scheme
-    const std::string & scheme;
+    const std::string scheme;
     /// Method for essential boundary data for a local implicit function evaluation.
     Delegate<void(Real time, Vector & x, Vector & x_t)> compute_boundary_local_method;
 

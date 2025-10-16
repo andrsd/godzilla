@@ -30,9 +30,9 @@ public:
 
 private:
     /// Text representation of the function to evaluate (one per component)
-    const std::vector<std::string> & function;
+    const std::vector<std::string> function;
     /// User defined constants
-    const std::map<std::string, Real> & constants;
+    const std::map<std::string, Real> constants;
     /// Function evaluator
     FunctionEvaluator evalr;
 
