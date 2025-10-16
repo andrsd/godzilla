@@ -59,7 +59,7 @@ public:
 
 private:
     /// Parameters of this object
-    const Parameters & pars;
+    const Parameters pars;
 
     /// The application owning this object
     App * app;
