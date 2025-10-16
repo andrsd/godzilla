@@ -57,6 +57,12 @@ install(
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
 )
 
+install(
+    FILES
+        "${CMAKE_SOURCE_DIR}/cmake/FindPETSc.cmake"
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/godzilla
+)
+
 # Tests
 
 if (GODZILLA_BUILD_TESTS)
