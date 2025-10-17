@@ -15,13 +15,13 @@ using ObjectPtr = Object *;
 
 using ParamsPtr = Parameters (*)();
 
-using BuildPtr = ObjectPtr (*)(const Parameters & parameters);
+using BuildPtr = ObjectPtr (*)(const Parameters & pars);
 
 template <typename T>
 ObjectPtr
-build_obj(const Parameters & parameters)
+build_obj(const Parameters & pars)
 {
-    return new T(parameters);
+    return new T(pars);
 }
 
 template <typename T>

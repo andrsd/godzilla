@@ -11,7 +11,7 @@ namespace godzilla {
 /// Constant function
 class ConstantFunction : public Function {
 public:
-    explicit ConstantFunction(const Parameters & params);
+    explicit ConstantFunction(const Parameters & pars);
 
     void create() override;
 

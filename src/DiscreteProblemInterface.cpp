@@ -62,11 +62,11 @@ DiscreteProblemInterface::invoke_natural_riemann_bc_delegate(Real time,
     return 0;
 }
 
-DiscreteProblemInterface::DiscreteProblemInterface(Problem * problem, const Parameters & params) :
+DiscreteProblemInterface::DiscreteProblemInterface(Problem * problem, const Parameters & pars) :
     problem(problem),
-    mesh_obj(params.get<MeshObject *>("_mesh_obj")),
+    mesh_obj(pars.get<MeshObject *>("_mesh_obj")),
     unstr_mesh(nullptr),
-    logger(params.get<App *>("_app")->get_logger()),
+    logger(pars.get<App *>("_app")->get_logger()),
     ds(nullptr),
     dm_aux(nullptr),
     ds_aux(nullptr)

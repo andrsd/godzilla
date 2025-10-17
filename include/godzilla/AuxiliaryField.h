@@ -19,7 +19,7 @@ class DiscreteProblemInterface;
 ///
 class AuxiliaryField : public Object, public PrintInterface {
 public:
-    explicit AuxiliaryField(const Parameters & params);
+    explicit AuxiliaryField(const Parameters & pars);
 
     void create() override;
 

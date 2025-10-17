@@ -15,13 +15,14 @@ Parameters
 NaturalBC::parameters()
 {
     auto params = BoundaryCondition::parameters();
-    params.add_param<std::string>("field", "", "Field name");
+    params.add_param<std::string>("field", "Field name");
     return params;
 }
 
-NaturalBC::NaturalBC(const Parameters & params) :
-    BoundaryCondition(params),
+NaturalBC::NaturalBC(const Parameters & pars) :
+    BoundaryCondition(pars),
     fid(FieldID::INVALID),
+    field_name(pars.get<Optional<std::string>>("field")),
     fepi(dynamic_cast<FEProblemInterface *>(get_discrete_problem_interface()))
 {
     CALL_STACK_MSG();
@@ -34,17 +35,16 @@ NaturalBC::create()
     auto dpi = get_discrete_problem_interface();
     assert_true(dpi != nullptr, "DiscreteProblemInterface is null");
 
-    std::vector<std::string> field_names = dpi->get_field_names();
+    auto field_names = dpi->get_field_names();
     if (field_names.size() == 1) {
         this->fid = dpi->get_field_id(field_names[0]);
     }
     else if (field_names.size() > 1) {
-        const auto & field_name = get_param<std::string>("field");
-        if (!field_name.empty()) {
-            if (dpi->has_field_by_name(field_name))
-                this->fid = dpi->get_field_id(field_name);
+        if (this->field_name.has_value()) {
+            if (dpi->has_field_by_name(this->field_name.value()))
+                this->fid = dpi->get_field_id(this->field_name.value());
             else
-                log_error("Field '{}' does not exists. Typo?", field_name);
+                log_error("Field '{}' does not exists. Typo?", field_name.value());
         }
         else
             log_error("Use the 'field' parameter to assign this boundary condition to an existing "

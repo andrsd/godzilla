@@ -15,10 +15,7 @@ namespace {
 
 class TestExplicitFELinearProblem : public ExplicitFELinearProblem {
 public:
-    explicit TestExplicitFELinearProblem(const Parameters & params) :
-        ExplicitFELinearProblem(params)
-    {
-    }
+    explicit TestExplicitFELinearProblem(const Parameters & pars) : ExplicitFELinearProblem(pars) {}
 
     void
     create() override

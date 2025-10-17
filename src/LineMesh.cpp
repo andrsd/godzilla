@@ -20,11 +20,11 @@ LineMesh::parameters()
     return params;
 }
 
-LineMesh::LineMesh(const Parameters & parameters) :
-    MeshObject(parameters),
-    xmin(get_param<Real>("xmin")),
-    xmax(get_param<Real>("xmax")),
-    nx(get_param<Int>("nx")),
+LineMesh::LineMesh(const Parameters & pars) :
+    MeshObject(pars),
+    xmin(pars.get<Real>("xmin")),
+    xmax(pars.get<Real>("xmax")),
+    nx(pars.get<Int>("nx")),
     interpolate(PETSC_TRUE)
 {
     CALL_STACK_MSG();

@@ -20,7 +20,7 @@ public:
 
 class MockInitialCondition : public InitialCondition {
 public:
-    explicit MockInitialCondition(const Parameters & params) : InitialCondition(params) {}
+    explicit MockInitialCondition(const Parameters & pars) : InitialCondition(pars) {}
 
     Int
     get_num_components() const override
@@ -32,7 +32,7 @@ public:
 
 class TestInitialCondition : public InitialCondition {
 public:
-    explicit TestInitialCondition(const Parameters & params) : InitialCondition(params) {}
+    explicit TestInitialCondition(const Parameters & pars) : InitialCondition(pars) {}
 
     Int
     get_num_components() const override
@@ -49,7 +49,7 @@ public:
 
 class TestVectorInitialCondition : public InitialCondition {
 public:
-    explicit TestVectorInitialCondition(const Parameters & params) : InitialCondition(params) {}
+    explicit TestVectorInitialCondition(const Parameters & pars) : InitialCondition(pars) {}
 
     Int
     get_num_components() const override
@@ -162,8 +162,6 @@ TEST_F(InitialConditionTest, duplicate_ic_name)
 
 TEST_F(InitialCondition2FieldTest, no_field_param)
 {
-    testing::internal::CaptureStderr();
-
     auto params = InitialCondition::parameters();
     params.set<App *>("_app", this->app);
     params.set<DiscreteProblemInterface *>("_dpi", this->prob);
@@ -173,15 +171,7 @@ TEST_F(InitialCondition2FieldTest, no_field_param)
     this->mesh->create();
 
     this->prob->add_initial_condition(&ic);
-    this->prob->create();
-
-    EXPECT_FALSE(this->app->check_integrity());
-    this->app->get_logger()->print();
-
-    EXPECT_THAT(
-        testing::internal::GetCapturedStderr(),
-        testing::HasSubstr(
-            "Use the 'field' parameter to assign this initial condition to an existing field"));
+    EXPECT_THROW(this->prob->create(), Exception);
 }
 
 TEST_F(InitialCondition2FieldTest, non_existing_field)

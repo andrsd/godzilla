@@ -17,7 +17,7 @@ class DiscreteProblemInterface;
 ///
 class BoundaryCondition : public Object, public PrintInterface {
 public:
-    explicit BoundaryCondition(const Parameters & params);
+    explicit BoundaryCondition(const Parameters & pars);
 
     /// Get problem spatial dimension
     ///

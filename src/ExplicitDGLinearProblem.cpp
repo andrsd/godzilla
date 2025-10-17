@@ -15,10 +15,10 @@ ExplicitDGLinearProblem::parameters()
     return params;
 }
 
-ExplicitDGLinearProblem::ExplicitDGLinearProblem(const Parameters & params) :
-    NonlinearProblem(params),
-    DGProblemInterface(this, params),
-    ExplicitProblemInterface(this, params)
+ExplicitDGLinearProblem::ExplicitDGLinearProblem(const Parameters & pars) :
+    NonlinearProblem(pars),
+    DGProblemInterface(this, pars),
+    ExplicitProblemInterface(this, pars)
 {
     CALL_STACK_MSG();
     set_default_output_on(EXECUTE_ON_INITIAL | EXECUTE_ON_TIMESTEP);

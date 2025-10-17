@@ -47,8 +47,9 @@ TEST(EssentialBCTest, api)
     app.set_problem(&problem);
 
     auto params = TestEssentialBC::parameters();
-    params.set<App *>("_app", &app);
-    params.set<DiscreteProblemInterface *>("_dpi", &problem);
+    params.set<App *>("_app", &app)
+        .set<DiscreteProblemInterface *>("_dpi", &problem)
+        .set<std::vector<std::string>>("boundary", {});
     TestEssentialBC bc(params);
 
     mesh.create();
@@ -79,9 +80,10 @@ TEST(EssentialBCTest, non_existing_field)
     app.set_problem(&problem);
 
     Parameters params = TestEssentialBC::parameters();
-    params.set<App *>("_app", &app);
-    params.set<DiscreteProblemInterface *>("_dpi", &problem);
-    params.set<std::string>("field", "asdf");
+    params.set<App *>("_app", &app)
+        .set<DiscreteProblemInterface *>("_dpi", &problem)
+        .set<std::string>("field", "asdf")
+        .set<std::vector<std::string>>("boundary", {});
     TestEssentialBC bc(params);
 
     mesh.create();
@@ -113,8 +115,9 @@ TEST(EssentialBCTest, field_param_not_specified)
     app.set_problem(&problem);
 
     auto params = TestEssentialBC::parameters();
-    params.set<App *>("_app", &app);
-    params.set<DiscreteProblemInterface *>("_dpi", &problem);
+    params.set<App *>("_app", &app)
+        .set<DiscreteProblemInterface *>("_dpi", &problem)
+        .set<std::vector<std::string>>("boundary", {});
     TestEssentialBC bc(params);
 
     mesh.create();

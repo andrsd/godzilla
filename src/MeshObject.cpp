@@ -17,7 +17,7 @@ MeshObject::parameters()
     return params;
 }
 
-MeshObject::MeshObject(const Parameters & parameters) : Object(parameters), PrintInterface(this) {}
+MeshObject::MeshObject(const Parameters & pars) : Object(pars), PrintInterface(this) {}
 
 void
 MeshObject::create()

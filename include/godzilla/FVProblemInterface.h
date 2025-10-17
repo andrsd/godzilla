@@ -18,7 +18,7 @@ public:
     using ComputeFluxDelegate =
         Delegate<void(const Real[], const Real[], const Scalar[], const Scalar[], Scalar[])>;
 
-    FVProblemInterface(Problem * problem, const Parameters & params);
+    FVProblemInterface(Problem * problem, const Parameters & pars);
     ~FVProblemInterface() override;
 
     Int get_num_fields() const override;

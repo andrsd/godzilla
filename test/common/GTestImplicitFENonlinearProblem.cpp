@@ -86,8 +86,8 @@ protected:
 
 } // namespace
 
-GTestImplicitFENonlinearProblem::GTestImplicitFENonlinearProblem(const Parameters & params) :
-    ImplicitFENonlinearProblem(params),
+GTestImplicitFENonlinearProblem::GTestImplicitFENonlinearProblem(const Parameters & pars) :
+    ImplicitFENonlinearProblem(pars),
     iu(0)
 {
 }

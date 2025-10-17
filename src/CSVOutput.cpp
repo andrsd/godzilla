@@ -18,9 +18,7 @@ CSVOutput::parameters()
     return params;
 }
 
-CSVOutput::CSVOutput(const Parameters & params) : FileOutput(params), f(nullptr), has_header(false)
-{
-}
+CSVOutput::CSVOutput(const Parameters & pars) : FileOutput(pars), f(nullptr), has_header(false) {}
 
 CSVOutput::~CSVOutput()
 {

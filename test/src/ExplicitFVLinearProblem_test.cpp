@@ -15,9 +15,9 @@ namespace {
 
 class TestBC : public NaturalRiemannBC {
 public:
-    explicit TestBC(const Parameters & params) :
-        NaturalRiemannBC(params),
-        inlet(get_param<bool>("inlet")),
+    explicit TestBC(const Parameters & pars) :
+        NaturalRiemannBC(pars),
+        inlet(pars.get<bool>("inlet")),
         components({ 0 })
     {
     }
@@ -57,10 +57,7 @@ class TestExplicitFVLinearProblem;
 
 class TestExplicitFVLinearProblem : public ExplicitFVLinearProblem {
 public:
-    explicit TestExplicitFVLinearProblem(const Parameters & params) :
-        ExplicitFVLinearProblem(params)
-    {
-    }
+    explicit TestExplicitFVLinearProblem(const Parameters & pars) : ExplicitFVLinearProblem(pars) {}
 
     void
     create() override

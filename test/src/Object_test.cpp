@@ -17,10 +17,6 @@ TEST(ObjectTest, api)
 
     EXPECT_EQ(obj->get_name(), "name");
 
-    [[maybe_unused]] const auto & p = obj->get_parameters();
-
-    EXPECT_TRUE(obj->is_param_valid("_name"));
-
     EXPECT_EQ(obj->get_processor_id(), 0);
 
     int sz;

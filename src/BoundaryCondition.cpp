@@ -18,11 +18,11 @@ BoundaryCondition::parameters()
     return params;
 }
 
-BoundaryCondition::BoundaryCondition(const Parameters & params) :
-    Object(params),
+BoundaryCondition::BoundaryCondition(const Parameters & pars) :
+    Object(pars),
     PrintInterface(this),
-    dpi(get_param<DiscreteProblemInterface *>("_dpi")),
-    boundary(get_param<std::vector<std::string>>("boundary"))
+    dpi(pars.get<DiscreteProblemInterface *>("_dpi")),
+    boundary(pars.get<std::vector<std::string>>("boundary"))
 {
     CALL_STACK_MSG();
 }

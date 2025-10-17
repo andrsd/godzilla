@@ -17,10 +17,7 @@ L2Diff::parameters()
     return params;
 }
 
-L2Diff::L2Diff(const Parameters & params) :
-    Postprocessor(params),
-    FunctionInterface(params),
-    l2_diff(0.)
+L2Diff::L2Diff(const Parameters & pars) : Postprocessor(pars), FunctionInterface(pars), l2_diff(0.)
 {
 }
 

@@ -15,9 +15,9 @@ ConstantInitialCondition::parameters()
     return params;
 }
 
-ConstantInitialCondition::ConstantInitialCondition(const Parameters & params) :
-    InitialCondition(params),
-    values(get_param<std::vector<Real>>("value"))
+ConstantInitialCondition::ConstantInitialCondition(const Parameters & pars) :
+    InitialCondition(pars),
+    values(pars.get<std::vector<Real>>("value"))
 {
     CALL_STACK_MSG();
 }

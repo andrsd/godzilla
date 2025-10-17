@@ -26,18 +26,18 @@ BoxMesh::parameters()
     return params;
 }
 
-BoxMesh::BoxMesh(const Parameters & parameters) :
-    MeshObject(parameters),
-    xmin(get_param<Real>("xmin")),
-    xmax(get_param<Real>("xmax")),
-    ymin(get_param<Real>("ymin")),
-    ymax(get_param<Real>("ymax")),
-    zmin(get_param<Real>("zmin")),
-    zmax(get_param<Real>("zmax")),
-    nx(get_param<Int>("nx")),
-    ny(get_param<Int>("ny")),
-    nz(get_param<Int>("nz")),
-    simplex(get_param<bool>("simplex") ? PETSC_TRUE : PETSC_FALSE),
+BoxMesh::BoxMesh(const Parameters & pars) :
+    MeshObject(pars),
+    xmin(pars.get<Real>("xmin")),
+    xmax(pars.get<Real>("xmax")),
+    ymin(pars.get<Real>("ymin")),
+    ymax(pars.get<Real>("ymax")),
+    zmin(pars.get<Real>("zmin")),
+    zmax(pars.get<Real>("zmax")),
+    nx(pars.get<Int>("nx")),
+    ny(pars.get<Int>("ny")),
+    nz(pars.get<Int>("nz")),
+    simplex(pars.get<bool>("simplex") ? PETSC_TRUE : PETSC_FALSE),
     interpolate(PETSC_TRUE)
 {
     CALL_STACK_MSG();

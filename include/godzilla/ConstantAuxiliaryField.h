@@ -12,7 +12,7 @@ namespace godzilla {
 ///
 class ConstantAuxiliaryField : public AuxiliaryField {
 public:
-    explicit ConstantAuxiliaryField(const Parameters & params);
+    explicit ConstantAuxiliaryField(const Parameters & pars);
 
     Int get_num_components() const override;
     void evaluate(Real time, const Real x[], Scalar u[]) override;

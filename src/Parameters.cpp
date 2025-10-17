@@ -12,18 +12,21 @@ Parameters::~Parameters()
 
 Parameters::Parameters(const Parameters & other)
 {
+    CALL_STACK_MSG();
     for (const auto & [key, val] : other.params)
         params[key] = val->copy();
 }
 
 Parameters::Parameters(Parameters && other) noexcept : params(std::move(other.params))
 {
+    CALL_STACK_MSG();
     other.params.clear();
 }
 
 Parameters &
 Parameters::operator=(const Parameters & other)
 {
+    CALL_STACK_MSG();
     if (this != &other) {
         clear();
         for (const auto & [key, val] : other.params)
@@ -35,6 +38,7 @@ Parameters::operator=(const Parameters & other)
 Parameters &
 Parameters::operator=(Parameters && other) noexcept
 {
+    CALL_STACK_MSG();
     if (this != &other) {
         clear();
         params = std::move(other.params);
@@ -46,6 +50,7 @@ Parameters::operator=(Parameters && other) noexcept
 Parameters &
 Parameters::operator+=(const Parameters & rhs)
 {
+    CALL_STACK_MSG();
     for (const auto & [name, value] : rhs) {
         auto jt = this->params.find(name);
         if (jt != this->params.end())
@@ -58,30 +63,35 @@ Parameters::operator+=(const Parameters & rhs)
 bool
 Parameters::is_param_required(const std::string & name) const
 {
+    CALL_STACK_MSG();
     return this->params.count(name) > 0 && this->params.at(name)->required;
 }
 
 bool
 Parameters::is_param_valid(const std::string & name) const
 {
+    CALL_STACK_MSG();
     return this->params.count(name) > 0 && this->params.at(name)->valid;
 }
 
 bool
 Parameters::is_private(const std::string & name) const
 {
+    CALL_STACK_MSG();
     return this->params.count(name) > 0 && this->params.at(name)->is_private;
 }
 
 std::string
 Parameters::type(const std::string & name) const
 {
+    CALL_STACK_MSG();
     return this->params.at(name)->type();
 }
 
 std::string
 Parameters::get_doc_string(const std::string & name) const
 {
+    CALL_STACK_MSG();
     auto it = this->params.find(name);
     if (it != this->params.end())
         return it->second->doc_string;
@@ -92,30 +102,35 @@ Parameters::get_doc_string(const std::string & name) const
 Parameters::iterator
 Parameters::begin()
 {
+    CALL_STACK_MSG();
     return this->params.begin();
 }
 
 Parameters::const_iterator
 Parameters::begin() const
 {
+    CALL_STACK_MSG();
     return this->params.begin();
 }
 
 Parameters::iterator
 Parameters ::end()
 {
+    CALL_STACK_MSG();
     return this->params.end();
 }
 
 Parameters::const_iterator
 Parameters::end() const
 {
+    CALL_STACK_MSG();
     return this->params.end();
 }
 
 void
 Parameters::clear()
 {
+    CALL_STACK_MSG();
     for (auto & [_, value] : this->params)
         delete value;
     this->params.clear();

@@ -15,7 +15,7 @@ class Problem;
 ///
 class Postprocessor : public Object, public PrintInterface {
 public:
-    explicit Postprocessor(const Parameters & params);
+    explicit Postprocessor(const Parameters & pars);
 
     /// Compute the postprocessor value
     ///

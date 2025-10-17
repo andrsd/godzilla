@@ -17,13 +17,11 @@ Object::parameters()
     return params;
 }
 
-Object::Object(const Parameters & parameters) :
-    LoggingInterface(parameters.get<App *>("_app")->get_logger(),
-                     parameters.get<std::string>("_name")),
-    pars(parameters),
-    app(get_param<App *>("_app")),
-    type(get_param<std::string>("_type")),
-    name(get_param<std::string>("_name"))
+Object::Object(const Parameters & pars) :
+    LoggingInterface(pars.get<App *>("_app")->get_logger(), pars.get<std::string>("_name")),
+    app(pars.get<App *>("_app")),
+    type(pars.get<std::string>("_type")),
+    name(pars.get<std::string>("_name"))
 {
     CALL_STACK_MSG();
 }
@@ -40,20 +38,6 @@ Object::get_name() const
 {
     CALL_STACK_MSG();
     return this->name;
-}
-
-const Parameters &
-Object::get_parameters() const
-{
-    CALL_STACK_MSG();
-    return this->pars;
-}
-
-bool
-Object::is_param_valid(const std::string & par_name) const
-{
-    CALL_STACK_MSG();
-    return this->pars.is_param_valid(par_name);
 }
 
 App *

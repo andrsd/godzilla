@@ -21,7 +21,7 @@ namespace {
 /// Test IC with 2 components
 class GTest2CompIC : public InitialCondition {
 public:
-    explicit GTest2CompIC(const Parameters & params) : InitialCondition(params) {}
+    explicit GTest2CompIC(const Parameters & pars) : InitialCondition(pars) {}
 
     Int
     get_num_components() const override

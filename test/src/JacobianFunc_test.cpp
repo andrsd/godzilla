@@ -12,7 +12,7 @@ namespace {
 
 class GTestProblem : public ImplicitFENonlinearProblem {
 public:
-    explicit GTestProblem(const Parameters & params) : ImplicitFENonlinearProblem(params) {}
+    explicit GTestProblem(const Parameters & pars) : ImplicitFENonlinearProblem(pars) {}
 
 protected:
     void

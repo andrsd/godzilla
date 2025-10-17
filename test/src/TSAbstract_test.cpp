@@ -35,9 +35,9 @@ register_scheme()
 
 class GTestProblem : public Problem, public TransientProblemInterface {
 public:
-    explicit GTestProblem(const Parameters & params) :
-        Problem(params),
-        TransientProblemInterface(this, params)
+    explicit GTestProblem(const Parameters & pars) :
+        Problem(pars),
+        TransientProblemInterface(this, pars)
     {
     }
 

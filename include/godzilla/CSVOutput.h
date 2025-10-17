@@ -12,7 +12,7 @@ namespace godzilla {
 ///
 class CSVOutput : public FileOutput {
 public:
-    explicit CSVOutput(const Parameters & params);
+    explicit CSVOutput(const Parameters & pars);
     ~CSVOutput() override;
 
     void create() override;

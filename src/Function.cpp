@@ -15,7 +15,7 @@ Function::parameters()
     return params;
 }
 
-Function::Function(const Parameters & params) : Object(params)
+Function::Function(const Parameters & pars) : Object(pars)
 {
     CALL_STACK_MSG();
 }

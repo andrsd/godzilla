@@ -20,11 +20,11 @@ RZSymmetry::parameters()
     return params;
 }
 
-RZSymmetry::RZSymmetry(const Parameters & params) :
-    Object(params),
-    dpi(get_param<DiscreteProblemInterface *>("_dpi")),
-    axis(get_param<std::vector<Real>>("axis")),
-    pt(get_param<std::vector<Real>>("point"))
+RZSymmetry::RZSymmetry(const Parameters & pars) :
+    Object(pars),
+    dpi(pars.get<DiscreteProblemInterface *>("_dpi")),
+    axis(pars.get<std::vector<Real>>("axis")),
+    pt(pars.get<std::vector<Real>>("point"))
 {
     CALL_STACK_MSG();
 }

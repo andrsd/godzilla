@@ -12,7 +12,7 @@ namespace {
 
 class TestBC : public NaturalRiemannBC {
 public:
-    explicit TestBC(const Parameters & params) : NaturalRiemannBC(params), comps({ 0 }) {}
+    explicit TestBC(const Parameters & pars) : NaturalRiemannBC(pars), comps({ 0 }) {}
 
     const std::vector<Int> &
     get_components() const override
@@ -38,10 +38,7 @@ public:
 
 class TestExplicitFVLinearProblem : public ExplicitFVLinearProblem {
 public:
-    explicit TestExplicitFVLinearProblem(const Parameters & params) :
-        ExplicitFVLinearProblem(params)
-    {
-    }
+    explicit TestExplicitFVLinearProblem(const Parameters & pars) : ExplicitFVLinearProblem(pars) {}
 
 protected:
     void

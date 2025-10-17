@@ -14,7 +14,7 @@ class ExplicitDGLinearProblem :
     public DGProblemInterface,
     public ExplicitProblemInterface {
 public:
-    explicit ExplicitDGLinearProblem(const Parameters & params);
+    explicit ExplicitDGLinearProblem(const Parameters & pars);
 
     void create() override;
     void run() override;

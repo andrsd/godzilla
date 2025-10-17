@@ -13,7 +13,7 @@ class DiscreteProblemInterface;
 
 class RZSymmetry : public Object {
 public:
-    RZSymmetry(const Parameters & params);
+    RZSymmetry(const Parameters & pars);
 
     void create() override;
     Real get_value(Real time, const DenseVector<Real, 2> & x);

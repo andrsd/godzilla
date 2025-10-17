@@ -9,7 +9,7 @@ TestMesh1D::parameters()
     return params;
 }
 
-TestMesh1D::TestMesh1D(const Parameters & parameters) : MeshObject(parameters) {}
+TestMesh1D::TestMesh1D(const Parameters & pars) : MeshObject(pars) {}
 
 Qtr<Mesh>
 TestMesh1D::create_mesh()

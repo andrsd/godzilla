@@ -12,7 +12,7 @@ namespace {
 
 class TestObject : public Object {
 public:
-    explicit TestObject(const Parameters & parameters) : Object(parameters) {}
+    explicit TestObject(const Parameters & pars) : Object(pars) {}
 };
 
 } // namespace

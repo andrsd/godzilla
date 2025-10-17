@@ -11,7 +11,7 @@ namespace {
 
 class ASDF : public Object {
 public:
-    explicit ASDF(const Parameters & parameters) : Object(parameters) {}
+    explicit ASDF(const Parameters & pars) : Object(pars) {}
 
     static Parameters parameters();
 };

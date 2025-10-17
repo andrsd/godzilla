@@ -99,15 +99,17 @@ ExodusIIOutput::parameters()
     params.add_private_param<MeshObject *>("_mesh_obj", nullptr)
         .add_param<std::vector<std::string>>(
             "variables",
+            std::vector<std::string> {},
             "List of variables to be stored. If not specified, all variables will be stored.");
     return params;
 }
 
-ExodusIIOutput::ExodusIIOutput(const Parameters & params) :
-    FileOutput(params),
+ExodusIIOutput::ExodusIIOutput(const Parameters & pars) :
+    FileOutput(pars),
     cont(false),
     discont(false),
-    variable_names(get_param<std::vector<std::string>>("variables")),
+    mesh_object(pars.get<MeshObject *>("_mesh_obj")),
+    variable_names(pars.get<std::vector<std::string>>("variables"), {}),
     dgpi(dynamic_cast<DGProblemInterface *>(get_problem())),
     step_num(1),
     mesh_stored(false)
@@ -140,9 +142,7 @@ ExodusIIOutput::create()
     FileOutput::create();
 
     auto dpi = get_discrete_problem_interface();
-
-    this->mesh =
-        dpi ? dpi->get_mesh() : get_param<MeshObject *>("_mesh_obj")->get_mesh<UnstructuredMesh>();
+    this->mesh = dpi ? dpi->get_mesh() : this->mesh_object->get_mesh<UnstructuredMesh>();
     if (this->mesh == nullptr)
         log_error("ExodusII output can be only used with unstructured meshes.");
 

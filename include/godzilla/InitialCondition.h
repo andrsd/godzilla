@@ -16,7 +16,7 @@ class DiscreteProblemInterface;
 ///
 class InitialCondition : public Object, public PrintInterface {
 public:
-    explicit InitialCondition(const Parameters & params);
+    explicit InitialCondition(const Parameters & pars);
 
     void create() override;
 
@@ -52,7 +52,7 @@ private:
     DiscreteProblemInterface * dpi;
 
     /// Field name this initial condition is attached to
-    std::string field_name;
+    Optional<std::string> field_name;
 
     /// Field ID this initial condition is attached to
     FieldID fid;

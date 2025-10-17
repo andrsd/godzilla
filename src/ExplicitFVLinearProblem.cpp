@@ -14,10 +14,10 @@ ExplicitFVLinearProblem::parameters()
     return params;
 }
 
-ExplicitFVLinearProblem::ExplicitFVLinearProblem(const Parameters & params) :
-    NonlinearProblem(params),
-    FVProblemInterface(this, params),
-    ExplicitProblemInterface(this, params)
+ExplicitFVLinearProblem::ExplicitFVLinearProblem(const Parameters & pars) :
+    NonlinearProblem(pars),
+    FVProblemInterface(this, pars),
+    ExplicitProblemInterface(this, pars)
 {
     CALL_STACK_MSG();
     set_default_output_on(EXECUTE_ON_INITIAL | EXECUTE_ON_TIMESTEP);

@@ -16,7 +16,7 @@ namespace {
 
 class TestNeumannProblem : public FENonlinearProblem {
 public:
-    explicit TestNeumannProblem(const Parameters & params);
+    explicit TestNeumannProblem(const Parameters & pars);
 
 protected:
     void set_up_fields() override;
@@ -92,11 +92,7 @@ protected:
     const Dimension & dim;
 };
 
-TestNeumannProblem::TestNeumannProblem(const Parameters & params) :
-    FENonlinearProblem(params),
-    iu(0)
-{
-}
+TestNeumannProblem::TestNeumannProblem(const Parameters & pars) : FENonlinearProblem(pars), iu(0) {}
 
 void
 TestNeumannProblem::set_up_fields()
@@ -139,7 +135,7 @@ public:
 
 class TestNeumannBC : public NaturalBC {
 public:
-    explicit TestNeumannBC(const Parameters & params) : NaturalBC(params), comps({ 0 }) {}
+    explicit TestNeumannBC(const Parameters & pars) : NaturalBC(pars), comps({ 0 }) {}
 
     const std::vector<Int> &
     get_components() const override

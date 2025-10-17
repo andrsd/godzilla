@@ -11,7 +11,7 @@ using namespace godzilla;
 ///
 class NSIncompressibleProblem : public ImplicitFENonlinearProblem {
 public:
-    explicit NSIncompressibleProblem(const Parameters & parameters);
+    explicit NSIncompressibleProblem(const Parameters & pars);
 
     const Real & get_reynolds_number() const;
 

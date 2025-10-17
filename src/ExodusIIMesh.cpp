@@ -14,7 +14,7 @@ ExodusIIMesh::parameters()
     return params;
 }
 
-ExodusIIMesh::ExodusIIMesh(const Parameters & parameters) : FileMesh(parameters)
+ExodusIIMesh::ExodusIIMesh(const Parameters & pars) : FileMesh(pars)
 {
     CALL_STACK_MSG();
     set_file_format(EXODUSII);

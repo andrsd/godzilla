@@ -50,13 +50,13 @@ LinearProblem::parameters()
     return params;
 }
 
-LinearProblem::LinearProblem(const Parameters & parameters) :
-    Problem(parameters),
+LinearProblem::LinearProblem(const Parameters & pars) :
+    Problem(pars),
     RestartInterface(),
-    ksp_type(get_param<std::string>("ksp_type")),
-    lin_rel_tol(get_param<Real>("lin_rel_tol")),
-    lin_abs_tol(get_param<Real>("lin_abs_tol")),
-    lin_max_iter(get_param<Int>("lin_max_iter"))
+    ksp_type(pars.get<std::string>("ksp_type")),
+    lin_rel_tol(pars.get<Real>("lin_rel_tol")),
+    lin_abs_tol(pars.get<Real>("lin_abs_tol")),
+    lin_max_iter(pars.get<Int>("lin_max_iter"))
 {
     CALL_STACK_MSG();
     set_default_output_on(EXECUTE_ON_FINAL);

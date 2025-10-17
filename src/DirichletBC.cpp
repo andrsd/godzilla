@@ -16,9 +16,9 @@ DirichletBC::parameters()
     return params;
 }
 
-DirichletBC::DirichletBC(const Parameters & params) :
-    EssentialBC(params),
-    FunctionInterface(params),
+DirichletBC::DirichletBC(const Parameters & pars) :
+    EssentialBC(pars),
+    FunctionInterface(pars),
     components(get_num_components(), 0)
 {
     CALL_STACK_MSG();

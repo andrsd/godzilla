@@ -37,18 +37,18 @@ NonlinearProblem::parameters()
     return params;
 }
 
-NonlinearProblem::NonlinearProblem(const Parameters & parameters) :
-    Problem(parameters),
+NonlinearProblem::NonlinearProblem(const Parameters & pars) :
+    Problem(pars),
     snes(),
     ksp(),
-    line_search_type(get_param<std::string>("line_search")),
-    nl_rel_tol(get_param<Real>("nl_rel_tol")),
-    nl_abs_tol(get_param<Real>("nl_abs_tol")),
-    nl_step_tol(get_param<Real>("nl_step_tol")),
-    nl_max_iter(get_param<Int>("nl_max_iter")),
-    lin_rel_tol(get_param<Real>("lin_rel_tol")),
-    lin_abs_tol(get_param<Real>("lin_abs_tol")),
-    lin_max_iter(get_param<Int>("lin_max_iter"))
+    line_search_type(pars.get<std::string>("line_search")),
+    nl_rel_tol(pars.get<Real>("nl_rel_tol")),
+    nl_abs_tol(pars.get<Real>("nl_abs_tol")),
+    nl_step_tol(pars.get<Real>("nl_step_tol")),
+    nl_max_iter(pars.get<Int>("nl_max_iter")),
+    lin_rel_tol(pars.get<Real>("lin_rel_tol")),
+    lin_abs_tol(pars.get<Real>("lin_abs_tol")),
+    lin_max_iter(pars.get<Int>("lin_max_iter"))
 {
     CALL_STACK_MSG();
     set_default_output_on(EXECUTE_ON_FINAL);

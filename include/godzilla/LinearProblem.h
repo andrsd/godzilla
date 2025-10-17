@@ -16,7 +16,7 @@ namespace godzilla {
 ///
 class LinearProblem : public Problem, public RestartInterface {
 public:
-    explicit LinearProblem(const Parameters & parameters);
+    explicit LinearProblem(const Parameters & pars);
 
     void create() override;
     void run() override;

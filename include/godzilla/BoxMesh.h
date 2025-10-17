@@ -13,7 +13,7 @@ namespace godzilla {
 class BoxMesh : public MeshObject {
 public:
     /// Constructor for building the object via Factory
-    explicit BoxMesh(const Parameters & parameters);
+    explicit BoxMesh(const Parameters & pars);
 
     /// Get lower limit in x-direction
     Real get_x_min() const;

@@ -28,10 +28,10 @@ ParsedFunction::parameters()
     return params;
 }
 
-ParsedFunction::ParsedFunction(const Parameters & params) :
-    Function(params),
-    function(get_param<std::vector<std::string>>("function")),
-    constants(get_param<std::map<std::string, Real>>("constants"))
+ParsedFunction::ParsedFunction(const Parameters & pars) :
+    Function(pars),
+    function(pars.get<std::vector<std::string>>("function")),
+    constants(pars.get<std::map<std::string, Real>>("constants"))
 {
     CALL_STACK_MSG();
     this->evalr.create(this->function);

@@ -26,13 +26,12 @@ FunctionInterface::valid_params_t()
     return params;
 }
 
-FunctionInterface::FunctionInterface(const Parameters & params) :
-    fi_app(params.get<App *>("_app")),
+FunctionInterface::FunctionInterface(const Parameters & pars) :
+    fi_app(pars.get<App *>("_app")),
     problem(nullptr),
-    expression(params.get<std::vector<std::string>>("value")),
-    expression_t(params.has<std::vector<std::string>>("value_t")
-                     ? params.get<std::vector<std::string>>("value_t")
-                     : std::vector<std::string>())
+    expression(pars.get<std::vector<std::string>>("value")),
+    expression_t(pars.is_param_valid("value_t") ? pars.get<std::vector<std::string>>("value_t")
+                                                : std::vector<std::string>())
 {
     this->num_comps = this->expression.size();
     // TODO: turn this into `log_error`

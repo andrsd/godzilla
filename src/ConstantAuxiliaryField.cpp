@@ -15,9 +15,9 @@ ConstantAuxiliaryField::parameters()
     return params;
 }
 
-ConstantAuxiliaryField::ConstantAuxiliaryField(const Parameters & params) :
-    AuxiliaryField(params),
-    values(params.get<std::vector<Real>>("value"))
+ConstantAuxiliaryField::ConstantAuxiliaryField(const Parameters & pars) :
+    AuxiliaryField(pars),
+    values(pars.get<std::vector<Real>>("value"))
 {
     CALL_STACK_MSG();
     if (this->values.empty())

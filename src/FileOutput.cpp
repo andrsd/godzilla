@@ -19,9 +19,9 @@ FileOutput::parameters()
     return params;
 }
 
-FileOutput::FileOutput(const Parameters & params) :
-    Output(params),
-    file_base(get_param<std::string>("file")),
+FileOutput::FileOutput(const Parameters & pars) :
+    Output(pars),
+    file_base(pars.get<std::string>("file")),
     dpi(dynamic_cast<DiscreteProblemInterface *>(get_problem()))
 {
     CALL_STACK_MSG();

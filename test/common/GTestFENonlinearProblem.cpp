@@ -56,8 +56,8 @@ protected:
 
 } // namespace
 
-GTestFENonlinearProblem::GTestFENonlinearProblem(const Parameters & params) :
-    FENonlinearProblem(params),
+GTestFENonlinearProblem::GTestFENonlinearProblem(const Parameters & pars) :
+    FENonlinearProblem(pars),
     iu(0)
 {
 }

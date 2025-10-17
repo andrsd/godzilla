@@ -15,7 +15,7 @@ class Problem;
 ///
 class FunctionInterface {
 public:
-    explicit FunctionInterface(const Parameters & params);
+    explicit FunctionInterface(const Parameters & pars);
 
     /// Build the evaluator
     void create();

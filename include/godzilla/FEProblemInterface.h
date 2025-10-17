@@ -28,7 +28,7 @@ class FEProblemInterface : public DiscreteProblemInterface, public DependencyEva
     struct FieldInfo;
 
 public:
-    FEProblemInterface(Problem * problem, const Parameters & params);
+    FEProblemInterface(Problem * problem, const Parameters & pars);
     ~FEProblemInterface() override;
 
     Int get_num_fields() const override;

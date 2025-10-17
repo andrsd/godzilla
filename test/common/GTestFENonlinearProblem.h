@@ -7,7 +7,7 @@ using namespace godzilla;
 /// Test problem for simple FE solver
 class GTestFENonlinearProblem : public FENonlinearProblem {
 public:
-    explicit GTestFENonlinearProblem(const Parameters & params);
+    explicit GTestFENonlinearProblem(const Parameters & pars);
 
     PetscDS get_ds();
     void set_up_initial_guess() override;

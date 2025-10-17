@@ -33,8 +33,8 @@ FVProblemInterface::compute_flux(Int dim,
 
 const std::string FVProblemInterface::empty_name;
 
-FVProblemInterface::FVProblemInterface(Problem * problem, const Parameters & params) :
-    DiscreteProblemInterface(problem, params),
+FVProblemInterface::FVProblemInterface(Problem * problem, const Parameters & pars) :
+    DiscreteProblemInterface(problem, pars),
     fvm(nullptr)
 {
     CALL_STACK_MSG();

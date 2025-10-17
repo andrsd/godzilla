@@ -97,13 +97,13 @@ HeatEquationProblem::parameters()
     return params;
 }
 
-HeatEquationProblem::HeatEquationProblem(const Parameters & parameters) :
-    ImplicitFENonlinearProblem(parameters),
+HeatEquationProblem::HeatEquationProblem(const Parameters & pars) :
+    ImplicitFENonlinearProblem(pars),
     temp_id(FieldID::INVALID),
     q_ppp_id(FieldID::INVALID),
     htc_aux_id(FieldID::INVALID),
     T_ambient_aux_id(FieldID::INVALID),
-    p_order(get_param<Int>("p_order"))
+    p_order(pars.get<Int>("p_order"))
 {
     CALL_STACK_MSG();
 }

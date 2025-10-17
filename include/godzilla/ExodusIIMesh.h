@@ -11,7 +11,7 @@ namespace godzilla {
 ///
 class ExodusIIMesh : public FileMesh {
 public:
-    explicit ExodusIIMesh(const Parameters & parameters);
+    explicit ExodusIIMesh(const Parameters & pars);
 
 public:
     static Parameters parameters();

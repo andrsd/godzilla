@@ -18,13 +18,13 @@ TimeSteppingAdaptor::parameters()
     return params;
 }
 
-TimeSteppingAdaptor::TimeSteppingAdaptor(const Parameters & params) :
-    Object(params),
-    problem(get_param<Problem *>("_problem")),
+TimeSteppingAdaptor::TimeSteppingAdaptor(const Parameters & pars) :
+    Object(pars),
+    problem(pars.get<Problem *>("_problem")),
     tpi(dynamic_cast<TransientProblemInterface *>(problem)),
     ts_adapt(nullptr),
-    dt_min(get_param<Real>("dt_min")),
-    dt_max(get_param<Real>("dt_max"))
+    dt_min(pars.get<Real>("dt_min")),
+    dt_max(pars.get<Real>("dt_max"))
 {
     CALL_STACK_MSG();
     if (this->tpi)

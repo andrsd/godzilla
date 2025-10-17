@@ -15,7 +15,7 @@ class UnstructuredMesh;
 ///
 class FileOutput : public Output {
 public:
-    explicit FileOutput(const Parameters & params);
+    explicit FileOutput(const Parameters & pars);
 
     void create() override;
 

@@ -12,7 +12,7 @@ namespace {
 
 class TestProblem : public LinearProblem {
 public:
-    explicit TestProblem(const Parameters & params) : LinearProblem(params) {}
+    explicit TestProblem(const Parameters & pars) : LinearProblem(pars) {}
 };
 
 } // namespace
@@ -31,7 +31,7 @@ TEST(VTKOutputTest, wrong_mesh_type)
 
     class TestMesh : public MeshObject {
     public:
-        explicit TestMesh(const Parameters & params) : MeshObject(params) {}
+        explicit TestMesh(const Parameters & pars) : MeshObject(pars) {}
 
         Qtr<Mesh>
         create_mesh() override

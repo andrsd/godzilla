@@ -7,7 +7,7 @@ using namespace godzilla;
 /// Test problem for simple FE solver
 class GTestImplicitFENonlinearProblem : public ImplicitFENonlinearProblem {
 public:
-    explicit GTestImplicitFENonlinearProblem(const Parameters & params);
+    explicit GTestImplicitFENonlinearProblem(const Parameters & pars);
     void set_up_initial_guess() override;
 
 protected:

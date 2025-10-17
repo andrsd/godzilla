@@ -35,7 +35,7 @@ namespace {
 
 class TestTSAdaptor : public TimeSteppingAdaptor {
 public:
-    explicit TestTSAdaptor(const Parameters & params);
+    explicit TestTSAdaptor(const Parameters & pars);
 
     void create() override;
 
@@ -61,7 +61,7 @@ TestTSAdaptor::parameters()
     return pars;
 }
 
-TestTSAdaptor::TestTSAdaptor(const Parameters & params) : TimeSteppingAdaptor(params)
+TestTSAdaptor::TestTSAdaptor(const Parameters & pars) : TimeSteppingAdaptor(pars)
 {
     this->dts = { 0.2, 0.3, 0.4, 1 };
 }
@@ -122,34 +122,28 @@ __ts_adapt_choose(TSAdapt adapt,
 
 class TestTSProblem : public GTestImplicitFENonlinearProblem {
 public:
-    explicit TestTSProblem(const Parameters & params);
+    explicit TestTSProblem(const Parameters & pars) : GTestImplicitFENonlinearProblem(pars)
+    {
+        this->dts.resize(5);
+    }
 
     std::vector<Real> dts;
 
 protected:
-    void set_up_monitors() override;
+    void
+    set_up_monitors() override
+    {
+        monitor_cancel();
+        monitor_set(this, &TestTSProblem::ts_monitor);
+    }
 
-    void ts_monitor(Int stepi, Real time, const Vector & x);
+    void
+    ts_monitor(Int stepi, Real time, const Vector & x)
+    {
+        Real dt = get_time_step();
+        this->dts[stepi] = dt;
+    }
 };
-
-TestTSProblem::TestTSProblem(const Parameters & params) : GTestImplicitFENonlinearProblem(params)
-{
-    this->dts.resize(5);
-}
-
-void
-TestTSProblem::set_up_monitors()
-{
-    monitor_cancel();
-    monitor_set(this, &TestTSProblem::ts_monitor);
-}
-
-void
-TestTSProblem::ts_monitor(Int stepi, Real time, const Vector & x)
-{
-    Real dt = get_time_step();
-    this->dts[stepi] = dt;
-}
 
 ///
 
@@ -209,7 +203,7 @@ TEST(TimeSteppingAdaptor, choose)
 
     auto bc_pars = DirichletBC::parameters();
     bc_pars.set<App *>("_app", &app);
-    bc_pars.set<std::vector<std::string>>("boundary", { "marker" });
+    bc_pars.set<std::vector<std::string>>("boundary", { "left", "right" });
     bc_pars.set<std::vector<std::string>>("value", { "x*x" });
     bc_pars.set<DiscreteProblemInterface *>("_dpi", &prob);
     DirichletBC bc(bc_pars);
@@ -223,6 +217,8 @@ TEST(TimeSteppingAdaptor, choose)
 
     mesh.create();
     prob.create();
+    app.check_integrity();
+    app.get_logger()->print();
 
     prob.run();
 

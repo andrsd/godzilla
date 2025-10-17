@@ -27,9 +27,9 @@ ConstantFunction::parameters()
     return params;
 }
 
-ConstantFunction::ConstantFunction(const Parameters & params) :
-    Function(params),
-    val(get_param<Real>("value"))
+ConstantFunction::ConstantFunction(const Parameters & pars) :
+    Function(pars),
+    val(pars.get<Real>("value"))
 {
     CALL_STACK_MSG();
 }

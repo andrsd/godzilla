@@ -12,6 +12,7 @@ namespace godzilla {
 
 class UnstructuredMesh;
 class DGProblemInterface;
+class MeshObject;
 
 /// ExodusII output
 ///
@@ -28,7 +29,7 @@ class DGProblemInterface;
 /// This output works only with finite element problems
 class ExodusIIOutput : public FileOutput {
 public:
-    explicit ExodusIIOutput(const Parameters & params);
+    explicit ExodusIIOutput(const Parameters & pars);
     ~ExodusIIOutput() override;
 
     void create() override;
@@ -70,6 +71,8 @@ private:
 
     bool cont;
     bool discont;
+    ///
+    MeshObject * mesh_object;
     /// Variable names to be stored
     std::vector<std::string> variable_names;
     /// DG problem interface

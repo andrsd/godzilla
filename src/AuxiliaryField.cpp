@@ -19,13 +19,13 @@ AuxiliaryField::parameters()
     return params;
 }
 
-AuxiliaryField::AuxiliaryField(const Parameters & params) :
-    Object(params),
+AuxiliaryField::AuxiliaryField(const Parameters & pars) :
+    Object(pars),
     PrintInterface(this),
-    dpi(get_param<DiscreteProblemInterface *>("_dpi")),
+    dpi(pars.get<DiscreteProblemInterface *>("_dpi")),
     mesh(nullptr),
-    field(get_param<std::string>("field")),
-    region(get_param<std::string>("region")),
+    field(pars.get<std::string>("field")),
+    region(pars.get<std::string>("region")),
     block_id(-1)
 {
     CALL_STACK_MSG();

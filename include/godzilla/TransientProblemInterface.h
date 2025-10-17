@@ -63,7 +63,7 @@ public:
         NONLINEAR = TS_NONLINEAR,
     };
 
-    TransientProblemInterface(Problem * problem, const Parameters & params);
+    TransientProblemInterface(Problem * problem, const Parameters & pars);
     virtual ~TransientProblemInterface();
 
     /// Set time stepping adaptivity using an adaptor class
@@ -404,9 +404,9 @@ private:
     /// Simulation start time
     Real start_time;
     /// Simulation end time
-    std::optional<Real> end_time;
+    Optional<Real> end_time;
     /// Number of steps
-    std::optional<Int> num_steps;
+    Optional<Int> num_steps;
     /// Initial time step size
     Real dt_initial;
     /// Time step number

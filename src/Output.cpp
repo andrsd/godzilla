@@ -5,6 +5,7 @@
 #include "godzilla/CallStack.h"
 #include "godzilla/Problem.h"
 #include "godzilla/Utils.h"
+#include "godzilla/Convert.h"
 
 namespace godzilla {
 
@@ -18,24 +19,38 @@ Output::parameters()
     return params;
 }
 
-Output::Output(const Parameters & params) :
-    Object(params),
+Output::Output(const Parameters & pars) :
+    Object(pars),
     PrintInterface(this),
-    problem(get_param<Problem *>("_problem")),
-    on_mask(),
-    interval(is_param_valid("interval") ? get_param<Int>("interval") : 1),
+    problem(pars.get<Problem *>("_problem")),
+    interval(pars.get<Int>("interval", 1)),
     last_output_time(std::nan(""))
 {
     CALL_STACK_MSG();
+    if (pars.is_param_valid("on")) {
+        const auto on = pars.get<std::vector<std::string>>("on");
+        if (!on.empty()) {
+            auto [mask, none] = conv::to_execute_on(on);
+            if (none && mask.has_flags())
+                log_error("The 'none' execution flag can be used only by itself.");
+            else
+                this->on_mask = mask;
+        }
+        else
+            log_error("The 'on' parameter can be either 'none' or a combination of 'initial', "
+                      "'timestep' and/or 'final'.");
+    }
+    else
+        this->on_mask = this->problem->get_default_output_on();
+
+    if (pars.is_param_valid("interval") && ((this->on_mask & EXECUTE_ON_TIMESTEP) == 0))
+        log_warning("Parameter 'interval' was specified, but 'on' is missing 'timestep'.");
 }
 
 void
 Output::create()
 {
     CALL_STACK_MSG();
-    set_up_exec();
-    if (is_param_valid("interval") && ((this->on_mask & EXECUTE_ON_TIMESTEP) == 0))
-        log_warning("Parameter 'interval' was specified, but 'on' is missing 'timestep'.");
 }
 
 void
@@ -59,36 +74,11 @@ Output::get_exec_mask() const
     return this->on_mask;
 }
 
-void
-Output::set_up_exec()
+ExecuteOn
+Output::execute_on() const
 {
     CALL_STACK_MSG();
-    if (is_param_valid("on")) {
-        const auto & on = get_param<std::vector<std::string>>("on");
-        if (!on.empty()) {
-            bool none = false;
-            ExecuteOn mask;
-            for (auto & s : on) {
-                std::string ls = utils::to_lower(s);
-                if (ls == "initial")
-                    mask |= EXECUTE_ON_INITIAL;
-                else if (ls == "timestep")
-                    mask |= EXECUTE_ON_TIMESTEP;
-                else if (ls == "final")
-                    mask |= EXECUTE_ON_FINAL;
-                else if (ls == "none")
-                    none = true;
-            }
-
-            if (none && (mask.has_flags()))
-                log_error("The 'none' execution flag can be used only by itself.");
-            else
-                this->on_mask = mask;
-        }
-        else
-            log_error("The 'on' parameter can be either 'none' or a combination of 'initial', "
-                      "'timestep' and/or 'final'.");
-    }
+    return this->on_mask;
 }
 
 bool

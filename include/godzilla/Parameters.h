@@ -3,12 +3,12 @@
 
 #pragma once
 
+#include "godzilla/CallStack.h"
+#include "godzilla/Exception.h"
+#include "godzilla/Types.h"
+#include "godzilla/Assert.h"
 #include <map>
 #include <string>
-#include <iostream>
-#include <vector>
-#include "godzilla/Exception.h"
-#include "godzilla/Utils.h"
 
 namespace godzilla {
 
@@ -100,12 +100,11 @@ public:
     bool
     has(const std::string & name) const
     {
+        CALL_STACK_MSG();
         auto it = this->params.find(name);
-
         if (it != this->params.end())
             if (dynamic_cast<const Parameter<T> *>(it->second) != nullptr)
                 return true;
-
         return false;
     }
 
@@ -114,20 +113,38 @@ public:
     inline T
     get(const std::string & name) const
     {
-        if (!this->has<T>(name))
-            throw Exception("No parameter '{}' found.", name);
-
-        auto it = this->params.find(name);
-        return dynamic_cast<Parameter<T> *>(it->second)->get();
+        CALL_STACK_MSG();
+        if constexpr (IsOptional<T>) {
+            using V = typename T::value_type;
+            if (this->has<V>(name)) {
+                auto it = this->params.find(name);
+                auto par = dynamic_cast<Parameter<V> *>(it->second);
+                if (par->valid)
+                    return par->get();
+                else
+                    return {};
+            }
+            else
+                return {};
+        }
+        else {
+            if (this->has<T>(name)) {
+                auto it = this->params.find(name);
+                auto par = dynamic_cast<Parameter<T> *>(it->second);
+                return par->get();
+            }
+            else
+                throw Exception("No parameter '{}' found.", name);
+        }
     }
 
     template <typename T>
     inline T
     get(const std::string & name, T default_value) const
     {
+        CALL_STACK_MSG();
         if (!this->has<T>(name))
             return default_value;
-
         auto it = this->params.find(name);
         return dynamic_cast<Parameter<T> *>(it->second)->get();
     }
@@ -137,6 +154,7 @@ public:
     inline Parameters &
     set(const std::string & name, T value)
     {
+        CALL_STACK_MSG();
         if (!this->has<T>(name))
             this->params[name] = new Parameter<T>;
 
@@ -152,6 +170,7 @@ public:
     Parameters &
     add_required_param(const std::string & name, const std::string & doc_string)
     {
+        CALL_STACK_MSG();
         if (!this->has<T>(name)) {
             auto * param = new Parameter<T>;
             param->required = true;
@@ -173,6 +192,7 @@ public:
     Parameters &
     add_param(const std::string & name, const S & value, const std::string & doc_string)
     {
+        CALL_STACK_MSG();
         if (!this->has<T>(name)) {
             auto * param = new Parameter<T>;
             param->required = false;
@@ -190,6 +210,7 @@ public:
     Parameters &
     add_param(const std::string & name, const std::string & doc_string)
     {
+        CALL_STACK_MSG();
         if (!this->has<T>(name)) {
             auto * param = new Parameter<T>;
             param->required = false;
@@ -212,6 +233,7 @@ public:
     Parameters &
     add_private_param(const std::string & name, const T & value)
     {
+        CALL_STACK_MSG();
         auto * param = new Parameter<T>;
         param->value = value;
         param->required = false;

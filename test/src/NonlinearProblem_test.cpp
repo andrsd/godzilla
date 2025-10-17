@@ -13,7 +13,7 @@ namespace {
 
 class G1DTestNonlinearProblem : public NonlinearProblem {
 public:
-    explicit G1DTestNonlinearProblem(const Parameters & params);
+    explicit G1DTestNonlinearProblem(const Parameters & pars);
     ~G1DTestNonlinearProblem() override;
     void create() override;
     void call_initial_guess();
@@ -28,8 +28,8 @@ protected:
 
 } // namespace
 
-G1DTestNonlinearProblem::G1DTestNonlinearProblem(const Parameters & params) :
-    NonlinearProblem(params),
+G1DTestNonlinearProblem::G1DTestNonlinearProblem(const Parameters & pars) :
+    NonlinearProblem(pars),
     s(nullptr)
 {
 }
@@ -143,7 +143,7 @@ TEST(NonlinearProblemTest, run)
 {
     class MockNonlinearProblem : public NonlinearProblem {
     public:
-        explicit MockNonlinearProblem(const Parameters & params) : NonlinearProblem(params) {}
+        explicit MockNonlinearProblem(const Parameters & pars) : NonlinearProblem(pars) {}
 
         MOCK_METHOD(void, set_up_initial_guess, ());
         MOCK_METHOD(void, on_initial, ());
@@ -197,7 +197,7 @@ TEST(NonlinearProblemTest, line_search_type)
 {
     class MockNonlinearProblem : public NonlinearProblem {
     public:
-        explicit MockNonlinearProblem(const Parameters & params) : NonlinearProblem(params) {}
+        explicit MockNonlinearProblem(const Parameters & pars) : NonlinearProblem(pars) {}
 
         SNESolver
         get_snes()
@@ -238,7 +238,7 @@ TEST(NonlinearProblemTest, invalid_line_search_type)
 
     class MockNonlinearProblem : public NonlinearProblem {
     public:
-        explicit MockNonlinearProblem(const Parameters & params) : NonlinearProblem(params) {}
+        explicit MockNonlinearProblem(const Parameters & pars) : NonlinearProblem(pars) {}
     };
 
     TestApp app;

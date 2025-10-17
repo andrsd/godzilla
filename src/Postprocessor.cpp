@@ -14,10 +14,10 @@ Postprocessor::parameters()
     return params;
 }
 
-Postprocessor::Postprocessor(const Parameters & params) :
-    Object(params),
+Postprocessor::Postprocessor(const Parameters & pars) :
+    Object(pars),
     PrintInterface(this),
-    problem(get_param<Problem *>("_problem"))
+    problem(pars.get<Problem *>("_problem"))
 {
 }
 

@@ -12,7 +12,7 @@ namespace {
 
 class TestMesh : public MeshObject {
 public:
-    explicit TestMesh(const Parameters & params) : MeshObject(params) {}
+    explicit TestMesh(const Parameters & pars) : MeshObject(pars) {}
 
     Qtr<Mesh>
     create_mesh() override

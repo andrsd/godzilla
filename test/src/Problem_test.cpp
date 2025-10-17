@@ -21,7 +21,7 @@ namespace {
 
 class TestProblem : public Problem {
 public:
-    explicit TestProblem(const Parameters & params) : Problem(params) {}
+    explicit TestProblem(const Parameters & pars) : Problem(pars) {}
 
     void
     run() override
@@ -46,7 +46,7 @@ TEST(ProblemTest, add_pp)
 
     class TestPostprocessor : public Postprocessor {
     public:
-        explicit TestPostprocessor(const Parameters & params) : Postprocessor(params) {}
+        explicit TestPostprocessor(const Parameters & pars) : Postprocessor(pars) {}
 
         void
         compute() override
@@ -62,7 +62,7 @@ TEST(ProblemTest, add_pp)
 
     class TestFunction : public Function {
     public:
-        explicit TestFunction(const Parameters & params) : Function(params) {}
+        explicit TestFunction(const Parameters & pars) : Function(pars) {}
 
         void
         register_callback(mu::Parser & parser) override
@@ -72,7 +72,7 @@ TEST(ProblemTest, add_pp)
 
     class TestOutput : public FileOutput {
     public:
-        explicit TestOutput(const Parameters & params) : FileOutput(params) {}
+        explicit TestOutput(const Parameters & pars) : FileOutput(pars) {}
 
         MOCK_METHOD(void, output_step, ());
 

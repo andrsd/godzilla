@@ -14,7 +14,7 @@ namespace {
 
 class MockProblem : public Problem {
 public:
-    explicit MockProblem(const Parameters & params) : Problem(params) {}
+    explicit MockProblem(const Parameters & pars) : Problem(pars) {}
 
     MOCK_METHOD(void, create, ());
     MOCK_METHOD(void, run, ());
@@ -25,7 +25,7 @@ public:
 
 class TestProblem : public Problem {
 public:
-    explicit TestProblem(const Parameters & params) : Problem(params) {}
+    explicit TestProblem(const Parameters & pars) : Problem(pars) {}
 
     void
     create() override

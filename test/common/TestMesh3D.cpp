@@ -9,7 +9,7 @@ TestMesh3D::parameters()
     return params;
 }
 
-TestMesh3D::TestMesh3D(const godzilla::Parameters & parameters) : MeshObject(parameters) {}
+TestMesh3D::TestMesh3D(const godzilla::Parameters & pars) : MeshObject(pars) {}
 
 Qtr<Mesh>
 TestMesh3D::create_mesh()

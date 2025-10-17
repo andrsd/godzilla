@@ -7,6 +7,7 @@
 #include "godzilla/Flags.h"
 #include "godzilla/Delegate.h"
 #include "petscsystypes.h"
+#include <optional>
 
 namespace godzilla {
 
@@ -235,5 +236,14 @@ constexpr Int N_NODES = SimplexSelector<D>::N_NODES;
 
 template <typename T>
 concept FloatingPoint = std::is_floating_point_v<T>;
+
+template <typename T>
+using Optional = std::optional<T>;
+
+template <typename T>
+concept IsOptional = requires {
+    typename T::value_type;
+    requires std::same_as<T, Optional<typename T::value_type>>;
+};
 
 } // namespace godzilla

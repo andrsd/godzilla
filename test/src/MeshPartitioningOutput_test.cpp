@@ -17,7 +17,7 @@ public:
 
 class EmptyMeshObject : public MeshObject {
 public:
-    explicit EmptyMeshObject(const Parameters & params) : MeshObject(params) {}
+    explicit EmptyMeshObject(const Parameters & pars) : MeshObject(pars) {}
 
     Qtr<Mesh>
     create_mesh() override
@@ -28,7 +28,7 @@ public:
 
 class TestProblem : public LinearProblem {
 public:
-    explicit TestProblem(const Parameters & params) : LinearProblem(params) {}
+    explicit TestProblem(const Parameters & pars) : LinearProblem(pars) {}
 };
 
 } // namespace

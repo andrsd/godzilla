@@ -12,7 +12,7 @@ namespace godzilla {
 ///
 class EssentialBC : public BoundaryCondition {
 public:
-    explicit EssentialBC(const Parameters & params);
+    explicit EssentialBC(const Parameters & pars);
 
     void create() override;
     void set_up() override;
@@ -44,6 +44,8 @@ public:
 private:
     /// Field ID this boundary condition is attached to
     FieldID fid;
+    ///
+    Optional<std::string> field_name;
 
 public:
     static Parameters parameters();

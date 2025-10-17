@@ -6,7 +6,7 @@ using namespace godzilla;
 
 class ConvectiveHeatFluxBC : public NaturalBC {
 public:
-    ConvectiveHeatFluxBC(const Parameters & params);
+    ConvectiveHeatFluxBC(const Parameters & pars);
 
     const std::vector<Int> & get_components() const override;
 

@@ -62,7 +62,7 @@ private:
     };
 
 public:
-    DiscreteProblemInterface(Problem * problem, const Parameters & params);
+    DiscreteProblemInterface(Problem * problem, const Parameters & pars);
     virtual ~DiscreteProblemInterface();
 
     /// Get unstructured mesh associated with this problem

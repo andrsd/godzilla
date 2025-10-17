@@ -12,7 +12,7 @@ namespace godzilla {
 ///
 class FunctionInitialCondition : public InitialCondition, protected FunctionInterface {
 public:
-    explicit FunctionInitialCondition(const Parameters & params);
+    explicit FunctionInitialCondition(const Parameters & pars);
 
     void create() override;
     Int get_num_components() const override;

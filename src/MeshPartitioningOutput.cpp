@@ -17,7 +17,7 @@ MeshPartitioningOutput::parameters()
     return params;
 }
 
-MeshPartitioningOutput::MeshPartitioningOutput(const Parameters & params) : FileOutput(params)
+MeshPartitioningOutput::MeshPartitioningOutput(const Parameters & pars) : FileOutput(pars)
 {
     CALL_STACK_MSG();
     set_file_base("part");

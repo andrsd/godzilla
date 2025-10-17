@@ -15,7 +15,7 @@ namespace {
 
 class TestUnstructuredMesh : public MeshObject {
 public:
-    explicit TestUnstructuredMesh(const Parameters & params) : MeshObject(params) {}
+    explicit TestUnstructuredMesh(const Parameters & pars) : MeshObject(pars) {}
 
     Qtr<Mesh>
     create_mesh() override
@@ -55,11 +55,11 @@ public:
 
 class TestUnstructuredMesh3D : public MeshObject {
 public:
-    explicit TestUnstructuredMesh3D(const Parameters & params) :
-        MeshObject(params),
-        nx(get_param<Int>("nx")),
-        ny(get_param<Int>("ny")),
-        nz(get_param<Int>("nz"))
+    explicit TestUnstructuredMesh3D(const Parameters & pars) :
+        MeshObject(pars),
+        nx(pars.get<Int>("nx")),
+        ny(pars.get<Int>("ny")),
+        nz(pars.get<Int>("nz"))
     {
     }
 
