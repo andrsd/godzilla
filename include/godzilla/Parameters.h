@@ -146,7 +146,11 @@ public:
         if (!this->has<T>(name))
             return default_value;
         auto it = this->params.find(name);
-        return dynamic_cast<Parameter<T> *>(it->second)->get();
+        auto par = dynamic_cast<Parameter<T> *>(it->second);
+        if (par->valid)
+            return par->get();
+        else
+            return default_value;
     }
 
     /// Set parameter
