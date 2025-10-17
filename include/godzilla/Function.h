@@ -15,7 +15,7 @@ class Problem;
 ///
 class Function : public Object {
 public:
-    explicit Function(const Parameters & params);
+    explicit Function(const Parameters & pars);
 
     /// Register this function with the function parser
     ///

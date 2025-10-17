@@ -1,7 +1,7 @@
 #include "GTest2FieldsFENonlinearProblem.h"
 
-GTest2FieldsFENonlinearProblem::GTest2FieldsFENonlinearProblem(const Parameters & params) :
-    GTestFENonlinearProblem(params),
+GTest2FieldsFENonlinearProblem::GTest2FieldsFENonlinearProblem(const Parameters & pars) :
+    GTestFENonlinearProblem(pars),
     iv(1)
 {
 }

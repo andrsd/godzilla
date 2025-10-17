@@ -19,7 +19,7 @@ class UnstructuredMesh;
 /// This output works only with finite element problems
 class TecplotOutput : public FileOutput {
 public:
-    explicit TecplotOutput(const Parameters & params);
+    explicit TecplotOutput(const Parameters & pars);
     ~TecplotOutput() override;
 
     void create() override;

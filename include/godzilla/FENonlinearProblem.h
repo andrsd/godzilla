@@ -17,7 +17,7 @@ class IndexSet;
 /// Non-linear problem that arises from a finite element discretization using the PetscFE system
 class FENonlinearProblem : public NonlinearProblem, public FEProblemInterface {
 public:
-    explicit FENonlinearProblem(const Parameters & parameters);
+    explicit FENonlinearProblem(const Parameters & pars);
 
     void create() override;
     Real get_time() const override;

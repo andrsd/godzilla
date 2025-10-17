@@ -13,7 +13,7 @@ BasicTSAdapt::parameters()
     return params;
 }
 
-BasicTSAdapt::BasicTSAdapt(const Parameters & params) : TimeSteppingAdaptor(params) {}
+BasicTSAdapt::BasicTSAdapt(const Parameters & pars) : TimeSteppingAdaptor(pars) {}
 
 void
 BasicTSAdapt::create()

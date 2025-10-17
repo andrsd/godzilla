@@ -14,7 +14,7 @@ public:
 
 class MockBoundaryCondition : public BoundaryCondition {
 public:
-    explicit MockBoundaryCondition(const Parameters & params) : BoundaryCondition(params) {}
+    explicit MockBoundaryCondition(const Parameters & pars) : BoundaryCondition(pars) {}
 
     MOCK_METHOD((DMBoundaryConditionType), get_bc_type, (), (const));
     MOCK_METHOD(void, evaluate, (Int, Real, const Real x[], Int Nc, Scalar u[]), ());

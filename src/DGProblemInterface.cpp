@@ -18,8 +18,8 @@ namespace godzilla {
 
 const std::string DGProblemInterface::empty_name;
 
-DGProblemInterface::DGProblemInterface(Problem * problem, const Parameters & params) :
-    DiscreteProblemInterface(problem, params),
+DGProblemInterface::DGProblemInterface(Problem * problem, const Parameters & pars) :
+    DiscreteProblemInterface(problem, pars),
     qorder(PETSC_DETERMINE)
 {
     CALL_STACK_MSG();

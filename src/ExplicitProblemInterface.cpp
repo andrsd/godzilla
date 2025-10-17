@@ -20,10 +20,10 @@ ExplicitProblemInterface::parameters()
 }
 
 ExplicitProblemInterface::ExplicitProblemInterface(NonlinearProblem * problem,
-                                                   const Parameters & params) :
-    TransientProblemInterface(problem, params),
+                                                   const Parameters & pars) :
+    TransientProblemInterface(problem, pars),
     nl_problem(problem),
-    scheme(params.get<std::string>("scheme"))
+    scheme(pars.get<std::string>("scheme"))
 {
     if (!validation::in(this->scheme, { "euler", "ssp-rk-2", "ssp-rk-3", "rk-2", "heun" }))
         this->nl_problem->log_error("The 'scheme' parameter can be either 'euler', 'ssp-rk-2', "

@@ -13,7 +13,7 @@ namespace {
 
 class CustomLinearProblem : public LinearProblem {
 public:
-    explicit CustomLinearProblem(const Parameters & params) : LinearProblem(params) {}
+    explicit CustomLinearProblem(const Parameters & pars) : LinearProblem(pars) {}
 
     void
     create() override

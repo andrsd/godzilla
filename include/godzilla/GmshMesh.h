@@ -11,7 +11,7 @@ namespace godzilla {
 ///
 class GmshMesh : public FileMesh {
 public:
-    explicit GmshMesh(const Parameters & parameters);
+    explicit GmshMesh(const Parameters & pars);
 
 public:
     static Parameters parameters();

@@ -16,7 +16,7 @@ class ParsedFunction;
 ///
 class L2FieldDiff : public Postprocessor {
 public:
-    explicit L2FieldDiff(const Parameters & params);
+    explicit L2FieldDiff(const Parameters & pars);
 
     void create() override;
     void compute() override;

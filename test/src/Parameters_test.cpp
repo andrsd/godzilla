@@ -112,3 +112,21 @@ TEST(ParametersTest, move_oper)
 
     EXPECT_FALSE(params1.has<Int>("i"));
 }
+
+TEST(ParametersTest, get_optional_param)
+{
+    Parameters params1;
+    params1.set<Int>("i", 1);
+
+    auto p1 = params1.get<Optional<Int>>("i");
+    EXPECT_TRUE(p1.has_value());
+    EXPECT_EQ(p1.value(), 1);
+
+    // getting param with incorrect type means the param was not specified
+    auto p2 = params1.get<Optional<Real>>("i");
+    EXPECT_FALSE(p2.has_value());
+
+    // auto p2 = params1.get_optional<Real>("f");
+    auto p3 = params1.get<Optional<Real>>("f");
+    EXPECT_FALSE(p3.has_value());
+}

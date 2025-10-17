@@ -12,7 +12,7 @@ namespace godzilla {
 /// Base class for natural Riemann boundary conditions
 class NaturalRiemannBC : public BoundaryCondition {
 public:
-    explicit NaturalRiemannBC(const Parameters & params);
+    explicit NaturalRiemannBC(const Parameters & pars);
 
     void create() override;
     void set_up() override;

@@ -12,7 +12,7 @@ namespace godzilla {
 ///
 class RectangleMesh : public MeshObject {
 public:
-    explicit RectangleMesh(const Parameters & parameters);
+    explicit RectangleMesh(const Parameters & pars);
 
     ///
     Real get_x_min() const;

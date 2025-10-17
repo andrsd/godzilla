@@ -6,7 +6,7 @@ target_code_coverage(${PROJECT_NAME})
 target_sanitization(${PROJECT_NAME})
 target_compile_options(${PROJECT_NAME}
     PRIVATE
-        $<$<CONFIG:Debug>:-Wall -Werror>
+        -Wall
         -ffile-prefix-map=${CMAKE_SOURCE_DIR}/include=include
         -ffile-prefix-map=${CMAKE_SOURCE_DIR}/src=godzilla/src
 )

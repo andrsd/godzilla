@@ -40,10 +40,10 @@ ImplicitFENonlinearProblem::parameters()
     return params;
 }
 
-ImplicitFENonlinearProblem::ImplicitFENonlinearProblem(const Parameters & params) :
-    FENonlinearProblem(params),
-    TransientProblemInterface(this, params),
-    scheme(get_param<std::string>("scheme"))
+ImplicitFENonlinearProblem::ImplicitFENonlinearProblem(const Parameters & pars) :
+    FENonlinearProblem(pars),
+    TransientProblemInterface(this, pars),
+    scheme(pars.get<std::string>("scheme"))
 {
     CALL_STACK_MSG();
     set_default_output_on(EXECUTE_ON_INITIAL | EXECUTE_ON_TIMESTEP);

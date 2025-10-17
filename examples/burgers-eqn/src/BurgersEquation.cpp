@@ -43,10 +43,10 @@ BurgersEquation::parameters()
     return params;
 }
 
-BurgersEquation::BurgersEquation(const Parameters & parameters) :
-    ExplicitFELinearProblem(parameters),
+BurgersEquation::BurgersEquation(const Parameters & pars) :
+    ExplicitFELinearProblem(pars),
     u_id(FieldID::INVALID),
-    viscosity(get_param<Real>("viscosity"))
+    viscosity(pars.get<Real>("viscosity"))
 {
     CALL_STACK_MSG();
 }

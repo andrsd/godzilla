@@ -39,10 +39,10 @@ Problem::parameters()
     return params;
 }
 
-Problem::Problem(const Parameters & parameters) :
-    Object(parameters),
+Problem::Problem(const Parameters & pars) :
+    Object(pars),
     PrintInterface(this),
-    mesh(get_param<MeshObject *>("_mesh_obj")),
+    mesh(pars.get<MeshObject *>("_mesh_obj")),
     partitioner(nullptr),
     partition_overlap(0),
     default_output_on()
@@ -157,8 +157,6 @@ void
 Problem::add_output(Output * output)
 {
     CALL_STACK_MSG();
-    if (!output->is_param_valid("on"))
-        output->set_exec_mask(this->default_output_on);
     this->outputs.push_back(output);
     auto fo = dynamic_cast<FileOutput *>(output);
     if (fo)
@@ -337,6 +335,12 @@ void
 Problem::set_default_output_on(ExecuteOn flags)
 {
     this->default_output_on = flags;
+}
+
+ExecuteOn
+Problem::get_default_output_on() const
+{
+    return this->default_output_on;
 }
 
 Problem::FieldDecomposition

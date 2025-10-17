@@ -12,7 +12,7 @@ namespace godzilla {
 ///
 class LineMesh : public MeshObject {
 public:
-    explicit LineMesh(const Parameters & parameters);
+    explicit LineMesh(const Parameters & pars);
 
     /// Get the lower bound in x-direction
     ///

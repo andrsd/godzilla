@@ -19,7 +19,7 @@ class App;
 class Object : public LoggingInterface {
 public:
     /// Constructor for building the object via Factory
-    explicit Object(const Parameters & parameters);
+    explicit Object(const Parameters & pars);
     virtual ~Object() = default;
 
     /// Get the type of this object.
@@ -30,22 +30,7 @@ public:
     /// @return The name of the object
     const std::string & get_name() const;
 
-    /// Get the parameters of the object
-    /// @return The parameters of the object
-    const Parameters & get_parameters() const;
-
-    /// Retrieve a parameter for the object
-    /// @param par_name The name of the parameter
-    /// @return The value of the parameter
-    template <typename T>
-    T get_param(const std::string & par_name) const;
-
-    /// Test if the supplied parameter is valid
-    /// @param par_name The name of the parameter to test
-    bool is_param_valid(const std::string & par_name) const;
-
     /// Get the App this object is associated with
-
     App * get_app() const;
 
     /// Get the MPI comm this object works on
@@ -58,9 +43,6 @@ public:
     virtual void create();
 
 private:
-    /// Parameters of this object
-    const Parameters pars;
-
     /// The application owning this object
     App * app;
 
@@ -74,12 +56,5 @@ public:
     /// Method for building Parameters for this class
     static Parameters parameters();
 };
-
-template <typename T>
-T
-Object::get_param(const std::string & par_name) const
-{
-    return this->pars.get<T>(par_name);
-}
 
 } // namespace godzilla

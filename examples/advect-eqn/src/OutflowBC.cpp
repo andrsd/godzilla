@@ -8,7 +8,7 @@ OutflowBC::parameters()
     return params;
 }
 
-OutflowBC::OutflowBC(const Parameters & params) : NaturalRiemannBC(params), components({ 0 })
+OutflowBC::OutflowBC(const Parameters & pars) : NaturalRiemannBC(pars), components({ 0 })
 {
     CALL_STACK_MSG();
 }

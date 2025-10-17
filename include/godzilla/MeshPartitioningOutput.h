@@ -11,7 +11,7 @@ namespace godzilla {
 ///
 class MeshPartitioningOutput : public FileOutput {
 public:
-    explicit MeshPartitioningOutput(const Parameters & params);
+    explicit MeshPartitioningOutput(const Parameters & pars);
 
     void output_step() override;
 

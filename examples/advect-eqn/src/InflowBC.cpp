@@ -9,9 +9,9 @@ InflowBC::parameters()
     return params;
 }
 
-InflowBC::InflowBC(const Parameters & params) :
-    NaturalRiemannBC(params),
-    inlet_vel(get_param<Real>("vel")),
+InflowBC::InflowBC(const Parameters & pars) :
+    NaturalRiemannBC(pars),
+    inlet_vel(pars.get<Real>("vel")),
     components({ 0 })
 {
     CALL_STACK_MSG();

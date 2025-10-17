@@ -14,7 +14,7 @@ class FileMesh : public MeshObject {
 public:
     enum FileFormat { UNKNOWN, EXODUSII, GMSH } file_format;
 
-    explicit FileMesh(const Parameters & parameters);
+    explicit FileMesh(const Parameters & pars);
 
     /// Return file name
     ///

@@ -20,7 +20,7 @@ namespace godzilla {
 /// ```
 class VTKOutput : public FileOutput {
 public:
-    explicit VTKOutput(const Parameters & params);
+    explicit VTKOutput(const Parameters & pars);
     ~VTKOutput() override;
 
     void create() override;

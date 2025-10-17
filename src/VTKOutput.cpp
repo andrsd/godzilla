@@ -18,9 +18,14 @@ VTKOutput::parameters()
     return params;
 }
 
-VTKOutput::VTKOutput(const Parameters & params) : FileOutput(params), viewer(nullptr)
+VTKOutput::VTKOutput(const Parameters & pars) : FileOutput(pars), viewer(nullptr)
 {
     CALL_STACK_MSG();
+    auto dpi = dynamic_cast<DiscreteProblemInterface *>(get_problem());
+    auto mesh =
+        dpi ? dpi->get_mesh() : pars.get<MeshObject *>("_mesh_obj")->get_mesh<UnstructuredMesh>();
+    if (mesh == nullptr)
+        log_error("VTK output works only with unstructured meshes.");
 }
 
 VTKOutput::~VTKOutput()
@@ -40,14 +45,7 @@ void
 VTKOutput::create()
 {
     CALL_STACK_MSG();
-    auto dpi = dynamic_cast<DiscreteProblemInterface *>(get_problem());
-    auto mesh =
-        dpi ? dpi->get_mesh() : get_param<MeshObject *>("_mesh_obj")->get_mesh<UnstructuredMesh>();
-    if (mesh == nullptr)
-        log_error("VTK output works only with unstructured meshes.");
-
     FileOutput::create();
-
     PETSC_CHECK(PetscViewerCreate(get_comm(), &this->viewer));
     PETSC_CHECK(PetscViewerSetType(this->viewer, PETSCVIEWERVTK));
     PETSC_CHECK(PetscViewerFileSetMode(this->viewer, FILE_MODE_WRITE));

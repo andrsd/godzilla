@@ -22,12 +22,12 @@ PiecewiseLinear::parameters()
     return params;
 }
 
-PiecewiseLinear::PiecewiseLinear(const Parameters & params) : Function(params), linpol(nullptr)
+PiecewiseLinear::PiecewiseLinear(const Parameters & pars) : Function(pars), linpol(nullptr)
 {
     CALL_STACK_MSG();
     try {
-        this->linpol = Qtr<LinearInterpolation>::alloc(get_param<std::vector<Real>>("x"),
-                                                       get_param<std::vector<Real>>("y"));
+        this->linpol = Qtr<LinearInterpolation>::alloc(pars.get<std::vector<Real>>("x"),
+                                                       pars.get<std::vector<Real>>("y"));
     }
     catch (std::exception & e) {
         log_error("{}", e.what());

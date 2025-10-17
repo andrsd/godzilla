@@ -14,7 +14,7 @@ TEST(PrintInterfaceTest, lprint)
 
     class TestObject : public Object, public PrintInterface {
     public:
-        explicit TestObject(const Parameters & params) : Object(params), PrintInterface(this) {}
+        explicit TestObject(const Parameters & pars) : Object(pars), PrintInterface(this) {}
 
         void
         create() override
@@ -39,7 +39,7 @@ TEST(PrintInterfaceTest, timed_event)
 
     class TestObject : public Object, public PrintInterface {
     public:
-        explicit TestObject(const Parameters & params) : Object(params), PrintInterface(this) {}
+        explicit TestObject(const Parameters & pars) : Object(pars), PrintInterface(this) {}
 
         void
         create() override

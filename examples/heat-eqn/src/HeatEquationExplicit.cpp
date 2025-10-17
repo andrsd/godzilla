@@ -59,11 +59,11 @@ HeatEquationExplicit::parameters()
     return params;
 }
 
-HeatEquationExplicit::HeatEquationExplicit(const Parameters & parameters) :
-    ExplicitFELinearProblem(parameters),
+HeatEquationExplicit::HeatEquationExplicit(const Parameters & pars) :
+    ExplicitFELinearProblem(pars),
     temp_id(FieldID::INVALID),
     ffn_aux_id(FieldID::INVALID),
-    order(get_param<Int>("order"))
+    order(pars.get<Int>("order"))
 {
     CALL_STACK_MSG();
 }

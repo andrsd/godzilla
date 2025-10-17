@@ -15,7 +15,7 @@ namespace {
 
 class TestBC : public NaturalBC {
 public:
-    explicit TestBC(const Parameters & params) : NaturalBC(params), comps({ 1 }) {}
+    explicit TestBC(const Parameters & pars) : NaturalBC(pars), comps({ 1 }) {}
 
     const std::vector<Int> &
     get_components() const override

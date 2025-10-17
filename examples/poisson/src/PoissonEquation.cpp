@@ -15,9 +15,9 @@ PoissonEquation::parameters()
     return params;
 }
 
-PoissonEquation::PoissonEquation(const Parameters & parameters) :
-    FENonlinearProblem(parameters),
-    p_order(get_param<Int>("p_order")),
+PoissonEquation::PoissonEquation(const Parameters & pars) :
+    FENonlinearProblem(pars),
+    p_order(pars.get<Int>("p_order")),
     iu(FieldID::INVALID),
     affn(FieldID::INVALID)
 {

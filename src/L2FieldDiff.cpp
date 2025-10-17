@@ -19,12 +19,12 @@ L2FieldDiff::parameters()
     return params;
 }
 
-L2FieldDiff::L2FieldDiff(const Parameters & params) :
-    Postprocessor(params),
+L2FieldDiff::L2FieldDiff(const Parameters & pars) :
+    Postprocessor(pars),
     fepi(dynamic_cast<const FEProblemInterface *>(get_problem()))
 {
     CALL_STACK_MSG();
-    const auto & fn_map = get_param<std::map<std::string, std::vector<std::string>>>("functions");
+    const auto fn_map = pars.get<std::map<std::string, std::vector<std::string>>>("functions");
 
     if (this->fepi != nullptr) {
         for (const auto & [field_name, fn_names] : fn_map) {

@@ -44,7 +44,7 @@ public:
         void destroy();
     };
 
-    explicit Problem(const Parameters & parameters);
+    explicit Problem(const Parameters & pars);
 
     /// Build the problem to solve
     void create() override;
@@ -174,6 +174,9 @@ public:
 
     /// Set default execute on flags
     void set_default_output_on(ExecuteOn flags);
+
+    /// Get default execute on flags for outputs
+    ExecuteOn get_default_output_on() const;
 
     /// Create field decomposition
     FieldDecomposition create_field_decomposition();

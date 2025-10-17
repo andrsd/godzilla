@@ -12,7 +12,7 @@ TEST(ResidualFuncTest, test)
 {
     class GTestProblem : public ImplicitFENonlinearProblem {
     public:
-        explicit GTestProblem(const Parameters & params) : ImplicitFENonlinearProblem(params) {}
+        explicit GTestProblem(const Parameters & pars) : ImplicitFENonlinearProblem(pars) {}
 
     protected:
         void
@@ -78,7 +78,7 @@ TEST(ResidualFuncTest, test_vals)
 {
     class GTestProblem : public ImplicitFENonlinearProblem {
     public:
-        explicit GTestProblem(const Parameters & params) : ImplicitFENonlinearProblem(params) {}
+        explicit GTestProblem(const Parameters & pars) : ImplicitFENonlinearProblem(pars) {}
 
     protected:
         void

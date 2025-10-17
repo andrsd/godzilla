@@ -17,7 +17,7 @@ namespace {
 /// Test problem for simple FE solver using JFNK
 class GTestFENonlinearProblemJFNK : public FENonlinearProblem {
 public:
-    explicit GTestFENonlinearProblemJFNK(const Parameters & params);
+    explicit GTestFENonlinearProblemJFNK(const Parameters & pars);
 
 protected:
     void set_up_fields() override;
@@ -81,8 +81,8 @@ protected:
     const Dimension & dim;
 };
 
-GTestFENonlinearProblemJFNK::GTestFENonlinearProblemJFNK(const Parameters & params) :
-    FENonlinearProblem(params),
+GTestFENonlinearProblemJFNK::GTestFENonlinearProblemJFNK(const Parameters & pars) :
+    FENonlinearProblem(pars),
     iu(0)
 {
 }

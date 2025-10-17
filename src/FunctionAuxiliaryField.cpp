@@ -15,9 +15,9 @@ FunctionAuxiliaryField::parameters()
     return params;
 }
 
-FunctionAuxiliaryField::FunctionAuxiliaryField(const Parameters & params) :
-    AuxiliaryField(params),
-    FunctionInterface(params)
+FunctionAuxiliaryField::FunctionAuxiliaryField(const Parameters & pars) :
+    AuxiliaryField(pars),
+    FunctionInterface(pars)
 {
     CALL_STACK_MSG();
 }

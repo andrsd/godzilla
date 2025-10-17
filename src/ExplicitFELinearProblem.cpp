@@ -41,9 +41,9 @@ ExplicitFELinearProblem::parameters()
     return params;
 }
 
-ExplicitFELinearProblem::ExplicitFELinearProblem(const Parameters & params) :
-    FENonlinearProblem(params),
-    ExplicitProblemInterface(this, params)
+ExplicitFELinearProblem::ExplicitFELinearProblem(const Parameters & pars) :
+    FENonlinearProblem(pars),
+    ExplicitProblemInterface(this, pars)
 {
     CALL_STACK_MSG();
     set_default_output_on(EXECUTE_ON_INITIAL | EXECUTE_ON_TIMESTEP);

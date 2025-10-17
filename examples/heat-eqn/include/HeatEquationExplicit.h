@@ -10,7 +10,7 @@ using namespace godzilla;
 ///
 class HeatEquationExplicit : public ExplicitFELinearProblem {
 public:
-    explicit HeatEquationExplicit(const Parameters & parameters);
+    explicit HeatEquationExplicit(const Parameters & pars);
     void create() override;
 
 protected:

@@ -13,7 +13,7 @@ namespace godzilla {
 /// Can be used only on single-field problems
 class DirichletBC : public EssentialBC, protected FunctionInterface {
 public:
-    explicit DirichletBC(const Parameters & params);
+    explicit DirichletBC(const Parameters & pars);
 
     void create() override;
     void set_up() override;

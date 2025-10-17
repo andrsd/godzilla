@@ -9,7 +9,7 @@ using namespace godzilla;
 ///
 class BurgersEquation : public ExplicitFELinearProblem {
 public:
-    explicit BurgersEquation(const Parameters & parameters);
+    explicit BurgersEquation(const Parameters & pars);
     void create() override;
 
     const Real & get_viscosity() const;

@@ -8,7 +8,7 @@
 
 class TestMesh1D : public godzilla::MeshObject {
 public:
-    explicit TestMesh1D(const godzilla::Parameters & parameters);
+    explicit TestMesh1D(const godzilla::Parameters & pars);
 
     godzilla::Qtr<godzilla::Mesh> create_mesh() override;
 

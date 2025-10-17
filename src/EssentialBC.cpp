@@ -4,6 +4,7 @@
 #include "godzilla/EssentialBC.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/App.h"
+#include "godzilla/Exception.h"
 #include "godzilla/Problem.h"
 #include "godzilla/DiscreteProblemInterface.h"
 #include "godzilla/Types.h"
@@ -15,13 +16,14 @@ Parameters
 EssentialBC::parameters()
 {
     auto params = BoundaryCondition::parameters();
-    params.add_param<std::string>("field", "", "Field name");
+    params.add_param<std::string>("field", "Field name");
     return params;
 }
 
-EssentialBC::EssentialBC(const Parameters & params) :
-    BoundaryCondition(params),
-    fid(FieldID::INVALID)
+EssentialBC::EssentialBC(const Parameters & pars) :
+    BoundaryCondition(pars),
+    fid(FieldID::INVALID),
+    field_name(pars.get<Optional<std::string>>("field"))
 
 {
     CALL_STACK_MSG();
@@ -34,17 +36,16 @@ EssentialBC::create()
     auto dpi = get_discrete_problem_interface();
     assert_true(dpi != nullptr, "DiscreteProblemInterface is null");
 
-    std::vector<std::string> field_names = dpi->get_field_names();
+    auto field_names = dpi->get_field_names();
     if (field_names.size() == 1) {
         this->fid = dpi->get_field_id(field_names[0]);
     }
     else if (field_names.size() > 1) {
-        const auto & field_name = get_param<std::string>("field");
-        if (!field_name.empty()) {
-            if (dpi->has_field_by_name(field_name))
-                this->fid = dpi->get_field_id(field_name);
+        if (this->field_name.has_value()) {
+            if (dpi->has_field_by_name(this->field_name.value()))
+                this->fid = dpi->get_field_id(this->field_name.value());
             else
-                log_error("Field '{}' does not exists. Typo?", field_name);
+                log_error("Field '{}' does not exists. Typo?", this->field_name.value());
         }
         else
             log_error("Use the 'field' parameter to assign this boundary condition to an existing "

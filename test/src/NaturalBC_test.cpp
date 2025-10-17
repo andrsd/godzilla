@@ -28,7 +28,7 @@ TEST(NaturalBCTest, api)
 
     class MockNaturalBC : public NaturalBC {
     public:
-        explicit MockNaturalBC(const Parameters & params) : NaturalBC(params), comps({ 3, 5 }) {}
+        explicit MockNaturalBC(const Parameters & pars) : NaturalBC(pars), comps({ 3, 5 }) {}
 
         const std::vector<Int> &
         get_components() const override
@@ -89,7 +89,7 @@ public:
 
 class TestNaturalBC : public NaturalBC {
 public:
-    explicit TestNaturalBC(const Parameters & params) : NaturalBC(params), comps({ 0 }) {}
+    explicit TestNaturalBC(const Parameters & pars) : NaturalBC(pars), comps({ 0 }) {}
 
     const std::vector<Int> &
     get_components() const override

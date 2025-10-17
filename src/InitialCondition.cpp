@@ -4,6 +4,7 @@
 #include "godzilla/CallStack.h"
 #include "godzilla/InitialCondition.h"
 #include "godzilla/DiscreteProblemInterface.h"
+#include "godzilla/Exception.h"
 #include "godzilla/Types.h"
 #include "godzilla/Assert.h"
 
@@ -13,15 +14,16 @@ Parameters
 InitialCondition::parameters()
 {
     auto params = Object::parameters();
-    params.add_param<std::string>("field", "", "Field name")
+    params.add_param<std::string>("field", "Field name")
         .add_private_param<DiscreteProblemInterface *>("_dpi", nullptr);
     return params;
 }
 
-InitialCondition::InitialCondition(const Parameters & params) :
-    Object(params),
+InitialCondition::InitialCondition(const Parameters & pars) :
+    Object(pars),
     PrintInterface(this),
-    dpi(get_param<DiscreteProblemInterface *>("_dpi")),
+    dpi(pars.get<DiscreteProblemInterface *>("_dpi")),
+    field_name(pars.get<Optional<std::string>>("field")),
     fid(FieldID::INVALID)
 {
     CALL_STACK_MSG();
@@ -32,20 +34,8 @@ InitialCondition::create()
 {
     CALL_STACK_MSG();
     assert_true(this->dpi != nullptr, "DiscreteProblemInterface is null");
-    auto fld = get_param<std::string>("field");
-    if (fld.empty()) {
-        std::vector<std::string> field_names = this->dpi->get_field_names();
-        std::vector<std::string> aux_field_names = this->dpi->get_aux_field_names();
-        if ((field_names.size() == 1) && (aux_field_names.empty())) {
-            this->fid = this->dpi->get_field_id(field_names[0]);
-            this->field_name = this->dpi->get_field_name(this->fid);
-        }
-        else
-            log_error(
-                "Use the 'field' parameter to assign this initial condition to an existing field.");
-    }
-    else {
-        this->field_name = fld;
+    if (this->field_name.has_value()) {
+        auto fld = this->field_name.value();
         if (this->dpi->has_field_by_name(fld))
             this->fid = this->dpi->get_field_id(fld);
         else if (this->dpi->has_aux_field_by_name(fld))
@@ -53,13 +43,25 @@ InitialCondition::create()
         else
             log_error("Field '{}' does not exists. Typo?", fld);
     }
+    else {
+        std::vector<std::string> field_names = this->dpi->get_field_names();
+        std::vector<std::string> aux_field_names = this->dpi->get_aux_field_names();
+        if ((field_names.size() == 1) && (aux_field_names.empty())) {
+            this->fid = this->dpi->get_field_id(field_names[0]);
+            this->field_name = this->dpi->get_field_name(this->fid);
+        }
+        else
+            throw Exception(
+                "Use the 'field' parameter to assign this initial condition to an existing field.");
+    }
 }
 
 const std::string &
 InitialCondition::get_field_name() const
 {
     CALL_STACK_MSG();
-    return this->field_name;
+    assert_true(this->field_name.has_value(), "Field name not set");
+    return this->field_name.value();
 }
 
 FieldID

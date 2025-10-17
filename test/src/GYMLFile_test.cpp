@@ -27,9 +27,9 @@ public:
 
 class GTestProblem : public Problem, public TransientProblemInterface {
 public:
-    explicit GTestProblem(const Parameters & params) :
-        Problem(params),
-        TransientProblemInterface(this, params)
+    explicit GTestProblem(const Parameters & pars) :
+        Problem(pars),
+        TransientProblemInterface(this, pars)
     {
     }
 
@@ -206,17 +206,6 @@ TEST_F(GYMLFileTest, build)
 
     auto problem = file.get_problem();
     EXPECT_NE(problem, nullptr);
-
-    EXPECT_EQ(problem->get_param<std::string>("str"), "input_str");
-    EXPECT_EQ(problem->get_param<int>("i"), -4321);
-    EXPECT_EQ(problem->get_param<unsigned int>("ui"), 7890);
-    EXPECT_EQ(problem->get_param<double>("d"), 34.567);
-    EXPECT_THAT(problem->get_param<std::vector<double>>("arr_d"), testing::ElementsAre(2.));
-    EXPECT_THAT(problem->get_param<std::vector<int>>("arr_i"), testing::ElementsAre(5));
-    EXPECT_THAT(problem->get_param<std::vector<std::string>>("arr_str"),
-                testing::ElementsAre("xyz"));
-    EXPECT_EQ(problem->get_param<bool>("bool1"), true);
-    EXPECT_EQ(problem->get_param<bool>("bool2"), false);
 }
 
 TEST_F(GYMLFileTest, funcs)

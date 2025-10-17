@@ -32,6 +32,7 @@ TEST(DirichletBCTest, api)
     auto params = DirichletBC::parameters();
     params.set<App *>("_app", &app)
         .set<DiscreteProblemInterface *>("_dpi", &problem)
+        .set<std::vector<std::string>>("boundary", {})
         .set<std::vector<std::string>>("value", { "t * (x + y + z)" })
         .set<std::vector<std::string>>("value_t", { "1" });
     DirichletBC obj(params);
@@ -80,6 +81,7 @@ TEST(DirichletBCTest, with_user_defined_fn)
     auto bc_pars = DirichletBC::parameters();
     bc_pars.set<App *>("_app", &app)
         .set<DiscreteProblemInterface *>("_dpi", &problem)
+        .set<std::vector<std::string>>("boundary", {})
         .set<std::vector<std::string>>("value", { "ipol(x)" });
     DirichletBC bc(bc_pars);
 

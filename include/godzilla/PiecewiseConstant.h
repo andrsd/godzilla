@@ -14,7 +14,7 @@ namespace godzilla {
 /// User have to specify at least 1 point
 class PiecewiseConstant : public Function {
 public:
-    explicit PiecewiseConstant(const Parameters & params);
+    explicit PiecewiseConstant(const Parameters & pars);
 
     void create() override;
 

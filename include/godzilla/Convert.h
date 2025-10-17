@@ -3,7 +3,9 @@
 
 #pragma once
 
+#include "godzilla/Types.h"
 #include <string>
+#include <tuple>
 
 namespace godzilla {
 namespace conv {
@@ -13,6 +15,9 @@ namespace conv {
 /// @param value Value to convert
 template <typename T>
 std::string to_str(T value);
+
+/// Convert
+std::tuple<ExecuteOn, bool> to_execute_on(const std::vector<std::string> & vals);
 
 } // namespace conv
 } // namespace godzilla

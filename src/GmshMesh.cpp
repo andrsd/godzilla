@@ -13,7 +13,7 @@ GmshMesh::parameters()
     return params;
 }
 
-GmshMesh::GmshMesh(const Parameters & parameters) : FileMesh(parameters)
+GmshMesh::GmshMesh(const Parameters & pars) : FileMesh(pars)
 {
     CALL_STACK_MSG();
     set_file_format(GMSH);

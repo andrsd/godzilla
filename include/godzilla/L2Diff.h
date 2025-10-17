@@ -12,7 +12,7 @@ namespace godzilla {
 ///
 class L2Diff : public Postprocessor, public FunctionInterface {
 public:
-    explicit L2Diff(const Parameters & params);
+    explicit L2Diff(const Parameters & pars);
 
     void create() override;
     void compute() override;

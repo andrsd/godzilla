@@ -8,7 +8,7 @@ using namespace godzilla;
 ///
 class AdvectionEquation : public ExplicitFVLinearProblem {
 public:
-    AdvectionEquation(const Parameters & parameters);
+    AdvectionEquation(const Parameters & pars);
     void create() override;
 
 protected:

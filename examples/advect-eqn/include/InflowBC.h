@@ -8,7 +8,7 @@ using namespace godzilla;
 ///
 class InflowBC : public NaturalRiemannBC {
 public:
-    InflowBC(const Parameters & params);
+    InflowBC(const Parameters & pars);
 
     const std::vector<Int> & get_components() const override;
     void

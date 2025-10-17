@@ -20,7 +20,8 @@ TEST_F(AuxiliaryFieldTest, api)
 {
     class TestAuxFld : public AuxiliaryField {
     public:
-        explicit TestAuxFld(const Parameters & params) : AuxiliaryField(params) {}
+        explicit TestAuxFld(const Parameters & pars) : AuxiliaryField(pars) {}
+
         Int
         get_num_components() const override
         {

@@ -15,7 +15,7 @@ public:
 
 class MockOutput : public Output {
 public:
-    explicit MockOutput(const Parameters & params) : Output(params) {}
+    explicit MockOutput(const Parameters & pars) : Output(pars) {}
 
     void
     output_step() override
@@ -48,7 +48,7 @@ TEST_F(OutputTest, exec_masks_2)
     MockOutput out(pars);
     out.create();
 
-    EXPECT_TRUE(out.get_exec_mask() & EXECUTE_ON_FINAL);
+    EXPECT_TRUE(out.execute_on() & EXECUTE_ON_FINAL);
     EXPECT_TRUE(out.should_output(EXECUTE_ON_FINAL));
     EXPECT_FALSE(out.should_output(EXECUTE_ON_INITIAL));
     EXPECT_FALSE(out.should_output(EXECUTE_ON_TIMESTEP));
@@ -63,9 +63,9 @@ TEST_F(OutputTest, exec_masks_3)
     MockOutput out(pars);
     out.create();
 
-    EXPECT_TRUE(out.get_exec_mask() & EXECUTE_ON_FINAL);
-    EXPECT_TRUE(out.get_exec_mask() & EXECUTE_ON_INITIAL);
-    EXPECT_TRUE(out.get_exec_mask() & EXECUTE_ON_TIMESTEP);
+    EXPECT_TRUE(out.execute_on() & EXECUTE_ON_FINAL);
+    EXPECT_TRUE(out.execute_on() & EXECUTE_ON_INITIAL);
+    EXPECT_TRUE(out.execute_on() & EXECUTE_ON_TIMESTEP);
 
     this->prob->set_time(0.);
     EXPECT_TRUE(out.should_output(EXECUTE_ON_INITIAL));

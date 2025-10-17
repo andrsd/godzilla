@@ -15,7 +15,7 @@ namespace godzilla {
 /// value for each component
 class ConstantInitialCondition : public InitialCondition {
 public:
-    explicit ConstantInitialCondition(const Parameters & params);
+    explicit ConstantInitialCondition(const Parameters & pars);
 
     Int get_num_components() const override;
 

@@ -101,7 +101,7 @@ TEST(ExodusIIOutputTest, fe_check)
 
     class TestMesh : public MeshObject {
     public:
-        explicit TestMesh(const Parameters & params) : MeshObject(params) {}
+        explicit TestMesh(const Parameters & pars) : MeshObject(pars) {}
 
         Qtr<Mesh>
         create_mesh() override
@@ -112,7 +112,7 @@ TEST(ExodusIIOutputTest, fe_check)
 
     class TestLinearProblem : public Problem {
     public:
-        explicit TestLinearProblem(const Parameters & params) : Problem(params) {}
+        explicit TestLinearProblem(const Parameters & pars) : Problem(pars) {}
 
         void
         run()

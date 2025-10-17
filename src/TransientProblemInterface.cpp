@@ -194,12 +194,14 @@ TransientProblemInterface::parameters()
     return params;
 }
 
-TransientProblemInterface::TransientProblemInterface(Problem * problem, const Parameters & params) :
+TransientProblemInterface::TransientProblemInterface(Problem * problem, const Parameters & pars) :
     ts(nullptr),
     problem(problem),
     ts_adaptor(nullptr),
-    start_time(params.get<Real>("start_time")),
-    dt_initial(params.get<Real>("dt")),
+    start_time(pars.get<Real>("start_time")),
+    end_time(pars.get<Optional<Real>>("end_time")),
+    num_steps(pars.get<Optional<Int>>("num_steps")),
+    dt_initial(pars.get<Real>("dt")),
     step_num(0)
 {
     CALL_STACK_MSG();
@@ -207,16 +209,11 @@ TransientProblemInterface::TransientProblemInterface(Problem * problem, const Pa
     PETSC_CHECK(TSSetApplicationContext(this->ts, this));
     this->time_step_adapt = TimeStepAdapt::from_ts(this->ts);
 
-    if (params.is_param_valid("end_time") && params.is_param_valid("num_steps"))
+    if (this->end_time.has_value() && this->num_steps.has_value())
         this->problem->log_error(
             "Cannot provide 'end_time' and 'num_steps' together. Specify one or the other.");
-    if (!params.is_param_valid("end_time") && !params.is_param_valid("num_steps"))
+    if (!this->end_time.has_value() && !this->num_steps.has_value())
         this->problem->log_error("You must provide either 'end_time' or 'num_steps' parameter.");
-
-    if (params.is_param_valid("end_time"))
-        this->end_time = params.get<Real>("end_time");
-    if (params.is_param_valid("num_steps"))
-        this->num_steps = params.get<Int>("num_steps");
 }
 
 TransientProblemInterface::~TransientProblemInterface()

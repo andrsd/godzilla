@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 #include "godzilla/Registry.h"
+#include "godzilla/Utils.h"
 
 namespace godzilla {
 

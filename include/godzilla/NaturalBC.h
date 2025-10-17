@@ -16,7 +16,7 @@ class BndJacobianFunc;
 /// Base class for natural boundary conditions
 class NaturalBC : public BoundaryCondition {
 public:
-    explicit NaturalBC(const Parameters & params);
+    explicit NaturalBC(const Parameters & pars);
 
     void create() override;
     void set_up() override;
@@ -57,7 +57,8 @@ protected:
 private:
     /// Field ID this boundary condition is attached to
     FieldID fid;
-
+    ///
+    Optional<std::string> field_name;
     /// Finite element problem this object is part of
     FEProblemInterface * fepi;
 

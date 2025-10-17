@@ -78,7 +78,7 @@ public:
     /// @param name Name of the functional
     /// @param params Parameters needed to build the functional
     template <typename Fn>
-    void create_functional(const std::string & name, const Parameters & params);
+    void create_functional(const std::string & name, const Parameters & pars);
 
     /// Get a reference to a functional using its name
     ///
@@ -154,12 +154,12 @@ DependencyEvaluator::get_value(const std::string & val_name)
 
 template <typename Fn>
 void
-DependencyEvaluator::create_functional(const std::string & name, const Parameters & params)
+DependencyEvaluator::create_functional(const std::string & name, const Parameters & pars)
 {
     CALL_STACK_MSG();
     const auto & it = this->functionals.find(name);
     if (it == this->functionals.end()) {
-        auto * fnl = new Fn(params);
+        auto * fnl = new Fn(pars);
         this->functionals[name] = fnl;
     }
     else

@@ -25,11 +25,11 @@ PiecewiseConstant::parameters()
     return params;
 }
 
-PiecewiseConstant::PiecewiseConstant(const Parameters & params) :
-    Function(params),
+PiecewiseConstant::PiecewiseConstant(const Parameters & pars) :
+    Function(pars),
     continuity(RIGHT),
-    x(get_param<std::vector<Real>>("x")),
-    y(get_param<std::vector<Real>>("y"))
+    x(pars.get<std::vector<Real>>("x")),
+    y(pars.get<std::vector<Real>>("y"))
 {
     CALL_STACK_MSG();
     if (this->x.size() + 1 != this->y.size())
@@ -46,6 +46,16 @@ PiecewiseConstant::PiecewiseConstant(const Parameters & params) :
                 log_error("Values in 'x' must be increasing. Failed at index '{}'.", i + 1);
         }
     }
+
+    auto cont = utils::to_lower(pars.get<std::string>("continuity"));
+    if (validation::in(cont, { "left", "right" })) {
+        if (cont == "left")
+            this->continuity = LEFT;
+        else if (cont == "right")
+            this->continuity = RIGHT;
+    }
+    else
+        log_error("The 'continuity' parameter can be either 'left' or 'right'.");
 }
 
 void
@@ -59,16 +69,6 @@ void
 PiecewiseConstant::create()
 {
     CALL_STACK_MSG();
-    auto cont = get_param<std::string>("continuity");
-    if (validation::in(cont, { "left", "right" })) {
-        std::string cont_lc = utils::to_lower(cont);
-        if (cont_lc == "left")
-            this->continuity = LEFT;
-        else if (cont_lc == "right")
-            this->continuity = RIGHT;
-    }
-    else
-        log_error("The 'continuity' parameter can be either 'left' or 'right'.");
 }
 
 Real

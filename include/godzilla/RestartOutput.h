@@ -10,7 +10,7 @@ namespace godzilla {
 
 class RestartOutput : public FileOutput {
 public:
-    explicit RestartOutput(const Parameters & params);
+    explicit RestartOutput(const Parameters & pars);
 
     void create() override;
     void output_step() override;

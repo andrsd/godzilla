@@ -15,7 +15,7 @@ namespace godzilla {
 /// TODO: This needs a better name
 class MeshObject : public Object, public PrintInterface {
 public:
-    explicit MeshObject(const Parameters & parameters);
+    explicit MeshObject(const Parameters & pars);
 
     void create() override;
 

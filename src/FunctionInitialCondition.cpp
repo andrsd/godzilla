@@ -14,9 +14,9 @@ FunctionInitialCondition::parameters()
     return params;
 }
 
-FunctionInitialCondition::FunctionInitialCondition(const Parameters & params) :
-    InitialCondition(params),
-    FunctionInterface(params)
+FunctionInitialCondition::FunctionInitialCondition(const Parameters & pars) :
+    InitialCondition(pars),
+    FunctionInterface(pars)
 {
 }
 

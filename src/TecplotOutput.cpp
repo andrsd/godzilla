@@ -79,14 +79,14 @@ TecplotOutput::parameters()
     return params;
 }
 
-TecplotOutput::TecplotOutput(const Parameters & params) :
-    FileOutput(params),
+TecplotOutput::TecplotOutput(const Parameters & pars) :
+    FileOutput(pars),
 #ifdef GODZILLA_WITH_TECIOCPP
     mesh(nullptr),
     file(nullptr),
     n_zones(0),
 #endif
-    variable_names(get_param<std::vector<std::string>>("variables"))
+    variable_names(pars.get<std::vector<std::string>>("variables"))
 {
     CALL_STACK_MSG();
 #ifdef GODZILLA_WITH_TECIOCPP

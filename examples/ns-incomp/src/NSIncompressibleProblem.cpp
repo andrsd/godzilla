@@ -271,12 +271,12 @@ NSIncompressibleProblem::parameters()
     return params;
 }
 
-NSIncompressibleProblem::NSIncompressibleProblem(const Parameters & parameters) :
-    ImplicitFENonlinearProblem(parameters),
+NSIncompressibleProblem::NSIncompressibleProblem(const Parameters & pars) :
+    ImplicitFENonlinearProblem(pars),
     velocity_id(FieldID::INVALID),
     pressure_id(FieldID::INVALID),
     ffn_aid(FieldID::INVALID),
-    Re(get_param<Real>("Re"))
+    Re(pars.get<Real>("Re"))
 {
     CALL_STACK_MSG();
 }

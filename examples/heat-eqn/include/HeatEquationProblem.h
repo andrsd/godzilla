@@ -8,7 +8,7 @@ using namespace godzilla;
 ///
 class HeatEquationProblem : public ImplicitFENonlinearProblem {
 public:
-    explicit HeatEquationProblem(const Parameters & parameters);
+    explicit HeatEquationProblem(const Parameters & pars);
 
 protected:
     void set_up_fields() override;

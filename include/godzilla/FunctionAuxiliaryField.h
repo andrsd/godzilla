@@ -13,7 +13,7 @@ namespace godzilla {
 ///
 class FunctionAuxiliaryField : public AuxiliaryField, protected FunctionInterface {
 public:
-    explicit FunctionAuxiliaryField(const Parameters & params);
+    explicit FunctionAuxiliaryField(const Parameters & pars);
 
     void create() override;
     Int get_num_components() const override;

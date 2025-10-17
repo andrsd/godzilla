@@ -12,8 +12,7 @@ AdvectionEquation::parameters()
     return params;
 }
 
-AdvectionEquation::AdvectionEquation(const Parameters & parameters) :
-    ExplicitFVLinearProblem(parameters)
+AdvectionEquation::AdvectionEquation(const Parameters & pars) : ExplicitFVLinearProblem(pars)
 {
     CALL_STACK_MSG();
 }

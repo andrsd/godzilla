@@ -18,8 +18,8 @@ RestartOutput::parameters()
     return params;
 }
 
-RestartOutput::RestartOutput(const Parameters & params) :
-    FileOutput(params),
+RestartOutput::RestartOutput(const Parameters & pars) :
+    FileOutput(pars),
     ri(dynamic_cast<RestartInterface *>(get_problem()))
 {
 }

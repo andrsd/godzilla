@@ -15,7 +15,7 @@ class Problem;
 ///
 class Output : public Object, public PrintInterface {
 public:
-    explicit Output(const Parameters & params);
+    explicit Output(const Parameters & pars);
 
     void create() override;
 
@@ -27,7 +27,12 @@ public:
     /// Get execution mask
     ///
     /// @return execution mask
-    ExecuteOn get_exec_mask() const;
+    [[deprecated("Use execute_on()")]] ExecuteOn get_exec_mask() const;
+
+    /// Get execution mask
+    ///
+    /// @return execution mask
+    ExecuteOn execute_on() const;
 
     /// Should output happen at a specified occasion
     ///
@@ -45,7 +50,7 @@ protected:
     Problem * get_problem() const;
 
     /// Set up the execution mask
-    void set_up_exec();
+    // void set_up_exec();
 
 private:
     /// Problem to get data from
