@@ -98,9 +98,6 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla6Object6ObjectERK10Parameters"><code class="docutils literal notranslate"><span class="pre">Object::Object()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla6Object8get_typeEv"><code class="docutils literal notranslate"><span class="pre">Object::get_type()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla6Object8get_nameEv"><code class="docutils literal notranslate"><span class="pre">Object::get_name()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla6Object14get_parametersEv"><code class="docutils literal notranslate"><span class="pre">Object::get_parameters()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4I0ENK8godzilla6Object9get_paramE1TRKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Object::get_param()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla6Object14is_param_validERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Object::is_param_valid()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla6Object7get_appEv"><code class="docutils literal notranslate"><span class="pre">Object::get_app()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla6Object8get_commEv"><code class="docutils literal notranslate"><span class="pre">Object::get_comm()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla6Object16get_processor_idEv"><code class="docutils literal notranslate"><span class="pre">Object::get_processor_id()</span></code></a></li>
@@ -161,7 +158,7 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla6Object6ObjectERK10Parameters">
-<span id="_CPPv3N8godzilla6Object6ObjectERK10Parameters"></span><span id="_CPPv2N8godzilla6Object6ObjectERK10Parameters"></span><span id="godzilla::Object::Object__ParametersCR"></span><span class="target" id="classgodzilla_1_1_object_1aca5e25f7182c3f8fa067847388b5cb91"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Object</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="parameters.html#_CPPv4N8godzilla10ParametersE" title="godzilla::Parameters"><span class="n"><span class="pre">Parameters</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">parameters</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla6Object6ObjectERK10Parameters" title="Link to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla6Object6ObjectERK10Parameters"></span><span id="_CPPv2N8godzilla6Object6ObjectERK10Parameters"></span><span id="godzilla::Object::Object__ParametersCR"></span><span class="target" id="classgodzilla_1_1_object_1ae42de2086f587785d293c099ff0df9b7"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Object</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="parameters.html#_CPPv4N8godzilla10ParametersE" title="godzilla::Parameters"><span class="n"><span class="pre">Parameters</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">pars</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla6Object6ObjectERK10Parameters" title="Link to this definition"></a><br /></dt>
 <dd><p>Constructor for building the object via <a class="reference internal" href="factory.html#classgodzilla_1_1_factory"><span class="std std-ref">Factory</span></a>. </p>
 </dd></dl>
 
@@ -183,42 +180,6 @@
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The name of the object </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla6Object14get_parametersEv">
-<span id="_CPPv3NK8godzilla6Object14get_parametersEv"></span><span id="_CPPv2NK8godzilla6Object14get_parametersEv"></span><span id="godzilla::Object::get_parametersC"></span><span class="target" id="classgodzilla_1_1_object_1a90df5376e2778681be34c57dc8a0df80"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="parameters.html#_CPPv4N8godzilla10ParametersE" title="godzilla::Parameters"><span class="n"><span class="pre">Parameters</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_parameters</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla6Object14get_parametersEv" title="Link to this definition"></a><br /></dt>
-<dd><p>Get the parameters of the object. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The parameters of the object </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4I0ENK8godzilla6Object9get_paramE1TRKNSt6stringE">
-<span id="_CPPv3I0ENK8godzilla6Object9get_paramERKNSt6stringE"></span><span id="_CPPv2I0ENK8godzilla6Object9get_paramERKNSt6stringE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classgodzilla_1_1_object_1a1ac42210842e9be627355ebf9b62a45b"></span><a class="reference internal" href="#_CPPv4I0ENK8godzilla6Object9get_paramE1TRKNSt6stringE" title="godzilla::Object::get_param::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_param</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">par_name</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4I0ENK8godzilla6Object9get_paramE1TRKNSt6stringE" title="Link to this definition"></a><br /></dt>
-<dd><p>Retrieve a parameter for the object. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>par_name</strong> – The name of the parameter </p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The value of the parameter </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla6Object14is_param_validERKNSt6stringE">
-<span id="_CPPv3NK8godzilla6Object14is_param_validERKNSt6stringE"></span><span id="_CPPv2NK8godzilla6Object14is_param_validERKNSt6stringE"></span><span id="godzilla::Object::is_param_valid__ssCRC"></span><span class="target" id="classgodzilla_1_1_object_1a3cc0cd88e9ba26658314f1fb010d2c3b"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_param_valid</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">par_name</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla6Object14is_param_validERKNSt6stringE" title="Link to this definition"></a><br /></dt>
-<dd><p>Test if the supplied parameter is valid. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>par_name</strong> – The name of the parameter to test </p>
 </dd>
 </dl>
 </dd></dl>
