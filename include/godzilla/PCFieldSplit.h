@@ -37,7 +37,13 @@ public:
     };
 
     struct SchurBlocks {
-        SchurBlocks(Mat A00, Mat A01, Mat A10, Mat A11) : A00(A00), A01(A01), A10(A10), A11(A11) {}
+        SchurBlocks(Mat A00, Mat A01, Mat A10, Mat A11) : A00(A00), A01(A01), A10(A10), A11(A11)
+        {
+            this->A00.inc_reference();
+            this->A01.inc_reference();
+            this->A10.inc_reference();
+            this->A11.inc_reference();
+        }
 
         Matrix A00;
         Matrix A01;
@@ -50,6 +56,7 @@ public:
             type(static_cast<SchurPreType>(type)),
             matrix(pre)
         {
+            this->matrix.inc_reference();
         }
 
         SchurPreType type;
