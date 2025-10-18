@@ -6,7 +6,6 @@
 #include "godzilla/Init.h"
 #include "godzilla/App.h"
 #include "godzilla/UnstructuredMesh.h"
-#include "godzilla/ExodusIIMesh.h"
 #include "godzilla/ExodusIIOutput.h"
 
 const char * version = "1.0";
