@@ -4,8 +4,8 @@
 #include "TestMesh2D.h"
 #include "TestMesh3D.h"
 #include "godzilla/Enums.h"
-#include "godzilla/MeshObject.h"
 #include "godzilla/FEBoundary.h"
+#include "godzilla/MeshFactory.h"
 
 using namespace godzilla;
 using namespace testing;
@@ -44,14 +44,12 @@ TEST(NaturalBoundaryTest, test_1d)
 
     auto mesh_pars = TestMesh1D::parameters();
     mesh_pars.set<godzilla::App *>("_app", &app);
-    TestMesh1D mesh(mesh_pars);
-    mesh.create();
-
-    auto m = mesh.get_mesh<UnstructuredMesh>();
+    auto mesh_qtr = MeshFactory::create<TestMesh1D>(mesh_pars);
+    auto mesh = mesh_qtr.get();
 
     {
-        auto bnd_facets = points_from_label(m->get_label("left"));
-        TestBoundary1D bnd(m, bnd_facets);
+        auto bnd_facets = points_from_label(mesh->get_label("left"));
+        TestBoundary1D bnd(mesh, bnd_facets);
         bnd.create();
         EXPECT_DOUBLE_EQ(bnd.num_facets(), 1);
         EXPECT_DOUBLE_EQ(bnd.facet(0), 2);
@@ -61,8 +59,8 @@ TEST(NaturalBoundaryTest, test_1d)
     }
 
     {
-        auto bnd_facets = points_from_label(m->get_label("right"));
-        TestBoundary1D bnd(m, bnd_facets);
+        auto bnd_facets = points_from_label(mesh->get_label("right"));
+        TestBoundary1D bnd(mesh, bnd_facets);
         bnd.create();
         EXPECT_DOUBLE_EQ(bnd.num_facets(), 1);
         EXPECT_DOUBLE_EQ(bnd.facet(0), 4);
@@ -78,14 +76,12 @@ TEST(NaturalBoundaryTest, test_2d)
 
     auto mesh_pars = TestMesh2D::parameters();
     mesh_pars.set<godzilla::App *>("_app", &app);
-    TestMesh2D mesh(mesh_pars);
-    mesh.create();
-
-    auto m = mesh.get_mesh<UnstructuredMesh>();
+    auto mesh_qtr = MeshFactory::create<TestMesh2D>(mesh_pars);
+    auto mesh = mesh_qtr.get();
 
     {
-        auto bnd_facets = points_from_label(m->get_label("left"));
-        TestBoundary2D bnd(m, bnd_facets);
+        auto bnd_facets = points_from_label(mesh->get_label("left"));
+        TestBoundary2D bnd(mesh, bnd_facets);
         bnd.create();
         EXPECT_DOUBLE_EQ(bnd.num_facets(), 1);
         EXPECT_DOUBLE_EQ(bnd.facet(0), 8);
@@ -96,8 +92,8 @@ TEST(NaturalBoundaryTest, test_2d)
     }
 
     {
-        auto bnd_facets = points_from_label(m->get_label("bottom"));
-        TestBoundary2D bnd(m, bnd_facets);
+        auto bnd_facets = points_from_label(mesh->get_label("bottom"));
+        TestBoundary2D bnd(mesh, bnd_facets);
         bnd.create();
         EXPECT_DOUBLE_EQ(bnd.num_facets(), 1);
         EXPECT_DOUBLE_EQ(bnd.facet(0), 6);
@@ -114,15 +110,13 @@ TEST(NaturalBoundaryTest, test_3d)
 
     auto mesh_pars = TestMesh3D::parameters();
     mesh_pars.set<godzilla::App *>("_app", &app);
-    TestMesh3D mesh(mesh_pars);
-    mesh.create();
-
-    auto m = mesh.get_mesh<UnstructuredMesh>();
+    auto mesh_qtr = MeshFactory::create<TestMesh3D>(mesh_pars);
+    auto mesh = mesh_qtr.get();
 
     {
-        auto label = m->get_label("left");
+        auto label = mesh->get_label("left");
         auto bnd_facets = points_from_label(label);
-        TestBoundary3D bnd(m, bnd_facets);
+        TestBoundary3D bnd(mesh, bnd_facets);
         bnd.create();
         EXPECT_DOUBLE_EQ(bnd.num_facets(), 1);
         EXPECT_DOUBLE_EQ(bnd.facet(0), 8);
@@ -134,9 +128,9 @@ TEST(NaturalBoundaryTest, test_3d)
     }
 
     {
-        auto label = m->get_label("bottom");
+        auto label = mesh->get_label("bottom");
         auto bnd_facets = points_from_label(label);
-        TestBoundary3D bnd(m, bnd_facets);
+        TestBoundary3D bnd(mesh, bnd_facets);
         bnd.create();
         EXPECT_DOUBLE_EQ(bnd.num_facets(), 1);
         EXPECT_DOUBLE_EQ(bnd.facet(0), 5);
@@ -148,9 +142,9 @@ TEST(NaturalBoundaryTest, test_3d)
     }
 
     {
-        auto label = m->get_label("front");
+        auto label = mesh->get_label("front");
         auto bnd_facets = points_from_label(label);
-        TestBoundary3D bnd(m, bnd_facets);
+        TestBoundary3D bnd(mesh, bnd_facets);
         bnd.create();
         EXPECT_DOUBLE_EQ(bnd.num_facets(), 1);
         EXPECT_DOUBLE_EQ(bnd.facet(0), 6);
@@ -162,9 +156,9 @@ TEST(NaturalBoundaryTest, test_3d)
     }
 
     {
-        auto label = m->get_label("slanted");
+        auto label = mesh->get_label("slanted");
         auto bnd_facets = points_from_label(label);
-        TestBoundary3D bnd(m, bnd_facets);
+        TestBoundary3D bnd(mesh, bnd_facets);
         bnd.create();
         EXPECT_DOUBLE_EQ(bnd.num_facets(), 1);
         EXPECT_DOUBLE_EQ(bnd.facet(0), 7);

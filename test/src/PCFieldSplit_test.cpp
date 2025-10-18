@@ -1,8 +1,11 @@
 #include "gmock/gmock.h"
 #include "TestApp.h"
 #include "GTestFENonlinearProblem.h"
+#include "GTest2FieldsFENonlinearProblem.h"
 #include "godzilla/PCFieldSplit.h"
+#include "godzilla/MeshFactory.h"
 #include "godzilla/LineMesh.h"
+#include "godzilla/UnstructuredMesh.h"
 
 using namespace godzilla;
 using namespace testing;
@@ -152,27 +155,25 @@ TEST(PCFieldSplit, off_diag_use_amat)
     EXPECT_TRUE(pc.get_off_diag_use_amat());
 }
 
-TEST(PCFieldSplit, DISABLED_schur)
+TEST(PCFieldSplit, schur)
 {
     TestApp app;
     auto comm = app.get_comm();
 
-    auto * mesh_pars = app.get_parameters("LineMesh");
-    mesh_pars->set<Int>("nx", 2);
-    auto mesh = app.build_object<LineMesh>("mesh", mesh_pars);
+    auto mesh_pars = LineMesh::parameters();
+    mesh_pars.set<App *>("_app", &app).set<Int>("nx", 2);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
-    auto * prob_pars = app.get_parameters("GTest2FieldsFENonlinearProblem");
-    prob_pars->set<MeshObject *>("_mesh_obj", mesh);
-    auto prob = app.build_object<FENonlinearProblem>("prob", prob_pars);
+    auto prob_pars = GTest2FieldsFENonlinearProblem::parameters();
+    prob_pars.set<App *>("_app", &app).set<Mesh *>("mesh", mesh.get());
+    GTest2FieldsFENonlinearProblem prob(prob_pars);
 
-    mesh->create();
-    prob->create();
+    prob.create();
 
-    auto fdecomp = prob->create_field_decomposition();
+    auto fdecomp = prob.create_field_decomposition();
 
-    auto ksp = prob->get_ksp();
-    PC pc;
-    KSPGetPC(ksp, &pc);
+    auto ksp = prob.get_ksp();
+    auto pc = ksp.get_pc();
 
     auto pre = Matrix::create_seq_aij(comm, 3, 3, 1);
     for (Int i = 0; i < 3; ++i)
@@ -208,7 +209,7 @@ TEST(PCFieldSplit, DISABLED_schur)
     EXPECT_THAT(is_idx1.to_std_vector(), ElementsAre(1, 3, 5));
     is_idx1.restore_indices();
 
-    auto J = prob->get_jacobian();
+    auto J = prob.get_jacobian();
     fs.set_operators(J, J);
     fs.set_up();
 

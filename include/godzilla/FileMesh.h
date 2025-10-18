@@ -3,14 +3,15 @@
 
 #pragma once
 
-#include "godzilla/MeshObject.h"
+#include "godzilla/Object.h"
 #include "godzilla/Qtr.h"
+#include "godzilla/UnstructuredMesh.h"
 
 namespace godzilla {
 
 /// Mesh loaded from a file
 ///
-class FileMesh : public MeshObject {
+class FileMesh : public Object {
 public:
     enum FileFormat { UNKNOWN, EXODUSII, GMSH } file_format;
 
@@ -26,14 +27,15 @@ public:
     /// @return Mesh file format
     FileFormat get_file_format() const;
 
+    Qtr<UnstructuredMesh> create_mesh();
+
 protected:
     void set_file_format(FileFormat fmt);
-    Qtr<Mesh> create_mesh() override;
 
 private:
     void detect_file_format();
-    Qtr<Mesh> create_from_exodus();
-    Qtr<Mesh> create_from_gmsh();
+    Qtr<UnstructuredMesh> create_from_exodus();
+    Qtr<UnstructuredMesh> create_from_gmsh();
 
     /// File name with the mesh
     std::string file_name;

@@ -11,7 +11,6 @@
 #include "godzilla/Postprocessor.h"
 #include "godzilla/IndexSet.h"
 #include "godzilla/Exception.h"
-#include "godzilla/MeshObject.h"
 #include "fmt/format.h"
 #include "fmt/chrono.h"
 #include <set>
@@ -96,25 +95,30 @@ Parameters
 ExodusIIOutput::parameters()
 {
     auto params = FileOutput::parameters();
-    params.add_private_param<MeshObject *>("_mesh_obj", nullptr)
-        .add_param<std::vector<std::string>>(
-            "variables",
-            std::vector<std::string> {},
-            "List of variables to be stored. If not specified, all variables will be stored.");
+    params.add_param<std::vector<std::string>>(
+        "variables",
+        std::vector<std::string> {},
+        "List of variables to be stored. If not specified, all variables will be stored.");
     return params;
 }
 
 ExodusIIOutput::ExodusIIOutput(const Parameters & pars) :
     FileOutput(pars),
+    mesh(nullptr),
     cont(false),
     discont(false),
-    mesh_object(pars.get<MeshObject *>("_mesh_obj")),
     variable_names(pars.get<std::vector<std::string>>("variables"), {}),
     dgpi(dynamic_cast<DGProblemInterface *>(get_problem())),
     step_num(1),
     mesh_stored(false)
 {
     CALL_STACK_MSG();
+    auto dpi = get_discrete_problem_interface();
+    assert_true(
+        dpi != nullptr,
+        "ExodusIIOutput works only with problems that inherit from DiscreteProblemInterface");
+    this->mesh = dpi->get_mesh();
+
     if (this->dgpi != nullptr)
         this->discont = true;
     else
@@ -142,10 +146,6 @@ ExodusIIOutput::create()
     FileOutput::create();
 
     auto dpi = get_discrete_problem_interface();
-    this->mesh = dpi ? dpi->get_mesh() : this->mesh_object->get_mesh<UnstructuredMesh>();
-    if (this->mesh == nullptr)
-        log_error("ExodusII output can be only used with unstructured meshes.");
-
     if (dpi) {
         auto flds = dpi->get_field_names();
         auto aux_flds = dpi->get_aux_field_names();

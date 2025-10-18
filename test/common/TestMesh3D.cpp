@@ -5,13 +5,13 @@ using namespace godzilla;
 Parameters
 TestMesh3D::parameters()
 {
-    Parameters params = MeshObject::parameters();
+    Parameters params = Object::parameters();
     return params;
 }
 
-TestMesh3D::TestMesh3D(const godzilla::Parameters & pars) : MeshObject(pars) {}
+TestMesh3D::TestMesh3D(const godzilla::Parameters & pars) : Object(pars) {}
 
-Qtr<Mesh>
+Qtr<UnstructuredMesh>
 TestMesh3D::create_mesh()
 {
     const Int N_ELEM_NODES = 4;

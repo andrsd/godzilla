@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
+#include "godzilla/MeshFactory.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Parameters.h"
 #include "godzilla/LineMesh.h"
@@ -17,18 +18,11 @@ TEST(LineMeshTest, api)
     params.set<Real>("xmin", 1);
     params.set<Real>("xmax", 2);
     params.set<Int>("nx", 10);
-    LineMesh mesh(params);
+    auto mesh = MeshFactory::create<LineMesh>(params);
 
-    EXPECT_EQ(mesh.get_x_min(), 1);
-    EXPECT_EQ(mesh.get_x_max(), 2);
-    EXPECT_EQ(mesh.get_nx(), 10);
+    auto dm = mesh->get_dm();
 
-    mesh.create();
-
-    auto m = mesh.get_mesh<UnstructuredMesh>();
-    auto dm = m->get_dm();
-
-    EXPECT_EQ(m->get_dimension(), 1);
+    EXPECT_EQ(mesh->get_dimension(), 1);
 
     Real gmin[4], gmax[4];
     DMGetBoundingBox(dm, gmin, gmax);

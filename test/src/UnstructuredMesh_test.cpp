@@ -2,8 +2,8 @@
 #include <petscsystypes.h>
 #include "GodzillaApp_test.h"
 #include "godzilla/LineMesh.h"
+#include "godzilla/MeshFactory.h"
 #include "godzilla/UnstructuredMesh.h"
-#include "godzilla/MeshObject.h"
 #include "godzilla/Parameters.h"
 #include "ExceptionTestMacros.h"
 #include "petscdmplex.h"
@@ -13,12 +13,12 @@ using namespace testing;
 
 namespace {
 
-class TestUnstructuredMesh : public MeshObject {
+class TestUnstructuredMesh : public Object {
 public:
-    explicit TestUnstructuredMesh(const Parameters & pars) : MeshObject(pars) {}
+    explicit TestUnstructuredMesh(const Parameters & pars) : Object(pars) {}
 
-    Qtr<Mesh>
-    create_mesh() override
+    Qtr<UnstructuredMesh>
+    create_mesh()
     {
         Real lower[1] = { -1 };
         Real upper[1] = { 1 };
@@ -53,18 +53,18 @@ public:
     }
 };
 
-class TestUnstructuredMesh3D : public MeshObject {
+class TestUnstructuredMesh3D : public Object {
 public:
     explicit TestUnstructuredMesh3D(const Parameters & pars) :
-        MeshObject(pars),
+        Object(pars),
         nx(pars.get<Int>("nx")),
         ny(pars.get<Int>("ny")),
         nz(pars.get<Int>("nz"))
     {
     }
 
-    Qtr<Mesh>
-    create_mesh() override
+    Qtr<UnstructuredMesh>
+    create_mesh()
     {
         Real lower[3] = { 0, 0, 0 };
         Real upper[3] = { 1, 1, 1 };
@@ -130,21 +130,18 @@ TEST(UnstructuredMeshTest, api)
     auto params = TestUnstructuredMesh::parameters();
     params.set<App *>("_app", &app);
     params.set<std::string>("_name", "obj");
-    TestUnstructuredMesh mesh(params);
+    auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh>(params);
+    auto mesh = mesh_qtr.get();
 
-    mesh.create();
+    EXPECT_EQ(mesh->get_num_vertices(), 3);
+    EXPECT_EQ(mesh->get_num_faces(), 3);
+    EXPECT_EQ(mesh->get_num_cells(), 2);
 
-    auto m = mesh.get_mesh<UnstructuredMesh>();
+    EXPECT_TRUE(mesh->is_simplex());
 
-    EXPECT_EQ(m->get_num_vertices(), 3);
-    EXPECT_EQ(m->get_num_faces(), 3);
-    EXPECT_EQ(m->get_num_cells(), 2);
+    EXPECT_FALSE(mesh->is_distributed());
 
-    EXPECT_TRUE(m->is_simplex());
-
-    EXPECT_FALSE(m->is_distributed());
-
-    EXPECT_EQ(m->get_coordinate_dim(), 1_D);
+    EXPECT_EQ(mesh->get_coordinate_dim(), 1_D);
 }
 
 TEST(UnstructuredMeshTest, api_ghosted)
@@ -154,19 +151,18 @@ TEST(UnstructuredMeshTest, api_ghosted)
     auto params = TestUnstructuredMesh::parameters();
     params.set<App *>("_app", &app);
     params.set<std::string>("_name", "obj");
-    TestUnstructuredMesh mesh(params);
-    mesh.create();
+    auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh>(params);
+    auto mesh = mesh_qtr.get();
 
-    auto m = mesh.get_mesh<UnstructuredMesh>();
-    m->construct_ghost_cells();
+    mesh->construct_ghost_cells();
 
-    EXPECT_EQ(m->get_num_vertices(), 3);
-    EXPECT_EQ(m->get_num_cells(), 2);
-    EXPECT_EQ(m->get_num_all_cells(), 4);
+    EXPECT_EQ(mesh->get_num_vertices(), 3);
+    EXPECT_EQ(mesh->get_num_cells(), 2);
+    EXPECT_EQ(mesh->get_num_all_cells(), 4);
 
-    EXPECT_TRUE(m->is_simplex());
+    EXPECT_TRUE(mesh->is_simplex());
 
-    auto ghost_range = m->get_ghost_cell_range();
+    auto ghost_range = mesh->get_ghost_cell_range();
     EXPECT_EQ(ghost_range.first(), 2);
     EXPECT_EQ(ghost_range.last(), 4);
 }
@@ -178,12 +174,11 @@ TEST(UnstructuredMeshTest, nonexistent_face_set)
     auto params = TestUnstructuredMesh::parameters();
     params.set<App *>("_app", &app);
     params.set<std::string>("_name", "obj");
-    TestUnstructuredMesh mesh(params);
-    mesh.create();
+    auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh>(params);
+    auto mesh = mesh_qtr.get();
 
-    auto m = mesh.get_mesh<UnstructuredMesh>();
     EXPECT_THROW_MSG(
-        { auto n = m->get_face_set_name(1234); },
+        { auto n = mesh->get_face_set_name(1234); },
         "Face set ID '1234' does not exist.");
 }
 
@@ -194,12 +189,10 @@ TEST(UnstructuredMeshTest, nonexistent_cell_set)
     auto params = TestUnstructuredMesh::parameters();
     params.set<App *>("_app", &app);
     params.set<std::string>("_name", "obj");
-    TestUnstructuredMesh mesh(params);
-    mesh.create();
-
-    auto m = mesh.get_mesh<UnstructuredMesh>();
+    auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh>(params);
+    auto mesh = mesh_qtr.get();
     EXPECT_THROW_MSG(
-        { auto n = m->get_cell_set_name(1234); },
+        { auto n = mesh->get_cell_set_name(1234); },
         "Cell set ID '1234' does not exist.");
 }
 
@@ -210,10 +203,9 @@ TEST(UnstructuredMeshTest, get_connectivity)
     auto params = TestUnstructuredMesh::parameters();
     params.set<App *>("_app", &app);
     params.set<std::string>("_name", "obj");
-    TestUnstructuredMesh mesh(params);
-    mesh.create();
+    auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh>(params);
+    auto m = mesh_qtr.get();
 
-    auto m = mesh.get_mesh<UnstructuredMesh>();
     auto conn0 = m->get_connectivity(0);
     EXPECT_EQ(conn0[0], 2);
     EXPECT_EQ(conn0[1], 3);
@@ -279,10 +271,8 @@ TEST(UnstructuredMeshTest, ranges)
     params.set<Int>("nx", 2);
     params.set<Int>("ny", 1);
     params.set<Int>("nz", 1);
-    TestUnstructuredMesh3D mesh(params);
-    mesh.create();
-
-    auto m = mesh.get_mesh<UnstructuredMesh>();
+    auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh3D>(params);
+    auto m = mesh_qtr.get();
     m->construct_ghost_cells();
 
     auto vtx_range = m->get_vertex_range();
@@ -311,10 +301,9 @@ TEST(UnstructuredMesh, get_cone_recursive_vertices)
     params.set<Int>("nx", 1);
     params.set<Int>("ny", 1);
     params.set<Int>("nz", 1);
-    TestUnstructuredMesh3D mesh(params);
-    mesh.create();
+    auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh3D>(params);
+    auto m = mesh_qtr.get();
 
-    auto m = mesh.get_mesh<UnstructuredMesh>();
     auto left = m->get_label("left");
     IndexSet left_facet = points_from_label(left);
     IndexSet left_points = m->get_cone_recursive_vertices(left_facet);
@@ -335,10 +324,9 @@ TEST(UnstructuredMesh, compute_cell_geometry)
     params.set<Int>("nx", 2);
     params.set<Int>("ny", 1);
     params.set<Int>("nz", 1);
-    TestUnstructuredMesh3D mesh(params);
-    mesh.create();
+    auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh3D>(params);
+    auto m = mesh_qtr.get();
 
-    auto m = mesh.get_mesh<UnstructuredMesh>();
     {
         Real vol;
         Real centroid[3];
@@ -402,9 +390,8 @@ TEST(UnstructuredMesh, get_face_set_label_nonexistent)
     params.set<Int>("nx", 2);
     params.set<Int>("ny", 1);
     params.set<Int>("nz", 1);
-    TestUnstructuredMesh3D mesh(params);
-    mesh.create();
-    auto m = mesh.get_mesh<UnstructuredMesh>();
+    auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh3D>(params);
+    auto m = mesh_qtr.get();
 
     auto nonex_lbl = m->get_face_set_label("asdf");
     EXPECT_EQ((DMLabel) nonex_lbl, nullptr);
@@ -423,9 +410,8 @@ TEST(UnstructuredMesh, get_chart)
     params.set<Int>("nx", 2);
     params.set<Int>("ny", 1);
     params.set<Int>("nz", 1);
-    TestUnstructuredMesh3D mesh(params);
-    mesh.create();
-    auto m = mesh.get_mesh<UnstructuredMesh>();
+    auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh3D>(params);
+    auto m = mesh_qtr.get();
 
     auto chart = m->get_chart();
     EXPECT_EQ(chart.first(), 0);
@@ -442,9 +428,8 @@ TEST(UnstructuredMesh, common_cells_by_vertex)
     params.set<Int>("nx", 2);
     params.set<Int>("ny", 1);
     params.set<Int>("nz", 1);
-    TestUnstructuredMesh3D mesh(params);
-    mesh.create();
-    auto m = mesh.get_mesh<UnstructuredMesh>();
+    auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh3D>(params);
+    auto m = mesh_qtr.get();
 
     auto map = m->common_cells_by_vertex();
     EXPECT_EQ(map.size(), 12);
@@ -480,12 +465,12 @@ TEST(UnstructuredMesh, common_cells_by_vertex)
 
 TEST(UnstructuredMesh, build_from_cell_list_2d)
 {
-    class TestMesh2D : public MeshObject {
+    class TestMesh2D : public Object {
     public:
-        explicit TestMesh2D(const godzilla::Parameters & parameters) : MeshObject(parameters) {}
+        explicit TestMesh2D(const godzilla::Parameters & parameters) : Object(parameters) {}
 
-        Qtr<Mesh>
-        create_mesh() override
+        Qtr<UnstructuredMesh>
+        create_mesh()
         {
             std::vector<Int> cells = { 0, 1, 2, 1, 3, 2 };
             std::vector<Real> vertices = { 0, 0, 1, 0, 0, 1, 1, 1 };
@@ -503,9 +488,8 @@ TEST(UnstructuredMesh, build_from_cell_list_2d)
 
     auto mesh_pars = TestMesh2D::parameters();
     mesh_pars.set<godzilla::App *>("_app", &app);
-    TestMesh2D mesh(mesh_pars);
-    mesh.create();
-    auto m = mesh.get_mesh<UnstructuredMesh>();
+    auto mesh_qtr = MeshFactory::create<TestMesh2D>(mesh_pars);
+    auto m = mesh_qtr.get();
 
     EXPECT_EQ(m->get_num_cells(), 2);
     EXPECT_THAT(m->get_connectivity(0), ElementsAre(2, 3, 4));
@@ -525,12 +509,12 @@ TEST(UnstructuredMesh, build_from_cell_list_2d)
 
 TEST(UnstructuredMesh, mark_boundary_faces)
 {
-    class TestMesh2D : public MeshObject {
+    class TestMesh2D : public Object {
     public:
-        explicit TestMesh2D(const godzilla::Parameters & parameters) : MeshObject(parameters) {}
+        explicit TestMesh2D(const godzilla::Parameters & parameters) : Object(parameters) {}
 
-        Qtr<Mesh>
-        create_mesh() override
+        Qtr<UnstructuredMesh>
+        create_mesh()
         {
             std::vector<Int> cells = { 0, 1, 2, 1, 3, 2 };
             std::vector<Real> vertices = { 0, 0, 1, 0, 0, 1, 1, 1 };
@@ -552,9 +536,8 @@ TEST(UnstructuredMesh, mark_boundary_faces)
 
     auto mesh_pars = TestMesh2D::parameters();
     mesh_pars.set<godzilla::App *>("_app", &app);
-    TestMesh2D mesh(mesh_pars);
-    mesh.create();
-    auto m = mesh.get_mesh<UnstructuredMesh>();
+    auto mesh_qtr = MeshFactory::create<TestMesh2D>(mesh_pars);
+    auto m = mesh_qtr.get();
 
     auto face_set = m->get_label("face sets");
     auto facets = face_set.get_stratum(10);
@@ -573,9 +556,8 @@ TEST(UnstructuredMesh, point_star_forrest)
     auto params = TestUnstructuredMesh::parameters();
     params.set<godzilla::App *>("_app", &app);
     params.set<std::string>("_name", "obj");
-    TestUnstructuredMesh mesh(params);
-    mesh.create();
-    auto m = mesh.get_mesh<UnstructuredMesh>();
+    auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh>(params);
+    auto m = mesh_qtr.get();
 
     StarForest sf;
     sf.create(comm);
@@ -596,10 +578,9 @@ TEST(UnstructuredMesh, face_sets)
     params.set<Int>("nx", 2);
     params.set<Int>("ny", 1);
     params.set<Int>("nz", 1);
-    TestUnstructuredMesh3D mesh(params);
-    mesh.create();
+    auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh3D>(params);
+    auto m = mesh_qtr.get();
 
-    auto m = mesh.get_mesh<UnstructuredMesh>();
     EXPECT_EQ(m->get_num_face_sets(), 6);
     EXPECT_THAT(m->get_face_sets(),
                 ElementsAre(Pair(1, "back"),
@@ -634,10 +615,9 @@ TEST(UnstructuredMesh, get_coordinates)
     params.set<Int>("nx", 2);
     params.set<Int>("ny", 1);
     params.set<Int>("nz", 1);
-    TestUnstructuredMesh3D mesh(params);
-    mesh.create();
+    auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh3D>(params);
+    auto m = mesh_qtr.get();
 
-    auto m = mesh.get_mesh<UnstructuredMesh>();
     auto coord0 = m->get_vertex_coordinates(2);
     EXPECT_EQ(coord0.size(), 3);
     EXPECT_DOUBLE_EQ(coord0[0], 0.);
@@ -659,12 +639,10 @@ TEST(UnstructuredMesh, get_cell_numbering)
     params.set<App *>("_app", &app);
     params.set<std::string>("_name", "obj");
     params.set<Int>("nx", 10);
-    LineMesh mesh(params);
-    mesh.create();
+    auto mesh = MeshFactory::create<LineMesh>(params);
 
-    auto m = mesh.get_mesh<UnstructuredMesh>();
-    m->distribute(1);
-    auto global_is = m->get_cell_numbering();
+    mesh->distribute(1);
+    auto global_is = mesh->get_cell_numbering();
     global_is.get_indices();
     auto gids = global_is.data();
     for (auto i = 0; i < 10; ++i)
@@ -682,10 +660,9 @@ TEST(UnstructuredMesh, get_point_depth)
     params.set<Int>("nx", 1);
     params.set<Int>("ny", 1);
     params.set<Int>("nz", 1);
-    TestUnstructuredMesh3D mesh(params);
-    mesh.create();
+    auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh3D>(params);
+    auto m = mesh_qtr.get();
 
-    auto m = mesh.get_mesh<UnstructuredMesh>();
     EXPECT_EQ(m->get_point_depth(0), 3);
 
     EXPECT_EQ(m->get_point_depth(13), 2);
@@ -706,10 +683,8 @@ TEST(UnstructuredMeshTest, index_sets)
     params.set<Int>("nx", 2);
     params.set<Int>("ny", 1);
     params.set<Int>("nz", 1);
-    TestUnstructuredMesh3D mesh(params);
-    mesh.create();
-
-    auto m = mesh.get_mesh<UnstructuredMesh>();
+    auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh3D>(params);
+    auto m = mesh_qtr.get();
 
     auto cell_is = m->get_all_cells();
     cell_is.get_indices();
@@ -729,11 +704,9 @@ TEST(UnstructuredMeshTest, clone)
     auto params = TestUnstructuredMesh::parameters();
     params.set<App *>("_app", &app);
     params.set<std::string>("_name", "obj");
-    TestUnstructuredMesh mesh(params);
+    auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh>(params);
+    auto m = mesh_qtr.get();
 
-    mesh.create();
-
-    auto m = mesh.get_mesh<UnstructuredMesh>();
     auto clone = m->clone();
 
     EXPECT_EQ(clone.get_num_vertices(), 3);

@@ -1,6 +1,7 @@
 #include "gmock/gmock.h"
 #include "TestApp.h"
 #include "GTestFENonlinearProblem.h"
+#include "godzilla/MeshFactory.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/RectangleMesh.h"
 #include "godzilla/RZSymmetry.h"
@@ -16,11 +17,11 @@ TEST(RZSymmetryTest, check_dim)
     mesh_pars.set<App *>("_app", &app)
         .set<Int>("nx", 2);
     // clang-format on
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
     prob_pars.set<App *>("_app", &app);
-    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_pars.set<Mesh *>("mesh", mesh.get());
     prob_pars.set<std::string>("scheme", "rk-2");
     GTestFENonlinearProblem prob(prob_pars);
 
@@ -31,7 +32,6 @@ TEST(RZSymmetryTest, check_dim)
     params.set<std::vector<Real>>("axis", { 1. });
     RZSymmetry rz(params);
 
-    mesh.create();
     rz.create();
 
     testing::internal::CaptureStderr();
@@ -53,11 +53,11 @@ TEST(RZSymmetryTest, check_compatible)
         .set<Int>("nx", 2)
         .set<Int>("ny", 2);
     // clang-format on
-    RectangleMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<RectangleMesh>(mesh_pars);
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
     prob_pars.set<App *>("_app", &app);
-    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_pars.set<Mesh *>("mesh", mesh.get());
     prob_pars.set<std::string>("scheme", "rk-2");
     GTestFENonlinearProblem prob(prob_pars);
 
@@ -68,7 +68,6 @@ TEST(RZSymmetryTest, check_compatible)
     params.set<std::vector<Real>>("axis", { 1. });
     RZSymmetry rz(params);
 
-    mesh.create();
     rz.create();
 
     testing::internal::CaptureStderr();
@@ -87,11 +86,11 @@ TEST(RZSymmetryTest, evaluate)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 2);
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
     prob_pars.set<App *>("_app", &app);
-    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_pars.set<Mesh *>("mesh", mesh.get());
     GTestFENonlinearProblem prob(prob_pars);
 
     auto params = RZSymmetry::parameters();
@@ -101,7 +100,6 @@ TEST(RZSymmetryTest, evaluate)
     params.set<std::vector<Real>>("axis", { 1., 0. });
     RZSymmetry rz(params);
 
-    mesh.create();
     rz.create();
 
     DenseVector<Real, 2> coord({ 0., 2. });

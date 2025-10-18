@@ -2,6 +2,7 @@
 #include "godzilla/Factory.h"
 #include "TestApp.h"
 #include "godzilla/LineMesh.h"
+#include "godzilla/MeshFactory.h"
 #include "GTestImplicitFENonlinearProblem.h"
 #include "godzilla/BasicTSAdapt.h"
 
@@ -17,11 +18,11 @@ TEST(BasicTSAdapt, api)
         .set<App *>("_app", &app)
         .set<Int>("nx", 2);
     // clang-format on
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = GTestImplicitFENonlinearProblem::parameters();
     prob_pars.set<App *>("_app", &app)
-        .set<MeshObject *>("_mesh_obj", &mesh)
+        .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1)
         .set<Real>("dt", 0.1);
@@ -38,7 +39,6 @@ TEST(BasicTSAdapt, api)
     BasicTSAdapt adaptor(params);
     prob.set_time_stepping_adaptor(&adaptor);
 
-    mesh.create();
     prob.create();
 
     TSAdapt ts_adapt = adaptor.get_ts_adapt();

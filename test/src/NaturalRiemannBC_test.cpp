@@ -1,5 +1,6 @@
 #include "gmock/gmock.h"
 #include <gtest/gtest.h>
+#include "godzilla/MeshFactory.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/NaturalRiemannBC.h"
 #include "godzilla/ExplicitFVLinearProblem.h"
@@ -72,11 +73,11 @@ TEST(NaturalRiemannBCTest, api)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 2);
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = TestExplicitFVLinearProblem::parameters();
     prob_pars.set<App *>("_app", &app);
-    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_pars.set<Mesh *>("mesh", mesh.get());
     prob_pars.set<Real>("start_time", 0.);
     prob_pars.set<Real>("end_time", 1e-3);
     prob_pars.set<Real>("dt", 1e-3);
@@ -89,8 +90,6 @@ TEST(NaturalRiemannBCTest, api)
     bc_pars.set<std::vector<std::string>>("boundary", { "left" });
     TestBC bc(bc_pars);
     prob.add_boundary_condition(&bc);
-
-    mesh.create();
 
 #if PETSC_VERSION_GE(3, 21, 0)
     EXPECT_THROW(prob.create(), Exception);

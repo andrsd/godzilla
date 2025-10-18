@@ -2,7 +2,8 @@
 
 #include "GodzillaApp_test.h"
 #include "GTestImplicitFENonlinearProblem.h"
-#include "godzilla/MeshObject.h"
+#include "godzilla/LineMesh.h"
+#include "godzilla/MeshFactory.h"
 
 class ImplicitFENonlinearProblemTest : public GodzillaAppTest {
 public:
@@ -14,17 +15,23 @@ public:
             "GTestImplicitFENonlinearProblem");
 
         {
-            auto * params = this->app->get_parameters("LineMesh");
-            params->set<Int>("nx", 2);
-            this->mesh = this->app->build_object<MeshObject>("mesh", params);
+            auto pars = LineMesh::parameters();
+            // clang-format off
+            pars.set<godzilla::App *>("_app", this->app)
+                .set<Int>("nx", 2);
+            // clang-format on
+            this->mesh = MeshFactory::create<LineMesh>(pars);
         }
         {
-            auto * params = this->app->get_parameters("GTestImplicitFENonlinearProblem");
-            params->set<MeshObject *>("_mesh_obj", mesh);
-            params->set<Real>("start_time", 0.);
-            params->set<Real>("end_time", 20);
-            params->set<Real>("dt", 5);
-            this->prob = this->app->build_object<GTestImplicitFENonlinearProblem>("prob", params);
+            auto pars = GTestImplicitFENonlinearProblem::parameters();
+            pars.set<godzilla::App *>("_app", this->app)
+                // FIXME: after app creates params and not pointers
+                .set<std::string>("_type", "GTestImplicitFENonlinearProblem")
+                .set<Mesh *>("mesh", mesh.get())
+                .set<Real>("start_time", 0.)
+                .set<Real>("end_time", 20)
+                .set<Real>("dt", 5);
+            this->prob = this->app->build_object<GTestImplicitFENonlinearProblem>("prob", pars);
         }
         this->app->set_problem(this->prob);
     }
@@ -35,6 +42,6 @@ public:
         GodzillaAppTest::TearDown();
     }
 
-    MeshObject * mesh;
+    Qtr<Mesh> mesh;
     GTestImplicitFENonlinearProblem * prob;
 };

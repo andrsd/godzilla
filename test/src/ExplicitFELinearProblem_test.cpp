@@ -1,5 +1,6 @@
 #include "gmock/gmock.h"
 #include "godzilla/Factory.h"
+#include "godzilla/MeshFactory.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/DirichletBC.h"
 #include "godzilla/ExplicitFELinearProblem.h"
@@ -89,11 +90,11 @@ TEST(ExplicitFELinearProblemTest, test_mass_matrix)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 3);
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = TestExplicitFELinearProblem::parameters();
     prob_pars.set<App *>("_app", &app)
-        .set<MeshObject *>("_mesh_obj", &mesh)
+        .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3)
@@ -101,7 +102,6 @@ TEST(ExplicitFELinearProblemTest, test_mass_matrix)
     TestExplicitFELinearProblem prob(prob_pars);
     app.set_problem(&prob);
 
-    mesh.create();
     prob.create();
 
     {
@@ -140,11 +140,11 @@ TEST(ExplicitFELinearProblemTest, test_lumped_mass_matrix)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 3);
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = TestExplicitFELinearProblem::parameters();
     prob_pars.set<App *>("_app", &app)
-        .set<MeshObject *>("_mesh_obj", &mesh)
+        .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3)
@@ -152,7 +152,6 @@ TEST(ExplicitFELinearProblemTest, test_lumped_mass_matrix)
     TestExplicitFELinearProblem prob(prob_pars);
     app.set_problem(&prob);
 
-    mesh.create();
     prob.create_w_lumped_mass_matrix();
 
     auto M = prob.get_lumped_mass_matrix();
@@ -169,11 +168,11 @@ TEST(ExplicitFELinearProblemTest, solve)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 3);
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = TestExplicitFELinearProblem::parameters();
     prob_pars.set<App *>("_app", &app)
-        .set<MeshObject *>("_mesh_obj", &mesh)
+        .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3)
@@ -197,7 +196,6 @@ TEST(ExplicitFELinearProblemTest, solve)
     DirichletBC bc_right(bc_right_pars);
     prob.add_boundary_condition(&bc_right);
 
-    mesh.create();
     prob.create();
 
     prob.run();
@@ -229,11 +227,11 @@ TEST(ExplicitFELinearProblemTest, solve_w_lumped_mass_matrix)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 3);
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = TestExplicitFELinearProblem::parameters();
     prob_pars.set<App *>("_app", &app)
-        .set<MeshObject *>("_mesh_obj", &mesh)
+        .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3)
@@ -257,7 +255,6 @@ TEST(ExplicitFELinearProblemTest, solve_w_lumped_mass_matrix)
     DirichletBC bc_right(bc_right_pars);
     prob.add_boundary_condition(&bc_right);
 
-    mesh.create();
     prob.create_w_lumped_mass_matrix();
 
     prob.run();
@@ -289,18 +286,17 @@ TEST(ExplicitFELinearProblemTest, set_schemes)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 2);
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = TestExplicitFELinearProblem::parameters();
     prob_pars.set<App *>("_app", &app)
-        .set<MeshObject *>("_mesh_obj", &mesh)
+        .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3)
         .set<std::string>("scheme", "euler");
     TestExplicitFELinearProblem prob(prob_pars);
 
-    mesh.create();
     prob.create();
 
     std::vector<std::string> schemes = { "euler", "ssp-rk-2", "ssp-rk-3", "rk-2", "heun" };
@@ -320,18 +316,17 @@ TEST(ExplicitFELinearProblemTest, wrong_scheme)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 2);
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = TestExplicitFELinearProblem::parameters();
     prob_pars.set<App *>("_app", &app)
-        .set<MeshObject *>("_mesh_obj", &mesh)
+        .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 20)
         .set<Real>("dt", 5)
         .set<std::string>("scheme", "asdf");
     TestExplicitFELinearProblem prob(prob_pars);
 
-    mesh.create();
     prob.create();
 
     EXPECT_FALSE(app.check_integrity());
@@ -349,11 +344,11 @@ TEST(ExplicitFELinearProblemTest, allocate_mass_matrix)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 3);
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = TestExplicitFELinearProblem::parameters();
     prob_pars.set<App *>("_app", &app)
-        .set<MeshObject *>("_mesh_obj", &mesh)
+        .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3)
@@ -361,7 +356,6 @@ TEST(ExplicitFELinearProblemTest, allocate_mass_matrix)
     TestExplicitFELinearProblem prob(prob_pars);
     app.set_problem(&prob);
 
-    mesh.create();
     prob.create();
 
     prob.allocate_mass_matrix();
@@ -376,11 +370,11 @@ TEST(ExplicitFELinearProblemTest, allocate_lumped_mass_matrix)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 3);
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = TestExplicitFELinearProblem::parameters();
     prob_pars.set<App *>("_app", &app)
-        .set<MeshObject *>("_mesh_obj", &mesh)
+        .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3)
@@ -388,7 +382,6 @@ TEST(ExplicitFELinearProblemTest, allocate_lumped_mass_matrix)
     TestExplicitFELinearProblem prob(prob_pars);
     app.set_problem(&prob);
 
-    mesh.create();
     prob.create();
 
     prob.allocate_lumped_mass_matrix();

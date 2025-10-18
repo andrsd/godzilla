@@ -12,7 +12,7 @@ namespace godzilla {
 Parameters
 BoxMesh::parameters()
 {
-    auto params = MeshObject::parameters();
+    auto params = Object::parameters();
     params.add_param<Real>("xmin", 0., "Minimum in the x direction")
         .add_param<Real>("xmax", 1., "Maximum in the x direction")
         .add_param<Real>("ymin", 0., "Minimum in the y direction")
@@ -27,7 +27,7 @@ BoxMesh::parameters()
 }
 
 BoxMesh::BoxMesh(const Parameters & pars) :
-    MeshObject(pars),
+    Object(pars),
     xmin(pars.get<Real>("xmin")),
     xmax(pars.get<Real>("xmax")),
     ymin(pars.get<Real>("ymin")),
@@ -112,7 +112,7 @@ BoxMesh::get_nz() const
     return this->nz;
 }
 
-Qtr<Mesh>
+Qtr<UnstructuredMesh>
 BoxMesh::create_mesh()
 {
     CALL_STACK_MSG();

@@ -56,6 +56,7 @@ FEProblemInterface::FEProblemInterface(Problem * problem, const Parameters & par
     DependencyEvaluator(),
     qorder(PETSC_DETERMINE)
 {
+    CALL_STACK_MSG();
 }
 
 FEProblemInterface::~FEProblemInterface()

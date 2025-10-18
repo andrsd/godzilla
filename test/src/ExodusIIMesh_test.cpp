@@ -1,4 +1,5 @@
 #include "gmock/gmock.h"
+#include "FENonlinearProblem_test.h"
 #include "GodzillaApp_test.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/ExodusIIMesh.h"
@@ -19,15 +20,11 @@ TEST(ExodusIIMeshTest, api)
     params.set<App *>("_app", &app);
     params.set<std::string>("_name", "obj");
     params.set<std::string>("file", file_name);
-    ExodusIIMesh mesh(params);
+    auto mesh = MeshFactory::create<ExodusIIMesh>(params);
 
-    EXPECT_EQ(mesh.get_file_name(), file_name);
+    auto dm = mesh->get_dm();
 
-    mesh.create();
-    auto m = mesh.get_mesh<Mesh>();
-    auto dm = m->get_dm();
-
-    EXPECT_EQ(m->get_dimension(), 2);
+    EXPECT_EQ(mesh->get_dimension(), 2);
 
     Real gmin[4], gmax[4];
     DMGetBoundingBox(dm, gmin, gmax);
@@ -53,17 +50,15 @@ TEST(ExodusIIMeshTest, two_block)
     params.set<App *>("_app", &app);
     params.set<std::string>("_name", "obj");
     params.set<std::string>("file", file_name);
-    ExodusIIMesh mesh(params);
-    mesh.create();
+    auto mesh = MeshFactory::create<ExodusIIMesh>(params);
 
-    auto m = mesh.get_mesh<UnstructuredMesh>();
-    EXPECT_EQ(m->get_cell_set_name(0), "0");
-    EXPECT_EQ(m->get_cell_set_name(1), "1");
+    EXPECT_EQ(mesh->get_cell_set_name(0), "0");
+    EXPECT_EQ(mesh->get_cell_set_name(1), "1");
 
-    EXPECT_EQ(m->get_cell_set_id("0"), 0);
-    EXPECT_EQ(m->get_cell_set_id("1"), 1);
+    EXPECT_EQ(mesh->get_cell_set_id("0"), 0);
+    EXPECT_EQ(mesh->get_cell_set_id("1"), 1);
 
-    auto cell_sets = m->get_cell_sets();
+    auto cell_sets = mesh->get_cell_sets();
     EXPECT_THAT(cell_sets, ElementsAre(Pair(0, "0"), Pair(1, "1")));
 }
 
@@ -76,15 +71,13 @@ TEST(ExodusIIMeshTest, two_block_nonexistent_blk)
     params.set<App *>("_app", &app);
     params.set<std::string>("_name", "obj");
     params.set<std::string>("file", file_name);
-    ExodusIIMesh mesh(params);
-    mesh.create();
+    auto mesh = MeshFactory::create<ExodusIIMesh>(params);
 
-    auto m = mesh.get_mesh<UnstructuredMesh>();
     EXPECT_THROW_MSG(
-        { [[maybe_unused]] auto & name = m->get_cell_set_name(1234); },
+        { [[maybe_unused]] auto & name = mesh->get_cell_set_name(1234); },
         "Cell set ID '1234' does not exist.");
     EXPECT_THROW_MSG(
-        { [[maybe_unused]] auto id = m->get_cell_set_id("1234"); },
+        { [[maybe_unused]] auto id = mesh->get_cell_set_id("1234"); },
         "Cell set '1234' does not exist.");
 }
 
@@ -98,7 +91,7 @@ TEST(ExodusIIMeshTest, nonexitent_file)
     params.set<App *>("_app", &app);
     params.set<std::string>("_name", "obj");
     params.set<std::string>("file", "asdf.e");
-    ExodusIIMesh mesh(params);
+    auto mesh = MeshFactory::create<ExodusIIMesh>(params);
 
     EXPECT_FALSE(app.check_integrity());
     app.get_logger()->print();

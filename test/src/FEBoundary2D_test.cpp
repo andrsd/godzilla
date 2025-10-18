@@ -2,7 +2,7 @@
 #include "TestApp.h"
 #include "TestMesh2D.h"
 #include "godzilla/Array1D.h"
-#include "godzilla/MeshObject.h"
+#include "godzilla/MeshFactory.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/FEGeometry.h"
 #include "godzilla/FEVolumes.h"
@@ -86,19 +86,18 @@ TEST(FEBoundaryTest, test_2d)
 
     auto mesh_pars = TestMesh2D::parameters();
     mesh_pars.set<godzilla::App *>("_app", &app);
-    TestMesh2D mesh(mesh_pars);
-    mesh.create();
+    auto mesh_qtr = MeshFactory::create<TestMesh2D>(mesh_pars);
+    auto mesh = mesh_qtr.get();
 
-    auto m = mesh.get_mesh<UnstructuredMesh>();
-    auto fe_volume = fe::calc_volumes<TRI3, 2>(*m);
-    auto grad_phi = fe::calc_grad_shape<TRI3, 2>(*m, fe_volume);
+    auto fe_volume = fe::calc_volumes<TRI3, 2>(*mesh);
+    auto grad_phi = fe::calc_grad_shape<TRI3, 2>(*mesh, fe_volume);
 
     {
-        auto label = m->get_label("left");
+        auto label = mesh->get_label("left");
         auto bnd_facets = points_from_label(label);
-        auto vertices = m->get_cone_recursive_vertices(bnd_facets);
+        auto vertices = mesh->get_cone_recursive_vertices(bnd_facets);
         vertices.sort_remove_dups();
-        TestEssentialBoundary2D bnd(m, vertices);
+        TestEssentialBoundary2D bnd(mesh, vertices);
         bnd.create();
         bnd.compute();
 
@@ -111,9 +110,9 @@ TEST(FEBoundaryTest, test_2d)
     }
 
     {
-        auto label = m->get_label("bottom");
+        auto label = mesh->get_label("bottom");
         auto bnd_facets = points_from_label(label);
-        TestNaturalBoundary2D bnd(m, grad_phi, bnd_facets);
+        TestNaturalBoundary2D bnd(mesh, grad_phi, bnd_facets);
         bnd.create();
         bnd.compute();
 
@@ -130,9 +129,9 @@ TEST(FEBoundaryTest, test_2d)
     }
 
     {
-        auto label = m->get_label("top_right");
+        auto label = mesh->get_label("top_right");
         IndexSet bnd_facets = points_from_label(label);
-        TestNaturalBoundary2D bnd(m, grad_phi, bnd_facets);
+        TestNaturalBoundary2D bnd(mesh, grad_phi, bnd_facets);
         bnd.create();
         bnd.compute();
 

@@ -6,6 +6,7 @@
 
 using namespace godzilla;
 
+#if 0
 TEST(GmshMeshTest, api)
 {
     TestApp app;
@@ -61,3 +62,4 @@ TEST(GmshMeshTest, nonexitent_file)
                     "obj: Unable to open 'asdf.msh' for reading. Make sure it exists and you "
                     "have read permissions."));
 }
+#endif

@@ -1,5 +1,6 @@
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
+#include "godzilla/MeshFactory.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/DirichletBC.h"
 #include "GTestFENonlinearProblem.h"
@@ -12,11 +13,11 @@ TEST(L2DiffTest, compute)
     auto mesh_params = LineMesh::parameters();
     mesh_params.set<App *>("_app", &app);
     mesh_params.set<Int>("nx", 2);
-    LineMesh mesh(mesh_params);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = GTestFENonlinearProblem::parameters();
     prob_params.set<App *>("_app", &app);
-    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_params.set<Mesh *>("mesh", mesh.get());
     GTestFENonlinearProblem prob(prob_params);
     app.set_problem(&prob);
 
@@ -44,7 +45,6 @@ TEST(L2DiffTest, compute)
     prob.add_boundary_condition(&bc_right);
     prob.add_postprocessor(&ps);
 
-    mesh.create();
     prob.create();
 
     prob.run();

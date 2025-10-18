@@ -1,7 +1,6 @@
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
 #include "ImplicitFENonlinearProblem_test.h"
-#include "godzilla/MeshObject.h"
 #include "godzilla/InitialCondition.h"
 #include "godzilla/Parameters.h"
 #include "godzilla/InitialCondition.h"
@@ -29,7 +28,6 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
         prob->add_boundary_condition(bc);
     }
 
-    this->mesh->create();
     this->prob->create();
 
     EXPECT_EQ(prob->get_time_step(), 5.);
@@ -67,7 +65,7 @@ TEST_F(ImplicitFENonlinearProblemTest, wrong_scheme)
     GTestImplicitFENonlinearProblem * prob;
     {
         auto * params = this->app->get_parameters("GTestImplicitFENonlinearProblem");
-        params->set<MeshObject *>("_mesh_obj", this->mesh);
+        params->set<Mesh *>("mesh", this->mesh.get());
         params->set<Real>("start_time", 0.);
         params->set<Real>("end_time", 20);
         params->set<Real>("dt", 5);
@@ -75,7 +73,6 @@ TEST_F(ImplicitFENonlinearProblemTest, wrong_scheme)
         prob = this->app->build_object<GTestImplicitFENonlinearProblem>("prob", params);
     }
 
-    this->mesh->create();
     prob->create();
 
     EXPECT_FALSE(this->app->check_integrity());
@@ -90,7 +87,7 @@ TEST_F(ImplicitFENonlinearProblemTest, wrong_time_stepping_params)
     testing::internal::CaptureStderr();
 
     auto * params = this->app->get_parameters("GTestImplicitFENonlinearProblem");
-    params->set<MeshObject *>("_mesh_obj", this->mesh);
+    params->set<Mesh *>("mesh", this->mesh.get());
     params->set<Real>("start_time", 0.);
     params->set<Int>("num_steps", 2);
     params->set<Real>("end_time", 20);
@@ -98,7 +95,6 @@ TEST_F(ImplicitFENonlinearProblemTest, wrong_time_stepping_params)
     params->set<std::string>("scheme", "asdf");
     auto prob = this->app->build_object<GTestImplicitFENonlinearProblem>("prob", params);
 
-    this->mesh->create();
     prob->create();
 
     EXPECT_FALSE(this->app->check_integrity());
@@ -115,13 +111,12 @@ TEST_F(ImplicitFENonlinearProblemTest, no_time_stepping_params)
     testing::internal::CaptureStderr();
 
     auto * params = this->app->get_parameters("GTestImplicitFENonlinearProblem");
-    params->set<MeshObject *>("_mesh_obj", this->mesh);
+    params->set<Mesh *>("mesh", this->mesh.get());
     params->set<Real>("start_time", 0.);
     params->set<Real>("dt", 5);
     params->set<std::string>("scheme", "asdf");
     auto prob = this->app->build_object<GTestImplicitFENonlinearProblem>("prob", params);
 
-    this->mesh->create();
     prob->create();
 
     EXPECT_FALSE(this->app->check_integrity());
@@ -149,7 +144,6 @@ TEST_F(ImplicitFENonlinearProblemTest, set_schemes)
     auto bc = this->app->build_object<BoundaryCondition>("bc", prob_params);
     this->prob->add_boundary_condition(bc);
 
-    this->mesh->create();
     this->prob->create();
 
     std::vector<TransientProblemInterface::TimeScheme> schemes = {
@@ -180,7 +174,6 @@ TEST_F(ImplicitFENonlinearProblemTest, converged_reason)
     auto bc = this->app->build_object<BoundaryCondition>("bc", bc_params);
     prob->add_boundary_condition(bc);
 
-    this->mesh->create();
     this->prob->create();
 
     this->prob->set_converged_reason(TransientProblemInterface::CONVERGED_USER);

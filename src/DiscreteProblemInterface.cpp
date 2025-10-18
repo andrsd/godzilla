@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: 2022 David Andrs <andrsd@gmail.com>
 // SPDX-License-Identifier: MIT
 
-#include "godzilla/MeshObject.h"
 #include "godzilla/Parameters.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/App.h"
@@ -64,13 +63,15 @@ DiscreteProblemInterface::invoke_natural_riemann_bc_delegate(Real time,
 
 DiscreteProblemInterface::DiscreteProblemInterface(Problem * problem, const Parameters & pars) :
     problem(problem),
-    mesh_obj(pars.get<MeshObject *>("_mesh_obj")),
-    unstr_mesh(nullptr),
+    unstr_mesh(dynamic_cast<UnstructuredMesh *>(pars.get<Mesh *>("mesh"))),
     logger(pars.get<App *>("_app")->get_logger()),
     ds(nullptr),
     dm_aux(nullptr),
     ds_aux(nullptr)
 {
+    CALL_STACK_MSG();
+    assert_true(this->problem != nullptr, "Problem is null");
+    assert_true(this->unstr_mesh != nullptr, "Mesh must be UnstructuredMesh");
 }
 
 DiscreteProblemInterface::~DiscreteProblemInterface()
@@ -228,11 +229,8 @@ DiscreteProblemInterface::distribute()
     auto part = this->problem->get_partitioner();
     part.set_up();
 
-    // cannot use `get_mesh`, since this may be called before the `create` calls
-    auto mesh = this->mesh_obj->get_mesh<UnstructuredMesh>();
-    assert_true(mesh != nullptr, "Mesh is null");
-    mesh->set_partitioner(part);
-    mesh->distribute(this->problem->get_partition_overlap());
+    this->unstr_mesh->set_partitioner(part);
+    this->unstr_mesh->distribute(this->problem->get_partition_overlap());
 }
 
 void
@@ -248,10 +246,6 @@ void
 DiscreteProblemInterface::create()
 {
     CALL_STACK_MSG();
-    assert_true(this->problem != nullptr, "Problem is null");
-    this->unstr_mesh = this->mesh_obj->get_mesh<UnstructuredMesh>();
-    assert_true(this->unstr_mesh != nullptr, "Mesh must be UnstructuredMesh");
-
     for (auto & ic : this->all_ics)
         ic->create();
     for (auto & bc : this->bcs)

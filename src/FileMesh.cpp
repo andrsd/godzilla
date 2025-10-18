@@ -16,12 +16,12 @@ namespace godzilla {
 Parameters
 FileMesh::parameters()
 {
-    auto params = MeshObject::parameters();
+    auto params = Object::parameters();
     params.add_required_param<std::string>("file", "The name of the file.");
     return params;
 }
 
-FileMesh::FileMesh(const Parameters & pars) : MeshObject(pars), file_format(UNKNOWN)
+FileMesh::FileMesh(const Parameters & pars) : Object(pars), file_format(UNKNOWN)
 {
     CALL_STACK_MSG();
 
@@ -53,7 +53,7 @@ FileMesh::get_file_format() const
     return this->file_format;
 }
 
-Qtr<Mesh>
+Qtr<UnstructuredMesh>
 FileMesh::create_mesh()
 {
     CALL_STACK_MSG();
@@ -67,7 +67,7 @@ FileMesh::create_mesh()
     }
 }
 
-Qtr<Mesh>
+Qtr<UnstructuredMesh>
 FileMesh::create_from_gmsh()
 {
     CALL_STACK_MSG();

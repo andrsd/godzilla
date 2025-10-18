@@ -2,7 +2,7 @@
 #include "TestApp.h"
 #include "TestMesh1D.h"
 #include "godzilla/Array1D.h"
-#include "godzilla/MeshObject.h"
+#include "godzilla/MeshFactory.h"
 #include "godzilla/FEGeometry.h"
 #include "godzilla/FEVolumes.h"
 #include "godzilla/FEShapeFns.h"
@@ -90,19 +90,18 @@ TEST(FEBoundaryTest, test_1d)
 
     auto mesh_pars = TestMesh1D::parameters();
     mesh_pars.set<godzilla::App *>("_app", &app);
-    TestMesh1D mesh(mesh_pars);
-    mesh.create();
+    auto mesh_qtr = MeshFactory::create<TestMesh1D>(mesh_pars);
+    auto mesh = mesh_qtr.get();
 
-    auto m = mesh.get_mesh<UnstructuredMesh>();
-    auto fe_volume = fe::calc_volumes<EDGE2, 1>(*m);
-    auto grad_phi = fe::calc_grad_shape<EDGE2, 1>(*m, fe_volume);
+    auto fe_volume = fe::calc_volumes<EDGE2, 1>(*mesh);
+    auto grad_phi = fe::calc_grad_shape<EDGE2, 1>(*mesh, fe_volume);
 
     {
-        auto bnd_facets = points_from_label(m->get_label("left"));
-        auto vertices = m->get_cone_recursive_vertices(bnd_facets);
+        auto bnd_facets = points_from_label(mesh->get_label("left"));
+        auto vertices = mesh->get_cone_recursive_vertices(bnd_facets);
         vertices.sort_remove_dups();
 
-        TestEssentialBoundary1D bnd(m, vertices);
+        TestEssentialBoundary1D bnd(mesh, vertices);
         bnd.create();
         bnd.compute();
         EXPECT_EQ(bnd.vals(0), 2);
@@ -110,8 +109,8 @@ TEST(FEBoundaryTest, test_1d)
     }
 
     {
-        IndexSet bnd_facets = points_from_label(m->get_label("right"));
-        TestNaturalBoundary1D bnd(m, bnd_facets);
+        IndexSet bnd_facets = points_from_label(mesh->get_label("right"));
+        TestNaturalBoundary1D bnd(mesh, bnd_facets);
         bnd.create();
         bnd.compute();
         EXPECT_DOUBLE_EQ(bnd.normal(0)(0), 1);

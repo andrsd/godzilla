@@ -12,7 +12,6 @@ namespace godzilla {
 
 class UnstructuredMesh;
 class DGProblemInterface;
-class MeshObject;
 
 /// ExodusII output
 ///
@@ -69,16 +68,14 @@ protected:
 private:
     std::string get_file_ext() const override;
 
+    /// Unstructured mesh
+    UnstructuredMesh * mesh;
     bool cont;
     bool discont;
-    ///
-    MeshObject * mesh_object;
     /// Variable names to be stored
     std::vector<std::string> variable_names;
     /// DG problem interface
     DGProblemInterface * dgpi;
-    /// Unstructured mesh
-    UnstructuredMesh * mesh;
     /// ExodusII file
     Qtr<exodusIIcpp::File> exo;
     /// Step number

@@ -29,7 +29,6 @@ class BoundaryCondition;
 class AuxiliaryField;
 class EssentialBC;
 class NaturalBC;
-class MeshObject;
 
 /// Interface for discrete problems
 ///
@@ -458,9 +457,6 @@ private:
 
     /// Problem this interface is part of
     Problem * problem;
-
-    /// Mesh object
-    MeshObject * mesh_obj;
 
     /// Unstructured mesh
     UnstructuredMesh * unstr_mesh;

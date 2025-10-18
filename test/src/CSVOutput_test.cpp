@@ -52,7 +52,6 @@ TEST_F(CSVOutputTest, create)
     TestCSVOutput out(params);
     prob->add_output(&out);
 
-    this->mesh->create();
     this->prob->create();
 
     auto pps_names = out.get_pps_names();
@@ -88,7 +87,6 @@ TEST_F(CSVOutputTest, output)
     TestCSVOutput out(params);
     this->prob->add_output(&out);
 
-    this->mesh->create();
     this->prob->create();
 
     auto pps_names = out.get_pps_names();
@@ -120,7 +118,6 @@ TEST_F(CSVOutputTest, set_file_name)
         .set<std::string>("file", "asdf");
     CSVOutput out(params);
 
-    this->mesh->create();
     this->prob->create();
     out.create();
 

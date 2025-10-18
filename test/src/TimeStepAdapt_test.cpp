@@ -1,6 +1,7 @@
 #include "gmock/gmock.h"
 #include "TestApp.h"
 #include "godzilla/TimeStepAdapt.h"
+#include "godzilla/MeshFactory.h"
 #include "godzilla/LineMesh.h"
 #include "GTestImplicitFENonlinearProblem.h"
 
@@ -14,10 +15,10 @@ TEST(TimeStepAdapt, test)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<godzilla::App *>("_app", &app);
     mesh_pars.set<Int>("nx", 2);
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_param = GTestImplicitFENonlinearProblem::parameters();
-    prob_param.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_param.set<Mesh *>("mesh", mesh.get());
     prob_param.set<godzilla::App *>("_app", &app);
     prob_param.set<Real>("start_time", 0.);
     prob_param.set<Real>("end_time", 20);

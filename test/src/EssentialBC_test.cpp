@@ -3,6 +3,7 @@
 #include "GTestFENonlinearProblem.h"
 #include "GTest2FieldsFENonlinearProblem.h"
 #include "godzilla/Factory.h"
+#include "godzilla/MeshFactory.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/EssentialBC.h"
 #include "godzilla/PiecewiseLinear.h"
@@ -38,11 +39,11 @@ TEST(EssentialBCTest, api)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 2);
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
     prob_pars.set<App *>("_app", &app);
-    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_pars.set<Mesh *>("mesh", mesh.get());
     GTestFENonlinearProblem problem(prob_pars);
     app.set_problem(&problem);
 
@@ -52,7 +53,6 @@ TEST(EssentialBCTest, api)
         .set<std::vector<std::string>>("boundary", {});
     TestEssentialBC bc(params);
 
-    mesh.create();
     problem.create();
     bc.create();
 
@@ -71,11 +71,11 @@ TEST(EssentialBCTest, non_existing_field)
     Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 2);
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     Parameters prob_pars = GTest2FieldsFENonlinearProblem::parameters();
     prob_pars.set<App *>("_app", &app);
-    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_pars.set<Mesh *>("mesh", mesh.get());
     GTest2FieldsFENonlinearProblem problem(prob_pars);
     app.set_problem(&problem);
 
@@ -86,7 +86,6 @@ TEST(EssentialBCTest, non_existing_field)
         .set<std::vector<std::string>>("boundary", {});
     TestEssentialBC bc(params);
 
-    mesh.create();
     problem.add_boundary_condition(&bc);
     problem.create();
 
@@ -106,11 +105,11 @@ TEST(EssentialBCTest, field_param_not_specified)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 2);
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = GTest2FieldsFENonlinearProblem::parameters();
     prob_pars.set<App *>("_app", &app);
-    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_pars.set<Mesh *>("mesh", mesh.get());
     GTest2FieldsFENonlinearProblem problem(prob_pars);
     app.set_problem(&problem);
 
@@ -120,7 +119,6 @@ TEST(EssentialBCTest, field_param_not_specified)
         .set<std::vector<std::string>>("boundary", {});
     TestEssentialBC bc(params);
 
-    mesh.create();
     problem.add_boundary_condition(&bc);
     problem.create();
 

@@ -1,7 +1,8 @@
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
 #include "FENonlinearProblem_test.h"
-#include "godzilla/MeshObject.h"
+#include "godzilla/MeshFactory.h"
+#include "godzilla/UnstructuredMesh.h"
 #include "godzilla/InitialCondition.h"
 #include "godzilla/Factory.h"
 #include "godzilla/Parameters.h"
@@ -41,8 +42,6 @@ public:
 
 TEST_F(FENonlinearProblemTest, fields)
 {
-    mesh->create();
-
     prob->set_field(FieldID(1), "vec", 3, Order(1));
 
     auto aux_fld1_idx = prob->add_aux_field("aux_fld1", 2, Order(1));
@@ -100,7 +99,6 @@ TEST_F(FENonlinearProblemTest, fields)
 
 TEST_F(FENonlinearProblemTest, add_duplicate_field_id)
 {
-    mesh->create();
     prob->set_field(FieldID(0), "first", 1, Order(1));
     EXPECT_THROW_MSG(prob->set_field(FieldID(0), "second", 1, Order(1)),
                      "Cannot add field 'second' with ID = 0. ID already exists.");
@@ -108,7 +106,6 @@ TEST_F(FENonlinearProblemTest, add_duplicate_field_id)
 
 TEST_F(FENonlinearProblemTest, get_aux_fields)
 {
-    mesh->create();
     prob->set_aux_field(FieldID(0), "aux_one", 1, Order(1));
     prob->add_aux_field("aux_two", 2, Order(1));
     prob->create();
@@ -151,7 +148,6 @@ TEST_F(FENonlinearProblemTest, get_aux_fields)
 
 TEST_F(FENonlinearProblemTest, add_duplicate_aux_field_id)
 {
-    mesh->create();
     prob->set_aux_field(FieldID(0), "first", 1, Order(1));
     EXPECT_THROW_MSG(prob->set_aux_field(FieldID(0), "second", 1, Order(1)),
                      "Cannot add auxiliary field 'second' with ID = 0. ID is already taken.");
@@ -166,7 +162,6 @@ TEST_F(FENonlinearProblemTest, set_up_initial_guess)
     ConstantInitialCondition ic(ic_pars);
     prob->add_initial_condition(&ic);
 
-    mesh->create();
     prob->create();
 
     prob->set_up_initial_guess();
@@ -179,7 +174,6 @@ TEST_F(FENonlinearProblemTest, set_up_initial_guess)
 
 TEST_F(FENonlinearProblemTest, zero_initial_guess)
 {
-    mesh->create();
     prob->create();
     prob->set_up_initial_guess();
 
@@ -205,8 +199,6 @@ TEST_F(FENonlinearProblemTest, solve)
     params.set<std::vector<std::string>>("value", { "x*x" });
     DirichletBC bc(params);
     this->prob->add_boundary_condition(&bc);
-
-    this->mesh->create();
     this->prob->create();
 
     auto bcs = this->prob->get_boundary_conditions();
@@ -235,8 +227,6 @@ TEST_F(FENonlinearProblemTest, solve_no_ic)
     params.set<std::vector<std::string>>("value", { "x*x" });
     DirichletBC bc(params);
     this->prob->add_boundary_condition(&bc);
-
-    this->mesh->create();
     this->prob->create();
 
     auto x = prob->get_solution_vector();
@@ -253,8 +243,6 @@ TEST_F(FENonlinearProblemTest, err_ic_comp_mismatch)
     params.set<DiscreteProblemInterface *>("_dpi", prob);
     GTest2CompIC ic(params);
     this->prob->add_initial_condition(&ic);
-
-    this->mesh->create();
     this->prob->create();
     EXPECT_FALSE(this->app->check_integrity());
     this->app->get_logger()->print();
@@ -274,11 +262,11 @@ TEST(TwoFieldFENonlinearProblemTest, err_duplicate_ics)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 2);
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_params = GTest2FieldsFENonlinearProblem::parameters();
     prob_params.set<App *>("_app", &app);
-    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_params.set<Mesh *>("mesh", mesh.get());
     GTest2FieldsFENonlinearProblem prob(prob_params);
 
     auto ic1_params = ConstantInitialCondition::parameters();
@@ -299,7 +287,6 @@ TEST(TwoFieldFENonlinearProblemTest, err_duplicate_ics)
     ConstantInitialCondition ic2(ic2_params);
     prob.add_initial_condition(&ic2);
 
-    mesh.create();
     prob.create();
     EXPECT_FALSE(app.check_integrity());
     app.get_logger()->print();
@@ -319,11 +306,11 @@ TEST(TwoFieldFENonlinearProblemTest, err_not_enough_ics)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 2);
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_params = GTest2FieldsFENonlinearProblem::parameters();
     prob_params.set<App *>("_app", &app);
-    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_params.set<Mesh *>("mesh", mesh.get());
     GTest2FieldsFENonlinearProblem prob(prob_params);
 
     auto * ic_params = app.get_parameters("ConstantInitialCondition");
@@ -333,7 +320,6 @@ TEST(TwoFieldFENonlinearProblemTest, err_not_enough_ics)
     auto ic = app.build_object<InitialCondition>("ic1", ic_params);
     prob.add_initial_condition(ic);
 
-    mesh.create();
     prob.create();
     EXPECT_FALSE(app.check_integrity());
     app.get_logger()->print();
@@ -354,8 +340,6 @@ TEST_F(FENonlinearProblemTest, err_nonexisting_bc_bnd)
     params.set<std::vector<std::string>>("value", { "0.1" });
     DirichletBC bc(params);
     this->prob->add_boundary_condition(&bc);
-
-    this->mesh->create();
     this->prob->create();
     EXPECT_FALSE(this->app->check_integrity());
     this->app->get_logger()->print();
@@ -373,14 +357,13 @@ TEST(TwoFieldFENonlinearProblemTest, field_decomposition)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 2);
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_params = GTest2FieldsFENonlinearProblem::parameters();
     prob_params.set<App *>("_app", &app);
-    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_params.set<Mesh *>("mesh", mesh.get());
     GTest2FieldsFENonlinearProblem prob(prob_params);
 
-    mesh.create();
     prob.create();
 
     auto fdecomp = prob.create_field_decomposition();
@@ -414,7 +397,6 @@ TEST_F(FENonlinearProblemTest, steady_state_output)
     DirichletBC bc(params);
     this->prob->add_boundary_condition(&bc);
 
-    this->mesh->create();
     this->prob->create();
     EXPECT_DOUBLE_EQ(this->prob->get_time(), 0.);
     this->prob->run();

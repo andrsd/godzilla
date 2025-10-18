@@ -6,7 +6,6 @@
 #include "godzilla/Problem.h"
 #include "godzilla/App.h"
 #include "godzilla/DiscreteProblemInterface.h"
-#include "godzilla/MeshObject.h"
 #include <filesystem>
 
 namespace godzilla {

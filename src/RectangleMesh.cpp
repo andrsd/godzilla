@@ -12,7 +12,7 @@ namespace godzilla {
 Parameters
 RectangleMesh::parameters()
 {
-    auto params = MeshObject::parameters();
+    auto params = Object::parameters();
     params.add_param<Real>("xmin", 0., "Minimum in the x direction")
         .add_param<Real>("xmax", 1., "Maximum in the x direction")
         .add_param<Real>("ymin", 0., "Minimum in the y direction")
@@ -24,7 +24,7 @@ RectangleMesh::parameters()
 }
 
 RectangleMesh::RectangleMesh(const Parameters & pars) :
-    MeshObject(pars),
+    Object(pars),
     xmin(pars.get<Real>("xmin")),
     xmax(pars.get<Real>("xmax")),
     ymin(pars.get<Real>("ymin")),
@@ -83,7 +83,7 @@ RectangleMesh::get_ny() const
     return this->ny;
 }
 
-Qtr<Mesh>
+Qtr<UnstructuredMesh>
 RectangleMesh::create_mesh()
 {
     CALL_STACK_MSG();

@@ -2,9 +2,9 @@
 #include <cstdio>
 #include "TestApp.h"
 #include "TestMesh3D.h"
+#include "godzilla/MeshFactory.h"
 #include "godzilla/FileMesh.h"
 #include "godzilla/UnstructuredMesh.h"
-#include "godzilla/MeshObject.h"
 #include "godzilla/FEGeometry.h"
 #include "godzilla/FEVolumes.h"
 #include "godzilla/FEShapeFns.h"
@@ -88,21 +88,20 @@ TEST(FEBoundaryTest, test_3d)
 
     auto mesh_pars = TestMesh3D::parameters();
     mesh_pars.set<godzilla::App *>("_app", &app);
-    TestMesh3D mesh(mesh_pars);
-    mesh.create();
+    auto mesh_qtr = MeshFactory::create<TestMesh3D>(mesh_pars);
+    auto mesh = mesh_qtr.get();
 
     constexpr Int DIM = 3;
-    auto m = mesh.get_mesh<UnstructuredMesh>();
-    auto fe_volume = fe::calc_volumes<TET4, DIM>(*m);
-    auto grad_phi = fe::calc_grad_shape<TET4, DIM>(*m, fe_volume);
+    auto fe_volume = fe::calc_volumes<TET4, DIM>(*mesh);
+    auto grad_phi = fe::calc_grad_shape<TET4, DIM>(*mesh, fe_volume);
 
     {
-        auto label = m->get_label("left");
+        auto label = mesh->get_label("left");
         auto bnd_facets = points_from_label(label);
-        auto vertices = m->get_cone_recursive_vertices(bnd_facets);
+        auto vertices = mesh->get_cone_recursive_vertices(bnd_facets);
         vertices.sort_remove_dups();
 
-        TestEssentialBoundary3D bnd(m, vertices);
+        TestEssentialBoundary3D bnd(mesh, vertices);
         bnd.create();
         bnd.compute();
 
@@ -113,9 +112,9 @@ TEST(FEBoundaryTest, test_3d)
         bnd.destroy();
     }
     {
-        auto label = m->get_label("front");
+        auto label = mesh->get_label("front");
         auto bnd_facets = points_from_label(label);
-        TestNaturalBoundary3D bnd(m, grad_phi, bnd_facets);
+        TestNaturalBoundary3D bnd(mesh, grad_phi, bnd_facets);
         bnd.create();
         bnd.compute();
 
@@ -132,9 +131,9 @@ TEST(FEBoundaryTest, test_3d)
         bnd.destroy();
     }
     {
-        auto label = m->get_label("bottom");
+        auto label = mesh->get_label("bottom");
         auto bnd_facets = points_from_label(label);
-        TestNaturalBoundary3D bnd(m, grad_phi, bnd_facets);
+        TestNaturalBoundary3D bnd(mesh, grad_phi, bnd_facets);
         bnd.create();
         bnd.compute();
 
@@ -151,9 +150,9 @@ TEST(FEBoundaryTest, test_3d)
         bnd.destroy();
     }
     {
-        auto label = m->get_label("slanted");
+        auto label = mesh->get_label("slanted");
         auto bnd_facets = points_from_label(label);
-        TestNaturalBoundary3D bnd(m, grad_phi, bnd_facets);
+        TestNaturalBoundary3D bnd(mesh, grad_phi, bnd_facets);
         bnd.create();
         bnd.compute();
 

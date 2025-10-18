@@ -1,6 +1,7 @@
 #include "gmock/gmock.h"
 #include "TestApp.h"
 #include "GTestFENonlinearProblem.h"
+#include "godzilla/MeshFactory.h"
 #include "godzilla/TecplotOutput.h"
 #include "godzilla/LineMesh.h"
 
@@ -15,11 +16,11 @@ TEST(TecplotOutputTest, get_file_ext)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 2);
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
     prob_pars.set<App *>("_app", &app);
-    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_pars.set<Mesh *>("mesh", mesh.get());
     GTestFENonlinearProblem prob(prob_pars);
 
     auto params = TecplotOutput::parameters();
@@ -28,7 +29,6 @@ TEST(TecplotOutputTest, get_file_ext)
     params.set<std::string>("file", "out");
     TecplotOutput out(params);
 
-    mesh.create();
     prob.create();
     out.create();
 
@@ -42,11 +42,11 @@ TEST(TecplotOutputTest, output)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 2);
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
     prob_pars.set<App *>("_app", &app);
-    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_pars.set<Mesh *>("mesh", mesh.get());
     GTestFENonlinearProblem prob(prob_pars);
 
     auto params = TecplotOutput::parameters();
@@ -56,7 +56,6 @@ TEST(TecplotOutputTest, output)
     TecplotOutput out(params);
     prob.add_output(&out);
 
-    mesh.create();
     prob.create();
 
     EXPECT_TRUE(app.check_integrity());
@@ -74,11 +73,11 @@ TEST(TecplotOutputTest, test)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 2);
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
     prob_pars.set<App *>("_app", &app);
-    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_pars.set<Mesh *>("mesh", mesh.get());
     GTestFENonlinearProblem prob(prob_pars);
 
     auto params = TecplotOutput::parameters();
@@ -89,7 +88,6 @@ TEST(TecplotOutputTest, test)
 
     prob.add_output(&out);
 
-    mesh.create();
     prob.create();
 
     testing::internal::CaptureStderr();

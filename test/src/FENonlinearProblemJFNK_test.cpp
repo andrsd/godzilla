@@ -1,5 +1,6 @@
 #include "gmock/gmock.h"
 #include "TestApp.h"
+#include "godzilla/MeshFactory.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/FENonlinearProblem.h"
 #include "godzilla/Preconditioner.h"
@@ -123,11 +124,11 @@ TEST(FENonlinearProblemJFNKTest, solve)
     auto mesh_params = LineMesh::parameters();
     mesh_params.set<godzilla::App *>("_app", &app);
     mesh_params.set<Int>("nx", 2);
-    LineMesh mesh(mesh_params);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = GTestFENonlinearProblemJFNK::parameters();
     prob_params.set<godzilla::App *>("_app", &app);
-    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_params.set<Mesh *>("mesh", mesh.get());
     GTestFENonlinearProblemJFNK prob(prob_params);
     app.set_problem(&prob);
 
@@ -147,7 +148,6 @@ TEST(FENonlinearProblemJFNKTest, solve)
     DirichletBC bc(bc_params);
     prob.add_boundary_condition(&bc);
 
-    mesh.create();
     prob.create();
 
     prob.run();

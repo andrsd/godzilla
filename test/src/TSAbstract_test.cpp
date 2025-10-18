@@ -1,5 +1,6 @@
 #include "gmock/gmock.h"
 #include "godzilla/TSAbstract.h"
+#include "godzilla/MeshFactory.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/FENonlinearProblem.h"
 #include "godzilla/TransientProblemInterface.h"
@@ -142,15 +143,14 @@ TEST(TSAbstract, test)
     auto pars_mesh = LineMesh::parameters();
     pars_mesh.set<godzilla::App *>("_app", &app);
     pars_mesh.set<Int>("nx", 2);
-    LineMesh mesh(pars_mesh);
+    auto mesh = MeshFactory::create<LineMesh>(pars_mesh);
 
     auto pars_prob = GTestProblem::parameters();
     pars_prob.set<godzilla::App *>("_app", &app);
-    pars_prob.set<MeshObject *>("_mesh_obj", &mesh);
+    pars_prob.set<Mesh *>("mesh", mesh.get());
     pars_prob.set<Int>("num_steps", 1);
     GTestProblem prob(pars_prob);
 
-    mesh.create();
     prob.create();
 
     EXPECT_EQ(prob.get_problem_type(), TransientProblemInterface::ProblemType::LINEAR);

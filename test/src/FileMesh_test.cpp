@@ -1,6 +1,7 @@
 #include "gmock/gmock.h"
 #include "TestApp.h"
 #include "godzilla/FileMesh.h"
+#include "godzilla/MeshFactory.h"
 
 using namespace godzilla;
 using namespace testing;
@@ -22,8 +23,6 @@ TEST(FileMesh, exoii_file_format)
 
 TEST(FileMesh, unknown_mesh_format)
 {
-    testing::internal::CaptureStderr();
-
     TestApp app;
 
     auto mesh_pars = FileMesh::parameters();
@@ -31,10 +30,11 @@ TEST(FileMesh, unknown_mesh_format)
     mesh_pars.set<std::string>("file",
                                std::string(GODZILLA_UNIT_TESTS_ROOT) +
                                    std::string("/assets/yml/empty.yml"));
-    FileMesh mesh(mesh_pars);
-    mesh.create();
+    auto mesh = MeshFactory::create<FileMesh>(mesh_pars);
 
     EXPECT_FALSE(app.check_integrity());
+
+    testing::internal::CaptureStderr();
     app.get_logger()->print();
     auto out = testing::internal::GetCapturedStderr();
     EXPECT_THAT(out, HasSubstr("[ERROR] Unknown mesh format"));

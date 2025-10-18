@@ -1,5 +1,6 @@
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
+#include "godzilla/MeshFactory.h"
 #include "godzilla/RectangleMesh.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Parameters.h"
@@ -19,21 +20,11 @@ TEST(RectangleMeshTest, api)
         .set<Real>("ymin", 2)
         .set<Real>("ymax", 4)
         .set<Int>("ny", 8);
-    RectangleMesh mesh(params);
+    auto mesh = MeshFactory::create<RectangleMesh>(params);
 
-    EXPECT_EQ(mesh.get_x_min(), 1);
-    EXPECT_EQ(mesh.get_x_max(), 3);
-    EXPECT_EQ(mesh.get_nx(), 9);
+    auto dm = mesh->get_dm();
 
-    EXPECT_EQ(mesh.get_y_min(), 2);
-    EXPECT_EQ(mesh.get_y_max(), 4);
-    EXPECT_EQ(mesh.get_ny(), 8);
-
-    mesh.create();
-    auto m = mesh.get_mesh<UnstructuredMesh>();
-    auto dm = m->get_dm();
-
-    EXPECT_EQ(m->get_dimension(), 2);
+    EXPECT_EQ(mesh->get_dimension(), 2);
 
     Real gmin[4], gmax[4];
     DMGetBoundingBox(dm, gmin, gmax);

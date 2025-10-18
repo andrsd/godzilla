@@ -1,6 +1,8 @@
 #include "gmock/gmock.h"
 #include "TestApp.h"
+#include "godzilla/MeshFactory.h"
 #include "godzilla/LineMesh.h"
+#include "godzilla/UnstructuredMesh.h"
 #include "godzilla/ImplicitFENonlinearProblem.h"
 #include "godzilla/ResidualFunc.h"
 #include "godzilla/Types.h"
@@ -58,17 +60,16 @@ TEST(ResidualFuncTest, test)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 2);
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = GTestProblem::parameters();
     prob_pars.set<App *>("_app", &app)
-        .set<MeshObject *>("_mesh_obj", &mesh)
+        .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 20)
         .set<Real>("dt", 5);
     GTestProblem prob(prob_pars);
 
-    mesh.create();
     prob.create();
 
     TestF res(&prob);
@@ -128,17 +129,16 @@ TEST(ResidualFuncTest, test_vals)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 2);
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = GTestProblem::parameters();
     prob_pars.set<App *>("_app", &app)
-        .set<MeshObject *>("_mesh_obj", &mesh)
+        .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 1.23)
         .set<Real>("end_time", 20)
         .set<Real>("dt", 5);
     GTestProblem prob(prob_pars);
 
-    mesh.create();
     prob.create();
 
     TestF res(&prob);
