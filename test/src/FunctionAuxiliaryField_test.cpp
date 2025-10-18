@@ -1,6 +1,7 @@
 #include "GodzillaApp_test.h"
 #include "GTestFENonlinearProblem.h"
 #include "godzilla/Parameters.h"
+#include "godzilla/MeshFactory.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/FunctionAuxiliaryField.h"
 #include "godzilla/Types.h"
@@ -14,11 +15,11 @@ TEST(FunctionAuxiliaryFieldTest, create)
     auto mesh_params = LineMesh::parameters();
     mesh_params.set<App *>("_app", &app);
     mesh_params.set<Int>("nx", 2);
-    LineMesh mesh(mesh_params);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = GTestFENonlinearProblem::parameters();
     prob_params.set<App *>("_app", &app);
-    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_params.set<Mesh *>("mesh", mesh.get());
     GTestFENonlinearProblem prob(prob_params);
     app.set_problem(&prob);
 
@@ -29,7 +30,6 @@ TEST(FunctionAuxiliaryFieldTest, create)
         .set<std::vector<std::string>>("value", { "1234" });
     FunctionAuxiliaryField aux(aux_params);
 
-    mesh.create();
     prob.set_aux_field(FieldID(0), "aux1", 1, Order(1));
     prob.add_auxiliary_field(&aux);
     prob.create();

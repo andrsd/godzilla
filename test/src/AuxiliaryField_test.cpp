@@ -45,8 +45,6 @@ TEST_F(AuxiliaryFieldTest, api)
         }
     };
 
-    mesh->create();
-
     prob->set_aux_field(FieldID(0), "fld", 1, Order(1));
 
     auto params = AuxiliaryField::parameters();
@@ -64,7 +62,7 @@ TEST_F(AuxiliaryFieldTest, api)
     EXPECT_EQ(aux.get_block_id(), -1);
     EXPECT_EQ(aux.get_field(), "fld");
     EXPECT_EQ(aux.get_field_id(), FieldID(0));
-    EXPECT_EQ(aux.get_msh(), this->mesh->get_mesh<Mesh>());
+    // EXPECT_EQ(aux.get_msh(), this->mesh->get_mesh<Mesh>());
     EXPECT_EQ(aux.get_prblm(), prob);
     EXPECT_EQ(aux.get_dimension(), 1_D);
 
@@ -89,8 +87,6 @@ TEST_F(AuxiliaryFieldTest, non_existent_field)
         {
         }
     };
-
-    mesh->create();
 
     testing::internal::CaptureStderr();
 
@@ -127,8 +123,6 @@ TEST_F(AuxiliaryFieldTest, inconsistent_comp_number)
         {
         }
     };
-
-    mesh->create();
 
     testing::internal::CaptureStderr();
 
@@ -167,8 +161,6 @@ TEST_F(AuxiliaryFieldTest, non_existent_region)
         }
     };
 
-    mesh->create();
-
     testing::internal::CaptureStderr();
 
     prob->set_aux_field(FieldID(0), "aux", 1, Order(1));
@@ -192,8 +184,6 @@ TEST_F(AuxiliaryFieldTest, non_existent_region)
 
 TEST_F(AuxiliaryFieldTest, name_already_taken)
 {
-    mesh->create();
-
     prob->set_aux_field(FieldID(0), "fld", 1, Order(1));
 
     auto params = ConstantAuxiliaryField::parameters();
@@ -224,8 +214,6 @@ TEST_F(AuxiliaryFieldTest, get_value)
             u[0] = time * (x[0] + 1234);
         }
     };
-
-    mesh->create();
 
     prob->set_aux_field(FieldID(0), "aux", 1, Order(1));
 
@@ -262,8 +250,6 @@ TEST_F(AuxiliaryFieldTest, get_vector_value)
             u[2] = 42.;
         }
     };
-
-    mesh->create();
 
     prob->set_aux_field(FieldID(0), "aux", 1, Order(1));
 

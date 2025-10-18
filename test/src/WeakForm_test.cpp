@@ -1,7 +1,8 @@
 #include "gmock/gmock.h"
 #include "TestApp.h"
-#include "godzilla/LineMesh.h"
 #include "GTestFENonlinearProblem.h"
+#include "godzilla/MeshFactory.h"
+#include "godzilla/LineMesh.h"
 #include "godzilla/ResidualFunc.h"
 #include "godzilla/JacobianFunc.h"
 #include "godzilla/NaturalBC.h"
@@ -84,11 +85,11 @@ TEST(WeakFormTest, test)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 2);
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
     prob_pars.set<App *>("_app", &app);
-    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_pars.set<Mesh *>("mesh", mesh.get());
     GTestFENonlinearProblem prob(prob_pars);
 
     auto bc_pars = NaturalBC::parameters();

@@ -4,7 +4,6 @@
 #include "godzilla/Problem.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/Error.h"
-#include "godzilla/MeshObject.h"
 #include "godzilla/Mesh.h"
 #include "godzilla/Function.h"
 #include "godzilla/Postprocessor.h"
@@ -35,14 +34,14 @@ Parameters
 Problem::parameters()
 {
     auto params = Object::parameters();
-    params.add_private_param<MeshObject *>("_mesh_obj", nullptr);
+    params.add_param<Mesh *>("mesh", nullptr, "Mesh to be used");
     return params;
 }
 
 Problem::Problem(const Parameters & pars) :
     Object(pars),
     PrintInterface(this),
-    mesh(pars.get<MeshObject *>("_mesh_obj")),
+    mesh(pars.get<Mesh *>("mesh")),
     partitioner(nullptr),
     partition_overlap(0),
     default_output_on()
@@ -56,9 +55,7 @@ Problem::get_dm() const
 {
     CALL_STACK_MSG();
     assert_true(this->mesh != nullptr, "Mesh is null");
-    auto m = this->mesh->get_mesh<Mesh>();
-    assert_true(m != nullptr, "Provided mesh object is not Mesh-derived object");
-    return m->get_dm();
+    return this->mesh->get_dm();
 }
 
 const Vector &

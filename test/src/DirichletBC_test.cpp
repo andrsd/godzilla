@@ -2,6 +2,7 @@
 #include "GodzillaApp_test.h"
 #include "GTestFENonlinearProblem.h"
 #include "godzilla/Factory.h"
+#include "godzilla/MeshFactory.h"
 #include "godzilla/BoxMesh.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/DirichletBC.h"
@@ -21,11 +22,11 @@ TEST(DirichletBCTest, api)
         .set<Int>("ny", 2)
         .set<Int>("nz", 2);
     // clang-format on
-    BoxMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<BoxMesh>(mesh_pars);
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
     prob_pars.set<App *>("_app", &app);
-    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_pars.set<Mesh *>("mesh", mesh.get());
     GTestFENonlinearProblem problem(prob_pars);
     app.set_problem(&problem);
 
@@ -37,7 +38,6 @@ TEST(DirichletBCTest, api)
         .set<std::vector<std::string>>("value_t", { "1" });
     DirichletBC obj(params);
 
-    mesh.create();
     problem.create();
     obj.create();
 
@@ -62,11 +62,11 @@ TEST(DirichletBCTest, with_user_defined_fn)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 2);
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
     prob_pars.set<App *>("_app", &app);
-    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_pars.set<Mesh *>("mesh", mesh.get());
     GTestFENonlinearProblem problem(prob_pars);
     app.set_problem(&problem);
 
@@ -85,7 +85,6 @@ TEST(DirichletBCTest, with_user_defined_fn)
         .set<std::vector<std::string>>("value", { "ipol(x)" });
     DirichletBC bc(bc_pars);
 
-    mesh.create();
     problem.create();
     bc.create();
 

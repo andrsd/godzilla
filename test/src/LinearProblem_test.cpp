@@ -1,6 +1,8 @@
 #include "gmock/gmock.h"
 #include "TestApp.h"
+#include "godzilla/MeshFactory.h"
 #include "godzilla/LineMesh.h"
+#include "godzilla/UnstructuredMesh.h"
 #include "godzilla/LinearProblem.h"
 #include "godzilla/Problem.h"
 #include "godzilla/RestartFile.h"
@@ -61,12 +63,11 @@ TEST(LinearProblemTest, run)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 1);
-    LineMesh mesh(mesh_pars);
-    mesh.create();
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = LinearProblem::parameters();
     prob_pars.set<App *>("_app", &app);
-    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_pars.set<Mesh *>("mesh", mesh.get());
     prob_pars.set<std::string>("ksp_type", KSPCG);
     CustomLinearProblem prob(prob_pars);
 
@@ -90,12 +91,11 @@ TEST(LinearProblemTest, restart_file)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 1);
-    LineMesh mesh(mesh_pars);
-    mesh.create();
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = LinearProblem::parameters();
     prob_pars.set<App *>("_app", &app);
-    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_pars.set<Mesh *>("mesh", mesh.get());
     prob_pars.set<std::string>("ksp_type", KSPCG);
     CustomLinearProblem prob(prob_pars);
 

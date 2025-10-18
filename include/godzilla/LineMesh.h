@@ -3,14 +3,17 @@
 
 #pragma once
 
-#include "godzilla/MeshObject.h"
+#include "godzilla/Object.h"
 #include "godzilla/Types.h"
+#include "godzilla/Qtr.h"
 
 namespace godzilla {
 
+class UnstructuredMesh;
+
 /// 1D line
 ///
-class LineMesh : public MeshObject {
+class LineMesh : public Object {
 public:
     explicit LineMesh(const Parameters & pars);
 
@@ -29,8 +32,7 @@ public:
     /// @return Number of divisions in the x-direction
     Int get_nx() const;
 
-protected:
-    Qtr<Mesh> create_mesh() override;
+    Qtr<UnstructuredMesh> create_mesh();
 
 private:
     /// Minimum in the x direction

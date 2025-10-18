@@ -4,7 +4,6 @@
 #include "godzilla/InputFile.h"
 #include "godzilla/App.h"
 #include "godzilla/Factory.h"
-#include "godzilla/MeshObject.h"
 #include "godzilla/Mesh.h"
 #include "godzilla/Problem.h"
 #include "godzilla/Output.h"
@@ -52,7 +51,6 @@ InputFile::InputFile(App * app) :
     PrintInterface(app),
     LoggingInterface(app->get_logger()),
     app(app),
-    mesh_obj(nullptr),
     problem(nullptr)
 {
     CALL_STACK_MSG();
@@ -90,13 +88,6 @@ InputFile::parse(const std::string & file_name)
     catch (YAML::ParserException & e) {
         throw Exception("Failed to parse the input file: {}", e.what() + 10);
     }
-}
-
-MeshObject *
-InputFile::get_mesh_object() const
-{
-    CALL_STACK_MSG();
-    return this->mesh_obj;
 }
 
 Problem *
@@ -144,22 +135,11 @@ InputFile::add_object(Object * obj)
     }
 }
 
-MeshObject *
-InputFile::create_mesh_object()
-{
-    CALL_STACK_MSG();
-    auto node = get_block(this->root, "mesh");
-    auto * params = build_params(node);
-    return this->app->build_object<MeshObject>("mesh", params);
-}
-
 void
 InputFile::build_mesh()
 {
     CALL_STACK_MSG();
     lprintln(9, "- mesh");
-    this->mesh_obj = create_mesh_object();
-    add_object(this->mesh_obj);
 }
 
 void
@@ -169,7 +149,6 @@ InputFile::build_problem()
     lprintln(9, "- problem");
     auto node = get_block(this->root, "problem");
     auto * params = build_params(node);
-    params->set<MeshObject *>("_mesh_obj", this->mesh_obj);
     this->problem = this->app->build_object<Problem>("problem", params);
     add_object(this->problem);
 }
@@ -187,7 +166,6 @@ InputFile::build_outputs()
         Block blk = get_block(output_block, it.first.as<std::string>());
         auto * params = build_params(blk);
         params->set<Problem *>("_problem", this->problem);
-        params->set<MeshObject *>("_mesh_obj", this->mesh_obj);
         auto output = this->app->build_object<Output>(blk.name(), params);
         assert_true(this->problem != nullptr, "Problem is null");
         this->problem->add_output(output);

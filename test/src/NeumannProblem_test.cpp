@@ -1,6 +1,7 @@
 #include "gmock/gmock.h"
 #include "TestApp.h"
 #include "godzilla/FENonlinearProblem.h"
+#include "godzilla/MeshFactory.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/RectangleMesh.h"
 #include "godzilla/NaturalBC.h"
@@ -164,11 +165,11 @@ TEST(NeumannProblemTest, solve)
     mesh_params.set<App *>("_app", &app);
     mesh_params.set<Int>("nx", 2);
     mesh_params.set<Int>("ny", 1);
-    RectangleMesh mesh(mesh_params);
+    auto mesh = MeshFactory::create<RectangleMesh>(mesh_params);
 
     auto prob_params = TestNeumannProblem::parameters();
     prob_params.set<App *>("_app", &app);
-    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_params.set<Mesh *>("mesh", mesh.get());
     TestNeumannProblem prob(prob_params);
     app.set_problem(&prob);
 
@@ -188,7 +189,6 @@ TEST(NeumannProblemTest, solve)
     TestNeumannBC bc_right(bc_right_pars);
     prob.add_boundary_condition(&bc_right);
 
-    mesh.create();
     prob.create();
 
     prob.run();

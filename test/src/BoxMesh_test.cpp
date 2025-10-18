@@ -1,6 +1,7 @@
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
-#include "godzilla/Mesh.h"
+#include "godzilla/MeshFactory.h"
+#include "godzilla/UnstructuredMesh.h"
 #include "godzilla/BoxMesh.h"
 #include "godzilla/Parameters.h"
 
@@ -36,9 +37,8 @@ TEST(BoxMeshTest, api)
     EXPECT_EQ(mesh.get_z_max(), 6);
     EXPECT_EQ(mesh.get_nz(), 7);
 
-    mesh.create();
+    auto m = mesh.create_mesh();
 
-    auto m = mesh.get_mesh<Mesh>();
     EXPECT_EQ(m->get_dimension(), 3_D);
 
     auto dm = m->get_dm();

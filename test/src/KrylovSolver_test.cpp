@@ -3,6 +3,7 @@
 #include "godzilla/Matrix.h"
 #include "godzilla/Vector.h"
 #include "godzilla/UnstructuredMesh.h"
+#include "godzilla/MeshFactory.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/PCJacobi.h"
 #include "TestApp.h"
@@ -185,11 +186,9 @@ TEST(KrylovSolver, set_opers_rhs)
     mesh_pars.set<Real>("xmin", 0);
     mesh_pars.set<Real>("xmax", 1);
     mesh_pars.set<Int>("nx", 1);
-    LineMesh mesh(mesh_pars);
-    mesh.create();
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
-    auto m = mesh.get_mesh<UnstructuredMesh>();
-    auto dm = m->get_dm();
+    auto dm = mesh->get_dm();
     DMSetNumFields(dm, 1);
     Int nc[1] = { 1 };
     Int n_dofs[2] = { 1, 0 };

@@ -1,6 +1,8 @@
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
+#include "godzilla/MeshFactory.h"
 #include "godzilla/LineMesh.h"
+#include "godzilla/UnstructuredMesh.h"
 #include "godzilla/NonlinearProblem.h"
 #include "godzilla/RestartOutput.h"
 #include "godzilla/RestartFile.h"
@@ -91,12 +93,11 @@ TEST(NonlinearProblemTest, initial_guess)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 1);
-    LineMesh mesh(mesh_pars);
-    mesh.create();
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = G1DTestNonlinearProblem::parameters();
     prob_pars.set<App *>("_app", &app);
-    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_pars.set<Mesh *>("mesh", mesh.get());
     G1DTestNonlinearProblem prob(prob_pars);
     prob.create();
     prob.call_initial_guess();
@@ -114,12 +115,11 @@ TEST(NonlinearProblemTest, solve)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 1);
-    LineMesh mesh(mesh_pars);
-    mesh.create();
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = G1DTestNonlinearProblem::parameters();
     prob_pars.set<App *>("_app", &app);
-    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_pars.set<Mesh *>("mesh", mesh.get());
     G1DTestNonlinearProblem prob(prob_pars);
 
     prob.create();
@@ -177,12 +177,11 @@ TEST(NonlinearProblemTest, run)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 1);
-    LineMesh mesh(mesh_pars);
-    mesh.create();
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = NonlinearProblem::parameters();
     prob_pars.set<App *>("_app", &app);
-    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_pars.set<Mesh *>("mesh", mesh.get());
     MockNonlinearProblem prob(prob_pars);
     prob.create();
 
@@ -211,14 +210,13 @@ TEST(NonlinearProblemTest, line_search_type)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 1);
-    LineMesh mesh(mesh_pars);
-    mesh.create();
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     std::vector<std::string> ls_type = { "basic", "l2", "cp", "nleqerr", "shell" };
     for (auto & lst : ls_type) {
         auto prob_pars = NonlinearProblem::parameters();
         prob_pars.set<App *>("_app", &app);
-        prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
+        prob_pars.set<Mesh *>("mesh", mesh.get());
         prob_pars.set<std::string>("line_search", lst);
         MockNonlinearProblem prob(prob_pars);
         prob.create();
@@ -246,12 +244,11 @@ TEST(NonlinearProblemTest, invalid_line_search_type)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 1);
-    LineMesh mesh(mesh_pars);
-    mesh.create();
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = NonlinearProblem::parameters();
     prob_pars.set<App *>("_app", &app);
-    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_pars.set<Mesh *>("mesh", mesh.get());
     prob_pars.set<std::string>("line_search", "asdf");
     MockNonlinearProblem prob(prob_pars);
     prob.create();
@@ -271,12 +268,11 @@ TEST(NonlinearProblemTest, restart_file)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 1);
-    LineMesh mesh(mesh_pars);
-    mesh.create();
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = G1DTestNonlinearProblem::parameters();
     prob_pars.set<App *>("_app", &app);
-    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_pars.set<Mesh *>("mesh", mesh.get());
     G1DTestNonlinearProblem prob(prob_pars);
 
     auto ro_pars = RestartOutput::parameters();

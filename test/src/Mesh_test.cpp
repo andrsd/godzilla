@@ -1,7 +1,7 @@
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
+#include "godzilla/MeshFactory.h"
 #include "godzilla/UnstructuredMesh.h"
-#include "godzilla/MeshObject.h"
 #include "godzilla/Parameters.h"
 #include "petscdmplex.h"
 
@@ -10,12 +10,12 @@ using namespace testing;
 
 namespace {
 
-class TestMesh : public MeshObject {
+class TestMesh : public Object {
 public:
-    explicit TestMesh(const Parameters & pars) : MeshObject(pars) {}
+    explicit TestMesh(const Parameters & pars) : Object(pars) {}
 
-    Qtr<Mesh>
-    create_mesh() override
+    Qtr<UnstructuredMesh>
+    create_mesh()
     {
         Real lower[1] = { -1 };
         Real upper[1] = { 1 };
@@ -59,18 +59,17 @@ TEST(MeshTest, get_coordinates)
     auto params = TestMesh::parameters();
     params.set<App *>("_app", &app);
     params.set<std::string>("_name", "obj");
-    TestMesh mesh(params);
-    mesh.create();
+    auto mesh_qtr = MeshFactory::create<TestMesh>(params);
+    auto mesh = mesh_qtr.get();
 
-    auto m = mesh.get_mesh<UnstructuredMesh>();
-    Vector coords = m->get_coordinates();
+    Vector coords = mesh->get_coordinates();
     EXPECT_EQ(coords(0), -1.);
     EXPECT_EQ(coords(1), 0.);
     EXPECT_EQ(coords(2), 1.);
 
     DM cdm;
-    DMGetCoordinateDM(m->get_dm(), &cdm);
-    EXPECT_EQ(m->get_coordinate_dm(), cdm);
+    DMGetCoordinateDM(mesh->get_dm(), &cdm);
+    EXPECT_EQ(mesh->get_coordinate_dm(), cdm);
 }
 
 TEST(MeshTest, get_coordinates_local)
@@ -80,11 +79,10 @@ TEST(MeshTest, get_coordinates_local)
     auto params = TestMesh::parameters();
     params.set<App *>("_app", &app);
     params.set<std::string>("_name", "obj");
-    TestMesh mesh(params);
-    mesh.create();
+    auto mesh_qtr = MeshFactory::create<TestMesh>(params);
+    auto mesh = mesh_qtr.get();
 
-    auto m = mesh.get_mesh<UnstructuredMesh>();
-    Vector coords = m->get_coordinates_local();
+    Vector coords = mesh->get_coordinates_local();
     EXPECT_EQ(coords(0), -1.);
     EXPECT_EQ(coords(1), 0.);
     EXPECT_EQ(coords(2), 1.);
@@ -97,11 +95,10 @@ TEST(MeshTest, get_coordinates_section)
     auto params = TestMesh::parameters();
     params.set<App *>("_app", &app);
     params.set<std::string>("_name", "obj");
-    TestMesh mesh(params);
-    mesh.create();
+    auto mesh_qtr = MeshFactory::create<TestMesh>(params);
+    auto mesh = mesh_qtr.get();
 
-    auto m = mesh.get_mesh<UnstructuredMesh>();
-    auto section = m->get_coordinate_section();
+    auto section = mesh->get_coordinate_section();
     EXPECT_EQ(section.get_offset(2), 0);
     EXPECT_EQ(section.get_offset(3), 1);
     EXPECT_EQ(section.get_offset(4), 2);
@@ -114,12 +111,11 @@ TEST(MeshTest, remove_label)
     auto params = TestMesh::parameters();
     params.set<App *>("_app", &app);
     params.set<std::string>("_name", "obj");
-    TestMesh mesh(params);
-    mesh.create();
+    auto mesh_qtr = MeshFactory::create<TestMesh>(params);
+    auto mesh = mesh_qtr.get();
 
-    auto m = mesh.get_mesh<UnstructuredMesh>();
-    m->remove_label("marker");
-    EXPECT_FALSE(m->has_label("marker"));
+    mesh->remove_label("marker");
+    EXPECT_FALSE(mesh->has_label("marker"));
 }
 
 TEST(MeshTest, set_label_value)
@@ -129,13 +125,12 @@ TEST(MeshTest, set_label_value)
     auto params = TestMesh::parameters();
     params.set<App *>("_app", &app);
     params.set<std::string>("_name", "obj");
-    TestMesh mesh(params);
-    mesh.create();
+    auto mesh_qtr = MeshFactory::create<TestMesh>(params);
+    auto mesh = mesh_qtr.get();
 
-    auto m = mesh.get_mesh<UnstructuredMesh>();
-    m->create_label("bnd");
-    auto bnd = m->get_label("bnd");
-    m->set_label_value("bnd", 0, 1001);
+    mesh->create_label("bnd");
+    auto bnd = mesh->get_label("bnd");
+    mesh->set_label_value("bnd", 0, 1001);
 
     EXPECT_EQ(bnd.get_value(0), 1001);
 }
@@ -147,14 +142,13 @@ TEST(MeshTest, clear_label_value)
     auto params = TestMesh::parameters();
     params.set<App *>("_app", &app);
     params.set<std::string>("_name", "obj");
-    TestMesh mesh(params);
-    mesh.create();
+    auto mesh_qtr = MeshFactory::create<TestMesh>(params);
+    auto mesh = mesh_qtr.get();
 
-    auto m = mesh.get_mesh<UnstructuredMesh>();
-    m->create_label("bnd");
-    auto bnd = m->get_label("bnd");
-    m->set_label_value("bnd", 0, 1001);
-    m->clear_label_value("bnd", 0, 1001);
+    mesh->create_label("bnd");
+    auto bnd = mesh->get_label("bnd");
+    mesh->set_label_value("bnd", 0, 1001);
+    mesh->clear_label_value("bnd", 0, 1001);
     EXPECT_EQ(bnd.get_value(0), -1);
 }
 
@@ -167,11 +161,10 @@ TEST(MeshTest, view)
     Parameters params = TestMesh::parameters();
     params.set<App *>("_app", &app);
     params.set<std::string>("_name", "obj");
-    TestMesh mesh(params);
-    mesh.create();
+    auto mesh_qtr = MeshFactory::create<TestMesh>(params);
+    auto mesh = mesh_qtr.get();
 
-    auto m = mesh.create_mesh();
-    m->view();
+    mesh->view();
 
     auto out = testing::internal::GetCapturedStdout();
     EXPECT_THAT(out, HasSubstr("DM Object:"));
@@ -185,12 +178,11 @@ TEST(MeshTest, get_neighbors)
     auto params = TestMesh::parameters();
     params.set<App *>("_app", &app);
     params.set<std::string>("_name", "obj");
-    TestMesh mesh(params);
-    mesh.create();
-    auto m = mesh.create_mesh();
+    auto mesh_qtr = MeshFactory::create<TestMesh>(params);
+    auto mesh = mesh_qtr.get();
 
     if (app.get_comm().size() == 1) {
-        auto neighbors = m->get_neighbors();
+        auto neighbors = mesh->get_neighbors();
         EXPECT_TRUE(neighbors.empty());
     }
 }

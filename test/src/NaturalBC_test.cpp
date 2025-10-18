@@ -2,6 +2,7 @@
 #include "TestApp.h"
 #include "GTestFENonlinearProblem.h"
 #include "GTest2FieldsFENonlinearProblem.h"
+#include "godzilla/MeshFactory.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/NaturalBC.h"
 #include "godzilla/WeakForm.h"
@@ -18,11 +19,11 @@ TEST(NaturalBCTest, api)
     auto mesh_params = LineMesh::parameters();
     mesh_params.set<App *>("_app", &app);
     mesh_params.set<Int>("nx", 2);
-    LineMesh mesh(mesh_params);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = GTestFENonlinearProblem::parameters();
     prob_params.set<App *>("_app", &app);
-    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_params.set<Mesh *>("mesh", mesh.get());
     GTestFENonlinearProblem prob(prob_params);
     app.set_problem(&prob);
 
@@ -51,7 +52,6 @@ TEST(NaturalBCTest, api)
     params.set<std::vector<std::string>>("boundary", { "left" });
     MockNaturalBC bc(params);
 
-    mesh.create();
     prob.create();
     bc.create();
 
@@ -117,11 +117,11 @@ TEST(NaturalBCTest, fe)
     auto mesh_params = LineMesh::parameters();
     mesh_params.set<App *>("_app", &app);
     mesh_params.set<Int>("nx", 2);
-    LineMesh mesh(mesh_params);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = GTest2FieldsFENonlinearProblem::parameters();
     prob_params.set<App *>("_app", &app);
-    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_params.set<Mesh *>("mesh", mesh.get());
     GTest2FieldsFENonlinearProblem prob(prob_params);
     app.set_problem(&prob);
 
@@ -133,7 +133,6 @@ TEST(NaturalBCTest, fe)
     bc_params.set<std::string>("field", "u");
     TestNaturalBC bc(bc_params);
 
-    mesh.create();
     prob.set_aux_field(FieldID(0), "aux1", 1, Order(1));
     prob.add_boundary_condition(&bc);
     prob.create();
@@ -146,8 +145,7 @@ TEST(NaturalBCTest, fe)
     //
     auto field = bc.get_field_id();
     auto & wf = prob.get_weak_form();
-    auto m = mesh.get_mesh<UnstructuredMesh>();
-    auto label = m->get_label("left");
+    auto label = mesh->get_label("left");
     auto ids = label.get_values();
 
     const auto & f0 = wf.get(WeakForm::BND_F0, label, ids[0], field, 0);
@@ -168,11 +166,11 @@ TEST(NaturalBCTest, non_existing_field)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 2);
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = GTest2FieldsFENonlinearProblem::parameters();
     prob_pars.set<App *>("_app", &app);
-    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_pars.set<Mesh *>("mesh", mesh.get());
     GTest2FieldsFENonlinearProblem problem(prob_pars);
     app.set_problem(&problem);
 
@@ -183,7 +181,6 @@ TEST(NaturalBCTest, non_existing_field)
     params.set<std::string>("field", "asdf");
     TestNaturalBC bc(params);
 
-    mesh.create();
     problem.add_boundary_condition(&bc);
     problem.create();
 
@@ -203,11 +200,11 @@ TEST(NaturalBCTest, field_param_not_specified)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 2);
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = GTest2FieldsFENonlinearProblem::parameters();
     prob_pars.set<App *>("_app", &app);
-    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_pars.set<Mesh *>("mesh", mesh.get());
     GTest2FieldsFENonlinearProblem problem(prob_pars);
     app.set_problem(&problem);
 
@@ -217,7 +214,6 @@ TEST(NaturalBCTest, field_param_not_specified)
     params.set<std::vector<std::string>>("boundary", { "left" });
     TestNaturalBC bc(params);
 
-    mesh.create();
     problem.add_boundary_condition(&bc);
     problem.create();
 

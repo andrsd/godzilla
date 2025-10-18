@@ -1,6 +1,7 @@
 #include "gmock/gmock.h"
 #include "godzilla/Factory.h"
 #include "TestApp.h"
+#include "godzilla/MeshFactory.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/DirichletBC.h"
 #include "GTestImplicitFENonlinearProblem.h"
@@ -154,18 +155,17 @@ TEST(TimeSteppingAdaptor, api)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 2);
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = TestTSProblem::parameters();
     prob_pars.set<App *>("_app", &app);
-    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_pars.set<Mesh *>("mesh", mesh.get());
     prob_pars.set<Real>("start_time", 0.);
     prob_pars.set<Real>("end_time", 1);
     prob_pars.set<Real>("dt", 0.1);
     TestTSProblem prob(prob_pars);
 
     app.set_problem(&prob);
-    mesh.create();
     prob.create();
 
     auto params = TimeSteppingAdaptor::parameters();
@@ -189,11 +189,11 @@ TEST(TimeSteppingAdaptor, choose)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 2);
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = TestTSProblem::parameters();
     prob_pars.set<App *>("_app", &app);
-    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_pars.set<Mesh *>("mesh", mesh.get());
     prob_pars.set<Real>("start_time", 0.);
     prob_pars.set<Real>("end_time", 1);
     prob_pars.set<Real>("dt", 0.1);
@@ -215,7 +215,6 @@ TEST(TimeSteppingAdaptor, choose)
     TestTSAdaptor ts_adaptor(tsa_pars);
     prob.set_time_stepping_adaptor(&ts_adaptor);
 
-    mesh.create();
     prob.create();
     app.check_integrity();
     app.get_logger()->print();

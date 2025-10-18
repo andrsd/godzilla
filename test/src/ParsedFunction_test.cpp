@@ -1,6 +1,7 @@
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
 #include "GTestFENonlinearProblem.h"
+#include "godzilla/MeshFactory.h"
 #include "godzilla/RectangleMesh.h"
 #include "godzilla/ParsedFunction.h"
 
@@ -14,15 +15,14 @@ TEST(ParsedFunctionTest, eval)
     mesh_params.set<App *>("_app", &app);
     mesh_params.set<Int>("nx", 2);
     mesh_params.set<Int>("ny", 1);
-    RectangleMesh mesh(mesh_params);
+    auto mesh = MeshFactory::create<RectangleMesh>(mesh_params);
 
     auto prob_params = GTestFENonlinearProblem::parameters();
     prob_params.set<App *>("_app", &app);
-    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_params.set<Mesh *>("mesh", mesh.get());
     GTestFENonlinearProblem prob(prob_params);
     app.set_problem(&prob);
 
-    mesh.create();
     prob.create();
 
     std::map<std::string, Real> consts;
@@ -49,15 +49,14 @@ TEST(ParsedFunctionTest, multi_eval)
     mesh_params.set<App *>("_app", &app);
     mesh_params.set<Int>("nx", 2);
     mesh_params.set<Int>("ny", 1);
-    RectangleMesh mesh(mesh_params);
+    auto mesh = MeshFactory::create<RectangleMesh>(mesh_params);
 
     auto prob_params = GTestFENonlinearProblem::parameters();
     prob_params.set<App *>("_app", &app);
-    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_params.set<Mesh *>("mesh", mesh.get());
     GTestFENonlinearProblem prob(prob_params);
     app.set_problem(&prob);
 
-    mesh.create();
     prob.create();
 
     auto params = ParsedFunction::parameters();
@@ -81,15 +80,14 @@ TEST(ParsedFunctionTest, eval_via_parser)
     mesh_params.set<App *>("_app", &app);
     mesh_params.set<Int>("nx", 2);
     mesh_params.set<Int>("ny", 1);
-    RectangleMesh mesh(mesh_params);
+    auto mesh = MeshFactory::create<RectangleMesh>(mesh_params);
 
     auto prob_params = GTestFENonlinearProblem::parameters();
     prob_params.set<App *>("_app", &app);
-    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_params.set<Mesh *>("mesh", mesh.get());
     GTestFENonlinearProblem prob(prob_params);
     app.set_problem(&prob);
 
-    mesh.create();
     prob.create();
 
     auto params = ParsedFunction::parameters();

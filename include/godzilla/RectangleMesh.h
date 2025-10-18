@@ -3,14 +3,17 @@
 
 #pragma once
 
-#include "godzilla/MeshObject.h"
+#include "godzilla/Object.h"
 #include "godzilla/Types.h"
+#include "godzilla/Qtr.h"
 
 namespace godzilla {
 
+class UnstructuredMesh;
+
 /// 2D rectangular mesh
 ///
-class RectangleMesh : public MeshObject {
+class RectangleMesh : public Object {
 public:
     explicit RectangleMesh(const Parameters & pars);
 
@@ -25,8 +28,7 @@ public:
     /// Get the number of mesh points in y direction
     Int get_ny() const;
 
-protected:
-    Qtr<Mesh> create_mesh() override;
+    Qtr<UnstructuredMesh> create_mesh();
 
 private:
     /// Minimum in the x direction

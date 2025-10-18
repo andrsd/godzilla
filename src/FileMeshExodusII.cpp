@@ -37,7 +37,7 @@ get_cell_type(const std::string & elem_type)
 
 // This is a rewrite of `DMPlexCreateExodus` from PETSc (`plexexodusii.c`) using exodusIIcpp
 // and C++ constructs. Plus, it adds some godzilla-specific stuff like mapping names to labels, etc.
-Qtr<Mesh>
+Qtr<UnstructuredMesh>
 FileMesh::create_from_exodus()
 {
     CALL_STACK_MSG();

@@ -3,14 +3,17 @@
 
 #pragma once
 
-#include "godzilla/MeshObject.h"
+#include "godzilla/Object.h"
 #include "godzilla/Types.h"
+#include "godzilla/Qtr.h"
 
 namespace godzilla {
 
+class UnstructuredMesh;
+
 /// 3D box mesh
 ///
-class BoxMesh : public MeshObject {
+class BoxMesh : public Object {
 public:
     /// Constructor for building the object via Factory
     explicit BoxMesh(const Parameters & pars);
@@ -42,8 +45,7 @@ public:
     /// Get the number of mesh points in z direction
     Int get_nz() const;
 
-protected:
-    Qtr<Mesh> create_mesh() override;
+    Qtr<UnstructuredMesh> create_mesh();
 
 private:
     /// Minimum in the x direction

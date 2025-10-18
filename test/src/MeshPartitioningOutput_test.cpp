@@ -1,6 +1,7 @@
 #include "gmock/gmock.h"
 #include "TestApp.h"
-#include "godzilla/Mesh.h"
+#include "godzilla/MeshFactory.h"
+#include "godzilla/UnstructuredMesh.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/LinearProblem.h"
 #include "godzilla/MeshPartitioningOutput.h"
@@ -15,12 +16,12 @@ public:
     EmptyMesh() : Mesh() {}
 };
 
-class EmptyMeshObject : public MeshObject {
+class EmptyMeshObject : public Object {
 public:
-    explicit EmptyMeshObject(const Parameters & pars) : MeshObject(pars) {}
+    explicit EmptyMeshObject(const Parameters & pars) : Object(pars) {}
 
     Qtr<Mesh>
-    create_mesh() override
+    create_mesh()
     {
         return Qtr<EmptyMesh>::alloc();
     }
@@ -42,11 +43,11 @@ TEST(MeshPartitioningOutputTest, get_file_ext)
     mesh_params.set<Real>("xmin", 0);
     mesh_params.set<Real>("xmax", 1);
     mesh_params.set<Int>("nx", 4);
-    LineMesh mesh(mesh_params);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = TestProblem::parameters();
     prob_params.set<App *>("_app", &app);
-    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_params.set<Mesh *>("mesh", mesh.get());
     TestProblem prob(prob_params);
 
     auto params = MeshPartitioningOutput::parameters();
@@ -67,11 +68,11 @@ TEST(MeshPartitioningOutputTest, output)
     mesh_params.set<Real>("xmin", 0);
     mesh_params.set<Real>("xmax", 1);
     mesh_params.set<Int>("nx", 4);
-    LineMesh mesh(mesh_params);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = TestProblem::parameters();
     prob_params.set<App *>("_app", &app);
-    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_params.set<Mesh *>("mesh", mesh.get());
     TestProblem prob(prob_params);
 
     auto params = MeshPartitioningOutput::parameters();
@@ -80,7 +81,6 @@ TEST(MeshPartitioningOutputTest, output)
     MeshPartitioningOutput out(params);
     prob.add_output(&out);
 
-    mesh.create();
     prob.create();
 
     out.output_step();

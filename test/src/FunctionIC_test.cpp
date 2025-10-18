@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 #include "godzilla/Factory.h"
 #include "TestApp.h"
+#include "godzilla/MeshFactory.h"
 #include "godzilla/BoxMesh.h"
 #include "GTestFENonlinearProblem.h"
 #include "godzilla/FunctionInitialCondition.h"
@@ -16,11 +17,11 @@ TEST(FunctionICTest, api)
     mesh_pars.set<Int>("nx", 2);
     mesh_pars.set<Int>("ny", 2);
     mesh_pars.set<Int>("nz", 2);
-    BoxMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<BoxMesh>(mesh_pars);
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
     prob_pars.set<App *>("_app", &app);
-    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_pars.set<Mesh *>("mesh", mesh.get());
     GTestFENonlinearProblem prob(prob_pars);
     app.set_problem(&prob);
 
@@ -30,7 +31,6 @@ TEST(FunctionICTest, api)
     params.set<std::vector<std::string>>("value", { "t * (x + y + z)" });
     FunctionInitialCondition obj(params);
 
-    mesh.create();
     prob.create();
     obj.create();
 

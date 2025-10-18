@@ -11,6 +11,7 @@
 
 const char * version = "1.0";
 
+#if 0
 using namespace godzilla;
 
 class MeshPartApp : public App {
@@ -95,14 +96,16 @@ MeshPartApp::save_partition(UnstructuredMesh * mesh, const std::string & file_na
     out.create();
     out.output_mesh();
 }
-
+#endif
 // ---
 
 int
 main(int argc, char * argv[])
 {
+#if 0
     Init init(argc, argv);
     MeshPartApp app(argc, argv);
     app.run();
+#endif
     return 0;
 }

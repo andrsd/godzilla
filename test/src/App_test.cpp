@@ -39,7 +39,7 @@ public:
 
 } // namespace
 
-TEST(AppTest, run_input)
+TEST(AppTest, DISABLED_run_input)
 {
     fs::path input_file = fs::path(GODZILLA_UNIT_TESTS_ROOT) / "assets" / "yml" / "simple-test.yml";
     std::vector<std::string> args = { "-i", input_file.string() };

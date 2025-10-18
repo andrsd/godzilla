@@ -2,6 +2,7 @@
 #include <petscdm.h>
 #include "GodzillaApp_test.h"
 #include "godzilla/Error.h"
+#include "godzilla/MeshFactory.h"
 #include "godzilla/Mesh.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/Problem.h"
@@ -86,11 +87,11 @@ TEST(ProblemTest, add_pp)
     auto mesh_params = LineMesh::parameters();
     mesh_params.set<App *>("_app", &app);
     mesh_params.set<Int>("nx", 2);
-    LineMesh mesh(mesh_params);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = Problem::parameters();
     prob_params.set<App *>("_app", &app);
-    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_params.set<Mesh *>("mesh", mesh.get());
     TestProblem problem(prob_params);
 
     auto pp_params = Postprocessor::parameters();
@@ -136,15 +137,13 @@ TEST(ProblemTest, local_vec)
     auto mesh_params = LineMesh::parameters();
     mesh_params.set<App *>("_app", &app);
     mesh_params.set<Int>("nx", 2);
-    LineMesh mesh(mesh_params);
-    mesh.create();
-    auto m = mesh.get_mesh<Mesh>();
+    auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = Problem::parameters();
     prob_params.set<App *>("_app", &app);
-    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_params.set<Mesh *>("mesh", mesh.get());
     TestProblem problem(prob_params);
-    problem.set_local_section(create_section(m->get_dm()));
+    problem.set_local_section(create_section(mesh->get_dm()));
 
     Vector loc_vec = problem.get_local_vector();
     EXPECT_EQ(loc_vec.get_size(), 3);
@@ -162,16 +161,14 @@ TEST(ProblemTest, global_vec)
     auto mesh_params = LineMesh::parameters();
     mesh_params.set<App *>("_app", &app);
     mesh_params.set<Int>("nx", 2);
-    LineMesh mesh(mesh_params);
-    mesh.create();
+    auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = Problem::parameters();
     prob_params.set<App *>("_app", &app);
-    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_params.set<Mesh *>("mesh", mesh.get());
     TestProblem problem(prob_params);
 
-    auto m = mesh.get_mesh<Mesh>();
-    problem.set_local_section(create_section(m->get_dm()));
+    problem.set_local_section(create_section(mesh->get_dm()));
 
     Vector glob_vec = problem.get_global_vector();
     EXPECT_EQ(glob_vec.get_size(), 3);
@@ -189,17 +186,15 @@ TEST(ProblemTest, create_matrix)
     auto mesh_params = LineMesh::parameters();
     mesh_params.set<App *>("_app", &app);
     mesh_params.set<Int>("nx", 2);
-    LineMesh mesh(mesh_params);
-    mesh.create();
+    auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = Problem::parameters();
     prob_params.set<App *>("_app", &app);
-    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_params.set<Mesh *>("mesh", mesh.get());
     TestProblem problem(prob_params);
     problem.create();
 
-    auto m = mesh.get_mesh<Mesh>();
-    problem.set_local_section(create_section(m->get_dm()));
+    problem.set_local_section(create_section(mesh->get_dm()));
 
     Matrix mat = problem.create_matrix();
     EXPECT_EQ(mat.get_n_rows(), 3);
@@ -215,17 +210,15 @@ TEST(ProblemTest, get_local_section)
     auto mesh_params = LineMesh::parameters();
     mesh_params.set<App *>("_app", &app);
     mesh_params.set<Int>("nx", 2);
-    LineMesh mesh(mesh_params);
-    mesh.create();
+    auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = Problem::parameters();
     prob_params.set<App *>("_app", &app);
-    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_params.set<Mesh *>("mesh", mesh.get());
     TestProblem problem(prob_params);
     problem.create();
 
-    auto m = mesh.get_mesh<Mesh>();
-    auto dm = m->get_dm();
+    auto dm = mesh->get_dm();
     Section s = create_section(dm);
     problem.set_local_section(s);
 
@@ -243,17 +236,15 @@ TEST(ProblemTest, get_global_section)
     auto mesh_params = LineMesh::parameters();
     mesh_params.set<App *>("_app", &app);
     mesh_params.set<Int>("nx", 2);
-    LineMesh mesh(mesh_params);
-    mesh.create();
+    auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = Problem::parameters();
     prob_params.set<App *>("_app", &app);
-    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_params.set<Mesh *>("mesh", mesh.get());
     TestProblem problem(prob_params);
     problem.create();
 
-    auto m = mesh.get_mesh<Mesh>();
-    auto dm = m->get_dm();
+    auto dm = mesh->get_dm();
     Section s = create_section(dm);
     problem.set_local_section(s);
     problem.set_global_section(s);
@@ -272,15 +263,14 @@ TEST(ProblemTest, aux_vecs)
     auto mesh_params = LineMesh::parameters();
     mesh_params.set<App *>("_app", &app);
     mesh_params.set<Int>("nx", 2);
-    LineMesh mesh(mesh_params);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = Problem::parameters();
     prob_params.set<App *>("_app", &app);
-    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_params.set<Mesh *>("mesh", mesh.get());
     TestProblem problem(prob_params);
     app.set_problem(&problem);
 
-    mesh.create();
     problem.create();
 
     auto aux_0 = Vector::create_seq(app.get_comm(), 1);
@@ -304,15 +294,14 @@ TEST(ProblemTest, aux_vecs_clear)
     auto mesh_params = LineMesh::parameters();
     mesh_params.set<App *>("_app", &app);
     mesh_params.set<Int>("nx", 2);
-    LineMesh mesh(mesh_params);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = Problem::parameters();
     prob_params.set<App *>("_app", &app);
-    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_params.set<Mesh *>("mesh", mesh.get());
     TestProblem problem(prob_params);
     app.set_problem(&problem);
 
-    mesh.create();
     problem.create();
 
 #if PETSC_VERSION_GE(3, 21, 0)
@@ -330,12 +319,11 @@ TEST(ProblemTest, mat_vec_types)
     auto mesh_params = LineMesh::parameters();
     mesh_params.set<App *>("_app", &app);
     mesh_params.set<Int>("nx", 2);
-    LineMesh mesh(mesh_params);
-    mesh.create();
+    auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = Problem::parameters();
     prob_params.set<App *>("_app", &app);
-    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_params.set<Mesh *>("mesh", mesh.get());
     TestProblem problem(prob_params);
 
     EXPECT_EQ(problem.get_vector_type(), VECSTANDARD);
@@ -350,22 +338,20 @@ TEST(ProblemTest, loc_glob_arithmetic_type)
     auto mesh_params = LineMesh::parameters();
     mesh_params.set<App *>("_app", &app);
     mesh_params.set<Int>("nx", 9);
-    LineMesh mesh(mesh_params);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = Problem::parameters();
     prob_params.set<App *>("_app", &app);
-    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_params.set<Mesh *>("mesh", mesh.get());
     TestProblem problem(prob_params);
 
-    mesh.create();
     problem.create();
 
     auto part = problem.get_partitioner();
     part.set_up();
 
-    auto m = mesh.get_mesh<UnstructuredMesh>();
-    m->set_partitioner(part);
-    m->distribute(problem.get_partition_overlap());
+    mesh->set_partitioner(part);
+    mesh->distribute(problem.get_partition_overlap());
 
     DM dm = clone(problem.get_dm());
     PetscBool simplex = PETSC_TRUE;
@@ -405,22 +391,20 @@ TEST(ProblemTest, loc_glob_arithmetic_type_min_max)
     auto mesh_params = LineMesh::parameters();
     mesh_params.set<App *>("_app", &app);
     mesh_params.set<Int>("nx", 9);
-    LineMesh mesh(mesh_params);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = Problem::parameters();
     prob_params.set<App *>("_app", &app);
-    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_params.set<Mesh *>("mesh", mesh.get());
     TestProblem problem(prob_params);
 
-    mesh.create();
     problem.create();
 
     auto part = problem.get_partitioner();
     part.set_up();
 
-    auto m = mesh.get_mesh<UnstructuredMesh>();
-    m->set_partitioner(part);
-    m->distribute(problem.get_partition_overlap());
+    mesh->set_partitioner(part);
+    mesh->distribute(problem.get_partition_overlap());
 
     DM dm = clone(problem.get_dm());
     PetscBool simplex = PETSC_TRUE;
@@ -479,22 +463,20 @@ TEST(ProblemTest, loc_glob_vec_type)
     auto mesh_params = LineMesh::parameters();
     mesh_params.set<App *>("_app", &app);
     mesh_params.set<Int>("nx", 9);
-    LineMesh mesh(mesh_params);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = Problem::parameters();
     prob_params.set<App *>("_app", &app);
-    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_params.set<Mesh *>("mesh", mesh.get());
     TestProblem problem(prob_params);
 
-    mesh.create();
     problem.create();
 
     auto part = problem.get_partitioner();
     part.set_up();
 
-    auto m = mesh.get_mesh<UnstructuredMesh>();
-    m->set_partitioner(part);
-    m->distribute(problem.get_partition_overlap());
+    mesh->set_partitioner(part);
+    mesh->distribute(problem.get_partition_overlap());
 
     DM dm = clone(problem.get_dm());
     PetscBool simplex = PETSC_TRUE;

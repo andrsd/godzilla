@@ -13,7 +13,7 @@ namespace godzilla {
 Parameters
 LineMesh::parameters()
 {
-    auto params = MeshObject::parameters();
+    auto params = Object::parameters();
     params.add_param<Real>("xmin", 0., "Minimum in the x direction")
         .add_param<Real>("xmax", 1., "Maximum in the x direction")
         .add_required_param<Int>("nx", "Number of mesh points in the x direction");
@@ -21,7 +21,7 @@ LineMesh::parameters()
 }
 
 LineMesh::LineMesh(const Parameters & pars) :
-    MeshObject(pars),
+    Object(pars),
     xmin(pars.get<Real>("xmin")),
     xmax(pars.get<Real>("xmax")),
     nx(pars.get<Int>("nx")),
@@ -53,7 +53,7 @@ LineMesh::get_nx() const
     return this->nx;
 }
 
-Qtr<Mesh>
+Qtr<UnstructuredMesh>
 LineMesh::create_mesh()
 {
     CALL_STACK_MSG();

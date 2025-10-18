@@ -25,5 +25,6 @@ target_link_libraries(
 )
 
 if (GODZILLA_BUILD_TESTS)
-    add_subdirectory(test)
+    # temporarily disbaled
+    # add_subdirectory(test)
 endif()

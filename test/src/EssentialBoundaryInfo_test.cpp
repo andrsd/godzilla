@@ -4,7 +4,7 @@
 #include "TestMesh2D.h"
 #include "TestMesh3D.h"
 #include "godzilla/Enums.h"
-#include "godzilla/MeshObject.h"
+#include "godzilla/MeshFactory.h"
 #include "godzilla/FEBoundary.h"
 
 using namespace godzilla;
@@ -44,14 +44,11 @@ TEST(EssentialBoundaryTest, test_1d)
 
     auto mesh_pars = TestMesh1D::parameters();
     mesh_pars.set<godzilla::App *>("_app", &app);
-    TestMesh1D mesh(mesh_pars);
-    mesh.create();
-
-    auto m = mesh.get_mesh<UnstructuredMesh>();
+    auto mesh = MeshFactory::create<TestMesh1D>(mesh_pars);
 
     {
-        auto bnd_facets = points_from_label(m->get_label("left"));
-        TestBoundary1D bnd(m, bnd_facets);
+        auto bnd_facets = points_from_label(mesh->get_label("left"));
+        TestBoundary1D bnd(mesh.get(), bnd_facets);
         bnd.create();
         EXPECT_DOUBLE_EQ(bnd.num_vertices(), 1);
         EXPECT_DOUBLE_EQ(bnd.vertex(0), 2);
@@ -59,8 +56,8 @@ TEST(EssentialBoundaryTest, test_1d)
     }
 
     {
-        auto bnd_facets = points_from_label(m->get_label("right"));
-        TestBoundary1D bnd(m, bnd_facets);
+        auto bnd_facets = points_from_label(mesh->get_label("right"));
+        TestBoundary1D bnd(mesh.get(), bnd_facets);
         bnd.create();
         EXPECT_DOUBLE_EQ(bnd.num_vertices(), 1);
         EXPECT_DOUBLE_EQ(bnd.vertex(0), 4);
@@ -74,15 +71,12 @@ TEST(EssentialBoundaryTest, test_2d)
 
     auto mesh_pars = TestMesh2D::parameters();
     mesh_pars.set<godzilla::App *>("_app", &app);
-    TestMesh2D mesh(mesh_pars);
-    mesh.create();
-
-    auto m = mesh.get_mesh<UnstructuredMesh>();
+    auto mesh = MeshFactory::create<TestMesh2D>(mesh_pars);
 
     {
-        auto bnd_facets = points_from_label(m->get_label("left"));
-        auto vtxs = boundary_vertices(m, bnd_facets);
-        TestBoundary2D bnd(m, vtxs);
+        auto bnd_facets = points_from_label(mesh->get_label("left"));
+        auto vtxs = boundary_vertices(mesh.get(), bnd_facets);
+        TestBoundary2D bnd(mesh.get(), vtxs);
         bnd.create();
         EXPECT_DOUBLE_EQ(bnd.num_vertices(), 2);
         EXPECT_DOUBLE_EQ(bnd.vertex(0), 2);
@@ -91,9 +85,9 @@ TEST(EssentialBoundaryTest, test_2d)
     }
 
     {
-        auto bnd_facets = points_from_label(m->get_label("bottom"));
-        auto vtxs = boundary_vertices(m, bnd_facets);
-        TestBoundary2D bnd(m, vtxs);
+        auto bnd_facets = points_from_label(mesh->get_label("bottom"));
+        auto vtxs = boundary_vertices(mesh.get(), bnd_facets);
+        TestBoundary2D bnd(mesh.get(), vtxs);
         bnd.create();
         EXPECT_DOUBLE_EQ(bnd.num_vertices(), 2);
         EXPECT_DOUBLE_EQ(bnd.vertex(0), 2);
@@ -108,16 +102,13 @@ TEST(EssentialBoundaryTest, test_3d)
 
     auto mesh_pars = TestMesh3D::parameters();
     mesh_pars.set<godzilla::App *>("_app", &app);
-    TestMesh3D mesh(mesh_pars);
-    mesh.create();
-
-    auto m = mesh.get_mesh<UnstructuredMesh>();
+    auto mesh = MeshFactory::create<TestMesh3D>(mesh_pars);
 
     {
-        auto label = m->get_label("left");
+        auto label = mesh->get_label("left");
         auto bnd_facets = points_from_label(label);
-        auto vtxs = boundary_vertices(m, bnd_facets);
-        TestBoundary3D bnd(m, vtxs);
+        auto vtxs = boundary_vertices(mesh.get(), bnd_facets);
+        TestBoundary3D bnd(mesh.get(), vtxs);
         bnd.create();
         EXPECT_DOUBLE_EQ(bnd.num_vertices(), 3);
         EXPECT_DOUBLE_EQ(bnd.vertex(0), 1);

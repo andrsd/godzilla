@@ -17,7 +17,6 @@
 
 namespace godzilla {
 
-class MeshObject;
 class Mesh;
 class Function;
 class Postprocessor;
@@ -299,7 +298,7 @@ private:
     void output_monitor(const std::string & file_name) const;
 
     /// Mesh
-    MeshObject * mesh;
+    Mesh * mesh;
 
     /// Mesh partitioner
     Partitioner partitioner;

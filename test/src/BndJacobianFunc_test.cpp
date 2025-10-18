@@ -1,5 +1,6 @@
 #include "gmock/gmock.h"
 #include "TestApp.h"
+#include "godzilla/MeshFactory.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/ImplicitFENonlinearProblem.h"
 #include "godzilla/NaturalBC.h"
@@ -86,11 +87,11 @@ TEST(BndJacobianFuncTest, test)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 2);
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = GTestProblem::parameters();
     prob_pars.set<App *>("_app", &app)
-        .set<MeshObject *>("_mesh_obj", &mesh)
+        .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 20)
         .set<Real>("dt", 5);
@@ -105,7 +106,6 @@ TEST(BndJacobianFuncTest, test)
     TestBC bc(bc_pars);
     prob.add_boundary_condition(&bc);
 
-    mesh.create();
     prob.create();
     bc.create();
 

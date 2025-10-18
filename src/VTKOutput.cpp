@@ -6,7 +6,6 @@
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Problem.h"
 #include "godzilla/DiscreteProblemInterface.h"
-#include "godzilla/MeshObject.h"
 
 namespace godzilla {
 
@@ -14,18 +13,14 @@ Parameters
 VTKOutput::parameters()
 {
     auto params = FileOutput::parameters();
-    params.add_private_param<MeshObject *>("_mesh_obj", nullptr);
     return params;
 }
 
 VTKOutput::VTKOutput(const Parameters & pars) : FileOutput(pars), viewer(nullptr)
 {
     CALL_STACK_MSG();
-    auto dpi = dynamic_cast<DiscreteProblemInterface *>(get_problem());
-    auto mesh =
-        dpi ? dpi->get_mesh() : pars.get<MeshObject *>("_mesh_obj")->get_mesh<UnstructuredMesh>();
-    if (mesh == nullptr)
-        log_error("VTK output works only with unstructured meshes.");
+    assert_true(get_discrete_problem_interface() != nullptr,
+                "VTKOutput works only with problems that inherit from DiscreteProblemInterface");
 }
 
 VTKOutput::~VTKOutput()

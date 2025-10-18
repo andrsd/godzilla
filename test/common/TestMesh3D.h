@@ -4,13 +4,13 @@
 #include "godzilla/Types.h"
 #include "godzilla/Label.h"
 #include "godzilla/UnstructuredMesh.h"
-#include "godzilla/MeshObject.h"
+#include "godzilla/Object.h"
 
-class TestMesh3D : public godzilla::MeshObject {
+class TestMesh3D : public godzilla::Object {
 public:
     explicit TestMesh3D(const godzilla::Parameters & pars);
 
-    godzilla::Qtr<godzilla::Mesh> create_mesh() override;
+    godzilla::Qtr<godzilla::UnstructuredMesh> create_mesh();
 
     void create_side_set(godzilla::Qtr<godzilla::UnstructuredMesh> & mesh,
                          godzilla::Label & face_sets,

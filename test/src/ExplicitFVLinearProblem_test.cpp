@@ -1,5 +1,6 @@
 #include "gmock/gmock.h"
 #include "godzilla/CallStack.h"
+#include "godzilla/MeshFactory.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/RectangleMesh.h"
 #include "godzilla/NaturalRiemannBC.h"
@@ -116,17 +117,17 @@ TEST(ExplicitFVLinearProblemTest, api)
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 2);
     mesh_pars.set<Int>("ny", 1);
-    RectangleMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<RectangleMesh>(mesh_pars);
 #else
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 2);
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 #endif
 
     auto prob_pars = TestExplicitFVLinearProblem::parameters();
     prob_pars.set<App *>("_app", &app)
-        .set<MeshObject *>("_mesh_obj", &mesh)
+        .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3)
@@ -134,7 +135,6 @@ TEST(ExplicitFVLinearProblemTest, api)
     TestExplicitFVLinearProblem prob(prob_pars);
     app.set_problem(&prob);
 
-    mesh.create();
     prob.create();
 
     EXPECT_EQ(prob.get_num_fields(), 1);
@@ -223,17 +223,17 @@ TEST(ExplicitFVLinearProblemTest, fields)
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 2);
     mesh_pars.set<Int>("ny", 1);
-    RectangleMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<RectangleMesh>(mesh_pars);
 #else
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 2);
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 #endif
 
     auto prob_pars = TestExplicitFVLinearProblem::parameters();
     prob_pars.set<App *>("_app", &app)
-        .set<MeshObject *>("_mesh_obj", &mesh)
+        .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3)
@@ -252,7 +252,6 @@ TEST(ExplicitFVLinearProblemTest, fields)
     EXPECT_THROW_MSG(prob.set_field_component_name(FieldID(65536), 0, "A"),
                      "Field with ID = '65536' does not exist.");
 
-    mesh.create();
     prob.create();
 
     EXPECT_EQ(prob.get_num_fields(), 1);
@@ -276,17 +275,17 @@ TEST(ExplicitFVLinearProblemTest, test_mass_matrix)
     mesh_pars.set<Int>("nx", 3);
     mesh_pars.set<Int>("ny", 1);
     mesh_pars.set<Real>("ymax", 3.);
-    RectangleMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<RectangleMesh>(mesh_pars);
 #else
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 3);
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 #endif
 
     auto prob_pars = TestExplicitFVLinearProblem::parameters();
     prob_pars.set<App *>("_app", &app)
-        .set<MeshObject *>("_mesh_obj", &mesh)
+        .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3)
@@ -294,7 +293,6 @@ TEST(ExplicitFVLinearProblemTest, test_mass_matrix)
     TestExplicitFVLinearProblem prob(prob_pars);
     app.set_problem(&prob);
 
-    mesh.create();
     prob.create();
 
     auto M = prob.get_mass_matrix();
@@ -317,11 +315,11 @@ TEST(ExplicitFVLinearProblemTest, solve)
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 2);
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = TestExplicitFVLinearProblem::parameters();
     prob_pars.set<App *>("_app", &app)
-        .set<MeshObject *>("_mesh_obj", &mesh)
+        .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3)
@@ -381,24 +379,23 @@ TEST(ExplicitFVLinearProblemTest, set_schemes)
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 2);
     mesh_pars.set<Int>("ny", 1);
-    RectangleMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<RectangleMesh>(mesh_pars);
 #else
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 2);
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 #endif
 
     auto prob_pars = TestExplicitFVLinearProblem::parameters();
     prob_pars.set<App *>("_app", &app)
-        .set<MeshObject *>("_mesh_obj", &mesh)
+        .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3)
         .set<std::string>("scheme", "euler");
     TestExplicitFVLinearProblem prob(prob_pars);
 
-    mesh.create();
     prob.create();
 
     std::vector<TransientProblemInterface::TimeScheme> schemes = {
@@ -427,24 +424,23 @@ TEST(ExplicitFVLinearProblemTest, wrong_schemes)
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 2);
     mesh_pars.set<Int>("ny", 1);
-    RectangleMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<RectangleMesh>(mesh_pars);
 #else
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app", &app);
     mesh_pars.set<Int>("nx", 2);
-    LineMesh mesh(mesh_pars);
+    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 #endif
 
     auto prob_pars = TestExplicitFVLinearProblem::parameters();
     prob_pars.set<App *>("_app", &app)
-        .set<MeshObject *>("_mesh_obj", &mesh)
+        .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3)
         .set<std::string>("scheme", "asdf");
     TestExplicitFVLinearProblem prob(prob_pars);
 
-    mesh.create();
     prob.create();
 
     EXPECT_FALSE(app.check_integrity());

@@ -36,7 +36,6 @@ public:
 
 TEST_F(BoundaryConditionTest, api)
 {
-    this->mesh->create();
     this->prob->create();
 
     auto params = BoundaryCondition::parameters();
