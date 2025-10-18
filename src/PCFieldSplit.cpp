@@ -102,12 +102,8 @@ PCFieldSplit::SchurBlocks
 PCFieldSplit::get_schur_blocks() const
 {
     CALL_STACK_MSG();
-    Matrix A00, A01, A10, A11;
-    PETSC_CHECK(PCFieldSplitGetSchurBlocks(this->obj, A00, A01, A10, A11));
-    A00.inc_reference();
-    A01.inc_reference();
-    A10.inc_reference();
-    A11.inc_reference();
+    Mat A00, A01, A10, A11;
+    PETSC_CHECK(PCFieldSplitGetSchurBlocks(this->obj, &A00, &A01, &A10, &A11));
     SchurBlocks blks(A00, A01, A10, A11);
     return blks;
 }
@@ -117,9 +113,8 @@ PCFieldSplit::get_schur_pre() const
 {
     CALL_STACK_MSG();
     PCFieldSplitSchurPreType ptype;
-    Matrix pre;
-    PETSC_CHECK(PCFieldSplitGetSchurPre(this->obj, &ptype, pre));
-    pre.inc_reference();
+    Mat pre;
+    PETSC_CHECK(PCFieldSplitGetSchurPre(this->obj, &ptype, &pre));
     SchurPC spc(ptype, pre);
     return spc;
 }
@@ -144,10 +139,11 @@ Matrix
 PCFieldSplit::schur_get_s() const
 {
     CALL_STACK_MSG();
-    Matrix s;
-    PETSC_CHECK(PCFieldSplitSchurGetS(this->obj, s));
-    s.inc_reference();
-    return s;
+    Mat s;
+    PETSC_CHECK(PCFieldSplitSchurGetS(this->obj, &s));
+    Matrix mat_s(s);
+    mat_s.inc_reference();
+    return mat_s;
 }
 
 std::vector<KrylovSolver>
@@ -158,8 +154,10 @@ PCFieldSplit::schur_get_sub_ksp() const
     KSP * subksp;
     PETSC_CHECK(PCFieldSplitSchurGetSubKSP(this->obj, &n, &subksp));
     std::vector<KrylovSolver> sks(n);
-    for (Int i = 0; i < n; ++i)
+    for (Int i = 0; i < n; ++i) {
         sks[i] = KrylovSolver(subksp[i]);
+        sks[i].inc_reference();
+    }
     PetscFree(subksp);
     return sks;
 }
