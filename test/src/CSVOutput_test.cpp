@@ -66,10 +66,10 @@ TEST_F(CSVOutputTest, output)
 
         void compute() override {};
 
-        Real
+        std::vector<Real>
         get_value() override
         {
-            return 1.;
+            return { 1. };
         }
     };
 

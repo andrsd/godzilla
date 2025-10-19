@@ -9,7 +9,6 @@
 #include "godzilla/LineMesh.h"
 #include "godzilla/InitialCondition.h"
 #include "godzilla/ConstantInitialCondition.h"
-#include "godzilla/DirichletBC.h"
 #include "godzilla/BoundaryCondition.h"
 #include "ExceptionTestMacros.h"
 #include "petscvec.h"
@@ -35,6 +34,24 @@ public:
     {
         u[0] = 0.;
         u[1] = 10.;
+    }
+};
+
+class DirichletBC : public EssentialBC {
+public:
+    explicit DirichletBC(const Parameters & pars) : EssentialBC(pars) {}
+
+private:
+    std::vector<Int>
+    create_components() override
+    {
+        return { 0 };
+    }
+
+    void
+    set_up_callbacks() override
+    {
+        set_compute([](Real time, const Real x[], Scalar u[]) { u[0] = x[0] * x[0]; });
     }
 };
 
@@ -196,7 +213,6 @@ TEST_F(FENonlinearProblemTest, solve)
     params.set<App *>("_app", this->app);
     params.set<DiscreteProblemInterface *>("_dpi", prob);
     params.set<std::vector<std::string>>("boundary", { "left", "right" });
-    params.set<std::vector<std::string>>("value", { "x*x" });
     DirichletBC bc(params);
     this->prob->add_boundary_condition(&bc);
     this->prob->create();
@@ -224,7 +240,6 @@ TEST_F(FENonlinearProblemTest, solve_no_ic)
     params.set<App *>("_app", this->app);
     params.set<DiscreteProblemInterface *>("_dpi", prob);
     params.set<std::vector<std::string>>("boundary", { "marker" });
-    params.set<std::vector<std::string>>("value", { "x*x" });
     DirichletBC bc(params);
     this->prob->add_boundary_condition(&bc);
     this->prob->create();
@@ -337,7 +352,6 @@ TEST_F(FENonlinearProblemTest, err_nonexisting_bc_bnd)
     params.set<App *>("_app", this->app);
     params.set<DiscreteProblemInterface *>("_dpi", prob);
     params.set<std::vector<std::string>>("boundary", { "asdf" });
-    params.set<std::vector<std::string>>("value", { "0.1" });
     DirichletBC bc(params);
     this->prob->add_boundary_condition(&bc);
     this->prob->create();
@@ -393,7 +407,6 @@ TEST_F(FENonlinearProblemTest, steady_state_output)
     params.set<App *>("_app", this->app);
     params.set<DiscreteProblemInterface *>("_dpi", prob);
     params.set<std::vector<std::string>>("boundary", { "left", "right" });
-    params.set<std::vector<std::string>>("value", { "x*x" });
     DirichletBC bc(params);
     this->prob->add_boundary_condition(&bc);
 

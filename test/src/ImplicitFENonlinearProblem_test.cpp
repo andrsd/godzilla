@@ -9,6 +9,28 @@
 
 using namespace godzilla;
 
+namespace {
+
+class DirichletBC : public EssentialBC {
+public:
+    explicit DirichletBC(const Parameters & pars) : EssentialBC(pars) {}
+
+private:
+    std::vector<Int>
+    create_components() override
+    {
+        return { 0 };
+    }
+
+    void
+    set_up_callbacks() override
+    {
+        set_compute([](Real time, const Real x[], Scalar u[]) { u[0] = x[0] * x[0]; });
+    }
+};
+
+} // namespace
+
 TEST_F(ImplicitFENonlinearProblemTest, run)
 {
     {
@@ -19,14 +41,12 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
         prob->add_initial_condition(ic);
     }
 
-    {
-        auto * params = this->app->get_parameters("DirichletBC");
-        params->set<std::vector<std::string>>("boundary", { "left", "right" });
-        params->set<std::vector<std::string>>("value", { "x*x" });
-        params->set<DiscreteProblemInterface *>("_dpi", prob);
-        auto bc = this->app->build_object<BoundaryCondition>("bc", params);
-        prob->add_boundary_condition(bc);
-    }
+    auto bc_params = DirichletBC::parameters();
+    bc_params.set<godzilla::App *>("_app", this->app);
+    bc_params.set<DiscreteProblemInterface *>("_dpi", prob);
+    bc_params.set<std::vector<std::string>>("boundary", { "left", "right" });
+    DirichletBC bc(bc_params);
+    prob->add_boundary_condition(&bc);
 
     this->prob->create();
 
@@ -137,12 +157,12 @@ TEST_F(ImplicitFENonlinearProblemTest, set_schemes)
     auto ic = this->app->build_object<InitialCondition>("ic", ic_params);
     prob->add_initial_condition(ic);
 
-    auto * prob_params = this->app->get_parameters("DirichletBC");
-    prob_params->set<std::vector<std::string>>("boundary", { "left", "right" });
-    prob_params->set<std::vector<std::string>>("value", { "x*x" });
-    prob_params->set<DiscreteProblemInterface *>("_dpi", this->prob);
-    auto bc = this->app->build_object<BoundaryCondition>("bc", prob_params);
-    this->prob->add_boundary_condition(bc);
+    auto bc_params = DirichletBC::parameters();
+    bc_params.set<godzilla::App *>("_app", this->app);
+    bc_params.set<DiscreteProblemInterface *>("_dpi", prob);
+    bc_params.set<std::vector<std::string>>("boundary", { "left", "right" });
+    DirichletBC bc(bc_params);
+    this->prob->add_boundary_condition(&bc);
 
     this->prob->create();
 
@@ -167,12 +187,12 @@ TEST_F(ImplicitFENonlinearProblemTest, converged_reason)
     auto ic = this->app->build_object<InitialCondition>("ic", ic_params);
     this->prob->add_initial_condition(ic);
 
-    auto * bc_params = this->app->get_parameters("DirichletBC");
-    bc_params->set<std::vector<std::string>>("boundary", { "left", "right" });
-    bc_params->set<std::vector<std::string>>("value", { "x*x" });
-    bc_params->set<DiscreteProblemInterface *>("_dpi", this->prob);
-    auto bc = this->app->build_object<BoundaryCondition>("bc", bc_params);
-    prob->add_boundary_condition(bc);
+    auto bc_params = DirichletBC::parameters();
+    bc_params.set<godzilla::App *>("_app", this->app);
+    bc_params.set<DiscreteProblemInterface *>("_dpi", prob);
+    bc_params.set<std::vector<std::string>>("boundary", { "left", "right" });
+    DirichletBC bc(bc_params);
+    this->prob->add_boundary_condition(&bc);
 
     this->prob->create();
 

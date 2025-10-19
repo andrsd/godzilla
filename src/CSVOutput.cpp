@@ -85,8 +85,9 @@ CSVOutput::write_values(Real time)
     fmt::print(this->f, "{:g}", time);
     for (auto & name : this->pps_names) {
         auto * pps = get_problem()->get_postprocessor(name);
-        Real val = pps->get_value();
-        fmt::print(this->f, ",{:g}", val);
+        auto vals = pps->get_value();
+        // FIXME: store all components
+        fmt::print(this->f, ",{:g}", vals[0]);
     }
     fmt::print(this->f, "\n");
 }

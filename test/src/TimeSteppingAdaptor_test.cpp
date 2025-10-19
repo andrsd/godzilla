@@ -3,7 +3,6 @@
 #include "TestApp.h"
 #include "godzilla/MeshFactory.h"
 #include "godzilla/LineMesh.h"
-#include "godzilla/DirichletBC.h"
 #include "GTestImplicitFENonlinearProblem.h"
 #include "godzilla/BoundaryCondition.h"
 #include "godzilla/TimeSteppingAdaptor.h"
@@ -51,6 +50,24 @@ public:
     std::vector<Real> dts;
 
     static Parameters parameters();
+};
+
+class DirichletBC : public EssentialBC {
+public:
+    explicit DirichletBC(const Parameters & pars) : EssentialBC(pars) {}
+
+private:
+    std::vector<Int>
+    create_components() override
+    {
+        return { 0 };
+    }
+
+    void
+    set_up_callbacks() override
+    {
+        set_compute([](Real time, const Real x[], Scalar u[]) { u[0] = x[0] * x[0]; });
+    }
 };
 
 } // namespace
@@ -204,7 +221,6 @@ TEST(TimeSteppingAdaptor, choose)
     auto bc_pars = DirichletBC::parameters();
     bc_pars.set<App *>("_app", &app);
     bc_pars.set<std::vector<std::string>>("boundary", { "left", "right" });
-    bc_pars.set<std::vector<std::string>>("value", { "x*x" });
     bc_pars.set<DiscreteProblemInterface *>("_dpi", &prob);
     DirichletBC bc(bc_pars);
     prob.add_boundary_condition(&bc);

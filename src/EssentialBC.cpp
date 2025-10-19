@@ -51,6 +51,9 @@ EssentialBC::create()
             log_error("Use the 'field' parameter to assign this boundary condition to an existing "
                       "field.");
     }
+
+    this->components = create_components();
+    set_up_callbacks();
 }
 
 FieldID
@@ -60,19 +63,41 @@ EssentialBC::get_field_id() const
     return this->fid;
 }
 
+const std::vector<Int> &
+EssentialBC::get_components() const
+{
+    CALL_STACK_MSG();
+    return this->components;
+}
+
 void
 EssentialBC::set_up()
 {
     CALL_STACK_MSG();
     auto dpi = get_discrete_problem_interface();
-    for (auto & bnd : get_boundary())
+    for (auto & bnd : get_boundary()) {
         dpi->add_boundary_essential(get_name(),
                                     bnd,
                                     get_field_id(),
                                     get_components(),
                                     this,
                                     &EssentialBC::evaluate,
-                                    &EssentialBC::evaluate_t);
+                                    this->delegate_t ? &EssentialBC::evaluate_t : nullptr);
+    }
+}
+
+void
+EssentialBC::evaluate(Real time, const Real x[], Scalar u[])
+{
+    assert_true(this->delegate, "Compute delegate not set");
+    this->delegate.invoke(time, x, u);
+}
+
+void
+EssentialBC::evaluate_t(Real time, const Real x[], Scalar u[])
+{
+    assert_true(this->delegate_t, "Compute time delegate not set");
+    this->delegate_t.invoke(time, x, u);
 }
 
 } // namespace godzilla

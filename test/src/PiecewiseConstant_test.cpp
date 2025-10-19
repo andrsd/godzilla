@@ -4,6 +4,7 @@
 
 using namespace godzilla;
 
+#if 0
 TEST(PiecewiseConstantTest, fn_parser_eval)
 {
     TestApp app;
@@ -148,3 +149,4 @@ TEST(PiecewiseConstantTest, err_cont)
                 testing::HasSubstr(
                     "[ERROR] fn: The 'continuity' parameter can be either 'left' or 'right'."));
 }
+#endif

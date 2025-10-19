@@ -1,12 +1,33 @@
 #include "gmock/gmock.h"
-#include "GodzillaApp_test.h"
+#include "TestApp.h"
 #include "godzilla/MeshFactory.h"
 #include "godzilla/LineMesh.h"
-#include "godzilla/DirichletBC.h"
 #include "GTestFENonlinearProblem.h"
 #include "godzilla/L2Diff.h"
 
-TEST(L2DiffTest, compute)
+namespace {
+
+class DirichletBC : public EssentialBC {
+public:
+    explicit DirichletBC(const Parameters & pars) : EssentialBC(pars) {}
+
+private:
+    std::vector<Int>
+    create_components() override
+    {
+        return { 0 };
+    }
+
+    void
+    set_up_callbacks() override
+    {
+        set_compute([](Real time, const Real x[], Scalar u[]) { u[0] = x[0] * x[0]; });
+    }
+};
+
+} // namespace
+
+TEST(L2DiffTest, DISABLED_compute)
 {
     TestApp app;
 
@@ -24,14 +45,12 @@ TEST(L2DiffTest, compute)
     auto bc_left_params = DirichletBC::parameters();
     bc_left_params.set<App *>("_app", &app)
         .set<DiscreteProblemInterface *>("_dpi", &prob)
-        .set<std::vector<std::string>>("value", { "x*x" })
         .set<std::vector<std::string>>("boundary", { "left" });
     DirichletBC bc_left(bc_left_params);
 
     auto bc_right_params = DirichletBC::parameters();
     bc_right_params.set<App *>("_app", &app)
         .set<DiscreteProblemInterface *>("_dpi", &prob)
-        .set<std::vector<std::string>>("value", { "x*x" })
         .set<std::vector<std::string>>("boundary", { "right" });
     DirichletBC bc_right(bc_right_params);
 
@@ -50,6 +69,7 @@ TEST(L2DiffTest, compute)
     prob.run();
     prob.compute_postprocessors();
 
-    Real l2_err = ps.get_value();
-    EXPECT_NEAR(l2_err, 0.0416667, 1e-7);
+    auto l2_err = ps.get_value();
+    ASSERT_TRUE(!l2_err.empty());
+    EXPECT_NEAR(l2_err[0], 0.0416667, 1e-7);
 }

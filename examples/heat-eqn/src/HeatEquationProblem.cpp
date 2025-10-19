@@ -1,4 +1,3 @@
-#include "godzilla/FunctionInterface.h"
 #include "HeatEquationProblem.h"
 #include "godzilla/ResidualFunc.h"
 #include "godzilla/JacobianFunc.h"

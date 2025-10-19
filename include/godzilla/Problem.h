@@ -18,7 +18,6 @@
 namespace godzilla {
 
 class Mesh;
-class Function;
 class Postprocessor;
 class Output;
 class FileOutput;
@@ -70,16 +69,6 @@ public:
     ///
     /// @return Time step number
     virtual Int get_step_num() const;
-
-    /// Get list of functions
-    ///
-    /// @return List of functions
-    const std::vector<Function *> & get_functions() const;
-
-    /// Add a function object
-    ///
-    /// @param fn Function object to add
-    void add_function(Function * fn);
 
     /// Add and output object
     ///
@@ -308,9 +297,6 @@ private:
 
     /// The solution vector
     Vector x;
-
-    /// List of functions
-    std::vector<Function *> functions;
 
     /// List of output objects
     std::vector<Output *> outputs;

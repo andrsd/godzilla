@@ -778,8 +778,9 @@ ExodusIIOutput::write_global_variables()
     int exo_var_id = 1;
     for (auto & name : this->global_var_names) {
         Postprocessor * pp = get_problem()->get_postprocessor(name);
-        Real val = pp->get_value();
-        this->exo->write_global_var(this->step_num, exo_var_id, val);
+        auto vals = pp->get_value();
+        // FIXME: store all components
+        this->exo->write_global_var(this->step_num, exo_var_id, vals[0]);
         ++exo_var_id;
     }
 }

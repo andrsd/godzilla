@@ -16,7 +16,6 @@ class Factory;
 class Object;
 class Mesh;
 class Problem;
-class Function;
 
 /// Base class for input files
 ///

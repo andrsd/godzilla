@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "godzilla/Function.h"
 #include "godzilla/Types.h"
 
 namespace godzilla {
@@ -12,30 +11,33 @@ namespace godzilla {
 ///
 /// The independent variable 'x' has to be increasing.
 /// User have to specify at least 1 point
-class PiecewiseConstant : public Function {
+class PiecewiseConstant {
 public:
-    explicit PiecewiseConstant(const Parameters & pars);
+    enum Continuity {
+        /// left
+        LEFT,
+        RIGHT
+    };
 
-    void create() override;
-
-    void register_callback(mu::Parser & parser) override;
+    /// Construct a piecewise constant function
+    ///
+    /// @param cont Left or right continuity
+    /// @param x Independent variable
+    /// @param y Dependent variable
+    PiecewiseConstant(Continuity cont, const std::vector<Real> & x, const std::vector<Real> & y);
 
     /// Evaluate this function at point 'x'
     Real evaluate(Real x);
 
-protected:
+private:
     Real eval_right_cont(Real x);
     Real eval_left_cont(Real x);
 
-private:
-    enum Continuity { LEFT, RIGHT } continuity;
+    Continuity continuity;
     /// Independent values
     const std::vector<Real> x;
     /// Dependent values
     const std::vector<Real> y;
-
-public:
-    static Parameters parameters();
 };
 
 } // namespace godzilla

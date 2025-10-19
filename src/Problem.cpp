@@ -5,7 +5,6 @@
 #include "godzilla/CallStack.h"
 #include "godzilla/Error.h"
 #include "godzilla/Mesh.h"
-#include "godzilla/Function.h"
 #include "godzilla/Postprocessor.h"
 #include "godzilla/Output.h"
 #include "godzilla/FileOutput.h"
@@ -91,8 +90,6 @@ void
 Problem::create()
 {
     CALL_STACK_MSG();
-    for (auto & f : this->functions)
-        f->create();
     for (auto & [_, pp] : this->pps)
         pp->create();
     for (auto & out : this->outputs)
@@ -134,20 +131,6 @@ Problem::get_step_num() const
 {
     CALL_STACK_MSG();
     return 0;
-}
-
-const std::vector<Function *> &
-Problem::get_functions() const
-{
-    CALL_STACK_MSG();
-    return this->functions;
-}
-
-void
-Problem::add_function(Function * fn)
-{
-    CALL_STACK_MSG();
-    this->functions.push_back(fn);
 }
 
 void

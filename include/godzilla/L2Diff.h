@@ -4,19 +4,20 @@
 #pragma once
 
 #include "godzilla/Postprocessor.h"
-#include "godzilla/FunctionInterface.h"
+#include "godzilla/Types.h"
 
 namespace godzilla {
 
 /// Compute the L_2 difference between a function 'u' and an FEM interpolant solution 'u_h'
 ///
-class L2Diff : public Postprocessor, public FunctionInterface {
+class L2Diff : public Postprocessor {
 public:
     explicit L2Diff(const Parameters & pars);
 
     void create() override;
     void compute() override;
-    Real get_value() override;
+
+    std::vector<Real> get_value() override;
 
     /// Evaluate the function 'u'
     ///
@@ -26,6 +27,8 @@ public:
     void evaluate(Real time, const Real x[], Scalar u[]);
 
 private:
+    ///
+    FunctionDelegate delegate;
     /// Computed L_2 error
     Real l2_diff;
 

@@ -52,7 +52,6 @@ target_link_libraries(
         HDF5::HDF5
         PETSc::petsc
     PRIVATE
-        muParser
         exodusIIcpp::exodusIIcpp
         yaml-cpp::yaml-cpp
 )
