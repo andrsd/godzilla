@@ -3,6 +3,7 @@
 
 #include "godzilla/ConstantInitialCondition.h"
 #include "godzilla/CallStack.h"
+#include <numeric>
 
 namespace godzilla {
 
@@ -22,11 +23,13 @@ ConstantInitialCondition::ConstantInitialCondition(const Parameters & pars) :
     CALL_STACK_MSG();
 }
 
-Int
-ConstantInitialCondition::get_num_components() const
+std::vector<Int>
+ConstantInitialCondition::create_components()
 {
     CALL_STACK_MSG();
-    return (Int) this->values.size();
+    std::vector<Int> comps(this->values.size());
+    std::iota(comps.begin(), comps.end(), 0);
+    return comps;
 }
 
 void

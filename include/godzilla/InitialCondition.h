@@ -38,7 +38,7 @@ public:
     /// Get the number of constrained components
     ///
     /// @return The number of constrained components
-    virtual Int get_num_components() const = 0;
+    Int get_num_components() const;
 
     /// Evaluate the initial condition
     ///
@@ -48,17 +48,25 @@ public:
     virtual void evaluate(Real time, const Real x[], Scalar u[]) = 0;
 
 private:
+    virtual std::vector<Int> create_components();
+
     /// Discrete problem this object is part of
     DiscreteProblemInterface * dpi;
-
     /// Field name this initial condition is attached to
     Optional<std::string> field_name;
-
     /// Field ID this initial condition is attached to
     FieldID fid;
+    /// Components
+    std::vector<Int> components;
 
 public:
     static Parameters parameters();
+
+private:
+    static ErrorCode
+    invoke_delegate(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx);
+
+    friend class DiscreteProblemInterface;
 };
 
 } // namespace godzilla

@@ -542,18 +542,11 @@ DiscreteProblemInterface::set_initial_guess_from_ics()
     CALL_STACK_MSG();
     auto n_ics = this->ics.size();
     std::vector<PetscFunc *> funcs(n_ics);
-    std::vector<FunctionDelegate> delegates(n_ics);
+    std::vector<void *> contexts(n_ics);
     for (auto & ic : this->ics) {
         auto fid = ic->get_field_id();
-        funcs[fid.value()] = internal::invoke_function_delegate;
-        delegates[fid.value()].bind(ic, &InitialCondition::evaluate);
-    }
-    std::vector<void *> contexts;
-    for (auto & d : delegates) {
-        if (d)
-            contexts.push_back(&d);
-        else
-            contexts.push_back(nullptr);
+        funcs[fid.value()] = InitialCondition::invoke_delegate;
+        contexts[fid.value()] = ic;
     }
     PETSC_CHECK(DMProjectFunction(this->unstr_mesh->get_dm(),
                                   this->problem->get_time(),

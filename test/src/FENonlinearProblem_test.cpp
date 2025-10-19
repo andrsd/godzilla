@@ -23,17 +23,18 @@ class GTest2CompIC : public InitialCondition {
 public:
     explicit GTest2CompIC(const Parameters & pars) : InitialCondition(pars) {}
 
-    Int
-    get_num_components() const override
-    {
-        return 2;
-    }
-
     void
     evaluate(Real time, const Real x[], Scalar u[]) override
     {
         u[0] = 0.;
         u[1] = 10.;
+    }
+
+private:
+    std::vector<Int>
+    create_components() override
+    {
+        return { 0, 1 };
     }
 };
 
