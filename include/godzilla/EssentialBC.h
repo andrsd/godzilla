@@ -87,6 +87,20 @@ private:
 
 public:
     static Parameters parameters();
+
+private:
+    static ErrorCode invoke_essential_bc_delegate(Int dim,
+                                                  Real time,
+                                                  const Real x[],
+                                                  Int nc,
+                                                  Scalar u[],
+                                                  void * ctx);
+    static ErrorCode invoke_essential_bc_delegate_t(Int dim,
+                                                    Real time,
+                                                    const Real x[],
+                                                    Int nc,
+                                                    Scalar u[],
+                                                    void * ctx);
 };
 
 } // namespace godzilla

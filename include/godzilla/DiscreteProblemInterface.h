@@ -287,7 +287,7 @@ public:
                       void * context);
 
     template <class T>
-    void
+    [[deprecated]] void
     add_boundary_essential(const std::string & name,
                            const std::string & boundary,
                            FieldID field,

@@ -3,14 +3,40 @@
 
 #include "godzilla/EssentialBC.h"
 #include "godzilla/CallStack.h"
-#include "godzilla/App.h"
 #include "godzilla/Exception.h"
-#include "godzilla/Problem.h"
 #include "godzilla/DiscreteProblemInterface.h"
 #include "godzilla/Types.h"
 #include "godzilla/Assert.h"
 
 namespace godzilla {
+
+ErrorCode
+EssentialBC::invoke_essential_bc_delegate(Int dim,
+                                          Real time,
+                                          const Real x[],
+                                          Int nc,
+                                          Scalar u[],
+                                          void * ctx)
+{
+    CALL_STACK_MSG();
+    auto * method = static_cast<EssentialBC *>(ctx);
+    method->delegate.invoke(time, x, u);
+    return 0;
+}
+
+ErrorCode
+EssentialBC::invoke_essential_bc_delegate_t(Int dim,
+                                            Real time,
+                                            const Real x[],
+                                            Int nc,
+                                            Scalar u[],
+                                            void * ctx)
+{
+    CALL_STACK_MSG();
+    auto * method = static_cast<EssentialBC *>(ctx);
+    method->delegate_t.invoke(time, x, u);
+    return 0;
+}
 
 Parameters
 EssentialBC::parameters()
@@ -75,14 +101,27 @@ EssentialBC::set_up()
 {
     CALL_STACK_MSG();
     auto dpi = get_discrete_problem_interface();
-    for (auto & bnd : get_boundary()) {
-        dpi->add_boundary_essential(get_name(),
-                                    bnd,
-                                    get_field_id(),
-                                    get_components(),
-                                    this,
-                                    &EssentialBC::evaluate,
-                                    this->delegate_t ? &EssentialBC::evaluate_t : nullptr);
+    auto mesh = dpi->get_mesh();
+    for (auto & boundary : get_boundary()) {
+        Label label;
+        if (mesh->has_face_set(boundary))
+            label = mesh->get_face_set_label(boundary);
+        else if (mesh->has_vertex_set(boundary))
+            label = mesh->get_vertex_set_label(boundary);
+        else
+            throw Exception("Boundary '{}' does not exist.", boundary);
+        auto ids = label.get_values();
+        dpi->add_boundary(DM_BC_ESSENTIAL,
+                          get_name(),
+                          label,
+                          ids,
+                          this->fid,
+                          this->components,
+                          reinterpret_cast<void (*)()>(invoke_essential_bc_delegate),
+                          this->delegate_t
+                              ? reinterpret_cast<void (*)()>(invoke_essential_bc_delegate_t)
+                              : nullptr,
+                          this);
     }
 }
 
