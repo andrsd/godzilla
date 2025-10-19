@@ -7,34 +7,25 @@
 #include "godzilla/DiscreteProblemInterface.h"
 #include "godzilla/Types.h"
 #include "godzilla/Assert.h"
+#include <numeric>
 
 namespace godzilla {
 
 ErrorCode
-EssentialBC::invoke_essential_bc_delegate(Int dim,
-                                          Real time,
-                                          const Real x[],
-                                          Int nc,
-                                          Scalar u[],
-                                          void * ctx)
+EssentialBC::invoke_delegate(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx)
 {
     CALL_STACK_MSG();
-    auto * method = static_cast<EssentialBC *>(ctx);
-    method->delegate.invoke(time, x, u);
+    auto * bc = static_cast<EssentialBC *>(ctx);
+    bc->evaluate(time, x, u);
     return 0;
 }
 
 ErrorCode
-EssentialBC::invoke_essential_bc_delegate_t(Int dim,
-                                            Real time,
-                                            const Real x[],
-                                            Int nc,
-                                            Scalar u[],
-                                            void * ctx)
+EssentialBC::invoke_delegate_t(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx)
 {
     CALL_STACK_MSG();
-    auto * method = static_cast<EssentialBC *>(ctx);
-    method->delegate_t.invoke(time, x, u);
+    auto * bc = static_cast<EssentialBC *>(ctx);
+    bc->evaluate_t(time, x, u);
     return 0;
 }
 
@@ -79,7 +70,6 @@ EssentialBC::create()
     }
 
     this->components = create_components();
-    set_up_callbacks();
 }
 
 FieldID
@@ -117,26 +107,26 @@ EssentialBC::set_up()
                           ids,
                           this->fid,
                           this->components,
-                          reinterpret_cast<void (*)()>(invoke_essential_bc_delegate),
-                          this->delegate_t
-                              ? reinterpret_cast<void (*)()>(invoke_essential_bc_delegate_t)
-                              : nullptr,
+                          reinterpret_cast<void (*)()>(invoke_delegate),
+                          reinterpret_cast<void (*)()>(invoke_delegate_t),
                           this);
     }
 }
 
-void
-EssentialBC::evaluate(Real time, const Real x[], Scalar u[])
+std::vector<Int>
+EssentialBC::create_components()
 {
-    assert_true(this->delegate, "Compute delegate not set");
-    this->delegate.invoke(time, x, u);
+    CALL_STACK_MSG();
+    auto dpi = get_discrete_problem_interface();
+    auto n_comps = dpi->get_field_num_components(this->fid);
+    std::vector<Int> comps(n_comps);
+    std::iota(comps.begin(), comps.end(), 0);
+    return comps;
 }
 
 void
 EssentialBC::evaluate_t(Real time, const Real x[], Scalar u[])
 {
-    assert_true(this->delegate_t, "Compute time delegate not set");
-    this->delegate_t.invoke(time, x, u);
 }
 
 } // namespace godzilla

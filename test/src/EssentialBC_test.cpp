@@ -17,15 +17,14 @@ class DirichletBC : public EssentialBC {
 public:
     explicit DirichletBC(const Parameters & pars) : EssentialBC(pars) {}
 
-private:
     void
-    compute(Real time, const Real x[], Scalar u[])
+    evaluate(Real time, const Real x[], Scalar u[]) override
     {
         u[0] = time * (x[0] + x[1] + x[2]);
     }
 
     void
-    compute_t(Real time, const Real x[], Scalar u[])
+    evaluate_t(Real time, const Real x[], Scalar u[]) override
     {
         u[0] = 1.;
     }
@@ -34,13 +33,6 @@ private:
     create_components() override
     {
         return { 0 };
-    }
-
-    void
-    set_up_callbacks() override
-    {
-        set_compute(this, &DirichletBC::compute);
-        set_compute_time(this, &DirichletBC::compute_t);
     }
 };
 

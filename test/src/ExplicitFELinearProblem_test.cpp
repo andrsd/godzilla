@@ -84,7 +84,6 @@ class DirichletBC : public EssentialBC {
 public:
     explicit DirichletBC(const Parameters & pars) : EssentialBC(pars) {}
 
-private:
     std::vector<Int>
     create_components() override
     {
@@ -92,9 +91,9 @@ private:
     }
 
     void
-    set_up_callbacks() override
+    evaluate(Real time, const Real x[], Scalar u[]) override
     {
-        set_compute([](Real time, const Real x[], Scalar u[]) { u[0] = 1.; });
+        u[0] = 1.;
     }
 };
 
