@@ -25,7 +25,7 @@ public:
     /// Get the component numbers this boundary condition is constraining
     ///
     /// @return Vector of component numbers
-    virtual const std::vector<Int> & get_components() const = 0;
+    const std::vector<Int> & get_components() const;
 
     /// Evaluate the boundary condition
     ///
@@ -38,11 +38,23 @@ public:
     evaluate(Real time, const Real * c, const Real * n, const Scalar * xI, Scalar * xG) = 0;
 
 private:
+    virtual std::vector<Int> create_components();
+
     /// Field ID this boundary condition is attached to
     FieldID fid;
+    ///
+    std::vector<Int> components;
 
 public:
     static Parameters parameters();
+
+private:
+    static ErrorCode invoke_delegate(Real time,
+                                     const Real * c,
+                                     const Real * n,
+                                     const Scalar * xI,
+                                     Scalar * xG,
+                                     void * ctx);
 };
 
 } // namespace godzilla

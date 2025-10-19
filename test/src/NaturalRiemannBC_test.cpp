@@ -13,13 +13,7 @@ namespace {
 
 class TestBC : public NaturalRiemannBC {
 public:
-    explicit TestBC(const Parameters & pars) : NaturalRiemannBC(pars), comps({ 0 }) {}
-
-    const std::vector<Int> &
-    get_components() const override
-    {
-        return this->comps;
-    }
+    explicit TestBC(const Parameters & pars) : NaturalRiemannBC(pars) {}
 
     MOCK_METHOD(void,
                 evaluate,

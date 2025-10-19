@@ -11,17 +11,9 @@ InflowBC::parameters()
 
 InflowBC::InflowBC(const Parameters & pars) :
     NaturalRiemannBC(pars),
-    inlet_vel(pars.get<Real>("vel")),
-    components({ 0 })
+    inlet_vel(pars.get<Real>("vel"))
 {
     CALL_STACK_MSG();
-}
-
-const std::vector<Int> &
-InflowBC::get_components() const
-{
-    CALL_STACK_MSG();
-    return this->components;
 }
 
 void

@@ -324,7 +324,7 @@ public:
                               const std::vector<Int> & components);
 
     template <class T>
-    void
+    [[deprecated]] void
     add_boundary_natural_riemann(
         const std::string & name,
         const std::string & boundary,

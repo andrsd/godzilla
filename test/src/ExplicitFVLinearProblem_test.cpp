@@ -18,15 +18,8 @@ class TestBC : public NaturalRiemannBC {
 public:
     explicit TestBC(const Parameters & pars) :
         NaturalRiemannBC(pars),
-        inlet(pars.get<bool>("inlet")),
-        components({ 0 })
+        inlet(pars.get<bool>("inlet"))
     {
-    }
-
-    const std::vector<Int> &
-    get_components() const override
-    {
-        return this->components;
     }
 
     void
@@ -40,7 +33,6 @@ public:
 
 protected:
     bool inlet;
-    std::vector<Int> components;
 
 public:
     static Parameters
