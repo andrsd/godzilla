@@ -12,13 +12,13 @@ public:
     PetscDS get_ds();
     void set_up_initial_guess() override;
 
-    const std::vector<BoundaryCondition *> &
+    std::vector<BoundaryCondition *>
     get_boundary_conditions() const
     {
         return DiscreteProblemInterface::get_boundary_conditions();
     }
 
-    const std::vector<EssentialBC *> &
+    std::vector<EssentialBC *>
     get_essential_bcs() const
     {
         return DiscreteProblemInterface::get_essential_bcs();

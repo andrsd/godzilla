@@ -205,19 +205,17 @@ TEST_F(FENonlinearProblemTest, solve)
 
     auto params = DirichletBC::parameters();
     params.set<App *>("_app", this->app);
-    params.set<DiscreteProblemInterface *>("_dpi", prob);
     params.set<std::vector<std::string>>("boundary", { "left", "right" });
-    DirichletBC bc(params);
-    this->prob->add_boundary_condition(&bc);
+    auto bc = this->prob->add_boundary_condition<DirichletBC>(params);
     this->prob->create();
 
     auto bcs = this->prob->get_boundary_conditions();
     EXPECT_EQ(bcs.size(), 1);
-    EXPECT_EQ(bcs[0], &bc);
+    EXPECT_EQ(bcs[0], bc);
 
     auto ess_bcs = this->prob->get_essential_bcs();
     ASSERT_EQ(ess_bcs.size(), 1);
-    EXPECT_EQ(bcs[0], &bc);
+    EXPECT_EQ(bcs[0], bc);
 
     this->prob->run();
 
@@ -232,10 +230,8 @@ TEST_F(FENonlinearProblemTest, solve_no_ic)
 {
     auto params = DirichletBC::parameters();
     params.set<App *>("_app", this->app);
-    params.set<DiscreteProblemInterface *>("_dpi", prob);
     params.set<std::vector<std::string>>("boundary", { "marker" });
-    DirichletBC bc(params);
-    this->prob->add_boundary_condition(&bc);
+    this->prob->add_boundary_condition<DirichletBC>(params);
     this->prob->create();
 
     auto x = prob->get_solution_vector();
@@ -344,10 +340,8 @@ TEST_F(FENonlinearProblemTest, err_nonexisting_bc_bnd)
     auto params = DirichletBC::parameters();
     params.set<std::string>("_name", "bc1");
     params.set<App *>("_app", this->app);
-    params.set<DiscreteProblemInterface *>("_dpi", prob);
     params.set<std::vector<std::string>>("boundary", { "asdf" });
-    DirichletBC bc(params);
-    this->prob->add_boundary_condition(&bc);
+    this->prob->add_boundary_condition<DirichletBC>(params);
     this->prob->create();
     EXPECT_FALSE(this->app->check_integrity());
     this->app->get_logger()->print();
@@ -399,10 +393,8 @@ TEST_F(FENonlinearProblemTest, steady_state_output)
 {
     auto params = DirichletBC::parameters();
     params.set<App *>("_app", this->app);
-    params.set<DiscreteProblemInterface *>("_dpi", prob);
     params.set<std::vector<std::string>>("boundary", { "left", "right" });
-    DirichletBC bc(params);
-    this->prob->add_boundary_condition(&bc);
+    this->prob->add_boundary_condition<DirichletBC>(params);
 
     this->prob->create();
     EXPECT_DOUBLE_EQ(this->prob->get_time(), 0.);

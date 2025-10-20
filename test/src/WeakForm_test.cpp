@@ -91,11 +91,10 @@ TEST(WeakFormTest, test)
     prob_pars.set<Mesh *>("mesh", mesh.get());
     GTestFENonlinearProblem prob(prob_pars);
 
-    auto bc_pars = NaturalBC::parameters();
+    auto bc_pars = TestBC::parameters();
     bc_pars.set<App *>("_app", &app);
-    bc_pars.set<DiscreteProblemInterface *>("_dpi", &prob);
     bc_pars.set<std::vector<std::string>>("boundary", { "left" });
-    TestBC bc(bc_pars);
+    auto bc = prob.add_boundary_condition<TestBC>(bc_pars);
 
     FieldID fid(0);
     WeakForm wf;
@@ -103,8 +102,8 @@ TEST(WeakFormTest, test)
     wf.add(WeakForm::F0, label, 0, fid, 0, new TestF(&prob));
     wf.add(WeakForm::G0, label, 0, fid, fid, 0, new TestJ(&prob));
     // bnd
-    wf.add(WeakForm::BND_F0, label, 0, fid, 0, new BndTestF(&bc));
-    wf.add(WeakForm::BND_G0, label, 0, fid, fid, 0, new BndTestJ(&bc));
+    wf.add(WeakForm::BND_F0, label, 0, fid, 0, new BndTestF(bc));
+    wf.add(WeakForm::BND_G0, label, 0, fid, fid, 0, new BndTestJ(bc));
 
     const auto & f0 = wf.get(WeakForm::F0, label, 0, fid, 0);
     EXPECT_EQ(f0.size(), 1);

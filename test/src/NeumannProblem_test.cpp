@@ -172,19 +172,15 @@ TEST(NeumannProblemTest, solve)
 
     auto bc_left_pars = TestNeumannBC::parameters();
     bc_left_pars.set<App *>("_app", &app);
-    bc_left_pars.set<DiscreteProblemInterface *>("_dpi", &prob);
     bc_left_pars.set<std::string>("_name", "bc1");
     bc_left_pars.set<std::vector<std::string>>("boundary", { "left" });
-    TestNeumannBC bc_left(bc_left_pars);
-    prob.add_boundary_condition(&bc_left);
+    prob.add_boundary_condition<TestNeumannBC>(bc_left_pars);
 
     auto bc_right_pars = TestNeumannBC::parameters();
     bc_right_pars.set<App *>("_app", &app);
-    bc_right_pars.set<DiscreteProblemInterface *>("_dpi", &prob);
     bc_right_pars.set<std::string>("_name", "bc2");
     bc_right_pars.set<std::vector<std::string>>("boundary", { "right" });
-    TestNeumannBC bc_right(bc_right_pars);
-    prob.add_boundary_condition(&bc_right);
+    prob.add_boundary_condition<TestNeumannBC>(bc_right_pars);
 
     prob.create();
 

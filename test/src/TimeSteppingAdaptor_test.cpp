@@ -214,9 +214,7 @@ TEST(TimeSteppingAdaptor, choose)
     auto bc_pars = DirichletBC::parameters();
     bc_pars.set<App *>("_app", &app);
     bc_pars.set<std::vector<std::string>>("boundary", { "left", "right" });
-    bc_pars.set<DiscreteProblemInterface *>("_dpi", &prob);
-    DirichletBC bc(bc_pars);
-    prob.add_boundary_condition(&bc);
+    prob.add_boundary_condition<DirichletBC>(bc_pars);
 
     auto tsa_pars = TestTSAdaptor::parameters();
     tsa_pars.set<App *>("_app", &app);

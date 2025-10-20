@@ -121,14 +121,12 @@ TEST(NaturalBCTest, fe)
 
     auto bc_params = TestNaturalBC::parameters();
     bc_params.set<App *>("_app", &app);
-    bc_params.set<DiscreteProblemInterface *>("_dpi", &prob);
     bc_params.set<std::string>("_name", "bc1");
     bc_params.set<std::vector<std::string>>("boundary", { "left" });
     bc_params.set<std::string>("field", "u");
-    TestNaturalBC bc(bc_params);
+    auto bc = prob.add_boundary_condition<TestNaturalBC>(bc_params);
 
     prob.set_aux_field(FieldID(0), "aux1", 1, Order(1));
-    prob.add_boundary_condition(&bc);
     prob.create();
 
     PetscDS ds = prob.get_ds();
@@ -137,7 +135,7 @@ TEST(NaturalBCTest, fe)
     PetscDSGetNumBoundary(ds, &num_bd);
     EXPECT_EQ(num_bd, 1);
     //
-    auto field = bc.get_field_id();
+    auto field = bc->get_field_id();
     auto & wf = prob.get_weak_form();
     auto label = mesh->get_label("left");
     auto ids = label.get_values();
@@ -170,12 +168,10 @@ TEST(NaturalBCTest, non_existing_field)
 
     auto params = TestNaturalBC::parameters();
     params.set<App *>("_app", &app);
-    params.set<DiscreteProblemInterface *>("_dpi", &problem);
     params.set<std::vector<std::string>>("boundary", { "left" });
     params.set<std::string>("field", "asdf");
-    TestNaturalBC bc(params);
+    problem.add_boundary_condition<TestNaturalBC>(params);
 
-    problem.add_boundary_condition(&bc);
     problem.create();
 
     EXPECT_FALSE(app.check_integrity());
@@ -204,11 +200,9 @@ TEST(NaturalBCTest, field_param_not_specified)
 
     auto params = TestNaturalBC::parameters();
     params.set<App *>("_app", &app);
-    params.set<DiscreteProblemInterface *>("_dpi", &problem);
     params.set<std::vector<std::string>>("boundary", { "left" });
-    TestNaturalBC bc(params);
+    problem.add_boundary_condition<TestNaturalBC>(params);
 
-    problem.add_boundary_condition(&bc);
     problem.create();
 
     EXPECT_FALSE(app.check_integrity());

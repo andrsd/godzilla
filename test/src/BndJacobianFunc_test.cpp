@@ -98,14 +98,12 @@ TEST(BndJacobianFuncTest, test)
 
     auto bc_pars = NaturalBC::parameters();
     bc_pars.set<App *>("_app", &app)
-        .set<DiscreteProblemInterface *>("_dpi", &prob)
         .set<std::string>("field", "u")
         .set<std::vector<std::string>>("boundary", { "marker" });
-    TestBC bc(bc_pars);
-    prob.add_boundary_condition(&bc);
+    auto bc = prob.add_boundary_condition<TestBC>(bc_pars);
 
     prob.create();
-    bc.create();
+    bc->create();
 
-    TestJ jac(&bc);
+    TestJ jac(bc);
 }

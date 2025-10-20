@@ -53,4 +53,7 @@ public:
     static Parameters parameters();
 };
 
+template <typename T>
+concept BoundaryConditionDerived = std::is_base_of_v<BoundaryCondition, T>;
+
 } // namespace godzilla

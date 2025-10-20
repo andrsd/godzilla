@@ -321,19 +321,15 @@ TEST(ExplicitFVLinearProblemTest, solve)
 
     auto bc_left_pars = TestBC::parameters();
     bc_left_pars.set<App *>("_app", &app)
-        .set<DiscreteProblemInterface *>("_dpi", &prob)
         .set<std::vector<std::string>>("boundary", { "left" })
         .set<bool>("inlet", true);
-    TestBC bc_left(bc_left_pars);
-    prob.add_boundary_condition(&bc_left);
+    auto bc_left = prob.add_boundary_condition<TestBC>(bc_left_pars);
 
     auto bc_right_pars = TestBC::parameters();
     bc_right_pars.set<App *>("_app", &app)
-        .set<DiscreteProblemInterface *>("_dpi", &prob)
         .set<std::vector<std::string>>("boundary", { "right" })
         .set<bool>("inlet", false);
-    TestBC bc_right(bc_right_pars);
-    prob.add_boundary_condition(&bc_right);
+    auto bc_right = prob.add_boundary_condition<TestBC>(bc_right_pars);
 
     mesh.create();
     prob.create();

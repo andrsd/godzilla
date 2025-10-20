@@ -57,4 +57,7 @@ private:
                                      void * ctx);
 };
 
+template <typename T>
+concept NaturalRiemannBCDerived = std::is_base_of_v<NaturalRiemannBC, T>;
+
 } // namespace godzilla

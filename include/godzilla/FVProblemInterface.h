@@ -5,6 +5,8 @@
 
 #include "godzilla/Delegate.h"
 #include "godzilla/DiscreteProblemInterface.h"
+#include "godzilla/NaturalRiemannBC.h"
+#include "godzilla/Qtr.h"
 
 namespace godzilla {
 
@@ -74,6 +76,12 @@ public:
                        Int nc,
                        Order k,
                        const Label & block = Label());
+
+    /// Add essential boundary condition
+    ///
+    /// @param bc Boundary condition object parameters to add/create
+    template <NaturalRiemannBCDerived OBJECT>
+    OBJECT * add_boundary_condition(Parameters & pars);
 
 protected:
     void init() override;
@@ -156,6 +164,8 @@ private:
 
     std::map<FieldID, ComputeFluxDelegate> compute_flux_methods;
 
+    std::vector<Qtr<NaturalRiemannBC>> riemann_bcs;
+
     static const std::string empty_name;
 
     static void compute_flux(Int dim,
@@ -169,5 +179,17 @@ private:
                              Scalar flux[],
                              void * ctx);
 };
+
+template <NaturalRiemannBCDerived OBJECT>
+OBJECT *
+FVProblemInterface::add_boundary_condition(Parameters & pars)
+{
+    CALL_STACK_MSG();
+    pars.set<DiscreteProblemInterface *>("_dpi", this);
+    auto obj = Qtr<OBJECT>::alloc(pars);
+    auto ptr = obj.get();
+    this->riemann_bcs.push_back(std::move(obj));
+    return ptr;
+}
 
 } // namespace godzilla
