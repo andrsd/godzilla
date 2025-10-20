@@ -8,16 +8,9 @@ OutflowBC::parameters()
     return params;
 }
 
-OutflowBC::OutflowBC(const Parameters & pars) : NaturalRiemannBC(pars), components({ 0 })
+OutflowBC::OutflowBC(const Parameters & pars) : NaturalRiemannBC(pars)
 {
     CALL_STACK_MSG();
-}
-
-const std::vector<Int> &
-OutflowBC::get_components() const
-{
-    CALL_STACK_MSG();
-    return this->components;
 }
 
 void

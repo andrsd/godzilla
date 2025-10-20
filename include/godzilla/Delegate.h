@@ -23,6 +23,11 @@ public:
         };
     }
 
+    template <typename F>
+    Delegate(F && f) : fn(std::forward<F>(f))
+    {
+    }
+
     template <typename T>
     void
     bind(T * t, R (T::*method)(ARGS...))
@@ -39,6 +44,13 @@ public:
         this->fn = [=](ARGS... args) {
             return (t->*method)(args...);
         };
+    }
+
+    template <typename F>
+    void
+    bind(F && f)
+    {
+        fn = std::forward<F>(f);
     }
 
     R

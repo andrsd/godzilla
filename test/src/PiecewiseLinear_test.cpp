@@ -1,43 +1,69 @@
 #include "gmock/gmock.h"
-#include "GodzillaApp_test.h"
 #include "godzilla/PiecewiseLinear.h"
+#include "godzilla/Exception.h"
 
 using namespace godzilla;
 
-TEST(PiecewiseLinearTest, eval)
+TEST(PiecewiseLinearTest, sample)
 {
-    TestApp app;
+    std::vector<Real> x = { 1, 2, 3 };
+    std::vector<Real> y = { 0, 4, 2 };
+    PiecewiseLinear lipol(x, y);
 
-    auto params = PiecewiseLinear::parameters();
-    params.set<App *>("_app", &app);
-    params.set<std::string>("_name", "ipol");
-    params.set<std::vector<Real>>("x", { 1., 2., 3. });
-    params.set<std::vector<Real>>("y", { 3., 1., 2. });
-    PiecewiseLinear obj(params);
-
-    mu::Parser parser;
-    obj.register_callback(parser);
-
-    parser.SetExpr("ipol(0)");
-    EXPECT_EQ(parser.Eval(), 3.);
+    EXPECT_EQ(lipol.evaluate(0.0), 0.);
+    EXPECT_EQ(lipol.evaluate(1.0), 0.);
+    EXPECT_EQ(lipol.evaluate(1.5), 2.);
+    EXPECT_EQ(lipol.evaluate(2.0), 4.);
+    EXPECT_EQ(lipol.evaluate(2.5), 3.);
+    EXPECT_EQ(lipol.evaluate(3.0), 2.);
+    EXPECT_EQ(lipol.evaluate(4.0), 2.);
 }
 
-TEST(PiecewiseLinearTest, inconsistent_data_sizes)
+TEST(PiecewiseLinearTest, ctor_empty)
 {
-    testing::internal::CaptureStderr();
+    PiecewiseLinear lipol;
+    std::vector<Real> x = { 1, 2, 3, 4 };
+    std::vector<Real> y = { 0, 4, 2, 3 };
+    lipol.create(x, y);
 
-    TestApp app;
+    EXPECT_EQ(lipol.evaluate(0.0), 0.);
+    EXPECT_EQ(lipol.evaluate(1.0), 0.);
+    EXPECT_EQ(lipol.evaluate(1.5), 2.);
+    EXPECT_EQ(lipol.evaluate(2.0), 4.);
+    EXPECT_EQ(lipol.evaluate(2.5), 3.);
+    EXPECT_EQ(lipol.evaluate(3.0), 2.);
+    EXPECT_EQ(lipol.evaluate(3.5), 2.5);
+    EXPECT_EQ(lipol.evaluate(4.0), 3.);
+    EXPECT_EQ(lipol.evaluate(4.5), 3.);
+}
 
-    auto params = PiecewiseLinear::parameters();
-    params.set<App *>("_app", &app);
-    params.set<std::string>("_name", "ipol");
-    params.set<std::vector<Real>>("x", { 1., 2. });
-    params.set<std::vector<Real>>("y", { 3., 1., 2. });
-    PiecewiseLinear obj(params);
+TEST(PiecewiseLinearTest, single_interval)
+{
+    std::vector<Real> x = { 1, 2 };
+    std::vector<Real> y = { 0, 4 };
+    PiecewiseLinear lipol(x, y);
 
-    EXPECT_FALSE(app.check_integrity());
-    app.get_logger()->print();
+    EXPECT_EQ(lipol.evaluate(0.5), 0.);
+    EXPECT_EQ(lipol.evaluate(1.0), 0.);
+    EXPECT_EQ(lipol.evaluate(1.5), 2.);
+    EXPECT_EQ(lipol.evaluate(2.0), 4.);
+    EXPECT_EQ(lipol.evaluate(2.5), 4.);
+}
+
+TEST(PiecewiseLinearTest, single_point)
+{
+    EXPECT_DEATH(PiecewiseLinear ipol({ 1 }, { 0 }), "Size of 'x' is 1. It must be 2 or more");
+}
+
+TEST(PiecewiseLinearTest, unequal_sizes)
+{
+    EXPECT_DEATH(PiecewiseLinear ipol({ 1, 2 }, { 0, 2, 3 }),
+                 "Size of 'x' \\(2\\) does not match size of 'y' \\(3\\)");
+}
+
+TEST(PiecewiseLinearTest, non_increasing)
+{
     EXPECT_THAT(
-        testing::internal::GetCapturedStderr(),
-        testing::HasSubstr("[ERROR] ipol: Size of 'x' (2) does not match size of 'y' (3)."));
+        []() { PiecewiseLinear ipol({ 1, 2, 1 }, { 0, 2, 3 }); },
+        testing::ThrowsMessage<Exception>("Values in 'x' must be increasing. Failed at index '2'"));
 }

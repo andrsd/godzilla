@@ -2,7 +2,6 @@
 #include "godzilla/Factory.h"
 #include "godzilla/MeshFactory.h"
 #include "godzilla/LineMesh.h"
-#include "godzilla/DirichletBC.h"
 #include "godzilla/ExplicitFELinearProblem.h"
 #include "godzilla/ResidualFunc.h"
 #include "godzilla/Parameters.h"
@@ -80,6 +79,23 @@ TestExplicitFELinearProblem::set_up_weak_form()
 {
     add_residual_block(FieldID(0), nullptr, new TestF1(this));
 }
+
+class DirichletBC : public EssentialBC {
+public:
+    explicit DirichletBC(const Parameters & pars) : EssentialBC(pars) {}
+
+    std::vector<Int>
+    create_components() override
+    {
+        return { 0 };
+    }
+
+    void
+    evaluate(Real time, const Real x[], Scalar u[]) override
+    {
+        u[0] = 1.;
+    }
+};
 
 } // namespace
 
@@ -183,16 +199,14 @@ TEST(ExplicitFELinearProblemTest, solve)
     auto bc_left_pars = DirichletBC::parameters();
     bc_left_pars.set<App *>("_app", &app)
         .set<DiscreteProblemInterface *>("_dpi", &prob)
-        .set<std::vector<std::string>>("boundary", { "left" })
-        .set<std::vector<std::string>>("value", { "1" });
+        .set<std::vector<std::string>>("boundary", { "left" });
     DirichletBC bc_left(bc_left_pars);
     prob.add_boundary_condition(&bc_left);
 
     auto bc_right_pars = DirichletBC::parameters();
     bc_right_pars.set<App *>("_app", &app)
         .set<DiscreteProblemInterface *>("_dpi", &prob)
-        .set<std::vector<std::string>>("boundary", { "right" })
-        .set<std::vector<std::string>>("value", { "1" });
+        .set<std::vector<std::string>>("boundary", { "right" });
     DirichletBC bc_right(bc_right_pars);
     prob.add_boundary_condition(&bc_right);
 
@@ -242,16 +256,14 @@ TEST(ExplicitFELinearProblemTest, solve_w_lumped_mass_matrix)
     auto bc_left_pars = DirichletBC::parameters();
     bc_left_pars.set<App *>("_app", &app)
         .set<DiscreteProblemInterface *>("_dpi", &prob)
-        .set<std::vector<std::string>>("boundary", { "left" })
-        .set<std::vector<std::string>>("value", { "1" });
+        .set<std::vector<std::string>>("boundary", { "left" });
     DirichletBC bc_left(bc_left_pars);
     prob.add_boundary_condition(&bc_left);
 
     auto bc_right_pars = DirichletBC::parameters();
     bc_right_pars.set<App *>("_app", &app)
         .set<DiscreteProblemInterface *>("_dpi", &prob)
-        .set<std::vector<std::string>>("boundary", { "right" })
-        .set<std::vector<std::string>>("value", { "1" });
+        .set<std::vector<std::string>>("boundary", { "right" });
     DirichletBC bc_right(bc_right_pars);
     prob.add_boundary_condition(&bc_right);
 

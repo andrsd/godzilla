@@ -1,6 +1,7 @@
 #include "gmock/gmock.h"
 #include "FENonlinearProblem_test.h"
 #include "godzilla/InitialCondition.h"
+#include "godzilla/ConstantInitialCondition.h"
 #include "godzilla/Parameters.h"
 #include "ExceptionTestMacros.h"
 #include "godzilla/Types.h"
@@ -22,11 +23,6 @@ class MockInitialCondition : public InitialCondition {
 public:
     explicit MockInitialCondition(const Parameters & pars) : InitialCondition(pars) {}
 
-    Int
-    get_num_components() const override
-    {
-        return 1.;
-    }
     MOCK_METHOD(void, evaluate, (Real, const Real x[], Scalar u[]), ());
 };
 
@@ -34,10 +30,10 @@ class TestInitialCondition : public InitialCondition {
 public:
     explicit TestInitialCondition(const Parameters & pars) : InitialCondition(pars) {}
 
-    Int
-    get_num_components() const override
+    std::vector<Int>
+    create_components() override
     {
-        return 1.;
+        return { 0 };
     }
 
     void
@@ -51,10 +47,10 @@ class TestVectorInitialCondition : public InitialCondition {
 public:
     explicit TestVectorInitialCondition(const Parameters & pars) : InitialCondition(pars) {}
 
-    Int
-    get_num_components() const override
+    std::vector<Int>
+    create_components() override
     {
-        return 2.;
+        return { 0, 1 };
     }
 
     void
@@ -156,6 +152,28 @@ TEST_F(InitialConditionTest, duplicate_ic_name)
 
     EXPECT_THROW_MSG(this->prob->add_initial_condition(&ic),
                      "Cannot add initial condition object 'obj'. Name already taken.");
+}
+
+TEST_F(InitialConditionTest, constant_ic)
+{
+    auto params = ConstantInitialCondition::parameters();
+    params.set<App *>("_app", this->app)
+        .set<DiscreteProblemInterface *>("_dpi", this->prob)
+        .set<std::vector<Real>>("value", { 3, 4, 5 });
+    ConstantInitialCondition ic(params);
+    this->prob->add_initial_condition(&ic);
+    this->prob->create();
+
+    EXPECT_EQ(ic.get_num_components(), 3);
+
+    Real time = 0.;
+    Real x[] = { 0 };
+    Scalar u[] = { 0, 0, 0 };
+    ic.evaluate(time, x, u);
+
+    EXPECT_EQ(u[0], 3);
+    EXPECT_EQ(u[1], 4);
+    EXPECT_EQ(u[2], 5);
 }
 
 TEST_F(InitialCondition2FieldTest, no_field_param)

@@ -210,31 +210,6 @@ TEST_F(GYMLFileTest, DISABLED_build)
     EXPECT_NE(problem, nullptr);
 }
 
-TEST_F(GYMLFileTest, DISABLED_funcs)
-{
-    class TestGYMLFile : public GYMLFile {
-    public:
-        explicit TestGYMLFile(App * app) : GYMLFile(app) {}
-        void
-        build()
-        {
-            GYMLFile::build_problem();
-            GYMLFile::build_functions();
-        }
-    } file(this->app);
-
-    std::string file_name =
-        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/yml/funcs.yml");
-
-    file.parse(file_name);
-    file.build();
-
-    auto * problem = file.get_problem();
-    const std::vector<Function *> & funcs = problem->get_functions();
-    EXPECT_EQ(funcs.size(), 1);
-    EXPECT_NE(dynamic_cast<PiecewiseLinear *>(funcs[0]), nullptr);
-}
-
 TEST_F(GYMLFileTest, DISABLED_build_vec_as_scalars)
 {
     GYMLFile file(this->app);

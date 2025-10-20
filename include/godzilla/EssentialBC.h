@@ -25,7 +25,7 @@ public:
     /// Get the component numbers this boundary condition is constraining
     ///
     /// @return Vector of component numbers
-    virtual const std::vector<Int> & get_components() const = 0;
+    const std::vector<Int> & get_components() const;
 
     /// Evaluate the boundary condition
     ///
@@ -39,16 +39,26 @@ public:
     /// @param time The time at which to sample
     /// @param x The coordinates
     /// @param u  The output field values
-    virtual void evaluate_t(Real time, const Real x[], Scalar u[]) = 0;
+    virtual void evaluate_t(Real time, const Real x[], Scalar u[]);
 
 private:
+    virtual std::vector<Int> create_components();
+
     /// Field ID this boundary condition is attached to
     FieldID fid;
-    ///
+    /// Field name
     Optional<std::string> field_name;
+    /// Components
+    std::vector<Int> components;
 
 public:
     static Parameters parameters();
+
+private:
+    static ErrorCode
+    invoke_delegate(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx);
+    static ErrorCode
+    invoke_delegate_t(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx);
 };
 
 } // namespace godzilla

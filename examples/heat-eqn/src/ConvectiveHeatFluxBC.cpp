@@ -54,17 +54,15 @@ ConvectiveHeatFluxBC::parameters()
     return params;
 }
 
-ConvectiveHeatFluxBC::ConvectiveHeatFluxBC(const Parameters & pars) :
-    NaturalBC(pars),
-    components({ 0 })
+ConvectiveHeatFluxBC::ConvectiveHeatFluxBC(const Parameters & pars) : NaturalBC(pars)
 {
     CALL_STACK_MSG();
 }
 
-const std::vector<Int> &
-ConvectiveHeatFluxBC::get_components() const
+std::vector<Int>
+ConvectiveHeatFluxBC::create_components()
 {
-    return this->components;
+    return { 0 };
 }
 
 void

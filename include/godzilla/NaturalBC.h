@@ -29,7 +29,7 @@ public:
     /// Get the component numbers this boundary condition is constraining
     ///
     /// @return Vector of component numbers
-    virtual const std::vector<Int> & get_components() const = 0;
+    const std::vector<Int> & get_components() const;
 
     /// Set up the weak form for the boundary integral of this boundary condition
     virtual void set_up_weak_form() = 0;
@@ -55,8 +55,12 @@ protected:
                             BndJacobianFunc * g3);
 
 private:
+    virtual std::vector<Int> create_components();
+
     /// Field ID this boundary condition is attached to
     FieldID fid;
+    /// Components
+    std::vector<Int> components;
     ///
     Optional<std::string> field_name;
     /// Finite element problem this object is part of

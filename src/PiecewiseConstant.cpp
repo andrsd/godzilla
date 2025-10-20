@@ -3,72 +3,32 @@
 
 #include "godzilla/PiecewiseConstant.h"
 #include "godzilla/CallStack.h"
-#include "godzilla/Utils.h"
-#include "godzilla/Validation.h"
+#include "godzilla/Exception.h"
+#include "godzilla/Assert.h"
 
 namespace godzilla {
 
-static double
-piecewise_constant_function_eval(void * ctx, double x)
-{
-    auto * fn = static_cast<PiecewiseConstant *>(ctx);
-    return fn->evaluate(x);
-}
-
-Parameters
-PiecewiseConstant::parameters()
-{
-    auto params = Function::parameters();
-    params.add_required_param<std::vector<Real>>("x", "Independent variable")
-        .add_required_param<std::vector<Real>>("y", "Dependent variable")
-        .add_param<std::string>("continuity", "right", "Continuity of the function: [left, right]");
-    return params;
-}
-
-PiecewiseConstant::PiecewiseConstant(const Parameters & pars) :
-    Function(pars),
-    continuity(RIGHT),
-    x(pars.get<std::vector<Real>>("x")),
-    y(pars.get<std::vector<Real>>("y"))
+PiecewiseConstant::PiecewiseConstant(Continuity cont,
+                                     const std::vector<Real> & x,
+                                     const std::vector<Real> & y) :
+    continuity(cont),
+    x(x),
+    y(y)
 {
     CALL_STACK_MSG();
-    if (this->x.size() + 1 != this->y.size())
-        log_error("Size of 'x' ({}) does not match size of 'y' ({}).",
-                  this->x.size(),
-                  this->y.size());
+    assert_true(this->x.size() + 1 == this->y.size(),
+                fmt::format("'x' (size={}) must have one more entry than 'y' (size={})",
+                            this->x.size(),
+                            this->y.size()));
 
-    if (this->x.empty())
-        log_error("Size of 'x' is {}. It must be 1 or more.", this->x.size());
-    else {
-        // check monotonicity
-        for (std::size_t i = 0; i < this->x.size() - 1; ++i) {
-            if (this->x[i] >= this->x[i + 1])
-                log_error("Values in 'x' must be increasing. Failed at index '{}'.", i + 1);
-        }
+    assert_true(!this->x.empty(),
+                fmt::format("Size of 'x' is {}. It must be 1 or more", this->x.size()));
+
+    // check monotonicity
+    for (std::size_t i = 0; i < this->x.size() - 1; ++i) {
+        if (this->x[i] >= this->x[i + 1])
+            throw Exception("Values in 'x' must be increasing - failed at index '{}'", i + 1);
     }
-
-    auto cont = utils::to_lower(pars.get<std::string>("continuity"));
-    if (validation::in(cont, { "left", "right" })) {
-        if (cont == "left")
-            this->continuity = LEFT;
-        else if (cont == "right")
-            this->continuity = RIGHT;
-    }
-    else
-        log_error("The 'continuity' parameter can be either 'left' or 'right'.");
-}
-
-void
-PiecewiseConstant::register_callback(mu::Parser & parser)
-{
-    CALL_STACK_MSG();
-    parser.DefineFunUserData(get_name(), piecewise_constant_function_eval, this);
-}
-
-void
-PiecewiseConstant::create()
-{
-    CALL_STACK_MSG();
 }
 
 Real

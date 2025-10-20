@@ -1,45 +1,56 @@
 #include "gmock/gmock.h"
-#include "GodzillaApp_test.h"
+#include "TestApp.h"
 #include "GTestFENonlinearProblem.h"
 #include "GTest2FieldsFENonlinearProblem.h"
 #include "godzilla/Factory.h"
 #include "godzilla/MeshFactory.h"
 #include "godzilla/LineMesh.h"
+#include "godzilla/BoxMesh.h"
 #include "godzilla/EssentialBC.h"
-#include "godzilla/PiecewiseLinear.h"
 
 using namespace godzilla;
 using namespace testing;
 
 namespace {
 
-class TestEssentialBC : public EssentialBC {
+class DirichletBC : public EssentialBC {
 public:
-    explicit TestEssentialBC(const Parameters & pars) : EssentialBC(pars), components({ 0 }) {}
+    explicit DirichletBC(const Parameters & pars) : EssentialBC(pars) {}
 
-    MOCK_METHOD(void, evaluate, (Real time, const Real x[], Scalar u[]));
-    MOCK_METHOD(void, evaluate_t, (Real time, const Real x[], Scalar u[]));
-
-    const std::vector<Int> &
-    get_components() const override
+    void
+    evaluate(Real time, const Real x[], Scalar u[]) override
     {
-        return this->components;
+        u[0] = time * (x[0] + x[1] + x[2]);
     }
 
-protected:
-    std::vector<Int> components;
+    void
+    evaluate_t(Real time, const Real x[], Scalar u[]) override
+    {
+        u[0] = 1.;
+    }
+
+    std::vector<Int>
+    create_components() override
+    {
+        return { 0 };
+    }
 };
 
 } // namespace
 
-TEST(EssentialBCTest, api)
+TEST(EssentialBCTest, test)
 {
     TestApp app;
 
-    auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app", &app);
-    mesh_pars.set<Int>("nx", 2);
-    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
+    auto mesh_pars = BoxMesh::parameters();
+    // clang-format off
+    mesh_pars
+        .set<App *>("_app", &app)
+        .set<Int>("nx", 2)
+        .set<Int>("ny", 2)
+        .set<Int>("nz", 2);
+    // clang-format on
+    auto mesh = MeshFactory::create<BoxMesh>(mesh_pars);
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
     prob_pars.set<App *>("_app", &app);
@@ -47,19 +58,29 @@ TEST(EssentialBCTest, api)
     GTestFENonlinearProblem problem(prob_pars);
     app.set_problem(&problem);
 
-    auto params = TestEssentialBC::parameters();
+    auto params = DirichletBC::parameters();
     params.set<App *>("_app", &app)
         .set<DiscreteProblemInterface *>("_dpi", &problem)
         .set<std::vector<std::string>>("boundary", {});
-    TestEssentialBC bc(params);
+    DirichletBC bc(params);
 
     problem.create();
     bc.create();
 
-    const auto & comps = bc.get_components();
-    EXPECT_EQ(comps.size(), 1);
-    EXPECT_EQ(comps[0], 0);
+    const auto & components = bc.get_components();
+    ASSERT_EQ(components.size(), 1);
+    EXPECT_THAT(components, testing::ElementsAre(0));
     EXPECT_EQ(bc.get_field_id(), FieldID(0));
+
+    Real time = 2.5;
+    Real x[] = { 3, 5, 7 };
+    Scalar u[] = { 0 };
+
+    bc.evaluate(time, x, u);
+    EXPECT_EQ(u[0], 37.5);
+
+    bc.evaluate_t(time, x, u);
+    EXPECT_EQ(u[0], 1.);
 }
 
 TEST(EssentialBCTest, non_existing_field)
@@ -79,12 +100,12 @@ TEST(EssentialBCTest, non_existing_field)
     GTest2FieldsFENonlinearProblem problem(prob_pars);
     app.set_problem(&problem);
 
-    Parameters params = TestEssentialBC::parameters();
+    Parameters params = DirichletBC::parameters();
     params.set<App *>("_app", &app)
         .set<DiscreteProblemInterface *>("_dpi", &problem)
         .set<std::string>("field", "asdf")
         .set<std::vector<std::string>>("boundary", {});
-    TestEssentialBC bc(params);
+    DirichletBC bc(params);
 
     problem.add_boundary_condition(&bc);
     problem.create();
@@ -113,11 +134,11 @@ TEST(EssentialBCTest, field_param_not_specified)
     GTest2FieldsFENonlinearProblem problem(prob_pars);
     app.set_problem(&problem);
 
-    auto params = TestEssentialBC::parameters();
+    auto params = DirichletBC::parameters();
     params.set<App *>("_app", &app)
         .set<DiscreteProblemInterface *>("_dpi", &problem)
         .set<std::vector<std::string>>("boundary", {});
-    TestEssentialBC bc(params);
+    DirichletBC bc(params);
 
     problem.add_boundary_condition(&bc);
     problem.create();

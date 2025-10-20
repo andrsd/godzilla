@@ -6,7 +6,6 @@
 #include "godzilla/Factory.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Problem.h"
-#include "godzilla/Function.h"
 #include "godzilla/AuxiliaryField.h"
 #include "godzilla/InitialCondition.h"
 #include "godzilla/BoundaryCondition.h"
@@ -47,6 +46,7 @@ void
 GYMLFile::build_functions()
 {
     CALL_STACK_MSG();
+#if 0
     if (!get_root()["functions"])
         return;
 
@@ -59,6 +59,7 @@ GYMLFile::build_functions()
         assert_true(get_problem() != nullptr, "Problem is nullptr");
         get_problem()->add_function(fn);
     }
+#endif
 }
 
 void

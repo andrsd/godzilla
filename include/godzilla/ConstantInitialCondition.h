@@ -17,11 +17,11 @@ class ConstantInitialCondition : public InitialCondition {
 public:
     explicit ConstantInitialCondition(const Parameters & pars);
 
-    Int get_num_components() const override;
-
     void evaluate(Real time, const Real x[], Scalar u[]) override;
 
 private:
+    std::vector<Int> create_components() override;
+
     /// Constant values -- one for each component
     const std::vector<Real> values;
 

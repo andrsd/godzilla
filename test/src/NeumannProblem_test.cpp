@@ -136,12 +136,12 @@ public:
 
 class TestNeumannBC : public NaturalBC {
 public:
-    explicit TestNeumannBC(const Parameters & pars) : NaturalBC(pars), comps({ 0 }) {}
+    explicit TestNeumannBC(const Parameters & pars) : NaturalBC(pars) {}
 
-    const std::vector<Int> &
-    get_components() const override
+    std::vector<Int>
+    create_components() override
     {
-        return this->comps;
+        return { 0 };
     }
 
     void
@@ -150,9 +150,6 @@ public:
         add_residual_block(new BndF0(this), nullptr);
         add_jacobian_block(get_field_id(), new BndG0(this), nullptr, nullptr, nullptr);
     }
-
-protected:
-    std::vector<Int> comps;
 };
 
 } // namespace

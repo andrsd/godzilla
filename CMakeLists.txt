@@ -44,7 +44,6 @@ check_include_file_cxx(cxxabi.h HAVE_CXXABI_H)
 
 # godzilla
 
-add_subdirectory(contrib/muParser)
 add_subdirectory(src)
 add_subdirectory(tools)
 

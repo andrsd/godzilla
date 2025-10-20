@@ -7,7 +7,6 @@
 #include "godzilla/ResidualFunc.h"
 #include "godzilla/JacobianFunc.h"
 #include "godzilla/ConstantInitialCondition.h"
-#include "godzilla/DirichletBC.h"
 #include "godzilla/PCFactor.h"
 #include "godzilla/Types.h"
 
@@ -115,6 +114,17 @@ GTestFENonlinearProblemJFNK::create_preconditioner(PC pc)
     return this->p;
 }
 
+class DirichletBC : public EssentialBC {
+public:
+    explicit DirichletBC(const Parameters & pars) : EssentialBC(pars) {}
+
+    void
+    evaluate(Real time, const Real x[], Scalar u[]) override
+    {
+        u[0] = x[0] * x[0];
+    }
+};
+
 } // namespace
 
 TEST(FENonlinearProblemJFNKTest, solve)
@@ -143,8 +153,7 @@ TEST(FENonlinearProblemJFNKTest, solve)
     bc_params.set<godzilla::App *>("_app", &app)
         .set<App *>("_app", &app)
         .set<DiscreteProblemInterface *>("_dpi", &prob)
-        .set<std::vector<std::string>>("boundary", { "left", "right" })
-        .set<std::vector<std::string>>("value", { "x*x" });
+        .set<std::vector<std::string>>("boundary", { "left", "right" });
     DirichletBC bc(bc_params);
     prob.add_boundary_condition(&bc);
 

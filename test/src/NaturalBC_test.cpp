@@ -29,21 +29,18 @@ TEST(NaturalBCTest, api)
 
     class MockNaturalBC : public NaturalBC {
     public:
-        explicit MockNaturalBC(const Parameters & pars) : NaturalBC(pars), comps({ 3, 5 }) {}
+        explicit MockNaturalBC(const Parameters & pars) : NaturalBC(pars) {}
 
-        const std::vector<Int> &
-        get_components() const override
+        std::vector<Int>
+        create_components() override
         {
-            return this->comps;
+            return { 3, 5 };
         }
 
         void
         set_up_weak_form() override
         {
         }
-
-    protected:
-        std::vector<Int> comps;
     };
 
     auto params = NaturalBC::parameters();
@@ -89,12 +86,12 @@ public:
 
 class TestNaturalBC : public NaturalBC {
 public:
-    explicit TestNaturalBC(const Parameters & pars) : NaturalBC(pars), comps({ 0 }) {}
+    explicit TestNaturalBC(const Parameters & pars) : NaturalBC(pars) {}
 
-    const std::vector<Int> &
-    get_components() const override
+    std::vector<Int>
+    create_components() override
     {
-        return this->comps;
+        return { 0 };
     }
 
     void
@@ -103,9 +100,6 @@ public:
         add_residual_block(new TestNatF0(this), nullptr);
         add_jacobian_block(get_field_id(), new TestNatG0(this), nullptr, nullptr, nullptr);
     }
-
-protected:
-    std::vector<Int> comps;
 };
 
 } // namespace

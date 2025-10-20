@@ -24,7 +24,7 @@ public:
     /// Get the computed value
     ///
     /// @return The value computed by the postprocessor
-    virtual Real get_value() = 0;
+    virtual std::vector<Real> get_value() = 0;
 
     /// Get problem this post-processor is part of
     ///

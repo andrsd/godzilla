@@ -6,7 +6,6 @@
 #include "godzilla/Mesh.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/Problem.h"
-#include "godzilla/Function.h"
 #include "godzilla/FileOutput.h"
 #include "godzilla/Postprocessor.h"
 #include "godzilla/Section.h"
@@ -54,20 +53,10 @@ TEST(ProblemTest, add_pp)
         {
         }
 
-        Real
+        std::vector<Real>
         get_value() override
         {
-            return 0;
-        }
-    };
-
-    class TestFunction : public Function {
-    public:
-        explicit TestFunction(const Parameters & pars) : Function(pars) {}
-
-        void
-        register_callback(mu::Parser & parser) override
-        {
+            return { 0. };
         }
     };
 
@@ -100,13 +89,6 @@ TEST(ProblemTest, add_pp)
     pp_params.set<std::string>("_name", "pp");
     TestPostprocessor pp(pp_params);
     problem.add_postprocessor(&pp);
-
-    auto fn_params = Function::parameters();
-    fn_params.set<App *>("_app", &app);
-    fn_params.set<Problem *>("_problem", &problem);
-    fn_params.set<std::string>("_name", "fn");
-    TestFunction fn(fn_params);
-    problem.add_function(&fn);
 
     auto out_params = FileOutput::parameters();
     out_params.set<App *>("_app", &app);

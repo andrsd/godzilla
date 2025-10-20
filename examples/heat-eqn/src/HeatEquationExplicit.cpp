@@ -1,4 +1,3 @@
-#include "godzilla/FunctionInterface.h"
 #include "HeatEquationExplicit.h"
 #include "godzilla/ResidualFunc.h"
 #include "godzilla/CallStack.h"
