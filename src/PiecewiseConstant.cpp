@@ -17,17 +17,17 @@ PiecewiseConstant::PiecewiseConstant(Continuity cont,
 {
     CALL_STACK_MSG();
     assert_true(this->x.size() + 1 == this->y.size(),
-                fmt::format("Size of 'x' ({}) does not match size of 'y' ({}).",
+                fmt::format("'x' (size={}) must have one more entry than 'y' (size={})",
                             this->x.size(),
                             this->y.size()));
 
     assert_true(!this->x.empty(),
-                fmt::format("Size of 'x' is {}. It must be 1 or more.", this->x.size()));
+                fmt::format("Size of 'x' is {}. It must be 1 or more", this->x.size()));
 
     // check monotonicity
     for (std::size_t i = 0; i < this->x.size() - 1; ++i) {
         if (this->x[i] >= this->x[i + 1])
-            throw Exception("Values in 'x' must be increasing. Failed at index '{}'.", i + 1);
+            throw Exception("Values in 'x' must be increasing - failed at index '{}'", i + 1);
     }
 }
 
