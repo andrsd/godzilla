@@ -65,7 +65,6 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">ConstantInitialCondition</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#parameters">Parameters</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla24ConstantInitialConditionE"><code class="docutils literal notranslate"><span class="pre">ConstantInitialCondition</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#_CPPv4NK8godzilla24ConstantInitialCondition18get_num_componentsEv"><code class="docutils literal notranslate"><span class="pre">ConstantInitialCondition::get_num_components()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv4N8godzilla24ConstantInitialCondition8evaluateE4RealA_K4RealA_6Scalar"><code class="docutils literal notranslate"><span class="pre">ConstantInitialCondition::evaluate()</span></code></a></li>
 </ul>
 </li>
@@ -84,11 +83,6 @@
 <li class="toctree-l1"><a class="reference internal" href="fe-problem-interface.html">FEProblemInterface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="file-mesh.html">FileMesh</a></li>
 <li class="toctree-l1"><a class="reference internal" href="file-output.html">FileOutput</a></li>
-<li class="toctree-l1"><a class="reference internal" href="function.html">Function</a></li>
-<li class="toctree-l1"><a class="reference internal" href="function-auxiliary-field.html">FunctionAuxiliaryField</a></li>
-<li class="toctree-l1"><a class="reference internal" href="function-evaluator.html">FunctionEvaluator</a></li>
-<li class="toctree-l1"><a class="reference internal" href="function-ic.html">FunctionInitialCondition</a></li>
-<li class="toctree-l1"><a class="reference internal" href="function-interface.html">FunctionInterface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fv-problem-interface.html">FVProblemInterface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gyml-file.html">GYMLFile</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implicit-fe-nonlinear-problem.html">ImplicitFENonlinearProblem</a></li>
@@ -96,7 +90,6 @@
 <li class="toctree-l1"><a class="reference internal" href="initial-condition.html">InitialCondition</a></li>
 <li class="toctree-l1"><a class="reference internal" href="input-file.html">InputFile</a></li>
 <li class="toctree-l1"><a class="reference internal" href="line-mesh.html">LineMesh</a></li>
-<li class="toctree-l1"><a class="reference internal" href="linear-interpolation.html">LinearInterpolation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="linear-problem.html">LinearProblem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="logger.html">Logger</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mesh.html">Mesh</a></li>
@@ -106,7 +99,6 @@
 <li class="toctree-l1"><a class="reference internal" href="object.html">Object</a></li>
 <li class="toctree-l1"><a class="reference internal" href="output.html">Output</a></li>
 <li class="toctree-l1"><a class="reference internal" href="parameters.html">Parameters</a></li>
-<li class="toctree-l1"><a class="reference internal" href="parsed-function.html">ParsedFunction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="piecewise-linear.html">PiecewiseLinear</a></li>
 <li class="toctree-l1"><a class="reference internal" href="print-interface.html">PrintInterface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="problem.html">Problem</a></li>
@@ -160,17 +152,6 @@
 <p>Use to set the initial condition of a field to constant values Note that if the field has multiple components, you can provide a single value for each component </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla24ConstantInitialCondition18get_num_componentsEv">
-<span id="_CPPv3NK8godzilla24ConstantInitialCondition18get_num_componentsEv"></span><span id="_CPPv2NK8godzilla24ConstantInitialCondition18get_num_componentsEv"></span><span id="godzilla::ConstantInitialCondition::get_num_componentsC"></span><span class="target" id="classgodzilla_1_1_constant_initial_condition_1a151aca4bc4dd155e0f7b8b1faa2d20b5"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_num_components</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8godzilla24ConstantInitialCondition18get_num_componentsEv" title="Link to this definition"></a><br /></dt>
-<dd><p>Get the number of constrained components. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The number of constrained components </p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla24ConstantInitialCondition8evaluateE4RealA_K4RealA_6Scalar">
 <span id="_CPPv3N8godzilla24ConstantInitialCondition8evaluateE4RealA_K4RealA_6Scalar"></span><span id="_CPPv2N8godzilla24ConstantInitialCondition8evaluateE4RealA_K4RealA_6Scalar"></span><span id="godzilla::ConstantInitialCondition::evaluate__Real.RealCA.ScalarA"></span><span class="target" id="classgodzilla_1_1_constant_initial_condition_1af1739758542fa3aef6ee8040c15c4e64"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evaluate</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">time</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="n"><span class="pre">Scalar</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">u</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla24ConstantInitialCondition8evaluateE4RealA_K4RealA_6Scalar" title="Link to this definition"></a><br /></dt>

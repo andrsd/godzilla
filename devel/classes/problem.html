@@ -74,11 +74,6 @@
 <li class="toctree-l1"><a class="reference internal" href="fe-problem-interface.html">FEProblemInterface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="file-mesh.html">FileMesh</a></li>
 <li class="toctree-l1"><a class="reference internal" href="file-output.html">FileOutput</a></li>
-<li class="toctree-l1"><a class="reference internal" href="function.html">Function</a></li>
-<li class="toctree-l1"><a class="reference internal" href="function-auxiliary-field.html">FunctionAuxiliaryField</a></li>
-<li class="toctree-l1"><a class="reference internal" href="function-evaluator.html">FunctionEvaluator</a></li>
-<li class="toctree-l1"><a class="reference internal" href="function-ic.html">FunctionInitialCondition</a></li>
-<li class="toctree-l1"><a class="reference internal" href="function-interface.html">FunctionInterface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fv-problem-interface.html">FVProblemInterface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gyml-file.html">GYMLFile</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implicit-fe-nonlinear-problem.html">ImplicitFENonlinearProblem</a></li>
@@ -86,7 +81,6 @@
 <li class="toctree-l1"><a class="reference internal" href="initial-condition.html">InitialCondition</a></li>
 <li class="toctree-l1"><a class="reference internal" href="input-file.html">InputFile</a></li>
 <li class="toctree-l1"><a class="reference internal" href="line-mesh.html">LineMesh</a></li>
-<li class="toctree-l1"><a class="reference internal" href="linear-interpolation.html">LinearInterpolation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="linear-problem.html">LinearProblem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="logger.html">Logger</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mesh.html">Mesh</a></li>
@@ -96,7 +90,6 @@
 <li class="toctree-l1"><a class="reference internal" href="object.html">Object</a></li>
 <li class="toctree-l1"><a class="reference internal" href="output.html">Output</a></li>
 <li class="toctree-l1"><a class="reference internal" href="parameters.html">Parameters</a></li>
-<li class="toctree-l1"><a class="reference internal" href="parsed-function.html">ParsedFunction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="piecewise-linear.html">PiecewiseLinear</a></li>
 <li class="toctree-l1"><a class="reference internal" href="print-interface.html">PrintInterface</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Problem</a><ul>
@@ -108,8 +101,6 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem13get_dimensionEv"><code class="docutils literal notranslate"><span class="pre">Problem::get_dimension()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem8get_timeEv"><code class="docutils literal notranslate"><span class="pre">Problem::get_time()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem12get_step_numEv"><code class="docutils literal notranslate"><span class="pre">Problem::get_step_num()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem13get_functionsEv"><code class="docutils literal notranslate"><span class="pre">Problem::get_functions()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla7Problem12add_functionEP8Function"><code class="docutils literal notranslate"><span class="pre">Problem::add_function()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla7Problem10add_outputEP6Output"><code class="docutils literal notranslate"><span class="pre">Problem::add_output()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla7Problem17add_postprocessorEP13Postprocessor"><code class="docutils literal notranslate"><span class="pre">Problem::add_postprocessor()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem17get_postprocessorERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Problem::get_postprocessor()</span></code></a></li>
@@ -242,28 +233,6 @@
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Time step number </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla7Problem13get_functionsEv">
-<span id="_CPPv3NK8godzilla7Problem13get_functionsEv"></span><span id="_CPPv2NK8godzilla7Problem13get_functionsEv"></span><span id="godzilla::Problem::get_functionsC"></span><span class="target" id="classgodzilla_1_1_problem_1a379faed6cf5a33ed912a708c1a94252b"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="function.html#_CPPv4N8godzilla8FunctionE" title="godzilla::Function"><span class="n"><span class="pre">Function</span></span></a><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_functions</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla7Problem13get_functionsEv" title="Link to this definition"></a><br /></dt>
-<dd><p>Get list of functions. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List of functions </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8godzilla7Problem12add_functionEP8Function">
-<span id="_CPPv3N8godzilla7Problem12add_functionEP8Function"></span><span id="_CPPv2N8godzilla7Problem12add_functionEP8Function"></span><span id="godzilla::Problem::add_function__FunctionP"></span><span class="target" id="classgodzilla_1_1_problem_1ab881d3ce48955b2e1e99131ac82b0d2a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_function</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="function.html#_CPPv4N8godzilla8FunctionE" title="godzilla::Function"><span class="n"><span class="pre">Function</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">fn</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla7Problem12add_functionEP8Function" title="Link to this definition"></a><br /></dt>
-<dd><p>Add a function object. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>fn</strong> – <a class="reference internal" href="function.html#classgodzilla_1_1_function"><span class="std std-ref">Function</span></a> object to add </p>
 </dd>
 </dl>
 </dd></dl>

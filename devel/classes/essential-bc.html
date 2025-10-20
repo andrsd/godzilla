@@ -85,11 +85,6 @@
 <li class="toctree-l1"><a class="reference internal" href="fe-problem-interface.html">FEProblemInterface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="file-mesh.html">FileMesh</a></li>
 <li class="toctree-l1"><a class="reference internal" href="file-output.html">FileOutput</a></li>
-<li class="toctree-l1"><a class="reference internal" href="function.html">Function</a></li>
-<li class="toctree-l1"><a class="reference internal" href="function-auxiliary-field.html">FunctionAuxiliaryField</a></li>
-<li class="toctree-l1"><a class="reference internal" href="function-evaluator.html">FunctionEvaluator</a></li>
-<li class="toctree-l1"><a class="reference internal" href="function-ic.html">FunctionInitialCondition</a></li>
-<li class="toctree-l1"><a class="reference internal" href="function-interface.html">FunctionInterface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fv-problem-interface.html">FVProblemInterface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gyml-file.html">GYMLFile</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implicit-fe-nonlinear-problem.html">ImplicitFENonlinearProblem</a></li>
@@ -97,7 +92,6 @@
 <li class="toctree-l1"><a class="reference internal" href="initial-condition.html">InitialCondition</a></li>
 <li class="toctree-l1"><a class="reference internal" href="input-file.html">InputFile</a></li>
 <li class="toctree-l1"><a class="reference internal" href="line-mesh.html">LineMesh</a></li>
-<li class="toctree-l1"><a class="reference internal" href="linear-interpolation.html">LinearInterpolation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="linear-problem.html">LinearProblem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="logger.html">Logger</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mesh.html">Mesh</a></li>
@@ -107,7 +101,6 @@
 <li class="toctree-l1"><a class="reference internal" href="object.html">Object</a></li>
 <li class="toctree-l1"><a class="reference internal" href="output.html">Output</a></li>
 <li class="toctree-l1"><a class="reference internal" href="parameters.html">Parameters</a></li>
-<li class="toctree-l1"><a class="reference internal" href="parsed-function.html">ParsedFunction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="piecewise-linear.html">PiecewiseLinear</a></li>
 <li class="toctree-l1"><a class="reference internal" href="print-interface.html">PrintInterface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="problem.html">Problem</a></li>
@@ -146,7 +139,6 @@
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla11EssentialBCE">
 <span id="_CPPv3N8godzilla11EssentialBCE"></span><span id="_CPPv2N8godzilla11EssentialBCE"></span><span id="godzilla::EssentialBC"></span><span class="target" id="classgodzilla_1_1_essential_b_c"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">EssentialBC</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="boundary-condition.html#_CPPv4N8godzilla17BoundaryConditionE" title="godzilla::BoundaryCondition"><span class="n"><span class="pre">BoundaryCondition</span></span></a><a class="headerlink" href="#_CPPv4N8godzilla11EssentialBCE" title="Link to this definition"></a><br /></dt>
 <dd><p>Essential boundary condition. </p>
-<p>Subclassed by <a class="reference internal" href="dirichlet-bc.html#classgodzilla_1_1_dirichlet_b_c"><span class="std std-ref">godzilla::DirichletBC</span></a></p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
@@ -174,7 +166,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8godzilla11EssentialBC14get_componentsEv">
-<span id="_CPPv3NK8godzilla11EssentialBC14get_componentsEv"></span><span id="_CPPv2NK8godzilla11EssentialBC14get_componentsEv"></span><span id="godzilla::EssentialBC::get_componentsC"></span><span class="target" id="classgodzilla_1_1_essential_b_c_1ad890af0d950148d14a7651d8d995c9f3"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_components</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4NK8godzilla11EssentialBC14get_componentsEv" title="Link to this definition"></a><br /></dt>
+<span id="_CPPv3NK8godzilla11EssentialBC14get_componentsEv"></span><span id="_CPPv2NK8godzilla11EssentialBC14get_componentsEv"></span><span id="godzilla::EssentialBC::get_componentsC"></span><span class="target" id="classgodzilla_1_1_essential_b_c_1af4d79add157448140e6775614c8a4b6b"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_components</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla11EssentialBC14get_componentsEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Get the component numbers this boundary condition is constraining. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -200,7 +192,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla11EssentialBC10evaluate_tE4RealA_K4RealA_6Scalar">
-<span id="_CPPv3N8godzilla11EssentialBC10evaluate_tE4RealA_K4RealA_6Scalar"></span><span id="_CPPv2N8godzilla11EssentialBC10evaluate_tE4RealA_K4RealA_6Scalar"></span><span id="godzilla::EssentialBC::evaluate_t__Real.RealCA.ScalarA"></span><span class="target" id="classgodzilla_1_1_essential_b_c_1a1f19297caeee8d49a8bc8add9018ff30"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evaluate_t</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">time</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="n"><span class="pre">Scalar</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">u</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N8godzilla11EssentialBC10evaluate_tE4RealA_K4RealA_6Scalar" title="Link to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla11EssentialBC10evaluate_tE4RealA_K4RealA_6Scalar"></span><span id="_CPPv2N8godzilla11EssentialBC10evaluate_tE4RealA_K4RealA_6Scalar"></span><span id="godzilla::EssentialBC::evaluate_t__Real.RealCA.ScalarA"></span><span class="target" id="classgodzilla_1_1_essential_b_c_1a3733dedfe2dc74bd79262d230150c052"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evaluate_t</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">time</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="n"><span class="pre">Scalar</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">u</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla11EssentialBC10evaluate_tE4RealA_K4RealA_6Scalar" title="Link to this definition"></a><br /></dt>
 <dd><p>Evaluate time derivative of the boundary condition. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
