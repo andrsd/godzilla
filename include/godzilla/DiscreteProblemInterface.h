@@ -192,7 +192,7 @@ public:
     ///
     /// @param name The name of the object
     /// @return Pointer to the initial condition object
-    InitialCondition * get_initial_condition(const std::string & name) const;
+    Optional<InitialCondition *> get_initial_condition(const std::string & name) const;
 
     /// Add essential boundary condition
     ///

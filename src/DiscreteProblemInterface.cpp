@@ -67,7 +67,7 @@ DiscreteProblemInterface::has_initial_condition(const std::string & name) const
     return it != this->ics_by_name.end();
 }
 
-InitialCondition *
+Optional<InitialCondition *>
 DiscreteProblemInterface::get_initial_condition(const std::string & name) const
 {
     CALL_STACK_MSG();
@@ -75,7 +75,7 @@ DiscreteProblemInterface::get_initial_condition(const std::string & name) const
     if (it != this->ics_by_name.end())
         return it->second;
     else
-        return nullptr;
+        return {};
 }
 
 void

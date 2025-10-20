@@ -99,10 +99,13 @@ TEST_F(InitialConditionTest, test)
     EXPECT_EQ(ic->get_dimension(), 1);
 
     EXPECT_TRUE(this->prob->has_initial_condition("obj"));
-    EXPECT_EQ(this->prob->get_initial_condition("obj"), ic);
+    auto ic2 = this->prob->get_initial_condition("obj");
+    EXPECT_TRUE(ic2.has_value());
+    EXPECT_EQ(ic2.value(), ic);
 
     EXPECT_FALSE(this->prob->has_initial_condition("non-existent-ic"));
-    EXPECT_EQ(this->prob->get_initial_condition("non-existent-ic"), nullptr);
+    auto ic3 = this->prob->get_initial_condition("non-existent-ic");
+    EXPECT_FALSE(ic3.has_value());
 
     auto ics = this->prob->get_initial_conditions();
     EXPECT_THAT(ics, ElementsAre(ic));
@@ -112,7 +115,9 @@ TEST_F(InitialConditionTest, test)
     EXPECT_EQ(aux_ic->get_field_id(), FieldID(0));
 
     EXPECT_TRUE(this->prob->has_initial_condition("a_ic"));
-    EXPECT_EQ(this->prob->get_initial_condition("a_ic"), aux_ic);
+    auto aic2 = this->prob->get_initial_condition("a_ic");
+    EXPECT_TRUE(aic2.has_value());
+    EXPECT_EQ(aic2.value(), aux_ic);
 
     auto aux_ics = this->prob->get_aux_initial_conditions();
     EXPECT_THAT(aux_ics, ElementsAre(aux_ic));
