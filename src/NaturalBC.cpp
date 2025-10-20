@@ -8,6 +8,7 @@
 #include "godzilla/BndResidualFunc.h"
 #include "godzilla/BndJacobianFunc.h"
 #include "godzilla/Types.h"
+#include <numeric>
 
 namespace godzilla {
 
@@ -50,6 +51,7 @@ NaturalBC::create()
             log_error("Use the 'field' parameter to assign this boundary condition to an existing "
                       "field.");
     }
+    this->components = create_components();
 }
 
 FieldID
@@ -59,15 +61,45 @@ NaturalBC::get_field_id() const
     return this->fid;
 }
 
+const std::vector<Int> &
+NaturalBC::get_components() const
+{
+    CALL_STACK_MSG();
+    return this->components;
+}
+
 void
 NaturalBC::set_up()
 {
     CALL_STACK_MSG();
     auto dpi = get_discrete_problem_interface();
-    for (auto & bnd : get_boundary()) {
-        if (get_field_id() != FieldID::INVALID)
-            dpi->add_boundary_natural(get_name(), bnd, get_field_id(), get_components());
+    auto mesh = dpi->get_mesh();
+    for (auto & boundary : get_boundary()) {
+        if (this->fid != FieldID::INVALID) {
+            auto label = mesh->get_face_set_label(boundary);
+            auto ids = label.get_values();
+            dpi->add_boundary(DM_BC_NATURAL,
+                              get_name(),
+                              label,
+                              ids,
+                              this->fid,
+                              this->components,
+                              nullptr,
+                              nullptr,
+                              nullptr);
+        }
     }
+}
+
+std::vector<Int>
+NaturalBC::create_components()
+{
+    CALL_STACK_MSG();
+    auto dpi = get_discrete_problem_interface();
+    auto n_comps = dpi->get_field_num_components(this->fid);
+    std::vector<Int> comps(n_comps);
+    std::iota(comps.begin(), comps.end(), 0);
+    return comps;
 }
 
 void

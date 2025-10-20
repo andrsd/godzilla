@@ -16,20 +16,19 @@ namespace {
 
 class TestBC : public NaturalBC {
 public:
-    explicit TestBC(const Parameters & pars) : NaturalBC(pars), comps({ 1 }) {}
+    explicit TestBC(const Parameters & pars) : NaturalBC(pars) {}
 
-    const std::vector<Int> &
-    get_components() const override
+private:
+    std::vector<Int>
+    create_components() override
     {
-        return this->comps;
+        return { 1 };
     }
+
     void
     set_up_weak_form() override
     {
     }
-
-protected:
-    std::vector<Int> comps;
 };
 
 class TestF : public ResidualFunc {

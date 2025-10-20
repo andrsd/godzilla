@@ -14,21 +14,19 @@ namespace {
 
 class TestBC : public NaturalBC {
 public:
-    explicit TestBC(const Parameters & pars) : NaturalBC(pars), components({ 0 }) {}
+    explicit TestBC(const Parameters & pars) : NaturalBC(pars) {}
 
-    const std::vector<Int> &
-    get_components() const override
+private:
+    std::vector<Int>
+    create_components() override
     {
-        return this->components;
+        return { 0 };
     }
 
-protected:
     void
     set_up_weak_form() override
     {
     }
-
-    std::vector<Int> components;
 };
 
 class GTestProblem : public ImplicitFENonlinearProblem {

@@ -19,48 +19,6 @@
 
 namespace godzilla {
 
-ErrorCode
-DiscreteProblemInterface::invoke_essential_bc_delegate(Int dim,
-                                                       Real time,
-                                                       const Real x[],
-                                                       Int nc,
-                                                       Scalar u[],
-                                                       void * ctx)
-{
-    CALL_STACK_MSG();
-    auto * method = static_cast<EssentialBCDelegate *>(ctx);
-    method->invoke(time, x, u);
-    return 0;
-}
-
-ErrorCode
-DiscreteProblemInterface::invoke_essential_bc_delegate_t(Int dim,
-                                                         Real time,
-                                                         const Real x[],
-                                                         Int nc,
-                                                         Scalar u[],
-                                                         void * ctx)
-{
-    CALL_STACK_MSG();
-    auto * method = static_cast<EssentialBCDelegate *>(ctx);
-    method->invoke_t(time, x, u);
-    return 0;
-}
-
-ErrorCode
-DiscreteProblemInterface::invoke_natural_riemann_bc_delegate(Real time,
-                                                             const Real * c,
-                                                             const Real * n,
-                                                             const Scalar * xI,
-                                                             Scalar * xG,
-                                                             void * ctx)
-{
-    CALL_STACK_MSG();
-    auto * method = static_cast<NaturalRiemannBCDelegate *>(ctx);
-    method->invoke(time, c, n, xI, xG);
-    return 0;
-}
-
 DiscreteProblemInterface::DiscreteProblemInterface(Problem * problem, const Parameters & pars) :
     problem(problem),
     unstr_mesh(dynamic_cast<UnstructuredMesh *>(pars.get<Mesh *>("mesh"))),
@@ -624,17 +582,6 @@ DiscreteProblemInterface::add_boundary(DMBoundaryConditionType type,
                                    bc_fn_t,
                                    context,
                                    nullptr));
-}
-
-void
-DiscreteProblemInterface::add_boundary_natural(const std::string & name,
-                                               const std::string & boundary,
-                                               FieldID field,
-                                               const std::vector<Int> & components)
-{
-    auto label = this->unstr_mesh->get_face_set_label(boundary);
-    auto ids = label.get_values();
-    add_boundary(DM_BC_NATURAL, name, label, ids, field, components, nullptr, nullptr, nullptr);
 }
 
 void
