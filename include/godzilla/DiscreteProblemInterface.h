@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "godzilla/InitialCondition.h"
 #include "godzilla/Types.h"
 #include "godzilla/Qtr.h"
 #include "godzilla/Ptr.h"
@@ -167,17 +168,19 @@ public:
     /// Get list of all initial conditions
     ///
     /// @return List of all initial conditions
-    const std::vector<InitialCondition *> & get_initial_conditions();
+    std::vector<InitialCondition *> get_initial_conditions();
 
     /// Get list of all auxiliary initial conditions
     ///
     /// @return List of all auxiliary initial conditions
-    const std::vector<InitialCondition *> & get_aux_initial_conditions();
+    std::vector<InitialCondition *> get_aux_initial_conditions();
 
     /// Add initial condition
     ///
-    /// @param ic Initial condition object to add
-    void add_initial_condition(InitialCondition * ic);
+    /// @param pars Initial condition object parameters to add/create
+    /// @return Pointer to the created initial condition object
+    template <InitialConditionDerived OBJECT>
+    OBJECT * add_initial_condition(Parameters & pars);
 
     /// Check if we have an initial condition object with a specified name
     ///
@@ -385,7 +388,7 @@ private:
     PetscDS ds;
 
     /// All initial condition objects
-    std::vector<InitialCondition *> all_ics;
+    std::vector<Qtr<InitialCondition>> all_ics;
 
     /// Initial conditions for primary fields
     std::vector<InitialCondition *> ics;
@@ -537,6 +540,25 @@ DiscreteProblemInterface::add_boundary_condition(Parameters & pars)
     this->bcs.push_back(ptr);
     this->natural_bcs.push_back(std::move(obj));
     return ptr;
+}
+
+template <InitialConditionDerived OBJECT>
+OBJECT *
+DiscreteProblemInterface::add_initial_condition(Parameters & pars)
+{
+    CALL_STACK_MSG();
+    pars.set<DiscreteProblemInterface *>("_dpi", this);
+    auto obj = Qtr<OBJECT>::alloc(pars);
+    const std::string & name = obj->get_name();
+    auto it = this->ics_by_name.find(name);
+    if (it == this->ics_by_name.end()) {
+        auto ic = obj.get();
+        this->ics_by_name[name] = ic;
+        this->all_ics.push_back(std::move(obj));
+        return ic;
+    }
+    else
+        throw Exception("Cannot add initial condition object '{}'. Name already taken.", name);
 }
 
 } // namespace godzilla

@@ -45,32 +45,18 @@ DiscreteProblemInterface::get_problem() const
     return this->problem;
 }
 
-const std::vector<InitialCondition *> &
+std::vector<InitialCondition *>
 DiscreteProblemInterface::get_initial_conditions()
 {
     CALL_STACK_MSG();
     return this->ics;
 }
 
-const std::vector<InitialCondition *> &
+std::vector<InitialCondition *>
 DiscreteProblemInterface::get_aux_initial_conditions()
 {
     CALL_STACK_MSG();
     return this->ics_aux;
-}
-
-void
-DiscreteProblemInterface::add_initial_condition(InitialCondition * ic)
-{
-    CALL_STACK_MSG();
-    const std::string & name = ic->get_name();
-    auto it = this->ics_by_name.find(name);
-    if (it == this->ics_by_name.end()) {
-        this->all_ics.push_back(ic);
-        this->ics_by_name[name] = ic;
-    }
-    else
-        throw Exception("Cannot add initial condition object '{}'. Name already taken.", name);
 }
 
 bool
@@ -280,9 +266,9 @@ DiscreteProblemInterface::set_up_initial_conditions()
     for (auto & ic : this->all_ics) {
         auto field_name = ic->get_field_name();
         if (has_field_by_name(field_name))
-            this->ics.push_back(ic);
+            this->ics.push_back(ic.get());
         else if (has_aux_field_by_name(field_name))
-            this->ics_aux.push_back(ic);
+            this->ics_aux.push_back(ic.get());
     }
 
     std::map<FieldID, Int> field_comps;

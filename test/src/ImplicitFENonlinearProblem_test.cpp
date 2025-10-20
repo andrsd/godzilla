@@ -3,7 +3,7 @@
 #include "ImplicitFENonlinearProblem_test.h"
 #include "godzilla/InitialCondition.h"
 #include "godzilla/Parameters.h"
-#include "godzilla/InitialCondition.h"
+#include "godzilla/ConstantInitialCondition.h"
 #include "godzilla/BoundaryCondition.h"
 #include "godzilla/TransientProblemInterface.h"
 
@@ -26,13 +26,11 @@ public:
 
 TEST_F(ImplicitFENonlinearProblemTest, run)
 {
-    {
-        auto * params = this->app->get_parameters("ConstantInitialCondition");
-        params->set<DiscreteProblemInterface *>("_dpi", prob);
-        params->set<std::vector<Real>>("value", { 0 });
-        auto ic = this->app->build_object<InitialCondition>("ic", params);
-        prob->add_initial_condition(ic);
-    }
+    auto ic_params = ConstantInitialCondition::parameters();
+    ic_params.set<godzilla::App *>("_app", this->app);
+    ic_params.set<std::string>("_name", "ic");
+    ic_params.set<std::vector<Real>>("value", { 0 });
+    prob->add_initial_condition<ConstantInitialCondition>(ic_params);
 
     auto bc_params = DirichletBC::parameters();
     bc_params.set<godzilla::App *>("_app", this->app);
@@ -142,11 +140,11 @@ TEST_F(ImplicitFENonlinearProblemTest, set_schemes)
 {
     this->app->set_problem(this->prob);
 
-    auto * ic_params = this->app->get_parameters("ConstantInitialCondition");
-    ic_params->set<DiscreteProblemInterface *>("_dpi", this->prob);
-    ic_params->set<std::vector<Real>>("value", { 0 });
-    auto ic = this->app->build_object<InitialCondition>("ic", ic_params);
-    prob->add_initial_condition(ic);
+    auto ic_params = ConstantInitialCondition::parameters();
+    ic_params.set<godzilla::App *>("_app", this->app);
+    ic_params.set<std::string>("_name", "ic");
+    ic_params.set<std::vector<Real>>("value", { 0 });
+    this->prob->add_initial_condition<ConstantInitialCondition>(ic_params);
 
     auto bc_params = DirichletBC::parameters();
     bc_params.set<godzilla::App *>("_app", this->app);
@@ -170,11 +168,11 @@ TEST_F(ImplicitFENonlinearProblemTest, converged_reason)
 {
     this->app->set_problem(this->prob);
 
-    auto * ic_params = this->app->get_parameters("ConstantInitialCondition");
-    ic_params->set<DiscreteProblemInterface *>("_dpi", this->prob);
-    ic_params->set<std::vector<Real>>("value", { 0 });
-    auto ic = this->app->build_object<InitialCondition>("ic", ic_params);
-    this->prob->add_initial_condition(ic);
+    auto ic_params = ConstantInitialCondition::parameters();
+    ic_params.set<godzilla::App *>("_app", this->app);
+    ic_params.set<std::string>("_name", "ic");
+    ic_params.set<std::vector<Real>>("value", { 0 });
+    this->prob->add_initial_condition<ConstantInitialCondition>(ic_params);
 
     auto bc_params = DirichletBC::parameters();
     bc_params.set<godzilla::App *>("_app", this->app);

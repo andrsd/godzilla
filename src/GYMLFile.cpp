@@ -142,6 +142,7 @@ void
 GYMLFile::build_initial_conditions()
 {
     CALL_STACK_MSG();
+#if 0
     if (!get_root()["ics"])
         return;
 
@@ -160,6 +161,7 @@ GYMLFile::build_initial_conditions()
             dpi->add_initial_condition(ic);
         }
     }
+#endif
 }
 
 void

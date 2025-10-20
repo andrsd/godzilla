@@ -80,46 +80,42 @@ TEST_F(InitialConditionTest, test)
 
     auto params = InitialCondition::parameters();
     params.set<App *>("_app", this->app);
-    params.set<DiscreteProblemInterface *>("_dpi", this->prob);
     params.set<std::string>("_name", "obj");
     params.set<std::string>("field", "u");
-    MockInitialCondition ic(params);
+    auto ic = this->prob->add_initial_condition<MockInitialCondition>(params);
 
     auto aux_ic_pars = InitialCondition::parameters();
     aux_ic_pars.set<App *>("_app", this->app);
-    aux_ic_pars.set<DiscreteProblemInterface *>("_dpi", this->prob);
     aux_ic_pars.set<std::string>("_name", "a_ic");
     aux_ic_pars.set<std::string>("field", "a");
-    MockInitialCondition aux_ic(aux_ic_pars);
+    auto aux_ic = this->prob->add_initial_condition<MockInitialCondition>(aux_ic_pars);
 
-    this->prob->add_initial_condition(&ic);
-    this->prob->add_initial_condition(&aux_ic);
     this->prob->create();
 
     EXPECT_TRUE(this->app->check_integrity());
     this->app->get_logger()->print();
 
-    EXPECT_EQ(ic.get_field_id(), FieldID(0));
-    EXPECT_EQ(ic.get_dimension(), 1);
+    EXPECT_EQ(ic->get_field_id(), FieldID(0));
+    EXPECT_EQ(ic->get_dimension(), 1);
 
     EXPECT_TRUE(this->prob->has_initial_condition("obj"));
-    EXPECT_EQ(this->prob->get_initial_condition("obj"), &ic);
+    EXPECT_EQ(this->prob->get_initial_condition("obj"), ic);
 
     EXPECT_FALSE(this->prob->has_initial_condition("non-existent-ic"));
     EXPECT_EQ(this->prob->get_initial_condition("non-existent-ic"), nullptr);
 
     auto ics = this->prob->get_initial_conditions();
-    EXPECT_THAT(ics, ElementsAre(&ic));
+    EXPECT_THAT(ics, ElementsAre(ic));
 
     // aux ICs
 
-    EXPECT_EQ(aux_ic.get_field_id(), FieldID(0));
+    EXPECT_EQ(aux_ic->get_field_id(), FieldID(0));
 
     EXPECT_TRUE(this->prob->has_initial_condition("a_ic"));
-    EXPECT_EQ(this->prob->get_initial_condition("a_ic"), &aux_ic);
+    EXPECT_EQ(this->prob->get_initial_condition("a_ic"), aux_ic);
 
     auto aux_ics = this->prob->get_aux_initial_conditions();
-    EXPECT_THAT(aux_ics, ElementsAre(&aux_ic));
+    EXPECT_THAT(aux_ics, ElementsAre(aux_ic));
 }
 
 TEST_F(InitialConditionTest, get_value)
@@ -144,32 +140,28 @@ TEST_F(InitialConditionTest, duplicate_ic_name)
 {
     auto params = TestInitialCondition::parameters();
     params.set<App *>("_app", this->app);
-    params.set<DiscreteProblemInterface *>("_dpi", this->prob);
     params.set<std::string>("_name", "obj");
-    TestInitialCondition ic(params);
 
-    this->prob->add_initial_condition(&ic);
+    this->prob->add_initial_condition<TestInitialCondition>(params);
 
-    EXPECT_THROW_MSG(this->prob->add_initial_condition(&ic),
+    EXPECT_THROW_MSG(this->prob->add_initial_condition<TestInitialCondition>(params),
                      "Cannot add initial condition object 'obj'. Name already taken.");
 }
 
 TEST_F(InitialConditionTest, constant_ic)
 {
     auto params = ConstantInitialCondition::parameters();
-    params.set<App *>("_app", this->app)
-        .set<DiscreteProblemInterface *>("_dpi", this->prob)
-        .set<std::vector<Real>>("value", { 3, 4, 5 });
-    ConstantInitialCondition ic(params);
-    this->prob->add_initial_condition(&ic);
+    params.set<App *>("_app", this->app);
+    params.set<std::vector<Real>>("value", { 3, 4, 5 });
+    auto ic = this->prob->add_initial_condition<ConstantInitialCondition>(params);
     this->prob->create();
 
-    EXPECT_EQ(ic.get_num_components(), 3);
+    EXPECT_EQ(ic->get_num_components(), 3);
 
     Real time = 0.;
     Real x[] = { 0 };
     Scalar u[] = { 0, 0, 0 };
-    ic.evaluate(time, x, u);
+    ic->evaluate(time, x, u);
 
     EXPECT_EQ(u[0], 3);
     EXPECT_EQ(u[1], 4);
@@ -180,11 +172,9 @@ TEST_F(InitialCondition2FieldTest, no_field_param)
 {
     auto params = InitialCondition::parameters();
     params.set<App *>("_app", this->app);
-    params.set<DiscreteProblemInterface *>("_dpi", this->prob);
     params.set<std::string>("_name", "obj");
-    MockInitialCondition ic(params);
+    this->prob->add_initial_condition<MockInitialCondition>(params);
 
-    this->prob->add_initial_condition(&ic);
     EXPECT_THROW(this->prob->create(), Exception);
 }
 
@@ -194,12 +184,10 @@ TEST_F(InitialCondition2FieldTest, non_existing_field)
 
     auto params = InitialCondition::parameters();
     params.set<App *>("_app", this->app);
-    params.set<DiscreteProblemInterface *>("_dpi", this->prob);
     params.set<std::string>("_name", "obj");
     params.set<std::string>("field", "asdf");
-    MockInitialCondition ic(params);
+    this->prob->add_initial_condition<MockInitialCondition>(params);
 
-    this->prob->add_initial_condition(&ic);
     this->prob->create();
 
     EXPECT_FALSE(this->app->check_integrity());

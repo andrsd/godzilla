@@ -168,10 +168,8 @@ TEST_F(FENonlinearProblemTest, set_up_initial_guess)
 {
     auto ic_pars = ConstantInitialCondition::parameters();
     ic_pars.set<App *>("_app", app);
-    ic_pars.set<DiscreteProblemInterface *>("_dpi", prob);
     ic_pars.set<std::vector<Real>>("value", { 0 });
-    ConstantInitialCondition ic(ic_pars);
-    prob->add_initial_condition(&ic);
+    prob->add_initial_condition<ConstantInitialCondition>(ic_pars);
 
     prob->create();
 
@@ -198,10 +196,8 @@ TEST_F(FENonlinearProblemTest, solve)
 {
     auto ic_pars = ConstantInitialCondition::parameters();
     ic_pars.set<App *>("_app", this->app);
-    ic_pars.set<DiscreteProblemInterface *>("_dpi", this->prob);
     ic_pars.set<std::vector<Real>>("value", { 0.1 });
-    ConstantInitialCondition ic(ic_pars);
-    this->prob->add_initial_condition(&ic);
+    this->prob->add_initial_condition<ConstantInitialCondition>(ic_pars);
 
     auto params = DirichletBC::parameters();
     params.set<App *>("_app", this->app);
@@ -245,9 +241,7 @@ TEST_F(FENonlinearProblemTest, err_ic_comp_mismatch)
     auto params = GTest2CompIC::parameters();
     params.set<std::string>("_name", "ic");
     params.set<App *>("_app", this->app);
-    params.set<DiscreteProblemInterface *>("_dpi", prob);
-    GTest2CompIC ic(params);
-    this->prob->add_initial_condition(&ic);
+    this->prob->add_initial_condition<GTest2CompIC>(params);
     this->prob->create();
     EXPECT_FALSE(this->app->check_integrity());
     this->app->get_logger()->print();
@@ -277,20 +271,16 @@ TEST(TwoFieldFENonlinearProblemTest, err_duplicate_ics)
     auto ic1_params = ConstantInitialCondition::parameters();
     ic1_params.set<std::string>("_name", "ic1")
         .set<App *>("_app", &app)
-        .set<DiscreteProblemInterface *>("_dpi", &prob)
         .set<std::string>("field", "u")
         .set<std::vector<Real>>("value", { 0.1 });
-    ConstantInitialCondition ic1(ic1_params);
-    prob.add_initial_condition(&ic1);
+    prob.add_initial_condition<ConstantInitialCondition>(ic1_params);
 
     auto ic2_params = ConstantInitialCondition::parameters();
     ic2_params.set<std::string>("_name", "ic2")
         .set<App *>("_app", &app)
-        .set<DiscreteProblemInterface *>("_dpi", &prob)
         .set<std::string>("field", "u")
         .set<std::vector<Real>>("value", { 0.2 });
-    ConstantInitialCondition ic2(ic2_params);
-    prob.add_initial_condition(&ic2);
+    prob.add_initial_condition<ConstantInitialCondition>(ic2_params);
 
     prob.create();
     EXPECT_FALSE(app.check_integrity());
@@ -318,12 +308,12 @@ TEST(TwoFieldFENonlinearProblemTest, err_not_enough_ics)
     prob_params.set<Mesh *>("mesh", mesh.get());
     GTest2FieldsFENonlinearProblem prob(prob_params);
 
-    auto * ic_params = app.get_parameters("ConstantInitialCondition");
-    ic_params->set<DiscreteProblemInterface *>("_dpi", &prob);
-    ic_params->set<std::vector<Real>>("value", { 0.1 });
-    ic_params->set<std::string>("field", "u");
-    auto ic = app.build_object<InitialCondition>("ic1", ic_params);
-    prob.add_initial_condition(ic);
+    auto ic_params = ConstantInitialCondition::parameters();
+    ic_params.set<App *>("_app", &app);
+    ic_params.set<std::string>("_name", "ic1");
+    ic_params.set<std::vector<Real>>("value", { 0.1 });
+    ic_params.set<std::string>("field", "u");
+    prob.add_initial_condition<ConstantInitialCondition>(ic_params);
 
     prob.create();
     EXPECT_FALSE(app.check_integrity());

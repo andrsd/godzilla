@@ -69,4 +69,7 @@ private:
     friend class DiscreteProblemInterface;
 };
 
+template <typename T>
+concept InitialConditionDerived = std::is_base_of_v<InitialCondition, T>;
+
 } // namespace godzilla
