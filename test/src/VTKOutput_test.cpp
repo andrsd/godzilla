@@ -50,13 +50,11 @@ TEST(VTKOutputTest, test)
 
     auto pars = VTKOutput::parameters();
     pars.set<App *>("_app", &app);
-    pars.set<Problem *>("_problem", &prob);
     pars.set<Mesh *>("mesh", mesh.get());
-    VTKOutput out(pars);
+    auto out = prob.add_output<VTKOutput>(pars);
 
-    prob.add_output(&out);
     prob.create();
 
-    EXPECT_EQ(out.get_file_name(), ".vtk");
-    out.output_step();
+    EXPECT_EQ(out->get_file_name(), ".vtk");
+    out->output_step();
 }

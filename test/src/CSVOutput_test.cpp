@@ -7,17 +7,7 @@
 
 namespace {
 
-class CSVOutputTest : public FENonlinearProblemTest {
-protected:
-    CSVOutput *
-    build_output(const std::string & file_name)
-    {
-        auto * params = this->app->get_parameters("CSVOutput");
-        params->set<Problem *>("_problem", this->prob);
-        params->set<std::string>("file", file_name);
-        return this->app->build_object<CSVOutput>("out", params);
-    }
-};
+class CSVOutputTest : public FENonlinearProblemTest {};
 
 class TestCSVOutput : public CSVOutput {
 public:
@@ -46,15 +36,13 @@ TEST_F(CSVOutputTest, get_file_ext)
 TEST_F(CSVOutputTest, create)
 {
     auto params = CSVOutput::parameters();
-    params.set<App *>("_app", this->app)
-        .set<Problem *>("_problem", this->prob)
-        .set<std::string>("file", "asdf");
-    TestCSVOutput out(params);
-    prob->add_output(&out);
+    params.set<App *>("_app", this->app);
+    params.set<std::string>("file", "asdf");
+    auto out = prob->add_output<TestCSVOutput>(params);
 
     this->prob->create();
 
-    auto pps_names = out.get_pps_names();
+    auto pps_names = out->get_pps_names();
     EXPECT_EQ(pps_names.size(), 0);
 }
 
@@ -74,26 +62,23 @@ TEST_F(CSVOutputTest, output)
     };
 
     auto pp_params = Postprocessor::parameters();
-    pp_params.set<std::string>("_name", "pp")
-        .set<App *>("_app", this->app)
-        .set<Problem *>("_problem", this->prob);
+    pp_params.set<std::string>("_name", "pp");
+    pp_params.set<App *>("_app", this->app);
     TestPostprocessor pp(pp_params);
     this->prob->add_postprocessor(&pp);
 
     auto params = CSVOutput::parameters();
-    params.set<App *>("_app", this->app)
-        .set<Problem *>("_problem", this->prob)
-        .set<std::string>("file", "out");
-    TestCSVOutput out(params);
-    this->prob->add_output(&out);
+    params.set<App *>("_app", this->app);
+    params.set<std::string>("file", "out");
+    auto out = this->prob->add_output<TestCSVOutput>(params);
 
     this->prob->create();
 
-    auto pps_names = out.get_pps_names();
+    auto pps_names = out->get_pps_names();
     EXPECT_EQ(pps_names.size(), 1);
 
-    out.output_step();
-    out.close();
+    out->output_step();
+    out->close();
 
     std::ifstream f;
     f.open("out.csv");

@@ -5,6 +5,7 @@
 
 #include "godzilla/CallStack.h"
 #include "godzilla/Formatters.h"
+#include "godzilla/Parameters.h"
 #include "godzilla/Types.h"
 #include "godzilla/Object.h"
 #include "godzilla/PrintInterface.h"
@@ -14,12 +15,12 @@
 #include "godzilla/Partitioner.h"
 #include "godzilla/Label.h"
 #include "godzilla/StarForest.h"
+#include "godzilla/Output.h"
 
 namespace godzilla {
 
 class Mesh;
 class Postprocessor;
-class Output;
 class FileOutput;
 class Section;
 template <typename T>
@@ -72,8 +73,10 @@ public:
 
     /// Add and output object
     ///
-    /// @param output Output object to add
-    void add_output(Output * output);
+    /// @param pars Parameters used to construct the Output object
+    /// @return Built Output object
+    template <OutputDerived OBJECT>
+    OBJECT * add_output(Parameters & pars);
 
     /// Add a postprocessor object
     ///
@@ -299,7 +302,7 @@ private:
     Vector x;
 
     /// List of output objects
-    std::vector<Output *> outputs;
+    std::vector<Qtr<Output>> outputs;
     std::vector<FileOutput *> file_outputs;
 
     /// Default output execute mask
@@ -317,6 +320,21 @@ private:
 public:
     static Parameters parameters();
 };
+
+template <OutputDerived OBJECT>
+OBJECT *
+Problem::add_output(Parameters & pars)
+{
+    CALL_STACK_MSG();
+    pars.set<Problem *>("_problem", this);
+    auto obj = Qtr<OBJECT>::alloc(pars);
+    auto output = obj.get();
+    auto fo = dynamic_cast<FileOutput *>(output);
+    if (fo)
+        this->file_outputs.push_back(fo);
+    this->outputs.push_back(std::move(obj));
+    return output;
+}
 
 /// Move values from a local vector to a global one
 ///

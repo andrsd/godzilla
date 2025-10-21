@@ -160,6 +160,7 @@ InputFile::build_outputs()
     if (!this->root["output"])
         return;
 
+#if 0
     lprintln(9, "- outputs");
     auto output_block = get_block(this->root, "output");
     for (const auto & it : output_block.values()) {
@@ -170,6 +171,7 @@ InputFile::build_outputs()
         assert_true(this->problem != nullptr, "Problem is null");
         this->problem->add_output(output);
     }
+#endif
 }
 
 InputFile::Block

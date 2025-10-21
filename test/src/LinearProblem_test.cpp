@@ -101,10 +101,8 @@ TEST(LinearProblemTest, restart_file)
 
     auto ro_pars = RestartOutput::parameters();
     ro_pars.set<App *>("_app", &app);
-    ro_pars.set<Problem *>("_problem", &prob);
     ro_pars.set<std::string>("file", "lp");
-    RestartOutput ro(ro_pars);
-    prob.add_output(&ro);
+    prob.add_output<RestartOutput>(ro_pars);
 
     prob.create();
     prob.run();

@@ -92,14 +92,11 @@ TEST(ProblemTest, add_pp)
 
     auto out_params = FileOutput::parameters();
     out_params.set<App *>("_app", &app);
-    out_params.set<Problem *>("_problem", &problem);
     out_params.set<std::string>("_name", "out");
     out_params.set<std::string>("file", "file");
     out_params.set<std::vector<std::string>>("on", { "initial" });
     out_params.set<Int>("interval", 1);
-    TestOutput out(out_params);
-    out.create();
-    problem.add_output(&out);
+    auto out = problem.add_output<TestOutput>(out_params);
 
     EXPECT_EQ(problem.get_postprocessor("pp"), &pp);
     EXPECT_EQ(problem.get_postprocessor("asdf"), nullptr);
@@ -108,7 +105,7 @@ TEST(ProblemTest, add_pp)
     EXPECT_EQ(pps_names.size(), 1);
     EXPECT_EQ(pps_names[0], "pp");
 
-    EXPECT_CALL(out, output_step);
+    EXPECT_CALL(*out, output_step);
     problem.output(EXECUTE_ON_INITIAL);
 }
 

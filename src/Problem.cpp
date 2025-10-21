@@ -134,16 +134,6 @@ Problem::get_step_num() const
 }
 
 void
-Problem::add_output(Output * output)
-{
-    CALL_STACK_MSG();
-    this->outputs.push_back(output);
-    auto fo = dynamic_cast<FileOutput *>(output);
-    if (fo)
-        this->file_outputs.push_back(fo);
-}
-
-void
 Problem::add_postprocessor(Postprocessor * pp)
 {
     CALL_STACK_MSG();

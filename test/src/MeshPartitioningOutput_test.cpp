@@ -77,13 +77,11 @@ TEST(MeshPartitioningOutputTest, output)
 
     auto params = MeshPartitioningOutput::parameters();
     params.set<App *>("_app", &app);
-    params.set<Problem *>("_problem", &prob);
-    MeshPartitioningOutput out(params);
-    prob.add_output(&out);
+    auto out = prob.add_output<MeshPartitioningOutput>(params);
 
     prob.create();
 
-    out.output_step();
+    out->output_step();
 
     PetscViewer viewer;
     Vec p;

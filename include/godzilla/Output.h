@@ -69,4 +69,7 @@ public:
     static Parameters parameters();
 };
 
+template <typename T>
+concept OutputDerived = std::is_base_of_v<Output, T>;
+
 } // namespace godzilla
