@@ -144,10 +144,8 @@ TEST(FENonlinearProblemJFNKTest, solve)
 
     auto ic_params = ConstantInitialCondition::parameters();
     ic_params.set<godzilla::App *>("_app", &app);
-    ic_params.set<DiscreteProblemInterface *>("_dpi", &prob);
     ic_params.set<std::vector<Real>>("value", { 0.1 });
-    ConstantInitialCondition ic(ic_params);
-    prob.add_initial_condition(&ic);
+    prob.add_initial_condition<ConstantInitialCondition>(ic_params);
 
     auto bc_params = DirichletBC::parameters();
     bc_params.set<godzilla::App *>("_app", &app)
