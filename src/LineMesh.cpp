@@ -25,7 +25,7 @@ LineMesh::LineMesh(const Parameters & pars) :
     xmin(pars.get<Real>("xmin")),
     xmax(pars.get<Real>("xmax")),
     nx(pars.get<Int>("nx")),
-    interpolate(PETSC_TRUE)
+    interpolate(true)
 {
     CALL_STACK_MSG();
     if (this->xmax <= this->xmin)
@@ -71,7 +71,7 @@ LineMesh::create_mesh()
                                     lower.data(),
                                     upper.data(),
                                     periodicity.data(),
-                                    this->interpolate,
+                                    this->interpolate ? PETSC_TRUE : PETSC_FALSE,
                                     0,
                                     PETSC_FALSE,
                                     &dm));
@@ -83,7 +83,7 @@ LineMesh::create_mesh()
                                     lower.data(),
                                     upper.data(),
                                     periodicity.data(),
-                                    this->interpolate,
+                                    this->interpolate ? PETSC_TRUE : PETSC_FALSE,
                                     &dm));
 #endif
     auto mesh = Qtr<UnstructuredMesh>::alloc(dm);

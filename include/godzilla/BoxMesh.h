@@ -76,10 +76,10 @@ private:
     Int nz;
 
     /// True for simplices, False for tensor cells
-    PetscBool simplex;
+    bool simplex;
 
     /// create intermediate mesh pieces (edges, faces)
-    PetscBool interpolate;
+    bool interpolate;
 
 public:
     /// Method for building Parameters for this class

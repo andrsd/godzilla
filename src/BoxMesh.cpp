@@ -37,8 +37,8 @@ BoxMesh::BoxMesh(const Parameters & pars) :
     nx(pars.get<Int>("nx")),
     ny(pars.get<Int>("ny")),
     nz(pars.get<Int>("nz")),
-    simplex(pars.get<bool>("simplex") ? PETSC_TRUE : PETSC_FALSE),
-    interpolate(PETSC_TRUE)
+    simplex(pars.get<bool>("simplex")),
+    interpolate(true)
 {
     CALL_STACK_MSG();
     if (this->xmax <= this->xmin)
@@ -129,24 +129,24 @@ BoxMesh::create_mesh()
 #if PETSC_VERSION_GE(3, 22, 0)
     PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
                                     3,
-                                    this->simplex,
+                                    this->simplex ? PETSC_TRUE : PETSC_FALSE,
                                     faces.data(),
                                     lower.data(),
                                     upper.data(),
                                     periodicity.data(),
-                                    this->interpolate,
+                                    this->interpolate ? PETSC_TRUE : PETSC_FALSE,
                                     0,
                                     PETSC_FALSE,
                                     &dm));
 #else
     PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
                                     3,
-                                    this->simplex,
+                                    this->simplex ? PETSC_TRUE : PETSC_FALSE,
                                     faces.data(),
                                     lower.data(),
                                     upper.data(),
                                     periodicity.data(),
-                                    this->interpolate,
+                                    this->interpolate ? PETSC_TRUE : PETSC_FALSE,
                                     &dm));
 #endif
     auto mesh = Qtr<UnstructuredMesh>::alloc(dm);
