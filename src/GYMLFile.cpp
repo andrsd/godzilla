@@ -200,6 +200,7 @@ GYMLFile::build_postprocessors()
     if (!get_root()["pps"])
         return;
 
+#if 0
     lprintln(9, "- post-processors");
     auto pps_node = get_block(get_root(), "pps");
     for (const auto & it : pps_node.values()) {
@@ -209,6 +210,7 @@ GYMLFile::build_postprocessors()
         auto pp = get_app()->build_object<Postprocessor>(blk.name(), params);
         get_problem()->add_postprocessor(pp);
     }
+#endif
 }
 
 } // namespace godzilla

@@ -134,14 +134,6 @@ Problem::get_step_num() const
 }
 
 void
-Problem::add_postprocessor(Postprocessor * pp)
-{
-    CALL_STACK_MSG();
-    this->pps_names.push_back(pp->get_name());
-    this->pps[pp->get_name()] = pp;
-}
-
-void
 Problem::compute_postprocessors()
 {
     CALL_STACK_MSG();
@@ -155,7 +147,7 @@ Problem::get_postprocessor(const std::string & name) const
     CALL_STACK_MSG();
     const auto & it = this->pps.find(name);
     if (it != this->pps.end())
-        return it->second;
+        return it->second.get();
     else
         return nullptr;
 }

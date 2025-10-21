@@ -64,8 +64,7 @@ TEST_F(CSVOutputTest, output)
     auto pp_params = Postprocessor::parameters();
     pp_params.set<std::string>("_name", "pp");
     pp_params.set<App *>("_app", this->app);
-    TestPostprocessor pp(pp_params);
-    this->prob->add_postprocessor(&pp);
+    this->prob->add_postprocessor<TestPostprocessor>(pp_params);
 
     auto params = CSVOutput::parameters();
     params.set<App *>("_app", this->app);

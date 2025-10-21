@@ -16,6 +16,7 @@
 #include "godzilla/Label.h"
 #include "godzilla/StarForest.h"
 #include "godzilla/Output.h"
+#include "godzilla/Postprocessor.h"
 
 namespace godzilla {
 
@@ -80,8 +81,10 @@ public:
 
     /// Add a postprocessor object
     ///
-    /// @param pp Postprocessor object to add
-    void add_postprocessor(Postprocessor * pp);
+    /// @param pars Postprocessor object parameters
+    /// @return Newly created postprocessor
+    template <PostprocessorDerived OBJECT>
+    OBJECT * add_postprocessor(Parameters & pars);
 
     /// Get postprocessor by name
     ///
@@ -309,7 +312,7 @@ private:
     ExecuteOn default_output_on;
 
     /// List of postprocessor objects
-    std::map<std::string, Postprocessor *> pps;
+    std::map<std::string, Qtr<Postprocessor>> pps;
 
     /// List of postprocessor names
     std::vector<std::string> pps_names;
@@ -334,6 +337,20 @@ Problem::add_output(Parameters & pars)
         this->file_outputs.push_back(fo);
     this->outputs.push_back(std::move(obj));
     return output;
+}
+
+template <PostprocessorDerived OBJECT>
+OBJECT *
+Problem::add_postprocessor(Parameters & pars)
+{
+    CALL_STACK_MSG();
+    pars.set<Problem *>("_problem", this);
+    auto obj = Qtr<OBJECT>::alloc(pars);
+    auto pp = obj.get();
+    auto name = pp->get_name();
+    this->pps_names.push_back(name);
+    this->pps[name] = std::move(obj);
+    return pp;
 }
 
 /// Move values from a local vector to a global one
