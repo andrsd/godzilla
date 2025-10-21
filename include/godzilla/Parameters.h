@@ -7,6 +7,7 @@
 #include "godzilla/Exception.h"
 #include "godzilla/Types.h"
 #include "godzilla/Assert.h"
+#include "godzilla/Qtr.h"
 #include <map>
 #include <string>
 
@@ -35,14 +36,14 @@ protected:
         bool valid;
         /// The set of parameters that will NOT appear in the the dump of the parser tree
         bool is_private;
-        ///
-        bool set_by_add_param;
     };
 
     /// Parameter value
     template <typename T>
     class Parameter : public Value {
     public:
+        Parameter() = default;
+
         /// @returns A read-only reference to the parameter value.
         T
         get() const
@@ -71,7 +72,6 @@ protected:
             copy->doc_string = this->doc_string;
             copy->valid = this->valid;
             copy->is_private = this->is_private;
-            copy->set_by_add_param = this->set_by_add_param;
             return copy;
         }
 
@@ -103,7 +103,7 @@ public:
         CALL_STACK_MSG();
         auto it = this->params.find(name);
         if (it != this->params.end())
-            if (dynamic_cast<const Parameter<T> *>(it->second) != nullptr)
+            if (dynamic_cast<const Parameter<T> *>(it->second.get()) != nullptr)
                 return true;
         return false;
     }
@@ -118,7 +118,7 @@ public:
             using V = typename T::value_type;
             if (this->has<V>(name)) {
                 auto it = this->params.find(name);
-                auto par = dynamic_cast<Parameter<V> *>(it->second);
+                auto par = dynamic_cast<Parameter<V> *>(it->second.get());
                 if (par->valid)
                     return par->get();
                 else
@@ -130,7 +130,7 @@ public:
         else {
             if (this->has<T>(name)) {
                 auto it = this->params.find(name);
-                auto par = dynamic_cast<Parameter<T> *>(it->second);
+                auto par = dynamic_cast<Parameter<T> *>(it->second.get());
                 return par->get();
             }
             else
@@ -146,7 +146,7 @@ public:
         if (!this->has<T>(name))
             return default_value;
         auto it = this->params.find(name);
-        auto par = dynamic_cast<Parameter<T> *>(it->second);
+        auto par = dynamic_cast<Parameter<T> *>(it->second.get());
         if (par->valid)
             return par->get();
         else
@@ -160,10 +160,10 @@ public:
     {
         CALL_STACK_MSG();
         if (!this->has<T>(name))
-            this->params[name] = new Parameter<T>;
+            this->params[name] = Qtr<Parameter<T>>::alloc();
 
         this->params[name]->valid = true;
-        dynamic_cast<Parameter<T> *>(this->params[name])->set(value);
+        dynamic_cast<Parameter<T> *>(this->params[name].get())->set(value);
         return *this;
     }
 
@@ -176,13 +176,12 @@ public:
     {
         CALL_STACK_MSG();
         if (!this->has<T>(name)) {
-            auto * param = new Parameter<T>;
+            auto param = Qtr<Parameter<T>>::alloc();
             param->required = true;
             param->is_private = false;
             param->doc_string = doc_string;
-            param->set_by_add_param = false;
             param->valid = false;
-            this->params[name] = param;
+            this->params[name] = std::move(param);
         }
         return *this;
     }
@@ -198,14 +197,13 @@ public:
     {
         CALL_STACK_MSG();
         if (!this->has<T>(name)) {
-            auto * param = new Parameter<T>;
+            auto param = Qtr<Parameter<T>>::alloc();
             param->required = false;
             param->value = value;
             param->is_private = false;
             param->doc_string = doc_string;
-            param->set_by_add_param = true;
             param->valid = true;
-            this->params[name] = param;
+            this->params[name] = std::move(param);
         }
         return *this;
     }
@@ -216,13 +214,12 @@ public:
     {
         CALL_STACK_MSG();
         if (!this->has<T>(name)) {
-            auto * param = new Parameter<T>;
+            auto param = Qtr<Parameter<T>>::alloc();
             param->required = false;
             param->is_private = false;
             param->doc_string = doc_string;
-            param->set_by_add_param = false;
             param->valid = false;
-            this->params[name] = param;
+            this->params[name] = std::move(param);
         }
         return *this;
     }
@@ -238,13 +235,12 @@ public:
     add_private_param(const std::string & name, const T & value)
     {
         CALL_STACK_MSG();
-        auto * param = new Parameter<T>;
+        auto param = Qtr<Parameter<T>>::alloc();
         param->value = value;
         param->required = false;
         param->is_private = true;
-        param->set_by_add_param = true;
         param->valid = true;
-        this->params[name] = param;
+        this->params[name] = std::move(param);
         return *this;
     }
     ///@}
@@ -266,10 +262,10 @@ public:
     std::string get_doc_string(const std::string & name) const;
 
     /// Parameter map iterator.
-    using iterator = std::map<std::string, Parameters::Value *>::iterator;
+    using iterator = std::map<std::string, Qtr<Parameters::Value>>::iterator;
 
     /// Constant parameter map iterator.
-    using const_iterator = std::map<std::string, Parameters::Value *>::const_iterator;
+    using const_iterator = std::map<std::string, Qtr<Parameters::Value>>::const_iterator;
 
     /// Iterator pointing to the beginning of the set of parameters.
     Parameters::iterator begin();
@@ -291,7 +287,7 @@ public:
 private:
     /// The actual parameter data. Each Metadata object contains attributes for the corresponding
     /// parameter.
-    std::map<std::string, Value *> params;
+    std::map<std::string, Qtr<Value>> params;
 };
 
 } // namespace godzilla
