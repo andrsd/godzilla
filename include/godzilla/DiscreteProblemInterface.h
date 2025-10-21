@@ -177,8 +177,8 @@ public:
 
     /// Add initial condition
     ///
-    /// @param pars Initial condition object parameters to add/create
-    /// @return Pointer to the created initial condition object
+    /// @param pars Parameters used to construct InitialCondition object
+    /// @return Built InitialCondition object
     template <InitialConditionDerived OBJECT>
     OBJECT * add_initial_condition(Parameters & pars);
 
@@ -196,7 +196,8 @@ public:
 
     /// Add boundary condition
     ///
-    /// @param bc Boundary condition object parameters to add/create
+    /// @param pars Paremeters used to construct BoundaryCondition object
+    /// @return Built BoundaryCondition object
     template <BoundaryConditionDerived OBJECT>
     OBJECT * add_boundary_condition(Parameters & pars);
 
