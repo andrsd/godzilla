@@ -42,7 +42,7 @@ private:
     /// Number of mesh point in the x direction
     Int nx;
     /// create intermediate mesh pieces (edges, faces)
-    PetscBool interpolate;
+    bool interpolate;
 
 public:
     static Parameters parameters();
