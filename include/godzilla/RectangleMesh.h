@@ -44,9 +44,9 @@ private:
     /// Number of mesh point in the y direction
     Int ny;
     /// True for simplices, False for tensor cells
-    PetscBool simplex;
+    bool simplex;
     /// create intermediate mesh pieces (edges, faces)
-    PetscBool interpolate;
+    bool interpolate;
 
 public:
     static Parameters parameters();
