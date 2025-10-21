@@ -35,8 +35,6 @@ protected:
         bool valid;
         /// The set of parameters that will NOT appear in the the dump of the parser tree
         bool is_private;
-        ///
-        bool set_by_add_param;
     };
 
     /// Parameter value
@@ -71,7 +69,6 @@ protected:
             copy->doc_string = this->doc_string;
             copy->valid = this->valid;
             copy->is_private = this->is_private;
-            copy->set_by_add_param = this->set_by_add_param;
             return copy;
         }
 
@@ -180,7 +177,6 @@ public:
             param->required = true;
             param->is_private = false;
             param->doc_string = doc_string;
-            param->set_by_add_param = false;
             param->valid = false;
             this->params[name] = param;
         }
@@ -203,7 +199,6 @@ public:
             param->value = value;
             param->is_private = false;
             param->doc_string = doc_string;
-            param->set_by_add_param = true;
             param->valid = true;
             this->params[name] = param;
         }
@@ -220,7 +215,6 @@ public:
             param->required = false;
             param->is_private = false;
             param->doc_string = doc_string;
-            param->set_by_add_param = false;
             param->valid = false;
             this->params[name] = param;
         }
@@ -242,7 +236,6 @@ public:
         param->value = value;
         param->required = false;
         param->is_private = true;
-        param->set_by_add_param = true;
         param->valid = true;
         this->params[name] = param;
         return *this;
