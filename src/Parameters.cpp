@@ -14,7 +14,7 @@ Parameters::Parameters(const Parameters & other)
 {
     CALL_STACK_MSG();
     for (const auto & [key, val] : other.params)
-        params[key] = val->copy();
+        params[key] = Qtr<Value>(val->copy());
 }
 
 Parameters::Parameters(Parameters && other) noexcept : params(std::move(other.params))
@@ -30,7 +30,7 @@ Parameters::operator=(const Parameters & other)
     if (this != &other) {
         clear();
         for (const auto & [key, val] : other.params)
-            params[key] = val->copy();
+            params[key] = Qtr<Value>(val->copy());
     }
     return *this;
 }
@@ -51,12 +51,8 @@ Parameters &
 Parameters::operator+=(const Parameters & rhs)
 {
     CALL_STACK_MSG();
-    for (const auto & [name, value] : rhs) {
-        auto jt = this->params.find(name);
-        if (jt != this->params.end())
-            delete jt->second;
-        this->params[name] = value->copy();
-    }
+    for (const auto & [name, value] : rhs)
+        this->params[name] = Qtr<Value>(value->copy());
     return *this;
 }
 
@@ -131,8 +127,6 @@ void
 Parameters::clear()
 {
     CALL_STACK_MSG();
-    for (auto & [_, value] : this->params)
-        delete value;
     this->params.clear();
 }
 
