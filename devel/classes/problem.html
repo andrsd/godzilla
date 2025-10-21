@@ -102,7 +102,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem8get_timeEv"><code class="docutils literal notranslate"><span class="pre">Problem::get_time()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem12get_step_numEv"><code class="docutils literal notranslate"><span class="pre">Problem::get_step_num()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4I_13OutputDerivedEN8godzilla7Problem10add_outputEP6OBJECTR10Parameters"><code class="docutils literal notranslate"><span class="pre">Problem::add_output()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla7Problem17add_postprocessorEP13Postprocessor"><code class="docutils literal notranslate"><span class="pre">Problem::add_postprocessor()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4I_20PostprocessorDerivedEN8godzilla7Problem17add_postprocessorEP6OBJECTR10Parameters"><code class="docutils literal notranslate"><span class="pre">Problem::add_postprocessor()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem17get_postprocessorERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Problem::get_postprocessor()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem23get_postprocessor_namesEv"><code class="docutils literal notranslate"><span class="pre">Problem::get_postprocessor_names()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla7Problem22compute_postprocessorsEv"><code class="docutils literal notranslate"><span class="pre">Problem::compute_postprocessors()</span></code></a></li>
@@ -252,12 +252,15 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8godzilla7Problem17add_postprocessorEP13Postprocessor">
-<span id="_CPPv3N8godzilla7Problem17add_postprocessorEP13Postprocessor"></span><span id="_CPPv2N8godzilla7Problem17add_postprocessorEP13Postprocessor"></span><span id="godzilla::Problem::add_postprocessor__PostprocessorP"></span><span class="target" id="classgodzilla_1_1_problem_1af64b7ff2e5cd004a1892e3d764ce089b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_postprocessor</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Postprocessor</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pp</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla7Problem17add_postprocessorEP13Postprocessor" title="Link to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4I_20PostprocessorDerivedEN8godzilla7Problem17add_postprocessorEP6OBJECTR10Parameters">
+<span id="_CPPv3I_20PostprocessorDerivedEN8godzilla7Problem17add_postprocessorER10Parameters"></span><span id="_CPPv2I_20PostprocessorDerivedEN8godzilla7Problem17add_postprocessorER10Parameters"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">PostprocessorDerived</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OBJECT</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classgodzilla_1_1_problem_1a09466ba073d6c846af4e356739ef57f4"></span><a class="reference internal" href="#_CPPv4I_20PostprocessorDerivedEN8godzilla7Problem17add_postprocessorEP6OBJECTR10Parameters" title="godzilla::Problem::add_postprocessor::OBJECT"><span class="n"><span class="pre">OBJECT</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">add_postprocessor</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="parameters.html#_CPPv4N8godzilla10ParametersE" title="godzilla::Parameters"><span class="n"><span class="pre">Parameters</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">pars</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_20PostprocessorDerivedEN8godzilla7Problem17add_postprocessorEP6OBJECTR10Parameters" title="Link to this definition"></a><br /></dt>
 <dd><p>Add a postprocessor object. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>pp</strong> – Postprocessor object to add </p>
+<dd class="field-odd"><p><strong>pars</strong> – Postprocessor object parameters </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Newly created postprocessor </p>
 </dd>
 </dl>
 </dd></dl>
