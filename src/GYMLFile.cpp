@@ -13,7 +13,6 @@
 #include "godzilla/FEProblemInterface.h"
 #include "godzilla/FVProblemInterface.h"
 #include "godzilla/TransientProblemInterface.h"
-#include "godzilla/TimeSteppingAdaptor.h"
 #include "godzilla/Postprocessor.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/Assert.h"
@@ -83,8 +82,10 @@ GYMLFile::build_ts_adapt(const Block & problem_node)
         auto * params = build_params(ts_adapt_node);
         params->set<Problem *>("_problem", get_problem());
 
+#if 0
         auto * ts_adaptor = get_app()->build_object<TimeSteppingAdaptor>("ts_adapt", params);
         tpi->set_time_stepping_adaptor(ts_adaptor);
+#endif
     }
     else
         log_error("Time stepping adaptivity can be used only with transient problems.");

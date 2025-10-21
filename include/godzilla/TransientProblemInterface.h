@@ -17,7 +17,6 @@ namespace godzilla {
 
 class Problem;
 class Parameters;
-class TimeSteppingAdaptor;
 class TimeStepAdapt;
 
 /// Interface for transient simulations
@@ -65,16 +64,6 @@ public:
 
     TransientProblemInterface(Problem * problem, const Parameters & pars);
     virtual ~TransientProblemInterface();
-
-    /// Set time stepping adaptivity using an adaptor class
-    ///
-    /// @param adaptor Time stepping adaptor object
-    void set_time_stepping_adaptor(TimeSteppingAdaptor * adaptor);
-
-    /// Get time stepping adaptor
-    ///
-    /// @return Time stepping adaptor
-    TimeSteppingAdaptor * get_time_stepping_adaptor() const;
 
     /// Get TS object
     ///
@@ -399,8 +388,6 @@ private:
         compute_ijacobian_local_method;
     /// Problem this interface is part of
     Problem * problem;
-    /// Time-stepping adaptor
-    TimeSteppingAdaptor * ts_adaptor;
     /// Simulation start time
     Real start_time;
     /// Simulation end time

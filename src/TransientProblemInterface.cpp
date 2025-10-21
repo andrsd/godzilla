@@ -4,7 +4,6 @@
 #include "godzilla/CallStack.h"
 #include "godzilla/Problem.h"
 #include "godzilla/TimeStepAdapt.h"
-#include "godzilla/TimeSteppingAdaptor.h"
 #include "godzilla/TransientProblemInterface.h"
 #include "godzilla/Assert.h"
 #include "godzilla/SNESolver.h"
@@ -197,7 +196,6 @@ TransientProblemInterface::parameters()
 TransientProblemInterface::TransientProblemInterface(Problem * problem, const Parameters & pars) :
     ts(nullptr),
     problem(problem),
-    ts_adaptor(nullptr),
     start_time(pars.get<Real>("start_time")),
     end_time(pars.get<Optional<Real>>("end_time")),
     num_steps(pars.get<Optional<Int>>("num_steps")),
@@ -230,20 +228,6 @@ TransientProblemInterface::get_snes() const
     PETSC_CHECK(TSGetSNES(this->ts, snes));
     snes.inc_reference();
     return snes;
-}
-
-void
-TransientProblemInterface::set_time_stepping_adaptor(TimeSteppingAdaptor * adaptor)
-{
-    CALL_STACK_MSG();
-    this->ts_adaptor = adaptor;
-}
-
-TimeSteppingAdaptor *
-TransientProblemInterface::get_time_stepping_adaptor() const
-{
-    CALL_STACK_MSG();
-    return this->ts_adaptor;
 }
 
 TS
@@ -346,8 +330,6 @@ TransientProblemInterface::create()
     set_time_step(this->dt_initial);
     PETSC_CHECK(TSSetStepNumber(this->ts, this->step_num));
     PETSC_CHECK(TSSetExactFinalTime(this->ts, TS_EXACTFINALTIME_MATCHSTEP));
-    if (this->ts_adaptor)
-        this->ts_adaptor->create();
 }
 
 void
