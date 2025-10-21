@@ -120,6 +120,7 @@ GYMLFile::build_auxiliary_fields()
     if (!get_root()["auxs"])
         return;
 
+#if 0
     lprintln(9, "- auxiliary fields");
     auto auxs_node = get_block(get_root(), "auxs");
     auto * fepi = dynamic_cast<FEProblemInterface *>(get_problem());
@@ -137,6 +138,7 @@ GYMLFile::build_auxiliary_fields()
     else
         log_error("Supplied problem type '{}' does not support auxiliary fields.",
                   get_problem()->get_type());
+#endif
 }
 
 void
