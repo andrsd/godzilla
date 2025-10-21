@@ -47,11 +47,9 @@ TEST(ExodusIIOutputTest, create)
 
     auto params = ExodusIIOutput::parameters();
     params.set<App *>("_app", &app);
-    params.set<Problem *>("_problem", &prob);
-    ExodusIIOutput out(params);
+    auto out = prob.add_output<ExodusIIOutput>(params);
 
-    prob.add_output(&out);
-    out.create();
+    out->create();
 }
 
 TEST(ExodusIIOutputTest, non_existent_var)
@@ -72,11 +70,9 @@ TEST(ExodusIIOutputTest, non_existent_var)
 
     auto params = ExodusIIOutput::parameters();
     params.set<App *>("_app", &app);
-    params.set<Problem *>("_problem", &prob);
     params.set<std::vector<std::string>>("variables", { "asdf" });
-    ExodusIIOutput out(params);
+    prob.add_output<ExodusIIOutput>(params);
 
-    prob.add_output(&out);
     prob.create();
 
     EXPECT_FALSE(app.check_integrity());
@@ -103,16 +99,14 @@ TEST(ExodusIIOutputTest, output)
 
     auto params = ExodusIIOutput::parameters();
     params.set<App *>("_app", &app);
-    params.set<Problem *>("_problem", &prob);
-    ExodusIIOutput out(params);
-    prob.add_output(&out);
+    auto out = prob.add_output<ExodusIIOutput>(params);
 
     prob.create();
 
     EXPECT_TRUE(app.check_integrity());
     app.get_logger()->print();
 
-    out.output_step();
+    out->output_step();
 }
 
 TEST(ExodusIIOutputTest, set_file_name)

@@ -51,17 +51,15 @@ TEST(TecplotOutputTest, output)
 
     auto params = TecplotOutput::parameters();
     params.set<App *>("_app", &app);
-    params.set<Problem *>("_problem", &prob);
     params.set<std::string>("file", "out");
-    TecplotOutput out(params);
-    prob.add_output(&out);
+    auto out = prob.add_output<TecplotOutput>(params);
 
     prob.create();
 
     EXPECT_TRUE(app.check_integrity());
     app.get_logger()->print();
 
-    out.output_step();
+    out->output_step();
 }
 
 #else
@@ -82,11 +80,8 @@ TEST(TecplotOutputTest, test)
 
     auto params = TecplotOutput::parameters();
     params.set<App *>("_app", &app);
-    params.set<Problem *>("_problem", &prob);
     params.set<std::string>("file", "out");
-    TecplotOutput out(params);
-
-    prob.add_output(&out);
+    prob.add_output<TecplotOutput>(params);
 
     prob.create();
 
