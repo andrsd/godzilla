@@ -152,10 +152,8 @@ TEST(FENonlinearProblemJFNKTest, solve)
     auto bc_params = DirichletBC::parameters();
     bc_params.set<godzilla::App *>("_app", &app)
         .set<App *>("_app", &app)
-        .set<DiscreteProblemInterface *>("_dpi", &prob)
         .set<std::vector<std::string>>("boundary", { "left", "right" });
-    DirichletBC bc(bc_params);
-    prob.add_boundary_condition(&bc);
+    prob.add_boundary_condition<DirichletBC>(bc_params);
 
     prob.create();
 

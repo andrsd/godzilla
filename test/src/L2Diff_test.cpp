@@ -36,16 +36,14 @@ TEST(L2DiffTest, DISABLED_compute)
     app.set_problem(&prob);
 
     auto bc_left_params = DirichletBC::parameters();
-    bc_left_params.set<App *>("_app", &app)
-        .set<DiscreteProblemInterface *>("_dpi", &prob)
-        .set<std::vector<std::string>>("boundary", { "left" });
-    DirichletBC bc_left(bc_left_params);
+    bc_left_params.set<App *>("_app", &app);
+    bc_left_params.set<std::vector<std::string>>("boundary", { "left" });
+    prob.add_boundary_condition<DirichletBC>(bc_left_params);
 
     auto bc_right_params = DirichletBC::parameters();
-    bc_right_params.set<App *>("_app", &app)
-        .set<DiscreteProblemInterface *>("_dpi", &prob)
-        .set<std::vector<std::string>>("boundary", { "right" });
-    DirichletBC bc_right(bc_right_params);
+    bc_right_params.set<App *>("_app", &app);
+    bc_right_params.set<std::vector<std::string>>("boundary", { "right" });
+    prob.add_boundary_condition<DirichletBC>(bc_right_params);
 
     auto ps_params = L2Diff::parameters();
     ps_params.set<App *>("_app", &app);
@@ -53,8 +51,6 @@ TEST(L2DiffTest, DISABLED_compute)
     ps_params.set<std::vector<std::string>>("value", { "x*x" });
     L2Diff ps(ps_params);
 
-    prob.add_boundary_condition(&bc_left);
-    prob.add_boundary_condition(&bc_right);
     prob.add_postprocessor(&ps);
 
     prob.create();

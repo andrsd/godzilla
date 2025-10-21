@@ -166,6 +166,7 @@ void
 GYMLFile::build_boundary_conditions()
 {
     CALL_STACK_MSG();
+#if 0
     if (!get_root()["bcs"])
         return;
 
@@ -184,6 +185,7 @@ GYMLFile::build_boundary_conditions()
             dpi->add_boundary_condition(bc);
         }
     }
+#endif
 }
 
 void

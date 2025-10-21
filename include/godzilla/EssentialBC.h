@@ -4,6 +4,7 @@
 #pragma once
 
 #include "godzilla/BoundaryCondition.h"
+#include "godzilla/NaturalBC.h"
 #include "godzilla/Types.h"
 
 namespace godzilla {
@@ -60,5 +61,8 @@ private:
     static ErrorCode
     invoke_delegate_t(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx);
 };
+
+template <typename T>
+concept EssentialBCDerived = std::is_base_of_v<EssentialBC, T>;
 
 } // namespace godzilla

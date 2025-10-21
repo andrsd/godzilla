@@ -25,6 +25,7 @@ BoundaryCondition::BoundaryCondition(const Parameters & pars) :
     boundary(pars.get<std::vector<std::string>>("boundary"))
 {
     CALL_STACK_MSG();
+    assert_true(this->dpi, "DiscreteProblemInterface is null");
 }
 
 Problem *

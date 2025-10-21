@@ -80,17 +80,15 @@ TEST(NaturalRiemannBCTest, api)
 
     auto bc_pars = TestBC::parameters();
     bc_pars.set<App *>("_app", &app);
-    bc_pars.set<DiscreteProblemInterface *>("_dpi", &prob);
     bc_pars.set<std::vector<std::string>>("boundary", { "left" });
-    TestBC bc(bc_pars);
-    prob.add_boundary_condition(&bc);
+    prob.add_boundary_condition<TestBC>(bc_pars);
 
 #if PETSC_VERSION_GE(3, 21, 0)
     EXPECT_THROW(prob.create(), Exception);
 #else
     prob.create();
 
-    EXPECT_THAT(bc.get_components(), ElementsAre(0));
-    EXPECT_EQ(bc.get_field_id(), FieldID(0));
+    EXPECT_THAT(bc->get_components(), ElementsAre(0));
+    EXPECT_EQ(bc->get_field_id(), FieldID(0));
 #endif
 }

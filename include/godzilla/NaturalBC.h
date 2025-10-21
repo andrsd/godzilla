@@ -70,4 +70,7 @@ public:
     static Parameters parameters();
 };
 
+template <typename T>
+concept NaturalBCDerived = std::is_base_of_v<NaturalBC, T>;
+
 } // namespace godzilla

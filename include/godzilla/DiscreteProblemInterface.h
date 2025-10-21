@@ -15,19 +15,18 @@
 #include "godzilla/Section.h"
 #include "godzilla/DenseMatrix.h"
 #include "godzilla/DenseMatrixSymm.h"
+#include "godzilla/BoundaryCondition.h"
 #include "godzilla/EssentialBC.h"
-#include "godzilla/NaturalRiemannBC.h"
 #include "petscds.h"
 #include "petscdmplex.h"
+#include <utility>
 
 namespace godzilla {
 
 class Parameters;
 class Logger;
 class InitialCondition;
-class BoundaryCondition;
 class AuxiliaryField;
-class EssentialBC;
 class NaturalBC;
 
 /// Interface for discrete problems
@@ -194,8 +193,15 @@ public:
 
     /// Add essential boundary condition
     ///
-    /// @param bc Boundary condition object to add
-    void add_boundary_condition(BoundaryCondition * bc);
+    /// @param bc Boundary condition object parameters to add/create
+    template <EssentialBCDerived OBJECT>
+    OBJECT * add_boundary_condition(Parameters & pars);
+
+    /// Add natual boundary condition
+    ///
+    /// @param par Boundary condition object parameters to add/create
+    template <NaturalBCDerived OBJECT>
+    OBJECT * add_boundary_condition(Parameters & pars);
 
     /// Add auxiliary field
     ///
@@ -298,11 +304,11 @@ public:
 
 protected:
     /// Get list of all boundary conditions
-    const std::vector<BoundaryCondition *> & get_boundary_conditions() const;
+    std::vector<BoundaryCondition *> get_boundary_conditions() const;
     /// Get list of all essential boundary conditions
-    const std::vector<EssentialBC *> & get_essential_bcs() const;
+    std::vector<EssentialBC *> get_essential_bcs() const;
     /// Get list of all natural boundary conditions
-    const std::vector<NaturalBC *> & get_natural_bcs() const;
+    std::vector<NaturalBC *> get_natural_bcs() const;
     /// Distribute the problem among processors for parallel execution
     void distribute();
 
@@ -394,10 +400,10 @@ private:
     std::vector<BoundaryCondition *> bcs;
 
     /// List of essential boundary conditions
-    std::vector<EssentialBC *> essential_bcs;
+    std::vector<Qtr<EssentialBC>> essential_bcs;
 
     /// List of natural boundary conditions
-    std::vector<NaturalBC *> natural_bcs;
+    std::vector<Qtr<NaturalBC>> natural_bcs;
 
     /// List of auxiliary field objects
     std::vector<AuxiliaryField *> auxs;
@@ -505,6 +511,32 @@ DiscreteProblemInterface::get_point_local_field_ref(Int point, FieldID field, Sc
     T var;
     PETSC_CHECK(DMPlexPointLocalFieldRef(dm, point, field, array, &var));
     return var;
+}
+
+template <EssentialBCDerived OBJECT>
+OBJECT *
+DiscreteProblemInterface::add_boundary_condition(Parameters & pars)
+{
+    CALL_STACK_MSG();
+    pars.set<DiscreteProblemInterface *>("_dpi", this);
+    auto obj = Qtr<OBJECT>::alloc(pars);
+    auto ptr = obj.get();
+    this->bcs.push_back(ptr);
+    this->essential_bcs.push_back(std::move(obj));
+    return ptr;
+}
+
+template <NaturalBCDerived OBJECT>
+OBJECT *
+DiscreteProblemInterface::add_boundary_condition(Parameters & pars)
+{
+    CALL_STACK_MSG();
+    pars.set<DiscreteProblemInterface *>("_dpi", this);
+    auto obj = Qtr<OBJECT>::alloc(pars);
+    auto ptr = obj.get();
+    this->bcs.push_back(ptr);
+    this->natural_bcs.push_back(std::move(obj));
+    return ptr;
 }
 
 } // namespace godzilla

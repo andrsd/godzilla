@@ -197,18 +197,14 @@ TEST(ExplicitFELinearProblemTest, solve)
     app.set_problem(&prob);
 
     auto bc_left_pars = DirichletBC::parameters();
-    bc_left_pars.set<App *>("_app", &app)
-        .set<DiscreteProblemInterface *>("_dpi", &prob)
-        .set<std::vector<std::string>>("boundary", { "left" });
-    DirichletBC bc_left(bc_left_pars);
-    prob.add_boundary_condition(&bc_left);
+    bc_left_pars.set<App *>("_app", &app);
+    bc_left_pars.set<std::vector<std::string>>("boundary", { "left" });
+    prob.add_boundary_condition<DirichletBC>(bc_left_pars);
 
     auto bc_right_pars = DirichletBC::parameters();
-    bc_right_pars.set<App *>("_app", &app)
-        .set<DiscreteProblemInterface *>("_dpi", &prob)
-        .set<std::vector<std::string>>("boundary", { "right" });
-    DirichletBC bc_right(bc_right_pars);
-    prob.add_boundary_condition(&bc_right);
+    bc_right_pars.set<App *>("_app", &app);
+    bc_right_pars.set<std::vector<std::string>>("boundary", { "right" });
+    prob.add_boundary_condition<DirichletBC>(bc_right_pars);
 
     prob.create();
 
@@ -254,18 +250,14 @@ TEST(ExplicitFELinearProblemTest, solve_w_lumped_mass_matrix)
     app.set_problem(&prob);
 
     auto bc_left_pars = DirichletBC::parameters();
-    bc_left_pars.set<App *>("_app", &app)
-        .set<DiscreteProblemInterface *>("_dpi", &prob)
-        .set<std::vector<std::string>>("boundary", { "left" });
-    DirichletBC bc_left(bc_left_pars);
-    prob.add_boundary_condition(&bc_left);
+    bc_left_pars.set<App *>("_app", &app);
+    bc_left_pars.set<std::vector<std::string>>("boundary", { "left" });
+    prob.add_boundary_condition<DirichletBC>(bc_left_pars);
 
     auto bc_right_pars = DirichletBC::parameters();
-    bc_right_pars.set<App *>("_app", &app)
-        .set<DiscreteProblemInterface *>("_dpi", &prob)
-        .set<std::vector<std::string>>("boundary", { "right" });
-    DirichletBC bc_right(bc_right_pars);
-    prob.add_boundary_condition(&bc_right);
+    bc_right_pars.set<App *>("_app", &app);
+    bc_right_pars.set<std::vector<std::string>>("boundary", { "right" });
+    prob.add_boundary_condition<DirichletBC>(bc_right_pars);
 
     prob.create_w_lumped_mass_matrix();
 

@@ -93,19 +93,6 @@ DiscreteProblemInterface::get_initial_condition(const std::string & name) const
 }
 
 void
-DiscreteProblemInterface::add_boundary_condition(BoundaryCondition * bc)
-{
-    CALL_STACK_MSG();
-    this->bcs.push_back(bc);
-    auto nbc = dynamic_cast<NaturalBC *>(bc);
-    if (nbc)
-        this->natural_bcs.push_back(nbc);
-    auto ebc = dynamic_cast<EssentialBC *>(bc);
-    if (ebc)
-        this->essential_bcs.push_back(ebc);
-}
-
-void
 DiscreteProblemInterface::add_auxiliary_field(AuxiliaryField * aux)
 {
     CALL_STACK_MSG();
@@ -159,25 +146,35 @@ DiscreteProblemInterface::get_solution_vector_local()
     return this->sln;
 }
 
-const std::vector<BoundaryCondition *> &
+std::vector<BoundaryCondition *>
 DiscreteProblemInterface::get_boundary_conditions() const
 {
     CALL_STACK_MSG();
     return this->bcs;
 }
 
-const std::vector<EssentialBC *> &
+std::vector<EssentialBC *>
 DiscreteProblemInterface::get_essential_bcs() const
 {
     CALL_STACK_MSG();
-    return this->essential_bcs;
+    std::vector<EssentialBC *> ret;
+    ret.reserve(this->essential_bcs.size());
+    for (auto & bc : this->essential_bcs) {
+        ret.push_back(bc.get());
+    }
+    return ret;
 }
 
-const std::vector<NaturalBC *> &
+std::vector<NaturalBC *>
 DiscreteProblemInterface::get_natural_bcs() const
 {
     CALL_STACK_MSG();
-    return this->natural_bcs;
+    std::vector<NaturalBC *> ret;
+    ret.reserve(this->natural_bcs.size());
+    for (auto & bc : this->natural_bcs) {
+        ret.push_back(bc.get());
+    }
+    return ret;
 }
 
 void

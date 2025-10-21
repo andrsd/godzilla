@@ -59,27 +59,25 @@ TEST(EssentialBCTest, test)
     app.set_problem(&problem);
 
     auto params = DirichletBC::parameters();
-    params.set<App *>("_app", &app)
-        .set<DiscreteProblemInterface *>("_dpi", &problem)
-        .set<std::vector<std::string>>("boundary", {});
-    DirichletBC bc(params);
+    params.set<App *>("_app", &app);
+    params.set<std::vector<std::string>>("boundary", {});
+    auto bc = problem.add_boundary_condition<DirichletBC>(params);
 
     problem.create();
-    bc.create();
 
-    const auto & components = bc.get_components();
+    const auto & components = bc->get_components();
     ASSERT_EQ(components.size(), 1);
     EXPECT_THAT(components, testing::ElementsAre(0));
-    EXPECT_EQ(bc.get_field_id(), FieldID(0));
+    EXPECT_EQ(bc->get_field_id(), FieldID(0));
 
     Real time = 2.5;
     Real x[] = { 3, 5, 7 };
     Scalar u[] = { 0 };
 
-    bc.evaluate(time, x, u);
+    bc->evaluate(time, x, u);
     EXPECT_EQ(u[0], 37.5);
 
-    bc.evaluate_t(time, x, u);
+    bc->evaluate_t(time, x, u);
     EXPECT_EQ(u[0], 1.);
 }
 
@@ -102,12 +100,10 @@ TEST(EssentialBCTest, non_existing_field)
 
     Parameters params = DirichletBC::parameters();
     params.set<App *>("_app", &app)
-        .set<DiscreteProblemInterface *>("_dpi", &problem)
         .set<std::string>("field", "asdf")
         .set<std::vector<std::string>>("boundary", {});
-    DirichletBC bc(params);
+    problem.add_boundary_condition<DirichletBC>(params);
 
-    problem.add_boundary_condition(&bc);
     problem.create();
 
     EXPECT_FALSE(app.check_integrity());
@@ -135,12 +131,10 @@ TEST(EssentialBCTest, field_param_not_specified)
     app.set_problem(&problem);
 
     auto params = DirichletBC::parameters();
-    params.set<App *>("_app", &app)
-        .set<DiscreteProblemInterface *>("_dpi", &problem)
-        .set<std::vector<std::string>>("boundary", {});
-    DirichletBC bc(params);
+    params.set<App *>("_app", &app);
+    params.set<std::vector<std::string>>("boundary", {});
+    problem.add_boundary_condition<DirichletBC>(params);
 
-    problem.add_boundary_condition(&bc);
     problem.create();
 
     EXPECT_FALSE(app.check_integrity());
