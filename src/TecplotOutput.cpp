@@ -75,6 +75,7 @@ TecplotOutput::parameters()
     Parameters params = FileOutput::parameters();
     params.add_param<std::vector<std::string>>(
         "variables",
+        std::vector<std::string> {},
         "List of variables to be stored. If not specified, all variables will be stored.");
     return params;
 }
