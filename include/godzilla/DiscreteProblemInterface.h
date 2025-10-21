@@ -18,6 +18,7 @@
 #include "godzilla/DenseMatrixSymm.h"
 #include "godzilla/BoundaryCondition.h"
 #include "godzilla/EssentialBC.h"
+#include "godzilla/AuxiliaryField.h"
 #include "petscds.h"
 #include "petscdmplex.h"
 #include <utility>
@@ -202,8 +203,10 @@ public:
 
     /// Add auxiliary field
     ///
-    /// @param aux Auxiliary field object to add
-    void add_auxiliary_field(AuxiliaryField * aux);
+    /// @param pars Parameters used to construct the AuxiliaryField object
+    /// @return Built AuxiliaryField object
+    template <AuxiliaryFieldDerived OBJECT>
+    OBJECT * add_auxiliary_field(Parameters & pars);
 
     /// Check if we have an auxiliary object with a specified name
     ///
@@ -403,7 +406,7 @@ private:
     std::vector<NaturalBC *> natural_bcs;
 
     /// List of auxiliary field objects
-    std::vector<AuxiliaryField *> auxs;
+    std::vector<Qtr<AuxiliaryField>> auxs;
 
     /// Map from aux object name to the aux object
     std::map<std::string, AuxiliaryField *> auxs_by_name;
@@ -543,6 +546,25 @@ DiscreteProblemInterface::add_initial_condition(Parameters & pars)
     }
     else
         throw Exception("Cannot add initial condition object '{}'. Name already taken.", name);
+}
+
+template <AuxiliaryFieldDerived OBJECT>
+OBJECT *
+DiscreteProblemInterface::add_auxiliary_field(Parameters & pars)
+{
+    CALL_STACK_MSG();
+    pars.set<DiscreteProblemInterface *>("_dpi", this);
+    auto obj = Qtr<OBJECT>::alloc(pars);
+    const auto & name = obj->get_name();
+    auto it = this->auxs_by_name.find(name);
+    if (it == this->auxs_by_name.end()) {
+        auto aux = obj.get();
+        this->auxs_by_name[name] = aux;
+        this->auxs.push_back(std::move(obj));
+        return aux;
+    }
+    else
+        throw Exception("Cannot add auxiliary object '{}'. Name already taken.", name);
 }
 
 } // namespace godzilla

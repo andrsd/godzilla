@@ -118,4 +118,7 @@ AuxiliaryField::get_vector_value(Real time, const DenseVector<Real, DIM> & x)
     return val;
 }
 
+template <typename T>
+concept AuxiliaryFieldDerived = std::is_base_of_v<AuxiliaryField, T>;
+
 } // namespace godzilla

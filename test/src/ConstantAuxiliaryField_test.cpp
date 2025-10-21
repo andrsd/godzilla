@@ -22,24 +22,23 @@ TEST(ConstantAuxiliaryFieldTest, create)
     prob_params.set<Mesh *>("mesh", mesh.get());
     GTestFENonlinearProblem prob(prob_params);
 
+    prob.create();
+
+    prob.set_aux_field(FieldID(0), "aux1", 1, Order(1));
     auto aux_params = ConstantAuxiliaryField::parameters();
     aux_params.set<App *>("_app", &app)
         .set<std::string>("_name", "aux1")
         .set<DiscreteProblemInterface *>("_dpi", &prob)
         .set<std::vector<Real>>("value", { 1234 });
-    ConstantAuxiliaryField aux(aux_params);
+    auto aux = prob.add_auxiliary_field<ConstantAuxiliaryField>(aux_params);
 
-    prob.create();
-    prob.set_aux_field(FieldID(0), "aux1", 1, Order(1));
-    prob.add_auxiliary_field(&aux);
+    EXPECT_EQ(aux->get_field_id(), FieldID(0));
 
-    EXPECT_EQ(aux.get_field_id(), FieldID(0));
-
-    EXPECT_EQ(aux.get_num_components(), 1);
+    EXPECT_EQ(aux->get_num_components(), 1);
 
     Real time = 0;
     Real x[1] = { 1. };
     Real u[1] = { 0 };
-    aux.evaluate(time, x, u);
+    aux->evaluate(time, x, u);
     EXPECT_EQ(u[0], 1234.);
 }

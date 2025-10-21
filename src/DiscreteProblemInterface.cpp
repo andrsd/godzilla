@@ -78,20 +78,6 @@ DiscreteProblemInterface::get_initial_condition(const std::string & name) const
         return {};
 }
 
-void
-DiscreteProblemInterface::add_auxiliary_field(AuxiliaryField * aux)
-{
-    CALL_STACK_MSG();
-    const std::string & name = aux->get_name();
-    auto it = this->auxs_by_name.find(name);
-    if (it == this->auxs_by_name.end()) {
-        this->auxs.push_back(aux);
-        this->auxs_by_name[name] = aux;
-    }
-    else
-        throw Exception("Cannot add auxiliary object '{}'. Name already taken.", name);
-}
-
 bool
 DiscreteProblemInterface::has_aux(const std::string & name) const
 {
@@ -329,7 +315,7 @@ DiscreteProblemInterface::set_up_auxiliary_dm(DM dm)
             Int field_nc = get_aux_field_num_components(fid);
             if (aux_nc == field_nc) {
                 const std::string & region_name = aux->get_region();
-                this->auxs_by_region[region_name].push_back(aux);
+                this->auxs_by_region[region_name].push_back(aux.get());
             }
             else {
                 no_errors = false;
