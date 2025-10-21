@@ -194,16 +194,10 @@ public:
     /// @return Pointer to the initial condition object
     Optional<InitialCondition *> get_initial_condition(const std::string & name) const;
 
-    /// Add essential boundary condition
+    /// Add boundary condition
     ///
     /// @param bc Boundary condition object parameters to add/create
-    template <EssentialBCDerived OBJECT>
-    OBJECT * add_boundary_condition(Parameters & pars);
-
-    /// Add natual boundary condition
-    ///
-    /// @param par Boundary condition object parameters to add/create
-    template <NaturalBCDerived OBJECT>
+    template <BoundaryConditionDerived OBJECT>
     OBJECT * add_boundary_condition(Parameters & pars);
 
     /// Add auxiliary field
@@ -400,13 +394,13 @@ private:
     std::map<std::string, InitialCondition *> ics_by_name;
 
     /// List of all boundary conditions
-    std::vector<BoundaryCondition *> bcs;
+    std::vector<Qtr<BoundaryCondition>> bcs;
 
     /// List of essential boundary conditions
-    std::vector<Qtr<EssentialBC>> essential_bcs;
+    std::vector<EssentialBC *> essential_bcs;
 
     /// List of natural boundary conditions
-    std::vector<Qtr<NaturalBC>> natural_bcs;
+    std::vector<NaturalBC *> natural_bcs;
 
     /// List of auxiliary field objects
     std::vector<AuxiliaryField *> auxs;
@@ -516,7 +510,7 @@ DiscreteProblemInterface::get_point_local_field_ref(Int point, FieldID field, Sc
     return var;
 }
 
-template <EssentialBCDerived OBJECT>
+template <BoundaryConditionDerived OBJECT>
 OBJECT *
 DiscreteProblemInterface::add_boundary_condition(Parameters & pars)
 {
@@ -524,21 +518,11 @@ DiscreteProblemInterface::add_boundary_condition(Parameters & pars)
     pars.set<DiscreteProblemInterface *>("_dpi", this);
     auto obj = Qtr<OBJECT>::alloc(pars);
     auto ptr = obj.get();
-    this->bcs.push_back(ptr);
-    this->essential_bcs.push_back(std::move(obj));
-    return ptr;
-}
-
-template <NaturalBCDerived OBJECT>
-OBJECT *
-DiscreteProblemInterface::add_boundary_condition(Parameters & pars)
-{
-    CALL_STACK_MSG();
-    pars.set<DiscreteProblemInterface *>("_dpi", this);
-    auto obj = Qtr<OBJECT>::alloc(pars);
-    auto ptr = obj.get();
-    this->bcs.push_back(ptr);
-    this->natural_bcs.push_back(std::move(obj));
+    if (auto essbc = dynamic_cast<EssentialBC *>(ptr))
+        this->essential_bcs.push_back(essbc);
+    else if (auto natbc = dynamic_cast<NaturalBC *>(ptr))
+        this->natural_bcs.push_back(natbc);
+    this->bcs.push_back(std::move(obj));
     return ptr;
 }
 
