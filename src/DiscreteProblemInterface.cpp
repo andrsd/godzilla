@@ -136,31 +136,26 @@ std::vector<BoundaryCondition *>
 DiscreteProblemInterface::get_boundary_conditions() const
 {
     CALL_STACK_MSG();
-    return this->bcs;
+    std::vector<BoundaryCondition *> ret;
+    ret.reserve(this->bcs.size());
+    for (auto & bc : this->bcs) {
+        ret.push_back(bc.get());
+    }
+    return ret;
 }
 
 std::vector<EssentialBC *>
 DiscreteProblemInterface::get_essential_bcs() const
 {
     CALL_STACK_MSG();
-    std::vector<EssentialBC *> ret;
-    ret.reserve(this->essential_bcs.size());
-    for (auto & bc : this->essential_bcs) {
-        ret.push_back(bc.get());
-    }
-    return ret;
+    return this->essential_bcs;
 }
 
 std::vector<NaturalBC *>
 DiscreteProblemInterface::get_natural_bcs() const
 {
     CALL_STACK_MSG();
-    std::vector<NaturalBC *> ret;
-    ret.reserve(this->natural_bcs.size());
-    for (auto & bc : this->natural_bcs) {
-        ret.push_back(bc.get());
-    }
-    return ret;
+    return this->natural_bcs;
 }
 
 void
