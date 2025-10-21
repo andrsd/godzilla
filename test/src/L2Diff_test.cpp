@@ -47,18 +47,15 @@ TEST(L2DiffTest, DISABLED_compute)
 
     auto ps_params = L2Diff::parameters();
     ps_params.set<App *>("_app", &app);
-    ps_params.set<Problem *>("_problem", &prob);
     ps_params.set<std::vector<std::string>>("value", { "x*x" });
-    L2Diff ps(ps_params);
-
-    prob.add_postprocessor(&ps);
+    auto ps = prob.add_postprocessor<L2Diff>(ps_params);
 
     prob.create();
 
     prob.run();
     prob.compute_postprocessors();
 
-    auto l2_err = ps.get_value();
+    auto l2_err = ps->get_value();
     ASSERT_TRUE(!l2_err.empty());
     EXPECT_NEAR(l2_err[0], 0.0416667, 1e-7);
 }

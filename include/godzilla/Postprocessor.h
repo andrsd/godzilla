@@ -6,6 +6,7 @@
 #include "godzilla/Object.h"
 #include "godzilla/Types.h"
 #include "godzilla/PrintInterface.h"
+#include <type_traits>
 
 namespace godzilla {
 
@@ -38,5 +39,8 @@ private:
 public:
     static Parameters parameters();
 };
+
+template <typename T>
+concept PostprocessorDerived = std::is_base_of_v<Postprocessor, T>;
 
 } // namespace godzilla

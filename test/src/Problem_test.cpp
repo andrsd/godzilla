@@ -85,10 +85,8 @@ TEST(ProblemTest, add_pp)
 
     auto pp_params = Postprocessor::parameters();
     pp_params.set<App *>("_app", &app);
-    pp_params.set<Problem *>("_problem", &problem);
     pp_params.set<std::string>("_name", "pp");
-    TestPostprocessor pp(pp_params);
-    problem.add_postprocessor(&pp);
+    auto pp = problem.add_postprocessor<TestPostprocessor>(pp_params);
 
     auto out_params = FileOutput::parameters();
     out_params.set<App *>("_app", &app);
@@ -98,7 +96,7 @@ TEST(ProblemTest, add_pp)
     out_params.set<Int>("interval", 1);
     auto out = problem.add_output<TestOutput>(out_params);
 
-    EXPECT_EQ(problem.get_postprocessor("pp"), &pp);
+    EXPECT_EQ(problem.get_postprocessor("pp"), pp);
     EXPECT_EQ(problem.get_postprocessor("asdf"), nullptr);
 
     auto & pps_names = problem.get_postprocessor_names();
