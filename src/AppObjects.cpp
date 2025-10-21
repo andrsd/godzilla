@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: MIT
 
 #include "godzilla/App.h"
-#include "godzilla/BasicTSAdapt.h"
 #include "godzilla/BoxMesh.h"
 #include "godzilla/ConstantAuxiliaryField.h"
 #include "godzilla/ConstantInitialCondition.h"
@@ -25,7 +24,6 @@ namespace godzilla {
 void
 App::register_objects(Registry & r)
 {
-    REGISTER_OBJECT(r, BasicTSAdapt);
     REGISTER_OBJECT(r, BoxMesh);
     REGISTER_OBJECT(r, ConstantAuxiliaryField);
     REGISTER_OBJECT(r, ConstantInitialCondition);
