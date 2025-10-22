@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "godzilla/Types.h"
 #include <vector>
 #include <map>
 #include <string>
@@ -14,6 +15,7 @@
 namespace godzilla {
 
 class PrintInterface;
+class UnstructuredMesh;
 
 namespace utils {
 
@@ -221,5 +223,15 @@ enumerate(ITERABLE && iterable)
 }
 
 void print_converged_reason(PrintInterface & pi, bool converged);
+
+/// Get block ID from region name
+///
+/// If block ID is a number, then it is returned as a `Int` type. If it is anything else, we assume
+/// it is a cell set name and we try to convert it into cell set ID.
+///
+/// @param mesh Unstructure mesh we operate on for cell set lookups
+/// @param region Region name/Block ID
+/// @return Block ID corresponding to the region
+Int get_block_id_from_region(const UnstructuredMesh & mesh, const std::string & region);
 
 } // namespace godzilla
