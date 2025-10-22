@@ -5,6 +5,7 @@
 #include "godzilla/CallStack.h"
 #include "godzilla/PrintInterface.h"
 #include "godzilla/Terminal.h"
+#include "godzilla/UnstructuredMesh.h"
 #include <sys/stat.h>
 #include <chrono>
 #include <fmt/printf.h>
@@ -13,6 +14,26 @@
 #endif
 
 namespace godzilla {
+
+namespace {
+
+Optional<Int>
+parse_region(const std::string & s)
+{
+    if (s.empty())
+        return std::nullopt;
+
+    Int value = 0;
+    auto [ptr, ec] = std::from_chars(s.data(), s.data() + s.size(), value);
+
+    if (ec == std::errc() && ptr == s.data() + s.size() && value >= 0)
+        return value;
+
+    return std::nullopt;
+}
+
+} // namespace
+
 namespace utils {
 
 bool
@@ -119,6 +140,16 @@ print_converged_reason(PrintInterface & pi, bool converged)
         pi.lprintln(8, Terminal::green, "Converged");
     else
         pi.lprintln(8, Terminal::red, "Not converged");
+}
+
+Int
+get_block_id_from_region(const godzilla::UnstructuredMesh & mesh, const std::string & region)
+{
+    auto id = parse_region(region);
+    if (id.has_value())
+        return id.value();
+    else
+        return mesh.get_cell_set_id(region);
 }
 
 } // namespace godzilla

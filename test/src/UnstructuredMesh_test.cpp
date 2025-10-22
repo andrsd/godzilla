@@ -1,15 +1,19 @@
 #include "gmock/gmock.h"
 #include <petscsystypes.h>
 #include "GodzillaApp_test.h"
+#include "godzilla/FileMesh.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/MeshFactory.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Parameters.h"
 #include "ExceptionTestMacros.h"
+#include "godzilla/Utils.h"
 #include "petscdmplex.h"
+#include <filesystem>
 
 using namespace godzilla;
 using namespace testing;
+namespace fs = std::filesystem;
 
 namespace {
 
@@ -713,4 +717,31 @@ TEST(UnstructuredMeshTest, clone)
     EXPECT_EQ(clone.get_num_faces(), 3);
     EXPECT_EQ(clone.get_num_cells(), 2);
     EXPECT_TRUE(clone.is_simplex());
+}
+
+TEST(UnstructuredMeshTest, get_block_id_from_region_via_number)
+{
+    TestApp app;
+
+    auto params = TestUnstructuredMesh::parameters();
+    params.set<App *>("_app", &app);
+    auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh>(params);
+    auto m = mesh_qtr.get();
+
+    EXPECT_EQ(get_block_id_from_region(*m, "0"), 0);
+}
+
+TEST(UnstructuredMeshTest, get_block_id_from_region_via_name)
+{
+    TestApp app;
+
+    auto file = fs::path(GODZILLA_UNIT_TESTS_ROOT) / "assets" / "mesh" / "square.e";
+
+    auto params = FileMesh::parameters();
+    params.set<App *>("_app", &app);
+    params.set<std::string>("file", file.string());
+    auto mesh_qtr = MeshFactory::create<FileMesh>(params);
+    auto m = mesh_qtr.get();
+
+    EXPECT_EQ(get_block_id_from_region(*m, "block"), 1);
 }
