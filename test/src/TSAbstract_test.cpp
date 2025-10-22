@@ -149,6 +149,7 @@ TEST(TSAbstract, test)
     pars_prob.set<godzilla::App *>("_app", &app);
     pars_prob.set<Mesh *>("mesh", mesh.get());
     pars_prob.set<Int>("num_steps", 1);
+    pars_prob.set<Real>("dt", 0.1);
     GTestProblem prob(pars_prob);
 
     prob.create();

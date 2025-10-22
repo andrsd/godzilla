@@ -6,10 +6,38 @@
 
 using namespace godzilla;
 
-TEST(ParametersTest, get)
+namespace {
+
+Parameters
+validParams1()
+{
+    Parameters params;
+    params.add_param<Real>("p", 78.56, "doco p");
+    return params;
+}
+
+} // namespace
+
+TEST(ParametersTest, get_nonexisting_param)
 {
     Parameters params = Object::parameters();
     EXPECT_THROW_MSG(params.get<int>("i"), "No parameter 'i' found.");
+}
+
+TEST(ParametersTest, get_uninitialized_param)
+{
+    Parameters params = Object::parameters();
+    params.add_param<Real>("param", "doco");
+
+    EXPECT_THROW_MSG(params.get<Real>("param"), "Parameter 'param' is uninitialized");
+}
+
+TEST(ParametersTest, get_param_with_incorrect_type)
+{
+    Parameters params = Object::parameters();
+    params.add_param<double>("param", "doco");
+
+    EXPECT_THROW_MSG(params.get<int>("param"), "Parameter 'param' has unexpected type (d)");
 }
 
 TEST(ParametersTest, param_value)
@@ -56,14 +84,6 @@ TEST(ParametersTest, add_params)
     EXPECT_EQ(params1.get_doc_string("p2"), std::string("doco2"));
 }
 
-Parameters
-validParams1()
-{
-    Parameters params;
-    params.add_param<Real>("p", 78.56, "doco p");
-    return params;
-}
-
 TEST(ParametersTest, valid_params)
 {
     Parameters params1 = validParams1();
@@ -83,15 +103,34 @@ TEST(ParametersTest, set_non_existing_param)
     auto params = Object::parameters();
     params.set<double>("d", 1.23);
 
-    EXPECT_EQ(params.get<double>("d"), 1.23);
+    EXPECT_DOUBLE_EQ(params.get<double>("d"), 1.23);
 }
 
 TEST(ParametersTest, get_non_existing_param_with_default)
 {
     auto params = Object::parameters();
-    auto val = params.get<double>("d", 1.23);
 
-    EXPECT_EQ(val, 1.23);
+    auto val = params.get<double>("d", 1.23);
+    EXPECT_DOUBLE_EQ(val, 1.23);
+}
+
+TEST(ParametersTest, get_invalid_param_with_default)
+{
+    auto params = Object::parameters();
+    params.add_param<double>("d", "");
+
+    auto val = params.get<double>("d", 1.23);
+    EXPECT_DOUBLE_EQ(val, 1.23);
+}
+
+TEST(ParametersTest, get_valid_param_with_default)
+{
+    auto params = Object::parameters();
+    params.add_param<double>("d", "");
+    params.set<double>("d", 43.21);
+
+    auto val = params.get<double>("d", 1.23);
+    EXPECT_DOUBLE_EQ(val, 43.21);
 }
 
 TEST(ParametersTest, chained_set)
@@ -100,6 +139,10 @@ TEST(ParametersTest, chained_set)
     params.set<Int>("num", 1234)
         .set<double>("float", 12.34)
         .set<std::string>("text", "some long text");
+
+    EXPECT_EQ(params.get<Int>("num"), 1234);
+    EXPECT_DOUBLE_EQ(params.get<double>("float"), 12.34);
+    EXPECT_EQ(params.get<std::string>("text"), std::string("some long text"));
 }
 
 TEST(ParametersTest, move_oper)
@@ -115,18 +158,27 @@ TEST(ParametersTest, move_oper)
 
 TEST(ParametersTest, get_optional_param)
 {
-    Parameters params1;
-    params1.set<Int>("i", 1);
+    Parameters params;
+    params.set<Int>("i", 1);
 
-    auto p1 = params1.get<Optional<Int>>("i");
-    EXPECT_TRUE(p1.has_value());
-    EXPECT_EQ(p1.value(), 1);
+    auto par = params.get<Optional<Int>>("i");
+    ASSERT_TRUE(par.has_value());
+    EXPECT_EQ(par.value(), 1);
+}
 
-    // getting param with incorrect type means the param was not specified
-    auto p2 = params1.get<Optional<Real>>("i");
-    EXPECT_FALSE(p2.has_value());
+TEST(ParametersTest, get_optional_param_that_was_not_set)
+{
+    Parameters params;
 
-    // auto p2 = params1.get_optional<Real>("f");
-    auto p3 = params1.get<Optional<Real>>("f");
-    EXPECT_FALSE(p3.has_value());
+    auto par = params.get<Optional<Real>>("f");
+    EXPECT_FALSE(par.has_value());
+}
+
+TEST(ParametersTest, get_optional_param_using_incorrect_type)
+{
+    Parameters params;
+    params.set<int>("int", 1);
+
+    EXPECT_THROW_MSG(params.get<Optional<double>>("int"),
+                     "Parameter 'int' has unexpected type (i)");
 }

@@ -102,10 +102,11 @@ public:
     {
         CALL_STACK_MSG();
         auto it = this->params.find(name);
-        if (it != this->params.end())
-            if (dynamic_cast<const Parameter<T> *>(it->second.get()) != nullptr)
-                return true;
-        return false;
+        if (it == this->params.end())
+            return false;
+        if (dynamic_cast<const Parameter<T> *>(it->second.get()) == nullptr)
+            return false;
+        return true;
     }
 
     /// Get parameter value
@@ -116,25 +117,32 @@ public:
         CALL_STACK_MSG();
         if constexpr (IsOptional<T>) {
             using V = typename T::value_type;
-            if (this->has<V>(name)) {
-                auto it = this->params.find(name);
-                auto par = dynamic_cast<Parameter<V> *>(it->second.get());
-                if (par->valid)
-                    return par->get();
-                else
-                    return {};
-            }
+            auto it = this->params.find(name);
+            if (it == this->params.end())
+                return {};
+
+            auto par = it->second.get();
+            auto tpar = dynamic_cast<Parameter<V> *>(par);
+            if (tpar == nullptr)
+                throw Exception("Parameter '{}' has unexpected type ({})", name, par->type());
+            if (tpar->valid)
+                return tpar->get();
             else
                 return {};
         }
         else {
-            if (this->has<T>(name)) {
-                auto it = this->params.find(name);
-                auto par = dynamic_cast<Parameter<T> *>(it->second.get());
-                return par->get();
-            }
-            else
+            auto it = this->params.find(name);
+            if (it == this->params.end())
                 throw Exception("No parameter '{}' found.", name);
+
+            auto par = it->second.get();
+            auto tpar = dynamic_cast<Parameter<T> *>(par);
+            if (tpar == nullptr)
+                throw Exception("Parameter '{}' has unexpected type ({})", name, par->type());
+            if (tpar->valid)
+                return tpar->get();
+            else
+                throw Exception("Parameter '{}' is uninitialized", name);
         }
     }
 
@@ -143,12 +151,13 @@ public:
     get(const std::string & name, T default_value) const
     {
         CALL_STACK_MSG();
-        if (!this->has<T>(name))
-            return default_value;
         auto it = this->params.find(name);
-        auto par = dynamic_cast<Parameter<T> *>(it->second.get());
-        if (par->valid)
-            return par->get();
+        if (it == this->params.end())
+            return default_value;
+        auto par = it->second.get();
+        auto tpar = dynamic_cast<Parameter<T> *>(par);
+        if (tpar->valid)
+            return tpar->get();
         else
             return default_value;
     }
