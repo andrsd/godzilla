@@ -13,7 +13,7 @@ Parameters
 AuxiliaryField::parameters()
 {
     auto params = Object::parameters();
-    params.add_private_param<DiscreteProblemInterface *>("_dpi", nullptr)
+    params.add_private_param<DiscreteProblemInterface *>("_dpi")
         .add_param<std::string>("field", "", "Name of the field.")
         .add_param<std::string>("region", "", "Label name where this auxiliary field is defined.");
     return params;

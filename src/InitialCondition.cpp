@@ -30,7 +30,7 @@ InitialCondition::parameters()
 {
     auto params = Object::parameters();
     params.add_param<std::string>("field", "Field name")
-        .add_private_param<DiscreteProblemInterface *>("_dpi", nullptr);
+        .add_private_param<DiscreteProblemInterface *>("_dpi");
     return params;
 }
 
