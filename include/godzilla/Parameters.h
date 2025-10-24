@@ -141,8 +141,9 @@ public:
                 throw Exception("Parameter '{}' has unexpected type ({})", name, par->type());
             if (tpar->valid)
                 return tpar->get();
-            else
-                throw Exception("Parameter '{}' is uninitialized", name);
+            if (tpar->required)
+                throw Exception("Required parameter '{}' is not set", name);
+            throw Exception("Parameter '{}' is uninitialized", name);
         }
     }
 
