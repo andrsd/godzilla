@@ -254,6 +254,17 @@ public:
     }
     ///@}
 
+    inline void
+    make_param_required(const std::string & name)
+    {
+        CALL_STACK_MSG();
+        auto it = this->params.find(name);
+        if (it == this->params.end())
+            throw Exception("No parameter '{}' found.", name);
+        auto par = it->second.get();
+        par->required = true;
+    }
+
     /// Returns a boolean indicating whether the specified parameter is required or not
     bool is_param_required(const std::string & name) const;
 
