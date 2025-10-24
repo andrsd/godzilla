@@ -193,3 +193,19 @@ TEST(ParametersTest, make_param_required)
     params.make_param_required("number");
     EXPECT_TRUE(params.is_param_required("number"));
 }
+
+TEST(ParametersTest, private_param)
+{
+    Parameters params;
+    params.add_private_param<Int>("number", 10);
+    EXPECT_TRUE(params.is_param_private("number"));
+    EXPECT_FALSE(params.is_param_required("number"));
+}
+
+TEST(ParametersTest, required_private_param)
+{
+    Parameters params;
+    params.add_private_param<Int>("number");
+    EXPECT_TRUE(params.is_param_private("number"));
+    EXPECT_TRUE(params.is_param_required("number"));
+}

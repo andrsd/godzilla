@@ -252,6 +252,24 @@ public:
         this->params[name] = std::move(param);
         return *this;
     }
+
+    template <typename T>
+    Parameters &
+    add_private_param(const std::string & name)
+    {
+        CALL_STACK_MSG();
+        assert_true(!this->has<T>(name),
+                    fmt::format("Private parameter '{}' already exists", name));
+
+        auto param = Qtr<Parameter<T>>::alloc();
+        param->value = {};
+        param->required = true;
+        param->is_private = true;
+        param->valid = false;
+        this->params[name] = std::move(param);
+        return *this;
+    }
+
     ///@}
 
     inline void
@@ -273,7 +291,7 @@ public:
     /// the input file
     bool is_param_valid(const std::string & name) const;
 
-    bool is_private(const std::string & name) const;
+    bool is_param_private(const std::string & name) const;
 
     ///
     std::string type(const std::string & name) const;
