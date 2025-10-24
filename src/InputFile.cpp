@@ -213,7 +213,7 @@ InputFile::build_params(const Block & block)
 
     for (auto & kv : *params) {
         const std::string & param_name = kv.first;
-        if (!params->is_private(param_name)) {
+        if (!params->is_param_private(param_name)) {
             set_parameter_from_yml(params, block.values(), param_name);
             unused_param_names.erase(param_name);
         }

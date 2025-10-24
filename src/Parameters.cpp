@@ -71,7 +71,7 @@ Parameters::is_param_valid(const std::string & name) const
 }
 
 bool
-Parameters::is_private(const std::string & name) const
+Parameters::is_param_private(const std::string & name) const
 {
     CALL_STACK_MSG();
     return this->params.count(name) > 0 && this->params.at(name)->is_private;
