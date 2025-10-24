@@ -12,7 +12,7 @@ Parameters
 RZSymmetry::parameters()
 {
     auto params = Object::parameters();
-    params.add_private_param<DiscreteProblemInterface *>("_dpi", nullptr)
+    params.add_private_param<DiscreteProblemInterface *>("_dpi")
         .add_required_param<std::vector<Real>>("axis", "Axis vector")
         .add_param<std::vector<Real>>("point",
                                       std::vector<Real>({ 0, 0 }),

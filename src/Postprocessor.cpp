@@ -10,7 +10,7 @@ Parameters
 Postprocessor::parameters()
 {
     auto params = Object::parameters();
-    params.add_private_param<Problem *>("_problem", nullptr);
+    params.add_private_param<Problem *>("_problem");
     return params;
 }
 
