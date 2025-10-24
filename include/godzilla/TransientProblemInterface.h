@@ -192,6 +192,13 @@ public:
     /// @return Time step adaptivity object
     TimeStepAdapt & get_time_step_adapt();
 
+    /// Checks if the current state is valid
+    ///
+    /// @param stage_time Time of the simulation
+    /// @param Y State vector to check
+    /// @return `true` if vector is ok, `false` otherwise
+    bool function_domain_error(Real stage_time, const Vector & Y);
+
 protected:
     /// Get underlying non-linear solver
     SNESolver get_snes() const;
