@@ -182,3 +182,14 @@ TEST(ParametersTest, get_optional_param_using_incorrect_type)
     EXPECT_THROW_MSG(params.get<Optional<double>>("int"),
                      "Parameter 'int' has unexpected type (i)");
 }
+
+TEST(ParametersTest, make_param_required)
+{
+    Parameters params;
+    params.add_param<int>("number", "number");
+
+    EXPECT_FALSE(params.is_param_required("number"));
+
+    params.make_param_required("number");
+    EXPECT_TRUE(params.is_param_required("number"));
+}
