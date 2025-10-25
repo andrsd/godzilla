@@ -26,6 +26,13 @@ target_link_libraries(
 )
 
 if (GODZILLA_BUILD_TESTS)
-    # temporarily disbaled
-    # add_subdirectory(test)
+    include(TesterExodusII)
+
+    add_test_exodiff(
+        NAME    ${PROJECT_NAME}-mms-2d
+        COMMAND ${PROJECT_NAME}
+        OUTPUT  ${PROJECT_BINARY_DIR}/mms-2d.exo
+        GOLD    ${PROJECT_SOURCE_DIR}/gold/mms-2d.exo
+        ARGS    -Floor 1e-12
+    )
 endif()
