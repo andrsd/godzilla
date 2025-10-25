@@ -487,4 +487,13 @@ TransientProblemInterface::monitor_cancel()
     this->monitor_method.reset();
 }
 
+bool
+TransientProblemInterface::function_domain_error(Real stage_time, const Vector & Y)
+{
+    CALL_STACK_MSG();
+    PetscBool ok;
+    PETSC_CHECK(TSFunctionDomainError(this->ts, stage_time, Y, &ok));
+    return ok == PETSC_TRUE ? true : false;
+}
+
 } // namespace godzilla
