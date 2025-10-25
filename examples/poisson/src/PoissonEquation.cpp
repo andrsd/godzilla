@@ -1,7 +1,6 @@
-#include "godzilla/Types.h"
-#include "godzilla/WeakForm.h"
 #include "PoissonEquation.h"
 #include "PoissonPDE.h"
+#include "godzilla/Types.h"
 #include "godzilla/CallStack.h"
 
 using namespace godzilla;
