@@ -50,7 +50,7 @@ get_num_element_nodes(ElementType type)
     }
 }
 
-using ExecuteOn = Flags<ExecuteOnFlag>;
+using ExecuteOnFlags = Flags<ExecuteOn>;
 
 /// Dimension
 class Dimension {

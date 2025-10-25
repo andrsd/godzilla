@@ -12,6 +12,9 @@ namespace godzilla {
 template <typename T>
 concept IsEnum = std::is_enum_v<T>;
 
+template <typename ENUM>
+struct IsFlagEnum : std::false_type {};
+
 /// Template for creating a type that can do a bit-wise OR on values defined as enum
 ///
 /// Example:
@@ -127,6 +130,7 @@ private:
 };
 
 template <IsEnum ENUM>
+    requires(IsFlagEnum<ENUM>::value)
 constexpr Flags<ENUM>
 operator|(ENUM lhs, ENUM rhs)
 {
@@ -135,6 +139,7 @@ operator|(ENUM lhs, ENUM rhs)
 }
 
 template <IsEnum ENUM>
+    requires(IsFlagEnum<ENUM>::value)
 constexpr Flags<ENUM>
 operator|(Flags<ENUM> lhs, ENUM rhs)
 {
@@ -142,6 +147,7 @@ operator|(Flags<ENUM> lhs, ENUM rhs)
 }
 
 template <IsEnum ENUM>
+    requires(IsFlagEnum<ENUM>::value)
 constexpr Flags<ENUM>
 operator|(ENUM lhs, Flags<ENUM> rhs)
 {

@@ -12,11 +12,11 @@ namespace godzilla {
 namespace {
 
 bool
-none_with_flags(const ExecuteOn & flags)
+none_with_flags(const ExecuteOnFlags & flags)
 {
     auto mask = flags.get_mask();
-    auto none_flag = ExecuteOnFlag::EXECUTE_ON_NONE;
-    return (flags & none_flag) && ((mask & ~none_flag) != 0);
+    auto none_flag = ExecuteOn::NONE;
+    return (flags & none_flag) && ((mask & ~static_cast<unsigned int>(none_flag)) != 0);
 }
 
 } // namespace
@@ -25,7 +25,7 @@ Parameters
 Output::parameters()
 {
     auto params = Object::parameters();
-    params.add_param<ExecuteOn>("on", "When output should happen")
+    params.add_param<ExecuteOnFlags>("on", "When output should happen")
         .add_param<Int>("interval", "Interval")
         .add_private_param<Problem *>("_problem");
     return params;
@@ -40,7 +40,7 @@ Output::Output(const Parameters & pars) :
 {
     CALL_STACK_MSG();
     if (pars.is_param_valid("on")) {
-        const auto on = pars.get<ExecuteOn>("on");
+        const auto on = pars.get<ExecuteOnFlags>("on");
         if (on.has_flags()) {
             if (none_with_flags(on))
                 log_error("The 'none' execution flag can be used only by itself.");
@@ -54,7 +54,7 @@ Output::Output(const Parameters & pars) :
     else
         this->on_mask = this->problem->get_default_output_on();
 
-    if (pars.is_param_valid("interval") && ((this->on_mask & EXECUTE_ON_TIMESTEP) == 0))
+    if (pars.is_param_valid("interval") && ((this->on_mask & ExecuteOn::TIMESTEP) == 0))
         log_warning("Parameter 'interval' was specified, but 'on' is missing 'timestep'.");
 }
 
@@ -65,10 +65,10 @@ Output::create()
 }
 
 void
-Output::set_exec_mask(ExecuteOn mask)
+Output::set_exec_mask(ExecuteOnFlags flags)
 {
     CALL_STACK_MSG();
-    this->on_mask = mask;
+    this->on_mask = flags;
 }
 
 Problem *
@@ -78,14 +78,14 @@ Output::get_problem() const
     return this->problem;
 }
 
-ExecuteOn
+ExecuteOnFlags
 Output::get_exec_mask() const
 {
     CALL_STACK_MSG();
     return this->on_mask;
 }
 
-ExecuteOn
+ExecuteOnFlags
 Output::execute_on() const
 {
     CALL_STACK_MSG();
@@ -93,12 +93,12 @@ Output::execute_on() const
 }
 
 bool
-Output::should_output(ExecuteOnFlag flag)
+Output::should_output(ExecuteOn flag)
 {
     CALL_STACK_MSG();
     if (this->on_mask & flag) {
         bool should;
-        if (flag == EXECUTE_ON_TIMESTEP)
+        if (flag == ExecuteOn::TIMESTEP)
             should = (this->problem->get_step_num() % this->interval) == 0;
         else
             should = true;

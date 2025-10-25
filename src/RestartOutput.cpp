@@ -15,7 +15,7 @@ Parameters
 RestartOutput::parameters()
 {
     auto params = FileOutput::parameters();
-    params.set<ExecuteOn>("on", EXECUTE_ON_FINAL);
+    params.set<ExecuteOnFlags>("on", ExecuteOn::FINAL);
     return params;
 }
 

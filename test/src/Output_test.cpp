@@ -31,13 +31,13 @@ TEST_F(OutputTest, exec_masks_1)
     auto pars = Output::parameters();
     pars.set<App *>("_app", this->app);
     pars.set<Problem *>("_problem", this->prob);
-    pars.set<ExecuteOn>("on", EXECUTE_ON_NONE);
+    pars.set<ExecuteOnFlags>("on", ExecuteOn::NONE);
     MockOutput out(pars);
     out.create();
 
-    EXPECT_FALSE(out.should_output(EXECUTE_ON_FINAL));
-    EXPECT_FALSE(out.should_output(EXECUTE_ON_INITIAL));
-    EXPECT_FALSE(out.should_output(EXECUTE_ON_TIMESTEP));
+    EXPECT_FALSE(out.should_output(ExecuteOn::FINAL));
+    EXPECT_FALSE(out.should_output(ExecuteOn::INITIAL));
+    EXPECT_FALSE(out.should_output(ExecuteOn::TIMESTEP));
 }
 
 TEST_F(OutputTest, exec_masks_2)
@@ -45,14 +45,14 @@ TEST_F(OutputTest, exec_masks_2)
     auto pars = Output::parameters();
     pars.set<App *>("_app", this->app);
     pars.set<Problem *>("_problem", this->prob);
-    pars.set<ExecuteOn>("on", EXECUTE_ON_FINAL);
+    pars.set<ExecuteOnFlags>("on", ExecuteOn::FINAL);
     MockOutput out(pars);
     out.create();
 
-    EXPECT_TRUE(out.execute_on() & EXECUTE_ON_FINAL);
-    EXPECT_TRUE(out.should_output(EXECUTE_ON_FINAL));
-    EXPECT_FALSE(out.should_output(EXECUTE_ON_INITIAL));
-    EXPECT_FALSE(out.should_output(EXECUTE_ON_TIMESTEP));
+    EXPECT_TRUE(out.execute_on() & ExecuteOn::FINAL);
+    EXPECT_TRUE(out.should_output(ExecuteOn::FINAL));
+    EXPECT_FALSE(out.should_output(ExecuteOn::INITIAL));
+    EXPECT_FALSE(out.should_output(ExecuteOn::TIMESTEP));
 }
 
 TEST_F(OutputTest, exec_masks_3)
@@ -60,21 +60,21 @@ TEST_F(OutputTest, exec_masks_3)
     auto pars = Output::parameters();
     pars.set<App *>("_app", this->app);
     pars.set<Problem *>("_problem", this->prob);
-    pars.set<ExecuteOn>("on", EXECUTE_ON_FINAL | EXECUTE_ON_INITIAL | EXECUTE_ON_TIMESTEP);
+    pars.set<ExecuteOnFlags>("on", ExecuteOn::FINAL | ExecuteOn::INITIAL | ExecuteOn::TIMESTEP);
     MockOutput out(pars);
     out.create();
 
-    EXPECT_TRUE(out.execute_on() & EXECUTE_ON_FINAL);
-    EXPECT_TRUE(out.execute_on() & EXECUTE_ON_INITIAL);
-    EXPECT_TRUE(out.execute_on() & EXECUTE_ON_TIMESTEP);
+    EXPECT_TRUE(out.execute_on() & ExecuteOn::FINAL);
+    EXPECT_TRUE(out.execute_on() & ExecuteOn::INITIAL);
+    EXPECT_TRUE(out.execute_on() & ExecuteOn::TIMESTEP);
 
     this->prob->set_time(0.);
-    EXPECT_TRUE(out.should_output(EXECUTE_ON_INITIAL));
+    EXPECT_TRUE(out.should_output(ExecuteOn::INITIAL));
     this->prob->set_time(0.1);
-    EXPECT_TRUE(out.should_output(EXECUTE_ON_TIMESTEP));
-    EXPECT_FALSE(out.should_output(EXECUTE_ON_TIMESTEP));
+    EXPECT_TRUE(out.should_output(ExecuteOn::TIMESTEP));
+    EXPECT_FALSE(out.should_output(ExecuteOn::TIMESTEP));
     this->prob->set_time(0.2);
-    EXPECT_TRUE(out.should_output(EXECUTE_ON_FINAL));
+    EXPECT_TRUE(out.should_output(ExecuteOn::FINAL));
 }
 
 TEST_F(OutputTest, empty_on)
@@ -84,7 +84,7 @@ TEST_F(OutputTest, empty_on)
     auto pars = Output::parameters();
     pars.set<App *>("_app", app);
     pars.set<Problem *>("_problem", prob);
-    pars.set<ExecuteOn>("on", 0);
+    pars.set<ExecuteOnFlags>("on", 0);
     MockOutput out(pars);
 
     out.create();
@@ -104,7 +104,7 @@ TEST_F(OutputTest, none_plus_mask)
     auto pars = Output::parameters();
     pars.set<App *>("_app", this->app);
     pars.set<Problem *>("_problem", this->prob);
-    pars.set<ExecuteOn>("on", EXECUTE_ON_NONE | EXECUTE_ON_FINAL | EXECUTE_ON_TIMESTEP);
+    pars.set<ExecuteOnFlags>("on", ExecuteOn::NONE | ExecuteOn::FINAL | ExecuteOn::TIMESTEP);
     MockOutput out(pars);
 
     out.create();
@@ -123,7 +123,7 @@ TEST_F(OutputTest, interval_with_no_timestep_output)
     auto pars = Output::parameters();
     pars.set<App *>("_app", app);
     pars.set<Problem *>("_problem", prob);
-    pars.set<ExecuteOn>("on", EXECUTE_ON_INITIAL | EXECUTE_ON_FINAL);
+    pars.set<ExecuteOnFlags>("on", ExecuteOn::INITIAL | ExecuteOn::FINAL);
     pars.set<Int>("interval", 10);
     MockOutput out(pars);
 

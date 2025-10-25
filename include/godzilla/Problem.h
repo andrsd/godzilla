@@ -103,7 +103,7 @@ public:
     /// Output
     ///
     /// @param mask Bit mask for an output event, see `Output` for valid options.
-    void output(ExecuteOnFlag flag);
+    void output(ExecuteOn flag);
 
     /// Gets the type of vector created with `create_local_vector` and `create_global_vector`
     ///
@@ -167,10 +167,10 @@ public:
     void set_global_section(const Section & section) const;
 
     /// Set default execute on flags
-    void set_default_output_on(ExecuteOn flags);
+    void set_default_output_on(ExecuteOnFlags flags);
 
     /// Get default execute on flags for outputs
-    ExecuteOn get_default_output_on() const;
+    ExecuteOnFlags get_default_output_on() const;
 
     /// Create field decomposition
     FieldDecomposition create_field_decomposition();
@@ -309,7 +309,7 @@ private:
     std::vector<FileOutput *> file_outputs;
 
     /// Default output execute mask
-    ExecuteOn default_output_on;
+    ExecuteOnFlags default_output_on;
 
     /// List of postprocessor objects
     std::map<std::string, Qtr<Postprocessor>> pps;
