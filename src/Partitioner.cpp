@@ -6,7 +6,7 @@
 #include "godzilla/Error.h"
 #include "godzilla/Exception.h"
 
-using namespace godzilla;
+namespace godzilla {
 
 Partitioner::Partitioner() : PetscObjectWrapper(nullptr)
 {
@@ -136,3 +136,5 @@ Partitioner::partition(Int n_parts,
     throw Exception("PETSc 3.21+ is needed for Partitioner::partition with edge_section parameter");
 #endif
 }
+
+} // namespace godzilla

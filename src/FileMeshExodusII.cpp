@@ -9,12 +9,12 @@
 #include "petsc/private/dmimpl.h"
 #include "petscdmplex.h"
 
-using namespace godzilla;
+namespace godzilla {
 
 namespace {
 
 PolytopeType
-get_cell_type(const std::string & elem_type)
+get_cell_type_ex2(const std::string & elem_type)
 {
     if (elem_type == "EDGE2" || elem_type == "BAR2" || elem_type == "BEAM" || elem_type == "BEAM2")
         return PolytopeType::SEGMENT;
@@ -81,7 +81,7 @@ FileMesh::create_from_exodus()
             int num_hybrid = 0;
             for (int i = 0; i < n_elem_blocks; ++i) {
                 auto eb = f.get_element_block(i);
-                auto ct = ::get_cell_type(eb.get_element_type());
+                auto ct = get_cell_type_ex2(eb.get_element_type());
                 dim = math::max(dim, UnstructuredMesh::get_polytope_dim(ct));
                 if (ct == PolytopeType::TRI_PRISM) {
                     cs_order[i] = i;
@@ -97,7 +97,7 @@ FileMesh::create_from_exodus()
             for (Int i = 0, cell = 0; i < n_elem_blocks; ++i) {
                 int blk_idx = cs_order[i];
                 auto eb = f.get_element_block(blk_idx);
-                auto ct = ::get_cell_type(eb.get_element_type());
+                auto ct = get_cell_type_ex2(eb.get_element_type());
                 for (int j = 0; j < eb.get_num_elements(); ++j, ++cell) {
                     m->set_cone_size(cell, eb.get_num_nodes_per_element());
                     m->set_cell_type(cell, ct);
@@ -283,3 +283,5 @@ FileMesh::create_from_exodus()
 
     return m;
 }
+
+} // namespace godzilla
