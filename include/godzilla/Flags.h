@@ -78,9 +78,15 @@ public:
     /// @param flag Flag to test
     /// @return `true` if the flag `flag` is set, `false` otherwise
     constexpr bool
-    operator&(ENUM flag)
+    operator&(ENUM flag) const noexcept
     {
-        return (this->mask & flag);
+        return (this->mask & flag) != 0;
+    }
+
+    [[nodiscard]] constexpr unsigned int
+    get_mask() const noexcept
+    {
+        return mask;
     }
 
 private:
@@ -92,7 +98,7 @@ private:
                           : ((unsigned int) (*it) | initializer_list_helper(it + 1, end)));
     }
 
-    /// Bit mask iwth flags
+    /// Bit mask with flags
     unsigned int mask;
 };
 

@@ -3,17 +3,29 @@
 
 #include "godzilla/Output.h"
 #include "godzilla/CallStack.h"
+#include "godzilla/Enums.h"
 #include "godzilla/Problem.h"
 #include "godzilla/Utils.h"
-#include "godzilla/Convert.h"
 
 namespace godzilla {
+
+namespace {
+
+bool
+none_with_flags(const ExecuteOn & flags)
+{
+    auto mask = flags.get_mask();
+    auto none_flag = ExecuteOnFlag::EXECUTE_ON_NONE;
+    return (flags & none_flag) && ((mask & ~none_flag) != 0);
+}
+
+} // namespace
 
 Parameters
 Output::parameters()
 {
     auto params = Object::parameters();
-    params.add_param<std::vector<std::string>>("on", "When output should happen")
+    params.add_param<ExecuteOn>("on", "When output should happen")
         .add_param<Int>("interval", "Interval")
         .add_private_param<Problem *>("_problem");
     return params;
@@ -28,13 +40,12 @@ Output::Output(const Parameters & pars) :
 {
     CALL_STACK_MSG();
     if (pars.is_param_valid("on")) {
-        const auto on = pars.get<std::vector<std::string>>("on");
-        if (!on.empty()) {
-            auto [mask, none] = conv::to_execute_on(on);
-            if (none && mask.has_flags())
+        const auto on = pars.get<ExecuteOn>("on");
+        if (on.has_flags()) {
+            if (none_with_flags(on))
                 log_error("The 'none' execution flag can be used only by itself.");
             else
-                this->on_mask = mask;
+                this->on_mask = on;
         }
         else
             log_error("The 'on' parameter can be either 'none' or a combination of 'initial', "

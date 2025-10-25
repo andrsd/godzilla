@@ -53,11 +53,16 @@ enum ElementType {
     HEX8
 };
 
+// exceute on flags
+
 enum ExecuteOnFlag : unsigned int {
-    EXECUTE_ON_INITIAL = 0x1,
-    EXECUTE_ON_TIMESTEP = 0x2,
-    EXECUTE_ON_FINAL = 0x4
+    EXECUTE_ON_NONE = 0x1,
+    EXECUTE_ON_INITIAL = 0x2,
+    EXECUTE_ON_TIMESTEP = 0x4,
+    EXECUTE_ON_FINAL = 0x8
 };
+
+//
 
 enum class PolytopeType {
     POINT = DM_POLYTOPE_POINT,

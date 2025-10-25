@@ -2,7 +2,9 @@
 #include "GodzillaApp_test.h"
 #include "ImplicitFENonlinearProblem_test.h"
 #include "godzilla/App.h"
+#include "godzilla/Enums.h"
 #include "godzilla/Output.h"
+#include "godzilla/Types.h"
 
 using namespace godzilla;
 
@@ -29,7 +31,7 @@ TEST_F(OutputTest, exec_masks_1)
     auto pars = Output::parameters();
     pars.set<App *>("_app", this->app);
     pars.set<Problem *>("_problem", this->prob);
-    pars.set<std::vector<std::string>>("on", { "none" });
+    pars.set<ExecuteOn>("on", EXECUTE_ON_NONE);
     MockOutput out(pars);
     out.create();
 
@@ -43,7 +45,7 @@ TEST_F(OutputTest, exec_masks_2)
     auto pars = Output::parameters();
     pars.set<App *>("_app", this->app);
     pars.set<Problem *>("_problem", this->prob);
-    pars.set<std::vector<std::string>>("on", { "final" });
+    pars.set<ExecuteOn>("on", EXECUTE_ON_FINAL);
     MockOutput out(pars);
     out.create();
 
@@ -58,7 +60,7 @@ TEST_F(OutputTest, exec_masks_3)
     auto pars = Output::parameters();
     pars.set<App *>("_app", this->app);
     pars.set<Problem *>("_problem", this->prob);
-    pars.set<std::vector<std::string>>("on", { "final", "initial", "timestep" });
+    pars.set<ExecuteOn>("on", EXECUTE_ON_FINAL | EXECUTE_ON_INITIAL | EXECUTE_ON_TIMESTEP);
     MockOutput out(pars);
     out.create();
 
@@ -82,7 +84,7 @@ TEST_F(OutputTest, empty_on)
     auto pars = Output::parameters();
     pars.set<App *>("_app", app);
     pars.set<Problem *>("_problem", prob);
-    pars.set<std::vector<std::string>>("on", {});
+    pars.set<ExecuteOn>("on", 0);
     MockOutput out(pars);
 
     out.create();
@@ -102,7 +104,7 @@ TEST_F(OutputTest, none_plus_mask)
     auto pars = Output::parameters();
     pars.set<App *>("_app", this->app);
     pars.set<Problem *>("_problem", this->prob);
-    pars.set<std::vector<std::string>>("on", { "none", "final", "timestep" });
+    pars.set<ExecuteOn>("on", EXECUTE_ON_NONE | EXECUTE_ON_FINAL | EXECUTE_ON_TIMESTEP);
     MockOutput out(pars);
 
     out.create();
@@ -121,7 +123,7 @@ TEST_F(OutputTest, interval_with_no_timestep_output)
     auto pars = Output::parameters();
     pars.set<App *>("_app", app);
     pars.set<Problem *>("_problem", prob);
-    pars.set<std::vector<std::string>>("on", { "initial", "final" });
+    pars.set<ExecuteOn>("on", EXECUTE_ON_INITIAL | EXECUTE_ON_FINAL);
     pars.set<Int>("interval", 10);
     MockOutput out(pars);
 

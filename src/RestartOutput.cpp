@@ -3,6 +3,7 @@
 
 #include "godzilla/RestartOutput.h"
 #include "godzilla/CallStack.h"
+#include "godzilla/Enums.h"
 #include "godzilla/Parameters.h"
 #include "godzilla/Problem.h"
 #include "godzilla/RestartFile.h"
@@ -14,7 +15,7 @@ Parameters
 RestartOutput::parameters()
 {
     auto params = FileOutput::parameters();
-    params.set<std::vector<std::string>>("on", { "final" });
+    params.set<ExecuteOn>("on", EXECUTE_ON_FINAL);
     return params;
 }
 
