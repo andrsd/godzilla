@@ -25,19 +25,25 @@ function(add_test_exodiff)
     cmake_parse_arguments(
         EXODIFFT
         ""
-        "NAME;BIN;INPUT;OUTPUT;GOLD"
-        "ARGS"
+        "NAME;OUTPUT;GOLD"
+        "COMMAND;ARGS"
         ${ARGN}
     )
 
+    list(GET EXODIFFT_COMMAND 0 first_cmd)
+    if(TARGET ${first_cmd})
+        list(REMOVE_AT EXODIFFT_COMMAND 0)
+        set(EXODIFFT_COMMAND "$<TARGET_FILE:${first_cmd}>" ${EXODIFFT_COMMAND})
+    endif()
+
+    string(JOIN "\;" CMD_STR ${EXODIFFT_COMMAND})
     string(JOIN "\;" ARG_STR ${EXODIFFT_ARGS})
     add_test(
         NAME
             ${EXODIFFT_NAME}
         COMMAND
             ${CMAKE_COMMAND}
-            -DBIN=$<TARGET_FILE:${EXODIFFT_BIN}>
-            -DINPUT=${EXODIFFT_INPUT}
+            -DCMD=${CMD_STR}
             -DOUTPUT=${EXODIFFT_OUTPUT}
             -DGOLD=${EXODIFFT_GOLD}
             -DARGS=${ARG_STR}
@@ -51,14 +57,13 @@ endfunction()
 #   1. run the provided executable
 #   2. compare its output to the expected values
 if(
-    DEFINED BIN AND
-    DEFINED INPUT AND
+    DEFINED CMD AND
     DEFINED OUTPUT AND
     DEFINED GOLD AND
     DEFINED ARGS
 )
     execute_process(
-        COMMAND ${BIN} -i ${INPUT}
+        COMMAND ${CMD}
         RESULT_VARIABLE CMD_RESULT
         OUTPUT_VARIABLE BIN_OUT
         ERROR_VARIABLE BIN_ERR
