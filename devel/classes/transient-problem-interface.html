@@ -128,6 +128,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla25TransientProblemInterface16get_time_stepperEv"><code class="docutils literal notranslate"><span class="pre">TransientProblemInterface::get_time_stepper()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla25TransientProblemInterface19get_time_step_adaptEv"><code class="docutils literal notranslate"><span class="pre">TransientProblemInterface::get_time_step_adapt()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla25TransientProblemInterface19get_time_step_adaptEv"><code class="docutils literal notranslate"><span class="pre">TransientProblemInterface::get_time_step_adapt()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla25TransientProblemInterface21function_domain_errorE4RealRK6Vector"><code class="docutils literal notranslate"><span class="pre">TransientProblemInterface::function_domain_error()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -458,6 +459,23 @@
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Time step adaptivity object </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla25TransientProblemInterface21function_domain_errorE4RealRK6Vector">
+<span id="_CPPv3N8godzilla25TransientProblemInterface21function_domain_errorE4RealRK6Vector"></span><span id="_CPPv2N8godzilla25TransientProblemInterface21function_domain_errorE4RealRK6Vector"></span><span id="godzilla::TransientProblemInterface::function_domain_error__Real.VectorCR"></span><span class="target" id="classgodzilla_1_1_transient_problem_interface_1a22bdc2090c2d1ac9feea7119766d4b85"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">function_domain_error</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">stage_time</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Vector</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">Y</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla25TransientProblemInterface21function_domain_errorE4RealRK6Vector" title="Link to this definition"></a><br /></dt>
+<dd><p>Checks if the current state is valid. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>stage_time</strong> – Time of the simulation </p></li>
+<li><p><strong>Y</strong> – State vector to check </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if vector is ok, <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise </p>
 </dd>
 </dl>
 </dd></dl>
