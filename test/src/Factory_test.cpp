@@ -59,7 +59,7 @@ TEST(FactoryTest, create_non_existent)
     godzilla::Registry reg;
 
     mpi::Communicator comm(MPI_COMM_WORLD);
-    App app(comm, reg, "test", {});
+    App app(comm, reg, "test");
 
     Factory factory(reg);
     EXPECT_THROW_MSG(

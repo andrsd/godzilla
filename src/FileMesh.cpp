@@ -3,6 +3,7 @@
 
 #include "godzilla/App.h"
 #include "godzilla/FileMesh.h"
+#include "godzilla/Exception.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/Utils.h"
@@ -21,15 +22,13 @@ FileMesh::parameters()
     return params;
 }
 
-FileMesh::FileMesh(const Parameters & pars) : Object(pars), file_format(UNKNOWN)
+FileMesh::FileMesh(const Parameters & pars) :
+    Object(pars),
+    file_format(UNKNOWN),
+    file_name(pars.get<std::string>("file"))
+
 {
     CALL_STACK_MSG();
-
-    std::filesystem::path file(pars.get<std::string>("file"));
-    if (file.is_absolute())
-        this->file_name = file;
-    else
-        this->file_name = fs::path(get_app()->get_input_file_name()).parent_path() / file;
 
     if (utils::path_exists(this->file_name))
         detect_file_format();

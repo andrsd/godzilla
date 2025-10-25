@@ -3,19 +3,16 @@
 
 #include "godzilla/App.h"
 #include "godzilla/GYMLFile.h"
-#include "godzilla/Mesh.h"
 #include "godzilla/PerfLog.h"
 #include "godzilla/Problem.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/Error.h"
 #include "godzilla/Exception.h"
 #include "godzilla/Utils.h"
-#include "godzilla/Terminal.h"
 #include "godzilla/Logger.h"
 #include "godzilla/Assert.h"
 #include "yaml-cpp/yaml.h"
 #include "fmt/chrono.h"
-#include <fstream>
 
 namespace YAML {
 
@@ -50,79 +47,30 @@ namespace godzilla {
 
 Registry registry;
 
-App::App(const mpi::Communicator & comm,
-         const std::string & name,
-         int argc,
-         const char * const * argv) :
+App::App(const mpi::Communicator & comm, const std::string & name) :
     PrintInterface(comm, this, this->verbosity_level, name),
     name(name),
     mpi_comm(comm),
     registry(godzilla::registry),
     logger(Qtr<Logger>::alloc()),
-    cmdln_opts(name),
     verbosity_level(1),
-    yml(nullptr),
+    cout_buf_(nullptr),
+    cerr_buf_(nullptr),
     problem(nullptr),
     factory(registry)
 {
     CALL_STACK_MSG();
-    this->args.resize(argc);
-    for (int i = 0; i < argc; ++i)
-        this->args.emplace_back(argv[i]);
 }
 
-App::App(const mpi::Communicator & comm,
-         const std::string & name,
-         const std::vector<std::string> & args) :
-    PrintInterface(comm, this, this->verbosity_level, name),
-    name(name),
-    mpi_comm(comm),
-    registry(godzilla::registry),
-    logger(Qtr<Logger>::alloc()),
-    args(args),
-    cmdln_opts(name),
-    verbosity_level(1),
-    yml(nullptr),
-    problem(nullptr),
-    factory(registry)
-{
-}
-
-App::App(const mpi::Communicator & comm,
-         Registry & registry,
-         const std::string & name,
-         int argc,
-         const char * const * argv) :
+App::App(const mpi::Communicator & comm, Registry & registry, const std::string & name) :
     PrintInterface(comm, this, this->verbosity_level, name),
     name(name),
     mpi_comm(comm),
     registry(registry),
     logger(Qtr<Logger>::alloc()),
-    cmdln_opts(name),
     verbosity_level(1),
-    yml(nullptr),
-    problem(nullptr),
-    factory(registry)
-{
-    CALL_STACK_MSG();
-    this->args.resize(argc);
-    for (int i = 0; i < argc; ++i)
-        this->args.emplace_back(argv[i]);
-}
-
-App::App(const mpi::Communicator & comm,
-         Registry & registry,
-         const std::string & name,
-         const std::vector<std::string> & args) :
-    PrintInterface(comm, this, this->verbosity_level, name),
-    name(name),
-    mpi_comm(comm),
-    registry(registry),
-    logger(Qtr<Logger>::alloc()),
-    args(args),
-    cmdln_opts(name),
-    verbosity_level(1),
-    yml(nullptr),
+    cout_buf_(nullptr),
+    cerr_buf_(nullptr),
     problem(nullptr),
     factory(registry)
 {
@@ -133,6 +81,15 @@ App::~App()
 {
     CALL_STACK_MSG();
     this->factory.destroy();
+
+    if (this->cout_buf_ != nullptr) {
+        std::cout.rdbuf(this->cout_buf_);
+        this->stdout_file_.close();
+    }
+    if (this->cerr_buf_ != nullptr) {
+        std::cerr.rdbuf(this->cerr_buf_);
+        this->stderr_file_.close();
+    }
 }
 
 const std::string &
@@ -163,13 +120,6 @@ App::get_factory()
     return this->factory;
 }
 
-const InputFile *
-App::get_input_file() const
-{
-    CALL_STACK_MSG();
-    return this->yml.get();
-}
-
 Problem *
 App::get_problem() const
 {
@@ -182,58 +132,6 @@ App::set_problem(Problem * problem)
 {
     CALL_STACK_MSG();
     this->problem = problem;
-}
-
-void
-App::create_command_line_options()
-{
-    this->cmdln_opts.add_option("", "h", "help", "Show this help page", cxxopts::value<bool>(), "");
-    this->cmdln_opts.add_option("",
-                                "i",
-                                "input-file",
-                                "Input file to execute",
-                                cxxopts::value<std::string>(),
-                                "");
-    this->cmdln_opts
-        .add_option("", "", "restart-from", "Restart file name", cxxopts::value<std::string>(), "");
-    this->cmdln_opts.add_option("", "v", "version", "Show the version", cxxopts::value<bool>(), "");
-    this->cmdln_opts
-        .add_option("", "", "verbose", "Verbosity level", cxxopts::value<unsigned int>(), "");
-    this->cmdln_opts
-        .add_option("", "", "no-colors", "Do not use terminal colors", cxxopts::value<bool>(), "");
-    this->cmdln_opts.add_option("",
-                                "",
-                                "export-parameters",
-                                "Export parameters for all registered objects into a YAML file",
-                                cxxopts::value<bool>(),
-                                "");
-    this->cmdln_opts.add_option("",
-                                "",
-                                "perf-log",
-                                "Save performance log into a file",
-                                cxxopts::value<std::string>(),
-                                "");
-}
-
-cxxopts::ParseResult
-App::parse_command_line()
-{
-    CALL_STACK_MSG();
-    try {
-        auto argc = this->args.size();
-        std::vector<const char *> argv;
-        argv.reserve(argc + 2);
-        argv.push_back(get_name().c_str());
-        for (auto & a : this->args)
-            argv.push_back(a.c_str());
-        argv.push_back(nullptr);
-        return this->cmdln_opts.parse(argc + 1, argv.data());
-    }
-    catch (const cxxopts::exceptions::exception & e) {
-        fmt::print(stderr, "Error: {}\n", e.what());
-        fmt::print(stdout, "{}", this->cmdln_opts.help());
-        throw Exception("");
-    }
 }
 
 const unsigned int &
@@ -251,21 +149,24 @@ App::set_verbosity_level(unsigned int level)
 }
 
 const std::string &
-App::get_input_file_name() const
-{
-    CALL_STACK_MSG();
-    static std::string empty_file_name;
-    if (this->yml == nullptr)
-        return empty_file_name;
-    else
-        return this->yml->get_file_name();
-}
-
-const std::string &
 App::get_restart_file_name() const
 {
     CALL_STACK_MSG();
     return this->restart_file_name;
+}
+
+void
+App::set_restart_file_name(const std::string & file_name)
+{
+    CALL_STACK_MSG();
+    this->restart_file_name = file_name;
+}
+
+void
+App::set_perf_log_file_name(const std::string & file_name)
+{
+    CALL_STACK_MSG();
+    this->perf_log_file_name = file_name;
 }
 
 const mpi::Communicator &
@@ -275,94 +176,18 @@ App::get_comm() const
     return this->mpi_comm;
 }
 
-cxxopts::Options &
-App::get_command_line_opts()
-{
-    return this->cmdln_opts;
-}
-
 Parameters *
 App::get_parameters(const std::string & class_name)
 {
     return this->factory.get_parameters(class_name);
 }
 
-void
-App::process_command_line(const cxxopts::ParseResult & result)
-{
-    CALL_STACK_MSG();
-    if (result.count("help")) {
-        fmt::print("{}", this->cmdln_opts.help());
-    }
-    else if (result.count("version"))
-        fmt::print("{}, version {}\n", get_name(), get_version());
-    else {
-        if (result.count("no-colors"))
-            Terminal::set_colors(false);
-
-        if (result.count("verbose"))
-            set_verbosity_level(result["verbose"].as<unsigned int>());
-
-        if (result.count("restart-from"))
-            this->restart_file_name = result["restart-from"].as<std::string>();
-
-        if (result.count("perf-log"))
-            this->perf_log_file_name = result["perf-log"].as<std::string>();
-
-        if (result.count("input-file")) {
-            auto input_file_name = result["input-file"].as<std::string>();
-            run_input_file(input_file_name);
-        }
-
-        if (result.count("export-parameters"))
-            export_parameters_yaml();
-    }
-}
-
-Qtr<InputFile>
-App::create_input_file()
-{
-    CALL_STACK_MSG();
-    return Qtr<GYMLFile>::alloc(this);
-}
-
-void
+int
 App::run()
 {
     CALL_STACK_MSG();
 
     auto start_time = std::chrono::high_resolution_clock::now();
-    create_command_line_options();
-    auto result = parse_command_line();
-    process_command_line(result);
-    auto end_time = std::chrono::high_resolution_clock::now();
-
-    if (!this->perf_log_file_name.empty()) {
-        std::chrono::duration<double> duration = end_time - start_time;
-        write_perf_log(this->perf_log_file_name, duration);
-        lprintln(9, "Performance log written into: {}", this->perf_log_file_name);
-    }
-}
-
-void
-App::run_input_file(const std::string & input_file_name)
-{
-    CALL_STACK_MSG();
-    if (!utils::path_exists(input_file_name))
-        throw Exception(
-            "Unable to open '{}' for reading. Make sure it exists and you have read permissions.",
-            input_file_name);
-
-    this->yml = create_input_file();
-    if (this->yml == nullptr)
-        throw InternalError("App::yaml is null");
-
-    this->yml->parse(input_file_name);
-    this->yml->build();
-    this->problem = this->yml->get_problem();
-
-    if (this->logger->get_num_errors() == 0)
-        this->yml->create_objects();
 
     if (!check_integrity()) {
         this->logger->print();
@@ -370,6 +195,16 @@ App::run_input_file(const std::string & input_file_name)
     }
 
     run_problem();
+
+    auto end_time = std::chrono::high_resolution_clock::now();
+
+    if (!this->perf_log_file_name.empty()) {
+        std::chrono::duration<double> duration = end_time - start_time;
+        write_perf_log(this->perf_log_file_name, duration);
+        lprintln(9, "Performance log written into: {}", this->perf_log_file_name);
+    }
+
+    return 0;
 }
 
 void
@@ -392,8 +227,6 @@ App::check_integrity()
 {
     CALL_STACK_MSG();
     lprintln(9, "Checking integrity");
-    if (this->yml)
-        this->yml->check();
     if (this->logger->get_num_entries() > 0)
         return false;
     else
@@ -519,6 +352,24 @@ App::write_perf_log(const std::string file_name, std::chrono::duration<double> r
         fout << std::endl;
         fout.close();
     }
+}
+
+void
+App::redirect_stdout(const std::string & file_name)
+{
+    CALL_STACK_MSG();
+    this->stdout_file_.open(file_name);
+    this->cout_buf_ = std::cout.rdbuf();
+    std::cout.rdbuf(this->stdout_file_.rdbuf());
+}
+
+void
+App::redirect_stderr(const std::string & file_name)
+{
+    CALL_STACK_MSG();
+    this->stderr_file_.open(file_name);
+    this->cerr_buf_ = std::cerr.rdbuf();
+    std::cerr.rdbuf(this->stderr_file_.rdbuf());
 }
 
 } // namespace godzilla

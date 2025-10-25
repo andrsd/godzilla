@@ -51,10 +51,11 @@ TEST(VTKOutputTest, test)
     auto pars = VTKOutput::parameters();
     pars.set<App *>("_app", &app);
     pars.set<Mesh *>("mesh", mesh.get());
+    pars.set<std::string>("file", "file");
     auto out = prob.add_output<VTKOutput>(pars);
 
     prob.create();
 
-    EXPECT_EQ(out->get_file_name(), ".vtk");
+    EXPECT_EQ(out->get_file_name(), "file.vtk");
     out->output_step();
 }

@@ -50,34 +50,24 @@ public:
 private:
     /// Minimum in the x direction
     Real xmin;
-
     /// Maximum in the x direction
     Real xmax;
-
     /// Minimum in the y direction
     Real ymin;
-
     /// Maximum in the y direction
     Real ymax;
-
     /// Minimum in the z direction
     Real zmin;
-
     /// Maximum in the z direction
     Real zmax;
-
     /// Number of mesh point in the x direction
     Int nx;
-
     /// Number of mesh point in the y direction
     Int ny;
-
     /// Number of mesh point in the z direction
     Int nz;
-
     /// True for simplices, False for tensor cells
     bool simplex;
-
     /// create intermediate mesh pieces (edges, faces)
     bool interpolate;
 
