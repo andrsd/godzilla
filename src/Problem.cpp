@@ -160,7 +160,7 @@ Problem::get_postprocessor_names() const
 }
 
 void
-Problem::output(ExecuteOnFlag flag)
+Problem::output(ExecuteOn flag)
 {
     CALL_STACK_MSG();
     for (auto & o : this->file_outputs)
@@ -176,7 +176,7 @@ Problem::on_initial()
 {
     CALL_STACK_MSG();
     compute_postprocessors();
-    output(EXECUTE_ON_INITIAL);
+    output(ExecuteOn::INITIAL);
 }
 
 void
@@ -184,7 +184,7 @@ Problem::on_final()
 {
     CALL_STACK_MSG();
     compute_postprocessors();
-    output(EXECUTE_ON_FINAL);
+    output(ExecuteOn::FINAL);
 }
 
 void
@@ -294,12 +294,12 @@ Problem::set_global_section(const Section & section) const
 }
 
 void
-Problem::set_default_output_on(ExecuteOn flags)
+Problem::set_default_output_on(ExecuteOnFlags flags)
 {
     this->default_output_on = flags;
 }
 
-ExecuteOn
+ExecuteOnFlags
 Problem::get_default_output_on() const
 {
     return this->default_output_on;

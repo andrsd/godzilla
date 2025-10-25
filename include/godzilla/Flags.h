@@ -5,8 +5,15 @@
 
 #include <type_traits>
 #include <initializer_list>
+#include <concepts>
 
 namespace godzilla {
+
+template <typename T>
+concept IsEnum = std::is_enum_v<T>;
+
+template <typename ENUM>
+struct IsFlagEnum : std::false_type {};
 
 /// Template for creating a type that can do a bit-wise OR on values defined as enum
 ///
@@ -23,12 +30,10 @@ namespace godzilla {
 /// ```
 ///
 /// @tparam ENUM enum defining the flags
-template <typename ENUM>
+template <IsEnum ENUM>
 class Flags {
 public:
-    static_assert(std::is_enum<ENUM>::value, "Flags is only usable on enumeration types.");
-
-    using enum_type = ENUM;
+    using UnderlyingType = std::underlying_type_t<ENUM>;
 
     constexpr inline Flags() noexcept : mask(0) {}
 
@@ -57,7 +62,18 @@ public:
     constexpr Flags &
     operator|=(ENUM rhs) noexcept
     {
-        this->mask |= rhs;
+        this->mask |= static_cast<UnderlyingType>(rhs);
+        return *this;
+    }
+
+    /// Set flags
+    ///
+    /// @param rhs Flags to set
+    /// @return New flags
+    constexpr Flags &
+    operator|=(Flags rhs)
+    {
+        this->mask |= rhs.mask;
         return *this;
     }
 
@@ -68,9 +84,20 @@ public:
     constexpr Flags
     operator|(ENUM rhs) const noexcept
     {
-        Flags<ENUM> flags(this->mask);
-        flags |= rhs;
-        return flags;
+        return Flags(this->mask | static_cast<UnderlyingType>(rhs));
+        //   Flags<ENUM> flags(this->mask);
+        // flags |= rhs;
+        // return flags;
+    }
+
+    /// Add flags
+    ///
+    /// @param rhs Flags to set
+    /// @return New flags
+    constexpr Flags
+    operator|(Flags rhs) const
+    {
+        return Flags(this->mask | this->mask);
     }
 
     /// Test if a flag is set
@@ -78,22 +105,53 @@ public:
     /// @param flag Flag to test
     /// @return `true` if the flag `flag` is set, `false` otherwise
     constexpr bool
-    operator&(ENUM flag)
+    operator&(ENUM flag) const noexcept
     {
-        return (this->mask & flag);
+        return (this->mask & static_cast<UnderlyingType>(flag)) != 0;
+    }
+
+    [[nodiscard]] constexpr UnderlyingType
+    get_mask() const noexcept
+    {
+        return mask;
     }
 
 private:
-    constexpr static inline unsigned int
+    constexpr static inline UnderlyingType
     initializer_list_helper(typename std::initializer_list<ENUM>::const_iterator it,
                             typename std::initializer_list<ENUM>::const_iterator end) noexcept
     {
-        return (it == end ? (unsigned int) 0
-                          : ((unsigned int) (*it) | initializer_list_helper(it + 1, end)));
+        return (it == end ? (UnderlyingType) 0
+                          : ((UnderlyingType) (*it) | initializer_list_helper(it + 1, end)));
     }
 
-    /// Bit mask iwth flags
-    unsigned int mask;
+    /// Bit mask with flags
+    UnderlyingType mask;
 };
+
+template <IsEnum ENUM>
+    requires(IsFlagEnum<ENUM>::value)
+constexpr Flags<ENUM>
+operator|(ENUM lhs, ENUM rhs)
+{
+    using U = std::underlying_type_t<ENUM>;
+    return Flags<ENUM>(static_cast<U>(lhs) | static_cast<U>(rhs));
+}
+
+template <IsEnum ENUM>
+    requires(IsFlagEnum<ENUM>::value)
+constexpr Flags<ENUM>
+operator|(Flags<ENUM> lhs, ENUM rhs)
+{
+    return lhs | Flags<ENUM>(rhs);
+}
+
+template <IsEnum ENUM>
+    requires(IsFlagEnum<ENUM>::value)
+constexpr Flags<ENUM>
+operator|(ENUM lhs, Flags<ENUM> rhs)
+{
+    return Flags<ENUM>(lhs) | rhs;
+}
 
 } // namespace godzilla

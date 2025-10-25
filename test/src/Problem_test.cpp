@@ -1,6 +1,7 @@
 #include "gmock/gmock.h"
 #include <petscdm.h>
 #include "GodzillaApp_test.h"
+#include "godzilla/Enums.h"
 #include "godzilla/Error.h"
 #include "godzilla/MeshFactory.h"
 #include "godzilla/Mesh.h"
@@ -9,6 +10,7 @@
 #include "godzilla/FileOutput.h"
 #include "godzilla/Postprocessor.h"
 #include "godzilla/Section.h"
+#include "godzilla/Types.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Array1D.h"
 #include "ExceptionTestMacros.h"
@@ -92,7 +94,7 @@ TEST(ProblemTest, add_pp)
     out_params.set<App *>("_app", &app);
     out_params.set<std::string>("_name", "out");
     out_params.set<std::string>("file", "file");
-    out_params.set<std::vector<std::string>>("on", { "initial" });
+    out_params.set<ExecuteOnFlags>("on", ExecuteOn::INITIAL);
     out_params.set<Int>("interval", 1);
     auto out = problem.add_output<TestOutput>(out_params);
 
@@ -104,7 +106,7 @@ TEST(ProblemTest, add_pp)
     EXPECT_EQ(pps_names[0], "pp");
 
     EXPECT_CALL(*out, output_step);
-    problem.output(EXECUTE_ON_INITIAL);
+    problem.output(ExecuteOn::INITIAL);
 }
 
 TEST(ProblemTest, local_vec)

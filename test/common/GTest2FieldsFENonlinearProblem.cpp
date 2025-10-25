@@ -1,5 +1,7 @@
 #include "GTest2FieldsFENonlinearProblem.h"
 
+using namespace godzilla;
+
 GTest2FieldsFENonlinearProblem::GTest2FieldsFENonlinearProblem(const Parameters & pars) :
     GTestFENonlinearProblem(pars),
     iv(1)

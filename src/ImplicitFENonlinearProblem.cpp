@@ -46,7 +46,7 @@ ImplicitFENonlinearProblem::ImplicitFENonlinearProblem(const Parameters & pars) 
     scheme(pars.get<std::string>("scheme"))
 {
     CALL_STACK_MSG();
-    set_default_output_on(EXECUTE_ON_INITIAL | EXECUTE_ON_TIMESTEP);
+    set_default_output_on(ExecuteOn::INITIAL | ExecuteOn::TIMESTEP);
     if (!validation::in(this->scheme, { "beuler", "cn" }))
         log_error("The 'scheme' parameter can be either 'beuler' or 'cn'.");
 }
@@ -219,7 +219,7 @@ ImplicitFENonlinearProblem::post_step()
     TransientProblemInterface::post_step();
     update_aux_vector();
     compute_postprocessors();
-    output(EXECUTE_ON_TIMESTEP);
+    output(ExecuteOn::TIMESTEP);
 }
 
 } // namespace godzilla

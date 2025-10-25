@@ -179,24 +179,5 @@ to_str(SNESolver::LineSearch::LineSearchType type)
         return "unknown";
 }
 
-std::tuple<ExecuteOn, bool>
-to_execute_on(const std::vector<std::string> & vals)
-{
-    bool none = false;
-    ExecuteOn mask;
-    for (auto s : vals) {
-        s = utils::to_lower(s);
-        if (s == "initial")
-            mask |= EXECUTE_ON_INITIAL;
-        else if (s == "timestep")
-            mask |= EXECUTE_ON_TIMESTEP;
-        else if (s == "final")
-            mask |= EXECUTE_ON_FINAL;
-        else if (s == "none")
-            none = true;
-    }
-    return { mask, none };
-}
-
 } // namespace conv
 } // namespace godzilla

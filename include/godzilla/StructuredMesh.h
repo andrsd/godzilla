@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Mesh.h"
+#include "petscdmdatypes.h"
 
 namespace godzilla {
 

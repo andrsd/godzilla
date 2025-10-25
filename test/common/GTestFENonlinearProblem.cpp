@@ -3,6 +3,8 @@
 #include "godzilla/JacobianFunc.h"
 #include "godzilla/Types.h"
 
+using namespace godzilla;
+
 namespace {
 
 class F0 : public ResidualFunc {

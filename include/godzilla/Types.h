@@ -6,7 +6,6 @@
 #include "godzilla/Enums.h"
 #include "godzilla/Flags.h"
 #include "godzilla/Delegate.h"
-#include "petscsystypes.h"
 #include <optional>
 
 namespace godzilla {
@@ -50,7 +49,7 @@ get_num_element_nodes(ElementType type)
     }
 }
 
-using ExecuteOn = Flags<ExecuteOnFlag>;
+using ExecuteOnFlags = Flags<ExecuteOn>;
 
 /// Dimension
 class Dimension {

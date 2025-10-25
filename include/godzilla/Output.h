@@ -21,24 +21,24 @@ public:
 
     /// Set execute mask
     ///
-    /// @param mask Bit mask for execution
-    void set_exec_mask(ExecuteOn mask);
+    /// @param mask Bit flags for execution
+    void set_exec_mask(ExecuteOnFlags flags);
 
     /// Get execution mask
     ///
     /// @return execution mask
-    [[deprecated("Use execute_on()")]] ExecuteOn get_exec_mask() const;
+    [[deprecated("Use execute_on()")]] ExecuteOnFlags get_exec_mask() const;
 
     /// Get execution mask
     ///
     /// @return execution mask
-    ExecuteOn execute_on() const;
+    ExecuteOnFlags execute_on() const;
 
     /// Should output happen at a specified occasion
     ///
     /// @param mask Bit mask specifying the occasion, see ON_XYZ below
     /// @return `true` if output should happen, otherwise `false`
-    virtual bool should_output(ExecuteOnFlag mask);
+    virtual bool should_output(ExecuteOn flags);
 
     /// Output a step of a simulation
     virtual void output_step() = 0;
@@ -57,7 +57,7 @@ private:
     Problem * problem;
 
     /// Bitwise mask for determining when this output object should output its content
-    ExecuteOn on_mask;
+    ExecuteOnFlags on_mask;
 
     ///
     Int interval;

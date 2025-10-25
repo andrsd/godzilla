@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "godzilla/Flags.h"
 #include "petscsys.h"
 #include "petscdmtypes.h"
 
@@ -53,11 +54,24 @@ enum ElementType {
     HEX8
 };
 
-enum ExecuteOnFlag : unsigned int {
-    EXECUTE_ON_INITIAL = 0x1,
-    EXECUTE_ON_TIMESTEP = 0x2,
-    EXECUTE_ON_FINAL = 0x4
+// exceute on flags
+
+enum class ExecuteOn : unsigned int {
+    /// None
+    NONE = 0x1,
+    /// Initial
+    INITIAL = 0x2,
+    /// Timestep end
+    TIMESTEP = 0x4,
+    /// Final
+    FINAL = 0x8
 };
+
+// Enable `ExecuteOn` to be used with `Flags` and bitmask operators
+template <>
+struct IsFlagEnum<ExecuteOn> : std::true_type {};
+
+//
 
 enum class PolytopeType {
     POINT = DM_POLYTOPE_POINT,

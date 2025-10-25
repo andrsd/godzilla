@@ -3,8 +3,6 @@
 #include "gtest/gtest.h"
 #include "TestApp.h"
 
-using namespace godzilla;
-
 class GodzillaAppTest : public ::testing::Test {
 protected:
     void

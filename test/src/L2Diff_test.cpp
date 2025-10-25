@@ -5,6 +5,8 @@
 #include "GTestFENonlinearProblem.h"
 #include "godzilla/L2Diff.h"
 
+using namespace godzilla;
+
 namespace {
 
 class DirichletBC : public EssentialBC {
