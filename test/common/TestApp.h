@@ -2,9 +2,7 @@
 
 #include "godzilla/App.h"
 
-using namespace godzilla;
-
-class TestApp : public App {
+class TestApp : public godzilla::App {
 public:
     TestApp();
 };

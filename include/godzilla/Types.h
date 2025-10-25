@@ -6,7 +6,6 @@
 #include "godzilla/Enums.h"
 #include "godzilla/Flags.h"
 #include "godzilla/Delegate.h"
-#include "petscsystypes.h"
 #include <optional>
 
 namespace godzilla {

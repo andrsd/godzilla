@@ -3,6 +3,8 @@
 #include "GTestFENonlinearProblem.h"
 #include "GTest2FieldsFENonlinearProblem.h"
 
+using namespace godzilla;
+
 Registry registry;
 
 TestApp::TestApp() : App(mpi::Communicator(MPI_COMM_WORLD), ::registry, "godzilla", {})

@@ -5,6 +5,8 @@
 #include "godzilla/CSVOutput.h"
 #include "godzilla/Postprocessor.h"
 
+using namespace godzilla;
+
 namespace {
 
 class CSVOutputTest : public FENonlinearProblemTest {};

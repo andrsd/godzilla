@@ -7,7 +7,6 @@
 #include "godzilla/CallStack.h"
 #include "godzilla/Types.h"
 #include "godzilla/Assert.h"
-#include "petsc.h"
 #include <type_traits>
 
 namespace godzilla {
