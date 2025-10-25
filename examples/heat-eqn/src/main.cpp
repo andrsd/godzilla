@@ -1,35 +1,28 @@
 #include "godzilla/App.h"
+#include "godzilla/CallStack.h"
 #include "godzilla/Init.h"
 #include "ConvectiveHeatFluxBC.h"
 #include "HeatEquationExplicit.h"
 #include "HeatEquationProblem.h"
 
-godzilla::Registry registry;
-
-void
-register_objects(godzilla::Registry & r)
-{
-    godzilla::App::register_objects(r);
-    REGISTER_OBJECT(r, ConvectiveHeatFluxBC);
-    REGISTER_OBJECT(r, HeatEquationExplicit);
-    REGISTER_OBJECT(r, HeatEquationProblem);
-}
+using namespace godzilla;
 
 int
 main(int argc, char * argv[])
 {
     try {
-        mpi::Communicator comm(MPI_COMM_WORLD);
-        godzilla::Init init(argc, argv);
-        register_objects(registry);
+        mpi::Communicator comm;
+        Init init(argc, argv);
 
-        godzilla::App app(comm, registry, "heat-eqn", argc, argv);
+        App app(comm, "heat-eqn");
+
         app.run();
 
         return 0;
     }
     catch (Exception & e) {
         fmt::println("{}", e.what());
+        print_call_stack(e.get_call_stack());
         return -1;
     }
     catch (...) {
