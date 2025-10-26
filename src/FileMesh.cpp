@@ -60,10 +60,8 @@ FileMesh::create_mesh()
         return create_from_exodus();
     else if (this->file_format == GMSH)
         return create_from_gmsh();
-    else {
-        log_error("Unknown mesh format");
-        return nullptr;
-    }
+    else
+        throw Exception("Unknown mesh format");
 }
 
 Qtr<UnstructuredMesh>

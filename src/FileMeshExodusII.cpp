@@ -275,10 +275,7 @@ FileMesh::create_from_exodus()
             m->set_face_set_name(id, name);
     }
     catch (exodusIIcpp::Exception & e) {
-        log_error("exodusIIcpp: {}", e.what());
-    }
-    catch (godzilla::Exception & e) {
-        log_error("{}", e.what());
+        throw Exception("exodusIIcpp: {}", e.what());
     }
 
     return m;

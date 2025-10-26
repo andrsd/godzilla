@@ -32,12 +32,12 @@ TEST(RZSymmetryTest, check_dim)
     params.set<std::vector<Real>>("axis", { 1. });
     RZSymmetry rz(params);
 
+    testing::internal::CaptureStderr();
     rz.create();
 
-    testing::internal::CaptureStderr();
     auto logger = app.get_logger();
-    if (logger->get_num_entries() > 0)
-        logger->print();
+    EXPECT_GE(logger->get_num_errors(), 0);
+    logger->print();
     auto stdout = testing::internal::GetCapturedStderr();
     EXPECT_THAT(stdout,
                 testing::HasSubstr("[ERROR] 'RZSymmetry' can be used only with 2D problems"));
@@ -68,12 +68,12 @@ TEST(RZSymmetryTest, check_compatible)
     params.set<std::vector<Real>>("axis", { 1. });
     RZSymmetry rz(params);
 
+    testing::internal::CaptureStderr();
     rz.create();
 
-    testing::internal::CaptureStderr();
     auto logger = app.get_logger();
-    if (logger->get_num_entries() > 0)
-        logger->print();
+    EXPECT_GE(logger->get_num_errors(), 0);
+    logger->print();
     auto stdout = testing::internal::GetCapturedStderr();
     EXPECT_THAT(stdout, testing::HasSubstr("[ERROR] 'axis' parameter must provide 2 components."));
     EXPECT_THAT(stdout, testing::HasSubstr("[ERROR] 'point' parameter must provide 2 components."));
@@ -83,10 +83,13 @@ TEST(RZSymmetryTest, evaluate)
 {
     TestApp app;
 
-    auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app", &app);
-    mesh_pars.set<Int>("nx", 2);
-    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
+    auto mesh_pars = RectangleMesh::parameters();
+    // clang-format off
+    mesh_pars.set<App *>("_app", &app)
+        .set<Int>("nx", 2)
+        .set<Int>("ny", 2);
+    // clang-format on
+    auto mesh = MeshFactory::create<RectangleMesh>(mesh_pars);
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
     prob_pars.set<App *>("_app", &app);
