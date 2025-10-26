@@ -66,6 +66,8 @@ TEST(TecplotOutputTest, output)
 
 TEST(TecplotOutputTest, test)
 {
+    testing::internal::CaptureStderr();
+
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
@@ -84,8 +86,6 @@ TEST(TecplotOutputTest, test)
     prob.add_output<TecplotOutput>(params);
 
     prob.create();
-
-    testing::internal::CaptureStderr();
 
     EXPECT_FALSE(app.check_integrity());
     app.get_logger()->print();
