@@ -26,6 +26,15 @@ target_link_libraries(
 )
 
 if (GODZILLA_BUILD_TESTS)
-    # temporarily disbaled
-    # add_subdirectory(test)
+    include(TesterExodusII)
+
+    if(${PETSC_VERSION} VERSION_LESS "3.21.0")
+        add_test_exodiff(
+            NAME    advect
+            COMMAND ${PROJECT_NAME}
+            OUTPUT  ${PROJECT_BINARY_DIR}/1d.exo
+            GOLD    ${PROJECT_SOURCE_DIR}/gold/1d.exo
+            ARGS    -Floor 1e-16
+        )
+    endif()
 endif()

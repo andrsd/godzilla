@@ -1,31 +1,22 @@
-#include "godzilla/App.h"
+#include "PoissonApp.h"
 #include "godzilla/Init.h"
-#include "PoissonEquation.h"
-
-godzilla::Registry registry;
-
-void
-register_objects(godzilla::Registry & r)
-{
-    godzilla::App::register_objects(r);
-    REGISTER_OBJECT(r, PoissonEquation);
-}
+#include "godzilla/Exception.h"
 
 int
 main(int argc, char * argv[])
 {
     try {
-        mpi::Communicator comm(MPI_COMM_WORLD);
+        mpi::Communicator comm;
         godzilla::Init init(argc, argv);
-        register_objects(registry);
 
-        godzilla::App app(comm, registry, "poisson", argc, argv);
-        app.run();
-
-        return 0;
+        PoissonApp app(comm, "poisson", argc, argv);
+        app.set_verbosity_level(9);
+        return app.run();
     }
-    catch (Exception & e) {
+    catch (godzilla::Exception & e) {
         fmt::println("{}", e.what());
+        fmt::println("");
+        godzilla::print_call_stack(e.get_call_stack());
         return -1;
     }
     catch (...) {

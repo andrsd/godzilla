@@ -2,25 +2,23 @@
 
 #include "godzilla/FENonlinearProblem.h"
 
-using namespace godzilla;
-
 /// Solves Poisson equation using finite element method
 ///
-class PoissonEquation : public FENonlinearProblem {
+class PoissonEquation : public godzilla::FENonlinearProblem {
 public:
-    PoissonEquation(const Parameters & pars);
+    PoissonEquation(const godzilla::Parameters & pars);
 
 protected:
     void set_up_fields() override;
     void set_up_weak_form() override;
 
     /// Polynomial order of the FE space
-    Order p_order;
+    godzilla::Order p_order;
     /// ID for the "u" field
-    FieldID iu;
+    godzilla::FieldID iu;
     /// ID for the forcing function field
-    FieldID affn;
+    godzilla::FieldID affn;
 
 public:
-    static Parameters parameters();
+    static godzilla::Parameters parameters();
 };

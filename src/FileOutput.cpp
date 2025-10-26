@@ -3,6 +3,7 @@
 
 #include "godzilla/CallStack.h"
 #include "godzilla/FileOutput.h"
+#include "godzilla/Exception.h"
 #include "godzilla/Problem.h"
 #include "godzilla/App.h"
 #include "godzilla/DiscreteProblemInterface.h"
@@ -14,7 +15,7 @@ Parameters
 FileOutput::parameters()
 {
     auto params = Output::parameters();
-    params.add_param<std::string>("file", "", "The name of the output file.");
+    params.add_required_param<std::string>("file", "The name of the output file.");
     return params;
 }
 
@@ -24,6 +25,8 @@ FileOutput::FileOutput(const Parameters & pars) :
     dpi(dynamic_cast<DiscreteProblemInterface *>(get_problem()))
 {
     CALL_STACK_MSG();
+    if (this->file_base.empty())
+        log_error("The 'file' parameter cannot be empty");
 }
 
 void
@@ -31,11 +34,6 @@ FileOutput::create()
 {
     CALL_STACK_MSG();
     Output::create();
-    if (this->file_base.empty()) {
-        std::filesystem::path input_file_name(get_app()->get_input_file_name());
-        this->file_base = input_file_name.stem().string();
-    }
-
     this->file_name = create_file_name();
 }
 

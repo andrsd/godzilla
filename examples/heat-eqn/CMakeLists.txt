@@ -3,28 +3,66 @@ project(heat-eqn)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-file(GLOB SRCS CONFIGURE_DEPENDS src/*.cpp)
+macro(add_binny name)
+    add_executable(${PROJECT_NAME}-${name} ${ARGN})
+    target_include_directories(${PROJECT_NAME}-${name}
+        PUBLIC
+            ${PROJECT_SOURCE_DIR}/include
+            ${CMAKE_BINARY_DIR}
+            ${CMAKE_SOURCE_DIR}/include
+            ${CMAKE_SOURCE_DIR}/contrib
+    )
+    target_link_libraries(${PROJECT_NAME}-${name} PRIVATE godzilla)
+endmacro()
 
-add_executable(${PROJECT_NAME} ${SRCS})
+# MMS 1D
 
-target_sanitization(${PROJECT_NAME})
-
-target_include_directories(
-    ${PROJECT_NAME}
-    PUBLIC
-        ${PROJECT_SOURCE_DIR}/include
-        ${CMAKE_BINARY_DIR}
-        ${CMAKE_SOURCE_DIR}/include
-        ${CMAKE_SOURCE_DIR}/contrib
+add_binny(mms-1d
+    src/HeatEquationProblem.cpp
+    src/mms-1d.cpp
 )
 
-target_link_libraries(
-    ${PROJECT_NAME}
-        PRIVATE
-        godzilla
+# 2D
+
+add_binny(2d
+    src/HeatEquationProblem.cpp
+    src/ConvectiveHeatFluxBC.cpp
+    src/2d.cpp
 )
+
+# 2D-explicit
+
+add_binny(2d-explicit
+    src/HeatEquationExplicit.cpp
+    src/2d-explicit.cpp
+)
+
+# TESTS
 
 if (GODZILLA_BUILD_TESTS)
-    # temporarily disbaled
-    # add_subdirectory(test)
+    include(TesterExodusII)
+
+    add_test_exodiff(
+        NAME    ${PROJECT_NAME}-mms-1d
+        COMMAND ${PROJECT_NAME}-mms-1d
+        OUTPUT  ${PROJECT_BINARY_DIR}/mms-1d.exo
+        GOLD    ${PROJECT_SOURCE_DIR}/gold/mms-1d.exo
+        ARGS    -Floor 1e-12
+    )
+
+    add_test_exodiff(
+        NAME    ${PROJECT_NAME}-2d
+        COMMAND ${PROJECT_NAME}-2d
+        OUTPUT  ${PROJECT_BINARY_DIR}/2d.exo
+        GOLD    ${PROJECT_SOURCE_DIR}/gold/2d.exo
+        ARGS    -Floor 1e-12
+    )
+
+    add_test_exodiff(
+        NAME    ${PROJECT_NAME}-2d-explicit
+        COMMAND ${PROJECT_NAME}-2d-explicit
+        OUTPUT  ${PROJECT_BINARY_DIR}/2d-explicit.exo
+        GOLD    ${PROJECT_SOURCE_DIR}/gold/2d-explicit.exo
+        ARGS    -Floor 1e-12
+    )
 endif()

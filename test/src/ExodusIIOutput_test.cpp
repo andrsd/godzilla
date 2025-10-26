@@ -47,6 +47,7 @@ TEST(ExodusIIOutputTest, create)
 
     auto params = ExodusIIOutput::parameters();
     params.set<App *>("_app", &app);
+    params.set<std::string>("file", "out");
     auto out = prob.add_output<ExodusIIOutput>(params);
 
     out->create();
@@ -70,6 +71,7 @@ TEST(ExodusIIOutputTest, non_existent_var)
 
     auto params = ExodusIIOutput::parameters();
     params.set<App *>("_app", &app);
+    params.set<std::string>("file", "out");
     params.set<std::vector<std::string>>("variables", { "asdf" });
     prob.add_output<ExodusIIOutput>(params);
 
@@ -99,6 +101,7 @@ TEST(ExodusIIOutputTest, output)
 
     auto params = ExodusIIOutput::parameters();
     params.set<App *>("_app", &app);
+    params.set<std::string>("file", "out");
     auto out = prob.add_output<ExodusIIOutput>(params);
 
     prob.create();
@@ -124,14 +127,12 @@ TEST(ExodusIIOutputTest, set_file_name)
     GTestFENonlinearProblem prob(prob_pars);
 
     auto params = ExodusIIOutput::parameters();
-    params.set<App *>("_app", &app);
-    params.set<Problem *>("_problem", &prob);
-    params.set<std::string>("file", "out");
-    ExodusIIOutput out(params);
+    params.set<App *>("_app", &app).set<std::string>("file", "out");
+    auto out = prob.add_output<ExodusIIOutput>(params);
 
-    out.create();
+    out->create();
 
-    EXPECT_EQ(out.get_file_name(), "out.exo");
+    EXPECT_EQ(out->get_file_name(), "out.exo");
 }
 
 TEST(ExodusIIOutputTest, set_seq_file_name)
@@ -149,13 +150,11 @@ TEST(ExodusIIOutputTest, set_seq_file_name)
     GTestFENonlinearProblem prob(prob_pars);
 
     auto params = ExodusIIOutput::parameters();
-    params.set<App *>("_app", &app);
-    params.set<Problem *>("_problem", &prob);
-    params.set<std::string>("file", "out");
-    ExodusIIOutput out(params);
+    params.set<App *>("_app", &app).set<std::string>("file", "out");
+    auto out = prob.add_output<ExodusIIOutput>(params);
 
-    out.create();
+    out->create();
 
-    out.set_sequence_file_base(2);
-    EXPECT_EQ(out.get_file_name(), "out.2.exo");
+    out->set_sequence_file_base(2);
+    EXPECT_EQ(out->get_file_name(), "out.2.exo");
 }
