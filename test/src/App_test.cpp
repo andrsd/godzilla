@@ -2,7 +2,6 @@
 #include "GodzillaApp_test.h"
 #include "godzilla/Mesh.h"
 #include "godzilla/Problem.h"
-#include "godzilla/GYMLFile.h"
 #include "godzilla/LineMesh.h"
 #include "ExceptionTestMacros.h"
 #include <filesystem>
