@@ -140,7 +140,7 @@ PoissonApp::create_auxs(godzilla::DiscreteProblemInterface & prob, godzilla::Int
 
     auto aux_pars = ConstantAuxiliaryField::parameters();
     aux_pars.set<godzilla::App *>("_app", this)
-        .set<std::string>("_name", "forcing_fn")
+        .set<std::string>("name", "forcing_fn")
         .set<std::vector<Real>>("value", { value });
     prob.add_auxiliary_field<ConstantAuxiliaryField>(aux_pars);
 }
@@ -161,7 +161,7 @@ PoissonApp::create_bcs(DiscreteProblemInterface & prob, Int dim)
 
     auto bc_pars = DirichletBC::parameters();
     bc_pars.set<godzilla::App *>("_app", this)
-        .set<std::string>("_name", "all")
+        .set<std::string>("name", "all")
         .set<Int>("dim", dim)
         .set<std::vector<std::string>>("boundary", boundaries);
     prob.add_boundary_condition<DirichletBC>(bc_pars);
@@ -185,7 +185,7 @@ PoissonApp::solve_problem(Int dim)
 
     auto ic_pars = ConstantInitialCondition::parameters();
     ic_pars.set<godzilla::App *>("_app", this)
-        .set<std::string>("_name", "all")
+        .set<std::string>("name", "all")
         .set<std::string>("field", "u")
         .set<std::vector<Real>>("value", { 0 });
     prob.add_initial_condition<ConstantInitialCondition>(ic_pars);

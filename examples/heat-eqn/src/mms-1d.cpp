@@ -76,13 +76,13 @@ main(int argc, char * argv[])
 
         auto aux_pars = ConstantAuxiliaryField::parameters();
         aux_pars.set<godzilla::App *>("_app", &app)
-            .set<std::string>("_name", "q_ppp")
+            .set<std::string>("name", "q_ppp")
             .set<std::vector<Real>>("value", { -1. });
         prob.add_auxiliary_field<ConstantAuxiliaryField>(aux_pars);
 
         auto ic_pars = TempIC::parameters();
         ic_pars.set<godzilla::App *>("_app", &app)
-            .set<std::string>("_name", "all")
+            .set<std::string>("name", "all")
             .set<std::string>("field", "temp");
         prob.add_initial_condition<TempIC>(ic_pars);
 

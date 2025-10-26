@@ -45,7 +45,7 @@ public:
     {
         auto class_name = parameters.get<std::string>("_type");
         auto entry = this->registry.get(class_name);
-        parameters.set<std::string>("_name", name);
+        parameters.set<std::string>("name", name);
         auto * obj = entry.build_ptr(parameters);
         if (T * object = dynamic_cast<T *>(obj)) {
             this->objects.push_back(object);

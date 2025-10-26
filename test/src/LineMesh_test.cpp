@@ -14,7 +14,7 @@ TEST(LineMeshTest, api)
 
     auto params = LineMesh::parameters();
     params.set<App *>("_app", &app);
-    params.set<std::string>("_name", "line_mesh");
+    params.set<std::string>("name", "line_mesh");
     params.set<Real>("xmin", 1);
     params.set<Real>("xmax", 2);
     params.set<Int>("nx", 10);
@@ -44,7 +44,7 @@ TEST(LineMeshTest, incorrect_dims)
 
     auto params = LineMesh::parameters();
     params.set<App *>("_app", &app);
-    params.set<std::string>("_name", "line_mesh");
+    params.set<std::string>("name", "line_mesh");
     params.set<Real>("xmin", 2);
     params.set<Real>("xmax", 1);
     params.set<Int>("nx", 2);

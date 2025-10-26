@@ -28,7 +28,7 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
 {
     auto ic_params = ConstantInitialCondition::parameters();
     ic_params.set<godzilla::App *>("_app", this->app);
-    ic_params.set<std::string>("_name", "ic");
+    ic_params.set<std::string>("name", "ic");
     ic_params.set<std::vector<Real>>("value", { 0 });
     prob->add_initial_condition<ConstantInitialCondition>(ic_params);
 
@@ -142,7 +142,7 @@ TEST_F(ImplicitFENonlinearProblemTest, set_schemes)
 
     auto ic_params = ConstantInitialCondition::parameters();
     ic_params.set<godzilla::App *>("_app", this->app);
-    ic_params.set<std::string>("_name", "ic");
+    ic_params.set<std::string>("name", "ic");
     ic_params.set<std::vector<Real>>("value", { 0 });
     this->prob->add_initial_condition<ConstantInitialCondition>(ic_params);
 
@@ -170,7 +170,7 @@ TEST_F(ImplicitFENonlinearProblemTest, converged_reason)
 
     auto ic_params = ConstantInitialCondition::parameters();
     ic_params.set<godzilla::App *>("_app", this->app);
-    ic_params.set<std::string>("_name", "ic");
+    ic_params.set<std::string>("name", "ic");
     ic_params.set<std::vector<Real>>("value", { 0 });
     this->prob->add_initial_condition<ConstantInitialCondition>(ic_params);
 

@@ -71,20 +71,20 @@ main(int argc, char * argv[])
 
         auto aux_ffn_pars = ConstantAuxiliaryField::parameters();
         aux_ffn_pars.set<godzilla::App *>("_app", &app)
-            .set<std::string>("_name", "forcing_fn")
+            .set<std::string>("name", "forcing_fn")
             .set<std::vector<Real>>("value", { 2. });
         prob.add_auxiliary_field<ConstantAuxiliaryField>(aux_ffn_pars);
 
         auto ic_pars = TempIC::parameters();
         ic_pars.set<godzilla::App *>("_app", &app)
-            .set<std::string>("_name", "all")
+            .set<std::string>("name", "all")
             .set<std::string>("field", "temp")
             .set<std::vector<Real>>("value", { 300 });
         prob.add_initial_condition<TempIC>(ic_pars);
 
         auto bc_all_pars = DirichletBC::parameters();
         bc_all_pars.set<godzilla::App *>("_app", &app)
-            .set<std::string>("_name", "all")
+            .set<std::string>("name", "all")
             .set<std::vector<std::string>>("boundary", { "left", "right", "top", "bottom" });
         prob.add_boundary_condition<DirichletBC>(bc_all_pars);
 
