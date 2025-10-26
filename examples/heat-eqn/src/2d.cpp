@@ -53,19 +53,19 @@ main(int argc, char * argv[])
 
         auto aux_htc_pars = ConstantAuxiliaryField::parameters();
         aux_htc_pars.set<godzilla::App *>("_app", &app)
-            .set<std::string>("_name", "htc")
+            .set<std::string>("name", "htc")
             .set<std::vector<Real>>("value", { 100. });
         prob.add_auxiliary_field<ConstantAuxiliaryField>(aux_htc_pars);
 
         auto aux_Tamb_pars = ConstantAuxiliaryField::parameters();
         aux_Tamb_pars.set<godzilla::App *>("_app", &app)
-            .set<std::string>("_name", "T_ambient")
+            .set<std::string>("name", "T_ambient")
             .set<std::vector<Real>>("value", { 400. });
         prob.add_auxiliary_field<ConstantAuxiliaryField>(aux_Tamb_pars);
 
         auto ic_pars = ConstantInitialCondition::parameters();
         ic_pars.set<godzilla::App *>("_app", &app)
-            .set<std::string>("_name", "all")
+            .set<std::string>("name", "all")
             .set<std::string>("field", "temp")
             .set<std::vector<Real>>("value", { 300 });
         prob.add_initial_condition<ConstantInitialCondition>(ic_pars);

@@ -13,15 +13,15 @@ Object::parameters()
     Parameters params;
     params.add_private_param<App *>("_app", nullptr)
         .add_private_param<std::string>("_type", "")
-        .add_private_param<std::string>("_name", "");
+        .add_param<std::string>("name", "Name of the object");
     return params;
 }
 
 Object::Object(const Parameters & pars) :
-    LoggingInterface(pars.get<App *>("_app")->get_logger(), pars.get<std::string>("_name")),
+    LoggingInterface(pars.get<App *>("_app")->get_logger(), pars.get<std::string>("name", "")),
     app(pars.get<App *>("_app")),
     type(pars.get<std::string>("_type")),
-    name(pars.get<std::string>("_name"))
+    name(pars.get<std::string>("name", ""))
 {
     CALL_STACK_MSG();
 }

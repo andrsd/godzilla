@@ -121,7 +121,7 @@ TEST(NaturalBCTest, fe)
 
     auto bc_params = TestNaturalBC::parameters();
     bc_params.set<App *>("_app", &app);
-    bc_params.set<std::string>("_name", "bc1");
+    bc_params.set<std::string>("name", "bc1");
     bc_params.set<std::vector<std::string>>("boundary", { "left" });
     bc_params.set<std::string>("field", "u");
     auto bc = prob.add_boundary_condition<TestNaturalBC>(bc_params);

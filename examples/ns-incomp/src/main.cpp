@@ -123,24 +123,24 @@ main(int argc, char * argv[])
 
         auto ic_vel_pars = VelocityIC::parameters();
         ic_vel_pars.set<godzilla::App *>("_app", &app)
-            .set<std::string>("_name", "velocity")
+            .set<std::string>("name", "velocity")
             .set<std::string>("field", "velocity");
         prob.add_initial_condition<VelocityIC>(ic_vel_pars);
 
         auto ic_p_pars = PressureIC::parameters();
         ic_p_pars.set<godzilla::App *>("_app", &app)
-            .set<std::string>("_name", "pressure")
+            .set<std::string>("name", "pressure")
             .set<std::string>("field", "pressure");
         prob.add_initial_condition<PressureIC>(ic_p_pars);
 
         auto aux_pars = ForcingFnAux::parameters();
         aux_pars.set<godzilla::App *>("_app", &app);
-        aux_pars.set<std::string>("_name", "ffn");
+        aux_pars.set<std::string>("name", "ffn");
         prob.add_auxiliary_field<ForcingFnAux>(aux_pars);
 
         auto bc_pars = VelocityBC::parameters();
         bc_pars.set<godzilla::App *>("_app", &app)
-            .set<std::string>("_name", "all")
+            .set<std::string>("name", "all")
             .set<std::string>("field", "velocity")
             .set<std::vector<std::string>>("boundary", { "left", "right", "top", "bottom" });
         prob.add_boundary_condition<VelocityBC>(bc_pars);
