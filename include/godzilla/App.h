@@ -19,7 +19,6 @@ namespace mpi = mpicpp_lite;
 namespace godzilla {
 
 class Problem;
-class InputFile;
 
 class App : public PrintInterface {
 public:
