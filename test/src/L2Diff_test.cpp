@@ -27,28 +27,28 @@ TEST(L2DiffTest, DISABLED_compute)
     TestApp app;
 
     auto mesh_params = LineMesh::parameters();
-    mesh_params.set<App *>("_app", &app);
+    mesh_params.set<App *>("app", &app);
     mesh_params.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = GTestFENonlinearProblem::parameters();
-    prob_params.set<App *>("_app", &app);
+    prob_params.set<App *>("app", &app);
     prob_params.set<Mesh *>("mesh", mesh.get());
     GTestFENonlinearProblem prob(prob_params);
     app.set_problem(&prob);
 
     auto bc_left_params = DirichletBC::parameters();
-    bc_left_params.set<App *>("_app", &app);
+    bc_left_params.set<App *>("app", &app);
     bc_left_params.set<std::vector<std::string>>("boundary", { "left" });
     prob.add_boundary_condition<DirichletBC>(bc_left_params);
 
     auto bc_right_params = DirichletBC::parameters();
-    bc_right_params.set<App *>("_app", &app);
+    bc_right_params.set<App *>("app", &app);
     bc_right_params.set<std::vector<std::string>>("boundary", { "right" });
     prob.add_boundary_condition<DirichletBC>(bc_right_params);
 
     auto ps_params = L2Diff::parameters();
-    ps_params.set<App *>("_app", &app);
+    ps_params.set<App *>("app", &app);
     ps_params.set<std::vector<std::string>>("value", { "x*x" });
     auto ps = prob.add_postprocessor<L2Diff>(ps_params);
 

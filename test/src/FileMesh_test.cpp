@@ -12,7 +12,7 @@ TEST(FileMesh, exoii_file_format)
     TestApp app;
 
     auto mesh_pars = FileMesh::parameters();
-    mesh_pars.set<godzilla::App *>("_app", &app);
+    mesh_pars.set<godzilla::App *>("app", &app);
     mesh_pars.set<std::string>("file",
                                std::string(GODZILLA_UNIT_TESTS_ROOT) +
                                    std::string("/assets/mesh/2blk.exo"));
@@ -27,7 +27,7 @@ TEST(FileMesh, unknown_mesh_format)
     TestApp app;
 
     auto mesh_pars = FileMesh::parameters();
-    mesh_pars.set<godzilla::App *>("_app", &app);
+    mesh_pars.set<godzilla::App *>("app", &app);
     mesh_pars.set<std::string>("file",
                                std::string(GODZILLA_UNIT_TESTS_ROOT) +
                                    std::string("/assets/yml/empty.yml"));

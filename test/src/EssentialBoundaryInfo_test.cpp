@@ -43,7 +43,7 @@ TEST(EssentialBoundaryTest, test_1d)
     TestApp app;
 
     auto mesh_pars = TestMesh1D::parameters();
-    mesh_pars.set<godzilla::App *>("_app", &app);
+    mesh_pars.set<godzilla::App *>("app", &app);
     auto mesh = MeshFactory::create<TestMesh1D>(mesh_pars);
 
     {
@@ -70,7 +70,7 @@ TEST(EssentialBoundaryTest, test_2d)
     TestApp app;
 
     auto mesh_pars = TestMesh2D::parameters();
-    mesh_pars.set<godzilla::App *>("_app", &app);
+    mesh_pars.set<godzilla::App *>("app", &app);
     auto mesh = MeshFactory::create<TestMesh2D>(mesh_pars);
 
     {
@@ -101,7 +101,7 @@ TEST(EssentialBoundaryTest, test_3d)
     TestApp app;
 
     auto mesh_pars = TestMesh3D::parameters();
-    mesh_pars.set<godzilla::App *>("_app", &app);
+    mesh_pars.set<godzilla::App *>("app", &app);
     auto mesh = MeshFactory::create<TestMesh3D>(mesh_pars);
 
     {

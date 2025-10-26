@@ -45,7 +45,7 @@ TEST(EssentialBCTest, test)
     auto mesh_pars = BoxMesh::parameters();
     // clang-format off
     mesh_pars
-        .set<App *>("_app", &app)
+        .set<App *>("app", &app)
         .set<Int>("nx", 2)
         .set<Int>("ny", 2)
         .set<Int>("nz", 2);
@@ -53,13 +53,13 @@ TEST(EssentialBCTest, test)
     auto mesh = MeshFactory::create<BoxMesh>(mesh_pars);
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<App *>("_app", &app);
+    prob_pars.set<App *>("app", &app);
     prob_pars.set<Mesh *>("mesh", mesh.get());
     GTestFENonlinearProblem problem(prob_pars);
     app.set_problem(&problem);
 
     auto params = DirichletBC::parameters();
-    params.set<App *>("_app", &app);
+    params.set<App *>("app", &app);
     params.set<std::vector<std::string>>("boundary", {});
     auto bc = problem.add_boundary_condition<DirichletBC>(params);
 
@@ -88,18 +88,18 @@ TEST(EssentialBCTest, non_existing_field)
     TestApp app;
 
     Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<App *>("app", &app);
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     Parameters prob_pars = GTest2FieldsFENonlinearProblem::parameters();
-    prob_pars.set<App *>("_app", &app);
+    prob_pars.set<App *>("app", &app);
     prob_pars.set<Mesh *>("mesh", mesh.get());
     GTest2FieldsFENonlinearProblem problem(prob_pars);
     app.set_problem(&problem);
 
     Parameters params = DirichletBC::parameters();
-    params.set<App *>("_app", &app)
+    params.set<App *>("app", &app)
         .set<std::string>("field", "asdf")
         .set<std::vector<std::string>>("boundary", {});
     problem.add_boundary_condition<DirichletBC>(params);
@@ -120,18 +120,18 @@ TEST(EssentialBCTest, field_param_not_specified)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<App *>("app", &app);
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = GTest2FieldsFENonlinearProblem::parameters();
-    prob_pars.set<App *>("_app", &app);
+    prob_pars.set<App *>("app", &app);
     prob_pars.set<Mesh *>("mesh", mesh.get());
     GTest2FieldsFENonlinearProblem problem(prob_pars);
     app.set_problem(&problem);
 
     auto params = DirichletBC::parameters();
-    params.set<App *>("_app", &app);
+    params.set<App *>("app", &app);
     params.set<std::vector<std::string>>("boundary", {});
     problem.add_boundary_condition<DirichletBC>(params);
 

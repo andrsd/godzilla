@@ -141,12 +141,12 @@ TEST(TSAbstract, test)
     TestApp app;
 
     auto pars_mesh = LineMesh::parameters();
-    pars_mesh.set<godzilla::App *>("_app", &app);
+    pars_mesh.set<godzilla::App *>("app", &app);
     pars_mesh.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(pars_mesh);
 
     auto pars_prob = GTestProblem::parameters();
-    pars_prob.set<godzilla::App *>("_app", &app);
+    pars_prob.set<godzilla::App *>("app", &app);
     pars_prob.set<Mesh *>("mesh", mesh.get());
     pars_prob.set<Int>("num_steps", 1);
     pars_prob.set<Real>("dt", 0.1);

@@ -106,19 +106,19 @@ TEST(ExplicitFVLinearProblemTest, api)
 #if PETSC_VERSION_GE(3, 21, 0)
     // PETSc 3.21.0+ has a bug in forming the mass matrix in 1D, se we use 2D mesh in this test
     auto mesh_pars = RectangleMesh::parameters();
-    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<App *>("app", &app);
     mesh_pars.set<Int>("nx", 2);
     mesh_pars.set<Int>("ny", 1);
     auto mesh = MeshFactory::create<RectangleMesh>(mesh_pars);
 #else
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<App *>("app", &app);
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 #endif
 
     auto prob_pars = TestExplicitFVLinearProblem::parameters();
-    prob_pars.set<App *>("_app", &app)
+    prob_pars.set<App *>("app", &app)
         .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
@@ -212,19 +212,19 @@ TEST(ExplicitFVLinearProblemTest, fields)
 #if PETSC_VERSION_GE(3, 21, 0)
     // PETSc 3.21.0+ has a bug in forming the mass matrix in 1D, se we use 2D mesh in this test
     auto mesh_pars = RectangleMesh::parameters();
-    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<App *>("app", &app);
     mesh_pars.set<Int>("nx", 2);
     mesh_pars.set<Int>("ny", 1);
     auto mesh = MeshFactory::create<RectangleMesh>(mesh_pars);
 #else
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<App *>("app", &app);
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 #endif
 
     auto prob_pars = TestExplicitFVLinearProblem::parameters();
-    prob_pars.set<App *>("_app", &app)
+    prob_pars.set<App *>("app", &app)
         .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
@@ -263,20 +263,20 @@ TEST(ExplicitFVLinearProblemTest, test_mass_matrix)
 #if PETSC_VERSION_GE(3, 21, 0)
     // PETSc 3.21.0+ has a bug in forming the mass matrix in 1D, se we use 2D mesh in this test
     auto mesh_pars = RectangleMesh::parameters();
-    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<App *>("app", &app);
     mesh_pars.set<Int>("nx", 3);
     mesh_pars.set<Int>("ny", 1);
     mesh_pars.set<Real>("ymax", 3.);
     auto mesh = MeshFactory::create<RectangleMesh>(mesh_pars);
 #else
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<App *>("app", &app);
     mesh_pars.set<Int>("nx", 3);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 #endif
 
     auto prob_pars = TestExplicitFVLinearProblem::parameters();
-    prob_pars.set<App *>("_app", &app)
+    prob_pars.set<App *>("app", &app)
         .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
@@ -305,12 +305,12 @@ TEST(ExplicitFVLinearProblemTest, solve)
     // PETSc 3.21.0+ has a bug in forming the mass matrix in 1D, se we use 2D mesh in this test
 #else
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<App *>("app", &app);
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = TestExplicitFVLinearProblem::parameters();
-    prob_pars.set<App *>("_app", &app)
+    prob_pars.set<App *>("app", &app)
         .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
@@ -320,13 +320,13 @@ TEST(ExplicitFVLinearProblemTest, solve)
     app.set_problem(&prob);
 
     auto bc_left_pars = TestBC::parameters();
-    bc_left_pars.set<App *>("_app", &app)
+    bc_left_pars.set<App *>("app", &app)
         .set<std::vector<std::string>>("boundary", { "left" })
         .set<bool>("inlet", true);
     auto bc_left = prob.add_boundary_condition<TestBC>(bc_left_pars);
 
     auto bc_right_pars = TestBC::parameters();
-    bc_right_pars.set<App *>("_app", &app)
+    bc_right_pars.set<App *>("app", &app)
         .set<std::vector<std::string>>("boundary", { "right" })
         .set<bool>("inlet", false);
     auto bc_right = prob.add_boundary_condition<TestBC>(bc_right_pars);
@@ -364,19 +364,19 @@ TEST(ExplicitFVLinearProblemTest, set_schemes)
 #if PETSC_VERSION_GE(3, 21, 0)
     // PETSc 3.21.0+ has a bug in forming the mass matrix in 1D, so we use 2D mesh in this test
     auto mesh_pars = RectangleMesh::parameters();
-    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<App *>("app", &app);
     mesh_pars.set<Int>("nx", 2);
     mesh_pars.set<Int>("ny", 1);
     auto mesh = MeshFactory::create<RectangleMesh>(mesh_pars);
 #else
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<App *>("app", &app);
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 #endif
 
     auto prob_pars = TestExplicitFVLinearProblem::parameters();
-    prob_pars.set<App *>("_app", &app)
+    prob_pars.set<App *>("app", &app)
         .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
@@ -409,19 +409,19 @@ TEST(ExplicitFVLinearProblemTest, wrong_schemes)
 #if PETSC_VERSION_GE(3, 21, 0)
     // PETSc 3.21.0+ has a bug in forming the mass matrix in 1D, se we use 2D mesh in this test
     auto mesh_pars = RectangleMesh::parameters();
-    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<App *>("app", &app);
     mesh_pars.set<Int>("nx", 2);
     mesh_pars.set<Int>("ny", 1);
     auto mesh = MeshFactory::create<RectangleMesh>(mesh_pars);
 #else
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<App *>("app", &app);
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 #endif
 
     auto prob_pars = TestExplicitFVLinearProblem::parameters();
-    prob_pars.set<App *>("_app", &app)
+    prob_pars.set<App *>("app", &app)
         .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)

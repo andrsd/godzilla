@@ -47,14 +47,14 @@ main(int argc, char * argv[])
         app.set_verbosity_level(9);
 
         auto mesh_pars = LineMesh::parameters();
-        mesh_pars.set<godzilla::App *>("_app", &app)
+        mesh_pars.set<godzilla::App *>("app", &app)
             .set<Int>("nx", 100)
             .set<Real>("xmin", 0)
             .set<Real>("xmax", 1);
         auto lm = MeshFactory::create<LineMesh>(mesh_pars);
 
         auto prob_pars = BurgersEquation::parameters();
-        prob_pars.set<godzilla::App *>("_app", &app)
+        prob_pars.set<godzilla::App *>("app", &app)
             .set<Mesh *>("mesh", lm.get())
             .set<Real>("dt", 0.002)
             .set<Real>("start_time", 0)
@@ -64,24 +64,24 @@ main(int argc, char * argv[])
         app.set_problem(&prob);
 
         auto ic_pars = ConstantInitialCondition::parameters();
-        ic_pars.set<godzilla::App *>("_app", &app);
+        ic_pars.set<godzilla::App *>("app", &app);
         ic_pars.set<std::vector<Real>>("value", { 0 });
         prob.add_initial_condition<ConstantInitialCondition>(ic_pars);
 
         auto bc_left_pars = VelocityBC::parameters();
-        bc_left_pars.set<godzilla::App *>("_app", &app)
+        bc_left_pars.set<godzilla::App *>("app", &app)
             .set<std::vector<std::string>>("boundary", { "left" })
             .set<Real>("value", 1);
         prob.add_boundary_condition<VelocityBC>(bc_left_pars);
 
         auto bc_right_pars = VelocityBC::parameters();
-        bc_right_pars.set<godzilla::App *>("_app", &app)
+        bc_right_pars.set<godzilla::App *>("app", &app)
             .set<std::vector<std::string>>("boundary", { "right" })
             .set<Real>("value", -1);
         prob.add_boundary_condition<VelocityBC>(bc_right_pars);
 
         auto out_pars = ExodusIIOutput::parameters();
-        out_pars.set<godzilla::App *>("_app", &app)
+        out_pars.set<godzilla::App *>("app", &app)
             .set<Problem *>("_problem", &prob)
             .set<std::string>("file", "burgers")
             .set<std::vector<std::string>>("on", { "initial", "final" });

@@ -57,7 +57,7 @@ TEST(MeshTest, get_coordinates)
     TestApp app;
 
     auto params = TestMesh::parameters();
-    params.set<App *>("_app", &app);
+    params.set<App *>("app", &app);
     params.set<std::string>("name", "obj");
     auto mesh_qtr = MeshFactory::create<TestMesh>(params);
     auto mesh = mesh_qtr.get();
@@ -77,7 +77,7 @@ TEST(MeshTest, get_coordinates_local)
     TestApp app;
 
     auto params = TestMesh::parameters();
-    params.set<App *>("_app", &app);
+    params.set<App *>("app", &app);
     params.set<std::string>("name", "obj");
     auto mesh_qtr = MeshFactory::create<TestMesh>(params);
     auto mesh = mesh_qtr.get();
@@ -93,7 +93,7 @@ TEST(MeshTest, get_coordinates_section)
     TestApp app;
 
     auto params = TestMesh::parameters();
-    params.set<App *>("_app", &app);
+    params.set<App *>("app", &app);
     params.set<std::string>("name", "obj");
     auto mesh_qtr = MeshFactory::create<TestMesh>(params);
     auto mesh = mesh_qtr.get();
@@ -109,7 +109,7 @@ TEST(MeshTest, remove_label)
     TestApp app;
 
     auto params = TestMesh::parameters();
-    params.set<App *>("_app", &app);
+    params.set<App *>("app", &app);
     params.set<std::string>("name", "obj");
     auto mesh_qtr = MeshFactory::create<TestMesh>(params);
     auto mesh = mesh_qtr.get();
@@ -123,7 +123,7 @@ TEST(MeshTest, set_label_value)
     TestApp app;
 
     auto params = TestMesh::parameters();
-    params.set<App *>("_app", &app);
+    params.set<App *>("app", &app);
     params.set<std::string>("name", "obj");
     auto mesh_qtr = MeshFactory::create<TestMesh>(params);
     auto mesh = mesh_qtr.get();
@@ -140,7 +140,7 @@ TEST(MeshTest, clear_label_value)
     TestApp app;
 
     auto params = TestMesh::parameters();
-    params.set<App *>("_app", &app);
+    params.set<App *>("app", &app);
     params.set<std::string>("name", "obj");
     auto mesh_qtr = MeshFactory::create<TestMesh>(params);
     auto mesh = mesh_qtr.get();
@@ -159,7 +159,7 @@ TEST(MeshTest, view)
     TestApp app;
 
     Parameters params = TestMesh::parameters();
-    params.set<App *>("_app", &app);
+    params.set<App *>("app", &app);
     params.set<std::string>("name", "obj");
     auto mesh_qtr = MeshFactory::create<TestMesh>(params);
     auto mesh = mesh_qtr.get();
@@ -176,7 +176,7 @@ TEST(MeshTest, get_neighbors)
     TestApp app;
 
     auto params = TestMesh::parameters();
-    params.set<App *>("_app", &app);
+    params.set<App *>("app", &app);
     params.set<std::string>("name", "obj");
     auto mesh_qtr = MeshFactory::create<TestMesh>(params);
     auto mesh = mesh_qtr.get();

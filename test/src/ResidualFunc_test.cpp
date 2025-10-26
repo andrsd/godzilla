@@ -58,12 +58,12 @@ TEST(ResidualFuncTest, test)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<App *>("app", &app);
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = GTestProblem::parameters();
-    prob_pars.set<App *>("_app", &app)
+    prob_pars.set<App *>("app", &app)
         .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 20)
@@ -127,12 +127,12 @@ TEST(ResidualFuncTest, test_vals)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<App *>("app", &app);
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = GTestProblem::parameters();
-    prob_pars.set<App *>("_app", &app)
+    prob_pars.set<App *>("app", &app)
         .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 1.23)
         .set<Real>("end_time", 20)

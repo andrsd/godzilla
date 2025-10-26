@@ -43,7 +43,7 @@ TEST(NaturalBoundaryTest, test_1d)
     TestApp app;
 
     auto mesh_pars = TestMesh1D::parameters();
-    mesh_pars.set<godzilla::App *>("_app", &app);
+    mesh_pars.set<godzilla::App *>("app", &app);
     auto mesh_qtr = MeshFactory::create<TestMesh1D>(mesh_pars);
     auto mesh = mesh_qtr.get();
 
@@ -75,7 +75,7 @@ TEST(NaturalBoundaryTest, test_2d)
     TestApp app;
 
     auto mesh_pars = TestMesh2D::parameters();
-    mesh_pars.set<godzilla::App *>("_app", &app);
+    mesh_pars.set<godzilla::App *>("app", &app);
     auto mesh_qtr = MeshFactory::create<TestMesh2D>(mesh_pars);
     auto mesh = mesh_qtr.get();
 
@@ -109,7 +109,7 @@ TEST(NaturalBoundaryTest, test_3d)
     TestApp app;
 
     auto mesh_pars = TestMesh3D::parameters();
-    mesh_pars.set<godzilla::App *>("_app", &app);
+    mesh_pars.set<godzilla::App *>("app", &app);
     auto mesh_qtr = MeshFactory::create<TestMesh3D>(mesh_pars);
     auto mesh = mesh_qtr.get();
 

@@ -66,7 +66,7 @@ public:
 TEST_F(InitialConditionTest, api)
 {
     auto params = InitialCondition::parameters();
-    params.set<App *>("_app", this->app);
+    params.set<App *>("app", this->app);
     params.set<DiscreteProblemInterface *>("_dpi", this->prob);
     params.set<std::string>("name", "obj");
     MockInitialCondition ic(params);
@@ -79,13 +79,13 @@ TEST_F(InitialConditionTest, test)
     this->prob->add_aux_field("a", 1, Order(1));
 
     auto params = InitialCondition::parameters();
-    params.set<App *>("_app", this->app);
+    params.set<App *>("app", this->app);
     params.set<std::string>("name", "obj");
     params.set<std::string>("field", "u");
     auto ic = this->prob->add_initial_condition<MockInitialCondition>(params);
 
     auto aux_ic_pars = InitialCondition::parameters();
-    aux_ic_pars.set<App *>("_app", this->app);
+    aux_ic_pars.set<App *>("app", this->app);
     aux_ic_pars.set<std::string>("name", "a_ic");
     aux_ic_pars.set<std::string>("field", "a");
     auto aux_ic = this->prob->add_initial_condition<MockInitialCondition>(aux_ic_pars);
@@ -126,7 +126,7 @@ TEST_F(InitialConditionTest, test)
 TEST_F(InitialConditionTest, get_value)
 {
     auto params = TestInitialCondition::parameters();
-    params.set<App *>("_app", this->app);
+    params.set<App *>("app", this->app);
     params.set<DiscreteProblemInterface *>("_dpi", this->prob);
     params.set<std::string>("name", "obj");
     TestInitialCondition ic(params);
@@ -135,7 +135,7 @@ TEST_F(InitialConditionTest, get_value)
 TEST_F(InitialConditionTest, get_vector_value)
 {
     auto params = TestVectorInitialCondition::parameters();
-    params.set<App *>("_app", this->app);
+    params.set<App *>("app", this->app);
     params.set<DiscreteProblemInterface *>("_dpi", this->prob);
     params.set<std::string>("name", "obj");
     TestVectorInitialCondition ic(params);
@@ -144,7 +144,7 @@ TEST_F(InitialConditionTest, get_vector_value)
 TEST_F(InitialConditionTest, duplicate_ic_name)
 {
     auto params = TestInitialCondition::parameters();
-    params.set<App *>("_app", this->app);
+    params.set<App *>("app", this->app);
     params.set<std::string>("name", "obj");
 
     this->prob->add_initial_condition<TestInitialCondition>(params);
@@ -156,7 +156,7 @@ TEST_F(InitialConditionTest, duplicate_ic_name)
 TEST_F(InitialConditionTest, constant_ic)
 {
     auto params = ConstantInitialCondition::parameters();
-    params.set<App *>("_app", this->app);
+    params.set<App *>("app", this->app);
     params.set<std::vector<Real>>("value", { 3, 4, 5 });
     auto ic = this->prob->add_initial_condition<ConstantInitialCondition>(params);
     this->prob->create();
@@ -176,7 +176,7 @@ TEST_F(InitialConditionTest, constant_ic)
 TEST_F(InitialCondition2FieldTest, no_field_param)
 {
     auto params = InitialCondition::parameters();
-    params.set<App *>("_app", this->app);
+    params.set<App *>("app", this->app);
     params.set<std::string>("name", "obj");
     this->prob->add_initial_condition<MockInitialCondition>(params);
 
@@ -188,7 +188,7 @@ TEST_F(InitialCondition2FieldTest, non_existing_field)
     testing::internal::CaptureStderr();
 
     auto params = InitialCondition::parameters();
-    params.set<App *>("_app", this->app);
+    params.set<App *>("app", this->app);
     params.set<std::string>("name", "obj");
     params.set<std::string>("field", "asdf");
     this->prob->add_initial_condition<MockInitialCondition>(params);

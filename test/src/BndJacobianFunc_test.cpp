@@ -83,12 +83,12 @@ TEST(BndJacobianFuncTest, test)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<App *>("app", &app);
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = GTestProblem::parameters();
-    prob_pars.set<App *>("_app", &app)
+    prob_pars.set<App *>("app", &app)
         .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 20)
@@ -97,7 +97,7 @@ TEST(BndJacobianFuncTest, test)
     app.set_problem(&prob);
 
     auto bc_pars = NaturalBC::parameters();
-    bc_pars.set<App *>("_app", &app)
+    bc_pars.set<App *>("app", &app)
         .set<std::string>("field", "u")
         .set<std::vector<std::string>>("boundary", { "marker" });
     auto bc = prob.add_boundary_condition<TestBC>(bc_pars);
