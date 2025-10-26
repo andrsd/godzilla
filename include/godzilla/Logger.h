@@ -5,7 +5,7 @@
 
 #include "godzilla/Terminal.h"
 #include "fmt/core.h"
-#include <vector>
+#include <array>
 #include <string>
 
 namespace godzilla {
@@ -13,15 +13,25 @@ namespace godzilla {
 /// Class for logging errors and warnings
 class Logger {
     /// Type of the message
-    enum Type { ERROR, WARNING };
-
-    /// Logger entry
-    struct Entry {
-        /// Type of the entry
-        Type type;
-        /// Text of the message
-        std::string text;
+    enum class Type {
+        /// Error
+        ERROR,
+        /// Warning
+        WARNING,
+        ///
+        Count
     };
+
+    constexpr static std::array<std::string_view, static_cast<size_t>(Type::Count)> type_name = {
+        "ERROR",
+        "WARNING"
+    };
+
+    constexpr std::string_view
+    to_string(Type c)
+    {
+        return Logger::type_name[static_cast<size_t>(c)];
+    }
 
 public:
     Logger();
@@ -38,8 +48,8 @@ public:
     void
     error(const std::string & prefix, fmt::format_string<T...> format, T... args)
     {
-        std::string str = format_msg("[ERROR]", prefix, format, std::forward<T>(args)...);
-        this->entries.push_back({ ERROR, str });
+        auto str = format_msg(Type::ERROR, prefix, format, std::forward<T>(args)...);
+        fmt::println(stderr, "{}{}{}", Terminal::red, str, Terminal::normal);
         ++this->num_errors;
     }
 
@@ -55,8 +65,8 @@ public:
     void
     warning(const std::string & prefix, fmt::format_string<T...> format, T... args)
     {
-        std::string str = format_msg("[WARNING]", prefix, format, std::forward<T>(args)...);
-        this->entries.push_back({ WARNING, str });
+        auto str = format_msg(Type::WARNING, prefix, format, std::forward<T>(args)...);
+        fmt::println(stderr, "{}{}{}", Terminal::yellow, str, Terminal::normal);
         ++this->num_warnings;
     }
 
@@ -81,13 +91,10 @@ public:
 protected:
     template <typename... T>
     std::string
-    format_msg(const std::string & title,
-               const std::string & prefix,
-               fmt::format_string<T...> format,
-               T... args)
+    format_msg(Type type, const std::string & prefix, fmt::format_string<T...> format, T... args)
     {
         std::string str;
-        str += fmt::format("{} ", title);
+        str += fmt::format("[{}] ", to_string(type));
         if (prefix.length() > 0)
             str += fmt::format("{}: ", prefix);
         str += fmt::format(format, std::forward<T>(args)...);
@@ -95,8 +102,6 @@ protected:
     }
 
 private:
-    /// List of logged errors/warnings
-    std::vector<Entry> entries;
     /// Number of errors
     std::size_t num_errors;
     /// Number of warnings

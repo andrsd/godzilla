@@ -186,15 +186,15 @@ App::run()
 {
     CALL_STACK_MSG();
 
-    auto start_time = std::chrono::high_resolution_clock::now();
-
     if (!check_integrity()) {
+        // NOTE: logger could return a string containing the number of errors and warnirngs and that
+        // can be thorwn as the text of the exception
         this->logger->print();
         throw Exception("");
     }
 
+    auto start_time = std::chrono::high_resolution_clock::now();
     run_problem();
-
     auto end_time = std::chrono::high_resolution_clock::now();
 
     if (!this->perf_log_file_name.empty()) {

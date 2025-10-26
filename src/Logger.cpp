@@ -16,7 +16,7 @@ std::size_t
 Logger::get_num_entries() const
 {
     CALL_STACK_MSG();
-    return this->entries.size();
+    return this->num_errors + this->num_warnings;
 }
 
 std::size_t
@@ -39,19 +39,6 @@ Logger::print() const
     CALL_STACK_MSG();
     if (this->num_errors == 0 && this->num_warnings == 0)
         return;
-
-    for (auto & entry : this->entries) {
-        switch (entry.type) {
-        case ERROR:
-            fmt::print(stderr, "{}", Terminal::red);
-            break;
-        case WARNING:
-            fmt::print(stderr, "{}", Terminal::yellow);
-            break;
-        }
-        fmt::print(stderr, "{}", entry.text);
-        fmt::print(stderr, "{}\n", Terminal::normal);
-    }
 
     fmt::print(stderr, "{}", Terminal::magenta);
     if (this->num_errors > 0)
