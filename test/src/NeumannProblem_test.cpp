@@ -159,25 +159,25 @@ TEST(NeumannProblemTest, solve)
     TestApp app;
 
     auto mesh_params = RectangleMesh::parameters();
-    mesh_params.set<App *>("_app", &app);
+    mesh_params.set<App *>("app", &app);
     mesh_params.set<Int>("nx", 2);
     mesh_params.set<Int>("ny", 1);
     auto mesh = MeshFactory::create<RectangleMesh>(mesh_params);
 
     auto prob_params = TestNeumannProblem::parameters();
-    prob_params.set<App *>("_app", &app);
+    prob_params.set<App *>("app", &app);
     prob_params.set<Mesh *>("mesh", mesh.get());
     TestNeumannProblem prob(prob_params);
     app.set_problem(&prob);
 
     auto bc_left_pars = TestNeumannBC::parameters();
-    bc_left_pars.set<App *>("_app", &app);
+    bc_left_pars.set<App *>("app", &app);
     bc_left_pars.set<std::string>("name", "bc1");
     bc_left_pars.set<std::vector<std::string>>("boundary", { "left" });
     prob.add_boundary_condition<TestNeumannBC>(bc_left_pars);
 
     auto bc_right_pars = TestNeumannBC::parameters();
-    bc_right_pars.set<App *>("_app", &app);
+    bc_right_pars.set<App *>("app", &app);
     bc_right_pars.set<std::string>("name", "bc2");
     bc_right_pars.set<std::vector<std::string>>("boundary", { "right" });
     prob.add_boundary_condition<TestNeumannBC>(bc_right_pars);

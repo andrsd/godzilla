@@ -27,13 +27,13 @@ public:
 TEST_F(ImplicitFENonlinearProblemTest, run)
 {
     auto ic_params = ConstantInitialCondition::parameters();
-    ic_params.set<godzilla::App *>("_app", this->app);
+    ic_params.set<godzilla::App *>("app", this->app);
     ic_params.set<std::string>("name", "ic");
     ic_params.set<std::vector<Real>>("value", { 0 });
     prob->add_initial_condition<ConstantInitialCondition>(ic_params);
 
     auto bc_params = DirichletBC::parameters();
-    bc_params.set<godzilla::App *>("_app", this->app);
+    bc_params.set<godzilla::App *>("app", this->app);
     bc_params.set<std::vector<std::string>>("boundary", { "left", "right" });
     prob->add_boundary_condition<DirichletBC>(bc_params);
 
@@ -141,13 +141,13 @@ TEST_F(ImplicitFENonlinearProblemTest, set_schemes)
     this->app->set_problem(this->prob);
 
     auto ic_params = ConstantInitialCondition::parameters();
-    ic_params.set<godzilla::App *>("_app", this->app);
+    ic_params.set<godzilla::App *>("app", this->app);
     ic_params.set<std::string>("name", "ic");
     ic_params.set<std::vector<Real>>("value", { 0 });
     this->prob->add_initial_condition<ConstantInitialCondition>(ic_params);
 
     auto bc_params = DirichletBC::parameters();
-    bc_params.set<godzilla::App *>("_app", this->app);
+    bc_params.set<godzilla::App *>("app", this->app);
     bc_params.set<std::vector<std::string>>("boundary", { "left", "right" });
     this->prob->add_boundary_condition<DirichletBC>(bc_params);
 
@@ -169,13 +169,13 @@ TEST_F(ImplicitFENonlinearProblemTest, converged_reason)
     this->app->set_problem(this->prob);
 
     auto ic_params = ConstantInitialCondition::parameters();
-    ic_params.set<godzilla::App *>("_app", this->app);
+    ic_params.set<godzilla::App *>("app", this->app);
     ic_params.set<std::string>("name", "ic");
     ic_params.set<std::vector<Real>>("value", { 0 });
     this->prob->add_initial_condition<ConstantInitialCondition>(ic_params);
 
     auto bc_params = DirichletBC::parameters();
-    bc_params.set<godzilla::App *>("_app", this->app);
+    bc_params.set<godzilla::App *>("app", this->app);
     bc_params.set<std::vector<std::string>>("boundary", { "left", "right" });
     this->prob->add_boundary_condition<DirichletBC>(bc_params);
 

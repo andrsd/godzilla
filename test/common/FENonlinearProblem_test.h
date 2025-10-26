@@ -17,14 +17,14 @@ public:
         {
             auto pars = godzilla::LineMesh::parameters();
             // clang-format off
-            pars.set<godzilla::App *>("_app", this->app)
+            pars.set<godzilla::App *>("app", this->app)
                 .set<godzilla::Int>("nx", 2);
             // clang-format on
             this->mesh = godzilla::MeshFactory::create<godzilla::LineMesh>(pars);
         }
         {
             auto pars = GTestFENonlinearProblem::parameters();
-            pars.set<godzilla::App *>("_app", this->app)
+            pars.set<godzilla::App *>("app", this->app)
                 .set<std::string>("_type", "GTestFENonlinearProblem")
                 .set<godzilla::Mesh *>("mesh", this->mesh.get());
             this->prob = this->app->build_object<GTestFENonlinearProblem>("prob", pars);
@@ -52,14 +52,14 @@ public:
         {
             auto pars = godzilla::LineMesh::parameters();
             // clang-format off
-            pars.set<godzilla::App *>("_app", this->app)
+            pars.set<godzilla::App *>("app", this->app)
                 .set<godzilla::Int>("nx", 2);
             // clang-format on
             this->mesh = godzilla::MeshFactory::create<godzilla::LineMesh>(pars);
         }
         {
             auto pars = GTest2FieldsFENonlinearProblem::parameters();
-            pars.set<godzilla::App *>("_app", this->app)
+            pars.set<godzilla::App *>("app", this->app)
                 .set<std::string>("_type", "GTest2FieldsFENonlinearProblem")
                 .set<godzilla::Mesh *>("mesh", this->mesh.get());
             this->prob = this->app->build_object<GTest2FieldsFENonlinearProblem>("prob", pars);

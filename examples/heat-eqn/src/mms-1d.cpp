@@ -59,13 +59,13 @@ main(int argc, char * argv[])
         app.set_verbosity_level(9);
 
         auto mesh_pars = LineMesh::parameters();
-        mesh_pars.set<godzilla::App *>("_app", &app);
+        mesh_pars.set<godzilla::App *>("app", &app);
         mesh_pars.set<Int>("nx", 2);
         mesh_pars.set<Real>("xmax", 2);
         auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
         auto prob_pars = HeatEquationProblem::parameters();
-        prob_pars.set<godzilla::App *>("_app", &app)
+        prob_pars.set<godzilla::App *>("app", &app)
             .set<Mesh *>("mesh", mesh.get())
             .set<Real>("start_time", 0.)
             .set<Real>("end_time", 1)
@@ -75,24 +75,24 @@ main(int argc, char * argv[])
         app.set_problem(&prob);
 
         auto aux_pars = ConstantAuxiliaryField::parameters();
-        aux_pars.set<godzilla::App *>("_app", &app)
+        aux_pars.set<godzilla::App *>("app", &app)
             .set<std::string>("name", "q_ppp")
             .set<std::vector<Real>>("value", { -1. });
         prob.add_auxiliary_field<ConstantAuxiliaryField>(aux_pars);
 
         auto ic_pars = TempIC::parameters();
-        ic_pars.set<godzilla::App *>("_app", &app)
+        ic_pars.set<godzilla::App *>("app", &app)
             .set<std::string>("name", "all")
             .set<std::string>("field", "temp");
         prob.add_initial_condition<TempIC>(ic_pars);
 
         auto bc_pars = DirichletBC::parameters();
-        bc_pars.set<godzilla::App *>("_app", &app)
+        bc_pars.set<godzilla::App *>("app", &app)
             .set<std::vector<std::string>>("boundary", { "left", "right" });
         prob.add_boundary_condition<DirichletBC>(bc_pars);
 
         auto out_pars = ExodusIIOutput::parameters();
-        out_pars.set<godzilla::App *>("_app", &app)
+        out_pars.set<godzilla::App *>("app", &app)
             .set<std::string>("file", "mms-1d")
             .set<ExecuteOnFlags>("on", ExecuteOn::INITIAL | ExecuteOn::FINAL)
             .set<std::vector<std::string>>("variables", { "temp" });

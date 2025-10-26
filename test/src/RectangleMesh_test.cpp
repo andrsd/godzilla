@@ -12,7 +12,7 @@ TEST(RectangleMeshTest, api)
     TestApp app;
 
     auto params = RectangleMesh::parameters();
-    params.set<App *>("_app", &app)
+    params.set<App *>("app", &app)
         .set<std::string>("name", "rect_mesh")
         .set<Real>("xmin", 1)
         .set<Real>("xmax", 3)
@@ -48,7 +48,7 @@ TEST(RectangleMeshTest, incorrect_dims)
     TestApp app;
 
     auto params = RectangleMesh::parameters();
-    params.set<App *>("_app", &app)
+    params.set<App *>("app", &app)
         .set<std::string>("name", "obj")
         .set<Real>("xmin", 2)
         .set<Real>("xmax", 1)

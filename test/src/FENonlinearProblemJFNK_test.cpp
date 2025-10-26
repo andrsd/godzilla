@@ -132,24 +132,24 @@ TEST(FENonlinearProblemJFNKTest, solve)
     TestApp app;
 
     auto mesh_params = LineMesh::parameters();
-    mesh_params.set<godzilla::App *>("_app", &app);
+    mesh_params.set<godzilla::App *>("app", &app);
     mesh_params.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = GTestFENonlinearProblemJFNK::parameters();
-    prob_params.set<godzilla::App *>("_app", &app);
+    prob_params.set<godzilla::App *>("app", &app);
     prob_params.set<Mesh *>("mesh", mesh.get());
     GTestFENonlinearProblemJFNK prob(prob_params);
     app.set_problem(&prob);
 
     auto ic_params = ConstantInitialCondition::parameters();
-    ic_params.set<godzilla::App *>("_app", &app);
+    ic_params.set<godzilla::App *>("app", &app);
     ic_params.set<std::vector<Real>>("value", { 0.1 });
     prob.add_initial_condition<ConstantInitialCondition>(ic_params);
 
     auto bc_params = DirichletBC::parameters();
-    bc_params.set<godzilla::App *>("_app", &app)
-        .set<App *>("_app", &app)
+    bc_params.set<godzilla::App *>("app", &app)
+        .set<App *>("app", &app)
         .set<std::vector<std::string>>("boundary", { "left", "right" });
     prob.add_boundary_condition<DirichletBC>(bc_params);
 

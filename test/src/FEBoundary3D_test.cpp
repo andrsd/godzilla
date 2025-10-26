@@ -87,7 +87,7 @@ TEST(FEBoundaryTest, test_3d)
     TestApp app;
 
     auto mesh_pars = TestMesh3D::parameters();
-    mesh_pars.set<godzilla::App *>("_app", &app);
+    mesh_pars.set<godzilla::App *>("app", &app);
     auto mesh_qtr = MeshFactory::create<TestMesh3D>(mesh_pars);
     auto mesh = mesh_qtr.get();
 

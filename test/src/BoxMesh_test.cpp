@@ -12,7 +12,7 @@ TEST(BoxMeshTest, api)
     TestApp app;
 
     auto params = BoxMesh::parameters();
-    params.set<App *>("_app", &app)
+    params.set<App *>("app", &app)
         .set<std::string>("name", "box_mesh")
         .set<Real>("xmin", 1)
         .set<Real>("xmax", 4)
@@ -67,7 +67,7 @@ TEST(BoxMeshTest, incorrect_dims)
     TestApp app;
 
     auto params = BoxMesh::parameters();
-    params.set<App *>("_app", &app)
+    params.set<App *>("app", &app)
         .set<std::string>("name", "obj")
         .set<Real>("xmin", 4)
         .set<Real>("xmax", 1)

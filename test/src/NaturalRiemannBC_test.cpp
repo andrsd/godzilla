@@ -65,12 +65,12 @@ TEST(NaturalRiemannBCTest, api)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<App *>("app", &app);
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = TestExplicitFVLinearProblem::parameters();
-    prob_pars.set<App *>("_app", &app);
+    prob_pars.set<App *>("app", &app);
     prob_pars.set<Mesh *>("mesh", mesh.get());
     prob_pars.set<Real>("start_time", 0.);
     prob_pars.set<Real>("end_time", 1e-3);
@@ -79,7 +79,7 @@ TEST(NaturalRiemannBCTest, api)
     app.set_problem(&prob);
 
     auto bc_pars = TestBC::parameters();
-    bc_pars.set<App *>("_app", &app);
+    bc_pars.set<App *>("app", &app);
     bc_pars.set<std::vector<std::string>>("boundary", { "left" });
     prob.add_boundary_condition<TestBC>(bc_pars);
 

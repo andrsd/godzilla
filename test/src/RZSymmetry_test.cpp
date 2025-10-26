@@ -14,19 +14,19 @@ TEST(RZSymmetryTest, check_dim)
 
     auto mesh_pars = LineMesh::parameters();
     // clang-format off
-    mesh_pars.set<App *>("_app", &app)
+    mesh_pars.set<App *>("app", &app)
         .set<Int>("nx", 2);
     // clang-format on
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<App *>("_app", &app);
+    prob_pars.set<App *>("app", &app);
     prob_pars.set<Mesh *>("mesh", mesh.get());
     prob_pars.set<std::string>("scheme", "rk-2");
     GTestFENonlinearProblem prob(prob_pars);
 
     auto params = RZSymmetry::parameters();
-    params.set<App *>("_app", &app);
+    params.set<App *>("app", &app);
     params.set<DiscreteProblemInterface *>("_dpi", &prob);
     params.set<std::vector<Real>>("point", { 0. });
     params.set<std::vector<Real>>("axis", { 1. });
@@ -49,20 +49,20 @@ TEST(RZSymmetryTest, check_compatible)
 
     auto mesh_pars = RectangleMesh::parameters();
     // clang-format off
-    mesh_pars.set<App *>("_app", &app)
+    mesh_pars.set<App *>("app", &app)
         .set<Int>("nx", 2)
         .set<Int>("ny", 2);
     // clang-format on
     auto mesh = MeshFactory::create<RectangleMesh>(mesh_pars);
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<App *>("_app", &app);
+    prob_pars.set<App *>("app", &app);
     prob_pars.set<Mesh *>("mesh", mesh.get());
     prob_pars.set<std::string>("scheme", "rk-2");
     GTestFENonlinearProblem prob(prob_pars);
 
     auto params = RZSymmetry::parameters();
-    params.set<App *>("_app", &app);
+    params.set<App *>("app", &app);
     params.set<DiscreteProblemInterface *>("_dpi", &prob);
     params.set<std::vector<Real>>("point", { 0. });
     params.set<std::vector<Real>>("axis", { 1. });
@@ -85,19 +85,19 @@ TEST(RZSymmetryTest, evaluate)
 
     auto mesh_pars = RectangleMesh::parameters();
     // clang-format off
-    mesh_pars.set<App *>("_app", &app)
+    mesh_pars.set<App *>("app", &app)
         .set<Int>("nx", 2)
         .set<Int>("ny", 2);
     // clang-format on
     auto mesh = MeshFactory::create<RectangleMesh>(mesh_pars);
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<App *>("_app", &app);
+    prob_pars.set<App *>("app", &app);
     prob_pars.set<Mesh *>("mesh", mesh.get());
     GTestFENonlinearProblem prob(prob_pars);
 
     auto params = RZSymmetry::parameters();
-    params.set<App *>("_app", &app);
+    params.set<App *>("app", &app);
     params.set<DiscreteProblemInterface *>("_dpi", &prob);
     params.set<std::vector<Real>>("point", { 1., 1. });
     params.set<std::vector<Real>>("axis", { 1., 0. });

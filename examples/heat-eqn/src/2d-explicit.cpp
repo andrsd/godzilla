@@ -54,13 +54,13 @@ main(int argc, char * argv[])
         app.set_verbosity_level(9);
 
         auto mesh_pars = RectangleMesh::parameters();
-        mesh_pars.set<godzilla::App *>("_app", &app);
+        mesh_pars.set<godzilla::App *>("app", &app);
         mesh_pars.set<Int>("nx", 4);
         mesh_pars.set<Int>("ny", 4);
         auto mesh = MeshFactory::create<RectangleMesh>(mesh_pars);
 
         auto prob_pars = HeatEquationExplicit::parameters();
-        prob_pars.set<godzilla::App *>("_app", &app)
+        prob_pars.set<godzilla::App *>("app", &app)
             .set<Mesh *>("mesh", mesh.get())
             .set<Real>("start_time", 0.)
             .set<Real>("end_time", 5e-3)
@@ -70,26 +70,26 @@ main(int argc, char * argv[])
         app.set_problem(&prob);
 
         auto aux_ffn_pars = ConstantAuxiliaryField::parameters();
-        aux_ffn_pars.set<godzilla::App *>("_app", &app)
+        aux_ffn_pars.set<godzilla::App *>("app", &app)
             .set<std::string>("name", "forcing_fn")
             .set<std::vector<Real>>("value", { 2. });
         prob.add_auxiliary_field<ConstantAuxiliaryField>(aux_ffn_pars);
 
         auto ic_pars = TempIC::parameters();
-        ic_pars.set<godzilla::App *>("_app", &app)
+        ic_pars.set<godzilla::App *>("app", &app)
             .set<std::string>("name", "all")
             .set<std::string>("field", "temp")
             .set<std::vector<Real>>("value", { 300 });
         prob.add_initial_condition<TempIC>(ic_pars);
 
         auto bc_all_pars = DirichletBC::parameters();
-        bc_all_pars.set<godzilla::App *>("_app", &app)
+        bc_all_pars.set<godzilla::App *>("app", &app)
             .set<std::string>("name", "all")
             .set<std::vector<std::string>>("boundary", { "left", "right", "top", "bottom" });
         prob.add_boundary_condition<DirichletBC>(bc_all_pars);
 
         auto out_pars = ExodusIIOutput::parameters();
-        out_pars.set<godzilla::App *>("_app", &app)
+        out_pars.set<godzilla::App *>("app", &app)
             .set<std::string>("file", "2d-explicit")
             .set<ExecuteOnFlags>("on", ExecuteOn::INITIAL | ExecuteOn::FINAL)
             .set<std::vector<std::string>>("variables", { "temp" });

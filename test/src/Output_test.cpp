@@ -29,7 +29,7 @@ public:
 TEST_F(OutputTest, exec_masks_1)
 {
     auto pars = Output::parameters();
-    pars.set<App *>("_app", this->app);
+    pars.set<App *>("app", this->app);
     pars.set<Problem *>("_problem", this->prob);
     pars.set<ExecuteOnFlags>("on", ExecuteOn::NONE);
     MockOutput out(pars);
@@ -43,7 +43,7 @@ TEST_F(OutputTest, exec_masks_1)
 TEST_F(OutputTest, exec_masks_2)
 {
     auto pars = Output::parameters();
-    pars.set<App *>("_app", this->app);
+    pars.set<App *>("app", this->app);
     pars.set<Problem *>("_problem", this->prob);
     pars.set<ExecuteOnFlags>("on", ExecuteOn::FINAL);
     MockOutput out(pars);
@@ -58,7 +58,7 @@ TEST_F(OutputTest, exec_masks_2)
 TEST_F(OutputTest, exec_masks_3)
 {
     auto pars = Output::parameters();
-    pars.set<App *>("_app", this->app);
+    pars.set<App *>("app", this->app);
     pars.set<Problem *>("_problem", this->prob);
     pars.set<ExecuteOnFlags>("on", ExecuteOn::FINAL | ExecuteOn::INITIAL | ExecuteOn::TIMESTEP);
     MockOutput out(pars);
@@ -82,7 +82,7 @@ TEST_F(OutputTest, empty_on)
     testing::internal::CaptureStderr();
 
     auto pars = Output::parameters();
-    pars.set<App *>("_app", app);
+    pars.set<App *>("app", app);
     pars.set<Problem *>("_problem", prob);
     pars.set<ExecuteOnFlags>("on", 0);
     MockOutput out(pars);
@@ -102,7 +102,7 @@ TEST_F(OutputTest, none_plus_mask)
     testing::internal::CaptureStderr();
 
     auto pars = Output::parameters();
-    pars.set<App *>("_app", this->app);
+    pars.set<App *>("app", this->app);
     pars.set<Problem *>("_problem", this->prob);
     pars.set<ExecuteOnFlags>("on", ExecuteOn::NONE | ExecuteOn::FINAL | ExecuteOn::TIMESTEP);
     MockOutput out(pars);
@@ -121,7 +121,7 @@ TEST_F(OutputTest, interval_with_no_timestep_output)
     testing::internal::CaptureStderr();
 
     auto pars = Output::parameters();
-    pars.set<App *>("_app", app);
+    pars.set<App *>("app", app);
     pars.set<Problem *>("_problem", prob);
     pars.set<ExecuteOnFlags>("on", ExecuteOn::INITIAL | ExecuteOn::FINAL);
     pars.set<Int>("interval", 10);
