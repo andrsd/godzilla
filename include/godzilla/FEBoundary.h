@@ -88,7 +88,6 @@ public:
         return this->vertices.get_local_size();
     }
 
-protected:
     /// Iterate over all boundary vertices
     template <BoundaryFunction Func>
     void
@@ -205,6 +204,17 @@ public:
         return this->lengths(ibf);
     }
 
+    /// Iterate over all boundary facets
+    template <BoundaryFunction Func>
+    void
+    for_each_facet(Func fn)
+    {
+        for (auto & ibf : make_range(this->num_facets())) {
+            auto facet = this->facets(ibf);
+            fn(ibf, facet);
+        }
+    }
+
 protected:
     void
     compute_face_normals()
@@ -228,17 +238,6 @@ protected:
         if (this->facets) {
             this->facets.restore_indices();
             this->facets.destroy();
-        }
-    }
-
-    /// Iterate over all boundary facets
-    template <BoundaryFunction Func>
-    void
-    for_each_facet(Func fn)
-    {
-        for (auto & ibf : make_range(this->num_facets())) {
-            auto facet = this->facets(ibf);
-            fn(ibf, facet);
         }
     }
 
