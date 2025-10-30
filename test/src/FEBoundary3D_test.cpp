@@ -112,6 +112,25 @@ TEST(FEBoundaryTest, test_3d)
         bnd.destroy();
     }
     {
+        auto label = mesh->get_label("left");
+        auto bnd_facets = points_from_label(label);
+        TestNaturalBoundary3D bnd(mesh, grad_phi, bnd_facets);
+        bnd.create();
+        bnd.compute();
+
+        EXPECT_EQ(bnd.num_facets(), 1);
+
+        EXPECT_DOUBLE_EQ(bnd.normal(0)(0), -1);
+        EXPECT_DOUBLE_EQ(bnd.normal(0)(1), 0);
+        EXPECT_DOUBLE_EQ(bnd.normal(0)(2), 0);
+
+        EXPECT_DOUBLE_EQ(bnd.facet_area(0), 0.5);
+
+        EXPECT_EQ(bnd.vals(0), 8);
+
+        bnd.destroy();
+    }
+    {
         auto label = mesh->get_label("front");
         auto bnd_facets = points_from_label(label);
         TestNaturalBoundary3D bnd(mesh, grad_phi, bnd_facets);
