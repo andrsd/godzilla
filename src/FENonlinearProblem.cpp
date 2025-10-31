@@ -115,6 +115,7 @@ void
 FENonlinearProblem::compute_boundary_local(Vector & x)
 {
     CALL_STACK_MSG();
+    std::cerr << "FENonlinearProblem::compute_boundary_local(Vector & x)" << std::endl;
     PETSC_CHECK(DMPlexInsertBoundaryValues(get_dm(),
                                            PETSC_TRUE,
                                            x,
@@ -122,6 +123,8 @@ FENonlinearProblem::compute_boundary_local(Vector & x)
                                            nullptr,
                                            nullptr,
                                            nullptr));
+    x.view();
+    std::cerr << "---" << std::endl;
 }
 
 void

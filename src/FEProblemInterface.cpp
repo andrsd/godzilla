@@ -54,7 +54,7 @@ FEProblemInterface::AssemblyData::AssemblyData(Dimension dim) :
 FEProblemInterface::FEProblemInterface(Problem * problem, const Parameters & pars) :
     DiscreteProblemInterface(problem, pars),
     DependencyEvaluator(),
-    qorder(PETSC_DETERMINE)
+    qorder(10)
 {
     CALL_STACK_MSG();
 }

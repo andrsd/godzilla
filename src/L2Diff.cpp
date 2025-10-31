@@ -3,6 +3,7 @@
 
 #include "godzilla/L2Diff.h"
 #include "godzilla/CallStack.h"
+#include "godzilla/FEProblemInterface.h"
 #include "godzilla/Problem.h"
 
 namespace godzilla {
@@ -39,12 +40,30 @@ L2Diff::compute()
     auto * problem = get_problem();
     std::vector<PetscFunc *> funcs(1, L2Diff__invoke_delegate);
     std::vector<void *> ctxs(1, this);
+    std::cerr << "L2Diff::compute()" << std::endl;
+
+    auto sln = problem->get_solution_vector();
+    for (Int i = 0; i < sln.get_local_size(); ++i) {
+        fmt::println("{:.12f}", sln(i));
+    }
+
+    auto * fepi = dynamic_cast<FEProblemInterface *>(problem);
+    auto loc_sln = fepi->get_solution_vector_local();
+    loc_sln.zero();
+    loc_sln.assemble();
+    std::cerr << "loc sln" << std::endl;
+    for (Int i = 0; i < loc_sln.get_local_size(); ++i) {
+        fmt::println("{:.12f}", loc_sln(i));
+    }
+
     PETSC_CHECK(DMComputeL2Diff(problem->get_dm(),
                                 problem->get_time(),
                                 funcs.data(),
                                 ctxs.data(),
                                 problem->get_solution_vector(),
                                 &this->l2_diff));
+    std::cerr << "ls = " << this->l2_diff << std::endl;
+    std::cerr << "L2Diff::compute() - end" << std::endl;
 }
 
 std::vector<Real>

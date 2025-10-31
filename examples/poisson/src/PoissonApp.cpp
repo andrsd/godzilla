@@ -16,6 +16,7 @@
 #include "godzilla/EssentialBC.h"
 #include "godzilla/ConstantAuxiliaryField.h"
 #include "godzilla/ExodusIIOutput.h"
+#include "godzilla/L2Diff.h"
 
 using namespace godzilla;
 
@@ -45,6 +46,26 @@ public:
         pars.add_required_param<Int>("dim", "Spatial dimension");
         return pars;
     };
+};
+
+//
+class L2Error : public L2Diff {
+public:
+    explicit L2Error(const Parameters & pars) : L2Diff(pars) {}
+
+    void
+    evaluate(Real time, const Real coord[], Scalar u[]) override
+    {
+        auto x = coord[0];
+        u[0] = math::sqr(x);
+    }
+
+public:
+    static Parameters
+    parameters()
+    {
+        return L2Diff::parameters();
+    }
 };
 
 PoissonApp::PoissonApp(mpi::Communicator comm, const std::string & name, int argc, char * argv[]) :
@@ -90,7 +111,7 @@ PoissonApp::create_mesh(Int dim)
     if (dim == 1) {
         auto mesh_pars = LineMesh::parameters();
         mesh_pars.set<godzilla::App *>("app", this)
-            .set<Int>("nx", 2)
+            .set<Int>("nx", 10)
             .set<Real>("xmin", 0)
             .set<Real>("xmax", 2);
         return MeshFactory::create<LineMesh>(mesh_pars);
@@ -199,6 +220,18 @@ PoissonApp::solve_problem(Int dim)
         .set<std::vector<std::string>>("variables", { "u" });
     prob.add_output<ExodusIIOutput>(out_pars);
 
+    auto l2err_pars = L2Error::parameters();
+    l2err_pars.set<godzilla::App *>("app", this);
+    auto l2err_pps = prob.add_postprocessor<L2Error>(l2err_pars);
+
     prob.create();
     prob.run();
+
+    auto sln = prob.get_solution_vector_local();
+    for (Int i = 0; i < 11; ++i) {
+        fmt::println("{:.12f}", sln(i));
+    }
+
+    auto l2_err = l2err_pps->get_value()[0];
+    fmt::println("L2 error = {:.12f}", l2_err);
 }
