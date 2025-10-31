@@ -7,6 +7,16 @@
 
 namespace godzilla {
 
+static ErrorCode
+L2Diff__invoke_delegate(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx)
+{
+    CALL_STACK_MSG();
+    auto * bc = static_cast<L2Diff *>(ctx);
+    assert_true(bc != nullptr, "Pointer to L2Diff is null");
+    bc->evaluate(time, x, u);
+    return 0;
+}
+
 Parameters
 L2Diff::parameters()
 {
@@ -27,8 +37,8 @@ L2Diff::compute()
 {
     CALL_STACK_MSG();
     auto * problem = get_problem();
-    std::vector<PetscFunc *> funcs(1, internal::invoke_function_delegate);
-    std::vector<void *> ctxs(1, &this->delegate);
+    std::vector<PetscFunc *> funcs(1, L2Diff__invoke_delegate);
+    std::vector<void *> ctxs(1, this);
     PETSC_CHECK(DMComputeL2Diff(problem->get_dm(),
                                 problem->get_time(),
                                 funcs.data(),
@@ -42,12 +52,6 @@ L2Diff::get_value()
 {
     CALL_STACK_MSG();
     return { this->l2_diff };
-}
-
-void
-L2Diff::evaluate(Real time, const Real x[], Scalar u[])
-{
-    CALL_STACK_MSG();
 }
 
 } // namespace godzilla

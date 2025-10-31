@@ -20,9 +20,20 @@ public:
     }
 };
 
+class L2Error : public L2Diff {
+public:
+    explicit L2Error(const Parameters & pars) : L2Diff(pars) {}
+
+    void
+    evaluate(Real time, const Real x[], Scalar u[]) override
+    {
+        u[0] = x[0] * x[0];
+    }
+};
+
 } // namespace
 
-TEST(L2DiffTest, DISABLED_compute)
+TEST(L2DiffTest, compute)
 {
     TestApp app;
 
@@ -47,10 +58,9 @@ TEST(L2DiffTest, DISABLED_compute)
     bc_right_params.set<std::vector<std::string>>("boundary", { "right" });
     prob.add_boundary_condition<DirichletBC>(bc_right_params);
 
-    auto ps_params = L2Diff::parameters();
+    auto ps_params = L2Error::parameters();
     ps_params.set<App *>("app", &app);
-    ps_params.set<std::vector<std::string>>("value", { "x*x" });
-    auto ps = prob.add_postprocessor<L2Diff>(ps_params);
+    auto ps = prob.add_postprocessor<L2Error>(ps_params);
 
     prob.create();
 

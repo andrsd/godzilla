@@ -24,11 +24,9 @@ public:
     /// @param time The time at which to sample
     /// @param x The coordinates
     /// @param u  The output field values
-    void evaluate(Real time, const Real x[], Scalar u[]);
+    virtual void evaluate(Real time, const Real x[], Scalar u[]) = 0;
 
 private:
-    ///
-    FunctionDelegate delegate;
     /// Computed L_2 error
     Real l2_diff;
 
