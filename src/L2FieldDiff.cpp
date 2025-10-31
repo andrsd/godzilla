@@ -22,35 +22,34 @@ L2FieldDiff::L2FieldDiff(const Parameters & pars) :
     n_fields(0)
 {
     CALL_STACK_MSG();
+    assert_true(this->fepi != nullptr, "FEProblemInterface is null");
 }
 
 void
 L2FieldDiff::create()
 {
     CALL_STACK_MSG();
-    this->l2_diff.resize(this->n_fields);
+    this->n_fields = this->fepi->get_num_fields();
+    this->l2_diff.resize(this->n_fields, 0.);
+    set_up_callbacks();
 }
 
 void
 L2FieldDiff::compute()
 {
     CALL_STACK_MSG();
+    assert_true(this->n_fields > 0, "No fields to evaluate");
     assert_true(this->delegates.size() > 0, "No evaluation function(s) set");
 
     std::vector<PetscFunc *> funcs(this->n_fields, nullptr);
-    // std::vector<Real> diff(this->n_fields, 0.);
-#if 0
-    for (const auto & [name, fn] : this->parsed_fns) {
-        auto fid = this->fepi->get_field_id(name);
-        funcs[fid.value()] = internal::invoke_function_delegate;
-    }
-    std::vector<void *> contexts;
-    contexts.reserve(n_fields);
-    for (auto & d : delegates) {
-        if (d)
-            contexts.push_back(&d);
-        else
-            contexts.push_back(nullptr);
+    std::vector<void *> contexts(this->n_fields, nullptr);
+    for (auto & [fid, d] : this->delegates) {
+        if (d) {
+            assert_true(fid >= 0 && fid < this->n_fields,
+                        fmt::format("Field ID ({}) is out of range [0, {})", fid, this->n_fields));
+            contexts[fid] = &d;
+            funcs[fid] = internal::invoke_function_delegate;
+        }
     }
     auto * problem = get_problem();
     PETSC_CHECK(DMComputeL2FieldDiff(problem->get_dm(),
@@ -59,7 +58,6 @@ L2FieldDiff::compute()
                                      contexts.data(),
                                      problem->get_solution_vector(),
                                      this->l2_diff.data()));
-#endif
 }
 
 std::vector<Real>
