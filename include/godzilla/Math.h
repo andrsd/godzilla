@@ -188,5 +188,32 @@ factorial(T x)
     return result;
 }
 
+/// Compute sine of an argument
+template <typename T>
+    requires std::is_floating_point_v<T>
+T
+sin(T arg)
+{
+    return std::sin(arg);
+}
+
+/// Compute cosine of an argument
+template <typename T>
+    requires std::is_floating_point_v<T>
+T
+cos(T arg)
+{
+    return std::cos(arg);
+}
+
+/// Compute tangent of an argument
+template <typename T>
+    requires std::is_floating_point_v<T>
+T
+tan(T arg)
+{
+    return std::tan(arg);
+}
+
 } // namespace math
 } // namespace godzilla

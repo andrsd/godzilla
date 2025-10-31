@@ -63,3 +63,24 @@ TEST(MathTest, factorial_undef)
                  testing::HasSubstr("Factorial is defined only for positive numbers"));
 }
 #endif
+
+TEST(MathTest, sine)
+{
+    EXPECT_NEAR(math::sin(-math::PI / 2), -1., 1e-15);
+    EXPECT_NEAR(math::sin(0.), 0., 1e-15);
+    EXPECT_NEAR(math::sin(math::PI / 2), 1., 1e-15);
+}
+
+TEST(MathTest, cosine)
+{
+    EXPECT_NEAR(math::cos(-math::PI / 2), 0., 1e-15);
+    EXPECT_NEAR(math::cos(0.), 1., 1e-15);
+    EXPECT_NEAR(math::cos(math::PI / 2), 0., 1e-15);
+}
+
+TEST(MathTest, tangent)
+{
+    EXPECT_NEAR(math::tan(-math::PI / 4), -1., 1e-15);
+    EXPECT_NEAR(math::tan(0.), 0., 1e-15);
+    EXPECT_NEAR(math::tan(math::PI / 4), 1., 1e-15);
+}
