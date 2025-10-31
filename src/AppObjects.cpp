@@ -9,7 +9,6 @@
 #include "godzilla/ExodusIIOutput.h"
 #include "godzilla/FileMesh.h"
 #include "godzilla/ExodusIIOutput.h"
-#include "godzilla/L2Diff.h"
 #include "godzilla/L2FieldDiff.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/MeshPartitioningOutput.h"
@@ -32,7 +31,6 @@ App::register_objects(Registry & r)
     REGISTER_OBJECT(r, FileMesh);
     REGISTER_OBJECT(r, ExodusIIOutput);
     REGISTER_OBJECT(r, FileMesh);
-    REGISTER_OBJECT(r, L2Diff);
     REGISTER_OBJECT(r, L2FieldDiff);
     REGISTER_OBJECT(r, LineMesh);
     REGISTER_OBJECT(r, MeshPartitioningOutput);
