@@ -1,6 +1,7 @@
 #include "gmock/gmock.h"
 #include "godzilla/PiecewiseLinear.h"
 #include "godzilla/Exception.h"
+#include "godzilla/Parameters.h"
 
 using namespace godzilla;
 
@@ -66,4 +67,15 @@ TEST(PiecewiseLinearTest, non_increasing)
     EXPECT_THAT(
         []() { PiecewiseLinear ipol({ 1, 2, 1 }, { 0, 2, 3 }); },
         testing::ThrowsMessage<Exception>("Values in 'x' must be increasing. Failed at index '2'"));
+}
+
+TEST(PiecewiseLinearTest, pass_into_parameters)
+{
+    PiecewiseLinear fn({ 1, 2 }, { -1, 3 });
+
+    Parameters params;
+    params.set<PiecewiseLinear>("fn", fn);
+
+    auto par_fn = params.get<PiecewiseLinear>("fn");
+    EXPECT_NEAR(par_fn.evaluate(1.5), 1., 1e-15);
 }
