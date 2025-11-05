@@ -1,6 +1,7 @@
 #include "gmock/gmock.h"
 #include "ExceptionTestMacros.h"
 #include "godzilla/PiecewiseConstant.h"
+#include "godzilla/Parameters.h"
 
 using namespace godzilla;
 
@@ -50,4 +51,18 @@ TEST(PiecewiseConstantTest, err_not_monotonic)
 {
     EXPECT_THROW_MSG(PiecewiseConstant(PiecewiseConstant::RIGHT, { 1., 0. }, { 1., 2., 3. }),
                      "Values in 'x' must be increasing - failed at index '1'");
+}
+
+TEST(PiecewiseConstantTest, pass_into_parameters)
+{
+    PiecewiseConstant fn(PiecewiseConstant::RIGHT, { 0.5 }, { -2, 3 });
+
+    Parameters params;
+    params.set<PiecewiseConstant>("fn", fn);
+
+    auto par_fn = params.get<PiecewiseConstant>("fn");
+    EXPECT_EQ(par_fn.get_continuity(), PiecewiseConstant::RIGHT);
+    EXPECT_NEAR(par_fn.evaluate(-10), -2, 1e-15);
+    EXPECT_NEAR(par_fn.evaluate(0.5), 3, 1e-15);
+    EXPECT_NEAR(par_fn.evaluate(10), 3, 1e-15);
 }

@@ -8,6 +8,8 @@
 
 namespace godzilla {
 
+PiecewiseConstant::PiecewiseConstant() : continuity(LEFT) {}
+
 PiecewiseConstant::PiecewiseConstant(Continuity cont,
                                      const std::vector<Real> & x,
                                      const std::vector<Real> & y) :
@@ -29,6 +31,12 @@ PiecewiseConstant::PiecewiseConstant(Continuity cont,
         if (this->x[i] >= this->x[i + 1])
             throw Exception("Values in 'x' must be increasing - failed at index '{}'", i + 1);
     }
+}
+
+auto
+PiecewiseConstant::get_continuity() const -> Continuity
+{
+    return this->continuity;
 }
 
 Real

@@ -19,12 +19,19 @@ public:
         RIGHT
     };
 
+    PiecewiseConstant();
+
     /// Construct a piecewise constant function
     ///
     /// @param cont Left or right continuity
     /// @param x Independent variable
     /// @param y Dependent variable
     PiecewiseConstant(Continuity cont, const std::vector<Real> & x, const std::vector<Real> & y);
+
+    /// Get type of continuity
+    ///
+    /// @return Continuity type
+    Continuity get_continuity() const;
 
     /// Evaluate this function at point 'x'
     Real evaluate(Real x);
@@ -35,9 +42,9 @@ private:
 
     Continuity continuity;
     /// Independent values
-    const std::vector<Real> x;
+    std::vector<Real> x;
     /// Dependent values
-    const std::vector<Real> y;
+    std::vector<Real> y;
 };
 
 } // namespace godzilla
