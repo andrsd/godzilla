@@ -2,6 +2,7 @@
 #include "godzilla/Types.h"
 #include "godzilla/Parameters.h"
 #include "godzilla/Factory.h"
+#include "godzilla/DenseVector.h"
 #include "ExceptionTestMacros.h"
 
 using namespace godzilla;
@@ -208,4 +209,16 @@ TEST(ParametersTest, required_private_param)
     params.add_private_param<Int>("number");
     EXPECT_TRUE(params.is_param_private("number"));
     EXPECT_TRUE(params.is_param_required("number"));
+}
+
+TEST(ParametersTest, std_array)
+{
+    Parameters params;
+    params.set<std::array<double, 2>>("number", { 1, 2 });
+}
+
+TEST(ParametersTest, dense_vector)
+{
+    Parameters params;
+    params.set<DenseVector<double, 2>>("number", { 1, 2 });
 }
