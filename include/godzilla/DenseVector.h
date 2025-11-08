@@ -12,6 +12,7 @@
 #include "mpicpp-lite/mpicpp-lite.h"
 #include <initializer_list>
 #include <type_traits>
+#include <format>
 
 namespace godzilla {
 
@@ -47,8 +48,13 @@ public:
 
     template <Int M = N>
         requires(M > 0)
-    explicit DenseVector(std::initializer_list<T> init)
+    DenseVector(std::initializer_list<T> init)
     {
+        assert_true(
+            init.size() == N,
+            std::format("Number of entries ({}) does not match the size of DenseVector<..., {}>",
+                        init.size(),
+                        N));
         for (const auto & [i, v] : enumerate(init))
             set(i) = v;
     }
