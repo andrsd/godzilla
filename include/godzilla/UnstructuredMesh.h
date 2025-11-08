@@ -331,11 +331,6 @@ public:
     /// @return The cell volume
     Real compute_cell_volume(Int cell) const;
 
-    /// Compute a map of cells common to a vertex
-    ///
-    /// @return A mapping [vertex index -> list of cell indices]
-    const std::map<Int, std::vector<Int>> & common_cells_by_vertex();
-
     /// Mark all faces on the boundary
     ///
     /// @param val The marker value
@@ -402,11 +397,6 @@ private:
     /// Vertex set IDs
     std::map<std::string, Int> vertex_set_ids;
 
-    /// Cells common to a vertex
-    std::map<Int, std::vector<Int>> common_cells_by_vtx;
-    /// Flag indicating if `common_cells_by_vtx` was computed
-    bool common_cells_by_vtx_computed;
-
 public:
     static int get_num_cell_nodes(PolytopeType cell_type);
 
@@ -471,5 +461,10 @@ boundary_vertices(const UnstructuredMesh * mesh, const IndexSet & facets)
     vertices.sort_remove_dups();
     return vertices;
 }
+
+/// Compute a map of cells common to a vertex
+///
+/// @return A mapping [vertex index -> list of cell indices]
+std::map<Int, std::vector<Int>> common_cells_by_vertex(const UnstructuredMesh & mesh);
 
 } // namespace godzilla
