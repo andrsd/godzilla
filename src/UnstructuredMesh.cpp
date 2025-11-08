@@ -13,9 +13,20 @@
 
 namespace godzilla {
 
-UnstructuredMesh::UnstructuredMesh(const mpi::Communicator & comm) :
-    Mesh(nullptr),
-    common_cells_by_vtx_computed(false)
+std::map<Int, std::vector<Int>>
+common_cells_by_vertex(const UnstructuredMesh & mesh)
+{
+    CALL_STACK_MSG();
+    std::map<Int, std::vector<Int>> data;
+    for (auto & cell : mesh.get_cell_range()) {
+        auto connect = mesh.get_connectivity(cell);
+        for (auto & vtx : connect)
+            data[vtx].push_back(cell);
+    }
+    return data;
+}
+
+UnstructuredMesh::UnstructuredMesh(const mpi::Communicator & comm) : Mesh(nullptr)
 {
     DM dm;
     PETSC_CHECK(DMCreate(comm, &dm));
@@ -23,7 +34,7 @@ UnstructuredMesh::UnstructuredMesh(const mpi::Communicator & comm) :
     set_dm(dm);
 }
 
-UnstructuredMesh::UnstructuredMesh(DM dm) : Mesh(dm), common_cells_by_vtx_computed(false)
+UnstructuredMesh::UnstructuredMesh(DM dm) : Mesh(dm)
 {
     CALL_STACK_MSG();
 }
@@ -625,21 +636,6 @@ UnstructuredMesh::get_num_cell_nodes(PolytopeType elem_type)
     default:
         throw InternalError("Unsupported type '{}'.", conv::to_str(elem_type));
     }
-}
-
-const std::map<Int, std::vector<Int>> &
-UnstructuredMesh::common_cells_by_vertex()
-{
-    CALL_STACK_MSG();
-    if (!this->common_cells_by_vtx_computed) {
-        for (auto & cell : get_cell_range()) {
-            auto connect = get_connectivity(cell);
-            for (auto & vtx : connect)
-                this->common_cells_by_vtx[vtx].push_back(cell);
-        }
-        this->common_cells_by_vtx_computed = true;
-    }
-    return this->common_cells_by_vtx;
 }
 
 void
