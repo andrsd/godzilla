@@ -10,7 +10,7 @@ include(FindPackageHandleStandardArgs)
 include(CMakeFindDependencyMacro)
 
 find_dependency(fmt 11)
-find_dependency(mpicpp-lite 2)
+find_dependency(mpicpp-lite 2.1)
 find_dependency(HDF5 1.12 REQUIRED COMPONENTS C)
 find_dependency(PETSc 3.22 REQUIRED)
 if (${GODZILLA_WITH_TECIOCPP})
