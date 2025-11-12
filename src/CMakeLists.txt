@@ -2,6 +2,8 @@ file(GLOB SRCS CONFIGURE_DEPENDS *.cpp)
 
 add_library(${PROJECT_NAME} SHARED ${SRCS})
 
+target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
+
 target_code_coverage(${PROJECT_NAME})
 target_sanitization(${PROJECT_NAME})
 target_compile_options(${PROJECT_NAME}

@@ -1,8 +1,5 @@
 project(heat-eqn)
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
-
 macro(add_binny name)
     add_executable(${PROJECT_NAME}-${name} ${ARGN})
     target_include_directories(${PROJECT_NAME}-${name}
