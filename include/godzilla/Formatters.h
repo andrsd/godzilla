@@ -4,7 +4,7 @@
 #pragma once
 
 #include "godzilla/Types.h"
-#include "godzilla/Exception.h"
+#include "godzilla/Utils.h"
 #include <petscsystypes.h>
 #include <fmt/format.h>
 
@@ -39,9 +39,8 @@ struct fmt::formatter<InsertMode> {
             return fmt::format_to(ctx.out(), "INSERT_BC_VALUES");
         case ADD_BC_VALUES:
             return fmt::format_to(ctx.out(), "ADD_BC_VALUES");
-        default:
-            throw godzilla::Exception("Unknown InsertMode");
         }
+        godzilla::utils::unreachable();
     }
 };
 
