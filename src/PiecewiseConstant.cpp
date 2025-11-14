@@ -5,6 +5,7 @@
 #include "godzilla/CallStack.h"
 #include "godzilla/Exception.h"
 #include "godzilla/Assert.h"
+#include "godzilla/Utils.h"
 
 namespace godzilla {
 
@@ -48,9 +49,8 @@ PiecewiseConstant::evaluate(Real x)
         return eval_right_cont(x);
     case LEFT:
         return eval_left_cont(x);
-    default:
-        throw InternalError("Unknown continuity type");
     }
+    utils::unreachable();
 }
 
 Real
