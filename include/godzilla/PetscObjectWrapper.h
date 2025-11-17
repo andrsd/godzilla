@@ -7,7 +7,10 @@
 #include "godzilla/CallStack.h"
 #include "godzilla/Types.h"
 #include "godzilla/Assert.h"
+#include "mpicpp-lite/mpicpp-lite.h"
 #include <type_traits>
+
+namespace mpi = mpicpp_lite;
 
 namespace godzilla {
 
@@ -67,6 +70,14 @@ public:
             other.obj = nullptr;
         }
         return *this;
+    }
+
+    mpi::Communicator
+    get_comm() const
+    {
+        MPI_Comm comm;
+        PETSC_CHECK(PetscObjectGetComm((PetscObject) this->obj, &comm));
+        return { comm };
     }
 
     T
