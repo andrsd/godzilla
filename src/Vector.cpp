@@ -435,6 +435,14 @@ Vector::restore_sub_vector(const IndexSet & is, Vector & y) const
     PETSC_CHECK(VecRestoreSubVector(this->obj, is, &y.obj));
 }
 
+Range
+Vector::get_ownership_range() const
+{
+    Int lo, hi;
+    PETSC_CHECK(VecGetOwnershipRange(this->obj, &lo, &hi));
+    return { lo, hi };
+}
+
 Real
 Vector::norm(NormType type) const
 {
