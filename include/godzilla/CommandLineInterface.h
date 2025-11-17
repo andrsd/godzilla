@@ -44,7 +44,6 @@ public:
 protected:
     std::string get_app_name() const;
 
-private:
     /// Create command line options
     ///
     virtual cxxopts::Options create_command_line_options();
@@ -54,6 +53,7 @@ private:
     /// @param result Result from calling `parse_command_line` or `cxxopt::parse`
     virtual void process_command_line(cxxopts::Options & opts, const cxxopts::ParseResult & result);
 
+private:
     /// Application we are part of
     App & app;
     /// Command line arguments
