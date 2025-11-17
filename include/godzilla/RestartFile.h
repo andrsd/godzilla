@@ -16,6 +16,8 @@ class Vector;
 /// Class for handling restart files
 class RestartFile {
 public:
+    RestartFile(mpi::Communicator comm, const std::string & file_name, FileAccess faccess);
+
     /// Restart file
     ///
     /// @param file_name Name of the file

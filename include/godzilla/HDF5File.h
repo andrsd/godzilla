@@ -8,6 +8,7 @@
 #include "godzilla/Enums.h"
 #include "godzilla/Types.h"
 #include "godzilla/Exception.h"
+#include "mpicpp-lite/mpicpp-lite.h"
 #include <filesystem>
 #include <string>
 #include <numeric>
@@ -15,6 +16,7 @@
 #include <mutex>
 #include <hdf5.h>
 
+namespace mpi = mpicpp_lite;
 namespace fs = std::filesystem;
 
 namespace godzilla {
@@ -440,6 +442,7 @@ class HDF5File {
     };
 
 public:
+    HDF5File(mpi::Communicator comm, const fs::path & file_name, FileAccess faccess);
     HDF5File(const fs::path & file_name, FileAccess faccess);
     ~HDF5File();
 

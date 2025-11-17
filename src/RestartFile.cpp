@@ -11,6 +11,13 @@ namespace fs = std::filesystem;
 
 namespace godzilla {
 
+RestartFile::RestartFile(mpi::Communicator comm,
+                         const std::string & file_name,
+                         FileAccess faccess) :
+    h5f(comm, fs::path(file_name), faccess)
+{
+}
+
 RestartFile::RestartFile(const std::string & file_name, FileAccess faccess) :
     h5f(fs::path(file_name), faccess)
 {
