@@ -31,25 +31,35 @@ RestartFile::file_path() const
 std::string
 RestartFile::get_full_path(const std::string & app_name, const std::string & path) const
 {
-    if (path == "/")
+    if (path == "/" || path == "")
         return fmt::format("/{}", app_name, path);
     else
         return fmt::format("/{}/{}", app_name, path);
+}
+
+std::string
+RestartFile::normalize_path(const std::string & path) const
+{
+    if (path == "")
+        return fmt::format("/{}", path);
+    else
+        return path;
 }
 
 template <>
 void
 RestartFile::write<Vector>(const std::string & path, const std::string & name, const Vector & data)
 {
+    auto norm_path = normalize_path(path);
     try {
-        auto group = this->h5f.create_group(path);
+        auto group = this->h5f.create_group(norm_path);
         auto * vals = data.get_array_read();
         auto len = data.get_local_size();
         group.write_dataset(name, len, vals);
         data.restore_array_read(vals);
     }
     catch (std::exception & e) {
-        throw Exception("Error writing '{}' to {}: {}", path, this->file_name(), e.what());
+        throw Exception("Error writing '{}' to {}: {}", norm_path, this->file_name(), e.what());
     }
 }
 
@@ -57,15 +67,16 @@ template <>
 void
 RestartFile::read<Vector>(const std::string & path, const std::string & name, Vector & data) const
 {
+    auto norm_path = normalize_path(path);
     try {
-        auto group = this->h5f.open_group(path);
+        auto group = this->h5f.open_group(norm_path);
         auto * vals = data.get_array();
         auto len = data.get_local_size();
         group.read_dataset(name, len, vals);
         data.restore_array(vals);
     }
     catch (std::exception & e) {
-        throw Exception("Error writing '{}' to {}: {}", path, this->file_name(), e.what());
+        throw Exception("Error writing '{}' to {}: {}", norm_path, this->file_name(), e.what());
     }
 }
 

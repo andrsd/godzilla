@@ -75,6 +75,12 @@ protected:
     /// @param path Path to the data
     std::string get_full_path(const std::string & app_name, const std::string & path) const;
 
+    /// Get the "path" to the data inside HDF5 file
+    ///
+    /// @param path Path to the data
+    /// @return Path to the data
+    std::string normalize_path(const std::string & path) const;
+
 private:
     HDF5File h5f;
 };
@@ -83,12 +89,13 @@ template <typename T>
 void
 RestartFile::write(const std::string & path, const std::string & name, const T & data)
 {
+    auto norm_path = normalize_path(path);
     try {
-        auto group = this->h5f.create_group(path);
+        auto group = this->h5f.create_group(norm_path);
         group.template write_dataset<T>(name, data);
     }
     catch (std::exception & e) {
-        throw Exception("Error writing '{}' to {}: {}", path, this->file_name(), e.what());
+        throw Exception("Error writing '{}' to {}: {}", norm_path, this->file_name(), e.what());
     }
 }
 
@@ -106,14 +113,15 @@ template <typename T>
 T
 RestartFile::read(const std::string & path, const std::string & name) const
 {
+    auto norm_path = normalize_path(path);
     try {
-        auto group = this->h5f.open_group(path);
+        auto group = this->h5f.open_group(norm_path);
         T data;
         group.template read_dataset<T>(name, data);
         return data;
     }
     catch (std::exception & e) {
-        throw Exception("Error reading '{}' from {}: {}", path, this->file_name(), e.what());
+        throw Exception("Error reading '{}' from {}: {}", norm_path, this->file_name(), e.what());
     }
 }
 
@@ -121,12 +129,13 @@ template <typename T>
 void
 RestartFile::read(const std::string & path, const std::string & name, T & data) const
 {
+    auto norm_path = normalize_path(path);
     try {
-        auto group = this->h5f.open_group(path);
+        auto group = this->h5f.open_group(norm_path);
         group.template read_dataset<T>(name, data);
     }
     catch (std::exception & e) {
-        throw Exception("Error reading '{}' from {}: {}", path, this->file_name(), e.what());
+        throw Exception("Error reading '{}' from {}: {}", norm_path, this->file_name(), e.what());
     }
 }
 
