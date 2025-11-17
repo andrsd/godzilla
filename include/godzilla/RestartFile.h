@@ -30,7 +30,7 @@ public:
     void write(const std::string & path, const std::string & name, const T & data);
 
     template <typename T>
-    void write(const std::string app_name,
+    void write(const std::string & app_name,
                const std::string & path,
                const std::string & name,
                const T & data);
@@ -94,7 +94,7 @@ RestartFile::write(const std::string & path, const std::string & name, const T &
 
 template <typename T>
 void
-RestartFile::write(const std::string app_name,
+RestartFile::write(const std::string & app_name,
                    const std::string & path,
                    const std::string & name,
                    const T & data)
