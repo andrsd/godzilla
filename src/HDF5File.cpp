@@ -60,4 +60,22 @@ HDF5File::get_file_path() const
     return this->file_name.string();
 }
 
+void
+HDF5File::Group::write_global_vector(const std::string & name, const Vector & data)
+{
+    auto rng = data.get_ownership_range();
+
+    auto space = Dataspace::create(data.get_size());
+    auto dset = Dataset::create<Real>(this->id, name.c_str(), space);
+
+    auto filespace = dset.get_space();
+    filespace.select_hyperslab(rng);
+
+    auto memspace = Dataspace::create(rng.size());
+
+    auto * vals = data.get_array_read();
+    dset.write(memspace, filespace, vals);
+    data.restore_array_read(vals);
+}
+
 } // namespace godzilla

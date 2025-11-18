@@ -8,6 +8,7 @@
 #include "godzilla/Enums.h"
 #include "godzilla/Types.h"
 #include "godzilla/Range.h"
+#include "godzilla/Vector.h"
 #include "godzilla/Exception.h"
 #include "mpicpp-lite/mpicpp-lite.h"
 #include <filesystem>
@@ -198,6 +199,8 @@ class HDF5File {
 
         template <typename T>
         void write_dataset(const std::string & name, const DynDenseMatrix<T> & data);
+
+        void write_global_vector(const std::string & name, const Vector & data);
 
         template <typename T>
         T read_dataset(const std::string & name) const;
