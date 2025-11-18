@@ -345,6 +345,9 @@ class HDF5File {
         template <typename T>
         void write(Int n, const T data[]);
 
+        template <typename T>
+        inline void write(const Dataspace & memspace, const Dataspace & filespace, const T data[]);
+
         Dataspace
         get_space() const
         {
@@ -798,6 +801,21 @@ inline void
 HDF5File::Dataset::write(Int n, const T data[])
 {
     auto res = H5Dwrite(this->id, hdf5::get_datatype<T>(), H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
+    if (res < 0)
+        throw Exception("Error writing dataset");
+}
+
+template <typename T>
+inline void
+HDF5File::Dataset::write(const Dataspace & memspace, const Dataspace & filespace, const T data[])
+{
+    auto dxpl = H5Pcreate(H5P_DATASET_XFER);
+    H5Pset_dxpl_mpio(dxpl, H5FD_MPIO_COLLECTIVE);
+
+    auto res = H5Dwrite(this->id, hdf5::get_datatype<T>(), memspace.id, filespace.id, dxpl, data);
+
+    H5Pclose(dxpl);
+
     if (res < 0)
         throw Exception("Error writing dataset");
 }
