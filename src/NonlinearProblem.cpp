@@ -328,7 +328,7 @@ NonlinearProblem::read_restart_file(const RestartFile & file)
 {
     CALL_STACK_MSG();
     auto & sln = get_solution_vector();
-    file.read(get_name(), "/", "sln", sln);
+    file.read_global_vector(get_name(), "/", "sln", sln);
 }
 
 } // namespace godzilla
