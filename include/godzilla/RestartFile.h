@@ -37,6 +37,16 @@ public:
                const std::string & name,
                const T & data);
 
+    /// Write global vector
+    void
+    write_global_vector(const std::string & path, const std::string & name, const Vector & data);
+
+    /// Write global vector
+    void write_global_vector(const std::string & app_name,
+                             const std::string & path,
+                             const std::string & name,
+                             const Vector & data);
+
     /// Read data from the file
     ///
     /// @param path Path to the data

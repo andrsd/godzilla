@@ -70,6 +70,30 @@ RestartFile::write<Vector>(const std::string & path, const std::string & name, c
     }
 }
 
+void
+RestartFile::write_global_vector(const std::string & app_name,
+                                 const std::string & path,
+                                 const std::string & name,
+                                 const Vector & data)
+{
+    write_global_vector(get_full_path(app_name, path), name, data);
+}
+
+void
+RestartFile::write_global_vector(const std::string & path,
+                                 const std::string & name,
+                                 const Vector & data)
+{
+    auto norm_path = normalize_path(path);
+    try {
+        auto group = this->h5f.create_group(norm_path);
+        group.write_global_vector(name, data);
+    }
+    catch (std::exception & e) {
+        throw Exception("Error writing '{}' to {}: {}", norm_path, this->file_name(), e.what());
+    }
+}
+
 template <>
 void
 RestartFile::read<Vector>(const std::string & path, const std::string & name, Vector & data) const
