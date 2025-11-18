@@ -7,7 +7,10 @@
 #include "godzilla/DenseVector.h"
 #include "godzilla/Enums.h"
 #include "godzilla/Types.h"
+#include "godzilla/Range.h"
+#include "godzilla/Vector.h"
 #include "godzilla/Exception.h"
+#include "mpicpp-lite/mpicpp-lite.h"
 #include <filesystem>
 #include <string>
 #include <numeric>
@@ -15,6 +18,7 @@
 #include <mutex>
 #include <hdf5.h>
 
+namespace mpi = mpicpp_lite;
 namespace fs = std::filesystem;
 
 namespace godzilla {
@@ -196,6 +200,8 @@ class HDF5File {
         template <typename T>
         void write_dataset(const std::string & name, const DynDenseMatrix<T> & data);
 
+        void write_global_vector(const std::string & name, const Vector & data);
+
         template <typename T>
         T read_dataset(const std::string & name) const;
 
@@ -210,6 +216,8 @@ class HDF5File {
 
         template <typename T>
         void read_dataset(const std::string & name, Int n, T data[]);
+
+        void read_global_vector(const std::string & name, Vector & data);
 
         Dataset
         get_dataset(const std::string & name) const
@@ -267,6 +275,17 @@ class HDF5File {
                 throw Exception("Failed to obtain dataspace dimension");
             else
                 return dims;
+        }
+
+        void
+        select_hyperslab(const Range & range)
+        {
+            auto start = static_cast<hsize_t>(range.first());
+            auto count = static_cast<hsize_t>(range.size());
+
+            auto err = H5Sselect_hyperslab(this->id, H5S_SELECT_SET, &start, NULL, &count, NULL);
+            if (err < 0)
+                throw Exception("Failed to select hyperslab");
         }
 
         const hid_t id;
@@ -329,6 +348,9 @@ class HDF5File {
         void read(Int n, T data[]);
 
         template <typename T>
+        inline void read(const Dataspace & memspace, const Dataspace & filespace, T data[]);
+
+        template <typename T>
         void write(const T & data);
 
         template <typename T, typename A>
@@ -342,6 +364,9 @@ class HDF5File {
 
         template <typename T>
         void write(Int n, const T data[]);
+
+        template <typename T>
+        inline void write(const Dataspace & memspace, const Dataspace & filespace, const T data[]);
 
         Dataspace
         get_space() const
@@ -440,6 +465,7 @@ class HDF5File {
     };
 
 public:
+    HDF5File(mpi::Communicator comm, const fs::path & file_name, FileAccess faccess);
     HDF5File(const fs::path & file_name, FileAccess faccess);
     ~HDF5File();
 
@@ -738,6 +764,21 @@ HDF5File::Dataset::read(Int n, T data[])
 
 template <typename T>
 inline void
+HDF5File::Dataset::read(const Dataspace & memspace, const Dataspace & filespace, T data[])
+{
+    auto dxpl = H5Pcreate(H5P_DATASET_XFER);
+    H5Pset_dxpl_mpio(dxpl, H5FD_MPIO_COLLECTIVE);
+
+    auto res = H5Dread(this->id, hdf5::get_datatype<T>(), memspace.id, filespace.id, dxpl, data);
+
+    H5Pclose(dxpl);
+
+    if (res < 0)
+        throw Exception("Error reading dataset");
+}
+
+template <typename T>
+inline void
 HDF5File::Dataset::write(const T & data)
 {
     auto res = H5Dwrite(this->id, hdf5::get_datatype<T>(), H5S_ALL, H5S_ALL, H5P_DEFAULT, &data);
@@ -795,6 +836,21 @@ inline void
 HDF5File::Dataset::write(Int n, const T data[])
 {
     auto res = H5Dwrite(this->id, hdf5::get_datatype<T>(), H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
+    if (res < 0)
+        throw Exception("Error writing dataset");
+}
+
+template <typename T>
+inline void
+HDF5File::Dataset::write(const Dataspace & memspace, const Dataspace & filespace, const T data[])
+{
+    auto dxpl = H5Pcreate(H5P_DATASET_XFER);
+    H5Pset_dxpl_mpio(dxpl, H5FD_MPIO_COLLECTIVE);
+
+    auto res = H5Dwrite(this->id, hdf5::get_datatype<T>(), memspace.id, filespace.id, dxpl, data);
+
+    H5Pclose(dxpl);
+
     if (res < 0)
         throw Exception("Error writing dataset");
 }

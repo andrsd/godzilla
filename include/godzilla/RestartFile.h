@@ -16,6 +16,8 @@ class Vector;
 /// Class for handling restart files
 class RestartFile {
 public:
+    RestartFile(mpi::Communicator comm, const std::string & file_name, FileAccess faccess);
+
     /// Restart file
     ///
     /// @param file_name Name of the file
@@ -35,6 +37,16 @@ public:
                const std::string & name,
                const T & data);
 
+    /// Write global vector
+    void
+    write_global_vector(const std::string & path, const std::string & name, const Vector & data);
+
+    /// Write global vector
+    void write_global_vector(const std::string & app_name,
+                             const std::string & path,
+                             const std::string & name,
+                             const Vector & data);
+
     /// Read data from the file
     ///
     /// @param path Path to the data
@@ -47,6 +59,16 @@ public:
               const std::string & path,
               const std::string & name,
               T & data) const;
+
+    /// Read global vector
+    void
+    read_global_vector(const std::string & path, const std::string & name, Vector & data) const;
+
+    /// Read global vector
+    void read_global_vector(const std::string & app_name,
+                            const std::string & path,
+                            const std::string & name,
+                            Vector & data) const;
 
     /// Read data from the file
     ///

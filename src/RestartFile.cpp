@@ -11,6 +11,13 @@ namespace fs = std::filesystem;
 
 namespace godzilla {
 
+RestartFile::RestartFile(mpi::Communicator comm,
+                         const std::string & file_name,
+                         FileAccess faccess) :
+    h5f(comm, fs::path(file_name), faccess)
+{
+}
+
 RestartFile::RestartFile(const std::string & file_name, FileAccess faccess) :
     h5f(fs::path(file_name), faccess)
 {
@@ -32,7 +39,7 @@ std::string
 RestartFile::get_full_path(const std::string & app_name, const std::string & path) const
 {
     if (path == "/" || path == "")
-        return fmt::format("/{}", app_name, path);
+        return fmt::format("/{}", app_name);
     else
         return fmt::format("/{}/{}", app_name, path);
 }
@@ -63,6 +70,30 @@ RestartFile::write<Vector>(const std::string & path, const std::string & name, c
     }
 }
 
+void
+RestartFile::write_global_vector(const std::string & app_name,
+                                 const std::string & path,
+                                 const std::string & name,
+                                 const Vector & data)
+{
+    write_global_vector(get_full_path(app_name, path), name, data);
+}
+
+void
+RestartFile::write_global_vector(const std::string & path,
+                                 const std::string & name,
+                                 const Vector & data)
+{
+    auto norm_path = normalize_path(path);
+    try {
+        auto group = this->h5f.create_group(norm_path);
+        group.write_global_vector(name, data);
+    }
+    catch (std::exception & e) {
+        throw Exception("Error writing '{}' to {}: {}", norm_path, this->file_name(), e.what());
+    }
+}
+
 template <>
 void
 RestartFile::read<Vector>(const std::string & path, const std::string & name, Vector & data) const
@@ -78,6 +109,34 @@ RestartFile::read<Vector>(const std::string & path, const std::string & name, Ve
     catch (std::exception & e) {
         throw Exception("Error writing '{}' to {}: {}", norm_path, this->file_name(), e.what());
     }
+}
+
+void
+RestartFile::read_global_vector(const std::string & path,
+                                const std::string & name,
+                                Vector & data) const
+{
+    auto norm_path = normalize_path(path);
+    try {
+        auto group = this->h5f.open_group(norm_path);
+        group.read_global_vector(name, data);
+    }
+    catch (std::exception & e) {
+        throw Exception("Error reading '{}/{}' from {}: {}",
+                        norm_path,
+                        name,
+                        this->file_name(),
+                        e.what());
+    }
+}
+
+void
+RestartFile::read_global_vector(const std::string & app_name,
+                                const std::string & path,
+                                const std::string & name,
+                                Vector & data) const
+{
+    read_global_vector(get_full_path(app_name, path), name, data);
 }
 
 } // namespace godzilla
