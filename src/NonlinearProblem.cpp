@@ -320,7 +320,7 @@ NonlinearProblem::write_restart_file(RestartFile & file) const
 {
     CALL_STACK_MSG();
     const auto & sln = get_solution_vector();
-    file.write(get_name(), "/", "sln", sln);
+    file.write_global_vector(get_name(), "/", "sln", sln);
 }
 
 void
