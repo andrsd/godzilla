@@ -32,7 +32,7 @@ std::string
 RestartFile::get_full_path(const std::string & app_name, const std::string & path) const
 {
     if (path == "/" || path == "")
-        return fmt::format("/{}", app_name, path);
+        return fmt::format("/{}", app_name);
     else
         return fmt::format("/{}/{}", app_name, path);
 }
