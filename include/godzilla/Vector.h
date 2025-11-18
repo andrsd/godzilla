@@ -6,6 +6,7 @@
 #include "godzilla/PetscObjectWrapper.h"
 #include "godzilla/IndexSet.h"
 #include "godzilla/Types.h"
+#include "godzilla/Range.h"
 #include "godzilla/DenseVector.h"
 #include "mpi.h"
 #include "petscvec.h"
@@ -187,6 +188,11 @@ public:
     /// @param is Index set representing the subset of X
     /// @param y Subvector being restored
     void restore_sub_vector(const IndexSet & is, Vector & y) const;
+
+    /// Returns the range of indices owned by this process.
+    ///
+    /// @return Range of elements owner by this process
+    Range get_ownership_range() const;
 
     Scalar operator()(Int idx) const;
 
