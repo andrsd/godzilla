@@ -346,6 +346,9 @@ class HDF5File {
         void read(Int n, T data[]);
 
         template <typename T>
+        inline void read(const Dataspace & memspace, const Dataspace & filespace, T data[]);
+
+        template <typename T>
         void write(const T & data);
 
         template <typename T, typename A>
@@ -753,6 +756,21 @@ inline void
 HDF5File::Dataset::read(Int n, T data[])
 {
     auto res = H5Dread(this->id, hdf5::get_datatype<T>(), H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
+    if (res < 0)
+        throw Exception("Error reading dataset");
+}
+
+template <typename T>
+inline void
+HDF5File::Dataset::read(const Dataspace & memspace, const Dataspace & filespace, T data[])
+{
+    auto dxpl = H5Pcreate(H5P_DATASET_XFER);
+    H5Pset_dxpl_mpio(dxpl, H5FD_MPIO_COLLECTIVE);
+
+    auto res = H5Dread(this->id, hdf5::get_datatype<T>(), memspace.id, filespace.id, dxpl, data);
+
+    H5Pclose(dxpl);
+
     if (res < 0)
         throw Exception("Error reading dataset");
 }
