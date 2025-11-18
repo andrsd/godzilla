@@ -217,6 +217,8 @@ class HDF5File {
         template <typename T>
         void read_dataset(const std::string & name, Int n, T data[]);
 
+        void read_global_vector(const std::string & name, Vector & data);
+
         Dataset
         get_dataset(const std::string & name) const
         {

@@ -78,4 +78,21 @@ HDF5File::Group::write_global_vector(const std::string & name, const Vector & da
     data.restore_array_read(vals);
 }
 
+void
+HDF5File::Group::read_global_vector(const std::string & name, Vector & data)
+{
+    auto rng = data.get_ownership_range();
+
+    auto dset = Dataset::open(this->id, name.c_str());
+
+    auto filespace = dset.get_space();
+    filespace.select_hyperslab(rng);
+
+    auto memspace = Dataspace::create(rng.size());
+
+    auto * vals = data.get_array();
+    dset.read(memspace, filespace, vals);
+    data.restore_array(vals);
+}
+
 } // namespace godzilla
