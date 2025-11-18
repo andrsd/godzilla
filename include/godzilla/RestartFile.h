@@ -60,6 +60,16 @@ public:
               const std::string & name,
               T & data) const;
 
+    /// Read global vector
+    void
+    read_global_vector(const std::string & path, const std::string & name, Vector & data) const;
+
+    /// Read global vector
+    void read_global_vector(const std::string & app_name,
+                            const std::string & path,
+                            const std::string & name,
+                            Vector & data) const;
+
     /// Read data from the file
     ///
     /// @param path Path to the data

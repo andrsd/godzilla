@@ -111,4 +111,32 @@ RestartFile::read<Vector>(const std::string & path, const std::string & name, Ve
     }
 }
 
+void
+RestartFile::read_global_vector(const std::string & path,
+                                const std::string & name,
+                                Vector & data) const
+{
+    auto norm_path = normalize_path(path);
+    try {
+        auto group = this->h5f.open_group(norm_path);
+        group.read_global_vector(name, data);
+    }
+    catch (std::exception & e) {
+        throw Exception("Error reading '{}/{}' from {}: {}",
+                        norm_path,
+                        name,
+                        this->file_name(),
+                        e.what());
+    }
+}
+
+void
+RestartFile::read_global_vector(const std::string & app_name,
+                                const std::string & path,
+                                const std::string & name,
+                                Vector & data) const
+{
+    read_global_vector(get_full_path(app_name, path), name, data);
+}
+
 } // namespace godzilla
