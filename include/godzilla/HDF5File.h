@@ -7,6 +7,7 @@
 #include "godzilla/DenseVector.h"
 #include "godzilla/Enums.h"
 #include "godzilla/Types.h"
+#include "godzilla/Range.h"
 #include "godzilla/Exception.h"
 #include "mpicpp-lite/mpicpp-lite.h"
 #include <filesystem>
@@ -269,6 +270,17 @@ class HDF5File {
                 throw Exception("Failed to obtain dataspace dimension");
             else
                 return dims;
+        }
+
+        void
+        select_hyperslab(const Range & range)
+        {
+            auto start = static_cast<hsize_t>(range.first());
+            auto count = static_cast<hsize_t>(range.size());
+
+            auto err = H5Sselect_hyperslab(this->id, H5S_SELECT_SET, &start, NULL, &count, NULL);
+            if (err < 0)
+                throw Exception("Failed to select hyperslab");
         }
 
         const hid_t id;
