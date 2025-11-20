@@ -39,7 +39,7 @@ TEST(L2DiffTest, compute)
 
     auto mesh_params = LineMesh::parameters();
     mesh_params.set<App *>("app", &app);
-    mesh_params.set<Int>("nx", 2);
+    mesh_params.set<Int>("nx", 20);
     auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = GTestFENonlinearProblem::parameters();
@@ -69,5 +69,5 @@ TEST(L2DiffTest, compute)
 
     auto l2_err = ps->get_value();
     ASSERT_TRUE(!l2_err.empty());
-    EXPECT_NEAR(l2_err[0], 0.0416667, 1e-7);
+    EXPECT_NEAR(l2_err[0], 0.000416667, 1e-7);
 }
