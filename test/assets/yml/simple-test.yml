@@ -1,5 +1,0 @@
-mesh:
-  type: LineMesh
-  nx: 2
-problem:
-  type: TestProblem

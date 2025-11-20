@@ -1,8 +1,0 @@
-functions:
-  fn:
-    type: PiecewiseLinear
-    x: [ 0, 1 ]
-    y: [ -1, 1 ]
-
-problem:
-  type: GTestProblem

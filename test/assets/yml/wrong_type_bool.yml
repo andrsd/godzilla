@@ -1,8 +1,0 @@
-mesh:
-  type: LineMesh
-  nx: 2
-problem:
-  type: GTestProblem
-  str: "input_str"
-  bool1: asdf
-  bool2: [ 1.0 ]
