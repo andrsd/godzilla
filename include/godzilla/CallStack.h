@@ -3,11 +3,9 @@
 
 #pragma once
 
-#include "godzilla/MemoryArena.h"
-#include "godzilla/Allocators.h"
-#include "fmt/format.h"
 #include <array>
 #include <vector>
+#include <string>
 
 namespace godzilla {
 namespace internal {
@@ -24,8 +22,14 @@ namespace internal {
 ///  ...your code here...
 /// }
 /// @endcode
-#define CALL_STACK_MSG() \
-    godzilla::internal::CallStack::Msg _CALL_STK_MSG_NAME(__call_stack_msg, __COUNTER__)(__FILE__, __LINE__, __PRETTY_FUNCTION__)
+#ifndef NDEBUG
+// clang-format off
+    #define CALL_STACK_MSG() \
+        godzilla::internal::CallStack::Msg _CALL_STK_MSG_NAME(__call_stack_msg, __COUNTER__)(__FILE__, __LINE__, __PRETTY_FUNCTION__)
+// clang-format on
+#else
+    #define CALL_STACK_MSG()
+#endif
 
 /// Call stack object
 ///
@@ -34,9 +38,6 @@ namespace internal {
 class CallStack {
 public:
     static const std::size_t MAX_SIZE = 256;
-
-    /// String that wll be allocated in our dedicated memory arena
-    using String = std::basic_string<char, std::char_traits<char>, MemoryArenaAllocator<char>>;
 
     /// Holds data for one call stack object
     struct Msg {
@@ -49,11 +50,10 @@ public:
 
         ~Msg();
 
-        MemoryArena<char>::Marker marker;
         /// Message
-        String msg;
+        const char * msg;
         /// Location
-        String location;
+        const char * location;
         /// Line number
         int line_no;
     };
