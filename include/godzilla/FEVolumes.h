@@ -109,7 +109,7 @@ calc_volumes(const Array1D<DenseVector<Real, DIM>> & coords,
              Array1D<Real> & fe_volume)
 {
     CALL_STACK_MSG();
-    assert_true(connect.size() == fe_volume.size(),
+    expect_true(connect.size() == fe_volume.size(),
                 "Connectivity array size does not match FE volume array size");
 
     for (godzilla::Int ie = 0; ie < connect.size(); ++ie) {

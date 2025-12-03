@@ -114,7 +114,7 @@ ExodusIIOutput::ExodusIIOutput(const Parameters & pars) :
 {
     CALL_STACK_MSG();
     auto dpi = get_discrete_problem_interface();
-    assert_true(
+    expect_true(
         dpi != nullptr,
         "ExodusIIOutput works only with problems that inherit from DiscreteProblemInterface");
     this->mesh = dpi->get_mesh();

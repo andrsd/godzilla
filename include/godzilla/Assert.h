@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "godzilla/Error.h"
 #include "godzilla/Terminal.h"
 #include "fmt/core.h"
 #include <source_location>
@@ -14,6 +15,7 @@ assert_true(bool cond,
             fmt::string_view format,
             std::source_location loc = std::source_location::current())
 {
+#ifndef NDEBUG
     if (!cond) {
         fmt::print(stderr, "{}", Terminal::red);
         fmt::print(stderr,
@@ -23,7 +25,20 @@ assert_true(bool cond,
                    loc.file_name(),
                    loc.line());
         fmt::println(stderr, "{}", Terminal::normal);
-        std::abort();
+        godzilla::abort();
+    }
+#endif
+}
+
+template <typename... T>
+inline void
+expect_true(bool cond, fmt::format_string<T...> format, T... args)
+{
+    if (!cond) {
+        fmt::print(stderr, "{}", Terminal::red);
+        fmt::print(stderr, format, std::forward<T>(args)...);
+        fmt::println(stderr, "{}", Terminal::normal);
+        godzilla::abort();
     }
 }
 

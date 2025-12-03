@@ -19,13 +19,12 @@ PiecewiseConstant::PiecewiseConstant(Continuity cont,
     y(y)
 {
     CALL_STACK_MSG();
-    assert_true(this->x.size() + 1 == this->y.size(),
-                fmt::format("'x' (size={}) must have one more entry than 'y' (size={})",
-                            this->x.size(),
-                            this->y.size()));
+    expect_true(this->x.size() + 1 == this->y.size(),
+                "'x' (size={}) must have one more entry than 'y' (size={})",
+                this->x.size(),
+                this->y.size());
 
-    assert_true(!this->x.empty(),
-                fmt::format("Size of 'x' is {}. It must be 1 or more", this->x.size()));
+    expect_true(!this->x.empty(), "Size of 'x' is {}. It must be 1 or more", this->x.size());
 
     // check monotonicity
     for (std::size_t i = 0; i < this->x.size() - 1; ++i) {

@@ -44,7 +44,7 @@ public:
         vertices(vertices)
     {
         CALL_STACK_MSG();
-        assert_true(mesh->get_dimension() == DIM, "Mesh dimension mismatch");
+        expect_true(mesh->get_dimension() == DIM, "Mesh dimension mismatch");
     }
 
     UnstructuredMesh *
@@ -119,14 +119,14 @@ public:
         facets(facets)
     {
         CALL_STACK_MSG();
-        assert_true(mesh->get_dimension() == DIM, "Mesh dimension mismatch");
+        expect_true(mesh->get_dimension() == DIM, "Mesh dimension mismatch");
         this->facets.sort();
     }
 
     NaturalBoundaryInfo(UnstructuredMesh * mesh, IndexSet facets) : mesh(mesh), facets(facets)
     {
         CALL_STACK_MSG();
-        assert_true(mesh->get_dimension() == DIM, "Mesh dimension mismatch");
+        expect_true(mesh->get_dimension() == DIM, "Mesh dimension mismatch");
         this->facets.sort();
     }
 

@@ -34,7 +34,7 @@ NaturalBC::create()
 {
     CALL_STACK_MSG();
     auto dpi = get_discrete_problem_interface();
-    assert_true(dpi != nullptr, "DiscreteProblemInterface is null");
+    expect_true(dpi != nullptr, "DiscreteProblemInterface is null");
 
     auto field_names = dpi->get_field_names();
     if (field_names.size() == 1) {

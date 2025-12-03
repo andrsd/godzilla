@@ -63,4 +63,10 @@ check_petsc_error(int ierr, const char * file, int line)
 
 } // namespace internal
 
+[[noreturn]] void
+abort()
+{
+    std::abort();
+}
+
 } // namespace godzilla

@@ -27,7 +27,7 @@ public:
     T *
     allocate(std::size_t n)
     {
-        assert_true(this->offset + n <= this->capacity, "Arena out of memory");
+        expect_true(this->offset + n <= this->capacity, "Arena out of memory");
         T * ptr = this->buffer + this->offset;
         this->offset += n;
         return ptr;

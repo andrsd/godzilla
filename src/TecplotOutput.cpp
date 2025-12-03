@@ -126,8 +126,8 @@ TecplotOutput::create()
     FileOutput::create();
 
     auto dpi = get_discrete_problem_interface();
-    assert_true(dpi != nullptr, "DiscreteProblemInterface is null");
-    assert_true(get_problem() != nullptr, "Problem is null");
+    expect_true(dpi != nullptr, "DiscreteProblemInterface is null");
+    expect_true(get_problem() != nullptr, "Problem is null");
 
     this->mesh = dpi->get_mesh();
     if (this->mesh == nullptr)
@@ -175,10 +175,9 @@ TecplotOutput::create()
             this->nodal_aux_var_fids.push_back(fid);
     }
 
-    assert_true(this->mesh != nullptr, "Mesh is null");
+    expect_true(this->mesh != nullptr, "Mesh is null");
     auto dim = this->mesh->get_dimension();
-    assert_true(dim == 1_D || dim == 2_D || dim == 3_D,
-                fmt::format("Unsupported dimension {}", dim));
+    expect_true(dim == 1_D || dim == 2_D || dim == 3_D, "Unsupported dimension {}", dim);
     for (Int i = 0; i < dim; ++i)
         this->shared_vars.push_back(true);
     int32_t var_idx = dim;
@@ -222,8 +221,7 @@ TecplotOutput::open_file()
 
         const std::vector<std::string> coord_names = { "x", "y", "z" };
         auto dim = this->mesh->get_dimension();
-        assert_true(dim == 1_D || dim == 2_D || dim == 3_D,
-                    fmt::format("Unsupported dimension {}", dim));
+        expect_true(dim == 1_D || dim == 2_D || dim == 3_D, "Unsupported dimension {}", dim);
         std::vector<std::string> var_names;
         for (Int i = 0; i < dim; ++i)
             var_names.push_back(coord_names[i]);

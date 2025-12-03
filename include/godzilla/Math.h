@@ -181,7 +181,7 @@ template <typename T>
 inline Real
 factorial(T x)
 {
-    assert_true(x >= 0, "Factorial is defined only for positive numbers");
+    expect_true(x >= 0, "Factorial is defined only for positive numbers");
     Real result = 1.0;
     for (Int i = 2; i <= x; ++i)
         result *= i;
