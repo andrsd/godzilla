@@ -63,7 +63,6 @@
 <li class="toctree-l1"><a class="reference internal" href="box-mesh.html">BoxMesh</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">CallStack</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#_CPPv4N8godzilla8internal9CallStackE"><code class="docutils literal notranslate"><span class="pre">CallStack</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla8internal9CallStack6StringE"><code class="docutils literal notranslate"><span class="pre">CallStack::String</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla8internal9CallStack9CallStackEv"><code class="docutils literal notranslate"><span class="pre">CallStack::CallStack()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla8internal9CallStack4dumpEv"><code class="docutils literal notranslate"><span class="pre">CallStack::dump()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla8internal9CallStack3addEP3Msg"><code class="docutils literal notranslate"><span class="pre">CallStack::add()</span></code></a></li>
@@ -148,15 +147,6 @@
 <dd><p>Call stack object. </p>
 <p>The allocation of the stack must be static to prevent problems during out-of-memory scenario. That’s why we should not be using <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> or similar. </p>
 <div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
-<dl class="cpp type">
-<dt class="sig sig-object cpp" id="_CPPv4N8godzilla8internal9CallStack6StringE">
-<span id="_CPPv3N8godzilla8internal9CallStack6StringE"></span><span id="_CPPv2N8godzilla8internal9CallStack6StringE"></span><span class="target" id="classgodzilla_1_1internal_1_1_call_stack_1a70f711bcf70296a7973dfd8540bbeb3f"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">String</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">basic_string</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">char</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">char_traits</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">char</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">MemoryArenaAllocator</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">char</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N8godzilla8internal9CallStack6StringE" title="Link to this definition"></a><br /></dt>
-<dd><p>String that wll be allocated in our dedicated memory arena. </p>
-</dd></dl>
-
-</div>
-<div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla8internal9CallStack9CallStackEv">
@@ -231,13 +221,13 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla8internal9CallStack3Msg3msgE">
-<span id="_CPPv3N8godzilla8internal9CallStack3Msg3msgE"></span><span id="_CPPv2N8godzilla8internal9CallStack3Msg3msgE"></span><span id="godzilla::internal::CallStack::Msg::msg__String"></span><span class="target" id="structgodzilla_1_1internal_1_1_call_stack_1_1_msg_1aeaecc9a07e822193d76952fdd7219004"></span><a class="reference internal" href="#_CPPv4N8godzilla8internal9CallStack6StringE" title="godzilla::internal::CallStack::String"><span class="n"><span class="pre">String</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">msg</span></span></span><a class="headerlink" href="#_CPPv4N8godzilla8internal9CallStack3Msg3msgE" title="Link to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla8internal9CallStack3Msg3msgE"></span><span id="_CPPv2N8godzilla8internal9CallStack3Msg3msgE"></span><span id="godzilla::internal::CallStack::Msg::msg__cCP"></span><span class="target" id="structgodzilla_1_1internal_1_1_call_stack_1_1_msg_1ad8beb135d6912675df5b7f1108d19666"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">msg</span></span></span><a class="headerlink" href="#_CPPv4N8godzilla8internal9CallStack3Msg3msgE" title="Link to this definition"></a><br /></dt>
 <dd><p>Message. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla8internal9CallStack3Msg8locationE">
-<span id="_CPPv3N8godzilla8internal9CallStack3Msg8locationE"></span><span id="_CPPv2N8godzilla8internal9CallStack3Msg8locationE"></span><span id="godzilla::internal::CallStack::Msg::location__String"></span><span class="target" id="structgodzilla_1_1internal_1_1_call_stack_1_1_msg_1a1d4ebada246d62e68e5ce2c053acfb0b"></span><a class="reference internal" href="#_CPPv4N8godzilla8internal9CallStack6StringE" title="godzilla::internal::CallStack::String"><span class="n"><span class="pre">String</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">location</span></span></span><a class="headerlink" href="#_CPPv4N8godzilla8internal9CallStack3Msg8locationE" title="Link to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla8internal9CallStack3Msg8locationE"></span><span id="_CPPv2N8godzilla8internal9CallStack3Msg8locationE"></span><span id="godzilla::internal::CallStack::Msg::location__cCP"></span><span class="target" id="structgodzilla_1_1internal_1_1_call_stack_1_1_msg_1a35a06e2af57a4f4643985b136a086b8c"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">location</span></span></span><a class="headerlink" href="#_CPPv4N8godzilla8internal9CallStack3Msg8locationE" title="Link to this definition"></a><br /></dt>
 <dd><p>Location. </p>
 </dd></dl>
 
