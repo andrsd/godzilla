@@ -28,8 +28,8 @@ DiscreteProblemInterface::DiscreteProblemInterface(Problem * problem, const Para
     ds_aux(nullptr)
 {
     CALL_STACK_MSG();
-    assert_true(this->problem != nullptr, "Problem is null");
-    assert_true(this->unstr_mesh != nullptr, "Mesh must be UnstructuredMesh");
+    expect_true(this->problem != nullptr, "Problem is null");
+    expect_true(this->unstr_mesh != nullptr, "Mesh must be UnstructuredMesh");
 }
 
 DiscreteProblemInterface::~DiscreteProblemInterface()

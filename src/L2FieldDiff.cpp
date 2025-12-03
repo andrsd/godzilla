@@ -22,7 +22,7 @@ L2FieldDiff::L2FieldDiff(const Parameters & pars) :
     n_fields(0)
 {
     CALL_STACK_MSG();
-    assert_true(this->fepi != nullptr, "FEProblemInterface is null");
+    expect_true(this->fepi != nullptr, "FEProblemInterface is null");
 }
 
 void

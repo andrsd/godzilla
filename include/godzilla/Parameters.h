@@ -259,8 +259,7 @@ public:
     add_private_param(const std::string & name)
     {
         CALL_STACK_MSG();
-        assert_true(!this->has<T>(name),
-                    fmt::format("Private parameter '{}' already exists", name));
+        expect_true(!this->has<T>(name), "Private parameter '{}' already exists", name);
 
         auto param = Qtr<Parameter<T>>::alloc();
         param->value = {};

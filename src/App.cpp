@@ -237,7 +237,7 @@ App::run_problem()
 {
     CALL_STACK_MSG();
     lprintln(9, "Running");
-    assert_true(this->problem != nullptr, "Problem is null");
+    expect_true(this->problem != nullptr, "Problem is null");
     this->problem->run();
 }
 

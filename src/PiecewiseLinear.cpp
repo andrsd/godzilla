@@ -14,12 +14,11 @@ PiecewiseLinear::PiecewiseLinear(const std::vector<Real> & x, const std::vector<
     y(y)
 {
     CALL_STACK_MSG();
-    assert_true(this->x.size() == this->y.size(),
-                fmt::format("Size of 'x' ({}) does not match size of 'y' ({})",
-                            this->x.size(),
-                            this->y.size()));
-    assert_true(this->x.size() >= 2,
-                fmt::format("Size of 'x' is {}. It must be 2 or more", this->x.size()));
+    expect_true(this->x.size() == this->y.size(),
+                "Size of 'x' ({}) does not match size of 'y' ({})",
+                this->x.size(),
+                this->y.size());
+    expect_true(this->x.size() >= 2, "Size of 'x' is {}. It must be 2 or more", this->x.size());
 
     // check monotonicity
     for (std::size_t i = 0; i < this->x.size() - 1; ++i) {

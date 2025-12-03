@@ -53,7 +53,7 @@ DM
 Problem::get_dm() const
 {
     CALL_STACK_MSG();
-    assert_true(this->mesh != nullptr, "Mesh is null");
+    expect_true(this->mesh != nullptr, "Mesh is null");
     return this->mesh->get_dm();
 }
 

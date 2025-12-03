@@ -48,7 +48,7 @@ void
 InitialCondition::create()
 {
     CALL_STACK_MSG();
-    assert_true(this->dpi != nullptr, "DiscreteProblemInterface is null");
+    expect_true(this->dpi != nullptr, "DiscreteProblemInterface is null");
     if (this->field_name.has_value()) {
         auto fld = this->field_name.value();
         if (this->dpi->has_field_by_name(fld))
@@ -77,7 +77,7 @@ const std::string &
 InitialCondition::get_field_name() const
 {
     CALL_STACK_MSG();
-    assert_true(this->field_name.has_value(), "Field name not set");
+    expect_true(this->field_name.has_value(), "Field name not set");
     return this->field_name.value();
 }
 
