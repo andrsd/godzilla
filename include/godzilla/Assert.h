@@ -14,6 +14,7 @@ assert_true(bool cond,
             fmt::string_view format,
             std::source_location loc = std::source_location::current())
 {
+#ifndef NDEBUG
     if (!cond) {
         fmt::print(stderr, "{}", Terminal::red);
         fmt::print(stderr,
@@ -25,6 +26,7 @@ assert_true(bool cond,
         fmt::println(stderr, "{}", Terminal::normal);
         std::abort();
     }
+#endif
 }
 
 template <typename... T>
