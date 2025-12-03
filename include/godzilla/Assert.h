@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "godzilla/Error.h"
 #include "godzilla/Terminal.h"
 #include "fmt/core.h"
 #include <source_location>
@@ -24,7 +25,7 @@ assert_true(bool cond,
                    loc.file_name(),
                    loc.line());
         fmt::println(stderr, "{}", Terminal::normal);
-        std::abort();
+        godzilla::abort();
     }
 #endif
 }
@@ -37,7 +38,7 @@ expect_true(bool cond, fmt::format_string<T...> format, T... args)
         fmt::print(stderr, "{}", Terminal::red);
         fmt::print(stderr, format, std::forward<T>(args)...);
         fmt::println(stderr, "{}", Terminal::normal);
-        std::abort();
+        godzilla::abort();
     }
 }
 
