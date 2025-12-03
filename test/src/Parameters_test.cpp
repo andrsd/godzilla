@@ -38,7 +38,7 @@ TEST(ParametersTest, get_param_with_incorrect_type)
     Parameters params = Object::parameters();
     params.add_param<double>("param", "doco");
 
-    EXPECT_THROW_MSG(params.get<int>("param"), "Parameter 'param' has unexpected type (d)");
+    EXPECT_THROW_MSG(params.get<int>("param"), "Parameter 'param' has unexpected type (double)");
 }
 
 TEST(ParametersTest, param_value)
@@ -181,7 +181,7 @@ TEST(ParametersTest, get_optional_param_using_incorrect_type)
     params.set<int>("int", 1);
 
     EXPECT_THROW_MSG(params.get<Optional<double>>("int"),
-                     "Parameter 'int' has unexpected type (i)");
+                     "Parameter 'int' has unexpected type (int)");
 }
 
 TEST(ParametersTest, make_param_required)

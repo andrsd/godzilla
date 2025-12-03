@@ -8,6 +8,7 @@
 #include "godzilla/Types.h"
 #include "godzilla/Assert.h"
 #include "godzilla/Qtr.h"
+#include "godzilla/Utils.h"
 #include <map>
 #include <string>
 
@@ -60,7 +61,7 @@ protected:
         std::string
         type() const override
         {
-            return typeid(T).name();
+            return utils::demangle(typeid(T).name());
         }
 
         Value *
