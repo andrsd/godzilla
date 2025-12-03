@@ -120,6 +120,9 @@ human_number(T number)
     return num_str;
 }
 
+/// Convert C++ names into human readable names
+std::string human_type_name(const std::string & type);
+
 /// Get index of an value in a std::vector
 ///
 /// @tparam T Type

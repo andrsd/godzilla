@@ -6,40 +6,6 @@
 
 namespace godzilla {
 
-namespace {
-
-/// Convert C++ names into human readable names
-std::string
-human_type_name(const std::string & type)
-{
-    // clang-format off
-    if (type == "std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>" ||
-        type == "NSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEE" ||
-        type == "std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >")
-        return "String";
-    else if (type == "int" || type == "long" || type == "long long")
-        return "Integer";
-    else if (type == "double" || type == "float")
-        return "Real";
-    else if (type == "bool")
-        return "Boolean";
-    else if (type == "std::__1::vector<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>, std::__1::allocator<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>>>" ||
-             type == "std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >")
-        return "[String, ...]";
-    else if (type == "std::__1::vector<int, std::__1::allocator<int>>")
-        return "[Integer, ...]";
-    else if (type == "std::__1::vector<long long, std::__1::allocator<long long>>")
-        return "[Integer, ...]";
-    else if (type == "std::__1::vector<double, std::__1::allocator<double>>" ||
-             type == "std::vector<double, std::allocator<double> >")
-        return "[Real, ...]";
-    // clang-format on
-    else
-        return type;
-}
-
-} // namespace
-
 bool
 Registry::exists(const std::string & class_name) const
 {
@@ -69,7 +35,7 @@ Registry::get_object_description() const
             if (!param->is_private) {
                 Registry::ObjectDescription::Parameter p;
                 p.name = name;
-                p.type = human_type_name(utils::demangle(param->type()));
+                p.type = utils::human_type_name(param->type());
                 p.description = param->doc_string;
                 p.required = param->required;
                 descr.parameters.push_back(p);

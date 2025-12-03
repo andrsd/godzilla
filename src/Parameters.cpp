@@ -78,13 +78,6 @@ Parameters::is_param_private(const std::string & name) const
 }
 
 std::string
-Parameters::type(const std::string & name) const
-{
-    CALL_STACK_MSG();
-    return this->params.at(name)->type();
-}
-
-std::string
 Parameters::get_doc_string(const std::string & name) const
 {
     CALL_STACK_MSG();
