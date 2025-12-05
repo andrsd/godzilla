@@ -20,6 +20,8 @@ constexpr Real PI = std::numbers::pi_v<Real>;
 constexpr Real SQRT2 = std::numbers::sqrt2_v<Real>;
 /// Square root of 3
 constexpr Real SQRT3 = std::numbers::sqrt3_v<Real>;
+/// Euler's number
+constexpr Real E = std::numbers::e_v<Real>;
 
 /// Sign of the argument
 ///
@@ -213,6 +215,42 @@ T
 tan(T arg)
 {
     return std::tan(arg);
+}
+
+/// Compute natural logarithm
+template <typename T>
+    requires std::is_floating_point_v<T>
+T
+ln(T arg)
+{
+    return std::log(arg);
+}
+
+/// Compute logarithm with base 2
+template <typename T>
+    requires std::is_floating_point_v<T>
+T
+log2(T arg)
+{
+    return std::log2(arg);
+}
+
+/// Compute logarithm with base 10
+template <typename T>
+    requires std::is_floating_point_v<T>
+T
+log10(T arg)
+{
+    return std::log10(arg);
+}
+
+/// Compute logarithm with any base
+template <typename T>
+    requires std::is_floating_point_v<T>
+T
+log(T base, T arg)
+{
+    return std::log(arg) / std::log(base);
 }
 
 } // namespace math

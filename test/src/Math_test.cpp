@@ -84,3 +84,23 @@ TEST(MathTest, tangent)
     EXPECT_NEAR(math::tan(0.), 0., 1e-15);
     EXPECT_NEAR(math::tan(math::PI / 4), 1., 1e-15);
 }
+
+TEST(MathTest, ln)
+{
+    EXPECT_NEAR(math::ln(math::E), 1., 1e-15);
+}
+
+TEST(MathTest, log2)
+{
+    EXPECT_NEAR(math::log2(8.), 3., 1e-15);
+}
+
+TEST(MathTest, log10)
+{
+    EXPECT_NEAR(math::log10(100'000.), 5., 1e-15);
+}
+
+TEST(MathTest, log)
+{
+    EXPECT_NEAR(math::log(5., 625.), 4., 1e-15);
+}
