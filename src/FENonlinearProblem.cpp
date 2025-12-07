@@ -508,7 +508,7 @@ FENonlinearProblem::compute_bnd_residual_single_internal(DM dm,
         PETSC_CHECK(PetscQuadratureGetData(q_geom, nullptr, nullptr, &n_qpts, nullptr, nullptr));
         PetscFEGeom * fgeom;
 #if PETSC_VERSION_GE(3, 23, 0)
-        PETSC_CHECK(DMSNESGetFEGeom(coord_field, points, q_geom, PETSC_FEGEOM_BASIC, &fgeom));
+        PETSC_CHECK(DMSNESGetFEGeom(coord_field, points, q_geom, PETSC_FEGEOM_BOUNDARY, &fgeom));
 #else
         PETSC_CHECK(DMSNESGetFEGeom(coord_field, points, q_geom, PETSC_TRUE, &fgeom));
 #endif
@@ -1039,7 +1039,7 @@ FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
         PETSC_CHECK(PetscQuadratureGetData(q_geom, nullptr, nullptr, &n_qpts, nullptr, nullptr));
         PetscFEGeom * fgeom;
 #if PETSC_VERSION_GE(3, 23, 0)
-        PETSC_CHECK(DMSNESGetFEGeom(coord_field, points, q_geom, PETSC_FEGEOM_BASIC, &fgeom));
+        PETSC_CHECK(DMSNESGetFEGeom(coord_field, points, q_geom, PETSC_FEGEOM_BOUNDARY, &fgeom));
 #else
         PETSC_CHECK(DMSNESGetFEGeom(coord_field, points, q_geom, PETSC_TRUE, &fgeom));
 #endif

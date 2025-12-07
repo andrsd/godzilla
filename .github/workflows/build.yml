@@ -36,6 +36,18 @@ jobs:
             build: Release
             teciocpp: OFF
             code-coverage: OFF
+          - os: ubuntu-22.04
+            python-version: "3.11"
+            petsc: 3.23.7
+            build: Release
+            teciocpp: ON
+            code-coverage: OFF
+          - os: ubuntu-22.04
+            python-version: "3.11"
+            petsc: 3.23.7
+            build: Release
+            teciocpp: OFF
+            code-coverage: OFF
     runs-on: ${{ matrix.os }}
     steps:
       - name: Set up miniconda
