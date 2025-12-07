@@ -214,8 +214,16 @@ FENonlinearProblem::compute_residual_internal(DM dm,
     if (max_degree <= 1) {
         PETSC_CHECK(DMFieldCreateDefaultQuadrature(coord_field, cell_is, &affine_quad));
         if (affine_quad) {
+#if PETSC_VERSION_GE(3, 23, 0)
+            PETSC_CHECK(DMSNESGetFEGeom(coord_field,
+                                        cell_is,
+                                        affine_quad,
+                                        PETSC_FEGEOM_BASIC,
+                                        &affine_geom));
+#else
             PETSC_CHECK(
                 DMSNESGetFEGeom(coord_field, cell_is, affine_quad, PETSC_FALSE, &affine_geom));
+#endif
         }
     }
     else {
@@ -233,8 +241,13 @@ FENonlinearProblem::compute_residual_internal(DM dm,
                 PetscFE fe = (PetscFE) obj;
                 PETSC_CHECK(PetscFEGetQuadrature(fe, &quads[f]));
                 PETSC_CHECK(PetscObjectReference((PetscObject) quads[f]));
+#if PETSC_VERSION_GE(3, 23, 0)
+                PETSC_CHECK(
+                    DMSNESGetFEGeom(coord_field, cell_is, quads[f], PETSC_FEGEOM_BASIC, &geoms[f]));
+#else
                 PETSC_CHECK(
                     DMSNESGetFEGeom(coord_field, cell_is, quads[f], PETSC_FALSE, &geoms[f]));
+#endif
             }
         }
     }
@@ -494,7 +507,11 @@ FENonlinearProblem::compute_bnd_residual_single_internal(DM dm,
         Int n_qpts;
         PETSC_CHECK(PetscQuadratureGetData(q_geom, nullptr, nullptr, &n_qpts, nullptr, nullptr));
         PetscFEGeom * fgeom;
+#if PETSC_VERSION_GE(3, 23, 0)
+        PETSC_CHECK(DMSNESGetFEGeom(coord_field, points, q_geom, PETSC_FEGEOM_BOUNDARY, &fgeom));
+#else
         PETSC_CHECK(DMSNESGetFEGeom(coord_field, points, q_geom, PETSC_TRUE, &fgeom));
+#endif
         for (Int face = 0; face < n_faces; ++face) {
             const Int * support;
             PETSC_CHECK(DMPlexGetSupport(dm, points[face], &support));
@@ -732,7 +749,11 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
         Int n_qpts;
         PETSC_CHECK(PetscQuadratureGetData(q_geom, nullptr, nullptr, &n_qpts, nullptr, nullptr));
         PetscFEGeom * cgeom_fem;
+#if PETSC_VERSION_GE(3, 23, 0)
+        PETSC_CHECK(DMSNESGetFEGeom(coord_field, cell_is, q_geom, PETSC_FEGEOM_BASIC, &cgeom_fem));
+#else
         PETSC_CHECK(DMSNESGetFEGeom(coord_field, cell_is, q_geom, PETSC_FALSE, &cgeom_fem));
+#endif
         Int block_size = n_basis;
         Int batch_size = n_blocks * block_size;
         PETSC_CHECK(PetscFESetTileSizes(fe, block_size, n_blocks, batch_size, n_batches));
@@ -1017,7 +1038,11 @@ FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
         Int n_qpts;
         PETSC_CHECK(PetscQuadratureGetData(q_geom, nullptr, nullptr, &n_qpts, nullptr, nullptr));
         PetscFEGeom * fgeom;
+#if PETSC_VERSION_GE(3, 23, 0)
+        PETSC_CHECK(DMSNESGetFEGeom(coord_field, points, q_geom, PETSC_FEGEOM_BOUNDARY, &fgeom));
+#else
         PETSC_CHECK(DMSNESGetFEGeom(coord_field, points, q_geom, PETSC_TRUE, &fgeom));
+#endif
         for (Int face = 0; face < n_faces; ++face) {
             const Int * support;
             PETSC_CHECK(DMPlexGetSupport(dm, points[face], &support));
