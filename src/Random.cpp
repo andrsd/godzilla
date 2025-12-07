@@ -33,8 +33,13 @@ unsigned long
 Random::get_seed() const
 {
     CALL_STACK_MSG();
+#if PETSC_VERSION_GE(3, 23, 0)
+    PetscInt seed;
+    PETSC_CHECK(PetscRandomGetSeed(this->obj, &seed));
+#else
     unsigned long seed;
     PETSC_CHECK(PetscRandomGetSeed(this->obj, &seed));
+#endif
     return seed;
 }
 
