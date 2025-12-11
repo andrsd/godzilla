@@ -13,7 +13,7 @@ Parameters
 NonlinearProblem::parameters()
 {
     auto params = Problem::parameters();
-    params.add_param<std::string>("line_search", "bt", "The type of line search to be used")
+    params.add_param<String>("line_search", "bt", "The type of line search to be used")
         .add_param<Real>("nl_rel_tol",
                          1e-8,
                          "Relative convergence tolerance for the non-linear solver")
@@ -41,7 +41,7 @@ NonlinearProblem::NonlinearProblem(const Parameters & pars) :
     Problem(pars),
     snes(),
     ksp(),
-    line_search_type(pars.get<std::string>("line_search")),
+    line_search_type(pars.get<String>("line_search")),
     nl_rel_tol(pars.get<Real>("nl_rel_tol")),
     nl_abs_tol(pars.get<Real>("nl_abs_tol")),
     nl_step_tol(pars.get<Real>("nl_step_tol")),

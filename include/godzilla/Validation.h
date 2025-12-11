@@ -30,10 +30,10 @@ in(T value, const std::vector<T> & options)
 
 template <>
 inline bool
-in<std::string>(std::string value, const std::vector<std::string> & options)
+in<String>(String value, const std::vector<String> & options)
 {
-    std::string v = utils::to_lower(value);
-    return std::any_of(options.cbegin(), options.cend(), [v](const std::string & o) {
+    String v = utils::to_lower(value);
+    return std::any_of(options.cbegin(), options.cend(), [v](const String & o) {
         return v == utils::to_lower(o);
     });
 }
@@ -42,8 +42,8 @@ template <>
 inline bool
 in<const char *>(const char * value, const std::vector<const char *> & options)
 {
-    std::string v = utils::to_lower(value);
-    return std::any_of(options.cbegin(), options.cend(), [v](const std::string & o) {
+    String v = utils::to_lower(value);
+    return std::any_of(options.cbegin(), options.cend(), [v](const String & o) {
         return v == utils::to_lower(o);
     });
 }

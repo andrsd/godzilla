@@ -6,7 +6,7 @@
 #include "godzilla/Types.h"
 #include "godzilla/FEProblemInterface.h"
 #include "godzilla/CallStack.h"
-#include <string>
+#include "godzilla/String.h"
 #include <set>
 
 namespace godzilla {
@@ -15,23 +15,23 @@ class FEProblemInterface;
 
 class Functional {
 public:
-    Functional(FEProblemInterface * fepi, const std::string & region = "");
+    Functional(FEProblemInterface * fepi, const String & region = "");
     virtual ~Functional() = default;
 
     /// Get value names this functional depends on
     ///
     /// @return List of value names this functional depends on
-    const std::set<std::string> & get_dependent_values() const;
+    const std::set<String> & get_dependent_values() const;
 
     /// Get region where this function is defined
     ///
     /// @return Region name where this functional is defined
-    const std::string & get_region() const;
+    const String & get_region() const;
 
-    const std::string
-    get_value_name(const std::string & val_name) const
+    const String
+    get_value_name(const String & val_name) const
     {
-        return this->region.empty() ? val_name : val_name + "@" + this->region;
+        return this->region.empty() ? String(val_name) : fmt::format("{}@{}", val_name, this->region);
     }
 
 protected:
@@ -54,19 +54,19 @@ protected:
     ///
     /// @param field_name The name of the field
     /// @return Reference to a class that contains the field values
-    const FieldValue & get_field_value(const std::string & field_name) const;
+    const FieldValue & get_field_value(const String & field_name) const;
 
     /// Get values of a gradient of a field
     ///
     /// @param field_name The name of the field
     /// @return Pointer to array that contains the field gradient values
-    const FieldGradient & get_field_gradient(const std::string & field_name) const;
+    const FieldGradient & get_field_gradient(const String & field_name) const;
 
     /// Get values of a time derivative of a field
     ///
     /// @param field_name The name of the field
     /// @return Reference to a class that contains the field time derivative values
-    const FieldValue & get_field_dot(const std::string & field_name) const;
+    const FieldValue & get_field_dot(const String & field_name) const;
 
     /// Get time at which the function is evaluated
     ///
@@ -80,7 +80,7 @@ protected:
     /// @return Const reference to the value
     template <typename T>
     const T &
-    get_value(const std::string & name)
+    get_value(const String & name)
     {
         CALL_STACK_MSG();
         auto val_name = get_value_name(name);
@@ -92,9 +92,9 @@ private:
     /// FEProblemInterface this functional is part of
     FEProblemInterface * fepi;
     /// region where this functional is defined
-    std::string region;
+    String region;
     /// Value names this functional depends on
-    std::set<std::string> depends_on;
+    std::set<String> depends_on;
 };
 
 } // namespace godzilla

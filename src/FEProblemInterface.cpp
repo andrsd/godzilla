@@ -21,7 +21,7 @@ namespace godzilla {
 template <typename T>
 void
 add_functionals(DependencyGraph<const Functional *> & g,
-                const std::map<std::string, const ValueFunctional *> & suppliers,
+                const std::map<String, const ValueFunctional *> & suppliers,
                 const std::vector<T> & fnls)
 {
     CALL_STACK_MSG();
@@ -126,11 +126,11 @@ FEProblemInterface::get_num_fields() const
     return (Int) this->fields.size();
 }
 
-std::vector<std::string>
+std::vector<String>
 FEProblemInterface::get_field_names() const
 {
     CALL_STACK_MSG();
-    std::vector<std::string> infos;
+    std::vector<String> infos;
     infos.reserve(this->fields.size());
     for (const auto & [_, info] : this->fields)
         infos.push_back(info.name);
@@ -138,7 +138,7 @@ FEProblemInterface::get_field_names() const
     return infos;
 }
 
-const std::string &
+const String &
 FEProblemInterface::get_field_name(FieldID fid) const
 {
     CALL_STACK_MSG();
@@ -172,7 +172,7 @@ FEProblemInterface::get_field_num_components(FieldID fid) const
 }
 
 FieldID
-FEProblemInterface::get_field_id(const std::string & name) const
+FEProblemInterface::get_field_id(const String & name) const
 {
     CALL_STACK_MSG();
     const auto & it = this->fields_by_name.find(name);
@@ -198,7 +198,7 @@ FEProblemInterface::has_field_by_id(FieldID fid) const
 }
 
 bool
-FEProblemInterface::has_field_by_name(const std::string & name) const
+FEProblemInterface::has_field_by_name(const String & name) const
 {
     CALL_STACK_MSG();
     const auto & it = this->fields_by_name.find(name);
@@ -217,7 +217,7 @@ FEProblemInterface::get_fe(FieldID fid) const
         throw Exception("Field with ID = '{}' does not exist.", fid);
 }
 
-std::string
+String
 FEProblemInterface::get_field_component_name(FieldID fid, Int component) const
 {
     CALL_STACK_MSG();
@@ -238,7 +238,7 @@ FEProblemInterface::get_field_component_name(FieldID fid, Int component) const
 }
 
 void
-FEProblemInterface::set_field_component_name(FieldID fid, Int component, const std::string & name)
+FEProblemInterface::set_field_component_name(FieldID fid, Int component, const String & name)
 {
     CALL_STACK_MSG();
     const auto & it = this->fields.find(fid);
@@ -263,18 +263,18 @@ FEProblemInterface::get_num_aux_fields() const
     return (Int) this->aux_fields.size();
 }
 
-std::vector<std::string>
+std::vector<String>
 FEProblemInterface::get_aux_field_names() const
 {
     CALL_STACK_MSG();
-    std::vector<std::string> names;
+    std::vector<String> names;
     names.reserve(this->aux_fields.size());
     for (const auto & [_, info] : this->aux_fields)
         names.push_back(info.name);
     return names;
 }
 
-const std::string &
+const String &
 FEProblemInterface::get_aux_field_name(FieldID fid) const
 {
     CALL_STACK_MSG();
@@ -297,7 +297,7 @@ FEProblemInterface::get_aux_field_num_components(FieldID fid) const
 }
 
 FieldID
-FEProblemInterface::get_aux_field_id(const std::string & name) const
+FEProblemInterface::get_aux_field_id(const String & name) const
 {
     CALL_STACK_MSG();
     const auto & it = this->aux_fields_by_name.find(name);
@@ -316,7 +316,7 @@ FEProblemInterface::has_aux_field_by_id(FieldID fid) const
 }
 
 bool
-FEProblemInterface::has_aux_field_by_name(const std::string & name) const
+FEProblemInterface::has_aux_field_by_name(const String & name) const
 {
     CALL_STACK_MSG();
     const auto & it = this->aux_fields_by_name.find(name);
@@ -334,7 +334,7 @@ FEProblemInterface::get_aux_field_order(FieldID fid) const
         throw Exception("Auxiliary field with ID = '{}' does not exist.", fid);
 }
 
-std::string
+String
 FEProblemInterface::get_aux_field_component_name(FieldID fid, Int component) const
 {
     CALL_STACK_MSG();
@@ -355,9 +355,7 @@ FEProblemInterface::get_aux_field_component_name(FieldID fid, Int component) con
 }
 
 void
-FEProblemInterface::set_aux_field_component_name(FieldID fid,
-                                                 Int component,
-                                                 const std::string & name)
+FEProblemInterface::set_aux_field_component_name(FieldID fid, Int component, const String & name)
 {
     CALL_STACK_MSG();
     const auto & it = this->aux_fields.find(fid);
@@ -376,7 +374,7 @@ FEProblemInterface::set_aux_field_component_name(FieldID fid,
 }
 
 FieldID
-FEProblemInterface::add_field(const std::string & name, Int nc, Order k, const Label & block)
+FEProblemInterface::add_field(const String & name, Int nc, Order k, const Label & block)
 {
     CALL_STACK_MSG();
     auto keys = utils::map_keys(this->fields);
@@ -386,11 +384,7 @@ FEProblemInterface::add_field(const std::string & name, Int nc, Order k, const L
 }
 
 void
-FEProblemInterface::set_field(FieldID id,
-                              const std::string & name,
-                              Int nc,
-                              Order k,
-                              const Label & block)
+FEProblemInterface::set_field(FieldID id, const String & name, Int nc, Order k, const Label & block)
 {
     CALL_STACK_MSG();
     auto it = this->fields.find(id);
@@ -410,7 +404,7 @@ FEProblemInterface::set_field(FieldID id,
 }
 
 FieldID
-FEProblemInterface::add_aux_field(const std::string & name, Int nc, Order k, const Label & block)
+FEProblemInterface::add_aux_field(const String & name, Int nc, Order k, const Label & block)
 {
     CALL_STACK_MSG();
     auto keys = utils::map_keys(this->aux_fields);
@@ -421,7 +415,7 @@ FEProblemInterface::add_aux_field(const std::string & name, Int nc, Order k, con
 
 void
 FEProblemInterface::set_aux_field(FieldID id,
-                                  const std::string & name,
+                                  const String & name,
                                   Int nc,
                                   Order k,
                                   const Label & block)
@@ -548,7 +542,7 @@ FEProblemInterface::get_spatial_dimension() const
 }
 
 const FieldValue &
-FEProblemInterface::get_field_value(const std::string & field_name) const
+FEProblemInterface::get_field_value(const String & field_name) const
 {
     CALL_STACK_MSG();
     if (has_field_by_name(field_name)) {
@@ -564,7 +558,7 @@ FEProblemInterface::get_field_value(const std::string & field_name) const
 }
 
 const FieldGradient &
-FEProblemInterface::get_field_gradient(const std::string & field_name) const
+FEProblemInterface::get_field_gradient(const String & field_name) const
 {
     CALL_STACK_MSG();
     if (has_field_by_name(field_name)) {
@@ -580,7 +574,7 @@ FEProblemInterface::get_field_gradient(const std::string & field_name) const
 }
 
 const FieldValue &
-FEProblemInterface::get_field_dot(const std::string & field_name) const
+FEProblemInterface::get_field_dot(const String & field_name) const
 {
     CALL_STACK_MSG();
     if (has_field_by_name(field_name)) {
@@ -625,7 +619,7 @@ FEProblemInterface::get_xyz() const
 
 void
 FEProblemInterface::sort_residual_functionals(
-    const std::map<std::string, const ValueFunctional *> & suppliers)
+    const std::map<String, const ValueFunctional *> & suppliers)
 {
     CALL_STACK_MSG();
     auto graph = build_dependecy_graph(suppliers);
@@ -658,7 +652,7 @@ FEProblemInterface::sort_residual_functionals(
 
 void
 FEProblemInterface::sort_jacobian_functionals(
-    const std::map<std::string, const ValueFunctional *> & suppliers)
+    const std::map<String, const ValueFunctional *> & suppliers)
 {
     CALL_STACK_MSG();
     auto graph = build_dependecy_graph(suppliers);
@@ -711,7 +705,7 @@ void
 FEProblemInterface::add_residual_block(FieldID fid,
                                        ResidualFunc * f0,
                                        ResidualFunc * f1,
-                                       const std::string & region)
+                                       const String & region)
 {
     CALL_STACK_MSG();
     if (region.empty()) {
@@ -732,7 +726,7 @@ void
 FEProblemInterface::add_boundary_residual_block(FieldID fid,
                                                 ResidualFunc * f0,
                                                 ResidualFunc * f1,
-                                                const std::string & boundary)
+                                                const String & boundary)
 {
     CALL_STACK_MSG();
     expect_true(!boundary.empty(), "No boundaries defined in the problem");
@@ -752,7 +746,7 @@ FEProblemInterface::add_jacobian_block(FieldID fid,
                                        JacobianFunc * g1,
                                        JacobianFunc * g2,
                                        JacobianFunc * g3,
-                                       const std::string & region)
+                                       const String & region)
 {
     CALL_STACK_MSG();
     if (region.empty()) {
@@ -780,7 +774,7 @@ FEProblemInterface::add_jacobian_preconditioner_block(FieldID fid,
                                                       JacobianFunc * g1,
                                                       JacobianFunc * g2,
                                                       JacobianFunc * g3,
-                                                      const std::string & region)
+                                                      const String & region)
 {
     CALL_STACK_MSG();
     if (region.empty()) {
@@ -808,7 +802,7 @@ FEProblemInterface::add_boundary_jacobian_block(FieldID fid,
                                                 JacobianFunc * g1,
                                                 JacobianFunc * g2,
                                                 JacobianFunc * g3,
-                                                const std::string & region)
+                                                const String & region)
 {
     CALL_STACK_MSG();
     expect_true(!region.empty(), "No regions defined in the problem");

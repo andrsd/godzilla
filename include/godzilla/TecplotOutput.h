@@ -35,7 +35,7 @@ protected:
     void write_nodal_field_variable_values(int32_t zone);
 
 private:
-    std::string get_file_ext() const override;
+    String get_file_ext() const override;
 
 #ifdef GODZILLA_WITH_TECIOCPP
     /// Unstructured mesh
@@ -50,15 +50,15 @@ private:
     Int n_zones;
 #endif
     /// Variable names to be stored
-    const std::vector<std::string> variable_names;
+    const std::vector<String> variable_names;
     /// List of field variable names to output
-    std::vector<std::string> field_var_names;
+    std::vector<String> field_var_names;
     /// List of nodal variable field IDs
     std::vector<FieldID> nodal_var_fids;
     /// List of variable indices
     std::vector<int32_t> nodal_var_idxs;
     /// List of auxiliary field variable names to output
-    std::vector<std::string> aux_field_var_names;
+    std::vector<String> aux_field_var_names;
     /// List of nodal auxiliary variable field IDs
     std::vector<FieldID> nodal_aux_var_fids;
     /// List of auxiliary variable indices

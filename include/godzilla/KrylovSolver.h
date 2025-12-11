@@ -7,6 +7,7 @@
 #include "godzilla/Types.h"
 #include "godzilla/Error.h"
 #include "godzilla/Delegate.h"
+#include "godzilla/String.h"
 #include "petscksp.h"
 #include <tuple>
 
@@ -234,7 +235,7 @@ public:
     /// Builds the KSP data structure for a particular KSPType
     ///
     /// @param type A krylov method
-    void set_type(const std::string & type);
+    void set_type(const String & type);
 
     /// View the KSP object
     ///

@@ -8,7 +8,6 @@
 #include "fmt/format.h"
 #include <filesystem>
 #include <vector>
-#include <string>
 #include <dlfcn.h>
 
 #define EXTENSION_API extern "C"
@@ -66,7 +65,7 @@ public:
     ///
     /// @param lib_name Library name (the part after `lib` on Unix-based systems, without the file
     /// extension). For example, if your library is named `libExt.so`, you would provide `Ext` here.
-    explicit DynamicLibrary(const std::string & lib_name);
+    explicit DynamicLibrary(const String & lib_name);
 
     /// Load the library
     void load();
@@ -117,10 +116,10 @@ public:
 
 private:
     /// Get extension file path
-    std::string get_ext_file_path() const;
+    String get_ext_file_path() const;
 
     /// Extension file name
-    std::string file_name;
+    String file_name;
     /// Extension handle
     void * handle;
 

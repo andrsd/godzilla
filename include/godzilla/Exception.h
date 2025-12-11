@@ -3,9 +3,9 @@
 
 #pragma once
 
+#include "godzilla/String.h"
 #include "fmt/format.h"
 #include <exception>
-#include <string>
 #include <vector>
 
 namespace godzilla {
@@ -25,16 +25,16 @@ public:
     const char * what() const noexcept override;
 
     /// Get the call stack from the time the exception occured
-    const std::vector<std::string> & get_call_stack() const;
+    const std::vector<String> & get_call_stack() const;
 
 private:
     /// Store call stack
     void store_call_stack();
 
     /// Error message
-    std::string msg;
+    String msg;
     /// Call stack at the time exception occured
-    std::vector<std::string> call_stack;
+    std::vector<String> call_stack;
 };
 
 /// Exception for internal errors

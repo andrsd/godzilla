@@ -15,8 +15,7 @@ CommandLineInterface::CommandLineInterface(App & app, int argc, const char * con
         this->args.emplace_back(argv[i]);
 }
 
-CommandLineInterface::CommandLineInterface(App & app, const std::vector<std::string> & args) :
-    app(app)
+CommandLineInterface::CommandLineInterface(App & app, const std::vector<String> & args) : app(app)
 {
     this->args.reserve(args.size() + 1);
     this->args.emplace_back(app.get_name());
@@ -24,7 +23,7 @@ CommandLineInterface::CommandLineInterface(App & app, const std::vector<std::str
         this->args.emplace_back(s);
 }
 
-std::string
+String
 CommandLineInterface::get_app_name() const
 {
     CALL_STACK_MSG();
@@ -37,7 +36,7 @@ CommandLineInterface::create_command_line_options()
     cxxopts::Options cmdln_opts("");
     cmdln_opts.add_option("", "h", "help", "Show this help page", cxxopts::value<bool>(), "");
     cmdln_opts
-        .add_option("", "", "restart-from", "Restart file name", cxxopts::value<std::string>(), "");
+        .add_option("", "", "restart-from", "Restart file name", cxxopts::value<String>(), "");
     cmdln_opts.add_option("", "v", "version", "Show the version", cxxopts::value<bool>(), "");
     cmdln_opts.add_option("", "", "verbose", "Verbosity level", cxxopts::value<unsigned int>(), "");
     cmdln_opts
@@ -52,7 +51,7 @@ CommandLineInterface::create_command_line_options()
                           "",
                           "perf-log",
                           "Save performance log into a file",
-                          cxxopts::value<std::string>(),
+                          cxxopts::value<String>(),
                           "");
     return cmdln_opts;
 }
@@ -89,10 +88,10 @@ CommandLineInterface::process_command_line(cxxopts::Options & opts,
             this->app.set_verbosity_level(result["verbose"].as<unsigned int>());
 
         if (result.count("restart-from"))
-            this->app.set_restart_file_name(result["restart-from"].as<std::string>());
+            this->app.set_restart_file_name(result["restart-from"].as<String>());
 
         if (result.count("perf-log"))
-            this->app.set_perf_log_file_name(result["perf-log"].as<std::string>());
+            this->app.set_perf_log_file_name(result["perf-log"].as<String>());
 
         if (result.count("redirect-stdout")) {
             auto fname = fmt::format("output.{}.txt", this->app.get_comm().rank());

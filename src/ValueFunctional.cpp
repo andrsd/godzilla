@@ -6,13 +6,13 @@
 
 namespace godzilla {
 
-ValueFunctional::ValueFunctional(FEProblemInterface * fepi, const std::string & region) :
+ValueFunctional::ValueFunctional(FEProblemInterface * fepi, const String & region) :
     Functional(fepi, region),
     evalr(fepi)
 {
 }
 
-const std::set<std::string> &
+const std::set<String> &
 ValueFunctional::get_provided_values() const
 {
     CALL_STACK_MSG();

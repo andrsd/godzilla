@@ -90,7 +90,7 @@ LineMesh::create_mesh()
 
     mesh->remove_label("marker");
     // create user-friendly names for sides
-    std::map<Int, std::string> face_set_names;
+    std::map<Int, String> face_set_names;
     face_set_names[1] = "left";
     face_set_names[2] = "right";
     mesh->create_face_set_labels(face_set_names);

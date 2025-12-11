@@ -189,7 +189,7 @@ TransientProblemInterface::parameters()
     params.add_param<Real>("end_time", "Simulation end time");
     params.add_param<Int>("num_steps", "Number of steps");
     params.add_required_param<Real>("dt", "Time step size");
-    params.add_param<std::map<std::string, std::string>>("ts_adapt", "Time stepping adaptivity");
+    params.add_param<std::map<String, String>>("ts_adapt", "Time stepping adaptivity");
     return params;
 }
 
@@ -464,13 +464,13 @@ TransientProblemInterface::set_scheme(TimeScheme scheme)
 }
 
 void
-TransientProblemInterface::set_scheme(const std::string & scheme_name)
+TransientProblemInterface::set_scheme(const String & scheme_name)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(TSSetType(this->ts, scheme_name.c_str()));
 }
 
-std::string
+String
 TransientProblemInterface::get_scheme() const
 {
     CALL_STACK_MSG();

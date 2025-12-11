@@ -5,9 +5,9 @@
 
 namespace godzilla {
 
-Extension::Extension(const std::string & extension_name) : name(extension_name) {}
+Extension::Extension(const String & extension_name) : name(extension_name) {}
 
-const std::string &
+const String &
 Extension::get_name() const
 {
     return this->name;

@@ -11,7 +11,7 @@ class FEProblemInterface;
 
 class ResidualFunc : public Functional {
 public:
-    ResidualFunc(FEProblemInterface * fepi, const std::string & region = "");
+    ResidualFunc(FEProblemInterface * fepi, const String & region = "");
 
     /// Evaluate this functional
     ///

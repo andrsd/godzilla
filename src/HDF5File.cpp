@@ -48,20 +48,20 @@ HDF5File::~HDF5File()
         H5Fclose(this->id);
 }
 
-std::string
+String
 HDF5File::get_file_name() const
 {
     return this->file_name.filename().string();
 }
 
-std::string
+String
 HDF5File::get_file_path() const
 {
     return this->file_name.string();
 }
 
 void
-HDF5File::Group::write_global_vector(const std::string & name, const Vector & data)
+HDF5File::Group::write_global_vector(const String & name, const Vector & data)
 {
     auto rng = data.get_ownership_range();
 
@@ -79,7 +79,7 @@ HDF5File::Group::write_global_vector(const std::string & name, const Vector & da
 }
 
 void
-HDF5File::Group::read_global_vector(const std::string & name, Vector & data)
+HDF5File::Group::read_global_vector(const String & name, Vector & data)
 {
     auto rng = data.get_ownership_range();
 

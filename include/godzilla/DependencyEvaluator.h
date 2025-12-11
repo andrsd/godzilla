@@ -7,6 +7,7 @@
 #include "godzilla/Exception.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/DependencyGraph.h"
+#include "godzilla/String.h"
 
 namespace godzilla {
 
@@ -70,7 +71,7 @@ public:
     /// Get all functionals
     ///
     /// @return List of all functionals
-    const std::map<std::string, const ValueFunctional *> & get_functionals() const;
+    const std::map<String, const ValueFunctional *> & get_functionals() const;
 
     /// Create a functional
     ///
@@ -78,13 +79,13 @@ public:
     /// @param name Name of the functional
     /// @param params Parameters needed to build the functional
     template <typename Fn>
-    void create_functional(const std::string & name, const Parameters & pars);
+    void create_functional(const String & name, const Parameters & pars);
 
     /// Get a reference to a functional using its name
     ///
     /// @param name The name of the functional
     /// @return Reference to the functional
-    const ValueFunctional & get_functional(const std::string & name) const;
+    const ValueFunctional & get_functional(const String & name) const;
 
     /// Declare a value with a name
     ///
@@ -92,7 +93,7 @@ public:
     /// @param val_name Value name
     /// @return Reference to the actual value
     template <typename T>
-    T & declare_value(const std::string & val_name);
+    T & declare_value(const String & val_name);
 
     /// Get value using its name
     ///
@@ -100,23 +101,23 @@ public:
     /// @param val_name Value name
     /// @return Const reference to the actual value
     template <typename T>
-    const T & get_value(const std::string & val_name);
+    const T & get_value(const String & val_name);
 
-    std::map<std::string, const ValueFunctional *> get_suppliers() const;
+    std::map<String, const ValueFunctional *> get_suppliers() const;
 
     DependencyGraph<const Functional *>
-    build_dependecy_graph(const std::map<std::string, const ValueFunctional *> & suppliers);
+    build_dependecy_graph(const std::map<String, const ValueFunctional *> & suppliers);
 
 private:
     /// All created functionals
-    std::map<std::string, const ValueFunctional *> functionals;
+    std::map<String, const ValueFunctional *> functionals;
     /// Values computed by functionals
-    std::map<std::string, const ValueBase *> values;
+    std::map<String, const ValueBase *> values;
 };
 
 template <typename T>
 T &
-DependencyEvaluator::declare_value(const std::string & val_name)
+DependencyEvaluator::declare_value(const String & val_name)
 {
     CALL_STACK_MSG();
     auto it = this->values.find(val_name);
@@ -137,7 +138,7 @@ DependencyEvaluator::declare_value(const std::string & val_name)
 
 template <typename T>
 const T &
-DependencyEvaluator::get_value(const std::string & val_name)
+DependencyEvaluator::get_value(const String & val_name)
 {
     CALL_STACK_MSG();
     auto it = this->values.find(val_name);
@@ -154,7 +155,7 @@ DependencyEvaluator::get_value(const std::string & val_name)
 
 template <typename Fn>
 void
-DependencyEvaluator::create_functional(const std::string & name, const Parameters & pars)
+DependencyEvaluator::create_functional(const String & name, const Parameters & pars)
 {
     CALL_STACK_MSG();
     const auto & it = this->functionals.find(name);

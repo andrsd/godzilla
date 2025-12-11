@@ -5,6 +5,7 @@
 
 #include "godzilla/PetscObjectWrapper.h"
 #include "godzilla/Types.h"
+#include "godzilla/String.h"
 #include "godzilla/Label.h"
 #include "godzilla/Vector.h"
 #include "godzilla/Section.h"
@@ -44,23 +45,23 @@ public:
     ///
     /// @param name The name of the label
     /// @return true if label exists, otherwise false
-    bool has_label(const std::string & name) const;
+    bool has_label(const String & name) const;
 
     /// Get label associated with a name
     ///
     /// @param name Label name
     /// @return Label associated with the `name`
-    Label get_label(const std::string & name) const;
+    Label get_label(const String & name) const;
 
     /// Create label
     ///
     /// @param name Label name
-    void create_label(const std::string & name) const;
+    void create_label(const String & name) const;
 
     /// Remove label with given name
     ///
     /// @param name The label name
-    void remove_label(const std::string & name);
+    void remove_label(const String & name);
 
     /// Gets the DM that prescribes coordinate layout and scatters between global and local
     /// coordinates

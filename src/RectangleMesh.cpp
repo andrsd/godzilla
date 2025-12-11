@@ -123,7 +123,7 @@ RectangleMesh::create_mesh()
 
     mesh->remove_label("marker");
     // create user-friendly names for sides
-    std::map<Int, std::string> face_set_names;
+    std::map<Int, String> face_set_names;
     face_set_names[1] = "bottom";
     face_set_names[2] = "right";
     face_set_names[3] = "top";

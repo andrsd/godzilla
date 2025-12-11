@@ -31,13 +31,13 @@ Preconditioner::destroy()
 }
 
 void
-Preconditioner::set_type(const std::string & type)
+Preconditioner::set_type(const String & type)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(PCSetType(this->obj, type.c_str()));
 }
 
-std::string
+String
 Preconditioner::get_type() const
 {
     CALL_STACK_MSG();

@@ -18,14 +18,14 @@ Parameters
 FileMesh::parameters()
 {
     auto params = Object::parameters();
-    params.add_required_param<std::string>("file", "The name of the file.");
+    params.add_required_param<String>("file", "The name of the file.");
     return params;
 }
 
 FileMesh::FileMesh(const Parameters & pars) :
     Object(pars),
     file_format(UNKNOWN),
-    file_name(pars.get<std::string>("file"))
+    file_name(pars.get<String>("file"))
 
 {
     CALL_STACK_MSG();
@@ -38,7 +38,7 @@ FileMesh::FileMesh(const Parameters & pars) :
             this->file_name);
 }
 
-const std::string &
+const String &
 FileMesh::get_file_name() const
 {
     CALL_STACK_MSG();

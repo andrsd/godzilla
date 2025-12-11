@@ -29,7 +29,7 @@ Parameters
 InitialCondition::parameters()
 {
     auto params = Object::parameters();
-    params.add_param<std::string>("field", "Field name")
+    params.add_param<String>("field", "Field name")
         .add_private_param<DiscreteProblemInterface *>("_dpi");
     return params;
 }
@@ -38,7 +38,7 @@ InitialCondition::InitialCondition(const Parameters & pars) :
     Object(pars),
     PrintInterface(this),
     dpi(pars.get<DiscreteProblemInterface *>("_dpi")),
-    field_name(pars.get<Optional<std::string>>("field")),
+    field_name(pars.get<Optional<String>>("field")),
     fid(FieldID::INVALID)
 {
     CALL_STACK_MSG();
@@ -73,7 +73,7 @@ InitialCondition::create()
     this->components = create_components();
 }
 
-const std::string &
+const String &
 InitialCondition::get_field_name() const
 {
     CALL_STACK_MSG();

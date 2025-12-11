@@ -110,17 +110,17 @@ PCShell::operator=(const PCShell & other)
     return *this;
 }
 
-std::string
+String
 PCShell::get_name() const
 {
     CALL_STACK_MSG();
     const char * name;
     PETSC_CHECK(PCShellGetName(this->obj, &name));
-    return std::string(name);
+    return String(name);
 }
 
 void
-PCShell::set_name(const std::string & name)
+PCShell::set_name(const String & name)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(PCShellSetName(this->obj, name.c_str()));

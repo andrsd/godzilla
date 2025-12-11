@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "godzilla/String.h"
 #include "petsclog.h"
 #include <map>
 #include <vector>
@@ -23,35 +24,35 @@ using LogDouble = PetscLogDouble;
 void init();
 
 bool is_event_registered(const char * name);
-bool is_event_registered(const std::string & name);
+bool is_event_registered(const String & name);
 
 /// Register a logging event
 ///
 /// @param name Event name
 /// @return Event ID
 EventID register_event(const char * name);
-EventID register_event(const std::string & name);
+EventID register_event(const String & name);
 
 /// Get event ID
 ///
 /// @param name Event name
 /// @return Event ID
 EventID get_event_id(const char * name);
-EventID get_event_id(const std::string & name);
+EventID get_event_id(const String & name);
 
 /// Register a logging stage
 ///
 /// @param name Stage name
 /// @return
 StageID register_stage(const char * name);
-StageID register_stage(const std::string & name);
+StageID register_stage(const String & name);
 
 /// Get stage ID
 ///
 /// @param name Stage name
 /// @return Stage ID
 StageID get_stage_id(const char * name);
-StageID get_stage_id(const std::string & name);
+StageID get_stage_id(const String & name);
 
 /// Adds floating point operations to the global counter.
 void log_flops(LogDouble n);
@@ -64,7 +65,7 @@ public:
     ///
     /// @param name Name of the stage. Must be registered in PerfLog class.
     explicit Stage(const char * name);
-    explicit Stage(const std::string & name);
+    explicit Stage(const String & name);
 
     /// Construct a performance logging stage from stage ID
     ///
@@ -127,7 +128,7 @@ private:
 /// @param event_name Event name
 /// @param stage_name Stage name
 /// @return Event information
-EventInfo get_event_info(const std::string & event_name, const std::string & stage_name = "");
+EventInfo get_event_info(const String & event_name, const String & stage_name = "");
 
 /// Get event information
 ///
@@ -144,7 +145,7 @@ public:
     ///
     /// @param name Name of the event
     explicit Event(const char * name);
-    explicit Event(const std::string & name);
+    explicit Event(const String & name);
 
     /// Construct a performance logging event from event ID
     ///
@@ -168,7 +169,7 @@ public:
     EventID get_id() const;
 
     /// Get event name
-    std::string name() const;
+    String name() const;
 
     /// Get event info
     EventInfo info() const;
@@ -190,7 +191,7 @@ public:
     ///
     /// @param name Name of the event
     explicit ScopedEvent(const char * name);
-    explicit ScopedEvent(const std::string & name);
+    explicit ScopedEvent(const String & name);
     virtual ~ScopedEvent();
 };
 

@@ -14,7 +14,7 @@ namespace godzilla {
 namespace {
 
 PolytopeType
-get_cell_type_ex2(const std::string & elem_type)
+get_cell_type_ex2(const String & elem_type)
 {
     if (elem_type == "EDGE2" || elem_type == "BAR2" || elem_type == "BEAM" || elem_type == "BEAM2")
         return PolytopeType::SEGMENT;
@@ -54,7 +54,7 @@ FileMesh::create_from_exodus()
         Int n_vertices = 0;
         Int n_side_sets = 0;
         Int n_node_sets = 0;
-        std::map<Int, std::string> cell_set_names;
+        std::map<Int, String> cell_set_names;
 
         exodusIIcpp::File f;
         if (rank == 0) {
@@ -156,7 +156,7 @@ FileMesh::create_from_exodus()
         m->interpolate();
 
         // create vertex sets
-        std::map<Int, std::string> node_set_names;
+        std::map<Int, String> node_set_names;
         if (rank == 0 && (n_node_sets > 0)) {
             auto vertex_sets = m->get_label("Vertex Sets");
             f.read_node_sets();
@@ -224,7 +224,7 @@ FileMesh::create_from_exodus()
         coordinates.destroy();
 
         // Create side set labels
-        std::map<Int, std::string> side_set_names;
+        std::map<Int, String> side_set_names;
         if ((rank == 0) && (n_side_sets > 0)) {
             auto face_sets = m->get_label("Face Sets");
 

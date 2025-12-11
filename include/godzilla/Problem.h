@@ -33,7 +33,7 @@ class Problem : public Object, public PrintInterface {
 public:
     struct FieldDecomposition {
         /// Field names
-        std::vector<std::string> field_name;
+        std::vector<String> field_name;
         /// Global indices for each field
         std::vector<IndexSet> is;
 
@@ -90,12 +90,12 @@ public:
     ///
     /// @param name The name of the postprocessor
     /// @return Pointer to the postprocessor with name 'name' if it exists, otherwise `nullptr`
-    Postprocessor * get_postprocessor(const std::string & name) const;
+    Postprocessor * get_postprocessor(const String & name) const;
 
     /// Get postprocessor names
     ///
     /// @return List of postprocessor names
-    const std::vector<std::string> & get_postprocessor_names() const;
+    const std::vector<String> & get_postprocessor_names() const;
 
     /// Compute all postprocessors
     void compute_postprocessors();
@@ -108,12 +108,12 @@ public:
     /// Gets the type of vector created with `create_local_vector` and `create_global_vector`
     ///
     /// @return The vector type
-    std::string get_vector_type() const;
+    String get_vector_type() const;
 
     /// Sets the type of vector to be created with `create_local_vector` and `create_global_vector`
     ///
     /// @param type The vector type, for example `VECSTANDARD`, `VECCUDA`, or `VECVIENNACL`
-    void set_vector_type(const std::string & type);
+    void set_vector_type(const String & type);
 
     /// Creates a local vector from a DM object
     ///
@@ -144,12 +144,12 @@ public:
     /// Gets the type of matrix that would be created with `create_matrix`
     ///
     /// @return The matrix type
-    std::string get_matrix_type() const;
+    String get_matrix_type() const;
 
     /// Sets the type of matrix created with `create_matrix`
     ///
     /// @param type the matrix type, for example `MATMPIAIJ`
-    void set_matrix_type(const std::string & type);
+    void set_matrix_type(const String & type);
 
     /// Get an empty matrix for a `DM`
     Matrix create_matrix() const;
@@ -183,7 +183,7 @@ public:
     /// Set partitioner type
     ///
     /// @param type Type of the partitioner
-    void set_partitioner_type(const std::string & type);
+    void set_partitioner_type(const String & type);
 
     /// Set partitioner overlap
     ///
@@ -244,7 +244,7 @@ public:
     /// @param monitor Member function in class T
     template <class T>
     void
-    set_output_monitor(T * instance, void (T::*method)(const std::string &) const)
+    set_output_monitor(T * instance, void (T::*method)(const String &) const)
     {
         this->output_monitor_delegate.bind(instance, method);
     }
@@ -290,7 +290,7 @@ private:
     /// Output monitor
     ///
     /// @param file_name Name of the output file
-    void output_monitor(const std::string & file_name) const;
+    void output_monitor(const String & file_name) const;
 
     /// Mesh
     Mesh * mesh;
@@ -312,13 +312,13 @@ private:
     ExecuteOnFlags default_output_on;
 
     /// List of postprocessor objects
-    std::map<std::string, Qtr<Postprocessor>> pps;
+    std::map<String, Qtr<Postprocessor>> pps;
 
     /// List of postprocessor names
-    std::vector<std::string> pps_names;
+    std::vector<String> pps_names;
 
     /// Output monitor
-    Delegate<void(const std::string &)> output_monitor_delegate;
+    Delegate<void(const String &)> output_monitor_delegate;
 
 public:
     static Parameters parameters();

@@ -5,6 +5,7 @@
 
 #include "godzilla/Types.h"
 #include "godzilla/Object.h"
+#include "godzilla/String.h"
 #include "godzilla/PrintInterface.h"
 
 namespace godzilla {
@@ -27,7 +28,7 @@ public:
     /// Get the boundary name this BC is active on
     ///
     /// @return The boundary name
-    const std::vector<std::string> & get_boundary() const;
+    const std::vector<String> & get_boundary() const;
 
     /// Get DiscreteProblemInterface
     ///
@@ -46,7 +47,7 @@ private:
     DiscreteProblemInterface * dpi;
 
     /// List of boundary names
-    const std::vector<std::string> boundary;
+    const std::vector<String> boundary;
 
 public:
     /// Method for building Parameters for this class

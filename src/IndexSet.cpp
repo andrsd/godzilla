@@ -392,13 +392,13 @@ IndexSet::get_min_max() const
     return std::make_tuple(min, max);
 }
 
-std::string
+String
 IndexSet::get_type() const
 {
     CALL_STACK_MSG();
     ISType type;
     PETSC_CHECK(ISGetType(this->obj, &type));
-    return std::string(type);
+    return String(type);
 }
 
 void
@@ -443,7 +443,7 @@ IndexSet::permutation() const
 }
 
 void
-IndexSet::set_type(const std::string & type)
+IndexSet::set_type(const String & type)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(ISSetType(this->obj, type.c_str()));

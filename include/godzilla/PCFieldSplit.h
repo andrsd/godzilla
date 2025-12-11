@@ -7,6 +7,7 @@
 #include "godzilla/IndexSet.h"
 #include "godzilla/Matrix.h"
 #include "godzilla/KrylovSolver.h"
+#include "godzilla/String.h"
 
 namespace godzilla {
 
@@ -98,7 +99,7 @@ public:
     ///
     /// @param split_name Name of the split
     /// @return The `IndexSet` that defines the elements in this split
-    IndexSet get_is(const std::string & split_name) const;
+    IndexSet get_is(const String & split_name) const;
 
     /// Retrieves the elements for a given split as an IS
     ///
@@ -169,7 +170,7 @@ public:
     /// @param fields_col Generally the same as `fields`, if it does not match `fields` then the
     /// matrix block that is solved for this set of fields comes from an off-diagonal block of the
     /// matrix and `fields_col` provides the column indices for that block
-    void set_fields(const std::string & split_name,
+    void set_fields(const String & split_name,
                     const std::vector<Int> & fields,
                     const std::vector<Int> & fields_col);
 
@@ -199,7 +200,7 @@ public:
     ///
     /// @param split_name Name of this split, if empty the number of the split is used
     /// @param is The `IndexSet` that defines the elements in this split
-    void set_is(const std::string & split_name, const IndexSet & is);
+    void set_is(const String & split_name, const IndexSet & is);
 
     /// Set flag indicating whether to extract off-diagonal blocks from `Amat` (rather than `Pmat`)
     /// to build the sub-matrices associated with each split. Where

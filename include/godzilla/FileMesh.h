@@ -20,7 +20,7 @@ public:
     /// Return file name
     ///
     /// @return Name of the file
-    const std::string & get_file_name() const;
+    const String & get_file_name() const;
 
     /// Get mesh file format
     ///
@@ -38,7 +38,7 @@ private:
     Qtr<UnstructuredMesh> create_from_gmsh();
 
     /// File name with the mesh
-    std::string file_name;
+    String file_name;
 
 public:
     static Parameters parameters();

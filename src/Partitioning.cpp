@@ -30,7 +30,7 @@ Partitioning::destroy()
     CALL_STACK_MSG();
 }
 
-std::string
+String
 Partitioning::get_type() const
 {
     CALL_STACK_MSG();
@@ -40,7 +40,7 @@ Partitioning::get_type() const
 }
 
 void
-Partitioning::set_type(const std::string & type) const
+Partitioning::set_type(const String & type) const
 {
     CALL_STACK_MSG();
     PETSC_CHECK(MatPartitioningSetType(this->obj, type.c_str()));

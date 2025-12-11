@@ -87,7 +87,7 @@ public:
     /// Gets the SNES method type (as a string).
     ///
     /// @return SNES method
-    std::string get_type() const;
+    String get_type() const;
 
     /// Sets non-linear solver options from the options database
     void set_from_options();

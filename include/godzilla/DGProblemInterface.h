@@ -4,6 +4,7 @@
 #pragma once
 
 #include "godzilla/DiscreteProblemInterface.h"
+#include "godzilla/String.h"
 
 namespace godzilla {
 
@@ -17,27 +18,26 @@ public:
     ~DGProblemInterface() override;
 
     Int get_num_fields() const override;
-    std::vector<std::string> get_field_names() const override;
-    const std::string & get_field_name(FieldID fid) const override;
+    std::vector<String> get_field_names() const override;
+    const String & get_field_name(FieldID fid) const override;
     Int get_field_num_components(FieldID fid) const override;
-    FieldID get_field_id(const std::string & name) const override;
+    FieldID get_field_id(const String & name) const override;
     bool has_field_by_id(FieldID fid) const override;
-    bool has_field_by_name(const std::string & name) const override;
+    bool has_field_by_name(const String & name) const override;
     Order get_field_order(FieldID fid) const override;
-    std::string get_field_component_name(FieldID fid, Int component) const override;
-    void set_field_component_name(FieldID fid, Int component, const std::string & name) override;
+    String get_field_component_name(FieldID fid, Int component) const override;
+    void set_field_component_name(FieldID fid, Int component, const String & name) override;
 
     Int get_num_aux_fields() const override;
-    std::vector<std::string> get_aux_field_names() const override;
-    const std::string & get_aux_field_name(FieldID fid) const override;
+    std::vector<String> get_aux_field_names() const override;
+    const String & get_aux_field_name(FieldID fid) const override;
     Int get_aux_field_num_components(FieldID fid) const override;
-    FieldID get_aux_field_id(const std::string & name) const override;
+    FieldID get_aux_field_id(const String & name) const override;
     bool has_aux_field_by_id(FieldID fid) const override;
-    bool has_aux_field_by_name(const std::string & name) const override;
+    bool has_aux_field_by_name(const String & name) const override;
     Order get_aux_field_order(FieldID fid) const override;
-    std::string get_aux_field_component_name(FieldID fid, Int component) const override;
-    void
-    set_aux_field_component_name(FieldID fid, Int component, const std::string & name) override;
+    String get_aux_field_component_name(FieldID fid, Int component) const override;
+    void set_aux_field_component_name(FieldID fid, Int component, const String & name) override;
 
     /// Adds a volumetric field
     ///
@@ -45,7 +45,7 @@ public:
     /// @param nc The number of components
     /// @param k The degree k of the space
     /// @return ID of the new field
-    FieldID add_field(const std::string & name, Int nc, Order k, const Label & block = Label());
+    FieldID add_field(const String & name, Int nc, Order k, const Label & block = Label());
 
     /// Set a volumetric field
     ///
@@ -53,8 +53,7 @@ public:
     /// @param name The name of the field
     /// @param nc The number of components
     /// @param k The degree k of the space
-    void
-    set_field(FieldID id, const std::string & name, Int nc, Order k, const Label & block = Label());
+    void set_field(FieldID id, const String & name, Int nc, Order k, const Label & block = Label());
 
     /// Adds a volumetric auxiliary field
     ///
@@ -62,7 +61,7 @@ public:
     /// @param nc The number of components
     /// @param k The degree k of the space
     /// @return ID of the new field
-    FieldID add_aux_field(const std::string & name, Int nc, Order k, const Label & block = Label());
+    FieldID add_aux_field(const String & name, Int nc, Order k, const Label & block = Label());
 
     /// Set a volumetric auxiliary field
     ///
@@ -70,11 +69,8 @@ public:
     /// @param name The name of the field
     /// @param nc The number of components
     /// @param k The degree k of the space
-    void set_aux_field(FieldID id,
-                       const std::string & name,
-                       Int nc,
-                       Order k,
-                       const Label & block = Label());
+    void
+    set_aux_field(FieldID id, const String & name, Int nc, Order k, const Label & block = Label());
 
     /// Get field degree of freedom
     ///
@@ -126,7 +122,7 @@ private:
     /// Field information
     struct FieldInfo {
         /// The name of the field
-        std::string name;
+        String name;
         /// Field number
         FieldID id;
         /// FE object
@@ -138,9 +134,9 @@ private:
         /// The degree k of the space
         Order k;
         /// Component names
-        std::vector<std::string> component_names;
+        std::vector<String> component_names;
 
-        FieldInfo(const std::string & name, FieldID id, Int nc, Order k, const Label & block) :
+        FieldInfo(const String & name, FieldID id, Int nc, Order k, const Label & block) :
             name(name),
             id(id),
             fe(nullptr),
@@ -159,17 +155,17 @@ private:
     std::map<FieldID, FieldInfo> fields;
 
     /// Map from field name to field ID
-    std::map<std::string, FieldID> fields_by_name;
+    std::map<String, FieldID> fields_by_name;
 
     /// Auxiliary fields in the problem
     std::map<FieldID, FieldInfo> aux_fields;
 
     /// Map from auxiliary field name to auxiliary field ID
-    std::map<std::string, FieldID> aux_fields_by_name;
+    std::map<String, FieldID> aux_fields_by_name;
 
     std::map<FieldID, PetscFE> aux_fe;
 
-    static const std::string empty_name;
+    static const String empty_name;
 };
 
 } // namespace godzilla

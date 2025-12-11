@@ -12,7 +12,7 @@ namespace godzilla {
 namespace conv {
 
 template <>
-std::string
+String
 to_str(PolytopeType elem_type)
 {
     CALL_STACK_MSG();
@@ -51,7 +51,7 @@ to_str(PolytopeType elem_type)
 }
 
 template <>
-std::string
+String
 to_str(const ElementType type)
 {
     switch (type) {
@@ -71,7 +71,7 @@ to_str(const ElementType type)
 }
 
 template <>
-std::string
+String
 to_str(KrylovSolver::ConvergedReason reason)
 {
     CALL_STACK_MSG();
@@ -115,7 +115,7 @@ to_str(KrylovSolver::ConvergedReason reason)
 }
 
 template <>
-std::string
+String
 to_str(SNESolver::ConvergedReason reason)
 {
     CALL_STACK_MSG();
@@ -159,7 +159,7 @@ to_str(SNESolver::ConvergedReason reason)
 }
 
 template <>
-std::string
+String
 to_str(SNESolver::LineSearch::LineSearchType type)
 {
     CALL_STACK_MSG();

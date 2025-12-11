@@ -12,7 +12,7 @@ Matrix::Matrix() : PetscObjectWrapper(nullptr) {}
 
 Matrix::Matrix(Mat mat) : PetscObjectWrapper(mat) {}
 
-std::string
+String
 Matrix::get_type() const
 {
     CALL_STACK_MSG();

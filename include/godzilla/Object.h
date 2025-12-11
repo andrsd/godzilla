@@ -6,6 +6,7 @@
 #include "mpicpp-lite/mpicpp-lite.h"
 #include "godzilla/Parameters.h"
 #include "godzilla/LoggingInterface.h"
+#include "godzilla/String.h"
 
 namespace godzilla {
 
@@ -24,11 +25,11 @@ public:
 
     /// Get the type of this object.
     /// @return the name of the type of this object
-    const std::string & get_type() const;
+    const String & get_type() const;
 
     /// Get the name of the object
     /// @return The name of the object
-    const std::string & get_name() const;
+    const String & get_name() const;
 
     /// Get the App this object is associated with
     App * get_app() const;
@@ -47,10 +48,10 @@ private:
     App * app;
 
     /// The type of this object
-    const std::string type;
+    const String type;
 
     /// The name of this object
-    const std::string name;
+    const String name;
 
 public:
     /// Method for building Parameters for this class

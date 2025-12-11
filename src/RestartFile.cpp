@@ -11,32 +11,30 @@ namespace fs = std::filesystem;
 
 namespace godzilla {
 
-RestartFile::RestartFile(mpi::Communicator comm,
-                         const std::string & file_name,
-                         FileAccess faccess) :
-    h5f(comm, fs::path(file_name), faccess)
+RestartFile::RestartFile(mpi::Communicator comm, const String & file_name, FileAccess faccess) :
+    h5f(comm, fs::path(file_name.c_str()), faccess)
 {
 }
 
-RestartFile::RestartFile(const std::string & file_name, FileAccess faccess) :
-    h5f(fs::path(file_name), faccess)
+RestartFile::RestartFile(const String & file_name, FileAccess faccess) :
+    h5f(fs::path(file_name.c_str()), faccess)
 {
 }
 
-std::string
+String
 RestartFile::file_name() const
 {
     return this->h5f.get_file_name();
 }
 
-std::string
+String
 RestartFile::file_path() const
 {
     return this->h5f.get_file_path();
 }
 
-std::string
-RestartFile::get_full_path(const std::string & app_name, const std::string & path) const
+String
+RestartFile::get_full_path(const String & app_name, const String & path) const
 {
     if (path == "/" || path == "")
         return fmt::format("/{}", app_name);
@@ -44,8 +42,8 @@ RestartFile::get_full_path(const std::string & app_name, const std::string & pat
         return fmt::format("/{}/{}", app_name, path);
 }
 
-std::string
-RestartFile::normalize_path(const std::string & path) const
+String
+RestartFile::normalize_path(const String & path) const
 {
     if (path == "")
         return fmt::format("/{}", path);
@@ -55,7 +53,7 @@ RestartFile::normalize_path(const std::string & path) const
 
 template <>
 void
-RestartFile::write<Vector>(const std::string & path, const std::string & name, const Vector & data)
+RestartFile::write<Vector>(const String & path, const String & name, const Vector & data)
 {
     auto norm_path = normalize_path(path);
     try {
@@ -71,18 +69,16 @@ RestartFile::write<Vector>(const std::string & path, const std::string & name, c
 }
 
 void
-RestartFile::write_global_vector(const std::string & app_name,
-                                 const std::string & path,
-                                 const std::string & name,
+RestartFile::write_global_vector(const String & app_name,
+                                 const String & path,
+                                 const String & name,
                                  const Vector & data)
 {
     write_global_vector(get_full_path(app_name, path), name, data);
 }
 
 void
-RestartFile::write_global_vector(const std::string & path,
-                                 const std::string & name,
-                                 const Vector & data)
+RestartFile::write_global_vector(const String & path, const String & name, const Vector & data)
 {
     auto norm_path = normalize_path(path);
     try {
@@ -96,7 +92,7 @@ RestartFile::write_global_vector(const std::string & path,
 
 template <>
 void
-RestartFile::read<Vector>(const std::string & path, const std::string & name, Vector & data) const
+RestartFile::read<Vector>(const String & path, const String & name, Vector & data) const
 {
     auto norm_path = normalize_path(path);
     try {
@@ -112,9 +108,7 @@ RestartFile::read<Vector>(const std::string & path, const std::string & name, Ve
 }
 
 void
-RestartFile::read_global_vector(const std::string & path,
-                                const std::string & name,
-                                Vector & data) const
+RestartFile::read_global_vector(const String & path, const String & name, Vector & data) const
 {
     auto norm_path = normalize_path(path);
     try {
@@ -131,9 +125,9 @@ RestartFile::read_global_vector(const std::string & path,
 }
 
 void
-RestartFile::read_global_vector(const std::string & app_name,
-                                const std::string & path,
-                                const std::string & name,
+RestartFile::read_global_vector(const String & app_name,
+                                const String & path,
+                                const String & name,
                                 Vector & data) const
 {
     read_global_vector(get_full_path(app_name, path), name, data);

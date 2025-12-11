@@ -27,7 +27,7 @@ public:
     void output_step() override;
 
 private:
-    std::string get_file_ext() const override;
+    String get_file_ext() const override;
 
     /// Viewer for the output
     PetscViewer viewer;

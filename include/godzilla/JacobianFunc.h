@@ -5,7 +5,7 @@
 
 #include "godzilla/Functional.h"
 #include "godzilla/FieldValue.h"
-#include <string>
+#include "godzilla/String.h"
 
 namespace godzilla {
 
@@ -13,7 +13,7 @@ class FEProblemInterface;
 
 class JacobianFunc : public Functional {
 public:
-    explicit JacobianFunc(FEProblemInterface * fepi, const std::string & region = "");
+    explicit JacobianFunc(FEProblemInterface * fepi, const String & region = "");
 
     /// Evaluate this functional
     ///

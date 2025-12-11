@@ -9,6 +9,7 @@
 #include "godzilla/Matrix.h"
 #include "godzilla/Preconditioner.h"
 #include "godzilla/SNESolver.h"
+#include "godzilla/String.h"
 
 namespace godzilla {
 
@@ -141,7 +142,7 @@ private:
     /// Preconditioner
     Preconditioner pcond;
     /// The type of line search to be used
-    std::string line_search_type;
+    String line_search_type;
     /// Relative convergence tolerance for the non-linear solver
     Real nl_rel_tol;
     /// Absolute convergence tolerance for the non-linear solver
