@@ -33,14 +33,14 @@ Parameters
 EssentialBC::parameters()
 {
     auto params = BoundaryCondition::parameters();
-    params.add_param<std::string>("field", "Field name");
+    params.add_param<String>("field", "Field name");
     return params;
 }
 
 EssentialBC::EssentialBC(const Parameters & pars) :
     BoundaryCondition(pars),
     fid(FieldID::INVALID),
-    field_name(pars.get<Optional<std::string>>("field"))
+    field_name(pars.get<Optional<String>>("field"))
 
 {
     CALL_STACK_MSG();

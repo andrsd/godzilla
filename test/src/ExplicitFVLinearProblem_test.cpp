@@ -123,7 +123,7 @@ TEST(ExplicitFVLinearProblemTest, api)
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3)
-        .set<std::string>("scheme", "euler");
+        .set<String>("scheme", "euler");
     TestExplicitFVLinearProblem prob(prob_pars);
     app.set_problem(&prob);
 
@@ -229,7 +229,7 @@ TEST(ExplicitFVLinearProblemTest, fields)
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3)
-        .set<std::string>("scheme", "euler");
+        .set<String>("scheme", "euler");
     TestExplicitFVLinearProblem prob(prob_pars);
     app.set_problem(&prob);
 
@@ -281,7 +281,7 @@ TEST(ExplicitFVLinearProblemTest, test_mass_matrix)
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3)
-        .set<std::string>("scheme", "euler");
+        .set<String>("scheme", "euler");
     TestExplicitFVLinearProblem prob(prob_pars);
     app.set_problem(&prob);
 
@@ -315,19 +315,19 @@ TEST(ExplicitFVLinearProblemTest, solve)
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3)
-        .set<std::string>("scheme", "euler");
+        .set<String>("scheme", "euler");
     TestExplicitFVLinearProblem prob(prob_pars);
     app.set_problem(&prob);
 
     auto bc_left_pars = TestBC::parameters();
     bc_left_pars.set<App *>("app", &app)
-        .set<std::vector<std::string>>("boundary", { "left" })
+        .set<std::vector<String>>("boundary", { "left" })
         .set<bool>("inlet", true);
     auto bc_left = prob.add_boundary_condition<TestBC>(bc_left_pars);
 
     auto bc_right_pars = TestBC::parameters();
     bc_right_pars.set<App *>("app", &app)
-        .set<std::vector<std::string>>("boundary", { "right" })
+        .set<std::vector<String>>("boundary", { "right" })
         .set<bool>("inlet", false);
     auto bc_right = prob.add_boundary_condition<TestBC>(bc_right_pars);
 
@@ -381,7 +381,7 @@ TEST(ExplicitFVLinearProblemTest, set_schemes)
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3)
-        .set<std::string>("scheme", "euler");
+        .set<String>("scheme", "euler");
     TestExplicitFVLinearProblem prob(prob_pars);
 
     prob.create();
@@ -426,7 +426,7 @@ TEST(ExplicitFVLinearProblemTest, wrong_schemes)
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3)
-        .set<std::string>("scheme", "asdf");
+        .set<String>("scheme", "asdf");
     TestExplicitFVLinearProblem prob(prob_pars);
 
     prob.create();

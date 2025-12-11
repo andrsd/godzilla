@@ -201,7 +201,7 @@ KrylovSolver::set_type(const char * type)
 }
 
 void
-KrylovSolver::set_type(const std::string & type)
+KrylovSolver::set_type(const String & type)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(KSPSetType(this->obj, type.c_str()));

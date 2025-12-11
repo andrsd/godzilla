@@ -27,11 +27,11 @@ TEST(PCFieldSplit, type)
                                               PCFieldSplit::SYMMETRIC_MULTIPLICATIVE,
                                               PCFieldSplit::SPECIAL,
                                               PCFieldSplit::SCHUR };
-    std::vector<std::string> type_str = { "ADDITIVE",
-                                          "MULTIPLICATIVE",
-                                          "SYMMETRIC_MULTIPLICATIVE",
-                                          "SPECIAL",
-                                          "Schur" };
+    std::vector<String> type_str = { "ADDITIVE",
+                                     "MULTIPLICATIVE",
+                                     "SYMMETRIC_MULTIPLICATIVE",
+                                     "SPECIAL",
+                                     "Schur" };
 
     testing::internal::CaptureStdout();
 
@@ -55,7 +55,7 @@ TEST(PCFieldSplit, schur_fact_type)
                                                        PCFieldSplit::SCHUR_FACT_LOWER,
                                                        PCFieldSplit::SCHUR_FACT_UPPER,
                                                        PCFieldSplit::SCHUR_FACT_FULL };
-    std::vector<std::string> type_str = { "DIAG", "LOWER", "UPPER", "FULL" };
+    std::vector<String> type_str = { "DIAG", "LOWER", "UPPER", "FULL" };
 
     testing::internal::CaptureStdout();
 
@@ -81,10 +81,10 @@ TEST(PCFieldSplit, schur_pre_type)
                                                       PCFieldSplit::SCHUR_PRE_A11,
                                                       PCFieldSplit::SCHUR_PRE_USER,
                                                       PCFieldSplit::SCHUR_PRE_FULL };
-    std::vector<std::string> type_str = { "S itself",
-                                          "A11",
-                                          "user provided matrix",
-                                          "the exact Schur complement" };
+    std::vector<String> type_str = { "S itself",
+                                     "A11",
+                                     "user provided matrix",
+                                     "the exact Schur complement" };
 
     TestApp app;
     auto comm = app.get_comm();
@@ -187,7 +187,7 @@ TEST(PCFieldSplit, schur)
     fs.set_schur_pre(PCFieldSplit::SCHUR_PRE_USER, pre);
     fs.set_dm_splits(true);
     EXPECT_TRUE(fs.get_dm_splits());
-    std::vector<std::string> fld_name = { "split0", "split1" };
+    std::vector<String> fld_name = { "split0", "split1" };
     for (Int i = 0; i < fdecomp.get_num_fields(); ++i)
         fs.set_is(fld_name[i], fdecomp.is[i]);
 

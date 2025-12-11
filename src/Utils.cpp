@@ -18,7 +18,7 @@ namespace godzilla {
 namespace {
 
 Optional<Int>
-parse_region(const std::string & s)
+parse_region(const String & s)
 {
     if (s.empty())
         return std::nullopt;
@@ -37,33 +37,33 @@ parse_region(const std::string & s)
 namespace utils {
 
 bool
-path_exists(const std::string & path)
+path_exists(const String & path)
 {
     CALL_STACK_MSG();
     struct stat buffer = {};
     return (stat(path.c_str(), &buffer) == 0);
 }
 
-std::string
-to_upper(const std::string & name)
+String
+to_upper(const String & name)
 {
     CALL_STACK_MSG();
-    std::string upper(name);
+    String upper(name);
     std::transform(upper.begin(), upper.end(), upper.begin(), ::toupper);
     return upper;
 }
 
-std::string
-to_lower(const std::string & name)
+String
+to_lower(const String & name)
 {
     CALL_STACK_MSG();
-    std::string lower(name);
+    String lower(name);
     std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
     return lower;
 }
 
 bool
-has_suffix(const std::string & str, const std::string & suffix)
+has_suffix(const String & str, const String & suffix)
 {
     CALL_STACK_MSG();
     return str.size() >= suffix.size() &&
@@ -71,27 +71,27 @@ has_suffix(const std::string & str, const std::string & suffix)
 }
 
 bool
-ends_with(const std::string & str, const std::string & end)
+ends_with(const String & str, const String & end)
 {
     CALL_STACK_MSG();
     return has_suffix(str, end);
 }
 
 bool
-has_prefix(const std::string & str, const std::string & prefix)
+has_prefix(const String & str, const String & prefix)
 {
     CALL_STACK_MSG();
     return str.size() >= prefix.size() && str.compare(0, prefix.size(), prefix) == 0;
 }
 
 bool
-starts_with(const std::string & str, const std::string & start)
+starts_with(const String & str, const String & start)
 {
     CALL_STACK_MSG();
     return has_prefix(str, start);
 }
 
-std::string
+String
 human_time(PetscLogDouble time)
 {
     CALL_STACK_MSG();
@@ -103,7 +103,7 @@ human_time(PetscLogDouble time)
     us -= m;
     auto s = duration_cast<milliseconds>(us) / 1000.;
 
-    std::string tm;
+    String tm;
     if (h.count() > 0)
         tm += fmt::format(" {}h", h.count());
     if (m.count() > 0)
@@ -115,13 +115,14 @@ human_time(PetscLogDouble time)
     return tm.substr(1);
 }
 
-std::string
-human_type_name(const std::string & type)
+String
+human_type_name(const String & type)
 {
     // clang-format off
     if (type == "std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>" ||
         type == "NSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEE" ||
-        type == "std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >")
+        type == "std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >" ||
+        type == "N8godzilla6StringE")
         return "String";
     else if (type == "int" || type == "long" || type == "long long")
         return "Integer";
@@ -144,8 +145,8 @@ human_type_name(const std::string & type)
         return type;
 }
 
-std::string
-demangle(const std::string & mangled_name)
+String
+demangle(const String & mangled_name)
 {
 #ifdef HAVE_CXXABI_H
     int status = -1;
@@ -172,7 +173,7 @@ print_converged_reason(PrintInterface & pi, bool converged)
 }
 
 Int
-get_block_id_from_region(const godzilla::UnstructuredMesh & mesh, const std::string & region)
+get_block_id_from_region(const godzilla::UnstructuredMesh & mesh, const String & region)
 {
     auto id = parse_region(region);
     if (id.has_value())

@@ -26,19 +26,19 @@ public:
     public:
         TimedEvent(const PrintInterface * pi,
                    unsigned int level,
-                   const std::string & event_name,
-                   const std::string & text);
+                   const String & event_name,
+                   const String & text);
         ~TimedEvent();
 
         template <typename... T>
         static TimedEvent
         create(const PrintInterface * pi,
                unsigned int level,
-               const std::string & event_name,
+               const String & event_name,
                fmt::format_string<T...> format,
                T... args)
         {
-            std::string text = fmt::format(format, std::forward<T>(args)...);
+            String text = fmt::format(format, std::forward<T>(args)...);
             return TimedEvent(pi, level, event_name, text);
         }
 
@@ -47,7 +47,7 @@ public:
         unsigned int level;
         perf_log::Event event;
         PetscLogDouble start_time;
-        std::string text;
+        String text;
         std::atomic<bool> running;
         std::thread thread;
     };
@@ -58,7 +58,7 @@ public:
     PrintInterface(const mpi::Communicator & comm,
                    const App * app,
                    const unsigned int & verbosity_level,
-                   std::string prefix);
+                   String prefix);
 
     /// Print a message on a terminal
     ///

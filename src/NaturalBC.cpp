@@ -16,14 +16,14 @@ Parameters
 NaturalBC::parameters()
 {
     auto params = BoundaryCondition::parameters();
-    params.add_param<std::string>("field", "Field name");
+    params.add_param<String>("field", "Field name");
     return params;
 }
 
 NaturalBC::NaturalBC(const Parameters & pars) :
     BoundaryCondition(pars),
     fid(FieldID::INVALID),
-    field_name(pars.get<Optional<std::string>>("field")),
+    field_name(pars.get<Optional<String>>("field")),
     fepi(dynamic_cast<FEProblemInterface *>(get_discrete_problem_interface()))
 {
     CALL_STACK_MSG();

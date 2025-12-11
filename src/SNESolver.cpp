@@ -155,13 +155,13 @@ SNESolver::set_type(SNESType type)
     PETSC_CHECK(SNESSetType(this->obj, type));
 }
 
-std::string
+String
 SNESolver::get_type() const
 {
     CALL_STACK_MSG();
     SNESType type;
     PETSC_CHECK(SNESGetType(this->obj, &type));
-    return std::string(type);
+    return String(type);
 }
 
 void

@@ -32,7 +32,7 @@ TestMesh1D::create_mesh()
     create_side_set(m, face_sets, 1, { 2 }, "left");
     create_side_set(m, face_sets, 2, { 4 }, "right");
 
-    std::map<Int, std::string> face_set_names;
+    std::map<Int, String> face_set_names;
     face_set_names[1] = "left";
     face_set_names[2] = "right";
     m->create_face_set_labels(face_set_names);

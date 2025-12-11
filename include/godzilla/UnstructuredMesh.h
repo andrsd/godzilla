@@ -178,13 +178,13 @@ public:
     ///
     /// @param id The ID of the cell set
     /// @return Cell set name
-    const std::string & get_cell_set_name(Int id) const;
+    const String & get_cell_set_name(Int id) const;
 
     /// Get cell set ID
     ///
     /// @param name The name of a cell sel
     /// @return Cell set ID
-    Int get_cell_set_id(const std::string & name) const;
+    Int get_cell_set_id(const String & name) const;
 
     /// Get number of cell sets
     ///
@@ -194,19 +194,19 @@ public:
     /// Get cell sets
     ///
     /// @return Cell sets
-    const std::map<Int, std::string> & get_cell_sets() const;
+    const std::map<Int, String> & get_cell_sets() const;
 
     /// Create cell set. Takes the ID and creates a label with `name` corresponding to the ID.
     ///
     /// @param id Cell set ID
     /// @param name Name of the cell set to create
-    void create_cell_set(Int id, const std::string & name);
+    void create_cell_set(Int id, const String & name);
 
     /// Create an entry in cell set name map
     ///
     /// @param id Cell set ID
     /// @param name Cell set name
-    void set_cell_set_name(Int id, const std::string & name);
+    void set_cell_set_name(Int id, const String & name);
 
     /// Set the polytope type of a given cell
     ///
@@ -218,7 +218,7 @@ public:
     ///
     /// @param id The ID of the face set
     /// @return Facet name
-    const std::string & get_face_set_name(Int id) const;
+    const String & get_face_set_name(Int id) const;
 
     /// Get number of face sets
     ///
@@ -228,39 +228,39 @@ public:
     /// Get face sets
     ///
     /// @return Face sets
-    const std::map<Int, std::string> & get_face_sets() const;
+    const std::map<Int, String> & get_face_sets() const;
 
     /// Check if mesh has a label corresponding to a face set name
     ///
     /// @param name The name of the face set
     /// @return true if label exists, false otherwise
-    bool has_face_set(const std::string & name) const;
+    bool has_face_set(const String & name) const;
 
     /// Get label corresponding to a face set name
     ///
     /// @param name The name of the face set
     /// @return Label associated with face set name
-    Label get_face_set_label(const std::string & name) const;
+    Label get_face_set_label(const String & name) const;
 
-    void create_face_set_labels(const std::map<Int, std::string> & names);
+    void create_face_set_labels(const std::map<Int, String> & names);
 
     /// Create face set. Takes the ID and creates a label with `name` corresponding to the ID.
     ///
     /// @param id Face set ID
     /// @param name Name of the face set to create
-    void create_face_set(Int id, const std::string & name);
+    void create_face_set(Int id, const String & name);
 
     /// Create an entry in face set name map
     ///
     /// @param id Face set ID
     /// @param name Face set name
-    void set_face_set_name(Int id, const std::string & name);
+    void set_face_set_name(Int id, const String & name);
 
     /// Get vertex set name
     ///
     /// @param id The ID of the vertex set
     /// @return Vertex set name
-    const std::string & get_vertex_set_name(Int id) const;
+    const String & get_vertex_set_name(Int id) const;
 
     /// Get number of vertex sets
     ///
@@ -270,33 +270,33 @@ public:
     /// Get vertex sets
     ///
     /// @return Vertex sets
-    const std::map<Int, std::string> & get_vertex_sets() const;
+    const std::map<Int, String> & get_vertex_sets() const;
 
     /// Check if mesh has a label corresponding to a vertex set name
     ///
     /// @param name The name of the vertex set
     /// @return true if label exists, false otherwise
-    bool has_vertex_set(const std::string & name) const;
+    bool has_vertex_set(const String & name) const;
 
     /// Get label corresponding to a vertex set name
     ///
     /// @param name The name of the face set
     /// @return Label associated with face set name
-    Label get_vertex_set_label(const std::string & name) const;
+    Label get_vertex_set_label(const String & name) const;
 
-    void create_vertex_set_labels(const std::map<Int, std::string> & names);
+    void create_vertex_set_labels(const std::map<Int, String> & names);
 
     /// Create vertex set. Takes the ID and creates a label with `name` corresponding to the ID.
     ///
     /// @param id Vertex set ID
     /// @param name Name of the vertex set to create
-    void create_vertex_set(Int id, const std::string & name);
+    void create_vertex_set(Int id, const String & name);
 
     /// Create an entry in vertex set name map
     ///
     /// @param id Vertex set ID
     /// @param name Vertex set name
-    void set_vertex_set_name(Int id, const std::string & name);
+    void set_vertex_set_name(Int id, const String & name);
 
     /// Set the mesh partitioner
     ///
@@ -383,19 +383,19 @@ public:
 
 private:
     /// Cell set names
-    std::map<Int, std::string> cell_set_names;
+    std::map<Int, String> cell_set_names;
     /// Cell set IDs
-    std::map<std::string, Int> cell_set_ids;
+    std::map<String, Int> cell_set_ids;
 
     /// Face set names
-    std::map<Int, std::string> face_set_names;
+    std::map<Int, String> face_set_names;
     /// Face set IDs
-    std::map<std::string, Int> face_set_ids;
+    std::map<String, Int> face_set_ids;
 
     /// Vertex set names
-    std::map<Int, std::string> vertex_set_names;
+    std::map<Int, String> vertex_set_names;
     /// Vertex set IDs
-    std::map<std::string, Int> vertex_set_ids;
+    std::map<String, Int> vertex_set_ids;
 
 public:
     static int get_num_cell_nodes(PolytopeType cell_type);

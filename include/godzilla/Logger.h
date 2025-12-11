@@ -41,12 +41,12 @@ public:
     void
     error(fmt::format_string<T...> format, T... args)
     {
-        error(std::string(""), format, std::forward<T>(args)...);
+        error(String(""), format, std::forward<T>(args)...);
     }
 
     template <typename... T>
     void
-    error(const std::string & prefix, fmt::format_string<T...> format, T... args)
+    error(const String & prefix, fmt::format_string<T...> format, T... args)
     {
         auto str = format_msg(Type::ERROR, prefix, format, std::forward<T>(args)...);
         fmt::println(stderr, "{}{}{}", Terminal::red, str, Terminal::normal);
@@ -58,12 +58,12 @@ public:
     void
     warning(fmt::format_string<T...> format, T... args)
     {
-        warning(std::string(""), format, std::forward<T>(args)...);
+        warning(String(""), format, std::forward<T>(args)...);
     }
 
     template <typename... T>
     void
-    warning(const std::string & prefix, fmt::format_string<T...> format, T... args)
+    warning(const String & prefix, fmt::format_string<T...> format, T... args)
     {
         auto str = format_msg(Type::WARNING, prefix, format, std::forward<T>(args)...);
         fmt::println(stderr, "{}{}{}", Terminal::yellow, str, Terminal::normal);
@@ -90,10 +90,10 @@ public:
 
 protected:
     template <typename... T>
-    std::string
-    format_msg(Type type, const std::string & prefix, fmt::format_string<T...> format, T... args)
+    String
+    format_msg(Type type, const String & prefix, fmt::format_string<T...> format, T... args)
     {
-        std::string str;
+        String str;
         str += fmt::format("[{}] ", to_string(type));
         if (prefix.length() > 0)
             str += fmt::format("{}: ", prefix);

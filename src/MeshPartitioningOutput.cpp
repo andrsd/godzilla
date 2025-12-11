@@ -23,7 +23,7 @@ MeshPartitioningOutput::MeshPartitioningOutput(const Parameters & pars) : FileOu
     set_file_base("part");
 }
 
-std::string
+String
 MeshPartitioningOutput::get_file_ext() const
 {
     CALL_STACK_MSG();

@@ -4,9 +4,9 @@
 #pragma once
 
 #include "godzilla/Types.h"
+#include "godzilla/String.h"
 #include <vector>
 #include <map>
-#include <string>
 #include <typeinfo>
 #include <utility>
 #include <petsclog.h>
@@ -19,19 +19,19 @@ class UnstructuredMesh;
 
 namespace utils {
 
-bool path_exists(const std::string & path);
+bool path_exists(const String & path);
 
 /**
  * Convert supplied string to upper case.
  * @param name The string to convert upper case.
  */
-std::string to_upper(const std::string & name);
+String to_upper(const String & name);
 
 /**
  * Convert supplied string to lower case.
  * @param name The string to convert upper case.
  */
-std::string to_lower(const std::string & name);
+String to_lower(const String & name);
 
 /**
  * Check if string `str` ends with `suffix`
@@ -39,7 +39,7 @@ std::string to_lower(const std::string & name);
  * @param str String to check
  * @param suffix The expected suffix
  */
-bool has_suffix(const std::string & str, const std::string & suffix);
+bool has_suffix(const String & str, const String & suffix);
 
 /**
  * Check if string `str` ends with specified text
@@ -47,7 +47,7 @@ bool has_suffix(const std::string & str, const std::string & suffix);
  * @param str String to check
  * @param end The expected text
  */
-bool ends_with(const std::string & str, const std::string & end);
+bool ends_with(const String & str, const String & end);
 
 /**
  * Check if string `str` starts with `prefix`
@@ -55,7 +55,7 @@ bool ends_with(const std::string & str, const std::string & end);
  * @param str String to check
  * @param prefix The expected prefix
  */
-bool has_prefix(const std::string & str, const std::string & prefix);
+bool has_prefix(const String & str, const String & prefix);
 
 /**
  * Check if string `str` starts with specified text
@@ -63,10 +63,10 @@ bool has_prefix(const std::string & str, const std::string & prefix);
  * @param str String to check
  * @param start The expected text
  */
-bool starts_with(const std::string & str, const std::string & start);
+bool starts_with(const String & str, const String & start);
 
 template <typename T>
-std::string
+String
 type_name()
 {
     return typeid(T).name();
@@ -101,14 +101,14 @@ map_values(const std::map<T, U> & m)
 ///
 /// @param time Time in seconds
 /// @return Formatted string with human readable time
-std::string human_time(PetscLogDouble time);
+String human_time(PetscLogDouble time);
 
 /// Provide human readable number
 ///
 /// @param number Number to format
 /// @return Formatted string with human readable number
 template <typename T>
-std::string
+String
 human_number(T number)
 {
     auto num_str = std::to_string(number);
@@ -121,7 +121,7 @@ human_number(T number)
 }
 
 /// Convert C++ names into human readable names
-std::string human_type_name(const std::string & type);
+String human_type_name(const String & type);
 
 /// Get index of an value in a std::vector
 ///
@@ -147,7 +147,7 @@ index_of(const std::vector<T> & array, T value)
 ///
 /// @param mangled_name Mangled name
 /// @return Demangled name
-std::string demangle(const std::string & mangled_name);
+String demangle(const String & mangled_name);
 
 /// Safely compute ratio of 2 numbers (avoiding division by zero)
 ///
@@ -252,6 +252,6 @@ void print_converged_reason(PrintInterface & pi, bool converged);
 /// @param mesh Unstructure mesh we operate on for cell set lookups
 /// @param region Region name/Block ID
 /// @return Block ID corresponding to the region
-Int get_block_id_from_region(const UnstructuredMesh & mesh, const std::string & region);
+Int get_block_id_from_region(const UnstructuredMesh & mesh, const String & region);
 
 } // namespace godzilla

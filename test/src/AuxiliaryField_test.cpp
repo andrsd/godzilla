@@ -49,9 +49,9 @@ TEST_F(AuxiliaryFieldTest, api)
 
     auto params = AuxiliaryField::parameters();
     params.set<App *>("app", app)
-        .set<std::string>("name", "aux")
-        .set<std::string>("field", "fld")
-        .set<std::string>("region", "rgn");
+        .set<String>("name", "aux")
+        .set<String>("field", "fld")
+        .set<String>("region", "rgn");
     auto aux = prob->add_auxiliary_field<TestAuxFld>(params);
     prob->create();
 
@@ -92,7 +92,7 @@ TEST_F(AuxiliaryFieldTest, non_existent_field)
 
     auto params = AuxiliaryField::parameters();
     params.set<App *>("app", app);
-    params.set<std::string>("name", "aux");
+    params.set<String>("name", "aux");
     prob->add_auxiliary_field<TestAuxFld>(params);
 
     prob->create();
@@ -126,7 +126,7 @@ TEST_F(AuxiliaryFieldTest, inconsistent_comp_number)
 
     auto params = AuxiliaryField::parameters();
     params.set<App *>("app", app);
-    params.set<std::string>("name", "aux");
+    params.set<String>("name", "aux");
     prob->add_auxiliary_field<TestAuxFld>(params);
 
     prob->create();
@@ -160,9 +160,7 @@ TEST_F(AuxiliaryFieldTest, non_existent_region)
     prob->set_aux_field(FieldID(0), "aux", 1, Order(1));
 
     auto params = AuxiliaryField::parameters();
-    params.set<App *>("app", app)
-        .set<std::string>("name", "aux")
-        .set<std::string>("region", "asdf");
+    params.set<App *>("app", app).set<String>("name", "aux").set<String>("region", "asdf");
     prob->add_auxiliary_field<TestAuxFld>(params);
 
     prob->create();
@@ -179,9 +177,7 @@ TEST_F(AuxiliaryFieldTest, name_already_taken)
     prob->set_aux_field(FieldID(0), "fld", 1, Order(1));
 
     auto params = ConstantAuxiliaryField::parameters();
-    params.set<App *>("app", app)
-        .set<std::string>("name", "aux")
-        .set<std::vector<Real>>("value", { 1 });
+    params.set<App *>("app", app).set<String>("name", "aux").set<std::vector<Real>>("value", { 1 });
     prob->add_auxiliary_field<ConstantAuxiliaryField>(params);
 
     EXPECT_THROW_MSG(prob->add_auxiliary_field<ConstantAuxiliaryField>(params),
@@ -208,9 +204,7 @@ TEST_F(AuxiliaryFieldTest, get_value)
     prob->set_aux_field(FieldID(0), "aux", 1, Order(1));
 
     auto params = AuxiliaryField::parameters();
-    params.set<App *>("app", app)
-        .set<std::string>("name", "aux")
-        .set<std::string>("region", "asdf");
+    params.set<App *>("app", app).set<String>("name", "aux").set<String>("region", "asdf");
     auto aux = prob->add_auxiliary_field<TestAuxFld>(params);
 
     prob->create();
@@ -242,9 +236,7 @@ TEST_F(AuxiliaryFieldTest, get_vector_value)
     prob->set_aux_field(FieldID(0), "aux", 1, Order(1));
 
     auto params = AuxiliaryField::parameters();
-    params.set<App *>("app", app)
-        .set<std::string>("name", "aux")
-        .set<std::string>("region", "asdf");
+    params.set<App *>("app", app).set<String>("name", "aux").set<String>("region", "asdf");
     auto aux = prob->add_auxiliary_field<TestAuxFld>(params);
 
     prob->create();

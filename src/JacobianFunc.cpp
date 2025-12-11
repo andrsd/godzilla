@@ -7,7 +7,7 @@
 
 namespace godzilla {
 
-JacobianFunc::JacobianFunc(FEProblemInterface * fepi, const std::string & region) :
+JacobianFunc::JacobianFunc(FEProblemInterface * fepi, const String & region) :
     Functional(fepi, region)
 {
 }

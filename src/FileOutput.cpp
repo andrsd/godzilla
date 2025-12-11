@@ -9,19 +9,21 @@
 #include "godzilla/DiscreteProblemInterface.h"
 #include <filesystem>
 
+namespace fs = std::filesystem;
+
 namespace godzilla {
 
 Parameters
 FileOutput::parameters()
 {
     auto params = Output::parameters();
-    params.add_required_param<std::string>("file", "The name of the output file.");
+    params.add_required_param<String>("file", "The name of the output file.");
     return params;
 }
 
 FileOutput::FileOutput(const Parameters & pars) :
     Output(pars),
-    file_base(pars.get<std::string>("file")),
+    file_base(pars.get<String>("file")),
     dpi(dynamic_cast<DiscreteProblemInterface *>(get_problem()))
 {
     CALL_STACK_MSG();
@@ -37,14 +39,14 @@ FileOutput::create()
     this->file_name = create_file_name();
 }
 
-std::string
+String
 FileOutput::get_file_name() const
 {
     CALL_STACK_MSG();
     return this->file_name;
 }
 
-std::string
+String
 FileOutput::create_file_name() const
 {
     CALL_STACK_MSG();
@@ -55,13 +57,13 @@ FileOutput::create_file_name() const
 }
 
 void
-FileOutput::set_file_base(const std::string & file_base)
+FileOutput::set_file_base(const String & file_base)
 {
     CALL_STACK_MSG();
     this->file_base = file_base;
 }
 
-const std::string &
+const String &
 FileOutput::get_file_base() const
 {
     CALL_STACK_MSG();
@@ -80,14 +82,14 @@ void
 FileOutput::add_var_names(FieldID fid, std::vector<std::string> & var_names)
 {
     CALL_STACK_MSG();
-    const std::string & name = this->dpi->get_field_name(fid);
+    const auto & name = this->dpi->get_field_name(fid);
     Int nc = this->dpi->get_field_num_components(fid);
     if (nc == 1)
         var_names.push_back(name);
     else {
         for (Int c = 0; c < nc; ++c) {
-            std::string comp_name = this->dpi->get_field_component_name(fid, c);
-            std::string s;
+            auto comp_name = this->dpi->get_field_component_name(fid, c);
+            String s;
             if (comp_name.empty())
                 s = fmt::format("{}_{}", name, c);
             else
@@ -101,14 +103,14 @@ void
 FileOutput::add_aux_var_names(FieldID fid, std::vector<std::string> & var_names)
 {
     CALL_STACK_MSG();
-    const std::string & name = this->dpi->get_aux_field_name(fid);
+    const auto & name = this->dpi->get_aux_field_name(fid);
     Int nc = this->dpi->get_aux_field_num_components(fid);
     if (nc == 1)
         var_names.push_back(name);
     else {
         for (Int c = 0; c < nc; ++c) {
-            std::string comp_name = this->dpi->get_aux_field_component_name(fid, c);
-            std::string s;
+            auto comp_name = this->dpi->get_aux_field_component_name(fid, c);
+            String s;
             if (comp_name.empty())
                 s = fmt::format("{}_{}", name, c);
             else

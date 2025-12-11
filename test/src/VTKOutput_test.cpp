@@ -51,7 +51,7 @@ TEST(VTKOutputTest, test)
     auto pars = VTKOutput::parameters();
     pars.set<App *>("app", &app);
     pars.set<Mesh *>("mesh", mesh.get());
-    pars.set<std::string>("file", "file");
+    pars.set<String>("file", "file");
     auto out = prob.add_output<VTKOutput>(pars);
 
     prob.create();

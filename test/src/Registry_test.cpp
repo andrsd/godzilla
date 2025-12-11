@@ -24,7 +24,7 @@ ASDF::parameters()
         .add_param<Real>("value_with_default", 0., "Some value")
         .add_param<bool>("on", false, "On/Off switch")
         .add_private_param<bool>("_private_value", false)
-        .add_required_param<std::string>("str", "Text parameter [-]");
+        .add_required_param<String>("str", "Text parameter [-]");
     return params;
 }
 
@@ -59,7 +59,7 @@ TEST(RegistryTest, get_object_description)
     EXPECT_EQ(o0.name, "ASDF");
     auto & p0 = o0.parameters;
     EXPECT_EQ(p0.size(), 6);
-    std::vector<std::string> names;
+    std::vector<String> names;
     for (auto & par : p0)
         names.push_back(par.name);
     EXPECT_THAT(names,

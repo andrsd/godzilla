@@ -12,7 +12,7 @@ TEST(ObjectTest, api)
     app.get_registry().add<Object>("Object");
 
     auto params = Object::parameters();
-    params.set<std::string>("_type", "Object");
+    params.set<String>("_type", "Object");
     auto obj = app.build_object<Object>("name", params);
 
     EXPECT_EQ(obj->get_name(), "name");

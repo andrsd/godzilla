@@ -3,9 +3,7 @@
 
 #pragma once
 
-#include "godzilla/Types.h"
-#include <string>
-#include <tuple>
+#include "godzilla/String.h"
 
 namespace godzilla {
 namespace conv {
@@ -14,7 +12,7 @@ namespace conv {
 ///
 /// @param value Value to convert
 template <typename T>
-std::string to_str(T value);
+String to_str(T value);
 
 } // namespace conv
 } // namespace godzilla

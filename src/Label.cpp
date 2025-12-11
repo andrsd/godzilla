@@ -18,7 +18,7 @@ Label::Label(DMLabel label) : PetscObjectWrapper(label)
 }
 
 void
-Label::create(MPI_Comm comm, const std::string & name)
+Label::create(MPI_Comm comm, const String & name)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(DMLabelCreate(comm, name.c_str(), &this->obj));

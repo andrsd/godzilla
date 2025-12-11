@@ -6,6 +6,7 @@
 #include "godzilla/PetscObjectWrapper.h"
 #include "godzilla/Types.h"
 #include "godzilla/IndexSet.h"
+#include "godzilla/String.h"
 #include "petscdmlabel.h"
 
 namespace godzilla {
@@ -19,7 +20,7 @@ public:
     ///
     /// @param comm The communicator
     /// @param name The label name
-    void create(MPI_Comm comm, const std::string & name);
+    void create(MPI_Comm comm, const String & name);
 
     /// Destroy the label
     void destroy();

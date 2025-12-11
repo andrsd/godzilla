@@ -95,9 +95,9 @@ Parameters
 ExodusIIOutput::parameters()
 {
     auto params = FileOutput::parameters();
-    params.add_param<std::vector<std::string>>(
+    params.add_param<std::vector<String>>(
         "variables",
-        std::vector<std::string> {},
+        std::vector<String> {},
         "List of variables to be stored. If not specified, all variables will be stored.");
     return params;
 }
@@ -107,7 +107,7 @@ ExodusIIOutput::ExodusIIOutput(const Parameters & pars) :
     mesh(nullptr),
     cont(false),
     discont(false),
-    variable_names(pars.get<std::vector<std::string>>("variables"), {}),
+    variable_names(pars.get<std::vector<String>>("variables"), {}),
     dgpi(dynamic_cast<DGProblemInterface *>(get_problem())),
     step_num(1),
     mesh_stored(false)
@@ -132,7 +132,7 @@ ExodusIIOutput::~ExodusIIOutput()
         this->exo->close();
 }
 
-std::string
+String
 ExodusIIOutput::get_file_ext() const
 {
     CALL_STACK_MSG();
@@ -154,12 +154,13 @@ ExodusIIOutput::create()
         if (this->variable_names.empty()) {
             this->field_var_names = flds;
             this->aux_field_var_names = aux_flds;
-            this->global_var_names = pps;
+            for (auto & name : pps)
+                this->global_var_names.push_back(name);
         }
         else {
-            std::set<std::string> field_names(flds.begin(), flds.end());
-            std::set<std::string> aux_field_names(aux_flds.begin(), aux_flds.end());
-            std::set<std::string> pp_names(pps.begin(), pps.end());
+            std::set<String> field_names(flds.begin(), flds.end());
+            std::set<String> aux_field_names(aux_flds.begin(), aux_flds.end());
+            std::set<String> pp_names(pps.begin(), pps.end());
 
             for (auto & name : this->variable_names) {
                 if (field_names.count(name) == 1)
@@ -791,8 +792,8 @@ ExodusIIOutput::write_info()
     CALL_STACK_MSG();
     auto app = get_app();
     std::time_t now = std::time(nullptr);
-    std::string datetime = fmt::format("{:%d %b %Y, %H:%M:%S}", *std::localtime(&now));
-    std::string created_by =
+    String datetime = fmt::format("{:%d %b %Y, %H:%M:%S}", *std::localtime(&now));
+    String created_by =
         fmt::format("Created by {} {}, on {}", app->get_name(), app->get_version(), datetime);
 
     std::vector<std::string> info;

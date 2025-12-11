@@ -66,14 +66,14 @@ protected:
     int get_num_nodes_per_element();
 
 private:
-    std::string get_file_ext() const override;
+    String get_file_ext() const override;
 
     /// Unstructured mesh
     UnstructuredMesh * mesh;
     bool cont;
     bool discont;
     /// Variable names to be stored
-    std::vector<std::string> variable_names;
+    std::vector<String> variable_names;
     /// DG problem interface
     DGProblemInterface * dgpi;
     /// ExodusII file
@@ -83,9 +83,9 @@ private:
     /// Flag indicating if we need to store mesh during `output_step`
     bool mesh_stored;
     /// List of field variable names to output
-    std::vector<std::string> field_var_names;
+    std::vector<String> field_var_names;
     /// List of auxiliary field variable names to output
-    std::vector<std::string> aux_field_var_names;
+    std::vector<String> aux_field_var_names;
     /// List of global variable names to output
     std::vector<std::string> global_var_names;
     /// List of nodal variable field IDs

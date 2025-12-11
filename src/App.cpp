@@ -46,7 +46,7 @@ namespace godzilla {
 
 Registry registry;
 
-App::App(const mpi::Communicator & comm, const std::string & name) :
+App::App(const mpi::Communicator & comm, const String & name) :
     PrintInterface(comm, this, this->verbosity_level, name),
     name(name),
     mpi_comm(comm),
@@ -61,7 +61,7 @@ App::App(const mpi::Communicator & comm, const std::string & name) :
     CALL_STACK_MSG();
 }
 
-App::App(const mpi::Communicator & comm, Registry & registry, const std::string & name) :
+App::App(const mpi::Communicator & comm, Registry & registry, const String & name) :
     PrintInterface(comm, this, this->verbosity_level, name),
     name(name),
     mpi_comm(comm),
@@ -91,18 +91,18 @@ App::~App()
     }
 }
 
-const std::string &
+const String &
 App::get_name() const
 {
     CALL_STACK_MSG();
     return this->name;
 }
 
-const std::string &
+const String &
 App::get_version() const
 {
     CALL_STACK_MSG();
-    static const std::string ver(GODZILLA_VERSION);
+    static const String ver(GODZILLA_VERSION);
     return ver;
 }
 
@@ -147,7 +147,7 @@ App::set_verbosity_level(unsigned int level)
     this->verbosity_level = level;
 }
 
-const std::string &
+const String &
 App::get_restart_file_name() const
 {
     CALL_STACK_MSG();
@@ -155,14 +155,14 @@ App::get_restart_file_name() const
 }
 
 void
-App::set_restart_file_name(const std::string & file_name)
+App::set_restart_file_name(const String & file_name)
 {
     CALL_STACK_MSG();
     this->restart_file_name = file_name;
 }
 
 void
-App::set_perf_log_file_name(const std::string & file_name)
+App::set_perf_log_file_name(const String & file_name)
 {
     CALL_STACK_MSG();
     this->perf_log_file_name = file_name;
@@ -176,7 +176,7 @@ App::get_comm() const
 }
 
 Parameters *
-App::get_parameters(const std::string & class_name)
+App::get_parameters(const String & class_name)
 {
     return this->factory.get_parameters(class_name);
 }
@@ -248,7 +248,7 @@ App::get_registry()
 }
 
 void
-App::write_perf_log(const std::string file_name, std::chrono::duration<double> run_time) const
+App::write_perf_log(const String file_name, std::chrono::duration<double> run_time) const
 {
     CALL_STACK_MSG();
     auto comm = get_comm();
@@ -281,14 +281,14 @@ App::write_perf_log(const std::string file_name, std::chrono::duration<double> r
         PETSC_CHECK(PetscGetProgramName(pname, sizeof(pname)));
 
         std::time_t now = std::time(nullptr);
-        std::string datetime = fmt::format("{:%d %b %Y, %H:%M:%S}", *std::localtime(&now));
+        String datetime = fmt::format("{:%d %b %Y, %H:%M:%S}", *std::localtime(&now));
 
         YAML::Node yinfo;
-        yinfo["petsc-version"] = std::string(version);
-        yinfo["arch"] = std::string(arch);
-        yinfo["hostname"] = std::string(hostname);
-        yinfo["username"] = std::string(username);
-        yinfo["program-name"] = std::string(pname);
+        yinfo["petsc-version"] = String(version);
+        yinfo["arch"] = String(arch);
+        yinfo["hostname"] = String(hostname);
+        yinfo["username"] = String(username);
+        yinfo["program-name"] = String(pname);
         yinfo["date"] = datetime;
 
         yperflog["info"] = yinfo;
@@ -354,7 +354,7 @@ App::write_perf_log(const std::string file_name, std::chrono::duration<double> r
 }
 
 void
-App::redirect_stdout(const std::string & file_name)
+App::redirect_stdout(const String & file_name)
 {
     CALL_STACK_MSG();
     this->stdout_file_.open(file_name);
@@ -363,7 +363,7 @@ App::redirect_stdout(const std::string & file_name)
 }
 
 void
-App::redirect_stderr(const std::string & file_name)
+App::redirect_stderr(const String & file_name)
 {
     CALL_STACK_MSG();
     this->stderr_file_.open(file_name);

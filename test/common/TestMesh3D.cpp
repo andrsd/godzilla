@@ -34,7 +34,7 @@ TestMesh3D::create_mesh()
     create_side_set(m, face_sets, 3, { 7 }, "slanted");
     create_side_set(m, face_sets, 4, { 8 }, "left");
 
-    std::map<Int, std::string> face_set_names;
+    std::map<Int, String> face_set_names;
     face_set_names[1] = "front";
     face_set_names[2] = "bottom";
     face_set_names[3] = "left";

@@ -10,7 +10,7 @@ namespace {
 struct TestStruct {
     int i;
     float f;
-    std::string str;
+    String str;
 };
 
 } // namespace
@@ -19,9 +19,7 @@ namespace godzilla {
 
 template <>
 void
-RestartFile::write<TestStruct>(const std::string & path,
-                               const std::string & name,
-                               const TestStruct & data)
+RestartFile::write<TestStruct>(const String & path, const String & name, const TestStruct & data)
 {
     write(path + name, "integer", data.i);
     write(path + name, "float", data.f);
@@ -30,13 +28,11 @@ RestartFile::write<TestStruct>(const std::string & path,
 
 template <>
 void
-RestartFile::read<TestStruct>(const std::string & path,
-                              const std::string & name,
-                              TestStruct & data) const
+RestartFile::read<TestStruct>(const String & path, const String & name, TestStruct & data) const
 {
     read<int>(path + name, "integer", data.i);
     read<float>(path + name, "float", data.f);
-    read<std::string>(path + name, "string", data.str);
+    read<String>(path + name, "string", data.str);
 }
 
 } // namespace godzilla
@@ -50,7 +46,7 @@ TEST(RestartFileTest, read_write)
         EXPECT_EQ(f.file_name(), "restart.h5");
         EXPECT_TRUE(utils::ends_with(f.file_path(), "restart.h5"));
 
-        f.write<std::string>("/", "greeting", "hello");
+        f.write<String>("/", "greeting", "hello");
 
         f.write<int>("/group1", "integer", 1);
         f.write<float>("/group1", "float", 1876.);
@@ -61,7 +57,7 @@ TEST(RestartFileTest, read_write)
 
     {
         RestartFile f("restart.h5", FileAccess::READ);
-        EXPECT_EQ(f.read<std::string>("/", "greeting"), "hello");
+        EXPECT_EQ(f.read<String>("/", "greeting"), "hello");
 
         EXPECT_EQ(f.read<int>("/group1", "integer"), 1);
         EXPECT_EQ(f.read<float>("/group1", "float"), 1876.);

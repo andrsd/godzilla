@@ -38,7 +38,7 @@ CSVOutput::create()
         open_file();
 }
 
-std::string
+String
 CSVOutput::get_file_ext() const
 {
     CALL_STACK_MSG();

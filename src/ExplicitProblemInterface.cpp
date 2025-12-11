@@ -13,9 +13,9 @@ Parameters
 ExplicitProblemInterface::parameters()
 {
     auto params = TransientProblemInterface::parameters();
-    params.add_param<std::string>("scheme",
-                                  "euler",
-                                  "Time stepping scheme: [euler, ssp-rk-2, ssp-rk-3, rk-2, heun]");
+    params.add_param<String>("scheme",
+                             "euler",
+                             "Time stepping scheme: [euler, ssp-rk-2, ssp-rk-3, rk-2, heun]");
     return params;
 }
 
@@ -23,7 +23,7 @@ ExplicitProblemInterface::ExplicitProblemInterface(NonlinearProblem * problem,
                                                    const Parameters & pars) :
     TransientProblemInterface(problem, pars),
     nl_problem(problem),
-    scheme(pars.get<std::string>("scheme"))
+    scheme(pars.get<String>("scheme"))
 {
     if (!validation::in(this->scheme, { "euler", "ssp-rk-2", "ssp-rk-3", "rk-2", "heun" }))
         this->nl_problem->log_error("The 'scheme' parameter can be either 'euler', 'ssp-rk-2', "
@@ -70,12 +70,12 @@ void
 ExplicitProblemInterface::set_up_time_scheme()
 {
     CALL_STACK_MSG();
-    std::string name = utils::to_lower(this->scheme);
-    std::map<std::string, TimeScheme> scheme_map = { { "euler", TimeScheme::EULER },
-                                                     { "ssp-rk-2", TimeScheme::SSP_RK_2 },
-                                                     { "ssp-rk-3", TimeScheme::SSP_RK_3 },
-                                                     { "rk-2", TimeScheme::RK_2 },
-                                                     { "heun", TimeScheme::HEUN } };
+    String name = utils::to_lower(this->scheme);
+    std::map<String, TimeScheme> scheme_map = { { "euler", TimeScheme::EULER },
+                                                { "ssp-rk-2", TimeScheme::SSP_RK_2 },
+                                                { "ssp-rk-3", TimeScheme::SSP_RK_3 },
+                                                { "rk-2", TimeScheme::RK_2 },
+                                                { "heun", TimeScheme::HEUN } };
     set_scheme(scheme_map[name]);
 }
 

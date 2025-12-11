@@ -70,17 +70,17 @@ Problem::get_solution_vector()
     return this->x;
 }
 
-std::string
+String
 Problem::get_vector_type() const
 {
     CALL_STACK_MSG();
     VecType type;
     PETSC_CHECK(DMGetVecType(get_dm(), &type));
-    return std::string { type };
+    return String { type };
 }
 
 void
-Problem::set_vector_type(const std::string & type)
+Problem::set_vector_type(const String & type)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(DMSetVecType(get_dm(), type.c_str()));
@@ -142,7 +142,7 @@ Problem::compute_postprocessors()
 }
 
 Postprocessor *
-Problem::get_postprocessor(const std::string & name) const
+Problem::get_postprocessor(const String & name) const
 {
     CALL_STACK_MSG();
     const auto & it = this->pps.find(name);
@@ -152,7 +152,7 @@ Problem::get_postprocessor(const std::string & name) const
         return nullptr;
 }
 
-const std::vector<std::string> &
+const std::vector<String> &
 Problem::get_postprocessor_names() const
 {
     CALL_STACK_MSG();
@@ -236,17 +236,17 @@ Problem::restore_global_vector(const Vector & vec) const
     godzilla::restore_global_vector(get_dm(), vec);
 }
 
-std::string
+String
 Problem::get_matrix_type() const
 {
     CALL_STACK_MSG();
     MatType type;
     PETSC_CHECK(DMGetMatType(get_dm(), &type));
-    return std::string { type };
+    return String { type };
 }
 
 void
-Problem::set_matrix_type(const std::string & type)
+Problem::set_matrix_type(const String & type)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(DMSetMatType(get_dm(), type.c_str()));
@@ -333,7 +333,7 @@ Problem::get_partitioner()
 }
 
 void
-Problem::set_partitioner_type(const std::string & type)
+Problem::set_partitioner_type(const String & type)
 {
     CALL_STACK_MSG();
     this->partitioner.set_type(type);
@@ -430,7 +430,7 @@ Problem::create_section_subis(const std::vector<Int> & fields,
 }
 
 void
-Problem::output_monitor(const std::string & file_name) const
+Problem::output_monitor(const String & file_name) const
 {
     lprintln(9, "Output to file: {}", file_name);
 }

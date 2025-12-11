@@ -46,7 +46,7 @@ TEST(ParametersTest, param_value)
     Parameters params;
     params.add_param<Real>("param", 12.34, "doco");
     EXPECT_EQ(params.get<Real>("param"), 12.34);
-    EXPECT_EQ(params.get_doc_string("param"), std::string("doco"));
+    EXPECT_EQ(params.get_doc_string("param"), String("doco"));
 }
 
 TEST(ParametersTest, has_value)
@@ -66,7 +66,7 @@ TEST(ParametersTest, assign)
     Parameters params2 = params1;
     EXPECT_TRUE(params2.has<Real>("param"));
     EXPECT_EQ(params2.get<Real>("param"), 12.34);
-    EXPECT_EQ(params2.get_doc_string("param"), std::string("doco"));
+    EXPECT_EQ(params2.get_doc_string("param"), String("doco"));
 }
 
 TEST(ParametersTest, add_params)
@@ -80,23 +80,23 @@ TEST(ParametersTest, add_params)
     params1 += params2;
     EXPECT_EQ(params1.has<Real>("p1"), true);
     EXPECT_EQ(params1.get<Real>("p1"), 12.34);
-    EXPECT_EQ(params1.get_doc_string("p1"), std::string("doco1"));
+    EXPECT_EQ(params1.get_doc_string("p1"), String("doco1"));
     EXPECT_EQ(params1.has<Real>("p2"), true);
-    EXPECT_EQ(params1.get_doc_string("p2"), std::string("doco2"));
+    EXPECT_EQ(params1.get_doc_string("p2"), String("doco2"));
 }
 
 TEST(ParametersTest, valid_params)
 {
     Parameters params1 = validParams1();
     EXPECT_EQ(params1.get<Real>("p"), 78.56);
-    EXPECT_EQ(params1.get_doc_string("p"), std::string("doco p"));
+    EXPECT_EQ(params1.get_doc_string("p"), String("doco p"));
 }
 
 TEST(ParametersTest, empty_doc_str)
 {
     Parameters params = Object::parameters();
 
-    EXPECT_EQ(params.get_doc_string("i"), std::string(""));
+    EXPECT_EQ(params.get_doc_string("i"), String(""));
 }
 
 TEST(ParametersTest, set_non_existing_param)
@@ -137,13 +137,11 @@ TEST(ParametersTest, get_valid_param_with_default)
 TEST(ParametersTest, chained_set)
 {
     Parameters params;
-    params.set<Int>("num", 1234)
-        .set<double>("float", 12.34)
-        .set<std::string>("text", "some long text");
+    params.set<Int>("num", 1234).set<double>("float", 12.34).set<String>("text", "some long text");
 
     EXPECT_EQ(params.get<Int>("num"), 1234);
     EXPECT_DOUBLE_EQ(params.get<double>("float"), 12.34);
-    EXPECT_EQ(params.get<std::string>("text"), std::string("some long text"));
+    EXPECT_EQ(params.get<String>("text"), String("some long text"));
 }
 
 TEST(ParametersTest, move_oper)

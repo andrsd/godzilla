@@ -65,13 +65,13 @@ Vector::assembly_end()
     PETSC_CHECK(VecAssemblyEnd(this->obj));
 }
 
-std::string
+String
 Vector::get_type() const
 {
     CALL_STACK_MSG();
     VecType type;
     PETSC_CHECK(VecGetType(this->obj, &type));
-    return std::string(type);
+    return String(type);
 }
 
 Int

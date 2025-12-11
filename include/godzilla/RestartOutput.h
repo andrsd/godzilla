@@ -16,13 +16,13 @@ public:
     void output_step() override;
 
 private:
-    std::string get_file_ext() const override;
-    std::string create_file_name() const override;
+    String get_file_ext() const override;
+    String create_file_name() const override;
 
     /// Restart interface
     RestartInterface * ri;
     /// The file base of the output file
-    std::string file_base;
+    String file_base;
 
 public:
     static Parameters parameters();

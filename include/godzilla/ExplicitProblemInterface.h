@@ -8,7 +8,7 @@
 #include "godzilla/Parameters.h"
 #include "godzilla/NonlinearProblem.h"
 #include "godzilla/TransientProblemInterface.h"
-#include <string>
+#include "godzilla/String.h"
 
 namespace godzilla {
 
@@ -63,7 +63,7 @@ private:
     /// Inverse of the lumped mass matrix
     Vector M_lumped_inv;
     /// Time stepping scheme
-    std::string scheme;
+    String scheme;
 
 public:
     static Parameters parameters();

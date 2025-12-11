@@ -29,7 +29,7 @@ VTKOutput::~VTKOutput()
     PETSC_CHECK(PetscViewerDestroy(&this->viewer));
 }
 
-std::string
+String
 VTKOutput::get_file_ext() const
 {
     CALL_STACK_MSG();
