@@ -15,27 +15,27 @@ SNESolver::LineSearch::set_type(LineSearchType type)
 {
     CALL_STACK_MSG();
     switch (type) {
-    case BASIC:
+    case LineSearchType::BASIC:
         PETSC_CHECK(SNESLineSearchSetType(this->ls, SNESLINESEARCHBASIC));
         return;
 
-    case L2:
+    case LineSearchType::L2:
         PETSC_CHECK(SNESLineSearchSetType(this->ls, SNESLINESEARCHL2));
         return;
 
-    case CP:
+    case LineSearchType::CP:
         PETSC_CHECK(SNESLineSearchSetType(this->ls, SNESLINESEARCHCP));
         return;
 
-    case NLEQERR:
+    case LineSearchType::NLEQERR:
         PETSC_CHECK(SNESLineSearchSetType(this->ls, SNESLINESEARCHNLEQERR));
         return;
 
-    case SHELL:
+    case LineSearchType::SHELL:
         PETSC_CHECK(SNESLineSearchSetType(this->ls, SNESLINESEARCHSHELL));
         return;
 
-    case BT:
+    case LineSearchType::BT:
         PETSC_CHECK(SNESLineSearchSetType(this->ls, SNESLINESEARCHBT));
         return;
     }
