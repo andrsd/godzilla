@@ -6,6 +6,7 @@
 #include "godzilla/Exception.h"
 #include "godzilla/Init.h"
 #include "godzilla/App.h"
+#include "godzilla/String.h"
 #include "godzilla/CommandLineInterface.h"
 #include "godzilla/MeshFactory.h"
 #include "godzilla/FileMesh.h"
@@ -13,9 +14,9 @@
 #include "godzilla/ExodusIIOutput.h"
 #include "mpicpp-lite/mpicpp-lite.h"
 
-const std::string version = "1.0";
-
 using namespace godzilla;
+
+const String version = "1.0";
 
 mpi::Communicator comm_world;
 
@@ -23,7 +24,7 @@ class MeshPartApp : public App, public CommandLineInterface {
 public:
     MeshPartApp(int argc, const char * const * argv);
 
-    const std::string &
+    const String &
     get_version() const override
     {
         return version;
