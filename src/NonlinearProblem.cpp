@@ -184,17 +184,17 @@ NonlinearProblem::set_up_line_search()
     CALL_STACK_MSG();
     auto ls = this->snes.get_line_search();
     if (this->line_search_type == "basic")
-        ls.set_type(SNESolver::LineSearch::BASIC);
+        ls.set_type(SNESolver::LineSearchType::BASIC);
     else if (this->line_search_type == "l2")
-        ls.set_type(SNESolver::LineSearch::L2);
+        ls.set_type(SNESolver::LineSearchType::L2);
     else if (this->line_search_type == "cp")
-        ls.set_type(SNESolver::LineSearch::CP);
+        ls.set_type(SNESolver::LineSearchType::CP);
     else if (this->line_search_type == "nleqerr")
-        ls.set_type(SNESolver::LineSearch::NLEQERR);
+        ls.set_type(SNESolver::LineSearchType::NLEQERR);
     else if (this->line_search_type == "shell")
-        ls.set_type(SNESolver::LineSearch::SHELL);
+        ls.set_type(SNESolver::LineSearchType::SHELL);
     else
-        ls.set_type(SNESolver::LineSearch::BT);
+        ls.set_type(SNESolver::LineSearchType::BT);
     this->snes.set_line_search(ls);
     ls.set_from_options();
 }
