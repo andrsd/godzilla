@@ -684,10 +684,11 @@ HDF5File::Dataset::read(String & data) const
     }
     else {
         size_t size = H5Tget_size(dtype);
-        data.resize(size);
-        auto res = H5Dread(this->id, dtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, data.data());
+        auto cstr = data.prepare_write(size);
+        auto res = H5Dread(this->id, dtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, cstr);
         if (res < 0)
             throw Exception("Error reading dataset");
+        data.commit(size);
     }
     H5Tclose(dtype);
 }
@@ -877,10 +878,11 @@ HDF5File::Attribute::read(String & data) const
     }
     else {
         size_t size = H5Tget_size(dtype);
-        data.resize(size);
-        auto res = H5Aread(this->id, dtype, data.data());
+        auto cstr = data.prepare_write(size);
+        auto res = H5Aread(this->id, dtype, cstr);
         if (res < 0)
             throw Exception("Error reading attribute");
+        data.commit(size);
     }
     H5Tclose(dtype);
 }

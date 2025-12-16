@@ -3,18 +3,21 @@
 #include "TestApp.h"
 #include "godzilla/FileMesh.h"
 #include "godzilla/MeshFactory.h"
+#include <filesystem>
 
 using namespace godzilla;
 using namespace testing;
+namespace fs = std::filesystem;
 
 TEST(FileMesh, exoii_file_format)
 {
     TestApp app;
 
+    auto file = fs::path(GODZILLA_UNIT_TESTS_ROOT) / "assets" / "mesh" / "2blk.exo";
+
     auto mesh_pars = FileMesh::parameters();
     mesh_pars.set<godzilla::App *>("app", &app);
-    mesh_pars.set<String>("file",
-                          String(GODZILLA_UNIT_TESTS_ROOT) + String("/assets/mesh/2blk.exo"));
+    mesh_pars.set<String>("file", file.string());
     FileMesh mesh(mesh_pars);
     mesh.create();
 
@@ -25,9 +28,10 @@ TEST(FileMesh, unknown_mesh_format)
 {
     TestApp app;
 
+    auto file = fs::path(GODZILLA_UNIT_TESTS_ROOT) / "assets" / "yml" / "empty.yml";
+
     auto mesh_pars = FileMesh::parameters();
     mesh_pars.set<godzilla::App *>("app", &app);
-    mesh_pars.set<String>("file",
-                          String(GODZILLA_UNIT_TESTS_ROOT) + String("/assets/yml/empty.yml"));
+    mesh_pars.set<String>("file", file.string());
     EXPECT_THROW_MSG(MeshFactory::create<FileMesh>(mesh_pars), "Unknown mesh format");
 }

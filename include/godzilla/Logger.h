@@ -4,9 +4,10 @@
 #pragma once
 
 #include "godzilla/Terminal.h"
+#include "godzilla/String.h"
 #include "fmt/core.h"
 #include <array>
-#include <string>
+#include <stdexcept>
 
 namespace godzilla {
 
@@ -46,7 +47,7 @@ public:
 
     template <typename... T>
     void
-    error(const String & prefix, fmt::format_string<T...> format, T... args)
+    error(const String prefix, fmt::format_string<T...> format, T... args)
     {
         auto str = format_msg(Type::ERROR, prefix, format, std::forward<T>(args)...);
         fmt::println(stderr, "{}{}{}", Terminal::red, str, Terminal::normal);
@@ -63,7 +64,7 @@ public:
 
     template <typename... T>
     void
-    warning(const String & prefix, fmt::format_string<T...> format, T... args)
+    warning(const String prefix, fmt::format_string<T...> format, T... args)
     {
         auto str = format_msg(Type::WARNING, prefix, format, std::forward<T>(args)...);
         fmt::println(stderr, "{}{}{}", Terminal::yellow, str, Terminal::normal);
@@ -91,13 +92,13 @@ public:
 protected:
     template <typename... T>
     String
-    format_msg(Type type, const String & prefix, fmt::format_string<T...> format, T... args)
+    format_msg(Type type, const String prefix, fmt::format_string<T...> format, T... args)
     {
         String str;
-        str += fmt::format("[{}] ", to_string(type));
+        str.append(fmt::format("[{}] ", to_string(type)));
         if (prefix.length() > 0)
-            str += fmt::format("{}: ", prefix);
-        str += fmt::format(format, std::forward<T>(args)...);
+            str.append(fmt::format("{}: ", prefix));
+        str.append(fmt::format(format, std::forward<T>(args)...));
         return str;
     }
 

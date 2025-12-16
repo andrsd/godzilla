@@ -197,7 +197,7 @@ App::run()
     run_problem();
     auto end_time = std::chrono::high_resolution_clock::now();
 
-    if (!this->perf_log_file_name.empty()) {
+    if (this->perf_log_file_name.length() > 0) {
         std::chrono::duration<double> duration = end_time - start_time;
         write_perf_log(this->perf_log_file_name, duration);
         lprintln(9, "Performance log written into: {}", this->perf_log_file_name);
@@ -346,7 +346,7 @@ App::write_perf_log(const String file_name, std::chrono::duration<double> run_ti
         if (!yaml.good())
             throw Exception("YAML Emitter error: {}", yaml.GetLastError());
 
-        std::ofstream fout(file_name);
+        std::ofstream fout(file_name.c_str());
         fout << yaml.c_str();
         fout << std::endl;
         fout.close();
@@ -357,7 +357,7 @@ void
 App::redirect_stdout(const String & file_name)
 {
     CALL_STACK_MSG();
-    this->stdout_file_.open(file_name);
+    this->stdout_file_.open(file_name.c_str());
     this->cout_buf_ = std::cout.rdbuf();
     std::cout.rdbuf(this->stdout_file_.rdbuf());
 }
@@ -366,7 +366,7 @@ void
 App::redirect_stderr(const String & file_name)
 {
     CALL_STACK_MSG();
-    this->stderr_file_.open(file_name);
+    this->stderr_file_.open(file_name.c_str());
     this->cerr_buf_ = std::cerr.rdbuf();
     std::cerr.rdbuf(this->stderr_file_.rdbuf());
 }

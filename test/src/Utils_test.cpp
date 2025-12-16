@@ -137,3 +137,39 @@ TEST(UtilsTest, human_number)
     EXPECT_EQ(utils::human_number(1000000), "1,000,000");
     EXPECT_EQ(utils::human_number(1000000000ll), "1,000,000,000");
 }
+
+TEST(UtilsTest, join_std_vec_empty)
+{
+    std::vector<int> vals;
+    String s = join(", ", vals);
+    EXPECT_EQ(s, "");
+}
+
+TEST(UtilsTest, join_std_vec_int)
+{
+    std::vector<Int> vals = { 1, 3, 5, 7, 9 };
+    String s = join(", ", vals);
+    EXPECT_EQ(s, "1, 3, 5, 7, 9");
+}
+
+TEST(UtilsTest, split_empty)
+{
+    auto parts = split(" ", "");
+    EXPECT_EQ(parts.size(), 0);
+}
+
+TEST(UtilsTest, split_one)
+{
+    auto parts = split(" ", "hello");
+    ASSERT_EQ(parts.size(), 1);
+    EXPECT_EQ(parts[0], "hello");
+}
+
+TEST(UtilsTest, split_multi)
+{
+    auto parts = split(" ", "apple orange strawberry");
+    ASSERT_EQ(parts.size(), 3);
+    EXPECT_EQ(parts[0], "apple");
+    EXPECT_EQ(parts[1], "orange");
+    EXPECT_EQ(parts[2], "strawberry");
+}

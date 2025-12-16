@@ -21,18 +21,20 @@ template <>
 void
 RestartFile::write<TestStruct>(const String & path, const String & name, const TestStruct & data)
 {
-    write(path + name, "integer", data.i);
-    write(path + name, "float", data.f);
-    write(path + name, "string", data.str);
+    auto pth = fmt::format("{}{}", path, name);
+    write(pth, "integer", data.i);
+    write(pth, "float", data.f);
+    write(pth, "string", data.str);
 }
 
 template <>
 void
 RestartFile::read<TestStruct>(const String & path, const String & name, TestStruct & data) const
 {
-    read<int>(path + name, "integer", data.i);
-    read<float>(path + name, "float", data.f);
-    read<String>(path + name, "string", data.str);
+    auto pth = fmt::format("{}{}", path, name);
+    read<int>(pth, "integer", data.i);
+    read<float>(pth, "float", data.f);
+    read<String>(pth, "string", data.str);
 }
 
 } // namespace godzilla

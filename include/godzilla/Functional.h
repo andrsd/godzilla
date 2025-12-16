@@ -28,10 +28,11 @@ public:
     /// @return Region name where this functional is defined
     const String & get_region() const;
 
-    const String
-    get_value_name(const String & val_name) const
+    String
+    get_value_name(const String val_name) const
     {
-        return this->region.empty() ? String(val_name) : fmt::format("{}@{}", val_name, this->region);
+        return this->region.length() == 0 ? val_name
+                                          : String(fmt::format("{}@{}", val_name, this->region));
     }
 
 protected:

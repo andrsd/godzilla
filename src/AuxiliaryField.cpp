@@ -29,7 +29,7 @@ AuxiliaryField::AuxiliaryField(const Parameters & pars) :
     block_id(-1)
 {
     CALL_STACK_MSG();
-    if (this->field.empty())
+    if (this->field.length() == 0)
         this->field = this->get_name();
 }
 
@@ -59,7 +59,7 @@ AuxiliaryField::create()
 {
     CALL_STACK_MSG();
     this->mesh = this->dpi->get_mesh();
-    if (!this->region.empty()) {
+    if (this->region.length() > 0) {
         if (this->mesh->has_label(this->region)) {
             this->label = this->mesh->get_label(this->region);
             this->block_id = this->mesh->get_cell_set_id(this->region);
