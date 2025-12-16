@@ -5,6 +5,7 @@
 
 #include "godzilla/Exception.h"
 #include "godzilla/Utils.h"
+#include <stdexcept>
 #include <sys/types.h>
 #include <initializer_list>
 #include <vector>

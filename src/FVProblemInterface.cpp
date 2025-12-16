@@ -11,6 +11,7 @@
 #include "godzilla/Utils.h"
 #include "godzilla/Exception.h"
 #include "godzilla/Assert.h"
+#include <stdexcept>
 
 namespace godzilla {
 

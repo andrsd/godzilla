@@ -14,6 +14,7 @@
 #include "fmt/format.h"
 #include "fmt/chrono.h"
 #include <set>
+#include <stdexcept>
 
 namespace godzilla {
 
@@ -145,6 +146,7 @@ ExodusIIOutput::create()
     CALL_STACK_MSG();
     FileOutput::create();
 
+    throw std::runtime_error("no");
     auto dpi = get_discrete_problem_interface();
     if (dpi) {
         auto flds = dpi->get_field_names();
@@ -167,8 +169,9 @@ ExodusIIOutput::create()
                     this->field_var_names.push_back(name);
                 else if (aux_field_names.count(name) == 1)
                     this->aux_field_var_names.push_back(name);
-                else if (pp_names.count(name) == 1)
+                else if (pp_names.count(name) == 1) {
                     this->global_var_names.push_back(name);
+                }
                 else
                     log_error(
                         "Variable '{}' specified in 'variables' parameter does not exist. Typo?",
@@ -212,7 +215,8 @@ void
 ExodusIIOutput::open_file()
 {
     CALL_STACK_MSG();
-    this->exo = Qtr<exodusIIcpp::File>::alloc(get_file_name(), exodusIIcpp::FileAccess::WRITE);
+    this->exo =
+        Qtr<exodusIIcpp::File>::alloc(get_file_name().c_str(), exodusIIcpp::FileAccess::WRITE);
     if (!this->exo->is_opened())
         throw Exception("Could not open file '{}' for writing.", get_file_name());
 }

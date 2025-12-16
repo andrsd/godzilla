@@ -1,17 +1,39 @@
 #include "gmock/gmock.h"
 #include "godzilla/String.h"
+#include <cctype>
+#include <sstream>
 
 using namespace godzilla;
 
+TEST(StringTest, ctor_empty)
+{
+    String str;
+    EXPECT_EQ(str.length(), 0);
+}
+
+TEST(StringTest, ctor_const_char)
+{
+    String str("some text");
+    EXPECT_EQ(str.length(), 9);
+    EXPECT_TRUE(str == "some text");
+}
+
+TEST(StringTest, ctor_std_string)
+{
+    std::string s("some other text");
+    String str(s);
+    EXPECT_EQ(str.length(), 15);
+}
+
 TEST(StringTest, to_lower)
 {
-    String str("asdf");
+    String str("AsDf");
     EXPECT_EQ(str.to_lower(), "asdf");
 }
 
 TEST(StringTest, to_upper)
 {
-    String str("asdf");
+    String str("aSdF");
     EXPECT_EQ(str.to_upper(), "ASDF");
 }
 
@@ -35,6 +57,7 @@ TEST(StringTest, op_assign_str)
 {
     String str;
     str = String("hello");
+    EXPECT_EQ(str.length(), 5);
     EXPECT_EQ(str, "hello");
 }
 
@@ -42,5 +65,40 @@ TEST(StringTest, op_assign_cchar)
 {
     String str;
     str = "HELLO";
+    EXPECT_EQ(str.length(), 5);
     EXPECT_EQ(str, "HELLO");
+}
+
+TEST(StringTest, iostream_shl)
+{
+    testing::internal::CaptureStdout();
+    String str("ahoy");
+    std::cout << str << std::endl;
+    auto out = testing::internal::GetCapturedStdout();
+    EXPECT_THAT(out, testing::HasSubstr("ahoy"));
+}
+
+TEST(StringTest, iostream_shr)
+{
+    std::string str("ahoy");
+    std::stringstream ss(str);
+    String s;
+    ss >> s;
+    EXPECT_EQ(s, "ahoy");
+}
+
+TEST(StringTest, fmt_print)
+{
+    testing::internal::CaptureStdout();
+    String s("ahoy");
+    fmt::print("{}", s);
+    auto out = testing::internal::GetCapturedStdout();
+    EXPECT_THAT(out, testing::HasSubstr("ahoy"));
+}
+
+TEST(StringTest, fmt_format)
+{
+    String world("world");
+    String greeting = fmt::format("hello, {}", world);
+    EXPECT_EQ(greeting, "hello, world");
 }

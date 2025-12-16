@@ -124,7 +124,8 @@ EventInfo
 get_event_info(const String & event_name, const String & stage_name)
 {
     EventID event_id = get_event_id(event_name.c_str());
-    StageID stage_id = stage_name.empty() ? PETSC_DETERMINE : get_stage_id(stage_name.c_str());
+    StageID stage_id =
+        stage_name.length() == 0 ? PETSC_DETERMINE : get_stage_id(stage_name.c_str());
     EventInfo info(event_id, stage_id);
     return info;
 }

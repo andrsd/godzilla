@@ -416,7 +416,7 @@ DiscreteProblemInterface::compute_aux_fields()
     CALL_STACK_MSG();
     for (const auto & [region_name, auxs] : this->auxs_by_region) {
         Label label;
-        if (!region_name.empty())
+        if (region_name.length() > 0)
             label = get_mesh()->get_label(region_name);
 
         if (label.is_null())

@@ -27,7 +27,7 @@ FileOutput::FileOutput(const Parameters & pars) :
     dpi(dynamic_cast<DiscreteProblemInterface *>(get_problem()))
 {
     CALL_STACK_MSG();
-    if (this->file_base.empty())
+    if (this->file_base.length() == 0)
         log_error("The 'file' parameter cannot be empty");
 }
 
@@ -90,7 +90,7 @@ FileOutput::add_var_names(FieldID fid, std::vector<std::string> & var_names)
         for (Int c = 0; c < nc; ++c) {
             auto comp_name = this->dpi->get_field_component_name(fid, c);
             String s;
-            if (comp_name.empty())
+            if (comp_name.length() == 0)
                 s = fmt::format("{}_{}", name, c);
             else
                 s = fmt::format("{}", comp_name);
@@ -111,7 +111,7 @@ FileOutput::add_aux_var_names(FieldID fid, std::vector<std::string> & var_names)
         for (Int c = 0; c < nc; ++c) {
             auto comp_name = this->dpi->get_aux_field_component_name(fid, c);
             String s;
-            if (comp_name.empty())
+            if (comp_name.length() == 0)
                 s = fmt::format("{}_{}", name, c);
             else
                 s = fmt::format("{}", comp_name);

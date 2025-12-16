@@ -708,7 +708,7 @@ FEProblemInterface::add_residual_block(FieldID fid,
                                        const String & region)
 {
     CALL_STACK_MSG();
-    if (region.empty()) {
+    if (region.length() > 0) {
         add_weak_form_residual_block(WeakForm::F0, fid, f0);
         add_weak_form_residual_block(WeakForm::F1, fid, f1);
     }
@@ -729,7 +729,7 @@ FEProblemInterface::add_boundary_residual_block(FieldID fid,
                                                 const String & boundary)
 {
     CALL_STACK_MSG();
-    expect_true(!boundary.empty(), "No boundaries defined in the problem");
+    expect_true(boundary.length() > 0, "No boundaries defined in the problem");
 
     auto label = get_mesh()->get_label(boundary);
     auto ids = label.get_values();
@@ -749,7 +749,7 @@ FEProblemInterface::add_jacobian_block(FieldID fid,
                                        const String & region)
 {
     CALL_STACK_MSG();
-    if (region.empty()) {
+    if (region.length() == 0) {
         add_weak_form_jacobian_block(WeakForm::G0, fid, gid, g0);
         add_weak_form_jacobian_block(WeakForm::G1, fid, gid, g1);
         add_weak_form_jacobian_block(WeakForm::G2, fid, gid, g2);
@@ -777,7 +777,7 @@ FEProblemInterface::add_jacobian_preconditioner_block(FieldID fid,
                                                       const String & region)
 {
     CALL_STACK_MSG();
-    if (region.empty()) {
+    if (region.length() == 0) {
         add_weak_form_jacobian_block(WeakForm::GP0, fid, gid, g0);
         add_weak_form_jacobian_block(WeakForm::GP1, fid, gid, g1);
         add_weak_form_jacobian_block(WeakForm::GP2, fid, gid, g2);
@@ -805,7 +805,7 @@ FEProblemInterface::add_boundary_jacobian_block(FieldID fid,
                                                 const String & region)
 {
     CALL_STACK_MSG();
-    expect_true(!region.empty(), "No regions defined in the problem");
+    expect_true(region.length() > 0, "No regions defined in the problem");
 
     auto label = get_mesh()->get_label(region);
     auto ids = label.get_values();
