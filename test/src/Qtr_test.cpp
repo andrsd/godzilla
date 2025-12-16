@@ -1,4 +1,5 @@
 #include "gmock/gmock.h"
+#include "gtest/gtest.h"
 #include <gtest/gtest.h>
 #include "godzilla/Qtr.h"
 
@@ -133,3 +134,72 @@ TEST(QtrTest, cast)
     EXPECT_FALSE(d.is_null());
     EXPECT_TRUE(bd.is_null());
 }
+
+TEST(QtrTest, borrow)
+{
+    auto data = Qtr<Data>::alloc(1, 98.7);
+    auto r = data.borrow();
+    EXPECT_DOUBLE_EQ(r->d, 98.7);
+    EXPECT_EQ(r->i, 1);
+}
+
+#ifndef NDEBUG
+
+TEST(QtrTest, no_double_borrow)
+{
+    auto data = Qtr<Data>::alloc(1, 98.7);
+    auto r1 = data.borrow();
+    EXPECT_DEATH(data.borrow(), "Already borrowed for mutation");
+}
+
+TEST(QtrTest, no_mutable_borrow_when_already_borrowed)
+{
+    auto data = Qtr<Data>::alloc(1, 98.7);
+    auto r1 = data.borrow_const();
+    EXPECT_DEATH(data.borrow(), "Already borrowed");
+}
+
+TEST(QtrTest, no_use_after_free)
+{
+    Ref<Data> r;
+    EXPECT_DEATH(
+        {
+            auto data = Qtr<Data>::alloc(1, 98.7);
+            r = data.borrow();
+        },
+        "Active mutable borrow detected");
+}
+
+TEST(QtrTest, no_use_after_free_const)
+{
+    Ref<const Data> r;
+    EXPECT_DEATH(
+        {
+            auto data = Qtr<Data>::alloc(1, 98.7);
+            r = data.borrow_const();
+        },
+        "Active borrow detected");
+}
+
+TEST(QtrTest, reset_via_bullptr)
+{
+    Ref<Data> r;
+    {
+        auto data = Qtr<Data>::alloc(1, 98.7);
+        r = data.borrow();
+        r->d = 45.6;
+        r = nullptr;
+    }
+}
+
+TEST(QtrTest, reset_via_bullptr_const)
+{
+    Ref<const Data> r;
+    {
+        auto data = Qtr<Data>::alloc(1, 98.7);
+        r = data.borrow_const();
+        r = nullptr;
+    }
+}
+
+#endif
