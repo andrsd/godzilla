@@ -6,8 +6,6 @@
 #include "godzilla/Enums.h"
 #include "godzilla/Exception.h"
 #include "godzilla/HDF5File.h"
-#include <string>
-#include <algorithm>
 
 namespace godzilla {
 
@@ -55,16 +53,6 @@ public:
 
     /// Read global vector
     void read_global_vector(String app_name, String path, String name, Vector & data) const;
-
-    /// Read data from the file
-    ///
-    /// @param path Path to the data
-    /// @return Data read from the file
-    template <typename T>
-    T read(const String & path, const String & name) const;
-
-    template <typename T>
-    T read(const String & app_name, const String & path, const String & name) const;
 
     /// Get the name of the file
     ///
@@ -115,22 +103,6 @@ RestartFile::write(String app_name, String path, String name, const T & data)
 }
 
 template <typename T>
-T
-RestartFile::read(const String & path, const String & name) const
-{
-    auto norm_path = normalize_path(path);
-    try {
-        auto group = this->h5f.open_group(norm_path);
-        T data;
-        group.template read_dataset<T>(name, data);
-        return data;
-    }
-    catch (std::exception & e) {
-        throw Exception("Error reading '{}' from {}: {}", norm_path, this->file_name(), e.what());
-    }
-}
-
-template <typename T>
 void
 RestartFile::read(String path, String name, T & data) const
 {
@@ -142,13 +114,6 @@ RestartFile::read(String path, String name, T & data) const
     catch (std::exception & e) {
         throw Exception("Error reading '{}' from {}: {}", norm_path, this->file_name(), e.what());
     }
-}
-
-template <typename T>
-T
-RestartFile::read(const String & app_name, const String & path, const String & name) const
-{
-    return this->read<T>(get_full_path(app_name, path), name);
 }
 
 template <typename T>

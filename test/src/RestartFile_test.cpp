@@ -21,7 +21,7 @@ template <>
 void
 RestartFile::write<TestStruct>(String path, String name, const TestStruct & data)
 {
-    auto pth = fmt::format("{}{}", path, name);
+    auto pth = fmt::format("{}/{}", path, name);
     write(pth, "integer", data.i);
     write(pth, "float", data.f);
     write(pth, "string", data.str);
@@ -31,7 +31,7 @@ template <>
 void
 RestartFile::read<TestStruct>(String path, String name, TestStruct & data) const
 {
-    auto pth = fmt::format("{}{}", path, name);
+    auto pth = fmt::format("{}/{}", path, name);
     read<int>(pth, "integer", data.i);
     read<float>(pth, "float", data.f);
     read<String>(pth, "string", data.str);
@@ -59,10 +59,17 @@ TEST(RestartFileTest, read_write)
 
     {
         RestartFile f("restart.h5", FileAccess::READ);
-        EXPECT_EQ(f.read<String>("/", "greeting"), "hello");
+        String greeting;
+        f.read<String>("/", "greeting", greeting);
+        EXPECT_EQ(greeting, "hello");
 
-        EXPECT_EQ(f.read<int>("/group1", "integer"), 1);
-        EXPECT_EQ(f.read<float>("/group1", "float"), 1876.);
+        int i;
+        f.read<int>("/group1", "integer", i);
+        EXPECT_EQ(i, 1);
+
+        float f32;
+        f.read<float>("/group1", "float", f32);
+        EXPECT_EQ(f32, 1876.);
 
         TestStruct data;
         f.read<TestStruct>("/group2", "my_data", data);

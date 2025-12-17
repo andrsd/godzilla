@@ -245,10 +245,14 @@ class HDF5File {
                 return Group::open(parent_id, name);
             }
             else {
-                auto id =
-                    H5Gcreate2(parent_id, name.c_str(), H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+                auto lcpl_id = H5Pcreate(H5P_LINK_CREATE);
+                auto status = H5Pset_create_intermediate_group(lcpl_id, 1);
+                if (status < 0)
+                    throw Exception("Failed to create property");
+                auto id = H5Gcreate(parent_id, name.c_str(), lcpl_id, H5P_DEFAULT, H5P_DEFAULT);
                 if (id < 0)
                     throw Exception("Failed to create group '{}'", name);
+                H5Pclose(lcpl_id);
                 return Group(id);
             }
         }
