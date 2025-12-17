@@ -7,9 +7,23 @@
 
 namespace godzilla {
 
+namespace {
+
+std::once_flag hdf5_init;
+
+void
+disable_hdf5_output()
+{
+    H5Eset_auto2(H5E_DEFAULT, NULL, NULL);
+}
+
+} // namespace
+
 HDF5File::HDF5File(mpi::Communicator comm, const fs::path & file_name, FileAccess faccess) :
     file_name(file_name)
 {
+    std::call_once(hdf5_init, disable_hdf5_output);
+
     MPI_Info info = MPI_INFO_NULL;
     auto fapl = H5Pcreate(H5P_FILE_ACCESS);
     H5Pset_fapl_mpio(fapl, comm, info);
@@ -29,6 +43,8 @@ HDF5File::HDF5File(mpi::Communicator comm, const fs::path & file_name, FileAcces
 
 HDF5File::HDF5File(const fs::path & file_name, FileAccess faccess) : file_name(file_name)
 {
+    std::call_once(hdf5_init, disable_hdf5_output);
+
     if (faccess == FileAccess::READ)
         this->id = H5Fopen(file_name.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT);
     else if (faccess == FileAccess::WRITE)
