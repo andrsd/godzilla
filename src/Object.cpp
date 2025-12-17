@@ -26,14 +26,14 @@ Object::Object(const Parameters & pars) :
     CALL_STACK_MSG();
 }
 
-const String &
+String
 Object::get_type() const
 {
     CALL_STACK_MSG();
     return this->type;
 }
 
-const String &
+String
 Object::get_name() const
 {
     CALL_STACK_MSG();

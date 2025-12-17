@@ -73,7 +73,7 @@ InitialCondition::create()
     this->components = create_components();
 }
 
-const String &
+String
 InitialCondition::get_field_name() const
 {
     CALL_STACK_MSG();

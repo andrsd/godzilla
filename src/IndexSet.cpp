@@ -443,7 +443,7 @@ IndexSet::permutation() const
 }
 
 void
-IndexSet::set_type(const String & type)
+IndexSet::set_type(String type)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(ISSetType(this->obj, type.c_str()));

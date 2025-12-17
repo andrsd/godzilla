@@ -30,7 +30,7 @@ public:
 
     void set_interval(Scalar low, Scalar high);
     void set_seed(unsigned long seed);
-    void set_type(const String & type);
+    void set_type(String type);
 };
 
 } // namespace godzilla

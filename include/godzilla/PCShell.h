@@ -26,7 +26,7 @@ public:
     /// Set the name of the preconditioner
     ///
     /// @param name The name of the preconditioner
-    void set_name(const String & name);
+    void set_name(String name);
 
     /// Set the apply method
     template <class T>

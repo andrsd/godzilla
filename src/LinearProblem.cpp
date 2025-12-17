@@ -62,7 +62,7 @@ LinearProblem::LinearProblem(const Parameters & pars) :
     set_default_output_on(ExecuteOn::FINAL);
 }
 
-const String &
+String
 LinearProblem::get_ksp_type() const
 {
     CALL_STACK_MSG();

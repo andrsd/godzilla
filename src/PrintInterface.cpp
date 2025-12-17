@@ -15,7 +15,7 @@ namespace godzilla {
 namespace {
 
 perf_log::Event
-create_event(const PrintInterface * pi, const String & app_name, const String & event_name)
+create_event(const PrintInterface * pi, String app_name, String event_name)
 {
     auto name = fmt::format("{}::{}", app_name, event_name);
     if (!perf_log::is_event_registered(name))
@@ -27,8 +27,8 @@ create_event(const PrintInterface * pi, const String & app_name, const String & 
 
 PrintInterface::TimedEvent::TimedEvent(const PrintInterface * pi,
                                        unsigned int level,
-                                       const String & event_name,
-                                       const String & text) :
+                                       String event_name,
+                                       String text) :
     pi(pi),
     level(level),
     event(create_event(pi, pi->pi_app->get_name(), event_name)),

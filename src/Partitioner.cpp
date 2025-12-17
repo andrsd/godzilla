@@ -38,7 +38,7 @@ Partitioner::destroy()
 }
 
 void
-Partitioner::set_type(const String & type)
+Partitioner::set_type(String type)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(PetscPartitionerSetType(this->obj, type.c_str()));

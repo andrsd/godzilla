@@ -25,25 +25,25 @@ public:
 
     Int get_num_fields() const override;
     std::vector<String> get_field_names() const override;
-    const String & get_field_name(FieldID fid) const override;
+    String get_field_name(FieldID fid) const override;
     Int get_field_num_components(FieldID fid) const override;
-    FieldID get_field_id(const String & name) const override;
+    FieldID get_field_id(String name) const override;
     bool has_field_by_id(FieldID fid) const override;
-    bool has_field_by_name(const String & name) const override;
+    bool has_field_by_name(String name) const override;
     Order get_field_order(FieldID fid) const override;
     String get_field_component_name(FieldID fid, Int component) const override;
-    void set_field_component_name(FieldID fid, Int component, const String & name) override;
+    void set_field_component_name(FieldID fid, Int component, String name) override;
 
     Int get_num_aux_fields() const override;
     std::vector<String> get_aux_field_names() const override;
-    const String & get_aux_field_name(FieldID fid) const override;
+    String get_aux_field_name(FieldID fid) const override;
     Int get_aux_field_num_components(FieldID fid) const override;
-    FieldID get_aux_field_id(const String & name) const override;
+    FieldID get_aux_field_id(String name) const override;
     bool has_aux_field_by_id(FieldID fid) const override;
-    bool has_aux_field_by_name(const String & name) const override;
+    bool has_aux_field_by_name(String name) const override;
     Order get_aux_field_order(FieldID fid) const override;
     String get_aux_field_component_name(FieldID fid, Int component) const override;
-    void set_aux_field_component_name(FieldID fid, Int component, const String & name) override;
+    void set_aux_field_component_name(FieldID fid, Int component, String name) override;
 
     /// Adds a volumetric field
     ///
@@ -52,7 +52,7 @@ public:
     /// @param nc The number of components
     /// @param k The degree k of the space
     /// @param block The label this field is restricted to
-    void add_field(FieldID id, const String & name, Int nc, const Label & block = Label());
+    void add_field(FieldID id, String name, Int nc, const Label & block = Label());
 
     /// Adds a volumetric auxiliary field
     ///
@@ -61,7 +61,7 @@ public:
     /// @param k The degree k of the space
     /// @param block The label this field is restricted to
     /// @return ID of the new field
-    FieldID add_aux_field(const String & name, Int nc, Order k, const Label & block = Label());
+    FieldID add_aux_field(String name, Int nc, Order k, const Label & block = Label());
 
     /// Set a volumetric auxiliary field
     ///
@@ -70,8 +70,7 @@ public:
     /// @param nc The number of components
     /// @param k The degree k of the space
     /// @param block The label this field is restricted to
-    void
-    set_aux_field(FieldID id, const String & name, Int nc, Order k, const Label & block = Label());
+    void set_aux_field(FieldID id, String name, Int nc, Order k, const Label & block = Label());
 
     /// Add essential boundary condition
     ///
@@ -129,7 +128,7 @@ private:
         /// Component names
         std::vector<String> component_names;
 
-        FieldInfo(const String & name, FieldID id, Int nc, Order k, const Label & block) :
+        FieldInfo(String name, FieldID id, Int nc, Order k, const Label & block) :
             name(name),
             id(id),
             block(block),

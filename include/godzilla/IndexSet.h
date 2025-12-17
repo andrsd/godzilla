@@ -226,7 +226,7 @@ public:
     /// Builds a index set, for a particular type
     ///
     /// @param type The type of index set to build
-    void set_type(const String & type);
+    void set_type(String type);
 
     /// Checks if the IndexSet is empty (i.e., has no indices)
     ///

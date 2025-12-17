@@ -95,7 +95,7 @@ FVProblemInterface::get_field_names() const
     return infos;
 }
 
-const String &
+String
 FVProblemInterface::get_field_name(FieldID fid) const
 {
     CALL_STACK_MSG();
@@ -124,7 +124,7 @@ FVProblemInterface::get_field_num_components(FieldID fid) const
 }
 
 FieldID
-FVProblemInterface::get_field_id(const String & name) const
+FVProblemInterface::get_field_id(String name) const
 {
     CALL_STACK_MSG();
     return FieldID(0);
@@ -141,7 +141,7 @@ FVProblemInterface::has_field_by_id(FieldID fid) const
 }
 
 bool
-FVProblemInterface::has_field_by_name(const String & name) const
+FVProblemInterface::has_field_by_name(String name) const
 {
     CALL_STACK_MSG();
     const auto & it = this->fields_by_name.find(name);
@@ -172,7 +172,7 @@ FVProblemInterface::get_field_component_name(FieldID fid, Int component) const
 }
 
 void
-FVProblemInterface::set_field_component_name(FieldID fid, Int component, const String & name)
+FVProblemInterface::set_field_component_name(FieldID fid, Int component, String name)
 {
     CALL_STACK_MSG();
     const auto & it = this->fields.find(fid);
@@ -208,7 +208,7 @@ FVProblemInterface::get_aux_field_names() const
     return names;
 }
 
-const String &
+String
 FVProblemInterface::get_aux_field_name(FieldID fid) const
 {
     CALL_STACK_MSG();
@@ -231,7 +231,7 @@ FVProblemInterface::get_aux_field_num_components(FieldID fid) const
 }
 
 FieldID
-FVProblemInterface::get_aux_field_id(const String & name) const
+FVProblemInterface::get_aux_field_id(String name) const
 {
     CALL_STACK_MSG();
     const auto & it = this->aux_fields_by_name.find(name);
@@ -250,7 +250,7 @@ FVProblemInterface::has_aux_field_by_id(FieldID fid) const
 }
 
 bool
-FVProblemInterface::has_aux_field_by_name(const String & name) const
+FVProblemInterface::has_aux_field_by_name(String name) const
 {
     CALL_STACK_MSG();
     const auto & it = this->aux_fields_by_name.find(name);
@@ -289,7 +289,7 @@ FVProblemInterface::get_aux_field_component_name(FieldID fid, Int component) con
 }
 
 void
-FVProblemInterface::set_aux_field_component_name(FieldID fid, Int component, const String & name)
+FVProblemInterface::set_aux_field_component_name(FieldID fid, Int component, String name)
 {
     CALL_STACK_MSG();
     const auto & it = this->aux_fields.find(fid);
@@ -308,7 +308,7 @@ FVProblemInterface::set_aux_field_component_name(FieldID fid, Int component, con
 }
 
 void
-FVProblemInterface::add_field(FieldID id, const String & name, Int nc, const Label & block)
+FVProblemInterface::add_field(FieldID id, String name, Int nc, const Label & block)
 {
     CALL_STACK_MSG();
     auto it = this->fields.find(id);
@@ -327,7 +327,7 @@ FVProblemInterface::add_field(FieldID id, const String & name, Int nc, const Lab
 }
 
 FieldID
-FVProblemInterface::add_aux_field(const String & name, Int nc, Order k, const Label & block)
+FVProblemInterface::add_aux_field(String name, Int nc, Order k, const Label & block)
 {
     CALL_STACK_MSG();
     auto keys = utils::map_keys(this->aux_fields);
@@ -337,11 +337,7 @@ FVProblemInterface::add_aux_field(const String & name, Int nc, Order k, const La
 }
 
 void
-FVProblemInterface::set_aux_field(FieldID id,
-                                  const String & name,
-                                  Int nc,
-                                  Order k,
-                                  const Label & block)
+FVProblemInterface::set_aux_field(FieldID id, String name, Int nc, Order k, const Label & block)
 {
     CALL_STACK_MSG();
     auto it = this->aux_fields.find(id);

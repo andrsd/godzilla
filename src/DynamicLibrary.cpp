@@ -10,7 +10,7 @@ namespace godzilla {
 
 std::vector<std::filesystem::path> DynamicLibrary::search_paths;
 
-DynamicLibrary::DynamicLibrary(const String & lib_name) : handle(nullptr)
+DynamicLibrary::DynamicLibrary(String lib_name) : handle(nullptr)
 {
 #ifdef __APPLE__
     this->file_name = fmt::format("lib{}.dylib", lib_name);

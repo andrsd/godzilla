@@ -6,8 +6,6 @@
 #include "godzilla/Enums.h"
 #include "godzilla/Exception.h"
 #include "godzilla/HDF5File.h"
-#include <string>
-#include <algorithm>
 
 namespace godzilla {
 
@@ -16,61 +14,45 @@ class Vector;
 /// Class for handling restart files
 class RestartFile {
 public:
-    RestartFile(mpi::Communicator comm, const String & file_name, FileAccess faccess);
+    RestartFile(mpi::Communicator comm, String file_name, FileAccess faccess);
 
     /// Restart file
     ///
     /// @param file_name Name of the file
     /// @param faccess Access mode
-    RestartFile(const String & file_name, FileAccess faccess);
+    RestartFile(String file_name, FileAccess faccess);
 
     /// Write data to the file
     ///
     /// @param path Path to the data
     /// @param data Data to write
     template <typename T>
-    void write(const String & path, const String & name, const T & data);
+    void write(String path, String name, const T & data);
 
     template <typename T>
-    void write(const String & app_name, const String & path, const String & name, const T & data);
+    void write(String app_name, String path, String name, const T & data);
 
     /// Write global vector
-    void write_global_vector(const String & path, const String & name, const Vector & data);
+    void write_global_vector(String path, String name, const Vector & data);
 
     /// Write global vector
-    void write_global_vector(const String & app_name,
-                             const String & path,
-                             const String & name,
-                             const Vector & data);
+    void write_global_vector(String app_name, String path, String name, const Vector & data);
 
     /// Read data from the file
     ///
     /// @param path Path to the data
     /// @param data Variable to store the data read from the file
     template <typename T>
-    void read(const String & path, const String & name, T & data) const;
+    void read(String path, String name, T & data) const;
 
     template <typename T>
-    void read(const String & app_name, const String & path, const String & name, T & data) const;
+    void read(String app_name, String path, String name, T & data) const;
 
     /// Read global vector
-    void read_global_vector(const String & path, const String & name, Vector & data) const;
+    void read_global_vector(String path, String name, Vector & data) const;
 
     /// Read global vector
-    void read_global_vector(const String & app_name,
-                            const String & path,
-                            const String & name,
-                            Vector & data) const;
-
-    /// Read data from the file
-    ///
-    /// @param path Path to the data
-    /// @return Data read from the file
-    template <typename T>
-    T read(const String & path, const String & name) const;
-
-    template <typename T>
-    T read(const String & app_name, const String & path, const String & name) const;
+    void read_global_vector(String app_name, String path, String name, Vector & data) const;
 
     /// Get the name of the file
     ///
@@ -87,13 +69,13 @@ protected:
     ///
     /// @param app_name Name of the application
     /// @param path Path to the data
-    String get_full_path(const String & app_name, const String & path) const;
+    String get_full_path(String app_name, String path) const;
 
     /// Get the "path" to the data inside HDF5 file
     ///
     /// @param path Path to the data
     /// @return Path to the data
-    String normalize_path(const String & path) const;
+    String normalize_path(String path) const;
 
 private:
     HDF5File h5f;
@@ -101,7 +83,7 @@ private:
 
 template <typename T>
 void
-RestartFile::write(const String & path, const String & name, const T & data)
+RestartFile::write(String path, String name, const T & data)
 {
     auto norm_path = normalize_path(path);
     try {
@@ -115,33 +97,14 @@ RestartFile::write(const String & path, const String & name, const T & data)
 
 template <typename T>
 void
-RestartFile::write(const String & app_name,
-                   const String & path,
-                   const String & name,
-                   const T & data)
+RestartFile::write(String app_name, String path, String name, const T & data)
 {
     this->write<T>(get_full_path(app_name, path), name, data);
 }
 
 template <typename T>
-T
-RestartFile::read(const String & path, const String & name) const
-{
-    auto norm_path = normalize_path(path);
-    try {
-        auto group = this->h5f.open_group(norm_path);
-        T data;
-        group.template read_dataset<T>(name, data);
-        return data;
-    }
-    catch (std::exception & e) {
-        throw Exception("Error reading '{}' from {}: {}", norm_path, this->file_name(), e.what());
-    }
-}
-
-template <typename T>
 void
-RestartFile::read(const String & path, const String & name, T & data) const
+RestartFile::read(String path, String name, T & data) const
 {
     auto norm_path = normalize_path(path);
     try {
@@ -154,15 +117,8 @@ RestartFile::read(const String & path, const String & name, T & data) const
 }
 
 template <typename T>
-T
-RestartFile::read(const String & app_name, const String & path, const String & name) const
-{
-    return this->read<T>(get_full_path(app_name, path), name);
-}
-
-template <typename T>
 void
-RestartFile::read(const String & app_name, const String & path, const String & name, T & data) const
+RestartFile::read(String app_name, String path, String name, T & data) const
 {
     this->read<T>(get_full_path(app_name, path), name, data);
 }
@@ -170,9 +126,9 @@ RestartFile::read(const String & app_name, const String & path, const String & n
 // Specializations for our datatypes go below
 
 template <>
-void RestartFile::write<Vector>(const String & path, const String & name, const Vector & data);
+void RestartFile::write<Vector>(String path, String name, const Vector & data);
 
 template <>
-void RestartFile::read<Vector>(const String & path, const String & name, Vector & data) const;
+void RestartFile::read<Vector>(String path, String name, Vector & data) const;
 
 } // namespace godzilla

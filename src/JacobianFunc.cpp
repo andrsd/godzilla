@@ -7,10 +7,7 @@
 
 namespace godzilla {
 
-JacobianFunc::JacobianFunc(FEProblemInterface * fepi, const String & region) :
-    Functional(fepi, region)
-{
-}
+JacobianFunc::JacobianFunc(FEProblemInterface * fepi, String region) : Functional(fepi, region) {}
 
 const Real &
 JacobianFunc::get_time_shift() const

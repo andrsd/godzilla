@@ -134,7 +134,7 @@ TEST(ExplicitFVLinearProblemTest, api)
 
     EXPECT_EQ(prob.get_field_name(FieldID(0)), "u");
     EXPECT_THROW_MSG(
-        { [[maybe_unused]] auto & n = prob.get_field_name(FieldID(65536)); },
+        { [[maybe_unused]] auto n = prob.get_field_name(FieldID(65536)); },
         "Field with ID = '65536' does not exist.");
 
     EXPECT_EQ(prob.get_field_num_components(FieldID(0)), 1);

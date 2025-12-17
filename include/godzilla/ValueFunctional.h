@@ -11,7 +11,7 @@ namespace godzilla {
 
 class ValueFunctional : public Functional {
 public:
-    ValueFunctional(FEProblemInterface * fepi, const String & region = "");
+    ValueFunctional(FEProblemInterface * fepi, String region = "");
 
     /// Get value names provided by this functional
     ///
@@ -24,7 +24,7 @@ public:
 protected:
     template <typename T>
     T &
-    declare_value(const String & name)
+    declare_value(String name)
     {
         CALL_STACK_MSG();
         auto val_name = get_value_name(name);

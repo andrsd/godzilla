@@ -11,12 +11,12 @@ namespace fs = std::filesystem;
 
 namespace godzilla {
 
-RestartFile::RestartFile(mpi::Communicator comm, const String & file_name, FileAccess faccess) :
+RestartFile::RestartFile(mpi::Communicator comm, String file_name, FileAccess faccess) :
     h5f(comm, fs::path(file_name.c_str()), faccess)
 {
 }
 
-RestartFile::RestartFile(const String & file_name, FileAccess faccess) :
+RestartFile::RestartFile(String file_name, FileAccess faccess) :
     h5f(fs::path(file_name.c_str()), faccess)
 {
 }
@@ -34,7 +34,7 @@ RestartFile::file_path() const
 }
 
 String
-RestartFile::get_full_path(const String & app_name, const String & path) const
+RestartFile::get_full_path(String app_name, String path) const
 {
     if (path == "/" || path == "")
         return fmt::format("/{}", app_name);
@@ -43,7 +43,7 @@ RestartFile::get_full_path(const String & app_name, const String & path) const
 }
 
 String
-RestartFile::normalize_path(const String & path) const
+RestartFile::normalize_path(String path) const
 {
     if (path == "")
         return fmt::format("/{}", path);
@@ -53,7 +53,7 @@ RestartFile::normalize_path(const String & path) const
 
 template <>
 void
-RestartFile::write<Vector>(const String & path, const String & name, const Vector & data)
+RestartFile::write<Vector>(String path, String name, const Vector & data)
 {
     auto norm_path = normalize_path(path);
     try {
@@ -69,16 +69,13 @@ RestartFile::write<Vector>(const String & path, const String & name, const Vecto
 }
 
 void
-RestartFile::write_global_vector(const String & app_name,
-                                 const String & path,
-                                 const String & name,
-                                 const Vector & data)
+RestartFile::write_global_vector(String app_name, String path, String name, const Vector & data)
 {
     write_global_vector(get_full_path(app_name, path), name, data);
 }
 
 void
-RestartFile::write_global_vector(const String & path, const String & name, const Vector & data)
+RestartFile::write_global_vector(String path, String name, const Vector & data)
 {
     auto norm_path = normalize_path(path);
     try {
@@ -92,7 +89,7 @@ RestartFile::write_global_vector(const String & path, const String & name, const
 
 template <>
 void
-RestartFile::read<Vector>(const String & path, const String & name, Vector & data) const
+RestartFile::read<Vector>(String path, String name, Vector & data) const
 {
     auto norm_path = normalize_path(path);
     try {
@@ -108,7 +105,7 @@ RestartFile::read<Vector>(const String & path, const String & name, Vector & dat
 }
 
 void
-RestartFile::read_global_vector(const String & path, const String & name, Vector & data) const
+RestartFile::read_global_vector(String path, String name, Vector & data) const
 {
     auto norm_path = normalize_path(path);
     try {
@@ -125,10 +122,7 @@ RestartFile::read_global_vector(const String & path, const String & name, Vector
 }
 
 void
-RestartFile::read_global_vector(const String & app_name,
-                                const String & path,
-                                const String & name,
-                                Vector & data) const
+RestartFile::read_global_vector(String app_name, String path, String name, Vector & data) const
 {
     read_global_vector(get_full_path(app_name, path), name, data);
 }

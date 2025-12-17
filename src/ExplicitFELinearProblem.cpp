@@ -164,7 +164,7 @@ void
 ExplicitFELinearProblem::add_residual_block(FieldID field_id,
                                             ResidualFunc * f0,
                                             ResidualFunc * f1,
-                                            const String & region)
+                                            String region)
 {
     CALL_STACK_MSG();
     // `compute_rhs_function_fem` which does the integration sets `Region::part = 100`. This matches
@@ -173,7 +173,7 @@ ExplicitFELinearProblem::add_residual_block(FieldID field_id,
     // this function does
     const Int part = 100;
 
-    if (region.empty()) {
+    if (region.length() == 0) {
         add_weak_form_residual_block(WeakForm::F0, field_id, f0, Label(), 0, part);
         add_weak_form_residual_block(WeakForm::F1, field_id, f1, Label(), 0, part);
     }

@@ -18,15 +18,15 @@ namespace godzilla {
 namespace {
 
 Optional<Int>
-parse_region(const String & s)
+parse_region(String s)
 {
-    if (s.empty())
+    if (s.length() == 0)
         return std::nullopt;
 
     Int value = 0;
-    auto [ptr, ec] = std::from_chars(s.data(), s.data() + s.size(), value);
+    auto [ptr, ec] = std::from_chars(s.data(), s.data() + s.length(), value);
 
-    if (ec == std::errc() && ptr == s.data() + s.size() && value >= 0)
+    if (ec == std::errc() && ptr == s.data() + s.length() && value >= 0)
         return value;
 
     return std::nullopt;
@@ -37,7 +37,7 @@ parse_region(const String & s)
 namespace utils {
 
 bool
-path_exists(const String & path)
+path_exists(String path)
 {
     CALL_STACK_MSG();
     struct stat buffer = {};
@@ -45,50 +45,47 @@ path_exists(const String & path)
 }
 
 String
-to_upper(const String & name)
+to_upper(String name)
 {
     CALL_STACK_MSG();
     String upper(name);
-    std::transform(upper.begin(), upper.end(), upper.begin(), ::toupper);
-    return upper;
+    return upper.to_upper();
 }
 
 String
-to_lower(const String & name)
+to_lower(String name)
 {
     CALL_STACK_MSG();
     String lower(name);
-    std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
-    return lower;
+    return lower.to_lower();
 }
 
 bool
-has_suffix(const String & str, const String & suffix)
+has_suffix(String str, String suffix)
 {
     CALL_STACK_MSG();
-    return str.size() >= suffix.size() &&
-           str.compare(str.size() - suffix.size(), suffix.size(), suffix) == 0;
+    return str.ends_with(suffix);
 }
 
 bool
-ends_with(const String & str, const String & end)
+ends_with(String str, String end)
 {
     CALL_STACK_MSG();
-    return has_suffix(str, end);
+    return str.ends_with(end);
 }
 
 bool
-has_prefix(const String & str, const String & prefix)
+has_prefix(String str, String prefix)
 {
     CALL_STACK_MSG();
-    return str.size() >= prefix.size() && str.compare(0, prefix.size(), prefix) == 0;
+    return str.starts_with(prefix);
 }
 
 bool
-starts_with(const String & str, const String & start)
+starts_with(String str, String start)
 {
     CALL_STACK_MSG();
-    return has_prefix(str, start);
+    return str.starts_with(start);
 }
 
 String
@@ -103,20 +100,18 @@ human_time(PetscLogDouble time)
     us -= m;
     auto s = duration_cast<milliseconds>(us) / 1000.;
 
-    String tm;
+    std::vector<String> strs;
     if (h.count() > 0)
-        tm += fmt::format(" {}h", h.count());
+        strs.push_back(fmt::format("{}h", h.count()));
     if (m.count() > 0)
-        tm += fmt::format(" {}m", m.count());
-    if ((s.count() > 0) || (h.count() == 0 && m.count() == 0)) {
-        tm += fmt::format(" {:.2f}", s.count());
-        tm += fmt::format("s");
-    }
-    return tm.substr(1);
+        strs.push_back(fmt::format("{}m", m.count()));
+    if ((s.count() > 0) || (h.count() == 0 && m.count() == 0))
+        strs.push_back(fmt::format("{:.2f}s", s.count()));
+    return join(" ", strs);
 }
 
 String
-human_type_name(const String & type)
+human_type_name(String type)
 {
     // clang-format off
     if (type == "std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>" ||
@@ -146,7 +141,7 @@ human_type_name(const String & type)
 }
 
 String
-demangle(const String & mangled_name)
+demangle(String mangled_name)
 {
 #ifdef HAVE_CXXABI_H
     int status = -1;
@@ -173,13 +168,32 @@ print_converged_reason(PrintInterface & pi, bool converged)
 }
 
 Int
-get_block_id_from_region(const godzilla::UnstructuredMesh & mesh, const String & region)
+get_block_id_from_region(const godzilla::UnstructuredMesh & mesh, String region)
 {
     auto id = parse_region(region);
     if (id.has_value())
         return id.value();
     else
         return mesh.get_cell_set_id(region);
+}
+
+std::vector<String>
+split(const char * delim, String line)
+{
+    std::vector<String> parts;
+    if (line.length() > 0) {
+        size_t start = 0;
+        while (true) {
+            auto pos = line.find(delim, start);
+            if (!pos.has_value()) {
+                parts.emplace_back(line.substr(start));
+                break;
+            }
+            parts.emplace_back(line.substr(start, pos.value() - start));
+            start = pos.value() + std::strlen(delim);
+        }
+    }
+    return parts;
 }
 
 } // namespace godzilla

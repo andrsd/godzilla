@@ -171,7 +171,7 @@ public:
     ///
     /// @param field The field number
     /// @param name The field name
-    void set_field_name(Int field, const String & name);
+    void set_field_name(Int field, String name);
 
     /// Returns the name of a field in the Section
     ///
@@ -227,7 +227,7 @@ public:
     /// @param field The field number
     /// @param comp The component number
     /// @param name The component name
-    void set_component_name(Int field, Int comp, const String & name);
+    void set_component_name(Int field, Int comp, String name);
 
     /// Gets the name of a field component in the Section
     ///

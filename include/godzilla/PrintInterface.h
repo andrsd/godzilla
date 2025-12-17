@@ -24,17 +24,14 @@ class PrintInterface {
 public:
     class TimedEvent {
     public:
-        TimedEvent(const PrintInterface * pi,
-                   unsigned int level,
-                   const String & event_name,
-                   const String & text);
+        TimedEvent(const PrintInterface * pi, unsigned int level, String event_name, String text);
         ~TimedEvent();
 
         template <typename... T>
         static TimedEvent
         create(const PrintInterface * pi,
                unsigned int level,
-               const String & event_name,
+               String event_name,
                fmt::format_string<T...> format,
                T... args)
         {

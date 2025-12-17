@@ -108,7 +108,7 @@ public:
     void set_scheme(TimeScheme scheme);
 
     /// Set time-stepping scheme
-    void set_scheme(const String & scheme_name);
+    void set_scheme(String scheme_name);
 
     /// Get the name of time stepping scheme
     String get_scheme() const;

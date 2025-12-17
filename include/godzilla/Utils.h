@@ -9,6 +9,7 @@
 #include <map>
 #include <typeinfo>
 #include <utility>
+#include <sstream>
 #include <petsclog.h>
 #include "fmt/printf.h"
 
@@ -19,19 +20,19 @@ class UnstructuredMesh;
 
 namespace utils {
 
-bool path_exists(const String & path);
+bool path_exists(String path);
 
 /**
  * Convert supplied string to upper case.
  * @param name The string to convert upper case.
  */
-String to_upper(const String & name);
+String to_upper(String name);
 
 /**
  * Convert supplied string to lower case.
  * @param name The string to convert upper case.
  */
-String to_lower(const String & name);
+String to_lower(String name);
 
 /**
  * Check if string `str` ends with `suffix`
@@ -39,7 +40,7 @@ String to_lower(const String & name);
  * @param str String to check
  * @param suffix The expected suffix
  */
-bool has_suffix(const String & str, const String & suffix);
+bool has_suffix(String str, String suffix);
 
 /**
  * Check if string `str` ends with specified text
@@ -47,7 +48,7 @@ bool has_suffix(const String & str, const String & suffix);
  * @param str String to check
  * @param end The expected text
  */
-bool ends_with(const String & str, const String & end);
+bool ends_with(String str, String end);
 
 /**
  * Check if string `str` starts with `prefix`
@@ -55,7 +56,7 @@ bool ends_with(const String & str, const String & end);
  * @param str String to check
  * @param prefix The expected prefix
  */
-bool has_prefix(const String & str, const String & prefix);
+bool has_prefix(String str, String prefix);
 
 /**
  * Check if string `str` starts with specified text
@@ -63,7 +64,7 @@ bool has_prefix(const String & str, const String & prefix);
  * @param str String to check
  * @param start The expected text
  */
-bool starts_with(const String & str, const String & start);
+bool starts_with(String str, String start);
 
 template <typename T>
 String
@@ -121,7 +122,7 @@ human_number(T number)
 }
 
 /// Convert C++ names into human readable names
-String human_type_name(const String & type);
+String human_type_name(String type);
 
 /// Get index of an value in a std::vector
 ///
@@ -147,7 +148,7 @@ index_of(const std::vector<T> & array, T value)
 ///
 /// @param mangled_name Mangled name
 /// @return Demangled name
-String demangle(const String & mangled_name);
+String demangle(String mangled_name);
 
 /// Safely compute ratio of 2 numbers (avoiding division by zero)
 ///
@@ -252,6 +253,52 @@ void print_converged_reason(PrintInterface & pi, bool converged);
 /// @param mesh Unstructure mesh we operate on for cell set lookups
 /// @param region Region name/Block ID
 /// @return Block ID corresponding to the region
-Int get_block_id_from_region(const UnstructuredMesh & mesh, const String & region);
+Int get_block_id_from_region(const UnstructuredMesh & mesh, String region);
+
+template <typename T>
+class Array1D;
+
+/// Join array of values
+///
+/// @param con String to connect values with
+/// @param array Values to connect
+/// @return String with connected values
+template <typename T>
+String
+join(const char * con, const Array1D<T> & array)
+{
+    std::ostringstream oss;
+    for (size_t i = 0; i < array.size(); ++i) {
+        if (i > 0)
+            oss << con;
+        oss << array(i);
+    }
+    return oss.str();
+}
+
+/// Join values in std::vector
+///
+/// @param con String to connect values with
+/// @param array Values to connect
+/// @return String with connected values
+template <typename T>
+String
+join(const char * con, const std::vector<T> & array)
+{
+    std::ostringstream oss;
+    for (size_t i = 0; i < array.size(); ++i) {
+        if (i > 0)
+            oss << con;
+        oss << array[i];
+    }
+    return oss.str();
+}
+
+/// Split string into parts spearated by delimiter
+///
+/// @param delim Delimiter
+/// @param line LIOne to split
+/// @return Individual parts
+std::vector<String> split(const char * delim, String line);
 
 } // namespace godzilla

@@ -5,9 +5,6 @@
 
 namespace godzilla {
 
-ResidualFunc::ResidualFunc(FEProblemInterface * fepi, const String & region) :
-    Functional(fepi, region)
-{
-}
+ResidualFunc::ResidualFunc(FEProblemInterface * fepi, String region) : Functional(fepi, region) {}
 
 } // namespace godzilla

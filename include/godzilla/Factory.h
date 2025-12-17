@@ -26,7 +26,7 @@ public:
     /// @param class_name Name of the object whose parameter we are requesting
     /// @return Parameters of the object
     Parameters *
-    get_parameters(const String & class_name)
+    get_parameters(String class_name)
     {
         auto entry = this->registry.get(class_name);
         auto pars = new Parameters((*entry.params_ptr)());
@@ -42,7 +42,7 @@ public:
     /// @return The created object
     template <typename T>
     T *
-    create(const String & name, Parameters & parameters)
+    create(String name, Parameters & parameters)
     {
         auto class_name = parameters.get<String>("_type");
         auto entry = this->registry.get(class_name);
@@ -65,7 +65,7 @@ public:
     /// @return The created object
     template <typename T>
     T *
-    create(const String & name, Parameters * parameters)
+    create(String name, Parameters * parameters)
     {
         return create<T>(name, *parameters);
     }
@@ -75,7 +75,7 @@ public:
     /// @param class_name Class name to check
     /// @return `true` if class name is known, `false` otherwise
     bool
-    is_registered(const String & class_name) const
+    is_registered(String class_name) const
     {
         return this->registry.exists(class_name);
     }

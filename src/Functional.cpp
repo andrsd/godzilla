@@ -6,11 +6,7 @@
 
 namespace godzilla {
 
-Functional::Functional(FEProblemInterface * fepi, const String & region) :
-    fepi(fepi),
-    region(region)
-{
-}
+Functional::Functional(FEProblemInterface * fepi, String region) : fepi(fepi), region(region) {}
 
 const std::set<String> &
 Functional::get_dependent_values() const
@@ -19,7 +15,7 @@ Functional::get_dependent_values() const
     return this->depends_on;
 }
 
-const String &
+String
 Functional::get_region() const
 {
     CALL_STACK_MSG();
@@ -48,21 +44,21 @@ Functional::get_xyz() const
 }
 
 const FieldValue &
-Functional::get_field_value(const String & field_name) const
+Functional::get_field_value(String field_name) const
 {
     CALL_STACK_MSG();
     return get_fe_problem()->get_field_value(field_name);
 }
 
 const FieldGradient &
-Functional::get_field_gradient(const String & field_name) const
+Functional::get_field_gradient(String field_name) const
 {
     CALL_STACK_MSG();
     return get_fe_problem()->get_field_gradient(field_name);
 }
 
 const FieldValue &
-Functional::get_field_dot(const String & field_name) const
+Functional::get_field_dot(String field_name) const
 {
     CALL_STACK_MSG();
     return get_fe_problem()->get_field_dot(field_name);

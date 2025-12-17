@@ -24,7 +24,7 @@ class MeshPartApp : public App, public CommandLineInterface {
 public:
     MeshPartApp(int argc, const char * const * argv);
 
-    const String &
+    String
     get_version() const override
     {
         return version;

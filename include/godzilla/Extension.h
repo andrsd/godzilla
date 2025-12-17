@@ -15,12 +15,12 @@ public:
     /// Create an extension
     ///
     /// @param extension_name Extension name
-    Extension(const String & extension_name);
+    Extension(String extension_name);
 
     /// Get extension name
     ///
     /// @return Extension name
-    const String & get_name() const;
+    String get_name() const;
 
 private:
     /// Extension name

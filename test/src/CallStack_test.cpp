@@ -41,7 +41,7 @@ fn2()
 }
 
 void
-fn1(int i, const String & s)
+fn1(int i, String s)
 {
     CALL_STACK_MSG();
     fn2();

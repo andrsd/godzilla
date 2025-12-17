@@ -120,7 +120,7 @@ PCShell::get_name() const
 }
 
 void
-PCShell::set_name(const String & name)
+PCShell::set_name(String name)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(PCShellSetName(this->obj, name.c_str()));

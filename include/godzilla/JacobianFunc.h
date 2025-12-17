@@ -13,7 +13,7 @@ class FEProblemInterface;
 
 class JacobianFunc : public Functional {
 public:
-    explicit JacobianFunc(FEProblemInterface * fepi, const String & region = "");
+    explicit JacobianFunc(FEProblemInterface * fepi, String region = "");
 
     /// Evaluate this functional
     ///

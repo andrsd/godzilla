@@ -32,25 +32,25 @@ public:
 
     Int get_num_fields() const override;
     std::vector<String> get_field_names() const override;
-    const String & get_field_name(FieldID fid) const override;
+    String get_field_name(FieldID fid) const override;
     Int get_field_num_components(FieldID fid) const override;
-    FieldID get_field_id(const String & name) const override;
+    FieldID get_field_id(String name) const override;
     bool has_field_by_id(FieldID fid) const override;
-    bool has_field_by_name(const String & name) const override;
+    bool has_field_by_name(String name) const override;
     Order get_field_order(FieldID fid) const override;
     String get_field_component_name(FieldID fid, Int component) const override;
-    void set_field_component_name(FieldID fid, Int component, const String & name) override;
+    void set_field_component_name(FieldID fid, Int component, String name) override;
 
     Int get_num_aux_fields() const override;
     std::vector<String> get_aux_field_names() const override;
-    const String & get_aux_field_name(FieldID fid) const override;
+    String get_aux_field_name(FieldID fid) const override;
     Int get_aux_field_num_components(FieldID fid) const override;
-    FieldID get_aux_field_id(const String & name) const override;
+    FieldID get_aux_field_id(String name) const override;
     bool has_aux_field_by_id(FieldID fid) const override;
-    bool has_aux_field_by_name(const String & name) const override;
+    bool has_aux_field_by_name(String name) const override;
     Order get_aux_field_order(FieldID fid) const override;
     String get_aux_field_component_name(FieldID fid, Int component) const override;
-    void set_aux_field_component_name(FieldID fid, Int component, const String & name) override;
+    void set_aux_field_component_name(FieldID fid, Int component, String name) override;
 
     const WeakForm & get_weak_form() const;
 
@@ -61,7 +61,7 @@ public:
     /// @param k The degree k of the space
     /// @param block The mesh region this field is restricted to
     /// @return ID of the new field
-    FieldID add_field(const String & name, Int nc, Order k, const Label & block = Label());
+    FieldID add_field(String name, Int nc, Order k, const Label & block = Label());
 
     /// Set a volumetric field
     ///
@@ -70,7 +70,7 @@ public:
     /// @param nc The number of components
     /// @param k The degree k of the space
     /// @param block The mesh region this field is restricted to
-    void set_field(FieldID id, const String & name, Int nc, Order k, const Label & block = Label());
+    void set_field(FieldID id, String name, Int nc, Order k, const Label & block = Label());
 
     /// Adds a volumetric auxiliary field
     ///
@@ -79,7 +79,7 @@ public:
     /// @param k The degree k of the space
     /// @param block The mesh region this field is restricted to
     /// @return ID of the new field
-    FieldID add_aux_field(const String & name, Int nc, Order k, const Label & block = Label());
+    FieldID add_aux_field(String name, Int nc, Order k, const Label & block = Label());
 
     /// Set a volumetric auxiliary field
     ///
@@ -88,16 +88,15 @@ public:
     /// @param nc The number of components
     /// @param k The degree k of the space
     /// @param block The mesh region this field is restricted to
-    void
-    set_aux_field(FieldID id, const String & name, Int nc, Order k, const Label & block = Label());
+    void set_aux_field(FieldID id, String name, Int nc, Order k, const Label & block = Label());
 
     const Dimension & get_spatial_dimension() const;
 
-    const FieldValue & get_field_value(const String & field_name) const;
+    const FieldValue & get_field_value(String field_name) const;
 
-    const FieldGradient & get_field_gradient(const String & field_name) const;
+    const FieldGradient & get_field_gradient(String field_name) const;
 
-    const FieldValue & get_field_dot(const String & field_name) const;
+    const FieldValue & get_field_dot(String field_name) const;
 
     const Real & get_time_shift() const;
 
@@ -113,10 +112,8 @@ public:
     /// @param f0 Integrand for the test function term
     /// @param f1 Integrand for the test function gradient term
     /// @param region Region name where this residual statement is active
-    virtual void add_residual_block(FieldID fid,
-                                    ResidualFunc * f0,
-                                    ResidualFunc * f1,
-                                    const String & region = "");
+    virtual void
+    add_residual_block(FieldID fid, ResidualFunc * f0, ResidualFunc * f1, String region = "");
 
     /// Add boundary residual statement for a field variable
     ///
@@ -124,10 +121,8 @@ public:
     /// @param f0 Integrand for the test function term
     /// @param f1 Integrand for the test function gradient term
     /// @param boundary Boundary name where this residual statement is active
-    virtual void add_boundary_residual_block(FieldID fid,
-                                             ResidualFunc * f0,
-                                             ResidualFunc * f1,
-                                             const String & boundary);
+    virtual void
+    add_boundary_residual_block(FieldID fid, ResidualFunc * f0, ResidualFunc * f1, String boundary);
 
     /// Add Jacobian statement for a field variable
     ///
@@ -144,7 +139,7 @@ public:
                                     JacobianFunc * g1,
                                     JacobianFunc * g2,
                                     JacobianFunc * g3,
-                                    const String & region = "");
+                                    String region = "");
 
     /// Add Jacobian preconditioner statement for a field variable
     ///
@@ -161,7 +156,7 @@ public:
                                                    JacobianFunc * g1,
                                                    JacobianFunc * g2,
                                                    JacobianFunc * g3,
-                                                   const String & region = "");
+                                                   String region = "");
 
     /// Add boundary Jacobian statement for a field variable
     ///
@@ -178,7 +173,7 @@ public:
                                              JacobianFunc * g1,
                                              JacobianFunc * g2,
                                              JacobianFunc * g3,
-                                             const String & boundary);
+                                             String boundary);
 
     void add_weak_form_residual_block(WeakForm::ResidualKind kind,
                                       FieldID field_id,
@@ -351,12 +346,7 @@ private:
         /// Time derivative (used during assembling)
         FieldValue dots;
 
-        FieldInfo(const String & name,
-                  FieldID id,
-                  Int nc,
-                  Order k,
-                  Dimension dim,
-                  const Label & block) :
+        FieldInfo(String name, FieldID id, Int nc, Order k, Dimension dim, const Label & block) :
             name(name),
             id(id),
             fe(nullptr),

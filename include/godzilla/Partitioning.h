@@ -27,7 +27,7 @@ public:
     /// Sets the type of partitioner to use
     ///
     /// @param type Partitioner name
-    void set_type(const String & type) const;
+    void set_type(String type) const;
 
     /// Set how many partitions need to be created; by default this is one per processor. Certain
     /// partitioning schemes may in fact only support that option.

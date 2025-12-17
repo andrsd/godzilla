@@ -14,7 +14,7 @@ namespace godzilla {
 namespace {
 
 PolytopeType
-get_cell_type_ex2(const String & elem_type)
+get_cell_type_ex2(String elem_type)
 {
     if (elem_type == "EDGE2" || elem_type == "BAR2" || elem_type == "BEAM" || elem_type == "BEAM2")
         return PolytopeType::SEGMENT;

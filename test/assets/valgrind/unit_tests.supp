@@ -15,3 +15,19 @@
    fun:DMPlexCreateBoxMesh
    fun:_ZN8godzilla8LineMesh11create_meshEv
 }
+{
+   DMPlexCreateBoxMesh-1
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:posix_memalign
+   fun:PetscMallocAlign
+   fun:PetscMallocA
+   fun:ISCreate
+   fun:ISCreateStride
+   fun:DMPlexCreateDepthStratum.part.0
+   fun:DMPlexStratify
+   fun:DMPlexCreateCubeMesh_Internal
+   fun:DMPlexCreateBoxMesh_Internal
+   fun:DMPlexCreateBoxMesh
+   ...
+}
