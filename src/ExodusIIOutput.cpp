@@ -146,7 +146,6 @@ ExodusIIOutput::create()
     CALL_STACK_MSG();
     FileOutput::create();
 
-    throw std::runtime_error("no");
     auto dpi = get_discrete_problem_interface();
     if (dpi) {
         auto flds = dpi->get_field_names();

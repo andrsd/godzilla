@@ -92,25 +92,23 @@ String
 human_time(PetscLogDouble time)
 {
     CALL_STACK_MSG();
-    throw std::runtime_error("no");
-    // using namespace std::chrono;
-    // duration<double, std::micro> us(time * 1e6);
-    // auto h = duration_cast<hours>(us);
-    // us -= h;
-    // auto m = duration_cast<minutes>(us);
-    // us -= m;
-    // auto s = duration_cast<milliseconds>(us) / 1000.;
+    using namespace std::chrono;
+    duration<double, std::micro> us(time * 1e6);
+    auto h = duration_cast<hours>(us);
+    us -= h;
+    auto m = duration_cast<minutes>(us);
+    us -= m;
+    auto s = duration_cast<milliseconds>(us) / 1000.;
 
-    // String tm;
-    // if (h.count() > 0)
-    //     tm += fmt::format(" {}h", h.count());
-    // if (m.count() > 0)
-    //     tm += fmt::format(" {}m", m.count());
-    // if ((s.count() > 0) || (h.count() == 0 && m.count() == 0)) {
-    //     tm += fmt::format(" {:.2f}", s.count());
-    //     tm += fmt::format("s");
-    // }
-    // return tm.substr(1);
+    std::vector<String> strs;
+    if (h.count() > 0)
+        strs.push_back(fmt::format(" {}h", h.count()));
+    if (m.count() > 0)
+        strs.push_back(fmt::format(" {}m", m.count()));
+    if ((s.count() > 0) || (h.count() == 0 && m.count() == 0))
+        strs.push_back(fmt::format(" {:.2f}s", s.count()));
+    String tm; // = join(" ", strs);
+    return tm;
 }
 
 String

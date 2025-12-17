@@ -204,6 +204,20 @@ public:
         return std::strncmp(this->rep->data + pos, s.rep->data, count);
     }
 
+    void
+    append(const String other)
+    {
+        if (other.length() == 0)
+            return;
+
+        detach();
+        ensure_capacity(this->rep->size + other.rep->size);
+
+        std::memcpy(this->rep->data + this->rep->size, other.rep->data, other.rep->size + 1);
+
+        this->rep->size += other.rep->size;
+    }
+
     const char *
     c_str() const
     {
@@ -248,7 +262,7 @@ private:
 } // namespace godzilla
 
 inline std::ostream &
-operator<<(std::ostream & os, const godzilla::String obj)
+operator<<(std::ostream & os, const godzilla::String & obj)
 {
     os << obj.c_str();
     return os;

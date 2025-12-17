@@ -61,6 +61,7 @@ TEST(UtilsTest, map_values)
 
 TEST(UtilsTest, human_time)
 {
+    std::cerr << utils::human_time(0) << std::endl;
     EXPECT_EQ(utils::human_time(0), "0.00s");
     EXPECT_EQ(utils::human_time(0.5), "0.50s");
     EXPECT_EQ(utils::human_time(10), "10.00s");
@@ -136,4 +137,18 @@ TEST(UtilsTest, human_number)
     EXPECT_EQ(utils::human_number(999999), "999,999");
     EXPECT_EQ(utils::human_number(1000000), "1,000,000");
     EXPECT_EQ(utils::human_number(1000000000ll), "1,000,000,000");
+}
+
+TEST(UtilsTest, join_std_vec_empty)
+{
+    std::vector<int> vals;
+    String s = join(", ", vals);
+    EXPECT_EQ(s, "");
+}
+
+TEST(UtilsTest, join_std_vec_int)
+{
+    std::vector<Int> vals = { 1, 3, 5, 7, 9 };
+    String s = join(", ", vals);
+    EXPECT_EQ(s, "1, 3, 5, 7, 9");
 }

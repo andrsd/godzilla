@@ -78,6 +78,16 @@ TEST(StringTest, iostream_shl)
     EXPECT_THAT(out, testing::HasSubstr("ahoy"));
 }
 
+TEST(StringTest, ostrstream_shl)
+{
+    std::ostringstream ss;
+    String hello("Hello");
+    ss << hello;
+    ss << ", ";
+    ss << "1234";
+    EXPECT_EQ(ss.str(), "Hello, 1234");
+}
+
 TEST(StringTest, iostream_shr)
 {
     std::string str("ahoy");
@@ -100,5 +110,15 @@ TEST(StringTest, fmt_format)
 {
     String world("world");
     String greeting = fmt::format("hello, {}", world);
+    EXPECT_EQ(greeting, "hello, world");
+}
+
+TEST(StringTest, append)
+{
+    String hello("hello");
+    String world("world");
+    String greeting = hello;
+    greeting.append(", ");
+    greeting.append(world);
     EXPECT_EQ(greeting, "hello, world");
 }

@@ -9,6 +9,7 @@
 #include <map>
 #include <typeinfo>
 #include <utility>
+#include <sstream>
 #include <petsclog.h>
 #include "fmt/printf.h"
 
@@ -253,5 +254,44 @@ void print_converged_reason(PrintInterface & pi, bool converged);
 /// @param region Region name/Block ID
 /// @return Block ID corresponding to the region
 Int get_block_id_from_region(const UnstructuredMesh & mesh, const String & region);
+
+template <typename T>
+class Array1D;
+
+/// Join array of values
+///
+/// @param con String to connect values with
+/// @param array Values to connect
+/// @return String with connected values
+template <typename T>
+String
+join(const String con, const Array1D<T> & array)
+{
+    std::ostringstream oss;
+    for (size_t i = 0; i < array.size(); ++i) {
+        if (i > 0)
+            oss << con.c_str();
+        oss << array(i);
+    }
+    return oss.str();
+}
+
+/// Join values in std::vector
+///
+/// @param con String to connect values with
+/// @param array Values to connect
+/// @return String with connected values
+template <typename T>
+String
+join(const String con, const std::vector<T> & array)
+{
+    std::ostringstream oss;
+    for (size_t i = 0; i < array.size(); ++i) {
+        if (i > 0)
+            oss << con.c_str();
+        oss << array[i];
+    }
+    return oss.str();
+}
 
 } // namespace godzilla
