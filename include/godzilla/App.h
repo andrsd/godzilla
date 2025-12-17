@@ -28,7 +28,7 @@ public:
     /// @param name Name of the application
     /// @param argc Number of command line arguments
     /// @param argv Command line arguments
-    App(const mpi::Communicator & comm, const String & name);
+    App(const mpi::Communicator & comm, String name);
 
     /// Build an application object
     ///
@@ -37,7 +37,7 @@ public:
     /// @param name Name of the application
     /// @param argc Number of command line arguments
     /// @param argv Command line arguments
-    App(const mpi::Communicator & comm, Registry & registry, const String & name);
+    App(const mpi::Communicator & comm, Registry & registry, String name);
 
     virtual ~App();
 
@@ -49,12 +49,12 @@ public:
     /// Get Application name
     ///
     /// @return Application name
-    const String & get_name() const;
+    String get_name() const;
 
     /// Get application version
     ///
     /// @return The application version as a string
-    virtual const String & get_version() const;
+    virtual String get_version() const;
 
     /// Get the instance of registry
     ///
@@ -107,12 +107,12 @@ public:
     /// Get restart file name
     ///
     /// @return The restart file name
-    const String & get_restart_file_name() const;
+    String get_restart_file_name() const;
 
     /// Set restart file name
     ///
     /// @file_name The restart file name
-    void set_restart_file_name(const String & file_name);
+    void set_restart_file_name(String file_name);
 
     /// Get MPI communicator
     ///
@@ -123,7 +123,7 @@ public:
     ///
     /// @param class_name Class name to get parameters for
     /// @return Parameters for class `class_name`
-    Parameters * get_parameters(const String & class_name);
+    Parameters * get_parameters(String class_name);
 
     /// Build object using the Factory
     ///
@@ -134,10 +134,10 @@ public:
     /// @param parameters Input parameters
     /// @return The constructed object
     template <typename T>
-    T * build_object(const String & obj_name, Parameters & parameters);
+    T * build_object(String obj_name, Parameters & parameters);
 
     template <typename T>
-    T * build_object(const String & obj_name, Parameters * parameters);
+    T * build_object(String obj_name, Parameters * parameters);
 
     /// Export parameters into a YAML format
     void export_parameters_yaml() const;
@@ -145,17 +145,17 @@ public:
     /// Set file name where to wrote the perf log
     ///
     /// @param file_name Perf log file name
-    void set_perf_log_file_name(const String & file_name);
+    void set_perf_log_file_name(String file_name);
 
     /// Redirect standard output into file
     ///
     /// @param file_name File to redirect stdout to
-    void redirect_stdout(const String & file_name);
+    void redirect_stdout(String file_name);
 
     /// Redirect standard error into file
     ///
     /// @param file_name File to redirect stderr to
-    void redirect_stderr(const String & file_name);
+    void redirect_stderr(String file_name);
 
 protected:
     /// Run the problem build via `build_from_yml`
@@ -201,7 +201,7 @@ public:
 
 template <typename T>
 T *
-App::build_object(const String & obj_name, Parameters & parameters)
+App::build_object(String obj_name, Parameters & parameters)
 {
     parameters.set<App *>("app", this);
     return this->factory.create<T>(obj_name, parameters);
@@ -209,7 +209,7 @@ App::build_object(const String & obj_name, Parameters & parameters)
 
 template <typename T>
 T *
-App::build_object(const String & obj_name, Parameters * parameters)
+App::build_object(String obj_name, Parameters * parameters)
 {
     parameters->set<App *>("app", this);
     return this->factory.create<T>(obj_name, parameters);

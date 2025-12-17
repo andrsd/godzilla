@@ -46,7 +46,7 @@ TEST(TerminalTest, ostream_operator_wo_colors_code)
 
 TEST(TerminalTest, string_operator)
 {
-    const String & r = Terminal::red;
+    String r = Terminal::red;
     EXPECT_EQ(r, "\33[31m");
 }
 

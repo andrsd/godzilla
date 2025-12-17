@@ -46,7 +46,7 @@ namespace godzilla {
 
 Registry registry;
 
-App::App(const mpi::Communicator & comm, const String & name) :
+App::App(const mpi::Communicator & comm, String name) :
     PrintInterface(comm, this, this->verbosity_level, name),
     name(name),
     mpi_comm(comm),
@@ -61,7 +61,7 @@ App::App(const mpi::Communicator & comm, const String & name) :
     CALL_STACK_MSG();
 }
 
-App::App(const mpi::Communicator & comm, Registry & registry, const String & name) :
+App::App(const mpi::Communicator & comm, Registry & registry, String name) :
     PrintInterface(comm, this, this->verbosity_level, name),
     name(name),
     mpi_comm(comm),
@@ -91,14 +91,14 @@ App::~App()
     }
 }
 
-const String &
+String
 App::get_name() const
 {
     CALL_STACK_MSG();
     return this->name;
 }
 
-const String &
+String
 App::get_version() const
 {
     CALL_STACK_MSG();
@@ -147,7 +147,7 @@ App::set_verbosity_level(unsigned int level)
     this->verbosity_level = level;
 }
 
-const String &
+String
 App::get_restart_file_name() const
 {
     CALL_STACK_MSG();
@@ -155,14 +155,14 @@ App::get_restart_file_name() const
 }
 
 void
-App::set_restart_file_name(const String & file_name)
+App::set_restart_file_name(String file_name)
 {
     CALL_STACK_MSG();
     this->restart_file_name = file_name;
 }
 
 void
-App::set_perf_log_file_name(const String & file_name)
+App::set_perf_log_file_name(String file_name)
 {
     CALL_STACK_MSG();
     this->perf_log_file_name = file_name;
@@ -176,7 +176,7 @@ App::get_comm() const
 }
 
 Parameters *
-App::get_parameters(const String & class_name)
+App::get_parameters(String class_name)
 {
     return this->factory.get_parameters(class_name);
 }
@@ -354,7 +354,7 @@ App::write_perf_log(const String file_name, std::chrono::duration<double> run_ti
 }
 
 void
-App::redirect_stdout(const String & file_name)
+App::redirect_stdout(String file_name)
 {
     CALL_STACK_MSG();
     this->stdout_file_.open(file_name.c_str());
@@ -363,7 +363,7 @@ App::redirect_stdout(const String & file_name)
 }
 
 void
-App::redirect_stderr(const String & file_name)
+App::redirect_stderr(String file_name)
 {
     CALL_STACK_MSG();
     this->stderr_file_.open(file_name.c_str());

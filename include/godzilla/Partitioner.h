@@ -21,7 +21,7 @@ public:
     void create(MPI_Comm comm);
     void destroy();
 
-    void set_type(const String & type);
+    void set_type(String type);
     String get_type() const;
 
     void reset();

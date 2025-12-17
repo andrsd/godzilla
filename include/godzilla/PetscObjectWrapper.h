@@ -118,7 +118,7 @@ public:
     ///
     /// @param name Object name to set
     void
-    set_name(const String & name)
+    set_name(String name)
     {
         CALL_STACK_MSG();
         PETSC_CHECK(PetscObjectSetName((PetscObject) this->obj, name.c_str()));

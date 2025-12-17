@@ -216,7 +216,7 @@ Section::get_field_dof(Int point, Int field) const
 }
 
 void
-Section::set_field_name(Int field, const String & name)
+Section::set_field_name(Int field, String name)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(PetscSectionSetFieldName(this->obj, field, name.c_str()));
@@ -293,7 +293,7 @@ Section::has_constraints() const
 }
 
 void
-Section::set_component_name(Int field, Int comp, const String & name)
+Section::set_component_name(Int field, Int comp, String name)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(PetscSectionSetComponentName(this->obj, field, comp, name.c_str()));

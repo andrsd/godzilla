@@ -164,7 +164,7 @@ void
 ExplicitFELinearProblem::add_residual_block(FieldID field_id,
                                             ResidualFunc * f0,
                                             ResidualFunc * f1,
-                                            const String & region)
+                                            String region)
 {
     CALL_STACK_MSG();
     // `compute_rhs_function_fem` which does the integration sets `Region::part = 100`. This matches

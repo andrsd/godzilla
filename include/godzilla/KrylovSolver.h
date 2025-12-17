@@ -235,7 +235,7 @@ public:
     /// Builds the KSP data structure for a particular KSPType
     ///
     /// @param type A krylov method
-    void set_type(const String & type);
+    void set_type(String type);
 
     /// View the KSP object
     ///

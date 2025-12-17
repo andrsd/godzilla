@@ -42,7 +42,7 @@ public:
     /// Get the region name this field is defined on
     ///
     /// @return The region name
-    const String & get_region() const;
+    String get_region() const;
 
     /// Get the ID of the field this boundary condition operates on
     ///
@@ -52,7 +52,7 @@ public:
     /// Get field name
     ///
     /// @return The field name
-    const String & get_field() const;
+    String get_field() const;
 
     /// Get the number of constrained components
     ///

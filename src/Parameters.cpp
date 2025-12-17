@@ -57,28 +57,28 @@ Parameters::operator+=(const Parameters & rhs)
 }
 
 bool
-Parameters::is_param_required(const String & name) const
+Parameters::is_param_required(String name) const
 {
     CALL_STACK_MSG();
     return this->params.count(name) > 0 && this->params.at(name)->required;
 }
 
 bool
-Parameters::is_param_valid(const String & name) const
+Parameters::is_param_valid(String name) const
 {
     CALL_STACK_MSG();
     return this->params.count(name) > 0 && this->params.at(name)->valid;
 }
 
 bool
-Parameters::is_param_private(const String & name) const
+Parameters::is_param_private(String name) const
 {
     CALL_STACK_MSG();
     return this->params.count(name) > 0 && this->params.at(name)->is_private;
 }
 
 String
-Parameters::get_doc_string(const String & name) const
+Parameters::get_doc_string(String name) const
 {
     CALL_STACK_MSG();
     auto it = this->params.find(name);

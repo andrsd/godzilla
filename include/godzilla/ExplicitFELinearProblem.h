@@ -30,7 +30,7 @@ protected:
     void add_residual_block(FieldID field_id,
                             ResidualFunc * f0,
                             ResidualFunc * f1,
-                            const String & region = "") override;
+                            String region = "") override;
     void post_step() override;
 
 private:

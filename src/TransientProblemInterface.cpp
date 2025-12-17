@@ -464,7 +464,7 @@ TransientProblemInterface::set_scheme(TimeScheme scheme)
 }
 
 void
-TransientProblemInterface::set_scheme(const String & scheme_name)
+TransientProblemInterface::set_scheme(String scheme_name)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(TSSetType(this->ts, scheme_name.c_str()));

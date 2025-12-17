@@ -11,7 +11,7 @@ class FEProblemInterface;
 
 class ResidualFunc : public Functional {
 public:
-    ResidualFunc(FEProblemInterface * fepi, const String & region = "");
+    ResidualFunc(FEProblemInterface * fepi, String region = "");
 
     /// Evaluate this functional
     ///

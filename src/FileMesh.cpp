@@ -38,7 +38,7 @@ FileMesh::FileMesh(const Parameters & pars) :
             this->file_name);
 }
 
-const String &
+String
 FileMesh::get_file_name() const
 {
     CALL_STACK_MSG();

@@ -20,7 +20,7 @@ public:
     /// Return file name
     ///
     /// @return Name of the file
-    const String & get_file_name() const;
+    String get_file_name() const;
 
     /// Get mesh file format
     ///

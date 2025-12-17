@@ -19,7 +19,7 @@ namespace godzilla {
 
 template <>
 void
-RestartFile::write<TestStruct>(const String & path, const String & name, const TestStruct & data)
+RestartFile::write<TestStruct>(String path, String name, const TestStruct & data)
 {
     auto pth = fmt::format("{}{}", path, name);
     write(pth, "integer", data.i);
@@ -29,7 +29,7 @@ RestartFile::write<TestStruct>(const String & path, const String & name, const T
 
 template <>
 void
-RestartFile::read<TestStruct>(const String & path, const String & name, TestStruct & data) const
+RestartFile::read<TestStruct>(String path, String name, TestStruct & data) const
 {
     auto pth = fmt::format("{}{}", path, name);
     read<int>(pth, "integer", data.i);

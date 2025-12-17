@@ -38,7 +38,7 @@ public:
 
 protected:
     /// Get KSP type
-    const String & get_ksp_type() const;
+    String get_ksp_type() const;
 
     virtual KrylovSolver create_krylov_solver();
 

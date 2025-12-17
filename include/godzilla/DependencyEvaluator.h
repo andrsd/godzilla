@@ -79,13 +79,13 @@ public:
     /// @param name Name of the functional
     /// @param params Parameters needed to build the functional
     template <typename Fn>
-    void create_functional(const String & name, const Parameters & pars);
+    void create_functional(String name, const Parameters & pars);
 
     /// Get a reference to a functional using its name
     ///
     /// @param name The name of the functional
     /// @return Reference to the functional
-    const ValueFunctional & get_functional(const String & name) const;
+    const ValueFunctional & get_functional(String name) const;
 
     /// Declare a value with a name
     ///
@@ -93,7 +93,7 @@ public:
     /// @param val_name Value name
     /// @return Reference to the actual value
     template <typename T>
-    T & declare_value(const String & val_name);
+    T & declare_value(String val_name);
 
     /// Get value using its name
     ///
@@ -101,7 +101,7 @@ public:
     /// @param val_name Value name
     /// @return Const reference to the actual value
     template <typename T>
-    const T & get_value(const String & val_name);
+    const T & get_value(String val_name);
 
     std::map<String, const ValueFunctional *> get_suppliers() const;
 
@@ -117,7 +117,7 @@ private:
 
 template <typename T>
 T &
-DependencyEvaluator::declare_value(const String & val_name)
+DependencyEvaluator::declare_value(String val_name)
 {
     CALL_STACK_MSG();
     auto it = this->values.find(val_name);
@@ -138,7 +138,7 @@ DependencyEvaluator::declare_value(const String & val_name)
 
 template <typename T>
 const T &
-DependencyEvaluator::get_value(const String & val_name)
+DependencyEvaluator::get_value(String val_name)
 {
     CALL_STACK_MSG();
     auto it = this->values.find(val_name);
@@ -155,7 +155,7 @@ DependencyEvaluator::get_value(const String & val_name)
 
 template <typename Fn>
 void
-DependencyEvaluator::create_functional(const String & name, const Parameters & pars)
+DependencyEvaluator::create_functional(String name, const Parameters & pars)
 {
     CALL_STACK_MSG();
     const auto & it = this->functionals.find(name);

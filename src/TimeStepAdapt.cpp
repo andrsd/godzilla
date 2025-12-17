@@ -27,7 +27,7 @@ TimeStepAdapt::get_ts_adapt() const
 }
 
 void
-TimeStepAdapt::add_candidate(const String & name,
+TimeStepAdapt::add_candidate(String name,
                              Int order,
                              Int stage_order,
                              Real ccfl,
@@ -195,7 +195,7 @@ TimeStepAdapt::set_step_limits(Real hmin, Real hmax)
 }
 
 void
-TimeStepAdapt::set_type(const String & type)
+TimeStepAdapt::set_type(String type)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(TSAdaptSetType(this->tsadapt, type.c_str()));

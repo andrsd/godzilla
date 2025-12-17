@@ -27,7 +27,7 @@ public:
     /// Builds PC for a particular preconditioner type
     ///
     /// @param type a known method, see PCType for possible values
-    void set_type(const String & type);
+    void set_type(String type);
 
     /// Gets the preconditioner type (as a string)
     ///

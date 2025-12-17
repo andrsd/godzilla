@@ -41,12 +41,7 @@ public:
     /// @param cost Relative measure of the amount of work required for the candidate scheme
     /// @param inuse Indicates that this scheme is the one currently in use, this flag can only be
     /// set for one scheme
-    void add_candidate(const String & name,
-                       Int order,
-                       Int stage_order,
-                       Real ccfl,
-                       Real cost,
-                       bool inuse);
+    void add_candidate(String name, Int order, Int stage_order, Real ccfl, Real cost, bool inuse);
 
     /// Clear any previously set candidate schemes
     void clear_candidates();
@@ -155,7 +150,7 @@ public:
     /// Set the adapter method
     ///
     /// @param type Adapter method
-    void set_type(const String & type);
+    void set_type(String type);
 
     /// Set the adapter method
     void set_type(Type type);

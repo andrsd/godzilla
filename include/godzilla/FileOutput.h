@@ -28,7 +28,7 @@ public:
     /// Set file base
     ///
     /// @param file_base File base to set
-    void set_file_base(const String & file_base);
+    void set_file_base(String file_base);
 
     /// Set the file base for a sequence of outputs
     ///
@@ -36,7 +36,7 @@ public:
     void set_sequence_file_base(unsigned int stepi);
 
 protected:
-    const String & get_file_base() const;
+    String get_file_base() const;
     void add_var_names(FieldID fid, std::vector<std::string> & var_names);
     void add_aux_var_names(FieldID fid, std::vector<std::string> & var_names);
 

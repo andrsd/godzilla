@@ -76,7 +76,7 @@ DGProblemInterface::get_field_names() const
     return infos;
 }
 
-const String &
+String
 DGProblemInterface::get_field_name(FieldID fid) const
 {
     CALL_STACK_MSG();
@@ -99,7 +99,7 @@ DGProblemInterface::get_field_num_components(FieldID fid) const
 }
 
 FieldID
-DGProblemInterface::get_field_id(const String & name) const
+DGProblemInterface::get_field_id(String name) const
 {
     CALL_STACK_MSG();
     const auto & it = this->fields_by_name.find(name);
@@ -118,7 +118,7 @@ DGProblemInterface::has_field_by_id(FieldID fid) const
 }
 
 bool
-DGProblemInterface::has_field_by_name(const String & name) const
+DGProblemInterface::has_field_by_name(String name) const
 {
     CALL_STACK_MSG();
     const auto & it = this->fields_by_name.find(name);
@@ -169,7 +169,7 @@ DGProblemInterface::get_field_component_name(FieldID fid, Int component) const
 }
 
 void
-DGProblemInterface::set_field_component_name(FieldID fid, Int component, const String & name)
+DGProblemInterface::set_field_component_name(FieldID fid, Int component, String name)
 {
     CALL_STACK_MSG();
     const auto & it = this->fields.find(fid);
@@ -205,7 +205,7 @@ DGProblemInterface::get_aux_field_names() const
     return names;
 }
 
-const String &
+String
 DGProblemInterface::get_aux_field_name(FieldID fid) const
 {
     CALL_STACK_MSG();
@@ -228,7 +228,7 @@ DGProblemInterface::get_aux_field_num_components(FieldID fid) const
 }
 
 FieldID
-DGProblemInterface::get_aux_field_id(const String & name) const
+DGProblemInterface::get_aux_field_id(String name) const
 {
     CALL_STACK_MSG();
     const auto & it = this->aux_fields_by_name.find(name);
@@ -247,7 +247,7 @@ DGProblemInterface::has_aux_field_by_id(FieldID fid) const
 }
 
 bool
-DGProblemInterface::has_aux_field_by_name(const String & name) const
+DGProblemInterface::has_aux_field_by_name(String name) const
 {
     CALL_STACK_MSG();
     const auto & it = this->aux_fields_by_name.find(name);
@@ -286,7 +286,7 @@ DGProblemInterface::get_aux_field_component_name(FieldID fid, Int component) con
 }
 
 void
-DGProblemInterface::set_aux_field_component_name(FieldID fid, Int component, const String & name)
+DGProblemInterface::set_aux_field_component_name(FieldID fid, Int component, String name)
 {
     CALL_STACK_MSG();
     const auto & it = this->aux_fields.find(fid);
@@ -305,7 +305,7 @@ DGProblemInterface::set_aux_field_component_name(FieldID fid, Int component, con
 }
 
 FieldID
-DGProblemInterface::add_field(const String & name, Int nc, Order k, const Label & block)
+DGProblemInterface::add_field(String name, Int nc, Order k, const Label & block)
 {
     CALL_STACK_MSG();
     auto keys = utils::map_keys(this->fields);
@@ -315,7 +315,7 @@ DGProblemInterface::add_field(const String & name, Int nc, Order k, const Label 
 }
 
 void
-DGProblemInterface::set_field(FieldID id, const String & name, Int nc, Order k, const Label & block)
+DGProblemInterface::set_field(FieldID id, String name, Int nc, Order k, const Label & block)
 {
     CALL_STACK_MSG();
     if (k != 1)
@@ -337,7 +337,7 @@ DGProblemInterface::set_field(FieldID id, const String & name, Int nc, Order k, 
 }
 
 FieldID
-DGProblemInterface::add_aux_field(const String & name, Int nc, Order k, const Label & block)
+DGProblemInterface::add_aux_field(String name, Int nc, Order k, const Label & block)
 {
     CALL_STACK_MSG();
     auto keys = utils::map_keys(this->aux_fields);
@@ -347,11 +347,7 @@ DGProblemInterface::add_aux_field(const String & name, Int nc, Order k, const La
 }
 
 void
-DGProblemInterface::set_aux_field(FieldID id,
-                                  const String & name,
-                                  Int nc,
-                                  Order k,
-                                  const Label & block)
+DGProblemInterface::set_aux_field(FieldID id, String name, Int nc, Order k, const Label & block)
 {
     CALL_STACK_MSG();
     auto it = this->aux_fields.find(id);

@@ -29,7 +29,7 @@ public:
     /// Get field name
     ///
     /// @return The field name
-    const String & get_field_name() const;
+    String get_field_name() const;
 
     /// Get the ID of the field this boundary condition operates on
     ///

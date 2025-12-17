@@ -377,7 +377,7 @@ UnstructuredMesh::create_face_set_labels(const std::map<Int, String> & names)
 }
 
 void
-UnstructuredMesh::create_face_set(Int id, const String & name)
+UnstructuredMesh::create_face_set(Int id, String name)
 {
     CALL_STACK_MSG();
     auto face_sets_label = get_label("Face Sets");
@@ -390,7 +390,7 @@ UnstructuredMesh::create_face_set(Int id, const String & name)
 }
 
 void
-UnstructuredMesh::set_face_set_name(Int id, const String & name)
+UnstructuredMesh::set_face_set_name(Int id, String name)
 {
     CALL_STACK_MSG();
     this->face_set_names[id] = name;
@@ -398,7 +398,7 @@ UnstructuredMesh::set_face_set_name(Int id, const String & name)
 }
 
 bool
-UnstructuredMesh::has_face_set(const String & name) const
+UnstructuredMesh::has_face_set(String name) const
 {
     CALL_STACK_MSG();
     const auto & it = this->face_set_ids.find(name);
@@ -406,7 +406,7 @@ UnstructuredMesh::has_face_set(const String & name) const
 }
 
 Label
-UnstructuredMesh::get_face_set_label(const String & name) const
+UnstructuredMesh::get_face_set_label(String name) const
 {
     CALL_STACK_MSG();
     const auto & it = this->face_set_ids.find(name);
@@ -416,7 +416,7 @@ UnstructuredMesh::get_face_set_label(const String & name) const
         return Label();
 }
 
-const String &
+String
 UnstructuredMesh::get_face_set_name(Int id) const
 {
     CALL_STACK_MSG();
@@ -428,7 +428,7 @@ UnstructuredMesh::get_face_set_name(Int id) const
 }
 
 void
-UnstructuredMesh::create_cell_set(Int id, const String & name)
+UnstructuredMesh::create_cell_set(Int id, String name)
 {
     CALL_STACK_MSG();
     auto cell_sets_label = get_label("Cell Sets");
@@ -440,7 +440,7 @@ UnstructuredMesh::create_cell_set(Int id, const String & name)
 }
 
 void
-UnstructuredMesh::set_cell_set_name(Int id, const String & name)
+UnstructuredMesh::set_cell_set_name(Int id, String name)
 {
     CALL_STACK_MSG();
     this->cell_set_names[id] = name;
@@ -454,7 +454,7 @@ UnstructuredMesh::set_cell_type(Int cell, PolytopeType cell_type)
     PETSC_CHECK(DMPlexSetCellType(get_dm(), cell, (DMPolytopeType) cell_type));
 }
 
-const String &
+String
 UnstructuredMesh::get_cell_set_name(Int id) const
 {
     CALL_STACK_MSG();
@@ -466,7 +466,7 @@ UnstructuredMesh::get_cell_set_name(Int id) const
 }
 
 Int
-UnstructuredMesh::get_cell_set_id(const String & name) const
+UnstructuredMesh::get_cell_set_id(String name) const
 {
     CALL_STACK_MSG();
     const auto & it = this->cell_set_ids.find(name);
@@ -508,7 +508,7 @@ UnstructuredMesh::get_face_sets() const
     return this->face_set_names;
 }
 
-const String &
+String
 UnstructuredMesh::get_vertex_set_name(Int id) const
 {
     CALL_STACK_MSG();
@@ -536,7 +536,7 @@ UnstructuredMesh::get_vertex_sets() const
 }
 
 bool
-UnstructuredMesh::has_vertex_set(const String & name) const
+UnstructuredMesh::has_vertex_set(String name) const
 {
     CALL_STACK_MSG();
     const auto & it = this->vertex_set_ids.find(name);
@@ -544,7 +544,7 @@ UnstructuredMesh::has_vertex_set(const String & name) const
 }
 
 Label
-UnstructuredMesh::get_vertex_set_label(const String & name) const
+UnstructuredMesh::get_vertex_set_label(String name) const
 {
     CALL_STACK_MSG();
     const auto & it = this->vertex_set_ids.find(name);
@@ -572,7 +572,7 @@ UnstructuredMesh::create_vertex_set_labels(const std::map<Int, String> & names)
 }
 
 void
-UnstructuredMesh::create_vertex_set(Int id, const String & name)
+UnstructuredMesh::create_vertex_set(Int id, String name)
 {
     CALL_STACK_MSG();
     auto vertex_sets_label = get_label("Vertex Sets");
@@ -585,7 +585,7 @@ UnstructuredMesh::create_vertex_set(Int id, const String & name)
 }
 
 void
-UnstructuredMesh::set_vertex_set_name(Int id, const String & name)
+UnstructuredMesh::set_vertex_set_name(Int id, String name)
 {
     CALL_STACK_MSG();
     this->vertex_set_names[id] = name;

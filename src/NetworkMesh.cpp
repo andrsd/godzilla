@@ -20,7 +20,7 @@ MeshNetwork::MeshNetwork(DM dm) : godzilla::Mesh(dm)
 }
 
 Int
-MeshNetwork::register_component(const String & name, std::size_t size)
+MeshNetwork::register_component(String name, std::size_t size)
 {
     CALL_STACK_MSG();
     Int key;
@@ -61,7 +61,7 @@ MeshNetwork::set_num_sub_networks(Int n, Int N)
 }
 
 Int
-MeshNetwork::add_sub_network(const String & name, std::vector<Int> & edge_list)
+MeshNetwork::add_sub_network(String name, std::vector<Int> & edge_list)
 {
     CALL_STACK_MSG();
     if (edge_list.size() % 2 == 0) {

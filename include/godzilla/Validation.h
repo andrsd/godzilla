@@ -32,7 +32,7 @@ inline bool
 in<String>(String value, const std::vector<String> & options)
 {
     String v = utils::to_lower(value);
-    return std::any_of(options.cbegin(), options.cend(), [v](const String & o) {
+    return std::any_of(options.cbegin(), options.cend(), [v](String o) {
         return v == utils::to_lower(o);
     });
 }
@@ -42,7 +42,7 @@ inline bool
 in<const char *>(const char * value, const std::vector<const char *> & options)
 {
     String v = utils::to_lower(value);
-    return std::any_of(options.cbegin(), options.cend(), [v](const String & o) {
+    return std::any_of(options.cbegin(), options.cend(), [v](String o) {
         return v == utils::to_lower(o);
     });
 }

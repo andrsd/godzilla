@@ -15,7 +15,7 @@ class FEProblemInterface;
 
 class Functional {
 public:
-    Functional(FEProblemInterface * fepi, const String & region = "");
+    Functional(FEProblemInterface * fepi, String region = "");
     virtual ~Functional() = default;
 
     /// Get value names this functional depends on
@@ -26,7 +26,7 @@ public:
     /// Get region where this function is defined
     ///
     /// @return Region name where this functional is defined
-    const String & get_region() const;
+    String get_region() const;
 
     String
     get_value_name(const String val_name) const
@@ -55,19 +55,19 @@ protected:
     ///
     /// @param field_name The name of the field
     /// @return Reference to a class that contains the field values
-    const FieldValue & get_field_value(const String & field_name) const;
+    const FieldValue & get_field_value(String field_name) const;
 
     /// Get values of a gradient of a field
     ///
     /// @param field_name The name of the field
     /// @return Pointer to array that contains the field gradient values
-    const FieldGradient & get_field_gradient(const String & field_name) const;
+    const FieldGradient & get_field_gradient(String field_name) const;
 
     /// Get values of a time derivative of a field
     ///
     /// @param field_name The name of the field
     /// @return Reference to a class that contains the field time derivative values
-    const FieldValue & get_field_dot(const String & field_name) const;
+    const FieldValue & get_field_dot(String field_name) const;
 
     /// Get time at which the function is evaluated
     ///
@@ -81,7 +81,7 @@ protected:
     /// @return Const reference to the value
     template <typename T>
     const T &
-    get_value(const String & name)
+    get_value(String name)
     {
         CALL_STACK_MSG();
         auto val_name = get_value_name(name);

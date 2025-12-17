@@ -57,13 +57,13 @@ FileOutput::create_file_name() const
 }
 
 void
-FileOutput::set_file_base(const String & file_base)
+FileOutput::set_file_base(String file_base)
 {
     CALL_STACK_MSG();
     this->file_base = file_base;
 }
 
-const String &
+String
 FileOutput::get_file_base() const
 {
     CALL_STACK_MSG();

@@ -18,7 +18,7 @@ namespace godzilla {
 namespace {
 
 Optional<Int>
-parse_region(const String & s)
+parse_region(String s)
 {
     if (s.length() == 0)
         return std::nullopt;
@@ -37,7 +37,7 @@ parse_region(const String & s)
 namespace utils {
 
 bool
-path_exists(const String & path)
+path_exists(String path)
 {
     CALL_STACK_MSG();
     struct stat buffer = {};
@@ -45,7 +45,7 @@ path_exists(const String & path)
 }
 
 String
-to_upper(const String & name)
+to_upper(String name)
 {
     CALL_STACK_MSG();
     String upper(name);
@@ -53,7 +53,7 @@ to_upper(const String & name)
 }
 
 String
-to_lower(const String & name)
+to_lower(String name)
 {
     CALL_STACK_MSG();
     String lower(name);
@@ -61,28 +61,28 @@ to_lower(const String & name)
 }
 
 bool
-has_suffix(const String & str, const String & suffix)
+has_suffix(String str, String suffix)
 {
     CALL_STACK_MSG();
     return str.ends_with(suffix);
 }
 
 bool
-ends_with(const String & str, const String & end)
+ends_with(String str, String end)
 {
     CALL_STACK_MSG();
     return str.ends_with(end);
 }
 
 bool
-has_prefix(const String & str, const String & prefix)
+has_prefix(String str, String prefix)
 {
     CALL_STACK_MSG();
     return str.starts_with(prefix);
 }
 
 bool
-starts_with(const String & str, const String & start)
+starts_with(String str, String start)
 {
     CALL_STACK_MSG();
     return str.starts_with(start);
@@ -111,7 +111,7 @@ human_time(PetscLogDouble time)
 }
 
 String
-human_type_name(const String & type)
+human_type_name(String type)
 {
     // clang-format off
     if (type == "std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>" ||
@@ -141,7 +141,7 @@ human_type_name(const String & type)
 }
 
 String
-demangle(const String & mangled_name)
+demangle(String mangled_name)
 {
 #ifdef HAVE_CXXABI_H
     int status = -1;
@@ -168,7 +168,7 @@ print_converged_reason(PrintInterface & pi, bool converged)
 }
 
 Int
-get_block_id_from_region(const godzilla::UnstructuredMesh & mesh, const String & region)
+get_block_id_from_region(const godzilla::UnstructuredMesh & mesh, String region)
 {
     auto id = parse_region(region);
     if (id.has_value())

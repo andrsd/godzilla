@@ -60,7 +60,7 @@ DiscreteProblemInterface::get_aux_initial_conditions()
 }
 
 bool
-DiscreteProblemInterface::has_initial_condition(const String & name) const
+DiscreteProblemInterface::has_initial_condition(String name) const
 {
     CALL_STACK_MSG();
     const auto & it = this->ics_by_name.find(name);
@@ -68,7 +68,7 @@ DiscreteProblemInterface::has_initial_condition(const String & name) const
 }
 
 Optional<InitialCondition *>
-DiscreteProblemInterface::get_initial_condition(const String & name) const
+DiscreteProblemInterface::get_initial_condition(String name) const
 {
     CALL_STACK_MSG();
     const auto & it = this->ics_by_name.find(name);
@@ -79,7 +79,7 @@ DiscreteProblemInterface::get_initial_condition(const String & name) const
 }
 
 bool
-DiscreteProblemInterface::has_aux(const String & name) const
+DiscreteProblemInterface::has_aux(String name) const
 {
     CALL_STACK_MSG();
     const auto & it = this->auxs_by_name.find(name);
@@ -87,7 +87,7 @@ DiscreteProblemInterface::has_aux(const String & name) const
 }
 
 AuxiliaryField *
-DiscreteProblemInterface::get_aux(const String & name) const
+DiscreteProblemInterface::get_aux(String name) const
 {
     CALL_STACK_MSG();
     const auto & it = this->auxs_by_name.find(name);
@@ -314,7 +314,7 @@ DiscreteProblemInterface::set_up_auxiliary_dm(DM dm)
             Int aux_nc = aux->get_num_components();
             Int field_nc = get_aux_field_num_components(fid);
             if (aux_nc == field_nc) {
-                const String & region_name = aux->get_region();
+                String region_name = aux->get_region();
                 this->auxs_by_region[region_name].push_back(aux.get());
             }
             else {
@@ -523,7 +523,7 @@ DiscreteProblemInterface::get_aux_solution_vector_local()
 
 void
 DiscreteProblemInterface::add_boundary(DMBoundaryConditionType type,
-                                       const String & name,
+                                       String name,
                                        const Label & label,
                                        const std::vector<Int> & ids,
                                        FieldID field,

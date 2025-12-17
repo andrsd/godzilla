@@ -22,7 +22,7 @@ DependencyEvaluator::get_functionals() const
 }
 
 const ValueFunctional &
-DependencyEvaluator::get_functional(const String & name) const
+DependencyEvaluator::get_functional(String name) const
 {
     CALL_STACK_MSG();
     const auto & it = this->functionals.find(name);

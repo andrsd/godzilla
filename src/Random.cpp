@@ -106,7 +106,7 @@ Random::set_seed(unsigned long seed)
 }
 
 void
-Random::set_type(const String & type)
+Random::set_type(String type)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(PetscRandomSetType(this->obj, type.c_str()));

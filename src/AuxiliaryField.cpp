@@ -69,7 +69,7 @@ AuxiliaryField::create()
     }
 }
 
-const String &
+String
 AuxiliaryField::get_region() const
 {
     CALL_STACK_MSG();
@@ -97,7 +97,7 @@ AuxiliaryField::get_field_id() const
     return this->dpi->get_aux_field_id(this->field);
 }
 
-const String &
+String
 AuxiliaryField::get_field() const
 {
     return this->field;

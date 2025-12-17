@@ -67,7 +67,7 @@ public:
     /// @param class_name Name of the object to register
     template <typename T>
     void
-    add(const String & class_name)
+    add(String class_name)
     {
         Entry entry = { &build_obj<T>, &call_parameters<T> };
         this->classes[class_name] = entry;
@@ -77,13 +77,13 @@ public:
     ///
     /// @param class_name Class name to check
     /// @return `true` is class is registered, `false` otherwise
-    bool exists(const String & class_name) const;
+    bool exists(String class_name) const;
 
     /// Find registry entry for a given class
     ///
     /// @param class_name Name of the class
     /// @return Registry entry
-    const Entry & get(const String & class_name) const;
+    const Entry & get(String class_name) const;
 
     /// Get object description
     std::vector<ObjectDescription> get_object_description() const;

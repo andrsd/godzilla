@@ -24,35 +24,35 @@ using LogDouble = PetscLogDouble;
 void init();
 
 bool is_event_registered(const char * name);
-bool is_event_registered(const String & name);
+bool is_event_registered(String name);
 
 /// Register a logging event
 ///
 /// @param name Event name
 /// @return Event ID
 EventID register_event(const char * name);
-EventID register_event(const String & name);
+EventID register_event(String name);
 
 /// Get event ID
 ///
 /// @param name Event name
 /// @return Event ID
 EventID get_event_id(const char * name);
-EventID get_event_id(const String & name);
+EventID get_event_id(String name);
 
 /// Register a logging stage
 ///
 /// @param name Stage name
 /// @return
 StageID register_stage(const char * name);
-StageID register_stage(const String & name);
+StageID register_stage(String name);
 
 /// Get stage ID
 ///
 /// @param name Stage name
 /// @return Stage ID
 StageID get_stage_id(const char * name);
-StageID get_stage_id(const String & name);
+StageID get_stage_id(String name);
 
 /// Adds floating point operations to the global counter.
 void log_flops(LogDouble n);
@@ -65,7 +65,7 @@ public:
     ///
     /// @param name Name of the stage. Must be registered in PerfLog class.
     explicit Stage(const char * name);
-    explicit Stage(const String & name);
+    explicit Stage(String name);
 
     /// Construct a performance logging stage from stage ID
     ///
@@ -128,7 +128,7 @@ private:
 /// @param event_name Event name
 /// @param stage_name Stage name
 /// @return Event information
-EventInfo get_event_info(const String & event_name, const String & stage_name = "");
+EventInfo get_event_info(String event_name, String stage_name = "");
 
 /// Get event information
 ///
@@ -145,7 +145,7 @@ public:
     ///
     /// @param name Name of the event
     explicit Event(const char * name);
-    explicit Event(const String & name);
+    explicit Event(String name);
 
     /// Construct a performance logging event from event ID
     ///
@@ -191,7 +191,7 @@ public:
     ///
     /// @param name Name of the event
     explicit ScopedEvent(const char * name);
-    explicit ScopedEvent(const String & name);
+    explicit ScopedEvent(String name);
     virtual ~ScopedEvent();
 };
 

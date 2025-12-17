@@ -61,7 +61,7 @@ HDF5File::get_file_path() const
 }
 
 void
-HDF5File::Group::write_global_vector(const String & name, const Vector & data)
+HDF5File::Group::write_global_vector(String name, const Vector & data)
 {
     auto rng = data.get_ownership_range();
 
@@ -79,7 +79,7 @@ HDF5File::Group::write_global_vector(const String & name, const Vector & data)
 }
 
 void
-HDF5File::Group::read_global_vector(const String & name, Vector & data)
+HDF5File::Group::read_global_vector(String name, Vector & data)
 {
     auto rng = data.get_ownership_range();
 

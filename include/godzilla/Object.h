@@ -25,11 +25,11 @@ public:
 
     /// Get the type of this object.
     /// @return the name of the type of this object
-    const String & get_type() const;
+    String get_type() const;
 
     /// Get the name of the object
     /// @return The name of the object
-    const String & get_name() const;
+    String get_name() const;
 
     /// Get the App this object is associated with
     App * get_app() const;

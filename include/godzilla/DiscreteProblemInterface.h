@@ -59,7 +59,7 @@ public:
     /// Get field name
     ///
     /// @param fid Field ID
-    virtual const String & get_field_name(FieldID fid) const = 0;
+    virtual String get_field_name(FieldID fid) const = 0;
 
     /// Get number of field components
     ///
@@ -71,7 +71,7 @@ public:
     ///
     /// @param name Field name
     /// @param Field ID
-    virtual FieldID get_field_id(const String & name) const = 0;
+    virtual FieldID get_field_id(String name) const = 0;
 
     /// Do we have field with specified ID
     ///
@@ -83,7 +83,7 @@ public:
     ///
     /// @param name The name of the field
     /// @return True if the field exists, otherwise False
-    virtual bool has_field_by_name(const String & name) const = 0;
+    virtual bool has_field_by_name(String name) const = 0;
 
     /// Get field order
     ///
@@ -103,7 +103,7 @@ public:
     /// @param fid Field ID
     /// @param component Component index
     /// @param name Component name
-    virtual void set_field_component_name(FieldID fid, Int component, const String & name) = 0;
+    virtual void set_field_component_name(FieldID fid, Int component, String name) = 0;
 
     /// Get number of auxiliary fields
     ///
@@ -119,7 +119,7 @@ public:
     ///
     /// @param fid Auxiliary field ID
     /// @return Auxiliary field name
-    virtual const String & get_aux_field_name(FieldID fid) const = 0;
+    virtual String get_aux_field_name(FieldID fid) const = 0;
 
     /// Get number of auxiliary field components
     ///
@@ -131,7 +131,7 @@ public:
     ///
     /// @param name Auxiliary field name
     /// @return Auxiliary field ID
-    virtual FieldID get_aux_field_id(const String & name) const = 0;
+    virtual FieldID get_aux_field_id(String name) const = 0;
 
     /// Do we have auxiliary field with specified ID
     ///
@@ -143,7 +143,7 @@ public:
     ///
     /// @param name The name of the auxiliary field
     /// @return True if the auxiliary field exists, otherwise False
-    virtual bool has_aux_field_by_name(const String & name) const = 0;
+    virtual bool has_aux_field_by_name(String name) const = 0;
 
     /// Get auxiliary field order
     ///
@@ -163,7 +163,7 @@ public:
     /// @param fid Field ID
     /// @param component Component index
     /// @param name Component name
-    virtual void set_aux_field_component_name(FieldID fid, Int component, const String & name) = 0;
+    virtual void set_aux_field_component_name(FieldID fid, Int component, String name) = 0;
 
     /// Get list of all initial conditions
     ///
@@ -186,13 +186,13 @@ public:
     ///
     /// @param name The name of the object
     /// @return True if the object exists, otherwise false
-    bool has_initial_condition(const String & name) const;
+    bool has_initial_condition(String name) const;
 
     /// Get initial condition object with a specified name
     ///
     /// @param name The name of the object
     /// @return Pointer to the initial condition object
-    Optional<InitialCondition *> get_initial_condition(const String & name) const;
+    Optional<InitialCondition *> get_initial_condition(String name) const;
 
     /// Add boundary condition
     ///
@@ -212,13 +212,13 @@ public:
     ///
     /// @param name The name of the object
     /// @return True if the object exists, otherwise false
-    bool has_aux(const String & name) const;
+    bool has_aux(String name) const;
 
     /// Get auxiliary object with a specified name
     ///
     /// @param name The name of the object
     /// @return Pointer to the auxiliary object
-    AuxiliaryField * get_aux(const String & name) const;
+    AuxiliaryField * get_aux(String name) const;
 
     /// Return the offset into an array or local Vec for the dof associated with the given point
     ///
@@ -256,7 +256,7 @@ public:
     Vector & get_aux_solution_vector_local();
 
     void add_boundary(DMBoundaryConditionType type,
-                      const String & name,
+                      String name,
                       const Label & label,
                       const std::vector<Int> & ids,
                       FieldID field,
@@ -536,7 +536,7 @@ DiscreteProblemInterface::add_initial_condition(Parameters & pars)
     CALL_STACK_MSG();
     pars.set<DiscreteProblemInterface *>("_dpi", this);
     auto obj = Qtr<OBJECT>::alloc(pars);
-    const String & name = obj->get_name();
+    String name = obj->get_name();
     auto it = this->ics_by_name.find(name);
     if (it == this->ics_by_name.end()) {
         auto ic = obj.get();

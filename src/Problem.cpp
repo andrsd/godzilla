@@ -80,7 +80,7 @@ Problem::get_vector_type() const
 }
 
 void
-Problem::set_vector_type(const String & type)
+Problem::set_vector_type(String type)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(DMSetVecType(get_dm(), type.c_str()));
@@ -142,7 +142,7 @@ Problem::compute_postprocessors()
 }
 
 Postprocessor *
-Problem::get_postprocessor(const String & name) const
+Problem::get_postprocessor(String name) const
 {
     CALL_STACK_MSG();
     const auto & it = this->pps.find(name);
@@ -246,7 +246,7 @@ Problem::get_matrix_type() const
 }
 
 void
-Problem::set_matrix_type(const String & type)
+Problem::set_matrix_type(String type)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(DMSetMatType(get_dm(), type.c_str()));
@@ -333,7 +333,7 @@ Problem::get_partitioner()
 }
 
 void
-Problem::set_partitioner_type(const String & type)
+Problem::set_partitioner_type(String type)
 {
     CALL_STACK_MSG();
     this->partitioner.set_type(type);
@@ -430,7 +430,7 @@ Problem::create_section_subis(const std::vector<Int> & fields,
 }
 
 void
-Problem::output_monitor(const String & file_name) const
+Problem::output_monitor(String file_name) const
 {
     lprintln(9, "Output to file: {}", file_name);
 }
