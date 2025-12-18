@@ -35,7 +35,7 @@ public:
     App * get_app() const;
 
     /// Get the MPI comm this object works on
-    const mpi::Communicator & get_comm() const;
+    mpi::Communicator get_comm() const;
 
     /// Get processor ID (aka MPI rank) this object is running at
     int get_processor_id() const;

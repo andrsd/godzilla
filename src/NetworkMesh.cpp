@@ -7,7 +7,7 @@
 
 namespace godzilla {
 
-MeshNetwork::MeshNetwork(const mpi::Communicator & comm) : godzilla::Mesh()
+MeshNetwork::MeshNetwork(mpi::Communicator comm) : godzilla::Mesh()
 {
     CALL_STACK_MSG();
     PETSC_CHECK(DMNetworkCreate(comm, &this->netw_));

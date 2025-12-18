@@ -8,7 +8,7 @@
 
 namespace godzilla {
 
-StructuredMesh::StructuredMesh(const mpi::Communicator & comm) : Mesh(nullptr)
+StructuredMesh::StructuredMesh(mpi::Communicator comm) : Mesh(nullptr)
 {
     CALL_STACK_MSG();
     DM dm;

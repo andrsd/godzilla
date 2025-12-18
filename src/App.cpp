@@ -46,7 +46,7 @@ namespace godzilla {
 
 Registry registry;
 
-App::App(const mpi::Communicator & comm, String name) :
+App::App(mpi::Communicator comm, String name) :
     PrintInterface(comm, this, this->verbosity_level, name),
     name(name),
     mpi_comm(comm),
@@ -61,7 +61,7 @@ App::App(const mpi::Communicator & comm, String name) :
     CALL_STACK_MSG();
 }
 
-App::App(const mpi::Communicator & comm, Registry & registry, String name) :
+App::App(mpi::Communicator comm, Registry & registry, String name) :
     PrintInterface(comm, this, this->verbosity_level, name),
     name(name),
     mpi_comm(comm),
@@ -168,7 +168,7 @@ App::set_perf_log_file_name(String file_name)
     this->perf_log_file_name = file_name;
 }
 
-const mpi::Communicator &
+mpi::Communicator
 App::get_comm() const
 {
     CALL_STACK_MSG();

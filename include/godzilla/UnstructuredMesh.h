@@ -22,7 +22,7 @@ class Partitioner;
 ///
 class UnstructuredMesh : public Mesh {
 public:
-    explicit UnstructuredMesh(const mpi::Communicator & comm);
+    explicit UnstructuredMesh(mpi::Communicator comm);
     explicit UnstructuredMesh(DM dm);
 
     UnstructuredMesh clone() const;
@@ -414,7 +414,7 @@ public:
     ///
     /// NOTES:
     /// - only process 0 takes in the input
-    static Qtr<UnstructuredMesh> build_from_cell_list(const mpi::Communicator & comm,
+    static Qtr<UnstructuredMesh> build_from_cell_list(mpi::Communicator comm,
                                                       Dimension dim,
                                                       Int n_corners,
                                                       const std::vector<Int> & cells,

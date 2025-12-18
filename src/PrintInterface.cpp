@@ -85,7 +85,7 @@ PrintInterface::PrintInterface(const App * app) :
     CALL_STACK_MSG();
 }
 
-PrintInterface::PrintInterface(const mpi::Communicator & comm,
+PrintInterface::PrintInterface(mpi::Communicator comm,
                                const App * app,
                                const unsigned int & verbosity_level,
                                String prefix) :
