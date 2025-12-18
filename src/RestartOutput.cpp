@@ -40,7 +40,7 @@ RestartOutput::output_step()
 {
     CALL_STACK_MSG();
     auto comm = get_comm();
-    RestartFile file(comm, get_file_name().string(), FileAccess::CREATE);
+    RestartFile file(comm, get_file_name(), FileAccess::CREATE);
     this->ri->write_restart_file(file);
 }
 

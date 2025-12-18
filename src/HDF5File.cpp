@@ -29,16 +29,17 @@ HDF5File::HDF5File(mpi::Communicator comm, fs::path file_name, FileAccess facces
     H5Pset_fapl_mpio(fapl, comm, info);
 
     if (faccess == FileAccess::READ)
-        this->id = H5Fopen(file_name.c_str(), H5F_ACC_RDONLY, fapl);
+        this->id = H5Fopen(this->file_name.c_str(), H5F_ACC_RDONLY, fapl);
     else if (faccess == FileAccess::WRITE)
-        this->id = H5Fopen(file_name.c_str(), H5F_ACC_RDWR, fapl);
+        this->id = H5Fopen(this->file_name.c_str(), H5F_ACC_RDWR, fapl);
     else if (faccess == FileAccess::CREATE)
-        this->id = H5Fcreate(file_name.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, fapl);
+        this->id = H5Fcreate(this->file_name.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, fapl);
     else
         throw Exception("Unsupported file access");
 
     if (this->id == H5I_INVALID_HID)
-        throw Exception("Unable to open {} or it is not a valid HDF5 file.", file_name.string());
+        throw Exception("Unable to open {} or it is not a valid HDF5 file.",
+                        this->file_name.string());
 }
 
 HDF5File::HDF5File(fs::path file_name, FileAccess faccess) : file_name(std::move(file_name))
@@ -46,16 +47,17 @@ HDF5File::HDF5File(fs::path file_name, FileAccess faccess) : file_name(std::move
     std::call_once(hdf5_init, disable_hdf5_output);
 
     if (faccess == FileAccess::READ)
-        this->id = H5Fopen(file_name.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT);
+        this->id = H5Fopen(this->file_name.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT);
     else if (faccess == FileAccess::WRITE)
-        this->id = H5Fopen(file_name.c_str(), H5F_ACC_RDWR, H5P_DEFAULT);
+        this->id = H5Fopen(this->file_name.c_str(), H5F_ACC_RDWR, H5P_DEFAULT);
     else if (faccess == FileAccess::CREATE)
-        this->id = H5Fcreate(file_name.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
+        this->id = H5Fcreate(this->file_name.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
     else
         throw Exception("Unsupported file access");
 
     if (this->id == H5I_INVALID_HID)
-        throw Exception("Unable to open {} or it is not a valid HDF5 file.", file_name.string());
+        throw Exception("Unable to open {} or it is not a valid HDF5 file.",
+                        this->file_name.string());
 }
 
 HDF5File::~HDF5File()
