@@ -10,7 +10,7 @@ namespace godzilla {
 
 class StructuredMesh : public Mesh {
 public:
-    explicit StructuredMesh(const mpi::Communicator & comm);
+    explicit StructuredMesh(mpi::Communicator comm);
     explicit StructuredMesh(DM dm);
 
     /// Clone this structured mesh object
@@ -56,9 +56,9 @@ public:
     /// @param dof Number of degrees of freedom per node
     /// @param s Stencil width
     static StructuredMesh
-    create_1d(const mpi::Communicator comm, DMBoundaryType bx, Int M, Int dof, Int s);
+    create_1d(mpi::Communicator comm, DMBoundaryType bx, Int M, Int dof, Int s);
 
-    static StructuredMesh create_2d(const mpi::Communicator comm,
+    static StructuredMesh create_2d(mpi::Communicator comm,
                                     DMBoundaryType bx,
                                     DMBoundaryType by,
                                     DMDAStencilType stencil_type,

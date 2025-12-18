@@ -26,7 +26,7 @@ common_cells_by_vertex(const UnstructuredMesh & mesh)
     return data;
 }
 
-UnstructuredMesh::UnstructuredMesh(const mpi::Communicator & comm) : Mesh(nullptr)
+UnstructuredMesh::UnstructuredMesh(mpi::Communicator comm) : Mesh(nullptr)
 {
     DM dm;
     PETSC_CHECK(DMCreate(comm, &dm));
@@ -646,7 +646,7 @@ UnstructuredMesh::mark_boundary_faces(Int val, Label & label)
 }
 
 Qtr<UnstructuredMesh>
-UnstructuredMesh::build_from_cell_list(const mpi::Communicator & comm,
+UnstructuredMesh::build_from_cell_list(mpi::Communicator comm,
                                        Dimension dim,
                                        Int n_corners,
                                        const std::vector<Int> & cells,

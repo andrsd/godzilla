@@ -47,7 +47,7 @@ Object::get_app() const
     return this->app;
 }
 
-const mpi::Communicator &
+mpi::Communicator
 Object::get_comm() const
 {
     CALL_STACK_MSG();

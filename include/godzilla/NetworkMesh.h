@@ -12,7 +12,7 @@ namespace godzilla {
 
 class MeshNetwork : public godzilla::Mesh {
 public:
-    MeshNetwork(const mpi::Communicator & comm);
+    MeshNetwork(mpi::Communicator comm);
     explicit MeshNetwork(DM dm);
 
     Int register_component(String name, std::size_t size);

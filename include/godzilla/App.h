@@ -28,7 +28,7 @@ public:
     /// @param name Name of the application
     /// @param argc Number of command line arguments
     /// @param argv Command line arguments
-    App(const mpi::Communicator & comm, String name);
+    App(mpi::Communicator comm, String name);
 
     /// Build an application object
     ///
@@ -37,7 +37,7 @@ public:
     /// @param name Name of the application
     /// @param argc Number of command line arguments
     /// @param argv Command line arguments
-    App(const mpi::Communicator & comm, Registry & registry, String name);
+    App(mpi::Communicator comm, Registry & registry, String name);
 
     virtual ~App();
 
@@ -117,7 +117,7 @@ public:
     /// Get MPI communicator
     ///
     /// @return MPI communicator
-    const mpi::Communicator & get_comm() const;
+    mpi::Communicator get_comm() const;
 
     /// Get parameters for a class
     ///
