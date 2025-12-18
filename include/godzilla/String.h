@@ -4,6 +4,7 @@
 #pragma once
 
 #include "godzilla/Types.h"
+#include "mpicpp-lite/mpicpp-lite.h"
 #include <cstdint>
 #include <cstring>
 #include <optional>
@@ -358,3 +359,26 @@ struct YAML::convert<godzilla::String> {
         return true;
     }
 };
+
+namespace mpicpp_lite {
+
+template <>
+inline void
+Communicator::send(int dest, int tag, const godzilla::String & value) const
+{
+    if (size() < 2)
+        return;
+    send(dest, tag, value.data(), value.length() + 1);
+}
+
+template <>
+inline Status
+Communicator::recv(int source, int tag, godzilla::String & value) const
+{
+    std::vector<char> str;
+    auto status = recv(source, tag, str);
+    value = godzilla::String(str.data());
+    return status;
+}
+
+} // namespace mpicpp_lite
