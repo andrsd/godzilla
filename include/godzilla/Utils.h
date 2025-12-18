@@ -20,8 +20,6 @@ class UnstructuredMesh;
 
 namespace utils {
 
-bool path_exists(String path);
-
 /**
  * Convert supplied string to upper case.
  * @param name The string to convert upper case.

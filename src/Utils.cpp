@@ -6,7 +6,6 @@
 #include "godzilla/PrintInterface.h"
 #include "godzilla/Terminal.h"
 #include "godzilla/UnstructuredMesh.h"
-#include <sys/stat.h>
 #include <chrono>
 #include <fmt/printf.h>
 #ifdef HAVE_CXXABI_H
@@ -35,14 +34,6 @@ parse_region(String s)
 } // namespace
 
 namespace utils {
-
-bool
-path_exists(String path)
-{
-    CALL_STACK_MSG();
-    struct stat buffer = {};
-    return (stat(path.c_str(), &buffer) == 0);
-}
 
 String
 to_upper(String name)
