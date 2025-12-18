@@ -64,16 +64,16 @@ HDF5File::~HDF5File()
         H5Fclose(this->id);
 }
 
-String
+fs::path
 HDF5File::get_file_name() const
 {
-    return this->file_name.filename().string();
+    return this->file_name.filename();
 }
 
-String
+fs::path
 HDF5File::get_file_path() const
 {
-    return this->file_name.string();
+    return this->file_name;
 }
 
 void

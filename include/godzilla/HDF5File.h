@@ -473,9 +473,9 @@ public:
     HDF5File(const fs::path & file_name, FileAccess faccess);
     ~HDF5File();
 
-    String get_file_name() const;
+    fs::path get_file_name() const;
 
-    String get_file_path() const;
+    fs::path get_file_path() const;
 
     bool has_attribute(String name) const;
 

@@ -24,13 +24,13 @@ RestartFile::RestartFile(String file_name, FileAccess faccess) :
 String
 RestartFile::file_name() const
 {
-    return this->h5f.get_file_name();
+    return this->h5f.get_file_name().string();
 }
 
 String
 RestartFile::file_path() const
 {
-    return this->h5f.get_file_path();
+    return this->h5f.get_file_path().string();
 }
 
 String
