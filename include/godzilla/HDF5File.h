@@ -469,8 +469,8 @@ class HDF5File {
     };
 
 public:
-    HDF5File(mpi::Communicator comm, const fs::path & file_name, FileAccess faccess);
-    HDF5File(const fs::path & file_name, FileAccess faccess);
+    HDF5File(mpi::Communicator comm, fs::path file_name, FileAccess faccess);
+    HDF5File(fs::path file_name, FileAccess faccess);
     ~HDF5File();
 
     fs::path get_file_name() const;

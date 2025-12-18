@@ -19,8 +19,8 @@ disable_hdf5_output()
 
 } // namespace
 
-HDF5File::HDF5File(mpi::Communicator comm, const fs::path & file_name, FileAccess faccess) :
-    file_name(file_name)
+HDF5File::HDF5File(mpi::Communicator comm, fs::path file_name, FileAccess faccess) :
+    file_name(std::move(file_name))
 {
     std::call_once(hdf5_init, disable_hdf5_output);
 
@@ -41,7 +41,7 @@ HDF5File::HDF5File(mpi::Communicator comm, const fs::path & file_name, FileAcces
         throw Exception("Unable to open {} or it is not a valid HDF5 file.", file_name.string());
 }
 
-HDF5File::HDF5File(const fs::path & file_name, FileAccess faccess) : file_name(file_name)
+HDF5File::HDF5File(fs::path file_name, FileAccess faccess) : file_name(std::move(file_name))
 {
     std::call_once(hdf5_init, disable_hdf5_output);
 
