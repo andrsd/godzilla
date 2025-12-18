@@ -11,23 +11,20 @@ namespace fs = std::filesystem;
 
 namespace godzilla {
 
-RestartFile::RestartFile(mpi::Communicator comm, String file_name, FileAccess faccess) :
-    h5f(comm, fs::path(file_name.c_str()), faccess)
+RestartFile::RestartFile(mpi::Communicator comm, fs::path file_name, FileAccess faccess) :
+    h5f(comm, file_name, faccess)
 {
 }
 
-RestartFile::RestartFile(String file_name, FileAccess faccess) :
-    h5f(fs::path(file_name.c_str()), faccess)
-{
-}
+RestartFile::RestartFile(fs::path file_name, FileAccess faccess) : h5f(file_name, faccess) {}
 
-String
+fs::path
 RestartFile::file_name() const
 {
     return this->h5f.get_file_name();
 }
 
-String
+fs::path
 RestartFile::file_path() const
 {
     return this->h5f.get_file_path();
@@ -64,7 +61,10 @@ RestartFile::write<Vector>(String path, String name, const Vector & data)
         data.restore_array_read(vals);
     }
     catch (std::exception & e) {
-        throw Exception("Error writing '{}' to {}: {}", norm_path, this->file_name(), e.what());
+        throw Exception("Error writing '{}' to {}: {}",
+                        norm_path,
+                        this->file_name().string(),
+                        e.what());
     }
 }
 
@@ -83,7 +83,10 @@ RestartFile::write_global_vector(String path, String name, const Vector & data)
         group.write_global_vector(name, data);
     }
     catch (std::exception & e) {
-        throw Exception("Error writing '{}' to {}: {}", norm_path, this->file_name(), e.what());
+        throw Exception("Error writing '{}' to {}: {}",
+                        norm_path,
+                        this->file_name().string(),
+                        e.what());
     }
 }
 
@@ -100,7 +103,10 @@ RestartFile::read<Vector>(String path, String name, Vector & data) const
         data.restore_array(vals);
     }
     catch (std::exception & e) {
-        throw Exception("Error writing '{}' to {}: {}", norm_path, this->file_name(), e.what());
+        throw Exception("Error writing '{}' to {}: {}",
+                        norm_path,
+                        this->file_name().string(),
+                        e.what());
     }
 }
 
@@ -116,7 +122,7 @@ RestartFile::read_global_vector(String path, String name, Vector & data) const
         throw Exception("Error reading '{}/{}' from {}: {}",
                         norm_path,
                         name,
-                        this->file_name(),
+                        this->file_name().string(),
                         e.what());
     }
 }

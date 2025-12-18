@@ -17,12 +17,12 @@ public:
 
 private:
     String get_file_ext() const override;
-    String create_file_name() const override;
+    fs::path create_file_name() const override;
 
     /// Restart interface
     RestartInterface * ri;
     /// The file base of the output file
-    String file_base;
+    fs::path file_base;
 
 public:
     static Parameters parameters();

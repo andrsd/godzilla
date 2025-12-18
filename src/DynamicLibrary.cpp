@@ -26,7 +26,7 @@ DynamicLibrary::load()
     auto ext_file_path = get_ext_file_path();
     this->handle = dlopen(ext_file_path.c_str(), RTLD_NOW);
     if (!this->handle)
-        throw Exception("Unable to load {}: {}", this->file_name, dlerror());
+        throw Exception("Unable to load {}: {}", this->file_name.string(), dlerror());
     // Clear any existing error
     dlerror();
 }
@@ -63,7 +63,7 @@ DynamicLibrary::get_search_paths()
     return search_paths;
 }
 
-String
+fs::path
 DynamicLibrary::get_ext_file_path() const
 {
     CALL_STACK_MSG();
@@ -71,7 +71,7 @@ DynamicLibrary::get_ext_file_path() const
     for (auto & path : search_paths) {
         fs::path ext_file_path = path / this->file_name.c_str();
         if (fs::exists(ext_file_path))
-            return String(ext_file_path);
+            return ext_file_path;
     }
     // not found, so try to use system paths
     return this->file_name;

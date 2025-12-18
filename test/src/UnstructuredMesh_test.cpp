@@ -723,7 +723,7 @@ TEST(UnstructuredMeshTest, get_block_id_from_region_via_name)
 
     auto params = FileMesh::parameters();
     params.set<App *>("app", &app);
-    params.set<String>("file", file.string());
+    params.set<fs::path>("file", file);
     auto mesh_qtr = MeshFactory::create<FileMesh>(params);
     auto m = mesh_qtr.get();
 

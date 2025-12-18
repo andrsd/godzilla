@@ -7,6 +7,9 @@
 #include "godzilla/Utils.h"
 #include <petscsystypes.h>
 #include <fmt/format.h>
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 template <>
 struct fmt::formatter<InsertMode> {
@@ -73,5 +76,21 @@ struct fmt::formatter<godzilla::Dimension> {
     format(const godzilla::Dimension & dim, FormatContext & ctx) const
     {
         return fmt::format_to(ctx.out(), "{}", static_cast<godzilla::Int>(dim));
+    }
+};
+
+template <>
+struct fmt::formatter<fs::path> {
+    constexpr auto
+    parse(fmt::format_parse_context & ctx)
+    {
+        return ctx.begin();
+    }
+
+    template <typename FormatContext>
+    auto
+    format(const fs::path & path, FormatContext & ctx) const
+    {
+        return fmt::format_to(ctx.out(), "{}", path.string());
     }
 };

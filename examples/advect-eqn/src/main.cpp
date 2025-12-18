@@ -47,7 +47,7 @@ main(int argc, char * argv[])
 
         auto out_pars = ExodusIIOutput::parameters();
         out_pars.set<App *>("app", &app);
-        out_pars.set<std::string>("file", "out");
+        out_pars.set<fs::path>("file", "out");
         prob.add_output<ExodusIIOutput>(out_pars);
 
         prob.create();

@@ -83,7 +83,7 @@ main(int argc, char * argv[])
         auto out_pars = ExodusIIOutput::parameters();
         out_pars.set<godzilla::App *>("app", &app)
             .set<Problem *>("_problem", &prob)
-            .set<std::string>("file", "burgers")
+            .set<fs::path>("file", "burgers")
             .set<std::vector<std::string>>("on", { "initial", "final" });
         prob.add_output<ExodusIIOutput>(out_pars);
 

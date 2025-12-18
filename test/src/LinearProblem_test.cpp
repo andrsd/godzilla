@@ -101,7 +101,7 @@ TEST(LinearProblemTest, restart_file)
 
     auto ro_pars = RestartOutput::parameters();
     ro_pars.set<App *>("app", &app);
-    ro_pars.set<String>("file", "lp");
+    ro_pars.set<fs::path>("file", "lp");
     prob.add_output<RestartOutput>(ro_pars);
 
     prob.create();

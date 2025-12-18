@@ -17,7 +17,7 @@ TEST(FileMesh, exoii_file_format)
 
     auto mesh_pars = FileMesh::parameters();
     mesh_pars.set<godzilla::App *>("app", &app);
-    mesh_pars.set<String>("file", file.string());
+    mesh_pars.set<fs::path>("file", file);
     FileMesh mesh(mesh_pars);
     mesh.create();
 
@@ -32,6 +32,6 @@ TEST(FileMesh, unknown_mesh_format)
 
     auto mesh_pars = FileMesh::parameters();
     mesh_pars.set<godzilla::App *>("app", &app);
-    mesh_pars.set<String>("file", file.string());
+    mesh_pars.set<fs::path>("file", file);
     EXPECT_THROW_MSG(MeshFactory::create<FileMesh>(mesh_pars), "Unknown mesh format");
 }

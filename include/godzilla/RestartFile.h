@@ -14,13 +14,13 @@ class Vector;
 /// Class for handling restart files
 class RestartFile {
 public:
-    RestartFile(mpi::Communicator comm, String file_name, FileAccess faccess);
+    RestartFile(mpi::Communicator comm, fs::path file_name, FileAccess faccess);
 
     /// Restart file
     ///
     /// @param file_name Name of the file
     /// @param faccess Access mode
-    RestartFile(String file_name, FileAccess faccess);
+    RestartFile(fs::path file_name, FileAccess faccess);
 
     /// Write data to the file
     ///
@@ -57,12 +57,12 @@ public:
     /// Get the name of the file
     ///
     /// @return The name of the file
-    [[nodiscard]] String file_name() const;
+    [[nodiscard]] fs::path file_name() const;
 
     /// Get the path of the file
     ///
     /// @return The path of the file
-    [[nodiscard]] String file_path() const;
+    [[nodiscard]] fs::path file_path() const;
 
 protected:
     /// Get the full "path" to the data inside HDF5 file
@@ -91,7 +91,10 @@ RestartFile::write(String path, String name, const T & data)
         group.template write_dataset<T>(name, data);
     }
     catch (std::exception & e) {
-        throw Exception("Error writing '{}' to {}: {}", norm_path, this->file_name(), e.what());
+        throw Exception("Error writing '{}' to {}: {}",
+                        norm_path,
+                        this->file_name().string(),
+                        e.what());
     }
 }
 
@@ -112,7 +115,10 @@ RestartFile::read(String path, String name, T & data) const
         group.template read_dataset<T>(name, data);
     }
     catch (std::exception & e) {
-        throw Exception("Error reading '{}' from {}: {}", norm_path, this->file_name(), e.what());
+        throw Exception("Error reading '{}' from {}: {}",
+                        norm_path,
+                        this->file_name().string(),
+                        e.what());
     }
 }
 

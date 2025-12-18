@@ -277,7 +277,7 @@ TEST(NonlinearProblemTest, restart_file)
 
     auto ro_pars = RestartOutput::parameters();
     ro_pars.set<App *>("app", &app);
-    ro_pars.set<String>("file", "nl");
+    ro_pars.set<fs::path>("file", "nl");
     prob.add_output<RestartOutput>(ro_pars);
 
     prob.create();

@@ -166,7 +166,7 @@ Problem::output(ExecuteOn flag)
     for (auto & o : this->file_outputs)
         if (o->should_output(flag)) {
             if (this->output_monitor_delegate)
-                this->output_monitor_delegate(o->get_file_name());
+                this->output_monitor_delegate(o->get_file_name().string());
             o->output_step();
         }
 }

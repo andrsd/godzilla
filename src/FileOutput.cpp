@@ -7,9 +7,6 @@
 #include "godzilla/Problem.h"
 #include "godzilla/App.h"
 #include "godzilla/DiscreteProblemInterface.h"
-#include <filesystem>
-
-namespace fs = std::filesystem;
 
 namespace godzilla {
 
@@ -17,18 +14,17 @@ Parameters
 FileOutput::parameters()
 {
     auto params = Output::parameters();
-    params.add_required_param<String>("file", "The name of the output file.");
+    params.add_required_param<fs::path>("file", "The name of the output file.");
     return params;
 }
 
 FileOutput::FileOutput(const Parameters & pars) :
     Output(pars),
-    file_base(pars.get<String>("file")),
+    file_base(pars.get<fs::path>("file")),
     dpi(dynamic_cast<DiscreteProblemInterface *>(get_problem()))
 {
     CALL_STACK_MSG();
-    if (this->file_base.length() == 0)
-        log_error("The 'file' parameter cannot be empty");
+    expect_true(!this->file_base.empty(), "The 'file' parameter cannot be empty");
 }
 
 void
@@ -39,14 +35,14 @@ FileOutput::create()
     this->file_name = create_file_name();
 }
 
-String
+fs::path
 FileOutput::get_file_name() const
 {
     CALL_STACK_MSG();
     return this->file_name;
 }
 
-String
+fs::path
 FileOutput::create_file_name() const
 {
     CALL_STACK_MSG();
@@ -57,13 +53,13 @@ FileOutput::create_file_name() const
 }
 
 void
-FileOutput::set_file_base(String file_base)
+FileOutput::set_file_base(fs::path file_base)
 {
     CALL_STACK_MSG();
     this->file_base = file_base;
 }
 
-String
+fs::path
 FileOutput::get_file_base() const
 {
     CALL_STACK_MSG();

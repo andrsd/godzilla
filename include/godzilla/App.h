@@ -13,7 +13,9 @@
 #include "godzilla/Logger.h"
 #include <chrono>
 #include <fstream>
+#include <filesystem>
 
+namespace fs = std::filesystem;
 namespace mpi = mpicpp_lite;
 
 namespace godzilla {
@@ -107,12 +109,12 @@ public:
     /// Get restart file name
     ///
     /// @return The restart file name
-    String get_restart_file_name() const;
+    fs::path get_restart_file_name() const;
 
     /// Set restart file name
     ///
     /// @file_name The restart file name
-    void set_restart_file_name(String file_name);
+    void set_restart_file_name(fs::path file_name);
 
     /// Get MPI communicator
     ///
@@ -145,17 +147,17 @@ public:
     /// Set file name where to wrote the perf log
     ///
     /// @param file_name Perf log file name
-    void set_perf_log_file_name(String file_name);
+    void set_perf_log_file_name(fs::path file_name);
 
     /// Redirect standard output into file
     ///
     /// @param file_name File to redirect stdout to
-    void redirect_stdout(String file_name);
+    void redirect_stdout(fs::path file_name);
 
     /// Redirect standard error into file
     ///
     /// @param file_name File to redirect stderr to
-    void redirect_stderr(String file_name);
+    void redirect_stderr(fs::path file_name);
 
 protected:
     /// Run the problem build via `build_from_yml`
@@ -165,7 +167,7 @@ protected:
     ///
     /// @param file_name File name to write into
     /// @param run_time Total application run time
-    void write_perf_log(const String file_name, std::chrono::duration<double> run_time) const;
+    void write_perf_log(const fs::path & file_name, std::chrono::duration<double> run_time) const;
 
 private:
     /// Application name
@@ -179,9 +181,9 @@ private:
     /// Verbosity level
     unsigned int verbosity_level;
     /// Restart file name
-    String restart_file_name;
+    fs::path restart_file_name;
     /// Performance log file name
-    String perf_log_file_name;
+    fs::path perf_log_file_name;
     /// File stream for redirected stdout.
     std::ofstream stdout_file_;
     /// Stream buffer for redirected stdout.

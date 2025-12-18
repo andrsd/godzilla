@@ -46,7 +46,7 @@ TEST(RestartFileTest, read_write)
     {
         RestartFile f("restart.h5", FileAccess::CREATE);
         EXPECT_EQ(f.file_name(), "restart.h5");
-        EXPECT_TRUE(utils::ends_with(f.file_path(), "restart.h5"));
+        EXPECT_EQ(f.file_path().extension(), ".h5");
 
         f.write<String>("/", "greeting", "hello");
 
