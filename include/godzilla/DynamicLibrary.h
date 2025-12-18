@@ -12,6 +12,8 @@
 
 #define EXTENSION_API extern "C"
 
+namespace fs = std::filesystem;
+
 namespace godzilla {
 
 /// Dynamically loadable library
@@ -95,7 +97,10 @@ public:
         *(void **) (&smbl) = dlsym(this->handle, symbol_name);
         auto error = dlerror();
         if (error != nullptr || smbl == nullptr)
-            throw Exception("Unable to locate '{}' in {}: {}", symbol_name, this->file_name, error);
+            throw Exception("Unable to locate '{}' in {}: {}",
+                            symbol_name,
+                            this->file_name.string(),
+                            error);
 
         Delegate<SIGNATURE> d;
         d.template bind<SIGNATURE>(smbl);
@@ -116,10 +121,10 @@ public:
 
 private:
     /// Get extension file path
-    String get_ext_file_path() const;
+    fs::path get_ext_file_path() const;
 
     /// Extension file name
-    String file_name;
+    fs::path file_name;
     /// Extension handle
     void * handle;
 
