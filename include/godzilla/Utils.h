@@ -21,12 +21,6 @@ class UnstructuredMesh;
 namespace utils {
 
 /**
- * Convert supplied string to lower case.
- * @param name The string to convert upper case.
- */
-String to_lower(String name);
-
-/**
  * Check if string `str` ends with `suffix`
  *
  * @param str String to check

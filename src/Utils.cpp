@@ -35,14 +35,6 @@ parse_region(String s)
 
 namespace utils {
 
-String
-to_lower(String name)
-{
-    CALL_STACK_MSG();
-    String lower(name);
-    return lower.to_lower();
-}
-
 bool
 has_suffix(String str, String suffix)
 {

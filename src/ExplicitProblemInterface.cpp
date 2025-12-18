@@ -70,7 +70,7 @@ void
 ExplicitProblemInterface::set_up_time_scheme()
 {
     CALL_STACK_MSG();
-    String name = utils::to_lower(this->scheme);
+    String name = this->scheme.to_lower();
     std::map<String, TimeScheme> scheme_map = { { "euler", TimeScheme::EULER },
                                                 { "ssp-rk-2", TimeScheme::SSP_RK_2 },
                                                 { "ssp-rk-3", TimeScheme::SSP_RK_3 },
