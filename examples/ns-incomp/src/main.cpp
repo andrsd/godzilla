@@ -148,7 +148,7 @@ main(int argc, char * argv[])
         auto out_pars = ExodusIIOutput::parameters();
         out_pars.set<godzilla::App *>("app", &app)
             .set<std::vector<std::string>>("variables", { "pressure", "velocity" })
-            .set<std::string>("file", "mms-2d");
+            .set<fs::path>("file", "mms-2d");
         prob.add_output<ExodusIIOutput>(out_pars);
 
         prob.create();

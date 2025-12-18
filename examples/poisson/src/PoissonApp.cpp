@@ -195,7 +195,7 @@ PoissonApp::solve_problem(Int dim)
 
     auto out_pars = ExodusIIOutput::parameters();
     out_pars.set<godzilla::App *>("app", this)
-        .set<std::string>("file", out_file_name)
+        .set<fs::path>("file", out_file_name)
         .set<std::vector<std::string>>("variables", { "u" });
     prob.add_output<ExodusIIOutput>(out_pars);
 

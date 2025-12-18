@@ -90,7 +90,7 @@ main(int argc, char * argv[])
 
         auto out_pars = ExodusIIOutput::parameters();
         out_pars.set<godzilla::App *>("app", &app)
-            .set<std::string>("file", "2d-explicit")
+            .set<fs::path>("file", "2d-explicit")
             .set<ExecuteOnFlags>("on", ExecuteOn::INITIAL | ExecuteOn::FINAL)
             .set<std::vector<std::string>>("variables", { "temp" });
         prob.add_output<ExodusIIOutput>(out_pars);

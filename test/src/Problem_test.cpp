@@ -93,7 +93,7 @@ TEST(ProblemTest, add_pp)
     auto out_params = FileOutput::parameters();
     out_params.set<App *>("app", &app);
     out_params.set<String>("name", "out");
-    out_params.set<String>("file", "file");
+    out_params.set<fs::path>("file", "file");
     out_params.set<ExecuteOnFlags>("on", ExecuteOn::INITIAL);
     out_params.set<Int>("interval", 1);
     auto out = problem.add_output<TestOutput>(out_params);
