@@ -6,6 +6,9 @@
 #include "godzilla/Object.h"
 #include "godzilla/Qtr.h"
 #include "godzilla/UnstructuredMesh.h"
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 namespace godzilla {
 
@@ -20,7 +23,7 @@ public:
     /// Return file name
     ///
     /// @return Name of the file
-    String get_file_name() const;
+    fs::path get_file_name() const;
 
     /// Get mesh file format
     ///
@@ -38,7 +41,7 @@ private:
     Qtr<UnstructuredMesh> create_from_gmsh();
 
     /// File name with the mesh
-    String file_name;
+    fs::path file_name;
 
 public:
     static Parameters parameters();

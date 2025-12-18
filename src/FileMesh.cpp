@@ -7,10 +7,8 @@
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/Utils.h"
+#include "godzilla/Formatters.h"
 #include "petscdmplex.h"
-#include <filesystem>
-
-namespace fs = std::filesystem;
 
 namespace godzilla {
 
@@ -18,19 +16,19 @@ Parameters
 FileMesh::parameters()
 {
     auto params = Object::parameters();
-    params.add_required_param<String>("file", "The name of the file.");
+    params.add_required_param<fs::path>("file", "The name of the file.");
     return params;
 }
 
 FileMesh::FileMesh(const Parameters & pars) :
     Object(pars),
     file_format(UNKNOWN),
-    file_name(pars.get<String>("file"))
+    file_name(pars.get<fs::path>("file"))
 
 {
     CALL_STACK_MSG();
 
-    if (utils::path_exists(this->file_name))
+    if (fs::exists(this->file_name))
         detect_file_format();
     else
         log_error(
@@ -38,7 +36,7 @@ FileMesh::FileMesh(const Parameters & pars) :
             this->file_name);
 }
 
-String
+fs::path
 FileMesh::get_file_name() const
 {
     CALL_STACK_MSG();
@@ -86,9 +84,9 @@ void
 FileMesh::detect_file_format()
 {
     CALL_STACK_MSG();
-    if (utils::has_suffix(this->file_name, ".exo") || utils::has_suffix(this->file_name, ".e"))
+    if (this->file_name.extension() == ".exo" || this->file_name.extension() == ".e")
         this->file_format = EXODUSII;
-    else if (utils::has_suffix(this->file_name, ".msh"))
+    else if (this->file_name.extension() == ".msh")
         this->file_format = GMSH;
 }
 
