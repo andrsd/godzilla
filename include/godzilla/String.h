@@ -302,7 +302,7 @@ public:
     void
     commit(uint32_t new_size)
     {
-        assert(new_size <= rep->size);
+        assert(new_size <= rep->capacity);
         rep->size = new_size;
         rep->data[new_size] = '\0';
     }
