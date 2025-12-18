@@ -35,34 +35,6 @@ parse_region(String s)
 
 namespace utils {
 
-bool
-has_suffix(String str, String suffix)
-{
-    CALL_STACK_MSG();
-    return str.ends_with(suffix);
-}
-
-bool
-ends_with(String str, String end)
-{
-    CALL_STACK_MSG();
-    return str.ends_with(end);
-}
-
-bool
-has_prefix(String str, String prefix)
-{
-    CALL_STACK_MSG();
-    return str.starts_with(prefix);
-}
-
-bool
-starts_with(String str, String start)
-{
-    CALL_STACK_MSG();
-    return str.starts_with(start);
-}
-
 String
 human_time(PetscLogDouble time)
 {
