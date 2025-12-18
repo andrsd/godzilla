@@ -21,12 +21,6 @@ class UnstructuredMesh;
 namespace utils {
 
 /**
- * Convert supplied string to upper case.
- * @param name The string to convert upper case.
- */
-String to_upper(String name);
-
-/**
  * Convert supplied string to lower case.
  * @param name The string to convert upper case.
  */

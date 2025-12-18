@@ -36,14 +36,6 @@ parse_region(String s)
 namespace utils {
 
 String
-to_upper(String name)
-{
-    CALL_STACK_MSG();
-    String upper(name);
-    return upper.to_upper();
-}
-
-String
 to_lower(String name)
 {
     CALL_STACK_MSG();
