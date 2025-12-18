@@ -147,7 +147,7 @@ App::set_verbosity_level(unsigned int level)
     this->verbosity_level = level;
 }
 
-String
+fs::path
 App::get_restart_file_name() const
 {
     CALL_STACK_MSG();
@@ -155,17 +155,17 @@ App::get_restart_file_name() const
 }
 
 void
-App::set_restart_file_name(String file_name)
+App::set_restart_file_name(fs::path file_name)
 {
     CALL_STACK_MSG();
-    this->restart_file_name = file_name;
+    this->restart_file_name = std::move(file_name);
 }
 
 void
-App::set_perf_log_file_name(String file_name)
+App::set_perf_log_file_name(fs::path file_name)
 {
     CALL_STACK_MSG();
-    this->perf_log_file_name = file_name;
+    this->perf_log_file_name = std::move(file_name);
 }
 
 mpi::Communicator
@@ -197,7 +197,7 @@ App::run()
     run_problem();
     auto end_time = std::chrono::high_resolution_clock::now();
 
-    if (this->perf_log_file_name.length() > 0) {
+    if (!this->perf_log_file_name.empty()) {
         std::chrono::duration<double> duration = end_time - start_time;
         write_perf_log(this->perf_log_file_name, duration);
         lprintln(9, "Performance log written into: {}", this->perf_log_file_name);
@@ -248,7 +248,7 @@ App::get_registry()
 }
 
 void
-App::write_perf_log(const String file_name, std::chrono::duration<double> run_time) const
+App::write_perf_log(const fs::path & file_name, std::chrono::duration<double> run_time) const
 {
     CALL_STACK_MSG();
     auto comm = get_comm();
@@ -354,7 +354,7 @@ App::write_perf_log(const String file_name, std::chrono::duration<double> run_ti
 }
 
 void
-App::redirect_stdout(String file_name)
+App::redirect_stdout(fs::path file_name)
 {
     CALL_STACK_MSG();
     this->stdout_file_.open(file_name.c_str());
@@ -363,7 +363,7 @@ App::redirect_stdout(String file_name)
 }
 
 void
-App::redirect_stderr(String file_name)
+App::redirect_stderr(fs::path file_name)
 {
     CALL_STACK_MSG();
     this->stderr_file_.open(file_name.c_str());

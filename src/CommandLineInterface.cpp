@@ -88,10 +88,10 @@ CommandLineInterface::process_command_line(cxxopts::Options & opts,
             this->app.set_verbosity_level(result["verbose"].as<unsigned int>());
 
         if (result.count("restart-from"))
-            this->app.set_restart_file_name(result["restart-from"].as<String>());
+            this->app.set_restart_file_name(result["restart-from"].as<std::string>());
 
         if (result.count("perf-log"))
-            this->app.set_perf_log_file_name(result["perf-log"].as<String>());
+            this->app.set_perf_log_file_name(result["perf-log"].as<std::string>());
 
         if (result.count("redirect-stdout")) {
             auto fname = fmt::format("output.{}.txt", this->app.get_comm().rank());
