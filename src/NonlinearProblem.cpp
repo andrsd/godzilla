@@ -52,7 +52,7 @@ NonlinearProblem::NonlinearProblem(const Parameters & pars) :
 {
     CALL_STACK_MSG();
     set_default_output_on(ExecuteOn::FINAL);
-    this->line_search_type = utils::to_lower(line_search_type);
+    this->line_search_type = this->line_search_type.to_lower();
     if (!validation::in(this->line_search_type, { "bt", "basic", "l2", "cp", "nleqerr", "shell" }))
         log_error("The 'line_search' parameter can be either 'bt', 'basic', 'l2', 'cp', 'nleqerr' "
                   "or 'shell'.");

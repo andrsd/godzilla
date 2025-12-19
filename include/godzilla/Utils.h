@@ -20,52 +20,6 @@ class UnstructuredMesh;
 
 namespace utils {
 
-bool path_exists(String path);
-
-/**
- * Convert supplied string to upper case.
- * @param name The string to convert upper case.
- */
-String to_upper(String name);
-
-/**
- * Convert supplied string to lower case.
- * @param name The string to convert upper case.
- */
-String to_lower(String name);
-
-/**
- * Check if string `str` ends with `suffix`
- *
- * @param str String to check
- * @param suffix The expected suffix
- */
-bool has_suffix(String str, String suffix);
-
-/**
- * Check if string `str` ends with specified text
- *
- * @param str String to check
- * @param end The expected text
- */
-bool ends_with(String str, String end);
-
-/**
- * Check if string `str` starts with `prefix`
- *
- * @param str String to check
- * @param prefix The expected prefix
- */
-bool has_prefix(String str, String prefix);
-
-/**
- * Check if string `str` starts with specified text
- *
- * @param str String to check
- * @param start The expected text
- */
-bool starts_with(String str, String start);
-
 template <typename T>
 String
 type_name()

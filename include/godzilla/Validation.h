@@ -31,9 +31,9 @@ template <>
 inline bool
 in<String>(String value, const std::vector<String> & options)
 {
-    String v = utils::to_lower(value);
+    String v = value.to_lower();
     return std::any_of(options.cbegin(), options.cend(), [v](String o) {
-        return v == utils::to_lower(o);
+        return v == o.to_lower();
     });
 }
 
@@ -41,9 +41,9 @@ template <>
 inline bool
 in<const char *>(const char * value, const std::vector<const char *> & options)
 {
-    String v = utils::to_lower(value);
+    String v = String(value).to_lower();
     return std::any_of(options.cbegin(), options.cend(), [v](String o) {
-        return v == utils::to_lower(o);
+        return v == o.to_lower();
     });
 }
 

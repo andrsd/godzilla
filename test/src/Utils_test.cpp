@@ -5,44 +5,6 @@
 using namespace godzilla;
 using namespace testing;
 
-TEST(UtilsTest, to_lower)
-{
-    EXPECT_EQ(utils::to_lower("ASDF"), "asdf");
-}
-
-TEST(UtilsTest, to_upper)
-{
-    EXPECT_EQ(utils::to_upper("asdf"), "ASDF");
-}
-
-TEST(UtilsTest, has_suffix)
-{
-    EXPECT_TRUE(utils::has_suffix("asdf", "df"));
-    EXPECT_FALSE(utils::has_suffix("asdf", "long_string"));
-    EXPECT_FALSE(utils::has_suffix("asdf", "as"));
-}
-
-TEST(UtilsTest, ends_with)
-{
-    EXPECT_TRUE(utils::ends_with("asdf", "df"));
-    EXPECT_FALSE(utils::ends_with("asdf", "long_string"));
-    EXPECT_FALSE(utils::ends_with("asdf", "as"));
-}
-
-TEST(UtilsTest, has_prefix)
-{
-    EXPECT_TRUE(utils::has_prefix("asdf", "as"));
-    EXPECT_FALSE(utils::has_prefix("asdf", "long_string"));
-    EXPECT_FALSE(utils::has_prefix("asdf", "df"));
-}
-
-TEST(UtilsTest, starts_with)
-{
-    EXPECT_TRUE(utils::starts_with("asdf", "as"));
-    EXPECT_FALSE(utils::starts_with("asdf", "long_string"));
-    EXPECT_FALSE(utils::starts_with("asdf", "df"));
-}
-
 TEST(UtilsTest, map_keys)
 {
     std::map<int, int> m = { { 1, 200 }, { 2, 201 }, { 5, 203 }, { 9, 204 } };

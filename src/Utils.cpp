@@ -6,7 +6,6 @@
 #include "godzilla/PrintInterface.h"
 #include "godzilla/Terminal.h"
 #include "godzilla/UnstructuredMesh.h"
-#include <sys/stat.h>
 #include <chrono>
 #include <fmt/printf.h>
 #ifdef HAVE_CXXABI_H
@@ -35,58 +34,6 @@ parse_region(String s)
 } // namespace
 
 namespace utils {
-
-bool
-path_exists(String path)
-{
-    CALL_STACK_MSG();
-    struct stat buffer = {};
-    return (stat(path.c_str(), &buffer) == 0);
-}
-
-String
-to_upper(String name)
-{
-    CALL_STACK_MSG();
-    String upper(name);
-    return upper.to_upper();
-}
-
-String
-to_lower(String name)
-{
-    CALL_STACK_MSG();
-    String lower(name);
-    return lower.to_lower();
-}
-
-bool
-has_suffix(String str, String suffix)
-{
-    CALL_STACK_MSG();
-    return str.ends_with(suffix);
-}
-
-bool
-ends_with(String str, String end)
-{
-    CALL_STACK_MSG();
-    return str.ends_with(end);
-}
-
-bool
-has_prefix(String str, String prefix)
-{
-    CALL_STACK_MSG();
-    return str.starts_with(prefix);
-}
-
-bool
-starts_with(String str, String start)
-{
-    CALL_STACK_MSG();
-    return str.starts_with(start);
-}
 
 String
 human_time(PetscLogDouble time)
