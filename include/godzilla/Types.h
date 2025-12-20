@@ -159,6 +159,7 @@ private:
 /// FieldID
 class FieldID {
 public:
+    constexpr FieldID() : num(-1) {}
     explicit constexpr FieldID(Int fid) : num(fid) {}
     ~FieldID() = default;
     constexpr FieldID(const FieldID &) = default;
