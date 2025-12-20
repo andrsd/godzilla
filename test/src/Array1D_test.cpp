@@ -195,3 +195,20 @@ TEST(Array1DTest, pointwise_max)
     EXPECT_NEAR(w[3], -4., 1e-15);
     EXPECT_NEAR(w[4], 9., 1e-15);
 }
+
+TEST(Array1DTest, pointwise_mult)
+{
+    Array1D<Real> x(5);
+    assign(x, { 1, -2, 3, -4, 5 });
+    Array1D<Real> y(5);
+    assign(y, { 2, 1, -5, -4, 9 });
+
+    Array1D<Real> w(5);
+    pointwise_mult(w, x, y);
+
+    EXPECT_NEAR(w[0], 2., 1e-15);
+    EXPECT_NEAR(w[1], -2., 1e-15);
+    EXPECT_NEAR(w[2], -15., 1e-15);
+    EXPECT_NEAR(w[3], 16., 1e-15);
+    EXPECT_NEAR(w[4], 45., 1e-15);
+}
