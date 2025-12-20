@@ -212,3 +212,20 @@ TEST(Array1DTest, pointwise_mult)
     EXPECT_NEAR(w[3], 16., 1e-15);
     EXPECT_NEAR(w[4], 45., 1e-15);
 }
+
+TEST(Array1DTest, pointwise_divide)
+{
+    Array1D<Real> x(5);
+    assign(x, { 1, -2, 6, -4, 5 });
+    Array1D<Real> y(5);
+    assign(y, { 2, 1, -2, -4, 20 });
+
+    Array1D<Real> w(5);
+    pointwise_divide(w, x, y);
+
+    EXPECT_NEAR(w[0], 0.5, 1e-15);
+    EXPECT_NEAR(w[1], -2., 1e-15);
+    EXPECT_NEAR(w[2], -3., 1e-15);
+    EXPECT_NEAR(w[3], 1., 1e-15);
+    EXPECT_NEAR(w[4], 0.25, 1e-15);
+}

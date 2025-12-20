@@ -328,6 +328,8 @@ private:
     friend void pointwise_max(Array1D<U> & w, const Array1D<U> & x, const Array1D<U> & y);
     template <typename U>
     friend void pointwise_mult(Array1D<U> & w, const Array1D<U> & x, const Array1D<U> & y);
+    template <typename U>
+    friend void pointwise_divide(Array1D<U> & w, const Array1D<U> & x, const Array1D<U> & y);
 };
 
 template <>
@@ -530,6 +532,22 @@ pointwise_mult(Array1D<T> & w, const Array1D<T> & x, const Array1D<T> & y)
     assert_true(w.size() == y.size(), "The size of 'w' does not match the size 'y'");
     for (Int i = 0; i < w.ctrl->n; ++i)
         w.data[i] = x.data[i] * y.data[i];
+}
+
+/// Compute pointwise division of elements
+///
+/// @tparam T C++ type
+/// @param w Resulting array
+/// @param x First array
+/// @param y Second array
+template <typename T>
+void
+pointwise_divide(Array1D<T> & w, const Array1D<T> & x, const Array1D<T> & y)
+{
+    assert_true(w.size() == x.size(), "The size of 'w' does not match the size 'x'");
+    assert_true(w.size() == y.size(), "The size of 'w' does not match the size 'y'");
+    for (Int i = 0; i < w.ctrl->n; ++i)
+        w.data[i] = x.data[i] / y.data[i];
 }
 
 } // namespace godzilla
