@@ -161,3 +161,20 @@ TEST(Array1DTest, norm)
     EXPECT_THROW(norm(vals, NORM_1_AND_2), NotImplementedException);
     EXPECT_THROW(norm(vals, NORM_FROBENIUS), NotImplementedException);
 }
+
+TEST(Array1DTest, pointwise_min)
+{
+    Array1D<Real> x(5);
+    assign(x, { 1, -2, 3, -4, 5 });
+    Array1D<Real> y(5);
+    assign(y, { 2, 1, -5, -4, 9 });
+
+    Array1D<Real> w(5);
+    pointwise_min(w, x, y);
+
+    EXPECT_NEAR(w[0], 1., 1e-10);
+    EXPECT_NEAR(w[1], -2., 1e-10);
+    EXPECT_NEAR(w[2], -5., 1e-10);
+    EXPECT_NEAR(w[3], -4., 1e-10);
+    EXPECT_NEAR(w[4], 5., 1e-10);
+}

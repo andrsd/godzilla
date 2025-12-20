@@ -7,6 +7,7 @@
 #include "godzilla/Range.h"
 #include "godzilla/Exception.h"
 #include "godzilla/Assert.h"
+#include "godzilla/Math.h"
 #include <petscvec.h>
 
 namespace godzilla {
@@ -320,6 +321,9 @@ private:
     Int first;
     /// Array containing the values
     T * data;
+
+    template <typename U>
+    friend void pointwise_min(Array1D<U> & w, const Array1D<U> & x, const Array1D<U> & y);
 };
 
 template <>
@@ -474,6 +478,22 @@ norm(Array1D<T> & vector, NormType type)
     default:
         throw NotImplementedException("`norm` not implemented for type {}", static_cast<int>(type));
     }
+}
+
+/// Compute pointwise minimum
+///
+/// @tparam T C++ type
+/// @param w Resulting array
+/// @param x First array
+/// @param y Second array
+template <typename T>
+void
+pointwise_min(Array1D<T> & w, const Array1D<T> & x, const Array1D<T> & y)
+{
+    assert_true(w.size() == x.size(), "The size of 'w' does not match the size 'x'");
+    assert_true(w.size() == y.size(), "The size of 'w' does not match the size 'y'");
+    for (Int i = 0; i < w.ctrl->n; ++i)
+        w.data[i] = math::min(x.data[i], y.data[i]);
 }
 
 } // namespace godzilla
