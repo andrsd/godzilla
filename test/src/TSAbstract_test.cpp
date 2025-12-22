@@ -125,7 +125,6 @@ GTestProblem::parameters()
 {
     Parameters params = Problem::parameters();
     params += TransientProblemInterface::parameters();
-    params.add_param<String>("scheme", "test-ts", "");
     return params;
 }
 

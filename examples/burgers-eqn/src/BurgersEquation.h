@@ -17,6 +17,7 @@ public:
 protected:
     void set_up_fields() override;
     void set_up_weak_form() override;
+    void set_up_time_scheme() override;
 
     FieldID u_id;
     const Real viscosity;

@@ -95,6 +95,12 @@ protected:
     {
         set_riemann_solver(FieldID(0), this, &TestExplicitFVLinearProblem::compute_flux);
     }
+
+    void
+    set_up_time_scheme() override
+    {
+        set_scheme(TimeScheme::EULER);
+    }
 };
 
 } // namespace
@@ -122,8 +128,7 @@ TEST(ExplicitFVLinearProblemTest, api)
         .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
-        .set<Real>("dt", 1e-3)
-        .set<String>("scheme", "euler");
+        .set<Real>("dt", 1e-3);
     TestExplicitFVLinearProblem prob(prob_pars);
     app.set_problem(&prob);
 
@@ -228,8 +233,7 @@ TEST(ExplicitFVLinearProblemTest, fields)
         .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
-        .set<Real>("dt", 1e-3)
-        .set<String>("scheme", "euler");
+        .set<Real>("dt", 1e-3);
     TestExplicitFVLinearProblem prob(prob_pars);
     app.set_problem(&prob);
 
@@ -280,8 +284,7 @@ TEST(ExplicitFVLinearProblemTest, test_mass_matrix)
         .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
-        .set<Real>("dt", 1e-3)
-        .set<String>("scheme", "euler");
+        .set<Real>("dt", 1e-3);
     TestExplicitFVLinearProblem prob(prob_pars);
     app.set_problem(&prob);
 
@@ -314,8 +317,7 @@ TEST(ExplicitFVLinearProblemTest, solve)
         .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
-        .set<Real>("dt", 1e-3)
-        .set<String>("scheme", "euler");
+        .set<Real>("dt", 1e-3);
     TestExplicitFVLinearProblem prob(prob_pars);
     app.set_problem(&prob);
 
@@ -380,8 +382,7 @@ TEST(ExplicitFVLinearProblemTest, set_schemes)
         .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
-        .set<Real>("dt", 1e-3)
-        .set<String>("scheme", "euler");
+        .set<Real>("dt", 1e-3);
     TestExplicitFVLinearProblem prob(prob_pars);
 
     prob.create();
@@ -398,43 +399,4 @@ TEST(ExplicitFVLinearProblemTest, set_schemes)
         prob.set_scheme(schemes[i]);
         EXPECT_EQ(prob.get_scheme(), types[i]);
     }
-}
-
-TEST(ExplicitFVLinearProblemTest, wrong_schemes)
-{
-    testing::internal::CaptureStderr();
-
-    TestApp app;
-
-#if PETSC_VERSION_GE(3, 21, 0)
-    // PETSc 3.21.0+ has a bug in forming the mass matrix in 1D, se we use 2D mesh in this test
-    auto mesh_pars = RectangleMesh::parameters();
-    mesh_pars.set<App *>("app", &app);
-    mesh_pars.set<Int>("nx", 2);
-    mesh_pars.set<Int>("ny", 1);
-    auto mesh = MeshFactory::create<RectangleMesh>(mesh_pars);
-#else
-    auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("app", &app);
-    mesh_pars.set<Int>("nx", 2);
-    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
-#endif
-
-    auto prob_pars = TestExplicitFVLinearProblem::parameters();
-    prob_pars.set<App *>("app", &app)
-        .set<Mesh *>("mesh", mesh.get())
-        .set<Real>("start_time", 0.)
-        .set<Real>("end_time", 1e-3)
-        .set<Real>("dt", 1e-3)
-        .set<String>("scheme", "asdf");
-    TestExplicitFVLinearProblem prob(prob_pars);
-
-    prob.create();
-
-    EXPECT_FALSE(app.check_integrity());
-    app.get_logger()->print();
-
-    EXPECT_THAT(testing::internal::GetCapturedStderr(),
-                testing::HasSubstr("The 'scheme' parameter can be either 'euler', 'ssp-rk-2', "
-                                   "'ssp-rk-3', 'rk-2' or 'heun'."));
 }

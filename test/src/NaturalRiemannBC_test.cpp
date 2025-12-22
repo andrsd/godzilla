@@ -49,6 +49,12 @@ protected:
     }
 
     void
+    set_up_time_scheme() override
+    {
+        set_scheme(TimeScheme::EULER);
+    }
+
+    void
     compute_flux(const PetscReal x[],
                  const PetscReal n[],
                  const PetscScalar u_l[],

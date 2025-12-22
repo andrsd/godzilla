@@ -29,8 +29,7 @@ main(int argc, char * argv[])
         prob_pars.set<godzilla::App *>("app", &app)
             .set<Mesh *>("mesh", mesh.get())
             .set<Real>("dt", 1e-3)
-            .set<Real>("end_time", 5e-3)
-            .set<String>("scheme", "ssp-rk-2");
+            .set<Real>("end_time", 5e-3);
         AdvectionEquation prob(prob_pars);
         app.set_problem(&prob);
 

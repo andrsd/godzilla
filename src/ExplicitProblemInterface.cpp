@@ -2,9 +2,6 @@
 // SPDX-License-Identifier: MIT
 
 #include "godzilla/ExplicitProblemInterface.h"
-#include "godzilla/Problem.h"
-#include "godzilla/Validation.h"
-#include "godzilla/Utils.h"
 #include "petscdmplex.h"
 
 namespace godzilla {
@@ -13,21 +10,14 @@ Parameters
 ExplicitProblemInterface::parameters()
 {
     auto params = TransientProblemInterface::parameters();
-    params.add_param<String>("scheme",
-                             "euler",
-                             "Time stepping scheme: [euler, ssp-rk-2, ssp-rk-3, rk-2, heun]");
     return params;
 }
 
 ExplicitProblemInterface::ExplicitProblemInterface(NonlinearProblem * problem,
                                                    const Parameters & pars) :
     TransientProblemInterface(problem, pars),
-    nl_problem(problem),
-    scheme(pars.get<String>("scheme"))
+    nl_problem(problem)
 {
-    if (!validation::in(this->scheme, { "euler", "ssp-rk-2", "ssp-rk-3", "rk-2", "heun" }))
-        this->nl_problem->log_error("The 'scheme' parameter can be either 'euler', 'ssp-rk-2', "
-                                    "'ssp-rk-3', 'rk-2' or 'heun'.");
 }
 
 const Matrix &
@@ -64,19 +54,6 @@ ExplicitProblemInterface::set_up_callbacks()
     CALL_STACK_MSG();
     TransientProblemInterface::set_up_callbacks();
     set_rhs_function(this, &ExplicitProblemInterface::compute_rhs_function);
-}
-
-void
-ExplicitProblemInterface::set_up_time_scheme()
-{
-    CALL_STACK_MSG();
-    String name = this->scheme.to_lower();
-    std::map<String, TimeScheme> scheme_map = { { "euler", TimeScheme::EULER },
-                                                { "ssp-rk-2", TimeScheme::SSP_RK_2 },
-                                                { "ssp-rk-3", TimeScheme::SSP_RK_3 },
-                                                { "rk-2", TimeScheme::RK_2 },
-                                                { "heun", TimeScheme::HEUN } };
-    set_scheme(scheme_map[name]);
 }
 
 void

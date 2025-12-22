@@ -39,6 +39,13 @@ AdvectionEquation::set_up_weak_form()
 }
 
 void
+AdvectionEquation::set_up_time_scheme()
+{
+    CALL_STACK_MSG();
+    set_scheme(TimeScheme::SSP_RK_2);
+}
+
+void
 AdvectionEquation::compute_flux(const Real[],
                                 const Real n[],
                                 const Scalar u_l[],
