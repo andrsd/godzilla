@@ -189,7 +189,6 @@ TransientProblemInterface::parameters()
     params.add_param<Real>("end_time", "Simulation end time");
     params.add_param<Int>("num_steps", "Number of steps");
     params.add_required_param<Real>("dt", "Time step size");
-    params.add_param<std::map<String, String>>("ts_adapt", "Time stepping adaptivity");
     return params;
 }
 
