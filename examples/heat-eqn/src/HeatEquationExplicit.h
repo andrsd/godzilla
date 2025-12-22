@@ -16,6 +16,7 @@ public:
 protected:
     void set_up_fields() override;
     void set_up_weak_form() override;
+    void set_up_time_scheme() override;
 
     FieldID temp_id;
     FieldID ffn_aux_id;

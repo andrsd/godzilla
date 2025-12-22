@@ -89,3 +89,10 @@ HeatEquationExplicit::set_up_weak_form()
     CALL_STACK_MSG();
     add_residual_block(temp_id, new Residual0(this), new Residual1(this));
 }
+
+void
+HeatEquationExplicit::set_up_time_scheme()
+{
+    CALL_STACK_MSG();
+    set_scheme(TSEULER);
+}

@@ -47,8 +47,8 @@ ImplicitFENonlinearProblem::ImplicitFENonlinearProblem(const Parameters & pars) 
 {
     CALL_STACK_MSG();
     set_default_output_on(ExecuteOn::INITIAL | ExecuteOn::TIMESTEP);
-    if (!validation::in(this->scheme, { "beuler", "cn" }))
-        log_error("The 'scheme' parameter can be either 'beuler' or 'cn'.");
+    expect_true(validation::in(this->scheme, { "beuler", "cn" }),
+                "The 'scheme' parameter can be either 'beuler' or 'cn'.");
 }
 
 Real
@@ -127,10 +127,13 @@ void
 ImplicitFENonlinearProblem::set_up_time_scheme()
 {
     CALL_STACK_MSG();
-    String name = this->scheme.to_lower();
-    std::map<String, TimeScheme> scheme_map = { { "beuler", TimeScheme::BEULER },
-                                                { "cn", TimeScheme::CN } };
-    set_scheme(scheme_map[name]);
+    auto name = this->scheme.to_lower();
+    if (name == "beuler")
+        set_scheme(TSBEULER);
+    else if (name == "cn")
+        set_scheme(TSCN);
+    else
+        godzilla::utils::unreachable();
 }
 
 void

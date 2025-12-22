@@ -22,7 +22,6 @@ TEST(RZSymmetryTest, check_dim)
     auto prob_pars = GTestFENonlinearProblem::parameters();
     prob_pars.set<App *>("app", &app);
     prob_pars.set<Mesh *>("mesh", mesh.get());
-    prob_pars.set<String>("scheme", "rk-2");
     GTestFENonlinearProblem prob(prob_pars);
 
     auto params = RZSymmetry::parameters();
@@ -58,7 +57,6 @@ TEST(RZSymmetryTest, check_compatible)
     auto prob_pars = GTestFENonlinearProblem::parameters();
     prob_pars.set<App *>("app", &app);
     prob_pars.set<Mesh *>("mesh", mesh.get());
-    prob_pars.set<String>("scheme", "rk-2");
     GTestFENonlinearProblem prob(prob_pars);
 
     auto params = RZSymmetry::parameters();
