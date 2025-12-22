@@ -84,7 +84,7 @@ TestExplicitFELinearProblem::set_up_weak_form()
 void
 TestExplicitFELinearProblem::set_up_time_scheme()
 {
-    set_scheme(TimeScheme::EULER);
+    set_scheme(TSEULER);
 }
 
 class DirichletBC : public EssentialBC {

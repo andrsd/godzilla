@@ -51,7 +51,7 @@ protected:
     void
     set_up_time_scheme() override
     {
-        set_scheme(TimeScheme::EULER);
+        set_scheme(TSEULER);
     }
 
     void

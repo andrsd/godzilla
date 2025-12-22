@@ -94,5 +94,5 @@ void
 HeatEquationExplicit::set_up_time_scheme()
 {
     CALL_STACK_MSG();
-    set_scheme(TimeScheme::EULER);
+    set_scheme(TSEULER);
 }

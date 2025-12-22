@@ -99,7 +99,7 @@ protected:
     void
     set_up_time_scheme() override
     {
-        set_scheme(TimeScheme::EULER);
+        set_scheme(TSEULER);
     }
 };
 
@@ -387,16 +387,9 @@ TEST(ExplicitFVLinearProblemTest, set_schemes)
 
     prob.create();
 
-    std::vector<TransientProblemInterface::TimeScheme> schemes = {
-        TransientProblemInterface::TimeScheme::EULER,
-        TransientProblemInterface::TimeScheme::SSP_RK_2,
-        TransientProblemInterface::TimeScheme::SSP_RK_3,
-        TransientProblemInterface::TimeScheme::RK_2,
-        TransientProblemInterface::TimeScheme::HEUN
-    };
     std::vector<TSType> types = { TSEULER, TSSSP, TSSSP, TSRK, TSRK };
-    for (std::size_t i = 0; i < schemes.size(); ++i) {
-        prob.set_scheme(schemes[i]);
+    for (std::size_t i = 0; i < types.size(); ++i) {
+        prob.set_scheme(types[i]);
         EXPECT_EQ(prob.get_scheme(), types[i]);
     }
 }

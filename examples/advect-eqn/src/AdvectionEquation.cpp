@@ -42,7 +42,7 @@ void
 AdvectionEquation::set_up_time_scheme()
 {
     CALL_STACK_MSG();
-    set_scheme(TimeScheme::SSP_RK_2);
+    set_scheme(TSSSP, TSSSPRKS2);
 }
 
 void
