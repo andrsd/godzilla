@@ -76,26 +76,26 @@ main(int argc, char * argv[])
 
         auto aux_pars = ConstantAuxiliaryField::parameters();
         aux_pars.set<godzilla::App *>("app", &app)
-            .set<std::string>("name", "q_ppp")
+            .set<String>("name", "q_ppp")
             .set<std::vector<Real>>("value", { -1. });
         prob.add_auxiliary_field<ConstantAuxiliaryField>(aux_pars);
 
         auto ic_pars = TempIC::parameters();
         ic_pars.set<godzilla::App *>("app", &app)
-            .set<std::string>("name", "all")
-            .set<std::string>("field", "temp");
+            .set<String>("name", "all")
+            .set<String>("field", "temp");
         prob.add_initial_condition<TempIC>(ic_pars);
 
         auto bc_pars = DirichletBC::parameters();
         bc_pars.set<godzilla::App *>("app", &app)
-            .set<std::vector<std::string>>("boundary", { "left", "right" });
+            .set<std::vector<String>>("boundary", { "left", "right" });
         prob.add_boundary_condition<DirichletBC>(bc_pars);
 
         auto out_pars = ExodusIIOutput::parameters();
         out_pars.set<godzilla::App *>("app", &app)
             .set<fs::path>("file", "mms-1d")
             .set<ExecuteOnFlags>("on", ExecuteOn::INITIAL | ExecuteOn::FINAL)
-            .set<std::vector<std::string>>("variables", { "temp" });
+            .set<std::vector<String>>("variables", { "temp" });
         prob.add_output<ExodusIIOutput>(out_pars);
 
         prob.create();
