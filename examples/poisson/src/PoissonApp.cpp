@@ -140,7 +140,7 @@ PoissonApp::create_auxs(godzilla::DiscreteProblemInterface & prob, godzilla::Int
 
     auto aux_pars = ConstantAuxiliaryField::parameters();
     aux_pars.set<godzilla::App *>("app", this)
-        .set<std::string>("name", "forcing_fn")
+        .set<String>("name", "forcing_fn")
         .set<std::vector<Real>>("value", { value });
     prob.add_auxiliary_field<ConstantAuxiliaryField>(aux_pars);
 }
@@ -149,7 +149,7 @@ void
 PoissonApp::create_bcs(DiscreteProblemInterface & prob, Int dim)
 {
     CALL_STACK_MSG();
-    std::vector<std::string> boundaries;
+    std::vector<String> boundaries;
     if (dim == 1)
         boundaries = { "left", "right" };
     else if (dim == 2)
@@ -161,9 +161,9 @@ PoissonApp::create_bcs(DiscreteProblemInterface & prob, Int dim)
 
     auto bc_pars = DirichletBC::parameters();
     bc_pars.set<godzilla::App *>("app", this)
-        .set<std::string>("name", "all")
+        .set<String>("name", "all")
         .set<Int>("dim", dim)
-        .set<std::vector<std::string>>("boundary", boundaries);
+        .set<std::vector<String>>("boundary", boundaries);
     prob.add_boundary_condition<DirichletBC>(bc_pars);
 }
 
@@ -185,8 +185,8 @@ PoissonApp::solve_problem(Int dim)
 
     auto ic_pars = ConstantInitialCondition::parameters();
     ic_pars.set<godzilla::App *>("app", this)
-        .set<std::string>("name", "all")
-        .set<std::string>("field", "u")
+        .set<String>("name", "all")
+        .set<String>("field", "u")
         .set<std::vector<Real>>("value", { 0 });
     prob.add_initial_condition<ConstantInitialCondition>(ic_pars);
 
@@ -196,7 +196,7 @@ PoissonApp::solve_problem(Int dim)
     auto out_pars = ExodusIIOutput::parameters();
     out_pars.set<godzilla::App *>("app", this)
         .set<fs::path>("file", out_file_name)
-        .set<std::vector<std::string>>("variables", { "u" });
+        .set<std::vector<String>>("variables", { "u" });
     prob.add_output<ExodusIIOutput>(out_pars);
 
     prob.create();
