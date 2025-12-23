@@ -53,3 +53,12 @@ TEST(RangeTest, oper_less_than)
     EXPECT_TRUE(rng.first() < rng.last());
     EXPECT_FALSE(rng.last() < rng.first());
 }
+
+TEST(RangeTest, contains)
+{
+    auto rng = make_range(2, 7);
+    EXPECT_FALSE(rng.contains(1));
+    EXPECT_TRUE(rng.contains(2));
+    EXPECT_TRUE(rng.contains(6));
+    EXPECT_FALSE(rng.contains(7));
+}
