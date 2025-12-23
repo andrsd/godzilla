@@ -126,6 +126,19 @@ public:
         return last_idx;
     }
 
+    /// Test if the range contains a given number
+    ///
+    /// @param x Number to test
+    /// @return `true` if the number is inside the range, `false` otherwise
+    bool
+    contains(Int x) const
+    {
+        if (size() == 0)
+            return false;
+        else
+            return (this->first_idx <= x) && (x < this->last_idx);
+    }
+
 private:
     /// First index
     Int first_idx;
