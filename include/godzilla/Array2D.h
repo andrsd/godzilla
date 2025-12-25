@@ -54,7 +54,7 @@ public:
     void
     zero()
     {
-        assert_true(this->data != nullptr, "Internal data storage is not allocated");
+        GODZILLA_ASSERT_TRUE(this->data != nullptr, "Internal data storage is not allocated");
         for (Int i = 0; i < this->n_rows * this->n_cols; ++i)
             this->data[i] = 0;
     }
@@ -77,9 +77,9 @@ public:
     const T &
     get(Int row, Int col) const
     {
-        assert_true(this->data != nullptr, "Internal data storage is not allocated");
-        assert_true((row >= 0) && (row < this->n_rows), "Row index out of bounds");
-        assert_true((col >= 0) && (col < this->n_cols), "Column index out of bounds");
+        GODZILLA_ASSERT_TRUE(this->data != nullptr, "Internal data storage is not allocated");
+        GODZILLA_ASSERT_TRUE((row >= 0) && (row < this->n_rows), "Row index out of bounds");
+        GODZILLA_ASSERT_TRUE((col >= 0) && (col < this->n_cols), "Column index out of bounds");
         return this->data[idx(row, col)];
     }
 
@@ -89,7 +89,7 @@ public:
     void
     set(const T & val)
     {
-        assert_true(this->data != nullptr, "Internal data storage is not allocated");
+        GODZILLA_ASSERT_TRUE(this->data != nullptr, "Internal data storage is not allocated");
         for (Int i = 0; i < this->n_rows * this->n_cols; ++i)
             this->data[i] = val;
     }
@@ -102,9 +102,9 @@ public:
     T &
     set(Int row, Int col)
     {
-        assert_true(this->data != nullptr, "Internal data storage is not allocated");
-        assert_true((row >= 0) && (row < this->n_rows), "Row index out of bounds");
-        assert_true((col >= 0) && (col < this->n_cols), "Column index out of bounds");
+        GODZILLA_ASSERT_TRUE(this->data != nullptr, "Internal data storage is not allocated");
+        GODZILLA_ASSERT_TRUE((row >= 0) && (row < this->n_rows), "Row index out of bounds");
+        GODZILLA_ASSERT_TRUE((col >= 0) && (col < this->n_cols), "Column index out of bounds");
         return this->data[idx(row, col)];
     }
 

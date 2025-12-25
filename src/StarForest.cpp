@@ -68,7 +68,7 @@ Int
 StarForest::Graph::find_leaf(Int point) const
 {
     CALL_STACK_MSG();
-    assert_true(this->leaves != nullptr, "Leaves are not allocated");
+    GODZILLA_ASSERT_TRUE(this->leaves != nullptr, "Leaves are not allocated");
     Int idx;
     PETSC_CHECK(PetscFindInt(point, this->n_leaves, this->leaves, &idx));
     return idx;

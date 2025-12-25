@@ -14,7 +14,7 @@ L2Diff__invoke_delegate(Int dim, Real time, const Real x[], Int nc, Scalar u[], 
 {
     CALL_STACK_MSG();
     auto * bc = static_cast<L2Diff *>(ctx);
-    assert_true(bc != nullptr, "Pointer to L2Diff is null");
+    GODZILLA_ASSERT_TRUE(bc != nullptr, "Pointer to L2Diff is null");
     bc->evaluate(time, x, u);
     return 0;
 }
@@ -40,7 +40,7 @@ L2Diff::compute()
     CALL_STACK_MSG();
     auto * problem = get_problem();
     auto * dpi = dynamic_cast<DiscreteProblemInterface *>(problem);
-    assert_true(dpi != nullptr, "Discrete problem is null");
+    GODZILLA_ASSERT_TRUE(dpi != nullptr, "Discrete problem is null");
     std::vector<PetscFunc *> funcs(1, L2Diff__invoke_delegate);
     std::vector<void *> ctxs(1, this);
     dpi->compute_solution_vector_local();

@@ -50,7 +50,7 @@ public:
         requires(M > 0)
     DenseVector(std::initializer_list<T> init)
     {
-        assert_true(
+        GODZILLA_ASSERT_TRUE(
             init.size() == N,
             std::format("Number of entries ({}) does not match the size of DenseVector<..., {}>",
                         init.size(),
@@ -74,7 +74,7 @@ public:
     const T &
     get(Int i) const
     {
-        assert_true((i >= 0) && (i < N), "Index out of bounds");
+        GODZILLA_ASSERT_TRUE((i >= 0) && (i < N), "Index out of bounds");
         return DenseMatrix<T, N, 1>::get(i, 0);
     }
 
@@ -85,7 +85,7 @@ public:
     T &
     set(Int i)
     {
-        assert_true((i >= 0) && (i < N), "Index out of bounds");
+        GODZILLA_ASSERT_TRUE((i >= 0) && (i < N), "Index out of bounds");
         return DenseMatrix<T, N, 1>::set(i, 0);
     }
 

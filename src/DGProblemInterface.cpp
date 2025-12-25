@@ -275,9 +275,9 @@ DGProblemInterface::get_aux_field_component_name(FieldID fid, Int component) con
         if (fi.nc == 1)
             return { "" };
         else {
-            assert_true(component < it->second.nc &&
-                            std::cmp_less(component, it->second.component_names.size()),
-                        "Component out of bounds");
+            GODZILLA_ASSERT_TRUE(component < it->second.nc &&
+                                     std::cmp_less(component, it->second.component_names.size()),
+                                 "Component out of bounds");
             return it->second.component_names.at(component);
         }
     }
@@ -470,8 +470,9 @@ DGProblemInterface::set_up_section_constraint_dofs(Section & section)
                 for (Int i = 0; i < facets.get_local_size(); ++i) {
                     auto facet = facets(i);
                     auto support = unstr_mesh->get_support(facet);
-                    assert_true(support.size() == 1,
-                                "Internal facet cannot be included in a boundary face set");
+                    GODZILLA_ASSERT_TRUE(
+                        support.size() == 1,
+                        "Internal facet cannot be included in a boundary face set");
                     auto cell_id = support[0];
                     section.add_constraint_dof(cell_id, n_ced_dofs);
                     section.set_field_constraint_dof(cell_id, fid.value(), n_ced_dofs);
@@ -506,8 +507,9 @@ DGProblemInterface::set_up_section_constraint_indicies(Section & section)
                 for (Int i = 0; i < facets.get_local_size(); ++i) {
                     auto facet = facets(i);
                     auto support = unstr_mesh->get_support(facet);
-                    assert_true(support.size() == 1,
-                                "Internal facet cannot be included in a boundary face set");
+                    GODZILLA_ASSERT_TRUE(
+                        support.size() == 1,
+                        "Internal facet cannot be included in a boundary face set");
                     auto fconn = unstr_mesh->get_connectivity(facet);
                     auto econn = unstr_mesh->get_connectivity(support[0]);
 

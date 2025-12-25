@@ -31,8 +31,8 @@ public:
     T
     operator()(unsigned int idx) const
     {
-        assert_true(this->data != nullptr, "Array is not bound to data");
-        assert_true(idx < this->size, "Index out of bounds");
+        GODZILLA_ASSERT_TRUE(this->data != nullptr, "Array is not bound to data");
+        GODZILLA_ASSERT_TRUE(idx < this->size, "Index out of bounds");
         return this->data[idx];
     }
 

@@ -210,7 +210,7 @@ public:
     void
     zero()
     {
-        assert_true(this->data != nullptr, "Internal storage is not allocated");
+        GODZILLA_ASSERT_TRUE(this->data != nullptr, "Internal storage is not allocated");
         for (Int i = 0; i < this->ctrl->n; ++i)
             this->data[i].zero();
     }
@@ -221,7 +221,7 @@ public:
     void
     set(const T & val)
     {
-        assert_true(this->data != nullptr, "Internal storage is not allocated");
+        GODZILLA_ASSERT_TRUE(this->data != nullptr, "Internal storage is not allocated");
         for (Int i = 0; i < this->ctrl->n; ++i)
             this->data[i] = val;
     }
@@ -247,8 +247,9 @@ public:
     const T &
     operator[](Int i) const
     {
-        assert_true(this->data != nullptr, "Internal storage is not allocated");
-        assert_true((i >= this->first) && (i < this->first + this->ctrl->n), "Index out of bounds");
+        GODZILLA_ASSERT_TRUE(this->data != nullptr, "Internal storage is not allocated");
+        GODZILLA_ASSERT_TRUE((i >= this->first) && (i < this->first + this->ctrl->n),
+                             "Index out of bounds");
         auto idx = i - this->first;
         return this->data[idx];
     }
@@ -260,8 +261,9 @@ public:
     T &
     operator[](Int i)
     {
-        assert_true(this->data != nullptr, "Internal storage is not allocated");
-        assert_true((i >= this->first) && (i < this->first + this->ctrl->n), "Index out of bounds");
+        GODZILLA_ASSERT_TRUE(this->data != nullptr, "Internal storage is not allocated");
+        GODZILLA_ASSERT_TRUE((i >= this->first) && (i < this->first + this->ctrl->n),
+                             "Index out of bounds");
         auto idx = i - this->first;
         return this->data[idx];
     }
@@ -336,7 +338,7 @@ template <>
 inline void
 Array1D<Real>::zero()
 {
-    assert_true(this->data != nullptr, "Internal storage is not allocated");
+    GODZILLA_ASSERT_TRUE(this->data != nullptr, "Internal storage is not allocated");
     for (Int i = 0; i < this->ctrl->n; ++i)
         this->data[i] = 0.;
 }
@@ -405,8 +407,8 @@ template <typename T, Int N>
 DenseVector<T, N>
 get_values(const Array1D<T> & data, const std::vector<Int> & idx)
 {
-    assert_true(N == idx.size(),
-                "Size of `idx` argument does not match the size of the return value");
+    GODZILLA_ASSERT_TRUE(N == idx.size(),
+                         "Size of `idx` argument does not match the size of the return value");
     DenseVector<T, N> vals;
     for (Int i = 0; i < N; ++i)
         vals(i) = data[idx[i]];
@@ -449,8 +451,8 @@ template <typename T>
 void
 assign(Array1D<T> & data, const std::vector<T> & vals)
 {
-    assert_true(data.size() == vals.size(),
-                "Number of values to be assigned does not match the size the array");
+    GODZILLA_ASSERT_TRUE(data.size() == vals.size(),
+                         "Number of values to be assigned does not match the size the array");
     for (Int i = 0; i < data.size(); ++i)
         data[i] = vals[i];
 }
@@ -496,8 +498,8 @@ template <typename T>
 void
 pointwise_min(Array1D<T> & w, const Array1D<T> & x, const Array1D<T> & y)
 {
-    assert_true(w.size() == x.size(), "The size of 'w' does not match the size 'x'");
-    assert_true(w.size() == y.size(), "The size of 'w' does not match the size 'y'");
+    GODZILLA_ASSERT_TRUE(w.size() == x.size(), "The size of 'w' does not match the size 'x'");
+    GODZILLA_ASSERT_TRUE(w.size() == y.size(), "The size of 'w' does not match the size 'y'");
     for (Int i = 0; i < w.ctrl->n; ++i)
         w.data[i] = math::min(x.data[i], y.data[i]);
 }
@@ -512,8 +514,8 @@ template <typename T>
 void
 pointwise_max(Array1D<T> & w, const Array1D<T> & x, const Array1D<T> & y)
 {
-    assert_true(w.size() == x.size(), "The size of 'w' does not match the size 'x'");
-    assert_true(w.size() == y.size(), "The size of 'w' does not match the size 'y'");
+    GODZILLA_ASSERT_TRUE(w.size() == x.size(), "The size of 'w' does not match the size 'x'");
+    GODZILLA_ASSERT_TRUE(w.size() == y.size(), "The size of 'w' does not match the size 'y'");
     for (Int i = 0; i < w.ctrl->n; ++i)
         w.data[i] = math::max(x.data[i], y.data[i]);
 }
@@ -528,8 +530,8 @@ template <typename T>
 void
 pointwise_mult(Array1D<T> & w, const Array1D<T> & x, const Array1D<T> & y)
 {
-    assert_true(w.size() == x.size(), "The size of 'w' does not match the size 'x'");
-    assert_true(w.size() == y.size(), "The size of 'w' does not match the size 'y'");
+    GODZILLA_ASSERT_TRUE(w.size() == x.size(), "The size of 'w' does not match the size 'x'");
+    GODZILLA_ASSERT_TRUE(w.size() == y.size(), "The size of 'w' does not match the size 'y'");
     for (Int i = 0; i < w.ctrl->n; ++i)
         w.data[i] = x.data[i] * y.data[i];
 }
@@ -544,8 +546,8 @@ template <typename T>
 void
 pointwise_divide(Array1D<T> & w, const Array1D<T> & x, const Array1D<T> & y)
 {
-    assert_true(w.size() == x.size(), "The size of 'w' does not match the size 'x'");
-    assert_true(w.size() == y.size(), "The size of 'w' does not match the size 'y'");
+    GODZILLA_ASSERT_TRUE(w.size() == x.size(), "The size of 'w' does not match the size 'x'");
+    GODZILLA_ASSERT_TRUE(w.size() == y.size(), "The size of 'w' does not match the size 'y'");
     for (Int i = 0; i < w.ctrl->n; ++i)
         w.data[i] = x.data[i] / y.data[i];
 }
