@@ -230,20 +230,22 @@ join(const char * con, const Array1D<T> & array)
     return oss.str();
 }
 
-/// Join values in std::vector
+/// Join values in a collection
 ///
 /// @param con String to connect values with
-/// @param array Values to connect
+/// @param vals Values to connect
 /// @return String with connected values
-template <typename T>
+template <typename RANGE>
 String
-join(const char * con, const std::vector<T> & array)
+join(const char * con, const RANGE & vals)
 {
     std::ostringstream oss;
-    for (size_t i = 0; i < array.size(); ++i) {
-        if (i > 0)
+    bool first = true;
+    for (const auto & v : vals) {
+        if (!first)
             oss << con;
-        oss << array[i];
+        first = false;
+        oss << v;
     }
     return oss.str();
 }
