@@ -38,15 +38,16 @@ void
 L2FieldDiff::compute()
 {
     CALL_STACK_MSG();
-    assert_true(this->n_fields > 0, "No fields to evaluate");
-    assert_true(this->delegates.size() > 0, "No evaluation function(s) set");
+    GODZILLA_ASSERT_TRUE(this->n_fields > 0, "No fields to evaluate");
+    GODZILLA_ASSERT_TRUE(this->delegates.size() > 0, "No evaluation function(s) set");
 
     std::vector<PetscFunc *> funcs(this->n_fields, nullptr);
     std::vector<void *> contexts(this->n_fields, nullptr);
     for (auto & [fid, d] : this->delegates) {
         if (d) {
-            assert_true(fid >= 0 && fid < this->n_fields,
-                        fmt::format("Field ID ({}) is out of range [0, {})", fid, this->n_fields));
+            GODZILLA_ASSERT_TRUE(
+                fid >= 0 && fid < this->n_fields,
+                fmt::format("Field ID ({}) is out of range [0, {})", fid, this->n_fields));
             contexts[fid] = &d;
             funcs[fid] = internal::invoke_function_delegate;
         }

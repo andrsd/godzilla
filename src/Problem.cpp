@@ -412,8 +412,8 @@ Problem::create_section_subis(const std::vector<Int> & fields,
 {
     CALL_STACK_MSG();
 #if PETSC_VERSION_GE(3, 21, 0)
-    assert_true(fields.size() == n_comps.size(),
-                "Number of fields must match number of components");
+    GODZILLA_ASSERT_TRUE(fields.size() == n_comps.size(),
+                         "Number of fields must match number of components");
     IndexSet is;
     PETSC_CHECK(DMCreateSectionSubDM(get_dm(),
                                      fields.size(),

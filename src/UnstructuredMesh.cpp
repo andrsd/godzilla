@@ -824,7 +824,7 @@ UnstructuredMesh::is_my_cell(Int cell) const
 {
     CALL_STACK_MSG();
     auto my_cells = get_label("my_cells");
-    assert_true(my_cells, "No my_cells label in the mesh");
+    GODZILLA_ASSERT_TRUE(my_cells, "No my_cells label in the mesh");
     return my_cells.get_value(cell) == 1;
 }
 

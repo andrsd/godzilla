@@ -52,24 +52,24 @@ public:
     const T &
     get(Int row, Int col) const
     {
-        assert_true((row >= 0) && (row < DIM), "Row index out of bounds");
-        assert_true((col >= 0) && (col < DIM), "Column index out of bounds");
+        GODZILLA_ASSERT_TRUE((row >= 0) && (row < DIM), "Row index out of bounds");
+        GODZILLA_ASSERT_TRUE((col >= 0) && (col < DIM), "Column index out of bounds");
         return this->values[idx(row, col)];
     }
 
     T &
     set(Int row, Int col)
     {
-        assert_true((row >= 0) && (row < DIM), "Row index out of bounds");
-        assert_true((col >= 0) && (col < DIM), "Column index out of bounds");
+        GODZILLA_ASSERT_TRUE((row >= 0) && (row < DIM), "Row index out of bounds");
+        GODZILLA_ASSERT_TRUE((col >= 0) && (col < DIM), "Column index out of bounds");
         return this->values[idx(row, col)];
     }
 
     void
     set(Int row, Int col, const T & val)
     {
-        assert_true((row >= 0) && (row < DIM), "Row index out of bounds");
-        assert_true((col >= 0) && (col < DIM), "Column index out of bounds");
+        GODZILLA_ASSERT_TRUE((row >= 0) && (row < DIM), "Row index out of bounds");
+        GODZILLA_ASSERT_TRUE((col >= 0) && (col < DIM), "Column index out of bounds");
         this->values[idx(row, col)] = val;
     }
 
@@ -96,9 +96,10 @@ public:
     void
     set_values(const std::vector<Real> & vals)
     {
-        assert_true(vals.size() == N,
-                    "Number of values to be assigned does not match the number of etires in the "
-                    "symmetric matrix");
+        GODZILLA_ASSERT_TRUE(
+            vals.size() == N,
+            "Number of values to be assigned does not match the number of etires in the "
+            "symmetric matrix");
         for (Int i = 0; i < N; ++i)
             this->values[i] = vals[i];
     }

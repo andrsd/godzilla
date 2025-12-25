@@ -70,8 +70,8 @@ public:
     const T &
     get(Int row, Int col) const
     {
-        assert_true((row >= 0) && (row < ROWS), "Row index out of bounds");
-        assert_true((col >= 0) && (col < COLS), "Column index out of bounds");
+        GODZILLA_ASSERT_TRUE((row >= 0) && (row < ROWS), "Row index out of bounds");
+        GODZILLA_ASSERT_TRUE((col >= 0) && (col < COLS), "Column index out of bounds");
         return this->values[idx(row, col)];
     }
 
@@ -109,8 +109,8 @@ public:
     T &
     set(Int row, Int col)
     {
-        assert_true((row >= 0) && (row < ROWS), "Row index out of bounds");
-        assert_true((col >= 0) && (col < COLS), "Column index out of bounds");
+        GODZILLA_ASSERT_TRUE((row >= 0) && (row < ROWS), "Row index out of bounds");
+        GODZILLA_ASSERT_TRUE((col >= 0) && (col < COLS), "Column index out of bounds");
         return this->values[idx(row, col)];
     }
 
@@ -122,8 +122,8 @@ public:
     void
     set(Int row, Int col, const T & val)
     {
-        assert_true((row >= 0) && (row < ROWS), "Row index out of bounds");
-        assert_true((col >= 0) && (col < COLS), "Column index out of bounds");
+        GODZILLA_ASSERT_TRUE((row >= 0) && (row < ROWS), "Row index out of bounds");
+        GODZILLA_ASSERT_TRUE((col >= 0) && (col < COLS), "Column index out of bounds");
         this->values[idx(row, col)] = val;
     }
 
@@ -135,8 +135,8 @@ public:
     void
     set_row(Int row, const std::vector<T> & vals)
     {
-        assert_true(vals.size() == COLS,
-                    "Number of values to assigned does not match the number of columns");
+        GODZILLA_ASSERT_TRUE(vals.size() == COLS,
+                             "Number of values to assigned does not match the number of columns");
         for (Int i = 0; i < COLS; ++i)
             set(row, i) = vals[i];
     }
@@ -144,8 +144,8 @@ public:
     void
     set_row(Int row, std::initializer_list<T> vals)
     {
-        assert_true(static_cast<Int>(vals.size()) == COLS,
-                    "Number of values to assigned does not match the number of columns");
+        GODZILLA_ASSERT_TRUE(static_cast<Int>(vals.size()) == COLS,
+                             "Number of values to assigned does not match the number of columns");
         Int i = 0;
         for (const T & val : vals)
             set(row, i++) = val;
@@ -173,8 +173,8 @@ public:
     void
     set_col(Int col, std::initializer_list<T> vals)
     {
-        assert_true(vals.size() == ROWS,
-                    "Number of values to assigned does not match the number of rows");
+        GODZILLA_ASSERT_TRUE(vals.size() == ROWS,
+                             "Number of values to assigned does not match the number of rows");
         Int i = 0;
         for (const T & val : vals)
             set(i++, col) = val;
@@ -183,8 +183,8 @@ public:
     void
     set_col(Int col, const std::vector<T> & vals)
     {
-        assert_true(vals.size() == ROWS,
-                    "Number of values to assigned does not match the number of rows");
+        GODZILLA_ASSERT_TRUE(vals.size() == ROWS,
+                             "Number of values to assigned does not match the number of rows");
         for (Int i = 0; i < ROWS; ++i)
             set(i, col) = vals[i];
     }
@@ -524,8 +524,8 @@ public:
     static DenseMatrix<T, ROWS, ROWS>
     create_symm(const std::vector<T> & vals)
     {
-        assert_true(vals.size() == (ROWS * (ROWS + 1) / 2),
-                    "Incorrect number of values to assign into a symmetric matrix");
+        GODZILLA_ASSERT_TRUE(vals.size() == (ROWS * (ROWS + 1) / 2),
+                             "Incorrect number of values to assign into a symmetric matrix");
         DenseMatrix<T, ROWS, ROWS> res;
         // store upper triangular
         for (Int i = 0, k = 0; i < ROWS; ++i)

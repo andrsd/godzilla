@@ -37,7 +37,7 @@ MeshPartitioningOutput::output_step()
     PetscViewer viewer;
     PETSC_CHECK(PetscViewerHDF5Open(get_comm(), get_file_name().c_str(), FILE_MODE_WRITE, &viewer));
 
-    assert_true(get_problem()->get_dm() != nullptr, "DM is null");
+    GODZILLA_ASSERT_TRUE(get_problem()->get_dm() != nullptr, "DM is null");
     DM dmp = clone(get_problem()->get_dm());
 
     Int dim;

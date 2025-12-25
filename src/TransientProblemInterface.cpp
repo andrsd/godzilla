@@ -312,7 +312,7 @@ void
 TransientProblemInterface::init()
 {
     CALL_STACK_MSG();
-    assert_true(this->problem != nullptr, "Problem is null");
+    GODZILLA_ASSERT_TRUE(this->problem != nullptr, "Problem is null");
     PETSC_CHECK(TSSetDM(this->ts, this->problem->get_dm()));
 }
 

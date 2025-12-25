@@ -62,7 +62,7 @@ Int
 IndexSet::operator[](Int i) const
 {
     CALL_STACK_MSG();
-    assert_true(this->indices != nullptr, "Indices are not allocated");
+    GODZILLA_ASSERT_TRUE(this->indices != nullptr, "Indices are not allocated");
     return this->indices[i];
 }
 
@@ -70,7 +70,7 @@ Int
 IndexSet::operator()(Int i) const
 {
     CALL_STACK_MSG();
-    assert_true(this->indices != nullptr, "Indices are not allocated");
+    GODZILLA_ASSERT_TRUE(this->indices != nullptr, "Indices are not allocated");
     return this->indices[i];
 }
 
@@ -99,7 +99,7 @@ IndexSet::restore_indices()
 {
     CALL_STACK_MSG();
     if (this->indices != nullptr) {
-        assert_true(this->obj != nullptr, "IndexSet is null");
+        GODZILLA_ASSERT_TRUE(this->obj != nullptr, "IndexSet is null");
         PETSC_CHECK(ISRestoreIndices(this->obj, &this->indices));
         this->indices = nullptr;
     }
@@ -109,7 +109,7 @@ void
 IndexSet::get_point_range(Int & start, Int & end, const Int *& points) const
 {
     CALL_STACK_MSG();
-    assert_true(this->obj != nullptr, "IndexSet is null");
+    GODZILLA_ASSERT_TRUE(this->obj != nullptr, "IndexSet is null");
     PETSC_CHECK(ISGetPointRange(this->obj, &start, &end, &points));
 }
 
@@ -117,7 +117,7 @@ void
 IndexSet::restore_point_range(Int start, Int end, const Int * points) const
 {
     CALL_STACK_MSG();
-    assert_true(this->obj != nullptr, "IndexSet is null");
+    GODZILLA_ASSERT_TRUE(this->obj != nullptr, "IndexSet is null");
     PETSC_CHECK(ISRestorePointRange(this->obj, &start, &end, &points));
 }
 
@@ -125,7 +125,7 @@ void
 IndexSet::get_point_subrange(Int start, Int end, const Int * points) const
 {
     CALL_STACK_MSG();
-    assert_true(this->obj != nullptr, "IndexSet is null");
+    GODZILLA_ASSERT_TRUE(this->obj != nullptr, "IndexSet is null");
     PETSC_CHECK(ISGetPointSubrange(this->obj, start, end, points));
 }
 
@@ -133,7 +133,7 @@ Int
 IndexSet::get_size() const
 {
     CALL_STACK_MSG();
-    assert_true(this->obj != nullptr, "IndexSet is null");
+    GODZILLA_ASSERT_TRUE(this->obj != nullptr, "IndexSet is null");
     Int n;
     PETSC_CHECK(ISGetSize(this->obj, &n));
     return n;
@@ -143,7 +143,7 @@ Int
 IndexSet::get_local_size() const
 {
     CALL_STACK_MSG();
-    assert_true(this->obj != nullptr, "IndexSet is null");
+    GODZILLA_ASSERT_TRUE(this->obj != nullptr, "IndexSet is null");
     Int n;
     PETSC_CHECK(ISGetLocalSize(this->obj, &n));
     return n;
@@ -191,7 +191,7 @@ bool
 IndexSet::sorted() const
 {
     CALL_STACK_MSG();
-    assert_true(this->obj != nullptr, "IndexSet is null");
+    GODZILLA_ASSERT_TRUE(this->obj != nullptr, "IndexSet is null");
     PetscBool res;
     PETSC_CHECK(ISSorted(this->obj, &res));
     return res == PETSC_TRUE;
@@ -201,7 +201,7 @@ void
 IndexSet::sort() const
 {
     CALL_STACK_MSG();
-    assert_true(this->obj != nullptr, "IndexSet is null");
+    GODZILLA_ASSERT_TRUE(this->obj != nullptr, "IndexSet is null");
     PETSC_CHECK(ISSort(this->obj));
 }
 
@@ -209,7 +209,7 @@ void
 IndexSet::sort_remove_dups() const
 {
     CALL_STACK_MSG();
-    assert_true(this->obj != nullptr, "IndexSet is null");
+    GODZILLA_ASSERT_TRUE(this->obj != nullptr, "IndexSet is null");
     PETSC_CHECK(ISSortRemoveDups(this->obj));
 }
 
@@ -217,7 +217,7 @@ void
 IndexSet::view(PetscViewer viewer) const
 {
     CALL_STACK_MSG();
-    assert_true(this->obj != nullptr, "IndexSet is null");
+    GODZILLA_ASSERT_TRUE(this->obj != nullptr, "IndexSet is null");
     PETSC_CHECK(ISView(this->obj, viewer));
 }
 
@@ -225,7 +225,7 @@ bool
 IndexSet::empty() const
 {
     CALL_STACK_MSG();
-    assert_true(this->obj != nullptr, "IndexSet is null");
+    GODZILLA_ASSERT_TRUE(this->obj != nullptr, "IndexSet is null");
     return get_size() == 0;
 }
 
