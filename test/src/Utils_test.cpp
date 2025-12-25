@@ -1,6 +1,7 @@
 #include "gmock/gmock.h"
 #include "godzilla/Range.h"
 #include "godzilla/Utils.h"
+#include "godzilla/Array1D.h"
 
 using namespace godzilla;
 using namespace testing;
@@ -112,6 +113,23 @@ TEST(UtilsTest, join_std_vec_int)
     std::vector<Int> vals = { 1, 3, 5, 7, 9 };
     String s = join(", ", vals);
     EXPECT_EQ(s, "1, 3, 5, 7, 9");
+}
+
+TEST(UtilsTest, join_std_set_int)
+{
+    std::set<Int> vals = { 1, 3, 5, 7, 9 };
+    String s = join(", ", vals);
+    EXPECT_EQ(s, "1, 3, 5, 7, 9");
+}
+
+TEST(UtilsTest, join_array_1d)
+{
+    Array1D<Int> vals(3);
+    vals[0] = 3;
+    vals[1] = 7;
+    vals[2] = 9;
+    auto s = join(", ", vals);
+    EXPECT_EQ(s, "3, 7, 9");
 }
 
 TEST(UtilsTest, split_empty)
