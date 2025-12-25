@@ -28,12 +28,11 @@ FileMesh::FileMesh(const Parameters & pars) :
 {
     CALL_STACK_MSG();
 
-    if (fs::exists(this->file_name))
-        detect_file_format();
-    else
-        log_error(
-            "Unable to open '{}' for reading. Make sure it exists and you have read permissions.",
-            this->file_name);
+    expect_true(
+        fs::exists(this->file_name),
+        "Unable to open '{}' for reading. Make sure it exists and you have read permissions.",
+        this->file_name);
+    detect_file_format();
 }
 
 fs::path
@@ -58,8 +57,10 @@ FileMesh::create_mesh()
         return create_from_exodus();
     else if (this->file_format == GMSH)
         return create_from_gmsh();
-    else
-        throw Exception("Unknown mesh format");
+    else {
+        expect_true(false, "Unknown mesh format");
+        utils::unreachable();
+    }
 }
 
 Qtr<UnstructuredMesh>
