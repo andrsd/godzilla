@@ -31,7 +31,7 @@ assert_true(bool cond,
 
 // clang-format off
     #define GODZILLA_ASSERT_TRUE(cond, msg)            \
-        if (!(cond)) assert_true(cond, msg);
+        if (!(cond)) godzilla::assert_true(cond, msg);
 // clang-format on
 
 #else
