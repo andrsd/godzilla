@@ -1,25 +1,23 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>App &mdash; godzilla  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
 
   
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
-        <script src="../../_static/doctools.js?v=888ff710"></script>
-        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
-        <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -59,8 +57,8 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">App</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#_CPPv4N8godzilla3AppE"><code class="docutils literal notranslate"><span class="pre">App</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla3App3AppERKN3mpi12CommunicatorERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">App::App()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla3App3AppERKN3mpi12CommunicatorER8RegistryRKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">App::App()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla3App3AppEN3mpi12CommunicatorE6String"><code class="docutils literal notranslate"><span class="pre">App::App()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla3App3AppEN3mpi12CommunicatorER8Registry6String"><code class="docutils literal notranslate"><span class="pre">App::App()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla3App10get_loggerEv"><code class="docutils literal notranslate"><span class="pre">App::get_logger()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla3App8get_nameEv"><code class="docutils literal notranslate"><span class="pre">App::get_name()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla3App11get_versionEv"><code class="docutils literal notranslate"><span class="pre">App::get_version()</span></code></a></li>
@@ -73,14 +71,14 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla3App19get_verbosity_levelEv"><code class="docutils literal notranslate"><span class="pre">App::get_verbosity_level()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla3App19set_verbosity_levelEj"><code class="docutils literal notranslate"><span class="pre">App::set_verbosity_level()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla3App21get_restart_file_nameEv"><code class="docutils literal notranslate"><span class="pre">App::get_restart_file_name()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla3App21set_restart_file_nameERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">App::set_restart_file_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla3App21set_restart_file_nameEN2fs4pathE"><code class="docutils literal notranslate"><span class="pre">App::set_restart_file_name()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla3App8get_commEv"><code class="docutils literal notranslate"><span class="pre">App::get_comm()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla3App14get_parametersERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">App::get_parameters()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4I0EN8godzilla3App12build_objectEP1TRKNSt6stringER10Parameters"><code class="docutils literal notranslate"><span class="pre">App::build_object()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla3App14get_parametersE6String"><code class="docutils literal notranslate"><span class="pre">App::get_parameters()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4I0EN8godzilla3App12build_objectEP1T6StringR10Parameters"><code class="docutils literal notranslate"><span class="pre">App::build_object()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla3App22export_parameters_yamlEv"><code class="docutils literal notranslate"><span class="pre">App::export_parameters_yaml()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla3App22set_perf_log_file_nameERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">App::set_perf_log_file_name()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla3App15redirect_stdoutERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">App::redirect_stdout()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla3App15redirect_stderrERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">App::redirect_stderr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla3App22set_perf_log_file_nameEN2fs4pathE"><code class="docutils literal notranslate"><span class="pre">App::set_perf_log_file_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla3App15redirect_stdoutEN2fs4pathE"><code class="docutils literal notranslate"><span class="pre">App::redirect_stdout()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla3App15redirect_stderrEN2fs4pathE"><code class="docutils literal notranslate"><span class="pre">App::redirect_stderr()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -155,8 +153,8 @@
 <dd><div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8godzilla3App3AppERKN3mpi12CommunicatorERKNSt6stringE">
-<span id="_CPPv3N8godzilla3App3AppERKN3mpi12CommunicatorERKNSt6stringE"></span><span id="_CPPv2N8godzilla3App3AppERKN3mpi12CommunicatorERKNSt6stringE"></span><span id="godzilla::App::App__mpi::CommunicatorCR.ssCR"></span><span class="target" id="classgodzilla_1_1_app_1a74ce0e4d227b8774a5e9db9613623401"></span><span class="sig-name descname"><span class="n"><span class="pre">App</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">mpi</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Communicator</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">comm</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla3App3AppERKN3mpi12CommunicatorERKNSt6stringE" title="Link to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla3App3AppEN3mpi12CommunicatorE6String">
+<span id="_CPPv3N8godzilla3App3AppEN3mpi12CommunicatorE6String"></span><span id="_CPPv2N8godzilla3App3AppEN3mpi12CommunicatorE6String"></span><span id="godzilla::App::App__mpi::Communicator.String"></span><span class="target" id="classgodzilla_1_1_app_1a61005423dd1981e81a9abafe56328972"></span><span class="sig-name descname"><span class="n"><span class="pre">App</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">mpi</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Communicator</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">comm</span></span>, <span class="n"><span class="pre">String</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla3App3AppEN3mpi12CommunicatorE6String" title="Link to this definition"></a><br /></dt>
 <dd><p>Build an application object. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -171,8 +169,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8godzilla3App3AppERKN3mpi12CommunicatorER8RegistryRKNSt6stringE">
-<span id="_CPPv3N8godzilla3App3AppERKN3mpi12CommunicatorER8RegistryRKNSt6stringE"></span><span id="_CPPv2N8godzilla3App3AppERKN3mpi12CommunicatorER8RegistryRKNSt6stringE"></span><span id="godzilla::App::App__mpi::CommunicatorCR.RegistryR.ssCR"></span><span class="target" id="classgodzilla_1_1_app_1a363dbebea2d335264b73d73aaa08e6aa"></span><span class="sig-name descname"><span class="n"><span class="pre">App</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">mpi</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Communicator</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">comm</span></span>, <span class="n"><span class="pre">Registry</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">registry</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla3App3AppERKN3mpi12CommunicatorER8RegistryRKNSt6stringE" title="Link to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla3App3AppEN3mpi12CommunicatorER8Registry6String">
+<span id="_CPPv3N8godzilla3App3AppEN3mpi12CommunicatorER8Registry6String"></span><span id="_CPPv2N8godzilla3App3AppEN3mpi12CommunicatorER8Registry6String"></span><span id="godzilla::App::App__mpi::Communicator.RegistryR.String"></span><span class="target" id="classgodzilla_1_1_app_1a39bb78547506f1e3f940eab1ef1c90d8"></span><span class="sig-name descname"><span class="n"><span class="pre">App</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">mpi</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Communicator</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">comm</span></span>, <span class="n"><span class="pre">Registry</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">registry</span></span>, <span class="n"><span class="pre">String</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla3App3AppEN3mpi12CommunicatorER8Registry6String" title="Link to this definition"></a><br /></dt>
 <dd><p>Build an application object. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -200,7 +198,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8godzilla3App8get_nameEv">
-<span id="_CPPv3NK8godzilla3App8get_nameEv"></span><span id="_CPPv2NK8godzilla3App8get_nameEv"></span><span id="godzilla::App::get_nameC"></span><span class="target" id="classgodzilla_1_1_app_1a9cab2dcd691c7f040632453434bf297a"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla3App8get_nameEv" title="Link to this definition"></a><br /></dt>
+<span id="_CPPv3NK8godzilla3App8get_nameEv"></span><span id="_CPPv2NK8godzilla3App8get_nameEv"></span><span id="godzilla::App::get_nameC"></span><span class="target" id="classgodzilla_1_1_app_1a2c88e99d8ca63eea85928717a5b80956"></span><span class="n"><span class="pre">String</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla3App8get_nameEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Get Application name. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -211,7 +209,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8godzilla3App11get_versionEv">
-<span id="_CPPv3NK8godzilla3App11get_versionEv"></span><span id="_CPPv2NK8godzilla3App11get_versionEv"></span><span id="godzilla::App::get_versionC"></span><span class="target" id="classgodzilla_1_1_app_1af5969cfe15944306617f7184e1a77d23"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_version</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla3App11get_versionEv" title="Link to this definition"></a><br /></dt>
+<span id="_CPPv3NK8godzilla3App11get_versionEv"></span><span id="_CPPv2NK8godzilla3App11get_versionEv"></span><span id="godzilla::App::get_versionC"></span><span class="target" id="classgodzilla_1_1_app_1af94d1c19b129bee02e27f1100f978bb4"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">String</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_version</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla3App11get_versionEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Get application version. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -310,7 +308,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8godzilla3App21get_restart_file_nameEv">
-<span id="_CPPv3NK8godzilla3App21get_restart_file_nameEv"></span><span id="_CPPv2NK8godzilla3App21get_restart_file_nameEv"></span><span id="godzilla::App::get_restart_file_nameC"></span><span class="target" id="classgodzilla_1_1_app_1aceedce798b7a629b8e29c2a096cf61ab"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_restart_file_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla3App21get_restart_file_nameEv" title="Link to this definition"></a><br /></dt>
+<span id="_CPPv3NK8godzilla3App21get_restart_file_nameEv"></span><span id="_CPPv2NK8godzilla3App21get_restart_file_nameEv"></span><span id="godzilla::App::get_restart_file_nameC"></span><span class="target" id="classgodzilla_1_1_app_1a32ec141659e8cb820e0736e320687afb"></span><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_restart_file_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla3App21get_restart_file_nameEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Get restart file name. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -320,15 +318,15 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8godzilla3App21set_restart_file_nameERKNSt6stringE">
-<span id="_CPPv3N8godzilla3App21set_restart_file_nameERKNSt6stringE"></span><span id="_CPPv2N8godzilla3App21set_restart_file_nameERKNSt6stringE"></span><span id="godzilla::App::set_restart_file_name__ssCR"></span><span class="target" id="classgodzilla_1_1_app_1a662a3e2c9d08495b36d0317ecf1b3736"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_restart_file_name</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">file_name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla3App21set_restart_file_nameERKNSt6stringE" title="Link to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla3App21set_restart_file_nameEN2fs4pathE">
+<span id="_CPPv3N8godzilla3App21set_restart_file_nameEN2fs4pathE"></span><span id="_CPPv2N8godzilla3App21set_restart_file_nameEN2fs4pathE"></span><span id="godzilla::App::set_restart_file_name__fs::path"></span><span class="target" id="classgodzilla_1_1_app_1a2e5fd0cc7444c02ce2422d46135252db"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_restart_file_name</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">file_name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla3App21set_restart_file_nameEN2fs4pathE" title="Link to this definition"></a><br /></dt>
 <dd><p>Set restart file name. </p>
 <p>&#64;file_name The restart file name </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8godzilla3App8get_commEv">
-<span id="_CPPv3NK8godzilla3App8get_commEv"></span><span id="_CPPv2NK8godzilla3App8get_commEv"></span><span id="godzilla::App::get_commC"></span><span class="target" id="classgodzilla_1_1_app_1aaa5cc4c414e7b660d3915f5ff8754af5"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">mpi</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Communicator</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_comm</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla3App8get_commEv" title="Link to this definition"></a><br /></dt>
+<span id="_CPPv3NK8godzilla3App8get_commEv"></span><span id="_CPPv2NK8godzilla3App8get_commEv"></span><span id="godzilla::App::get_commC"></span><span class="target" id="classgodzilla_1_1_app_1a8d6846d194a9a6d9ecc97d47260758ad"></span><span class="n"><span class="pre">mpi</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Communicator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_comm</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla3App8get_commEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Get MPI communicator. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -338,8 +336,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8godzilla3App14get_parametersERKNSt6stringE">
-<span id="_CPPv3N8godzilla3App14get_parametersERKNSt6stringE"></span><span id="_CPPv2N8godzilla3App14get_parametersERKNSt6stringE"></span><span id="godzilla::App::get_parameters__ssCR"></span><span class="target" id="classgodzilla_1_1_app_1a4b4cafb31f309b500df0199a922b0b2e"></span><a class="reference internal" href="parameters.html#_CPPv4N8godzilla10ParametersE" title="godzilla::Parameters"><span class="n"><span class="pre">Parameters</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_parameters</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">class_name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla3App14get_parametersERKNSt6stringE" title="Link to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla3App14get_parametersE6String">
+<span id="_CPPv3N8godzilla3App14get_parametersE6String"></span><span id="_CPPv2N8godzilla3App14get_parametersE6String"></span><span id="godzilla::App::get_parameters__String"></span><span class="target" id="classgodzilla_1_1_app_1a574a3fb47adfce5dda2cc968464a8526"></span><a class="reference internal" href="parameters.html#_CPPv4N8godzilla10ParametersE" title="godzilla::Parameters"><span class="n"><span class="pre">Parameters</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_parameters</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">String</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">class_name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla3App14get_parametersE6String" title="Link to this definition"></a><br /></dt>
 <dd><p>Get parameters for a class. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -352,8 +350,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4I0EN8godzilla3App12build_objectEP1TRKNSt6stringER10Parameters">
-<span id="_CPPv3I0EN8godzilla3App12build_objectERKNSt6stringER10Parameters"></span><span id="_CPPv2I0EN8godzilla3App12build_objectERKNSt6stringER10Parameters"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classgodzilla_1_1_app_1acf726f8a42ecaffaf117ae5ff41c951a"></span><a class="reference internal" href="#_CPPv4I0EN8godzilla3App12build_objectEP1TRKNSt6stringER10Parameters" title="godzilla::App::build_object::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">build_object</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">obj_name</span></span>, <a class="reference internal" href="parameters.html#_CPPv4N8godzilla10ParametersE" title="godzilla::Parameters"><span class="n"><span class="pre">Parameters</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">parameters</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN8godzilla3App12build_objectEP1TRKNSt6stringER10Parameters" title="Link to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4I0EN8godzilla3App12build_objectEP1T6StringR10Parameters">
+<span id="_CPPv3I0EN8godzilla3App12build_objectE6StringR10Parameters"></span><span id="_CPPv2I0EN8godzilla3App12build_objectE6StringR10Parameters"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classgodzilla_1_1_app_1a92d46c7040eb221d5e8a764f850fef96"></span><a class="reference internal" href="#_CPPv4I0EN8godzilla3App12build_objectEP1T6StringR10Parameters" title="godzilla::App::build_object::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">build_object</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">String</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">obj_name</span></span>, <a class="reference internal" href="parameters.html#_CPPv4N8godzilla10ParametersE" title="godzilla::Parameters"><span class="n"><span class="pre">Parameters</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">parameters</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN8godzilla3App12build_objectEP1T6StringR10Parameters" title="Link to this definition"></a><br /></dt>
 <dd><p>Build object using the <a class="reference internal" href="factory.html#classgodzilla_1_1_factory"><span class="std std-ref">Factory</span></a>. </p>
 <p>This is convenience API for building object with having the <code class="docutils literal notranslate"><span class="pre">_app</span></code> parameter set to this application object.</p>
 <dl class="field-list simple">
@@ -376,8 +374,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8godzilla3App22set_perf_log_file_nameERKNSt6stringE">
-<span id="_CPPv3N8godzilla3App22set_perf_log_file_nameERKNSt6stringE"></span><span id="_CPPv2N8godzilla3App22set_perf_log_file_nameERKNSt6stringE"></span><span id="godzilla::App::set_perf_log_file_name__ssCR"></span><span class="target" id="classgodzilla_1_1_app_1aafb3b2f4245f6ce81a77288dca402508"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_perf_log_file_name</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">file_name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla3App22set_perf_log_file_nameERKNSt6stringE" title="Link to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla3App22set_perf_log_file_nameEN2fs4pathE">
+<span id="_CPPv3N8godzilla3App22set_perf_log_file_nameEN2fs4pathE"></span><span id="_CPPv2N8godzilla3App22set_perf_log_file_nameEN2fs4pathE"></span><span id="godzilla::App::set_perf_log_file_name__fs::path"></span><span class="target" id="classgodzilla_1_1_app_1a3ed01696a0cdee8bedb4ee8c6709a185"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_perf_log_file_name</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">file_name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla3App22set_perf_log_file_nameEN2fs4pathE" title="Link to this definition"></a><br /></dt>
 <dd><p>Set file name where to wrote the perf log. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -387,8 +385,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8godzilla3App15redirect_stdoutERKNSt6stringE">
-<span id="_CPPv3N8godzilla3App15redirect_stdoutERKNSt6stringE"></span><span id="_CPPv2N8godzilla3App15redirect_stdoutERKNSt6stringE"></span><span id="godzilla::App::redirect_stdout__ssCR"></span><span class="target" id="classgodzilla_1_1_app_1adb803c7a38f7c2ab789d0edbdaa57e61"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">redirect_stdout</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">file_name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla3App15redirect_stdoutERKNSt6stringE" title="Link to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla3App15redirect_stdoutEN2fs4pathE">
+<span id="_CPPv3N8godzilla3App15redirect_stdoutEN2fs4pathE"></span><span id="_CPPv2N8godzilla3App15redirect_stdoutEN2fs4pathE"></span><span id="godzilla::App::redirect_stdout__fs::path"></span><span class="target" id="classgodzilla_1_1_app_1a9d37303b02b4f2d1d80faa1223dc9093"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">redirect_stdout</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">file_name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla3App15redirect_stdoutEN2fs4pathE" title="Link to this definition"></a><br /></dt>
 <dd><p>Redirect standard output into file. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -398,8 +396,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8godzilla3App15redirect_stderrERKNSt6stringE">
-<span id="_CPPv3N8godzilla3App15redirect_stderrERKNSt6stringE"></span><span id="_CPPv2N8godzilla3App15redirect_stderrERKNSt6stringE"></span><span id="godzilla::App::redirect_stderr__ssCR"></span><span class="target" id="classgodzilla_1_1_app_1a45b5b45c4c10f3485d8d7028d4616120"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">redirect_stderr</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">file_name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla3App15redirect_stderrERKNSt6stringE" title="Link to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla3App15redirect_stderrEN2fs4pathE">
+<span id="_CPPv3N8godzilla3App15redirect_stderrEN2fs4pathE"></span><span id="_CPPv2N8godzilla3App15redirect_stderrEN2fs4pathE"></span><span id="godzilla::App::redirect_stderr__fs::path"></span><span class="target" id="classgodzilla_1_1_app_1a24110ea749d3a95f51bd439f4be783fd"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">redirect_stderr</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">file_name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla3App15redirect_stderrEN2fs4pathE" title="Link to this definition"></a><br /></dt>
 <dd><p>Redirect standard error into file. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

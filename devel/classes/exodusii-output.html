@@ -1,25 +1,23 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ExodusIIOutput &mdash; godzilla  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
 
   
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
-        <script src="../../_static/doctools.js?v=888ff710"></script>
-        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
-        <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -137,14 +135,14 @@
 <ul>
 <li><strong>Required:</strong><ul class="simple">
 <li><p><strong>app (godzilla::App*) - </strong>Application we are part of</p></li>
-<li><p><strong>file (String) - </strong>The name of the output file.</p></li>
+<li><p><strong>file (std::filesystem::__cxx11::path) - </strong>The name of the output file.</p></li>
 </ul>
 </li>
 <li><strong>Optional:</strong><ul class="simple">
 <li><p><strong>interval (Integer) - </strong>Interval</p></li>
-<li><p><strong>name (String) - </strong>Name of the object</p></li>
+<li><p><strong>name (godzilla::String) - </strong>Name of the object</p></li>
 <li><p><strong>True (godzilla::Flags&lt;godzilla::ExecuteOn&gt;) - </strong>When output should happen</p></li>
-<li><p><strong>variables ([String, …]) - </strong>List of variables to be stored. If not specified, all variables will be stored.</p></li>
+<li><p><strong>variables (std::vector&lt;godzilla::String, std::allocator&lt;godzilla::String&gt; &gt;) - </strong>List of variables to be stored. If not specified, all variables will be stored.</p></li>
 </ul>
 </li>
 </ul>
