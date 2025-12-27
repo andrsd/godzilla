@@ -6,7 +6,6 @@
 #include "godzilla/PrintInterface.h"
 #include "godzilla/Terminal.h"
 #include "godzilla/UnstructuredMesh.h"
-#include <sys/stat.h>
 #include <chrono>
 #include <fmt/printf.h>
 #ifdef HAVE_CXXABI_H
@@ -18,15 +17,15 @@ namespace godzilla {
 namespace {
 
 Optional<Int>
-parse_region(const std::string & s)
+parse_region(String s)
 {
-    if (s.empty())
+    if (s.length() == 0)
         return std::nullopt;
 
     Int value = 0;
-    auto [ptr, ec] = std::from_chars(s.data(), s.data() + s.size(), value);
+    auto [ptr, ec] = std::from_chars(s.data(), s.data() + s.length(), value);
 
-    if (ec == std::errc() && ptr == s.data() + s.size() && value >= 0)
+    if (ec == std::errc() && ptr == s.data() + s.length() && value >= 0)
         return value;
 
     return std::nullopt;
@@ -36,62 +35,7 @@ parse_region(const std::string & s)
 
 namespace utils {
 
-bool
-path_exists(const std::string & path)
-{
-    CALL_STACK_MSG();
-    struct stat buffer = {};
-    return (stat(path.c_str(), &buffer) == 0);
-}
-
-std::string
-to_upper(const std::string & name)
-{
-    CALL_STACK_MSG();
-    std::string upper(name);
-    std::transform(upper.begin(), upper.end(), upper.begin(), ::toupper);
-    return upper;
-}
-
-std::string
-to_lower(const std::string & name)
-{
-    CALL_STACK_MSG();
-    std::string lower(name);
-    std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
-    return lower;
-}
-
-bool
-has_suffix(const std::string & str, const std::string & suffix)
-{
-    CALL_STACK_MSG();
-    return str.size() >= suffix.size() &&
-           str.compare(str.size() - suffix.size(), suffix.size(), suffix) == 0;
-}
-
-bool
-ends_with(const std::string & str, const std::string & end)
-{
-    CALL_STACK_MSG();
-    return has_suffix(str, end);
-}
-
-bool
-has_prefix(const std::string & str, const std::string & prefix)
-{
-    CALL_STACK_MSG();
-    return str.size() >= prefix.size() && str.compare(0, prefix.size(), prefix) == 0;
-}
-
-bool
-starts_with(const std::string & str, const std::string & start)
-{
-    CALL_STACK_MSG();
-    return has_prefix(str, start);
-}
-
-std::string
+String
 human_time(PetscLogDouble time)
 {
     CALL_STACK_MSG();
@@ -103,25 +47,24 @@ human_time(PetscLogDouble time)
     us -= m;
     auto s = duration_cast<milliseconds>(us) / 1000.;
 
-    std::string tm;
+    std::vector<String> strs;
     if (h.count() > 0)
-        tm += fmt::format(" {}h", h.count());
+        strs.push_back(fmt::format("{}h", h.count()));
     if (m.count() > 0)
-        tm += fmt::format(" {}m", m.count());
-    if ((s.count() > 0) || (h.count() == 0 && m.count() == 0)) {
-        tm += fmt::format(" {:.2f}", s.count());
-        tm += fmt::format("s");
-    }
-    return tm.substr(1);
+        strs.push_back(fmt::format("{}m", m.count()));
+    if ((s.count() > 0) || (h.count() == 0 && m.count() == 0))
+        strs.push_back(fmt::format("{:.2f}s", s.count()));
+    return join(" ", strs);
 }
 
-std::string
-human_type_name(const std::string & type)
+String
+human_type_name(String type)
 {
     // clang-format off
     if (type == "std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>" ||
         type == "NSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEE" ||
-        type == "std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >")
+        type == "std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >" ||
+        type == "N8godzilla6StringE")
         return "String";
     else if (type == "int" || type == "long" || type == "long long")
         return "Integer";
@@ -144,8 +87,8 @@ human_type_name(const std::string & type)
         return type;
 }
 
-std::string
-demangle(const std::string & mangled_name)
+String
+demangle(String mangled_name)
 {
 #ifdef HAVE_CXXABI_H
     int status = -1;
@@ -172,13 +115,32 @@ print_converged_reason(PrintInterface & pi, bool converged)
 }
 
 Int
-get_block_id_from_region(const godzilla::UnstructuredMesh & mesh, const std::string & region)
+get_block_id_from_region(const godzilla::UnstructuredMesh & mesh, String region)
 {
     auto id = parse_region(region);
     if (id.has_value())
         return id.value();
     else
         return mesh.get_cell_set_id(region);
+}
+
+std::vector<String>
+split(const char * delim, String line)
+{
+    std::vector<String> parts;
+    if (line.length() > 0) {
+        size_t start = 0;
+        while (true) {
+            auto pos = line.find(delim, start);
+            if (!pos.has_value()) {
+                parts.emplace_back(line.substr(start));
+                break;
+            }
+            parts.emplace_back(line.substr(start, pos.value() - start));
+            start = pos.value() + std::strlen(delim);
+        }
+    }
+    return parts;
 }
 
 } // namespace godzilla

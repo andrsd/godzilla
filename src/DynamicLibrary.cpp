@@ -10,7 +10,7 @@ namespace godzilla {
 
 std::vector<std::filesystem::path> DynamicLibrary::search_paths;
 
-DynamicLibrary::DynamicLibrary(const std::string & lib_name) : handle(nullptr)
+DynamicLibrary::DynamicLibrary(String lib_name) : handle(nullptr)
 {
 #ifdef __APPLE__
     this->file_name = fmt::format("lib{}.dylib", lib_name);
@@ -26,7 +26,7 @@ DynamicLibrary::load()
     auto ext_file_path = get_ext_file_path();
     this->handle = dlopen(ext_file_path.c_str(), RTLD_NOW);
     if (!this->handle)
-        throw Exception("Unable to load {}: {}", this->file_name, dlerror());
+        throw Exception("Unable to load {}: {}", this->file_name.string(), dlerror());
     // Clear any existing error
     dlerror();
 }
@@ -63,13 +63,13 @@ DynamicLibrary::get_search_paths()
     return search_paths;
 }
 
-std::string
+fs::path
 DynamicLibrary::get_ext_file_path() const
 {
     CALL_STACK_MSG();
     // first, look at our paths
     for (auto & path : search_paths) {
-        fs::path ext_file_path = path / this->file_name;
+        fs::path ext_file_path = path / this->file_name.c_str();
         if (fs::exists(ext_file_path))
             return ext_file_path;
     }

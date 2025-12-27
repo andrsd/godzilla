@@ -37,7 +37,7 @@ Parameters
 LinearProblem::parameters()
 {
     auto params = Problem::parameters();
-    params.add_param<std::string>("ksp_type", "gmres", "KSP type")
+    params.add_param<String>("ksp_type", "gmres", "KSP type")
         .add_param<Real>("lin_rel_tol",
                          1e-5,
                          "Relative convergence tolerance for the linear solver")
@@ -53,7 +53,7 @@ LinearProblem::parameters()
 LinearProblem::LinearProblem(const Parameters & pars) :
     Problem(pars),
     RestartInterface(),
-    ksp_type(pars.get<std::string>("ksp_type")),
+    ksp_type(pars.get<String>("ksp_type")),
     lin_rel_tol(pars.get<Real>("lin_rel_tol")),
     lin_abs_tol(pars.get<Real>("lin_abs_tol")),
     lin_max_iter(pars.get<Int>("lin_max_iter"))
@@ -62,7 +62,7 @@ LinearProblem::LinearProblem(const Parameters & pars) :
     set_default_output_on(ExecuteOn::FINAL);
 }
 
-const std::string &
+String
 LinearProblem::get_ksp_type() const
 {
     CALL_STACK_MSG();

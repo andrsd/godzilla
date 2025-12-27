@@ -4,7 +4,11 @@
 #pragma once
 
 #include "godzilla/Types.h"
+#include "godzilla/String.h"
 #include "godzilla/Output.h"
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 namespace godzilla {
 
@@ -22,12 +26,12 @@ public:
     /// Get the file name with the output file produced by this outputter
     ///
     /// @return The file name with the output
-    std::string get_file_name() const;
+    fs::path get_file_name() const;
 
     /// Set file base
     ///
     /// @param file_base File base to set
-    void set_file_base(const std::string & file_base);
+    void set_file_base(fs::path file_base);
 
     /// Set the file base for a sequence of outputs
     ///
@@ -35,7 +39,7 @@ public:
     void set_sequence_file_base(unsigned int stepi);
 
 protected:
-    const std::string & get_file_base() const;
+    fs::path get_file_base() const;
     void add_var_names(FieldID fid, std::vector<std::string> & var_names);
     void add_aux_var_names(FieldID fid, std::vector<std::string> & var_names);
 
@@ -46,13 +50,13 @@ private:
     /// Get file extension
     ///
     /// @return File extension
-    virtual std::string get_file_ext() const = 0;
-    virtual std::string create_file_name() const;
+    virtual String get_file_ext() const = 0;
+    virtual fs::path create_file_name() const;
 
     /// The file base of the output file
-    std::string file_base;
+    fs::path file_base;
     /// The file name of the output file
-    std::string file_name;
+    fs::path file_name;
     /// Convenience pointer
     DiscreteProblemInterface * dpi;
 

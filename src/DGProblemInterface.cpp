@@ -16,7 +16,7 @@
 
 namespace godzilla {
 
-const std::string DGProblemInterface::empty_name;
+const String DGProblemInterface::empty_name;
 
 DGProblemInterface::DGProblemInterface(Problem * problem, const Parameters & pars) :
     DiscreteProblemInterface(problem, pars),
@@ -65,18 +65,18 @@ DGProblemInterface::get_num_fields() const
     return (Int) this->fields.size();
 }
 
-std::vector<std::string>
+std::vector<String>
 DGProblemInterface::get_field_names() const
 {
     CALL_STACK_MSG();
-    std::vector<std::string> infos;
+    std::vector<String> infos;
     infos.reserve(this->fields.size());
     for (const auto & [_, info] : this->fields)
         infos.push_back(info.name);
     return infos;
 }
 
-const std::string &
+String
 DGProblemInterface::get_field_name(FieldID fid) const
 {
     CALL_STACK_MSG();
@@ -99,7 +99,7 @@ DGProblemInterface::get_field_num_components(FieldID fid) const
 }
 
 FieldID
-DGProblemInterface::get_field_id(const std::string & name) const
+DGProblemInterface::get_field_id(String name) const
 {
     CALL_STACK_MSG();
     const auto & it = this->fields_by_name.find(name);
@@ -118,7 +118,7 @@ DGProblemInterface::has_field_by_id(FieldID fid) const
 }
 
 bool
-DGProblemInterface::has_field_by_name(const std::string & name) const
+DGProblemInterface::has_field_by_name(String name) const
 {
     CALL_STACK_MSG();
     const auto & it = this->fields_by_name.find(name);
@@ -148,7 +148,7 @@ DGProblemInterface::get_field_order(FieldID fid) const
         throw Exception("Field with ID = '{}' does not exist.", fid);
 }
 
-std::string
+String
 DGProblemInterface::get_field_component_name(FieldID fid, Int component) const
 {
     CALL_STACK_MSG();
@@ -169,7 +169,7 @@ DGProblemInterface::get_field_component_name(FieldID fid, Int component) const
 }
 
 void
-DGProblemInterface::set_field_component_name(FieldID fid, Int component, const std::string & name)
+DGProblemInterface::set_field_component_name(FieldID fid, Int component, String name)
 {
     CALL_STACK_MSG();
     const auto & it = this->fields.find(fid);
@@ -194,18 +194,18 @@ DGProblemInterface::get_num_aux_fields() const
     return (Int) this->aux_fields.size();
 }
 
-std::vector<std::string>
+std::vector<String>
 DGProblemInterface::get_aux_field_names() const
 {
     CALL_STACK_MSG();
-    std::vector<std::string> names;
+    std::vector<String> names;
     names.reserve(this->aux_fields.size());
     for (const auto & [_, info] : this->aux_fields)
         names.push_back(info.name);
     return names;
 }
 
-const std::string &
+String
 DGProblemInterface::get_aux_field_name(FieldID fid) const
 {
     CALL_STACK_MSG();
@@ -228,7 +228,7 @@ DGProblemInterface::get_aux_field_num_components(FieldID fid) const
 }
 
 FieldID
-DGProblemInterface::get_aux_field_id(const std::string & name) const
+DGProblemInterface::get_aux_field_id(String name) const
 {
     CALL_STACK_MSG();
     const auto & it = this->aux_fields_by_name.find(name);
@@ -247,7 +247,7 @@ DGProblemInterface::has_aux_field_by_id(FieldID fid) const
 }
 
 bool
-DGProblemInterface::has_aux_field_by_name(const std::string & name) const
+DGProblemInterface::has_aux_field_by_name(String name) const
 {
     CALL_STACK_MSG();
     const auto & it = this->aux_fields_by_name.find(name);
@@ -265,7 +265,7 @@ DGProblemInterface::get_aux_field_order(FieldID fid) const
         throw Exception("Auxiliary field with ID = '{}' does not exist.", fid);
 }
 
-std::string
+String
 DGProblemInterface::get_aux_field_component_name(FieldID fid, Int component) const
 {
     CALL_STACK_MSG();
@@ -275,9 +275,9 @@ DGProblemInterface::get_aux_field_component_name(FieldID fid, Int component) con
         if (fi.nc == 1)
             return { "" };
         else {
-            assert_true(component < it->second.nc &&
-                            std::cmp_less(component, it->second.component_names.size()),
-                        "Component out of bounds");
+            GODZILLA_ASSERT_TRUE(component < it->second.nc &&
+                                     std::cmp_less(component, it->second.component_names.size()),
+                                 "Component out of bounds");
             return it->second.component_names.at(component);
         }
     }
@@ -286,9 +286,7 @@ DGProblemInterface::get_aux_field_component_name(FieldID fid, Int component) con
 }
 
 void
-DGProblemInterface::set_aux_field_component_name(FieldID fid,
-                                                 Int component,
-                                                 const std::string & name)
+DGProblemInterface::set_aux_field_component_name(FieldID fid, Int component, String name)
 {
     CALL_STACK_MSG();
     const auto & it = this->aux_fields.find(fid);
@@ -307,7 +305,7 @@ DGProblemInterface::set_aux_field_component_name(FieldID fid,
 }
 
 FieldID
-DGProblemInterface::add_field(const std::string & name, Int nc, Order k, const Label & block)
+DGProblemInterface::add_field(String name, Int nc, Order k, const Label & block)
 {
     CALL_STACK_MSG();
     auto keys = utils::map_keys(this->fields);
@@ -317,11 +315,7 @@ DGProblemInterface::add_field(const std::string & name, Int nc, Order k, const L
 }
 
 void
-DGProblemInterface::set_field(FieldID id,
-                              const std::string & name,
-                              Int nc,
-                              Order k,
-                              const Label & block)
+DGProblemInterface::set_field(FieldID id, String name, Int nc, Order k, const Label & block)
 {
     CALL_STACK_MSG();
     if (k != 1)
@@ -343,7 +337,7 @@ DGProblemInterface::set_field(FieldID id,
 }
 
 FieldID
-DGProblemInterface::add_aux_field(const std::string & name, Int nc, Order k, const Label & block)
+DGProblemInterface::add_aux_field(String name, Int nc, Order k, const Label & block)
 {
     CALL_STACK_MSG();
     auto keys = utils::map_keys(this->aux_fields);
@@ -353,11 +347,7 @@ DGProblemInterface::add_aux_field(const std::string & name, Int nc, Order k, con
 }
 
 void
-DGProblemInterface::set_aux_field(FieldID id,
-                                  const std::string & name,
-                                  Int nc,
-                                  Order k,
-                                  const Label & block)
+DGProblemInterface::set_aux_field(FieldID id, String name, Int nc, Order k, const Label & block)
 {
     CALL_STACK_MSG();
     auto it = this->aux_fields.find(id);
@@ -480,8 +470,9 @@ DGProblemInterface::set_up_section_constraint_dofs(Section & section)
                 for (Int i = 0; i < facets.get_local_size(); ++i) {
                     auto facet = facets(i);
                     auto support = unstr_mesh->get_support(facet);
-                    assert_true(support.size() == 1,
-                                "Internal facet cannot be included in a boundary face set");
+                    GODZILLA_ASSERT_TRUE(
+                        support.size() == 1,
+                        "Internal facet cannot be included in a boundary face set");
                     auto cell_id = support[0];
                     section.add_constraint_dof(cell_id, n_ced_dofs);
                     section.set_field_constraint_dof(cell_id, fid.value(), n_ced_dofs);
@@ -516,8 +507,9 @@ DGProblemInterface::set_up_section_constraint_indicies(Section & section)
                 for (Int i = 0; i < facets.get_local_size(); ++i) {
                     auto facet = facets(i);
                     auto support = unstr_mesh->get_support(facet);
-                    assert_true(support.size() == 1,
-                                "Internal facet cannot be included in a boundary face set");
+                    GODZILLA_ASSERT_TRUE(
+                        support.size() == 1,
+                        "Internal facet cannot be included in a boundary face set");
                     auto fconn = unstr_mesh->get_connectivity(facet);
                     auto econn = unstr_mesh->get_connectivity(support[0]);
 

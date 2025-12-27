@@ -44,7 +44,7 @@ Mesh::set_dimension(Dimension dim)
 }
 
 bool
-Mesh::has_label(const std::string & name) const
+Mesh::has_label(String name) const
 {
     CALL_STACK_MSG();
     PetscBool exists = PETSC_FALSE;
@@ -53,7 +53,7 @@ Mesh::has_label(const std::string & name) const
 }
 
 Label
-Mesh::get_label(const std::string & name) const
+Mesh::get_label(String name) const
 {
     CALL_STACK_MSG();
     Label label;
@@ -63,14 +63,14 @@ Mesh::get_label(const std::string & name) const
 }
 
 void
-Mesh::create_label(const std::string & name) const
+Mesh::create_label(String name) const
 {
     CALL_STACK_MSG();
     PETSC_CHECK(DMCreateLabel(this->obj, name.c_str()));
 }
 
 void
-Mesh::remove_label(const std::string & name)
+Mesh::remove_label(String name)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(DMRemoveLabel(this->obj, name.c_str(), nullptr));

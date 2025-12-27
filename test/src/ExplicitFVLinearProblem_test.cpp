@@ -95,6 +95,12 @@ protected:
     {
         set_riemann_solver(FieldID(0), this, &TestExplicitFVLinearProblem::compute_flux);
     }
+
+    void
+    set_up_time_scheme() override
+    {
+        set_scheme(TSEULER);
+    }
 };
 
 } // namespace
@@ -122,8 +128,7 @@ TEST(ExplicitFVLinearProblemTest, api)
         .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
-        .set<Real>("dt", 1e-3)
-        .set<std::string>("scheme", "euler");
+        .set<Real>("dt", 1e-3);
     TestExplicitFVLinearProblem prob(prob_pars);
     app.set_problem(&prob);
 
@@ -134,7 +139,7 @@ TEST(ExplicitFVLinearProblemTest, api)
 
     EXPECT_EQ(prob.get_field_name(FieldID(0)), "u");
     EXPECT_THROW_MSG(
-        { [[maybe_unused]] auto & n = prob.get_field_name(FieldID(65536)); },
+        { [[maybe_unused]] auto n = prob.get_field_name(FieldID(65536)); },
         "Field with ID = '65536' does not exist.");
 
     EXPECT_EQ(prob.get_field_num_components(FieldID(0)), 1);
@@ -228,8 +233,7 @@ TEST(ExplicitFVLinearProblemTest, fields)
         .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
-        .set<Real>("dt", 1e-3)
-        .set<std::string>("scheme", "euler");
+        .set<Real>("dt", 1e-3);
     TestExplicitFVLinearProblem prob(prob_pars);
     app.set_problem(&prob);
 
@@ -280,8 +284,7 @@ TEST(ExplicitFVLinearProblemTest, test_mass_matrix)
         .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
-        .set<Real>("dt", 1e-3)
-        .set<std::string>("scheme", "euler");
+        .set<Real>("dt", 1e-3);
     TestExplicitFVLinearProblem prob(prob_pars);
     app.set_problem(&prob);
 
@@ -314,20 +317,19 @@ TEST(ExplicitFVLinearProblemTest, solve)
         .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
-        .set<Real>("dt", 1e-3)
-        .set<std::string>("scheme", "euler");
+        .set<Real>("dt", 1e-3);
     TestExplicitFVLinearProblem prob(prob_pars);
     app.set_problem(&prob);
 
     auto bc_left_pars = TestBC::parameters();
     bc_left_pars.set<App *>("app", &app)
-        .set<std::vector<std::string>>("boundary", { "left" })
+        .set<std::vector<String>>("boundary", { "left" })
         .set<bool>("inlet", true);
     auto bc_left = prob.add_boundary_condition<TestBC>(bc_left_pars);
 
     auto bc_right_pars = TestBC::parameters();
     bc_right_pars.set<App *>("app", &app)
-        .set<std::vector<std::string>>("boundary", { "right" })
+        .set<std::vector<String>>("boundary", { "right" })
         .set<bool>("inlet", false);
     auto bc_right = prob.add_boundary_condition<TestBC>(bc_right_pars);
 
@@ -380,61 +382,14 @@ TEST(ExplicitFVLinearProblemTest, set_schemes)
         .set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
-        .set<Real>("dt", 1e-3)
-        .set<std::string>("scheme", "euler");
+        .set<Real>("dt", 1e-3);
     TestExplicitFVLinearProblem prob(prob_pars);
 
     prob.create();
 
-    std::vector<TransientProblemInterface::TimeScheme> schemes = {
-        TransientProblemInterface::TimeScheme::EULER,
-        TransientProblemInterface::TimeScheme::SSP_RK_2,
-        TransientProblemInterface::TimeScheme::SSP_RK_3,
-        TransientProblemInterface::TimeScheme::RK_2,
-        TransientProblemInterface::TimeScheme::HEUN
-    };
     std::vector<TSType> types = { TSEULER, TSSSP, TSSSP, TSRK, TSRK };
-    for (std::size_t i = 0; i < schemes.size(); ++i) {
-        prob.set_scheme(schemes[i]);
+    for (std::size_t i = 0; i < types.size(); ++i) {
+        prob.set_scheme(types[i]);
         EXPECT_EQ(prob.get_scheme(), types[i]);
     }
-}
-
-TEST(ExplicitFVLinearProblemTest, wrong_schemes)
-{
-    testing::internal::CaptureStderr();
-
-    TestApp app;
-
-#if PETSC_VERSION_GE(3, 21, 0)
-    // PETSc 3.21.0+ has a bug in forming the mass matrix in 1D, se we use 2D mesh in this test
-    auto mesh_pars = RectangleMesh::parameters();
-    mesh_pars.set<App *>("app", &app);
-    mesh_pars.set<Int>("nx", 2);
-    mesh_pars.set<Int>("ny", 1);
-    auto mesh = MeshFactory::create<RectangleMesh>(mesh_pars);
-#else
-    auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("app", &app);
-    mesh_pars.set<Int>("nx", 2);
-    auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
-#endif
-
-    auto prob_pars = TestExplicitFVLinearProblem::parameters();
-    prob_pars.set<App *>("app", &app)
-        .set<Mesh *>("mesh", mesh.get())
-        .set<Real>("start_time", 0.)
-        .set<Real>("end_time", 1e-3)
-        .set<Real>("dt", 1e-3)
-        .set<std::string>("scheme", "asdf");
-    TestExplicitFVLinearProblem prob(prob_pars);
-
-    prob.create();
-
-    EXPECT_FALSE(app.check_integrity());
-    app.get_logger()->print();
-
-    EXPECT_THAT(testing::internal::GetCapturedStderr(),
-                testing::HasSubstr("The 'scheme' parameter can be either 'euler', 'ssp-rk-2', "
-                                   "'ssp-rk-3', 'rk-2' or 'heun'."));
 }

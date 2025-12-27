@@ -22,10 +22,10 @@ public:
     MOCK_METHOD(void, view, (PetscViewer viewer));
 
 public:
-    static const std::string name;
+    static const String name;
 };
 
-const std::string TestTSScheme::name = "test-ts";
+const String TestTSScheme::name = "test-ts";
 
 bool
 register_scheme()
@@ -125,7 +125,6 @@ GTestProblem::parameters()
 {
     Parameters params = Problem::parameters();
     params += TransientProblemInterface::parameters();
-    params.add_param<std::string>("scheme", "test-ts", "");
     return params;
 }
 

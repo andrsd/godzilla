@@ -36,19 +36,19 @@ ImplicitFENonlinearProblem::parameters()
 {
     auto params = FENonlinearProblem::parameters();
     params += TransientProblemInterface::parameters();
-    params.add_param<std::string>("scheme", "beuler", "Time stepping scheme: [beuler, cn]");
+    params.add_param<String>("scheme", "beuler", "Time stepping scheme: [beuler, cn]");
     return params;
 }
 
 ImplicitFENonlinearProblem::ImplicitFENonlinearProblem(const Parameters & pars) :
     FENonlinearProblem(pars),
     TransientProblemInterface(this, pars),
-    scheme(pars.get<std::string>("scheme"))
+    scheme(pars.get<String>("scheme"))
 {
     CALL_STACK_MSG();
     set_default_output_on(ExecuteOn::INITIAL | ExecuteOn::TIMESTEP);
-    if (!validation::in(this->scheme, { "beuler", "cn" }))
-        log_error("The 'scheme' parameter can be either 'beuler' or 'cn'.");
+    expect_true(validation::in(this->scheme, { "beuler", "cn" }),
+                "The 'scheme' parameter can be either 'beuler' or 'cn'.");
 }
 
 Real
@@ -127,10 +127,13 @@ void
 ImplicitFENonlinearProblem::set_up_time_scheme()
 {
     CALL_STACK_MSG();
-    std::string name = utils::to_lower(this->scheme);
-    std::map<std::string, TimeScheme> scheme_map = { { "beuler", TimeScheme::BEULER },
-                                                     { "cn", TimeScheme::CN } };
-    set_scheme(scheme_map[name]);
+    auto name = this->scheme.to_lower();
+    if (name == "beuler")
+        set_scheme(TSBEULER);
+    else if (name == "cn")
+        set_scheme(TSCN);
+    else
+        godzilla::utils::unreachable();
 }
 
 void

@@ -6,6 +6,7 @@
 #include "godzilla/Object.h"
 #include "godzilla/PrintInterface.h"
 #include "godzilla/Types.h"
+#include "godzilla/String.h"
 #include "godzilla/DenseVector.h"
 
 namespace godzilla {
@@ -28,7 +29,7 @@ public:
     /// Get field name
     ///
     /// @return The field name
-    const std::string & get_field_name() const;
+    String get_field_name() const;
 
     /// Get the ID of the field this boundary condition operates on
     ///
@@ -53,7 +54,7 @@ private:
     /// Discrete problem this object is part of
     DiscreteProblemInterface * dpi;
     /// Field name this initial condition is attached to
-    Optional<std::string> field_name;
+    Optional<String> field_name;
     /// Field ID this initial condition is attached to
     FieldID fid;
     /// Components

@@ -26,7 +26,7 @@ public:
             auto pars = GTestImplicitFENonlinearProblem::parameters();
             pars.set<godzilla::App *>("app", this->app)
                 // FIXME: after app creates params and not pointers
-                .set<std::string>("_type", "GTestImplicitFENonlinearProblem")
+                .set<String>("_type", "GTestImplicitFENonlinearProblem")
                 .set<Mesh *>("mesh", mesh.get())
                 .set<Real>("start_time", 0.)
                 .set<Real>("end_time", 20)

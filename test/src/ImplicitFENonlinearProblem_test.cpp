@@ -28,13 +28,13 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
 {
     auto ic_params = ConstantInitialCondition::parameters();
     ic_params.set<godzilla::App *>("app", this->app);
-    ic_params.set<std::string>("name", "ic");
+    ic_params.set<String>("name", "ic");
     ic_params.set<std::vector<Real>>("value", { 0 });
     prob->add_initial_condition<ConstantInitialCondition>(ic_params);
 
     auto bc_params = DirichletBC::parameters();
     bc_params.set<godzilla::App *>("app", this->app);
-    bc_params.set<std::vector<std::string>>("boundary", { "left", "right" });
+    bc_params.set<std::vector<String>>("boundary", { "left", "right" });
     prob->add_boundary_condition<DirichletBC>(bc_params);
 
     this->prob->create();
@@ -69,26 +69,15 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
 
 TEST_F(ImplicitFENonlinearProblemTest, wrong_scheme)
 {
-    testing::internal::CaptureStderr();
+    auto * params = this->app->get_parameters("GTestImplicitFENonlinearProblem");
+    params->set<Mesh *>("mesh", this->mesh.get());
+    params->set<Real>("start_time", 0.);
+    params->set<Real>("end_time", 20);
+    params->set<Real>("dt", 5);
+    params->set<String>("scheme", "asdf");
 
-    GTestImplicitFENonlinearProblem * prob;
-    {
-        auto * params = this->app->get_parameters("GTestImplicitFENonlinearProblem");
-        params->set<Mesh *>("mesh", this->mesh.get());
-        params->set<Real>("start_time", 0.);
-        params->set<Real>("end_time", 20);
-        params->set<Real>("dt", 5);
-        params->set<std::string>("scheme", "asdf");
-        prob = this->app->build_object<GTestImplicitFENonlinearProblem>("prob", params);
-    }
-
-    prob->create();
-
-    EXPECT_FALSE(this->app->check_integrity());
-    this->app->get_logger()->print();
-
-    EXPECT_THAT(testing::internal::GetCapturedStderr(),
-                testing::HasSubstr("prob: The 'scheme' parameter can be either 'beuler' or 'cn'."));
+    EXPECT_DEATH(this->app->build_object<GTestImplicitFENonlinearProblem>("prob", params),
+                 testing::HasSubstr("The 'scheme' parameter can be either 'beuler' or 'cn'."));
 }
 
 TEST_F(ImplicitFENonlinearProblemTest, wrong_time_stepping_params)
@@ -101,7 +90,7 @@ TEST_F(ImplicitFENonlinearProblemTest, wrong_time_stepping_params)
     params->set<Int>("num_steps", 2);
     params->set<Real>("end_time", 20);
     params->set<Real>("dt", 5);
-    params->set<std::string>("scheme", "asdf");
+    params->set<String>("scheme", "beuler");
     auto prob = this->app->build_object<GTestImplicitFENonlinearProblem>("prob", params);
 
     prob->create();
@@ -123,7 +112,7 @@ TEST_F(ImplicitFENonlinearProblemTest, no_time_stepping_params)
     params->set<Mesh *>("mesh", this->mesh.get());
     params->set<Real>("start_time", 0.);
     params->set<Real>("dt", 5);
-    params->set<std::string>("scheme", "asdf");
+    params->set<String>("scheme", "beuler");
     auto prob = this->app->build_object<GTestImplicitFENonlinearProblem>("prob", params);
 
     prob->create();
@@ -142,20 +131,20 @@ TEST_F(ImplicitFENonlinearProblemTest, set_schemes)
 
     auto ic_params = ConstantInitialCondition::parameters();
     ic_params.set<godzilla::App *>("app", this->app);
-    ic_params.set<std::string>("name", "ic");
+    ic_params.set<String>("name", "ic");
     ic_params.set<std::vector<Real>>("value", { 0 });
     this->prob->add_initial_condition<ConstantInitialCondition>(ic_params);
 
     auto bc_params = DirichletBC::parameters();
     bc_params.set<godzilla::App *>("app", this->app);
-    bc_params.set<std::vector<std::string>>("boundary", { "left", "right" });
+    bc_params.set<std::vector<String>>("boundary", { "left", "right" });
     this->prob->add_boundary_condition<DirichletBC>(bc_params);
 
     this->prob->create();
 
-    std::vector<TransientProblemInterface::TimeScheme> schemes = {
-        TransientProblemInterface::TimeScheme::BEULER,
-        TransientProblemInterface::TimeScheme::CN,
+    std::vector<String> schemes = {
+        TSBEULER,
+        TSCN,
     };
     std::vector<TSType> types = { TSBEULER, TSCN };
     for (std::size_t i = 0; i < types.size(); ++i) {
@@ -170,13 +159,13 @@ TEST_F(ImplicitFENonlinearProblemTest, converged_reason)
 
     auto ic_params = ConstantInitialCondition::parameters();
     ic_params.set<godzilla::App *>("app", this->app);
-    ic_params.set<std::string>("name", "ic");
+    ic_params.set<String>("name", "ic");
     ic_params.set<std::vector<Real>>("value", { 0 });
     this->prob->add_initial_condition<ConstantInitialCondition>(ic_params);
 
     auto bc_params = DirichletBC::parameters();
     bc_params.set<godzilla::App *>("app", this->app);
-    bc_params.set<std::vector<std::string>>("boundary", { "left", "right" });
+    bc_params.set<std::vector<String>>("boundary", { "left", "right" });
     this->prob->add_boundary_condition<DirichletBC>(bc_params);
 
     this->prob->create();

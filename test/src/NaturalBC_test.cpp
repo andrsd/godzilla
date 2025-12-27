@@ -46,7 +46,7 @@ TEST(NaturalBCTest, api)
     auto params = NaturalBC::parameters();
     params.set<App *>("app", &app);
     params.set<DiscreteProblemInterface *>("_dpi", &prob);
-    params.set<std::vector<std::string>>("boundary", { "left" });
+    params.set<std::vector<String>>("boundary", { "left" });
     MockNaturalBC bc(params);
 
     prob.create();
@@ -121,9 +121,9 @@ TEST(NaturalBCTest, fe)
 
     auto bc_params = TestNaturalBC::parameters();
     bc_params.set<App *>("app", &app);
-    bc_params.set<std::string>("name", "bc1");
-    bc_params.set<std::vector<std::string>>("boundary", { "left" });
-    bc_params.set<std::string>("field", "u");
+    bc_params.set<String>("name", "bc1");
+    bc_params.set<std::vector<String>>("boundary", { "left" });
+    bc_params.set<String>("field", "u");
     auto bc = prob.add_boundary_condition<TestNaturalBC>(bc_params);
 
     prob.set_aux_field(FieldID(0), "aux1", 1, Order(1));
@@ -168,8 +168,8 @@ TEST(NaturalBCTest, non_existing_field)
 
     auto params = TestNaturalBC::parameters();
     params.set<App *>("app", &app);
-    params.set<std::vector<std::string>>("boundary", { "left" });
-    params.set<std::string>("field", "asdf");
+    params.set<std::vector<String>>("boundary", { "left" });
+    params.set<String>("field", "asdf");
     problem.add_boundary_condition<TestNaturalBC>(params);
 
     problem.create();
@@ -200,7 +200,7 @@ TEST(NaturalBCTest, field_param_not_specified)
 
     auto params = TestNaturalBC::parameters();
     params.set<App *>("app", &app);
-    params.set<std::vector<std::string>>("boundary", { "left" });
+    params.set<std::vector<String>>("boundary", { "left" });
     problem.add_boundary_condition<TestNaturalBC>(params);
 
     problem.create();

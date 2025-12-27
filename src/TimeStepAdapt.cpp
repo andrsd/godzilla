@@ -27,7 +27,7 @@ TimeStepAdapt::get_ts_adapt() const
 }
 
 void
-TimeStepAdapt::add_candidate(const std::string & name,
+TimeStepAdapt::add_candidate(String name,
                              Int order,
                              Int stage_order,
                              Real ccfl,
@@ -136,7 +136,7 @@ TimeStepAdapt::get_step_limits() const
     return { hmin, hmax };
 }
 
-std::string
+String
 TimeStepAdapt::get_type() const
 {
     CALL_STACK_MSG();
@@ -195,7 +195,7 @@ TimeStepAdapt::set_step_limits(Real hmin, Real hmax)
 }
 
 void
-TimeStepAdapt::set_type(const std::string & type)
+TimeStepAdapt::set_type(String type)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(TSAdaptSetType(this->tsadapt, type.c_str()));

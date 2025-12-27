@@ -13,7 +13,9 @@
 #include "godzilla/Logger.h"
 #include <chrono>
 #include <fstream>
+#include <filesystem>
 
+namespace fs = std::filesystem;
 namespace mpi = mpicpp_lite;
 
 namespace godzilla {
@@ -28,7 +30,7 @@ public:
     /// @param name Name of the application
     /// @param argc Number of command line arguments
     /// @param argv Command line arguments
-    App(const mpi::Communicator & comm, const std::string & name);
+    App(mpi::Communicator comm, String name);
 
     /// Build an application object
     ///
@@ -37,7 +39,7 @@ public:
     /// @param name Name of the application
     /// @param argc Number of command line arguments
     /// @param argv Command line arguments
-    App(const mpi::Communicator & comm, Registry & registry, const std::string & name);
+    App(mpi::Communicator comm, Registry & registry, String name);
 
     virtual ~App();
 
@@ -49,12 +51,12 @@ public:
     /// Get Application name
     ///
     /// @return Application name
-    const std::string & get_name() const;
+    String get_name() const;
 
     /// Get application version
     ///
     /// @return The application version as a string
-    virtual const std::string & get_version() const;
+    virtual String get_version() const;
 
     /// Get the instance of registry
     ///
@@ -107,23 +109,23 @@ public:
     /// Get restart file name
     ///
     /// @return The restart file name
-    const std::string & get_restart_file_name() const;
+    fs::path get_restart_file_name() const;
 
     /// Set restart file name
     ///
     /// @file_name The restart file name
-    void set_restart_file_name(const std::string & file_name);
+    void set_restart_file_name(fs::path file_name);
 
     /// Get MPI communicator
     ///
     /// @return MPI communicator
-    const mpi::Communicator & get_comm() const;
+    mpi::Communicator get_comm() const;
 
     /// Get parameters for a class
     ///
     /// @param class_name Class name to get parameters for
     /// @return Parameters for class `class_name`
-    Parameters * get_parameters(const std::string & class_name);
+    Parameters * get_parameters(String class_name);
 
     /// Build object using the Factory
     ///
@@ -134,10 +136,10 @@ public:
     /// @param parameters Input parameters
     /// @return The constructed object
     template <typename T>
-    T * build_object(const std::string & obj_name, Parameters & parameters);
+    T * build_object(String obj_name, Parameters & parameters);
 
     template <typename T>
-    T * build_object(const std::string & obj_name, Parameters * parameters);
+    T * build_object(String obj_name, Parameters * parameters);
 
     /// Export parameters into a YAML format
     void export_parameters_yaml() const;
@@ -145,17 +147,17 @@ public:
     /// Set file name where to wrote the perf log
     ///
     /// @param file_name Perf log file name
-    void set_perf_log_file_name(const std::string & file_name);
+    void set_perf_log_file_name(fs::path file_name);
 
     /// Redirect standard output into file
     ///
     /// @param file_name File to redirect stdout to
-    void redirect_stdout(const std::string & file_name);
+    void redirect_stdout(fs::path file_name);
 
     /// Redirect standard error into file
     ///
     /// @param file_name File to redirect stderr to
-    void redirect_stderr(const std::string & file_name);
+    void redirect_stderr(fs::path file_name);
 
 protected:
     /// Run the problem build via `build_from_yml`
@@ -165,11 +167,11 @@ protected:
     ///
     /// @param file_name File name to write into
     /// @param run_time Total application run time
-    void write_perf_log(const std::string file_name, std::chrono::duration<double> run_time) const;
+    void write_perf_log(const fs::path & file_name, std::chrono::duration<double> run_time) const;
 
 private:
     /// Application name
-    std::string name;
+    String name;
     /// MPI communicator
     mpi::Communicator mpi_comm;
     /// Registry
@@ -179,9 +181,9 @@ private:
     /// Verbosity level
     unsigned int verbosity_level;
     /// Restart file name
-    std::string restart_file_name;
+    fs::path restart_file_name;
     /// Performance log file name
-    std::string perf_log_file_name;
+    fs::path perf_log_file_name;
     /// File stream for redirected stdout.
     std::ofstream stdout_file_;
     /// Stream buffer for redirected stdout.
@@ -201,7 +203,7 @@ public:
 
 template <typename T>
 T *
-App::build_object(const std::string & obj_name, Parameters & parameters)
+App::build_object(String obj_name, Parameters & parameters)
 {
     parameters.set<App *>("app", this);
     return this->factory.create<T>(obj_name, parameters);
@@ -209,7 +211,7 @@ App::build_object(const std::string & obj_name, Parameters & parameters)
 
 template <typename T>
 T *
-App::build_object(const std::string & obj_name, Parameters * parameters)
+App::build_object(String obj_name, Parameters * parameters)
 {
     parameters->set<App *>("app", this);
     return this->factory.create<T>(obj_name, parameters);

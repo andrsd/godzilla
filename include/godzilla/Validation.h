@@ -8,7 +8,6 @@
 #include <sys/types.h>
 #include <initializer_list>
 #include <vector>
-#include <string>
 #include <type_traits>
 
 namespace godzilla {
@@ -30,11 +29,11 @@ in(T value, const std::vector<T> & options)
 
 template <>
 inline bool
-in<std::string>(std::string value, const std::vector<std::string> & options)
+in<String>(String value, const std::vector<String> & options)
 {
-    std::string v = utils::to_lower(value);
-    return std::any_of(options.cbegin(), options.cend(), [v](const std::string & o) {
-        return v == utils::to_lower(o);
+    String v = value.to_lower();
+    return std::any_of(options.cbegin(), options.cend(), [v](String o) {
+        return v == o.to_lower();
     });
 }
 
@@ -42,9 +41,9 @@ template <>
 inline bool
 in<const char *>(const char * value, const std::vector<const char *> & options)
 {
-    std::string v = utils::to_lower(value);
-    return std::any_of(options.cbegin(), options.cend(), [v](const std::string & o) {
-        return v == utils::to_lower(o);
+    String v = String(value).to_lower();
+    return std::any_of(options.cbegin(), options.cend(), [v](String o) {
+        return v == o.to_lower();
     });
 }
 

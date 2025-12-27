@@ -22,7 +22,7 @@ RestartOutput::parameters()
 RestartOutput::RestartOutput(const Parameters & pars) :
     FileOutput(pars),
     ri(dynamic_cast<RestartInterface *>(get_problem())),
-    file_base(pars.get<std::string>("file"))
+    file_base(pars.get<fs::path>("file"))
 {
 }
 
@@ -44,16 +44,16 @@ RestartOutput::output_step()
     this->ri->write_restart_file(file);
 }
 
-std::string
+String
 RestartOutput::get_file_ext() const
 {
     return { "restart.h5" };
 }
 
-std::string
+fs::path
 RestartOutput::create_file_name() const
 {
-    return fmt::format("{}.{}", this->file_base, this->get_file_ext());
+    return fmt::format("{}.{}", this->file_base.string(), this->get_file_ext());
 }
 
 } // namespace godzilla

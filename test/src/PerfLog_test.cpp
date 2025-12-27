@@ -7,8 +7,8 @@ using namespace godzilla;
 
 TEST(PerfLogTest, event)
 {
-    const std::string event1_name = "event1";
-    const std::string event2_name = "event2";
+    const String event1_name = "event1";
+    const String event2_name = "event2";
 
     auto event2_id = perf_log::register_event(event2_name);
 
@@ -50,16 +50,16 @@ TEST(PerfLogTest, non_existent_event_id)
     EXPECT_THROW_MSG(perf_log::get_event_id("event_none"),
                      "Event 'event_none' was not registered.");
 
-    const std::string no_event = "event_none";
+    const String no_event = "event_none";
     EXPECT_THROW_MSG(perf_log::get_event_id(no_event), "Event 'event_none' was not registered.");
 }
 
 TEST(PerfLogTest, stage)
 {
-    const std::string event_name = "event";
+    const String event_name = "event";
     perf_log::register_event(event_name);
 
-    const std::string stage_name = "stage1";
+    const String stage_name = "stage1";
     perf_log::register_stage(stage_name);
     PetscLogStage stage2_id = perf_log::register_stage("stage2");
 

@@ -8,7 +8,7 @@
 #include "godzilla/Parameters.h"
 #include "godzilla/NonlinearProblem.h"
 #include "godzilla/TransientProblemInterface.h"
-#include <string>
+#include "godzilla/String.h"
 
 namespace godzilla {
 
@@ -46,8 +46,6 @@ protected:
     virtual void compute_boundary_local(Real time, Vector & x);
 
 private:
-    void set_up_time_scheme() override;
-
     /// Form the global residual 'F' from the global input 'x' using pointwise functions specified
     /// by the user
     ///
@@ -62,8 +60,6 @@ private:
     Matrix M;
     /// Inverse of the lumped mass matrix
     Vector M_lumped_inv;
-    /// Time stepping scheme
-    std::string scheme;
 
 public:
     static Parameters parameters();

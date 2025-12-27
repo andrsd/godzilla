@@ -312,7 +312,7 @@ void
 TransientProblemInterface::init()
 {
     CALL_STACK_MSG();
-    assert_true(this->problem != nullptr, "Problem is null");
+    GODZILLA_ASSERT_TRUE(this->problem != nullptr, "Problem is null");
     PETSC_CHECK(TSSetDM(this->ts, this->problem->get_dm()));
 }
 
@@ -435,41 +435,23 @@ TransientProblemInterface::set_converged_reason(ConvergedReason reason)
 }
 
 void
-TransientProblemInterface::set_scheme(TimeScheme scheme)
-{
-    CALL_STACK_MSG();
-    if (scheme == TimeScheme::BEULER)
-        PETSC_CHECK(TSSetType(this->ts, TSBEULER));
-    else if (scheme == TimeScheme::CN)
-        PETSC_CHECK(TSSetType(this->ts, TSCN));
-    else if (scheme == TimeScheme::EULER)
-        PETSC_CHECK(TSSetType(this->ts, TSEULER));
-    else if (scheme == TimeScheme::SSP_RK_2) {
-        PETSC_CHECK(TSSetType(this->ts, TSSSP));
-        PETSC_CHECK(TSSSPSetType(this->ts, TSSSPRKS2));
-    }
-    else if (scheme == TimeScheme::SSP_RK_3) {
-        PETSC_CHECK(TSSetType(this->ts, TSSSP));
-        PETSC_CHECK(TSSSPSetType(this->ts, TSSSPRKS3));
-    }
-    else if (scheme == TimeScheme::RK_2) {
-        PETSC_CHECK(TSSetType(this->ts, TSRK));
-        PETSC_CHECK(TSRKSetType(this->ts, TSRK2B));
-    }
-    else if (scheme == TimeScheme::HEUN) {
-        PETSC_CHECK(TSSetType(this->ts, TSRK));
-        PETSC_CHECK(TSRKSetType(this->ts, TSRK2A));
-    }
-}
-
-void
-TransientProblemInterface::set_scheme(const std::string & scheme_name)
+TransientProblemInterface::set_scheme(String scheme_name)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(TSSetType(this->ts, scheme_name.c_str()));
 }
 
-std::string
+void
+TransientProblemInterface::set_scheme(String scheme_name, String sub_name)
+{
+    PETSC_CHECK(TSSetType(this->ts, scheme_name.c_str()));
+    if (scheme_name == TSSSP)
+        PETSC_CHECK(TSSSPSetType(this->ts, sub_name.c_str()));
+    else if (scheme_name == TSRK)
+        PETSC_CHECK(TSRKSetType(this->ts, sub_name.c_str()));
+}
+
+String
 TransientProblemInterface::get_scheme() const
 {
     CALL_STACK_MSG();

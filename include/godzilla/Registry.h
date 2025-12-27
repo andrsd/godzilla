@@ -6,6 +6,7 @@
 #include <map>
 #include "godzilla/Object.h"
 #include "godzilla/Exception.h"
+#include "godzilla/String.h"
 
 #define REGISTER_OBJECT(registry, classname) registry.add<classname>(#classname)
 
@@ -46,17 +47,17 @@ public:
     struct ObjectDescription {
         struct Parameter {
             /// Parameter name
-            std::string name;
+            String name;
             /// Parameter type
-            std::string type;
+            String type;
             /// Parameter description
-            std::string description;
+            String description;
             /// Is parameter required
             bool required;
         };
 
         /// Object name
-        std::string name;
+        String name;
         /// Object parameters
         std::vector<Parameter> parameters;
     };
@@ -66,7 +67,7 @@ public:
     /// @param class_name Name of the object to register
     template <typename T>
     void
-    add(const std::string & class_name)
+    add(String class_name)
     {
         Entry entry = { &build_obj<T>, &call_parameters<T> };
         this->classes[class_name] = entry;
@@ -76,13 +77,13 @@ public:
     ///
     /// @param class_name Class name to check
     /// @return `true` is class is registered, `false` otherwise
-    bool exists(const std::string & class_name) const;
+    bool exists(String class_name) const;
 
     /// Find registry entry for a given class
     ///
     /// @param class_name Name of the class
     /// @return Registry entry
-    const Entry & get(const std::string & class_name) const;
+    const Entry & get(String class_name) const;
 
     /// Get object description
     std::vector<ObjectDescription> get_object_description() const;
@@ -92,7 +93,7 @@ public:
 
 private:
     /// All registered classes that we can build
-    std::map<std::string, Entry> classes;
+    std::map<String, Entry> classes;
 };
 
 } // namespace godzilla

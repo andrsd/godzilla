@@ -70,21 +70,21 @@ main(int argc, char * argv[])
 
         auto bc_left_pars = VelocityBC::parameters();
         bc_left_pars.set<godzilla::App *>("app", &app)
-            .set<std::vector<std::string>>("boundary", { "left" })
+            .set<std::vector<String>>("boundary", { "left" })
             .set<Real>("value", 1);
         prob.add_boundary_condition<VelocityBC>(bc_left_pars);
 
         auto bc_right_pars = VelocityBC::parameters();
         bc_right_pars.set<godzilla::App *>("app", &app)
-            .set<std::vector<std::string>>("boundary", { "right" })
+            .set<std::vector<String>>("boundary", { "right" })
             .set<Real>("value", -1);
         prob.add_boundary_condition<VelocityBC>(bc_right_pars);
 
         auto out_pars = ExodusIIOutput::parameters();
         out_pars.set<godzilla::App *>("app", &app)
             .set<Problem *>("_problem", &prob)
-            .set<std::string>("file", "burgers")
-            .set<std::vector<std::string>>("on", { "initial", "final" });
+            .set<fs::path>("file", "burgers")
+            .set<std::vector<String>>("on", { "initial", "final" });
         prob.add_output<ExodusIIOutput>(out_pars);
 
         prob.create();

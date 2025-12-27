@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "godzilla/String.h"
 #include "mpicpp-lite/mpicpp-lite.h"
 #include "cxxopts/cxxopts.hpp"
 
@@ -27,7 +28,7 @@ public:
     /// @param comm MPI communicator
     /// @param name Name of the application
     /// @param args Command line arguments (without the executable name as first argument)
-    CommandLineInterface(App & app, const std::vector<std::string> & args);
+    CommandLineInterface(App & app, const std::vector<String> & args);
 
     virtual ~CommandLineInterface() = default;
 
@@ -42,7 +43,7 @@ public:
     int run();
 
 protected:
-    std::string get_app_name() const;
+    String get_app_name() const;
 
     /// Create command line options
     ///
@@ -57,7 +58,7 @@ private:
     /// Application we are part of
     App & app;
     /// Command line arguments
-    std::vector<std::string> args;
+    std::vector<String> args;
 };
 
 } // namespace godzilla

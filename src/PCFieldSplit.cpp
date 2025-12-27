@@ -70,7 +70,7 @@ PCFieldSplit::get_diag_use_amat() const
 }
 
 IndexSet
-PCFieldSplit::get_is(const std::string & split_name) const
+PCFieldSplit::get_is(String split_name) const
 {
     CALL_STACK_MSG();
     IndexSet is;
@@ -199,7 +199,7 @@ PCFieldSplit::set_diag_use_amat(bool flg)
 }
 
 void
-PCFieldSplit::set_fields(const std::string & split_name,
+PCFieldSplit::set_fields(String split_name,
                          const std::vector<Int> & fields,
                          const std::vector<Int> & fields_col)
 {
@@ -240,7 +240,7 @@ PCFieldSplit::set_gkb_tol(Real tolerance)
 }
 
 void
-PCFieldSplit::set_is(const std::string & split_name, const IndexSet & is)
+PCFieldSplit::set_is(String split_name, const IndexSet & is)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(PCFieldSplitSetIS(this->obj, split_name.c_str(), is));

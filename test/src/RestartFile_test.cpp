@@ -10,7 +10,7 @@ namespace {
 struct TestStruct {
     int i;
     float f;
-    std::string str;
+    String str;
 };
 
 } // namespace
@@ -19,24 +19,22 @@ namespace godzilla {
 
 template <>
 void
-RestartFile::write<TestStruct>(const std::string & path,
-                               const std::string & name,
-                               const TestStruct & data)
+RestartFile::write<TestStruct>(String path, String name, const TestStruct & data)
 {
-    write(path + name, "integer", data.i);
-    write(path + name, "float", data.f);
-    write(path + name, "string", data.str);
+    auto pth = fmt::format("{}/{}", path, name);
+    write(pth, "integer", data.i);
+    write(pth, "float", data.f);
+    write(pth, "string", data.str);
 }
 
 template <>
 void
-RestartFile::read<TestStruct>(const std::string & path,
-                              const std::string & name,
-                              TestStruct & data) const
+RestartFile::read<TestStruct>(String path, String name, TestStruct & data) const
 {
-    read<int>(path + name, "integer", data.i);
-    read<float>(path + name, "float", data.f);
-    read<std::string>(path + name, "string", data.str);
+    auto pth = fmt::format("{}/{}", path, name);
+    read<int>(pth, "integer", data.i);
+    read<float>(pth, "float", data.f);
+    read<String>(pth, "string", data.str);
 }
 
 } // namespace godzilla
@@ -48,9 +46,9 @@ TEST(RestartFileTest, read_write)
     {
         RestartFile f("restart.h5", FileAccess::CREATE);
         EXPECT_EQ(f.file_name(), "restart.h5");
-        EXPECT_TRUE(utils::ends_with(f.file_path(), "restart.h5"));
+        EXPECT_EQ(f.file_path().extension(), ".h5");
 
-        f.write<std::string>("/", "greeting", "hello");
+        f.write<String>("/", "greeting", "hello");
 
         f.write<int>("/group1", "integer", 1);
         f.write<float>("/group1", "float", 1876.);
@@ -61,10 +59,17 @@ TEST(RestartFileTest, read_write)
 
     {
         RestartFile f("restart.h5", FileAccess::READ);
-        EXPECT_EQ(f.read<std::string>("/", "greeting"), "hello");
+        String greeting;
+        f.read<String>("/", "greeting", greeting);
+        EXPECT_EQ(greeting, "hello");
 
-        EXPECT_EQ(f.read<int>("/group1", "integer"), 1);
-        EXPECT_EQ(f.read<float>("/group1", "float"), 1876.);
+        int i;
+        f.read<int>("/group1", "integer", i);
+        EXPECT_EQ(i, 1);
+
+        float f32;
+        f.read<float>("/group1", "float", f32);
+        EXPECT_EQ(f32, 1876.);
 
         TestStruct data;
         f.read<TestStruct>("/group2", "my_data", data);

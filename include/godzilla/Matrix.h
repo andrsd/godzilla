@@ -5,6 +5,7 @@
 
 #include "godzilla/PetscObjectWrapper.h"
 #include "godzilla/Types.h"
+#include "godzilla/String.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/Vector.h"
 #include "godzilla/DenseVector.h"
@@ -50,7 +51,7 @@ public:
     Matrix();
     Matrix(Mat mat);
 
-    std::string get_type() const;
+    String get_type() const;
 
     /// Builds matrix object for a particular matrix type
     ///

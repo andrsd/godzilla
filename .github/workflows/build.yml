@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - main
+      - 0.11.x
   pull_request:
     branches:
       - main
+      - 0.11.x
 
 jobs:
   build:
@@ -20,22 +22,10 @@ jobs:
         include:
           - os: ubuntu-22.04
             python-version: "3.11"
-            petsc: 3.22.5
+            petsc: 3.23.7
             build: Debug
             teciocpp: ON
             code-coverage: ON
-          - os: ubuntu-22.04
-            python-version: "3.11"
-            petsc: 3.22.5
-            build: Release
-            teciocpp: ON
-            code-coverage: OFF
-          - os: ubuntu-22.04
-            python-version: "3.11"
-            petsc: 3.22.5
-            build: Release
-            teciocpp: OFF
-            code-coverage: OFF
           - os: ubuntu-22.04
             python-version: "3.11"
             petsc: 3.23.7
@@ -67,7 +57,7 @@ jobs:
             rhash=1.4.3 \
             make \
             mpich-mpicxx \
-            mpicpp-lite=2.* \
+            mpicpp-lite=2.2.* \
             spdlog=1.* \
             petsc==${{ matrix.petsc }} \
             fmt=11.* \

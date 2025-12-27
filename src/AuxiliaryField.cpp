@@ -14,8 +14,8 @@ AuxiliaryField::parameters()
 {
     auto params = Object::parameters();
     params.add_private_param<DiscreteProblemInterface *>("_dpi")
-        .add_param<std::string>("field", "", "Name of the field.")
-        .add_param<std::string>("region", "", "Label name where this auxiliary field is defined.");
+        .add_param<String>("field", "", "Name of the field.")
+        .add_param<String>("region", "", "Label name where this auxiliary field is defined.");
     return params;
 }
 
@@ -24,12 +24,12 @@ AuxiliaryField::AuxiliaryField(const Parameters & pars) :
     PrintInterface(this),
     dpi(pars.get<DiscreteProblemInterface *>("_dpi")),
     mesh(nullptr),
-    field(pars.get<std::string>("field")),
-    region(pars.get<std::string>("region")),
+    field(pars.get<String>("field")),
+    region(pars.get<String>("region")),
     block_id(-1)
 {
     CALL_STACK_MSG();
-    if (this->field.empty())
+    if (this->field.length() == 0)
         this->field = this->get_name();
 }
 
@@ -59,7 +59,7 @@ AuxiliaryField::create()
 {
     CALL_STACK_MSG();
     this->mesh = this->dpi->get_mesh();
-    if (!this->region.empty()) {
+    if (this->region.length() > 0) {
         if (this->mesh->has_label(this->region)) {
             this->label = this->mesh->get_label(this->region);
             this->block_id = this->mesh->get_cell_set_id(this->region);
@@ -69,7 +69,7 @@ AuxiliaryField::create()
     }
 }
 
-const std::string &
+String
 AuxiliaryField::get_region() const
 {
     CALL_STACK_MSG();
@@ -97,7 +97,7 @@ AuxiliaryField::get_field_id() const
     return this->dpi->get_aux_field_id(this->field);
 }
 
-const std::string &
+String
 AuxiliaryField::get_field() const
 {
     return this->field;

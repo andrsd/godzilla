@@ -53,7 +53,7 @@ TEST(MeshPartitioningOutputTest, get_file_ext)
     auto params = MeshPartitioningOutput::parameters();
     params.set<App *>("app", &app);
     params.set<Problem *>("_problem", &prob);
-    params.set<std::string>("file", "part");
+    params.set<fs::path>("file", "part");
     MeshPartitioningOutput out(params);
     out.create();
 
@@ -78,7 +78,7 @@ TEST(MeshPartitioningOutputTest, output)
 
     auto params = MeshPartitioningOutput::parameters();
     params.set<App *>("app", &app);
-    params.set<std::string>("file", "part");
+    params.set<fs::path>("file", "part");
     auto out = prob.add_output<MeshPartitioningOutput>(params);
 
     prob.create();

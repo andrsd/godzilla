@@ -43,13 +43,13 @@ Random::get_seed() const
     return seed;
 }
 
-std::string
+String
 Random::get_type() const
 {
     CALL_STACK_MSG();
     PetscRandomType type;
     PETSC_CHECK(PetscRandomGetType(this->obj, &type));
-    return std::string(type);
+    return String(type);
 }
 
 Scalar
@@ -106,7 +106,7 @@ Random::set_seed(unsigned long seed)
 }
 
 void
-Random::set_type(const std::string & type)
+Random::set_type(String type)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(PetscRandomSetType(this->obj, type.c_str()));

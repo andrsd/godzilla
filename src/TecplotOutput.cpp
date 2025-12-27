@@ -73,9 +73,9 @@ Parameters
 TecplotOutput::parameters()
 {
     Parameters params = FileOutput::parameters();
-    params.add_param<std::vector<std::string>>(
+    params.add_param<std::vector<String>>(
         "variables",
-        std::vector<std::string> {},
+        std::vector<String> {},
         "List of variables to be stored. If not specified, all variables will be stored.");
     return params;
 }
@@ -87,7 +87,7 @@ TecplotOutput::TecplotOutput(const Parameters & pars) :
     file(nullptr),
     n_zones(0),
 #endif
-    variable_names(pars.get<std::vector<std::string>>("variables"))
+    variable_names(pars.get<std::vector<String>>("variables"))
 {
     CALL_STACK_MSG();
 #ifdef GODZILLA_WITH_TECIOCPP
@@ -107,7 +107,7 @@ TecplotOutput::~TecplotOutput()
 #endif
 }
 
-std::string
+String
 TecplotOutput::get_file_ext() const
 {
     CALL_STACK_MSG();
@@ -141,8 +141,8 @@ TecplotOutput::create()
         this->aux_field_var_names = aux_flds;
     }
     else {
-        std::set<std::string> field_names(flds.begin(), flds.end());
-        std::set<std::string> aux_field_names(aux_flds.begin(), aux_flds.end());
+        std::set<String> field_names(flds.begin(), flds.end());
+        std::set<String> aux_field_names(aux_flds.begin(), aux_flds.end());
 
         for (auto & name : this->variable_names) {
             if (field_names.count(name) == 1)
@@ -219,7 +219,7 @@ TecplotOutput::open_file()
     try {
         this->file = new teciocpp::File(get_comm());
 
-        const std::vector<std::string> coord_names = { "x", "y", "z" };
+        const std::vector<String> coord_names = { "x", "y", "z" };
         auto dim = this->mesh->get_dimension();
         expect_true(dim == 1_D || dim == 2_D || dim == 3_D, "Unsupported dimension {}", dim);
         std::vector<std::string> var_names;

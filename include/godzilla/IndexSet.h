@@ -6,6 +6,7 @@
 #include "godzilla/PetscObjectWrapper.h"
 #include "godzilla/Enums.h"
 #include "godzilla/Types.h"
+#include "godzilla/String.h"
 #include "petscis.h"
 #include "petscviewer.h"
 #include <vector>
@@ -148,7 +149,7 @@ public:
     /// Gets the index set type name
     ///
     /// @return The type name
-    std::string get_type() const;
+    String get_type() const;
 
     void restore_indices();
 
@@ -225,7 +226,7 @@ public:
     /// Builds a index set, for a particular type
     ///
     /// @param type The type of index set to build
-    void set_type(const std::string & type);
+    void set_type(String type);
 
     /// Checks if the IndexSet is empty (i.e., has no indices)
     ///

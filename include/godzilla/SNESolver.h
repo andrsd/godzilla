@@ -38,11 +38,11 @@ public:
         DIVERGED_TR_DELTA = SNES_DIVERGED_TR_DELTA,
     };
 
+    enum class LineSearchType { BASIC, L2, CP, NLEQERR, SHELL, BT };
+
     /// Wrapper around SNESLineSearch
     class LineSearch {
     public:
-        enum LineSearchType { BASIC, L2, CP, NLEQERR, SHELL, BT };
-
         LineSearch(SNESLineSearch ls);
 
         void set_type(LineSearchType type);
@@ -87,7 +87,7 @@ public:
     /// Gets the SNES method type (as a string).
     ///
     /// @return SNES method
-    std::string get_type() const;
+    String get_type() const;
 
     /// Sets non-linear solver options from the options database
     void set_from_options();

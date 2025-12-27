@@ -11,32 +11,27 @@ namespace fs = std::filesystem;
 
 namespace godzilla {
 
-RestartFile::RestartFile(mpi::Communicator comm,
-                         const std::string & file_name,
-                         FileAccess faccess) :
-    h5f(comm, fs::path(file_name), faccess)
+RestartFile::RestartFile(mpi::Communicator comm, fs::path file_name, FileAccess faccess) :
+    h5f(comm, file_name, faccess)
 {
 }
 
-RestartFile::RestartFile(const std::string & file_name, FileAccess faccess) :
-    h5f(fs::path(file_name), faccess)
-{
-}
+RestartFile::RestartFile(fs::path file_name, FileAccess faccess) : h5f(file_name, faccess) {}
 
-std::string
+fs::path
 RestartFile::file_name() const
 {
     return this->h5f.get_file_name();
 }
 
-std::string
+fs::path
 RestartFile::file_path() const
 {
     return this->h5f.get_file_path();
 }
 
-std::string
-RestartFile::get_full_path(const std::string & app_name, const std::string & path) const
+String
+RestartFile::get_full_path(String app_name, String path) const
 {
     if (path == "/" || path == "")
         return fmt::format("/{}", app_name);
@@ -44,8 +39,8 @@ RestartFile::get_full_path(const std::string & app_name, const std::string & pat
         return fmt::format("/{}/{}", app_name, path);
 }
 
-std::string
-RestartFile::normalize_path(const std::string & path) const
+String
+RestartFile::normalize_path(String path) const
 {
     if (path == "")
         return fmt::format("/{}", path);
@@ -55,7 +50,7 @@ RestartFile::normalize_path(const std::string & path) const
 
 template <>
 void
-RestartFile::write<Vector>(const std::string & path, const std::string & name, const Vector & data)
+RestartFile::write<Vector>(String path, String name, const Vector & data)
 {
     auto norm_path = normalize_path(path);
     try {
@@ -66,23 +61,21 @@ RestartFile::write<Vector>(const std::string & path, const std::string & name, c
         data.restore_array_read(vals);
     }
     catch (std::exception & e) {
-        throw Exception("Error writing '{}' to {}: {}", norm_path, this->file_name(), e.what());
+        throw Exception("Error writing '{}' to {}: {}",
+                        norm_path,
+                        this->file_name().string(),
+                        e.what());
     }
 }
 
 void
-RestartFile::write_global_vector(const std::string & app_name,
-                                 const std::string & path,
-                                 const std::string & name,
-                                 const Vector & data)
+RestartFile::write_global_vector(String app_name, String path, String name, const Vector & data)
 {
     write_global_vector(get_full_path(app_name, path), name, data);
 }
 
 void
-RestartFile::write_global_vector(const std::string & path,
-                                 const std::string & name,
-                                 const Vector & data)
+RestartFile::write_global_vector(String path, String name, const Vector & data)
 {
     auto norm_path = normalize_path(path);
     try {
@@ -90,13 +83,16 @@ RestartFile::write_global_vector(const std::string & path,
         group.write_global_vector(name, data);
     }
     catch (std::exception & e) {
-        throw Exception("Error writing '{}' to {}: {}", norm_path, this->file_name(), e.what());
+        throw Exception("Error writing '{}' to {}: {}",
+                        norm_path,
+                        this->file_name().string(),
+                        e.what());
     }
 }
 
 template <>
 void
-RestartFile::read<Vector>(const std::string & path, const std::string & name, Vector & data) const
+RestartFile::read<Vector>(String path, String name, Vector & data) const
 {
     auto norm_path = normalize_path(path);
     try {
@@ -107,14 +103,15 @@ RestartFile::read<Vector>(const std::string & path, const std::string & name, Ve
         data.restore_array(vals);
     }
     catch (std::exception & e) {
-        throw Exception("Error writing '{}' to {}: {}", norm_path, this->file_name(), e.what());
+        throw Exception("Error writing '{}' to {}: {}",
+                        norm_path,
+                        this->file_name().string(),
+                        e.what());
     }
 }
 
 void
-RestartFile::read_global_vector(const std::string & path,
-                                const std::string & name,
-                                Vector & data) const
+RestartFile::read_global_vector(String path, String name, Vector & data) const
 {
     auto norm_path = normalize_path(path);
     try {
@@ -125,16 +122,13 @@ RestartFile::read_global_vector(const std::string & path,
         throw Exception("Error reading '{}/{}' from {}: {}",
                         norm_path,
                         name,
-                        this->file_name(),
+                        this->file_name().string(),
                         e.what());
     }
 }
 
 void
-RestartFile::read_global_vector(const std::string & app_name,
-                                const std::string & path,
-                                const std::string & name,
-                                Vector & data) const
+RestartFile::read_global_vector(String app_name, String path, String name, Vector & data) const
 {
     read_global_vector(get_full_path(app_name, path), name, data);
 }

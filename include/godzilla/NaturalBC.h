@@ -62,7 +62,7 @@ private:
     /// Components
     std::vector<Int> components;
     ///
-    Optional<std::string> field_name;
+    Optional<String> field_name;
     /// Finite element problem this object is part of
     FEProblemInterface * fepi;
 

@@ -10,12 +10,12 @@
 
 namespace godzilla {
 
+#ifndef NDEBUG
 inline void
 assert_true(bool cond,
             fmt::string_view format,
             std::source_location loc = std::source_location::current())
 {
-#ifndef NDEBUG
     if (!cond) {
         fmt::print(stderr, "{}", Terminal::red);
         fmt::print(stderr,
@@ -27,8 +27,25 @@ assert_true(bool cond,
         fmt::println(stderr, "{}", Terminal::normal);
         godzilla::abort();
     }
-#endif
 }
+
+// clang-format off
+    #define GODZILLA_ASSERT_TRUE(cond, msg)            \
+        if (!(cond)) godzilla::assert_true(cond, msg);
+// clang-format on
+
+#else
+
+[[deprecated]] inline void
+assert_true(bool cond,
+            fmt::string_view format,
+            std::source_location loc = std::source_location::current())
+{
+}
+
+    #define GODZILLA_ASSERT_TRUE(cond, msg)
+
+#endif
 
 template <typename... T>
 inline void

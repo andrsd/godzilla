@@ -35,7 +35,7 @@ public:
     /// Get the vector type name
     ///
     /// @return The vector type
-    std::string get_type() const;
+    String get_type() const;
 
     Scalar * get_array();
     const Scalar * get_array_read() const;

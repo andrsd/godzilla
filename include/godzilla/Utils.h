@@ -4,11 +4,12 @@
 #pragma once
 
 #include "godzilla/Types.h"
+#include "godzilla/String.h"
 #include <vector>
 #include <map>
-#include <string>
 #include <typeinfo>
 #include <utility>
+#include <sstream>
 #include <petsclog.h>
 #include "fmt/printf.h"
 
@@ -19,54 +20,8 @@ class UnstructuredMesh;
 
 namespace utils {
 
-bool path_exists(const std::string & path);
-
-/**
- * Convert supplied string to upper case.
- * @param name The string to convert upper case.
- */
-std::string to_upper(const std::string & name);
-
-/**
- * Convert supplied string to lower case.
- * @param name The string to convert upper case.
- */
-std::string to_lower(const std::string & name);
-
-/**
- * Check if string `str` ends with `suffix`
- *
- * @param str String to check
- * @param suffix The expected suffix
- */
-bool has_suffix(const std::string & str, const std::string & suffix);
-
-/**
- * Check if string `str` ends with specified text
- *
- * @param str String to check
- * @param end The expected text
- */
-bool ends_with(const std::string & str, const std::string & end);
-
-/**
- * Check if string `str` starts with `prefix`
- *
- * @param str String to check
- * @param prefix The expected prefix
- */
-bool has_prefix(const std::string & str, const std::string & prefix);
-
-/**
- * Check if string `str` starts with specified text
- *
- * @param str String to check
- * @param start The expected text
- */
-bool starts_with(const std::string & str, const std::string & start);
-
 template <typename T>
-std::string
+String
 type_name()
 {
     return typeid(T).name();
@@ -101,14 +56,14 @@ map_values(const std::map<T, U> & m)
 ///
 /// @param time Time in seconds
 /// @return Formatted string with human readable time
-std::string human_time(PetscLogDouble time);
+String human_time(PetscLogDouble time);
 
 /// Provide human readable number
 ///
 /// @param number Number to format
 /// @return Formatted string with human readable number
 template <typename T>
-std::string
+String
 human_number(T number)
 {
     auto num_str = std::to_string(number);
@@ -121,7 +76,7 @@ human_number(T number)
 }
 
 /// Convert C++ names into human readable names
-std::string human_type_name(const std::string & type);
+String human_type_name(String type);
 
 /// Get index of an value in a std::vector
 ///
@@ -147,7 +102,7 @@ index_of(const std::vector<T> & array, T value)
 ///
 /// @param mangled_name Mangled name
 /// @return Demangled name
-std::string demangle(const std::string & mangled_name);
+String demangle(String mangled_name);
 
 /// Safely compute ratio of 2 numbers (avoiding division by zero)
 ///
@@ -252,6 +207,54 @@ void print_converged_reason(PrintInterface & pi, bool converged);
 /// @param mesh Unstructure mesh we operate on for cell set lookups
 /// @param region Region name/Block ID
 /// @return Block ID corresponding to the region
-Int get_block_id_from_region(const UnstructuredMesh & mesh, const std::string & region);
+Int get_block_id_from_region(const UnstructuredMesh & mesh, String region);
+
+template <typename T>
+class Array1D;
+
+/// Join array of values
+///
+/// @param con String to connect values with
+/// @param array Values to connect
+/// @return String with connected values
+template <typename T>
+String
+join(const char * con, const Array1D<T> & array)
+{
+    std::ostringstream oss;
+    for (size_t i = 0; i < array.size(); ++i) {
+        if (i > 0)
+            oss << con;
+        oss << array(i);
+    }
+    return oss.str();
+}
+
+/// Join values in a collection
+///
+/// @param con String to connect values with
+/// @param vals Values to connect
+/// @return String with connected values
+template <typename RANGE>
+String
+join(const char * con, const RANGE & vals)
+{
+    std::ostringstream oss;
+    bool first = true;
+    for (const auto & v : vals) {
+        if (!first)
+            oss << con;
+        first = false;
+        oss << v;
+    }
+    return oss.str();
+}
+
+/// Split string into parts spearated by delimiter
+///
+/// @param delim Delimiter
+/// @param line LIOne to split
+/// @return Individual parts
+std::vector<String> split(const char * delim, String line);
 
 } // namespace godzilla

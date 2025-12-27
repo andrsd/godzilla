@@ -104,7 +104,7 @@ public:
         auto m = Qtr<UnstructuredMesh>::alloc(dm);
 
         // create "side sets"
-        std::map<Int, std::string> face_set_names;
+        std::map<Int, String> face_set_names;
         face_set_names[1] = "back";
         face_set_names[2] = "front";
         face_set_names[3] = "bottom";
@@ -133,7 +133,7 @@ TEST(UnstructuredMeshTest, api)
 
     auto params = TestUnstructuredMesh::parameters();
     params.set<App *>("app", &app);
-    params.set<std::string>("name", "obj");
+    params.set<String>("name", "obj");
     auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh>(params);
     auto mesh = mesh_qtr.get();
 
@@ -154,7 +154,7 @@ TEST(UnstructuredMeshTest, api_ghosted)
 
     auto params = TestUnstructuredMesh::parameters();
     params.set<App *>("app", &app);
-    params.set<std::string>("name", "obj");
+    params.set<String>("name", "obj");
     auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh>(params);
     auto mesh = mesh_qtr.get();
 
@@ -177,7 +177,7 @@ TEST(UnstructuredMeshTest, nonexistent_face_set)
 
     auto params = TestUnstructuredMesh::parameters();
     params.set<App *>("app", &app);
-    params.set<std::string>("name", "obj");
+    params.set<String>("name", "obj");
     auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh>(params);
     auto mesh = mesh_qtr.get();
 
@@ -192,7 +192,7 @@ TEST(UnstructuredMeshTest, nonexistent_cell_set)
 
     auto params = TestUnstructuredMesh::parameters();
     params.set<App *>("app", &app);
-    params.set<std::string>("name", "obj");
+    params.set<String>("name", "obj");
     auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh>(params);
     auto mesh = mesh_qtr.get();
     EXPECT_THROW_MSG(
@@ -206,7 +206,7 @@ TEST(UnstructuredMeshTest, get_connectivity)
 
     auto params = TestUnstructuredMesh::parameters();
     params.set<App *>("app", &app);
-    params.set<std::string>("name", "obj");
+    params.set<String>("name", "obj");
     auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh>(params);
     auto m = mesh_qtr.get();
 
@@ -271,7 +271,7 @@ TEST(UnstructuredMeshTest, ranges)
 
     auto params = TestUnstructuredMesh3D::parameters();
     params.set<App *>("app", &app);
-    params.set<std::string>("name", "obj");
+    params.set<String>("name", "obj");
     params.set<Int>("nx", 2);
     params.set<Int>("ny", 1);
     params.set<Int>("nz", 1);
@@ -324,7 +324,7 @@ TEST(UnstructuredMesh, compute_cell_geometry)
 
     auto params = TestUnstructuredMesh3D::parameters();
     params.set<App *>("app", &app);
-    params.set<std::string>("name", "obj");
+    params.set<String>("name", "obj");
     params.set<Int>("nx", 2);
     params.set<Int>("ny", 1);
     params.set<Int>("nz", 1);
@@ -390,7 +390,7 @@ TEST(UnstructuredMesh, get_face_set_label_nonexistent)
 
     auto params = TestUnstructuredMesh3D::parameters();
     params.set<App *>("app", &app);
-    params.set<std::string>("name", "obj");
+    params.set<String>("name", "obj");
     params.set<Int>("nx", 2);
     params.set<Int>("ny", 1);
     params.set<Int>("nz", 1);
@@ -410,7 +410,7 @@ TEST(UnstructuredMesh, get_chart)
 
     auto params = TestUnstructuredMesh3D::parameters();
     params.set<App *>("app", &app);
-    params.set<std::string>("name", "obj");
+    params.set<String>("name", "obj");
     params.set<Int>("nx", 2);
     params.set<Int>("ny", 1);
     params.set<Int>("nz", 1);
@@ -428,7 +428,7 @@ TEST(UnstructuredMesh, common_cells_by_vertex)
 
     auto params = TestUnstructuredMesh3D::parameters();
     params.set<App *>("app", &app);
-    params.set<std::string>("name", "obj");
+    params.set<String>("name", "obj");
     params.set<Int>("nx", 2);
     params.set<Int>("ny", 1);
     params.set<Int>("nz", 1);
@@ -543,7 +543,7 @@ TEST(UnstructuredMesh, point_star_forrest)
 
     auto params = TestUnstructuredMesh::parameters();
     params.set<godzilla::App *>("app", &app);
-    params.set<std::string>("name", "obj");
+    params.set<String>("name", "obj");
     auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh>(params);
     auto m = mesh_qtr.get();
 
@@ -562,7 +562,7 @@ TEST(UnstructuredMesh, face_sets)
 
     auto params = TestUnstructuredMesh3D::parameters();
     params.set<App *>("app", &app);
-    params.set<std::string>("name", "obj");
+    params.set<String>("name", "obj");
     params.set<Int>("nx", 2);
     params.set<Int>("ny", 1);
     params.set<Int>("nz", 1);
@@ -599,7 +599,7 @@ TEST(UnstructuredMesh, get_coordinates)
 
     auto params = TestUnstructuredMesh3D::parameters();
     params.set<App *>("app", &app);
-    params.set<std::string>("name", "obj");
+    params.set<String>("name", "obj");
     params.set<Int>("nx", 2);
     params.set<Int>("ny", 1);
     params.set<Int>("nz", 1);
@@ -625,7 +625,7 @@ TEST(UnstructuredMesh, get_cell_numbering)
 
     auto params = LineMesh::parameters();
     params.set<App *>("app", &app);
-    params.set<std::string>("name", "obj");
+    params.set<String>("name", "obj");
     params.set<Int>("nx", 10);
     auto mesh = MeshFactory::create<LineMesh>(params);
 
@@ -644,7 +644,7 @@ TEST(UnstructuredMesh, get_point_depth)
 
     auto params = TestUnstructuredMesh3D::parameters();
     params.set<App *>("app", &app);
-    params.set<std::string>("name", "obj");
+    params.set<String>("name", "obj");
     params.set<Int>("nx", 1);
     params.set<Int>("ny", 1);
     params.set<Int>("nz", 1);
@@ -667,7 +667,7 @@ TEST(UnstructuredMeshTest, index_sets)
 
     auto params = TestUnstructuredMesh3D::parameters();
     params.set<App *>("app", &app);
-    params.set<std::string>("name", "obj");
+    params.set<String>("name", "obj");
     params.set<Int>("nx", 2);
     params.set<Int>("ny", 1);
     params.set<Int>("nz", 1);
@@ -691,7 +691,7 @@ TEST(UnstructuredMeshTest, clone)
 
     auto params = TestUnstructuredMesh::parameters();
     params.set<App *>("app", &app);
-    params.set<std::string>("name", "obj");
+    params.set<String>("name", "obj");
     auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh>(params);
     auto m = mesh_qtr.get();
 
@@ -723,7 +723,7 @@ TEST(UnstructuredMeshTest, get_block_id_from_region_via_name)
 
     auto params = FileMesh::parameters();
     params.set<App *>("app", &app);
-    params.set<std::string>("file", file.string());
+    params.set<fs::path>("file", file);
     auto mesh_qtr = MeshFactory::create<FileMesh>(params);
     auto m = mesh_qtr.get();
 

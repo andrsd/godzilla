@@ -49,10 +49,10 @@ TEST(ConvertTest, snes_converged_reason)
 
 TEST(ConvertTest, snes_line_search)
 {
-    EXPECT_EQ(conv::to_str(SNESolver::LineSearch::BASIC), "basic");
-    EXPECT_EQ(conv::to_str(SNESolver::LineSearch::L2), "l2");
-    EXPECT_EQ(conv::to_str(SNESolver::LineSearch::CP), "cp");
-    EXPECT_EQ(conv::to_str(SNESolver::LineSearch::NLEQERR), "nleqerr");
-    EXPECT_EQ(conv::to_str(SNESolver::LineSearch::SHELL), "shell");
-    EXPECT_EQ(conv::to_str(SNESolver::LineSearch::BT), "bt");
+    EXPECT_EQ(conv::to_str(SNESolver::LineSearchType::BASIC), "basic");
+    EXPECT_EQ(conv::to_str(SNESolver::LineSearchType::L2), "l2");
+    EXPECT_EQ(conv::to_str(SNESolver::LineSearchType::CP), "cp");
+    EXPECT_EQ(conv::to_str(SNESolver::LineSearchType::NLEQERR), "nleqerr");
+    EXPECT_EQ(conv::to_str(SNESolver::LineSearchType::SHELL), "shell");
+    EXPECT_EQ(conv::to_str(SNESolver::LineSearchType::BT), "bt");
 }

@@ -78,3 +78,10 @@ BurgersEquation::set_up_weak_form()
     CALL_STACK_MSG();
     add_residual_block(this->u_id, nullptr, new F1(this));
 }
+
+void
+BurgersEquation::set_up_time_scheme()
+{
+    CALL_STACK_MSG();
+    set_scheme(TSEULER);
+}

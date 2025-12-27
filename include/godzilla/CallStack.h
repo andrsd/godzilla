@@ -3,9 +3,9 @@
 
 #pragma once
 
+#include "godzilla/String.h"
 #include <array>
 #include <vector>
-#include <string>
 
 namespace godzilla {
 namespace internal {
@@ -98,6 +98,6 @@ CallStack & get_callstack();
 } // namespace internal
 
 /// Print call stack
-void print_call_stack(const std::vector<std::string> & call_stack);
+void print_call_stack(const std::vector<String> & call_stack);
 
 } // namespace godzilla

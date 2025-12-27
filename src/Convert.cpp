@@ -12,7 +12,7 @@ namespace godzilla {
 namespace conv {
 
 template <>
-std::string
+String
 to_str(PolytopeType elem_type)
 {
     CALL_STACK_MSG();
@@ -51,7 +51,7 @@ to_str(PolytopeType elem_type)
 }
 
 template <>
-std::string
+String
 to_str(const ElementType type)
 {
     switch (type) {
@@ -71,7 +71,7 @@ to_str(const ElementType type)
 }
 
 template <>
-std::string
+String
 to_str(KrylovSolver::ConvergedReason reason)
 {
     CALL_STACK_MSG();
@@ -115,7 +115,7 @@ to_str(KrylovSolver::ConvergedReason reason)
 }
 
 template <>
-std::string
+String
 to_str(SNESolver::ConvergedReason reason)
 {
     CALL_STACK_MSG();
@@ -159,21 +159,21 @@ to_str(SNESolver::ConvergedReason reason)
 }
 
 template <>
-std::string
-to_str(SNESolver::LineSearch::LineSearchType type)
+String
+to_str(SNESolver::LineSearchType type)
 {
     CALL_STACK_MSG();
-    if (type == SNESolver::LineSearch::BASIC)
+    if (type == SNESolver::LineSearchType::BASIC)
         return "basic";
-    else if (type == SNESolver::LineSearch::L2)
+    else if (type == SNESolver::LineSearchType::L2)
         return "l2";
-    else if (type == SNESolver::LineSearch::CP)
+    else if (type == SNESolver::LineSearchType::CP)
         return "cp";
-    else if (type == SNESolver::LineSearch::NLEQERR)
+    else if (type == SNESolver::LineSearchType::NLEQERR)
         return "nleqerr";
-    else if (type == SNESolver::LineSearch::SHELL)
+    else if (type == SNESolver::LineSearchType::SHELL)
         return "shell";
-    else if (type == SNESolver::LineSearch::BT)
+    else if (type == SNESolver::LineSearchType::BT)
         return "bt";
     else
         return "unknown";

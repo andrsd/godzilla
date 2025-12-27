@@ -36,7 +36,7 @@ is_event_registered(const char * name)
 }
 
 bool
-is_event_registered(const std::string & name)
+is_event_registered(String name)
 {
     return is_event_registered(name.c_str());
 }
@@ -56,7 +56,7 @@ register_event(const char * name)
 }
 
 EventID
-register_event(const std::string & name)
+register_event(String name)
 {
     return register_event(name.c_str());
 }
@@ -73,7 +73,7 @@ get_event_id(const char * name)
 }
 
 EventID
-get_event_id(const std::string & name)
+get_event_id(String name)
 {
     return get_event_id(name.c_str());
 }
@@ -92,7 +92,7 @@ register_stage(const char * name)
 }
 
 StageID
-register_stage(const std::string & name)
+register_stage(String name)
 {
     return register_stage(name.c_str());
 }
@@ -109,7 +109,7 @@ get_stage_id(const char * name)
 }
 
 StageID
-get_stage_id(const std::string & name)
+get_stage_id(String name)
 {
     return get_stage_id(name.c_str());
 }
@@ -121,10 +121,11 @@ log_flops(LogDouble n)
 }
 
 EventInfo
-get_event_info(const std::string & event_name, const std::string & stage_name)
+get_event_info(String event_name, String stage_name)
 {
     EventID event_id = get_event_id(event_name.c_str());
-    StageID stage_id = stage_name.empty() ? PETSC_DETERMINE : get_stage_id(stage_name.c_str());
+    StageID stage_id =
+        stage_name.length() == 0 ? PETSC_DETERMINE : get_stage_id(stage_name.c_str());
     EventInfo info(event_id, stage_id);
     return info;
 }
@@ -140,7 +141,7 @@ get_event_info(EventID event_id, StageID stage_id)
 
 Event::Event(const char * name) : id(id_from_name(name)) {}
 
-Event::Event(const std::string & name) : id(id_from_name(name.c_str())) {}
+Event::Event(String name) : id(id_from_name(name.c_str())) {}
 
 Event::Event(EventID id) : id(id) {}
 
@@ -162,12 +163,12 @@ Event::get_id() const
     return this->id;
 }
 
-std::string
+String
 Event::name() const
 {
     const char * nm;
     PETSC_CHECK(PetscLogEventGetName(id, &nm));
-    return std::string(nm);
+    return String(nm);
 }
 
 EventID
@@ -193,7 +194,7 @@ Stage::Stage(const char * name) : id(get_stage_id(name))
     PetscLogStagePush(this->id);
 }
 
-Stage::Stage(const std::string & name) : id(get_stage_id(name))
+Stage::Stage(String name) : id(get_stage_id(name))
 {
     PetscLogStagePush(this->id);
 }
@@ -270,7 +271,7 @@ ScopedEvent::ScopedEvent(const char * name) : Event(name)
     begin();
 }
 
-ScopedEvent::ScopedEvent(const std::string & name) : Event(name)
+ScopedEvent::ScopedEvent(String name) : Event(name)
 {
     begin();
 }

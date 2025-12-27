@@ -8,10 +8,11 @@
 #include "fmt/format.h"
 #include <filesystem>
 #include <vector>
-#include <string>
 #include <dlfcn.h>
 
 #define EXTENSION_API extern "C"
+
+namespace fs = std::filesystem;
 
 namespace godzilla {
 
@@ -66,7 +67,7 @@ public:
     ///
     /// @param lib_name Library name (the part after `lib` on Unix-based systems, without the file
     /// extension). For example, if your library is named `libExt.so`, you would provide `Ext` here.
-    explicit DynamicLibrary(const std::string & lib_name);
+    explicit DynamicLibrary(String lib_name);
 
     /// Load the library
     void load();
@@ -96,7 +97,10 @@ public:
         *(void **) (&smbl) = dlsym(this->handle, symbol_name);
         auto error = dlerror();
         if (error != nullptr || smbl == nullptr)
-            throw Exception("Unable to locate '{}' in {}: {}", symbol_name, this->file_name, error);
+            throw Exception("Unable to locate '{}' in {}: {}",
+                            symbol_name,
+                            this->file_name.string(),
+                            error);
 
         Delegate<SIGNATURE> d;
         d.template bind<SIGNATURE>(smbl);
@@ -117,10 +121,10 @@ public:
 
 private:
     /// Get extension file path
-    std::string get_ext_file_path() const;
+    fs::path get_ext_file_path() const;
 
     /// Extension file name
-    std::string file_name;
+    fs::path file_name;
     /// Extension handle
     void * handle;
 

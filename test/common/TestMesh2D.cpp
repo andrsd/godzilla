@@ -33,7 +33,7 @@ TestMesh2D::create_mesh()
     create_side_set(m, face_sets, 2, { 6 }, "bottom");
     create_side_set(m, face_sets, 3, { 9, 10 }, "top_right");
 
-    std::map<Int, std::string> face_set_names;
+    std::map<Int, String> face_set_names;
     face_set_names[1] = "left";
     face_set_names[2] = "bottom";
     face_set_names[3] = "top_right";

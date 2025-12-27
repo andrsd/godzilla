@@ -15,7 +15,7 @@ godzilla::Registry registry;
 /// @note This is used for generating the documentation of the parameters
 class ParamDumperApp : public godzilla::App {
 public:
-    ParamDumperApp(const mpi::Communicator & comm, godzilla::Registry & registry) :
+    ParamDumperApp(mpi::Communicator comm, godzilla::Registry & registry) :
         App(comm, registry, "param_dumper")
     {
         godzilla::App::register_objects(registry);

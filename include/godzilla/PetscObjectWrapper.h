@@ -108,7 +108,7 @@ public:
     get_id() const
     {
         CALL_STACK_MSG();
-        assert_true(this->obj != nullptr, "PETSc object is null");
+        GODZILLA_ASSERT_TRUE(this->obj != nullptr, "PETSc object is null");
         PetscObjectId id;
         PETSC_CHECK(PetscObjectGetId((PetscObject) this->obj, &id));
         return id;
@@ -118,7 +118,7 @@ public:
     ///
     /// @param name Object name to set
     void
-    set_name(const std::string & name)
+    set_name(String name)
     {
         CALL_STACK_MSG();
         PETSC_CHECK(PetscObjectSetName((PetscObject) this->obj, name.c_str()));
@@ -127,7 +127,7 @@ public:
     /// Gets a string name associated with a PETSc object.
     ///
     /// @return The name associated with object
-    std::string
+    String
     get_name()
     {
         CALL_STACK_MSG();

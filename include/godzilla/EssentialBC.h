@@ -48,7 +48,7 @@ private:
     /// Field ID this boundary condition is attached to
     FieldID fid;
     /// Field name
-    Optional<std::string> field_name;
+    Optional<String> field_name;
     /// Components
     std::vector<Int> components;
 

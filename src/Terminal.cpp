@@ -22,7 +22,7 @@ Terminal::Code Terminal::erase_ln_from_cursor("\033[0K");
 
 Terminal::Code::Code(const char * code) : str(code) {}
 
-Terminal::Code::operator const std::string &() const
+Terminal::Code::operator String() const
 {
     return this->str;
 }

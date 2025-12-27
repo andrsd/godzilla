@@ -24,7 +24,7 @@ TEST(LoggerTest, log_error)
     EXPECT_EQ(log.get_num_warnings(), 0);
 
     log.print();
-    std::string output = testing::internal::GetCapturedStderr();
+    String output = testing::internal::GetCapturedStderr();
     EXPECT_THAT(output, testing::HasSubstr("error1"));
     EXPECT_THAT(output, testing::HasSubstr("1 error(s) found."));
 }
@@ -40,7 +40,7 @@ TEST(LoggerTest, log_warning)
     EXPECT_EQ(log.get_num_warnings(), 1);
 
     log.print();
-    std::string output = testing::internal::GetCapturedStderr();
+    String output = testing::internal::GetCapturedStderr();
     EXPECT_THAT(output, testing::HasSubstr("warn1"));
     EXPECT_THAT(output, testing::HasSubstr("1 warning(s) found."));
 }
@@ -57,7 +57,7 @@ TEST(LoggerTest, log_err_warning)
     EXPECT_EQ(log.get_num_warnings(), 1);
 
     log.print();
-    std::string output = testing::internal::GetCapturedStderr();
+    String output = testing::internal::GetCapturedStderr();
     EXPECT_THAT(output, testing::HasSubstr("error1"));
     EXPECT_THAT(output, testing::HasSubstr("warn1"));
     EXPECT_THAT(output, testing::HasSubstr("1 error(s), 1 warning(s) found."));

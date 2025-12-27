@@ -6,6 +6,7 @@
 #include "GTest2FieldsFENonlinearProblem.h"
 #include "godzilla/MeshFactory.h"
 #include "godzilla/LineMesh.h"
+#include "godzilla/String.h"
 
 class FENonlinearProblemTest : public GodzillaAppTest {
 public:
@@ -25,7 +26,7 @@ public:
         {
             auto pars = GTestFENonlinearProblem::parameters();
             pars.set<godzilla::App *>("app", this->app)
-                .set<std::string>("_type", "GTestFENonlinearProblem")
+                .set<godzilla::String>("_type", "GTestFENonlinearProblem")
                 .set<godzilla::Mesh *>("mesh", this->mesh.get());
             this->prob = this->app->build_object<GTestFENonlinearProblem>("prob", pars);
         }
@@ -60,7 +61,7 @@ public:
         {
             auto pars = GTest2FieldsFENonlinearProblem::parameters();
             pars.set<godzilla::App *>("app", this->app)
-                .set<std::string>("_type", "GTest2FieldsFENonlinearProblem")
+                .set<godzilla::String>("_type", "GTest2FieldsFENonlinearProblem")
                 .set<godzilla::Mesh *>("mesh", this->mesh.get());
             this->prob = this->app->build_object<GTest2FieldsFENonlinearProblem>("prob", pars);
         }

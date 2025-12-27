@@ -42,7 +42,7 @@ public:
 TEST(AppTest, DISABLED_run_input)
 {
     fs::path input_file = fs::path(GODZILLA_UNIT_TESTS_ROOT) / "assets" / "yml" / "simple-test.yml";
-    std::vector<std::string> args = { "-i", input_file.string() };
+    std::vector<String> args = { "-i", input_file.string() };
 
     godzilla::Registry reg;
     REGISTER_OBJECT(reg, LineMesh);
@@ -61,7 +61,7 @@ TEST(AppTest, run_input_non_existent_file)
 {
     fs::path input_file =
         fs::path(GODZILLA_UNIT_TESTS_ROOT) / "assets" / "yml" / "non_existent_file.yml";
-    std::vector<std::string> args = { "-i", input_file.string() };
+    std::vector<String> args = { "-i", input_file.string() };
 
     mpi::Communicator comm(MPI_COMM_WORLD);
     App app(comm, "godzilla", args);

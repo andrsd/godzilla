@@ -212,12 +212,12 @@ TEST(NonlinearProblemTest, line_search_type)
     mesh_pars.set<Int>("nx", 1);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
-    std::vector<std::string> ls_type = { "basic", "l2", "cp", "nleqerr", "shell" };
+    std::vector<String> ls_type = { "basic", "l2", "cp", "nleqerr", "shell" };
     for (auto & lst : ls_type) {
         auto prob_pars = NonlinearProblem::parameters();
         prob_pars.set<App *>("app", &app);
         prob_pars.set<Mesh *>("mesh", mesh.get());
-        prob_pars.set<std::string>("line_search", lst);
+        prob_pars.set<String>("line_search", lst);
         MockNonlinearProblem prob(prob_pars);
         prob.create();
 
@@ -249,7 +249,7 @@ TEST(NonlinearProblemTest, invalid_line_search_type)
     auto prob_pars = NonlinearProblem::parameters();
     prob_pars.set<App *>("app", &app);
     prob_pars.set<Mesh *>("mesh", mesh.get());
-    prob_pars.set<std::string>("line_search", "asdf");
+    prob_pars.set<String>("line_search", "asdf");
     MockNonlinearProblem prob(prob_pars);
     prob.create();
 
@@ -277,7 +277,7 @@ TEST(NonlinearProblemTest, restart_file)
 
     auto ro_pars = RestartOutput::parameters();
     ro_pars.set<App *>("app", &app);
-    ro_pars.set<std::string>("file", "nl");
+    ro_pars.set<fs::path>("file", "nl");
     prob.add_output<RestartOutput>(ro_pars);
 
     prob.create();

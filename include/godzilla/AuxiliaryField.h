@@ -7,6 +7,7 @@
 #include "godzilla/PrintInterface.h"
 #include "godzilla/Label.h"
 #include "godzilla/Types.h"
+#include "godzilla/String.h"
 #include "godzilla/DenseVector.h"
 
 namespace godzilla {
@@ -41,7 +42,7 @@ public:
     /// Get the region name this field is defined on
     ///
     /// @return The region name
-    const std::string & get_region() const;
+    String get_region() const;
 
     /// Get the ID of the field this boundary condition operates on
     ///
@@ -51,7 +52,7 @@ public:
     /// Get field name
     ///
     /// @return The field name
-    const std::string & get_field() const;
+    String get_field() const;
 
     /// Get the number of constrained components
     ///
@@ -85,10 +86,10 @@ private:
     UnstructuredMesh * mesh;
 
     /// Field name
-    std::string field;
+    String field;
 
     /// Region name this auxiliary field is defined on
-    const std::string region;
+    const String region;
 
     /// Block here the auxiliary field lives
     Label label;

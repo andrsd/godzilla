@@ -71,28 +71,28 @@ main(int argc, char * argv[])
 
         auto aux_ffn_pars = ConstantAuxiliaryField::parameters();
         aux_ffn_pars.set<godzilla::App *>("app", &app)
-            .set<std::string>("name", "forcing_fn")
+            .set<String>("name", "forcing_fn")
             .set<std::vector<Real>>("value", { 2. });
         prob.add_auxiliary_field<ConstantAuxiliaryField>(aux_ffn_pars);
 
         auto ic_pars = TempIC::parameters();
         ic_pars.set<godzilla::App *>("app", &app)
-            .set<std::string>("name", "all")
-            .set<std::string>("field", "temp")
+            .set<String>("name", "all")
+            .set<String>("field", "temp")
             .set<std::vector<Real>>("value", { 300 });
         prob.add_initial_condition<TempIC>(ic_pars);
 
         auto bc_all_pars = DirichletBC::parameters();
         bc_all_pars.set<godzilla::App *>("app", &app)
-            .set<std::string>("name", "all")
-            .set<std::vector<std::string>>("boundary", { "left", "right", "top", "bottom" });
+            .set<String>("name", "all")
+            .set<std::vector<String>>("boundary", { "left", "right", "top", "bottom" });
         prob.add_boundary_condition<DirichletBC>(bc_all_pars);
 
         auto out_pars = ExodusIIOutput::parameters();
         out_pars.set<godzilla::App *>("app", &app)
-            .set<std::string>("file", "2d-explicit")
+            .set<fs::path>("file", "2d-explicit")
             .set<ExecuteOnFlags>("on", ExecuteOn::INITIAL | ExecuteOn::FINAL)
-            .set<std::vector<std::string>>("variables", { "temp" });
+            .set<std::vector<String>>("variables", { "temp" });
         prob.add_output<ExodusIIOutput>(out_pars);
 
         prob.create();

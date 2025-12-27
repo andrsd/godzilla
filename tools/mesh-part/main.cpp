@@ -6,6 +6,7 @@
 #include "godzilla/Exception.h"
 #include "godzilla/Init.h"
 #include "godzilla/App.h"
+#include "godzilla/String.h"
 #include "godzilla/CommandLineInterface.h"
 #include "godzilla/MeshFactory.h"
 #include "godzilla/FileMesh.h"
@@ -13,9 +14,9 @@
 #include "godzilla/ExodusIIOutput.h"
 #include "mpicpp-lite/mpicpp-lite.h"
 
-const std::string version = "1.0";
-
 using namespace godzilla;
+
+const String version = "1.0";
 
 mpi::Communicator comm_world;
 
@@ -23,7 +24,7 @@ class MeshPartApp : public App, public CommandLineInterface {
 public:
     MeshPartApp(int argc, const char * const * argv);
 
-    const std::string &
+    String
     get_version() const override
     {
         return version;
@@ -94,7 +95,7 @@ MeshPartApp::load_mesh(const std::string & file_name)
 {
     auto pars = FileMesh::parameters();
     pars.set<App *>("app", this);
-    pars.set<std::string>("file", file_name);
+    pars.set<fs::path>("file", file_name);
     return MeshFactory::create<FileMesh>(pars);
 }
 
@@ -113,7 +114,7 @@ MeshPartApp::save_partition(UnstructuredMesh * mesh, const std::string & file_na
 {
     auto pars = ExodusIIOutput::parameters();
     pars.set<App *>("app", this);
-    pars.set<std::string>("file", file_name);
+    pars.set<fs::path>("file", file_name);
     ExodusIIOutput out(pars);
     // FIXME: this needs exodusII refactoring done
     // out.create();

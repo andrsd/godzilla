@@ -10,7 +10,6 @@
 #include "godzilla/Qtr.h"
 #include "godzilla/Utils.h"
 #include <map>
-#include <string>
 
 namespace godzilla {
 
@@ -24,7 +23,7 @@ protected:
         virtual ~Value() = default;
 
         /// Return the type of this value as a string
-        virtual std::string type() const = 0;
+        virtual String type() const = 0;
 
         /// Create a copy of this value
         virtual Value * copy() const = 0;
@@ -32,7 +31,7 @@ protected:
         /// Is required
         bool required;
         /// Doco string
-        std::string doc_string;
+        String doc_string;
         ///
         bool valid;
         /// The set of parameters that will NOT appear in the the dump of the parser tree
@@ -58,7 +57,7 @@ protected:
             this->value = val;
         }
 
-        std::string
+        String
         type() const override
         {
             return utils::demangle(typeid(T).name());
@@ -99,7 +98,7 @@ public:
     /// Check if parameter exist
     template <typename T>
     bool
-    has(const std::string & name) const
+    has(String name) const
     {
         CALL_STACK_MSG();
         auto it = this->params.find(name);
@@ -113,7 +112,7 @@ public:
     /// Get parameter value
     template <typename T>
     inline T
-    get(const std::string & name) const
+    get(String name) const
     {
         CALL_STACK_MSG();
         if constexpr (IsOptional<T>) {
@@ -150,7 +149,7 @@ public:
 
     template <typename T>
     inline T
-    get(const std::string & name, T default_value) const
+    get(String name, T default_value) const
     {
         CALL_STACK_MSG();
         auto it = this->params.find(name);
@@ -167,7 +166,7 @@ public:
     /// Set parameter
     template <typename T>
     inline Parameters &
-    set(const std::string & name, T value)
+    set(String name, T value)
     {
         CALL_STACK_MSG();
         if (!this->has<T>(name))
@@ -183,7 +182,7 @@ public:
     /// missing in the input file, and error will be thrown
     template <typename T>
     Parameters &
-    add_required_param(const std::string & name, const std::string & doc_string)
+    add_required_param(String name, String doc_string)
     {
         CALL_STACK_MSG();
         if (!this->has<T>(name)) {
@@ -204,7 +203,7 @@ public:
     /// uninitialized but can be checked with "is_param_valid" before use.
     template <typename T, typename S>
     Parameters &
-    add_param(const std::string & name, const S & value, const std::string & doc_string)
+    add_param(String name, const S & value, String doc_string)
     {
         CALL_STACK_MSG();
         if (!this->has<T>(name)) {
@@ -221,7 +220,7 @@ public:
 
     template <typename T>
     Parameters &
-    add_param(const std::string & name, const std::string & doc_string)
+    add_param(String name, String doc_string)
     {
         CALL_STACK_MSG();
         if (!this->has<T>(name)) {
@@ -243,7 +242,7 @@ public:
     /// an optional default value.
     template <typename T>
     Parameters &
-    add_private_param(const std::string & name, const T & value)
+    add_private_param(String name, const T & value)
     {
         CALL_STACK_MSG();
         auto param = Qtr<Parameter<T>>::alloc();
@@ -257,7 +256,7 @@ public:
 
     template <typename T>
     Parameters &
-    add_private_param(const std::string & name)
+    add_private_param(String name)
     {
         CALL_STACK_MSG();
         expect_true(!this->has<T>(name), "Private parameter '{}' already exists", name);
@@ -274,7 +273,7 @@ public:
     ///@}
 
     inline void
-    make_param_required(const std::string & name)
+    make_param_required(String name)
     {
         CALL_STACK_MSG();
         auto it = this->params.find(name);
@@ -285,26 +284,26 @@ public:
     }
 
     /// Returns a boolean indicating whether the specified parameter is required or not
-    bool is_param_required(const std::string & name) const;
+    bool is_param_required(String name) const;
 
     /// This method returns parameters that have been initialized in one fashion or another,
     /// i.e. The value was supplied as a default argument or read and properly converted from
     /// the input file
-    bool is_param_valid(const std::string & name) const;
+    bool is_param_valid(String name) const;
 
-    bool is_param_private(const std::string & name) const;
-
-    ///
-    std::string type(const std::string & name) const;
+    bool is_param_private(String name) const;
 
     ///
-    std::string get_doc_string(const std::string & name) const;
+    String type(String name) const;
+
+    ///
+    String get_doc_string(String name) const;
 
     /// Parameter map iterator.
-    using iterator = std::map<std::string, Qtr<Parameters::Value>>::iterator;
+    using iterator = std::map<String, Qtr<Parameters::Value>>::iterator;
 
     /// Constant parameter map iterator.
-    using const_iterator = std::map<std::string, Qtr<Parameters::Value>>::const_iterator;
+    using const_iterator = std::map<String, Qtr<Parameters::Value>>::const_iterator;
 
     /// Iterator pointing to the beginning of the set of parameters.
     Parameters::iterator begin();
@@ -326,7 +325,7 @@ public:
 private:
     /// The actual parameter data. Each Metadata object contains attributes for the corresponding
     /// parameter.
-    std::map<std::string, Qtr<Value>> params;
+    std::map<String, Qtr<Value>> params;
 };
 
 } // namespace godzilla

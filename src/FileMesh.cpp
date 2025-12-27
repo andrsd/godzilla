@@ -7,10 +7,8 @@
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/Utils.h"
+#include "godzilla/Formatters.h"
 #include "petscdmplex.h"
-#include <filesystem>
-
-namespace fs = std::filesystem;
 
 namespace godzilla {
 
@@ -18,27 +16,26 @@ Parameters
 FileMesh::parameters()
 {
     auto params = Object::parameters();
-    params.add_required_param<std::string>("file", "The name of the file.");
+    params.add_required_param<fs::path>("file", "The name of the file.");
     return params;
 }
 
 FileMesh::FileMesh(const Parameters & pars) :
     Object(pars),
     file_format(UNKNOWN),
-    file_name(pars.get<std::string>("file"))
+    file_name(pars.get<fs::path>("file"))
 
 {
     CALL_STACK_MSG();
 
-    if (utils::path_exists(this->file_name))
-        detect_file_format();
-    else
-        log_error(
-            "Unable to open '{}' for reading. Make sure it exists and you have read permissions.",
-            this->file_name);
+    expect_true(
+        fs::exists(this->file_name),
+        "Unable to open '{}' for reading. Make sure it exists and you have read permissions.",
+        this->file_name);
+    detect_file_format();
 }
 
-const std::string &
+fs::path
 FileMesh::get_file_name() const
 {
     CALL_STACK_MSG();
@@ -60,8 +57,10 @@ FileMesh::create_mesh()
         return create_from_exodus();
     else if (this->file_format == GMSH)
         return create_from_gmsh();
-    else
-        throw Exception("Unknown mesh format");
+    else {
+        expect_true(false, "Unknown mesh format");
+        utils::unreachable();
+    }
 }
 
 Qtr<UnstructuredMesh>
@@ -86,9 +85,9 @@ void
 FileMesh::detect_file_format()
 {
     CALL_STACK_MSG();
-    if (utils::has_suffix(this->file_name, ".exo") || utils::has_suffix(this->file_name, ".e"))
+    if (this->file_name.extension() == ".exo" || this->file_name.extension() == ".e")
         this->file_format = EXODUSII;
-    else if (utils::has_suffix(this->file_name, ".msh"))
+    else if (this->file_name.extension() == ".msh")
         this->file_format = GMSH;
 }
 

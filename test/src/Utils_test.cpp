@@ -1,47 +1,10 @@
 #include "gmock/gmock.h"
 #include "godzilla/Range.h"
 #include "godzilla/Utils.h"
+#include "godzilla/Array1D.h"
 
 using namespace godzilla;
 using namespace testing;
-
-TEST(UtilsTest, to_lower)
-{
-    EXPECT_EQ(utils::to_lower("ASDF"), "asdf");
-}
-
-TEST(UtilsTest, to_upper)
-{
-    EXPECT_EQ(utils::to_upper("asdf"), "ASDF");
-}
-
-TEST(UtilsTest, has_suffix)
-{
-    EXPECT_TRUE(utils::has_suffix("asdf", "df"));
-    EXPECT_FALSE(utils::has_suffix("asdf", "long_string"));
-    EXPECT_FALSE(utils::has_suffix("asdf", "as"));
-}
-
-TEST(UtilsTest, ends_with)
-{
-    EXPECT_TRUE(utils::ends_with("asdf", "df"));
-    EXPECT_FALSE(utils::ends_with("asdf", "long_string"));
-    EXPECT_FALSE(utils::ends_with("asdf", "as"));
-}
-
-TEST(UtilsTest, has_prefix)
-{
-    EXPECT_TRUE(utils::has_prefix("asdf", "as"));
-    EXPECT_FALSE(utils::has_prefix("asdf", "long_string"));
-    EXPECT_FALSE(utils::has_prefix("asdf", "df"));
-}
-
-TEST(UtilsTest, starts_with)
-{
-    EXPECT_TRUE(utils::starts_with("asdf", "as"));
-    EXPECT_FALSE(utils::starts_with("asdf", "long_string"));
-    EXPECT_FALSE(utils::starts_with("asdf", "df"));
-}
 
 TEST(UtilsTest, map_keys)
 {
@@ -136,4 +99,57 @@ TEST(UtilsTest, human_number)
     EXPECT_EQ(utils::human_number(999999), "999,999");
     EXPECT_EQ(utils::human_number(1000000), "1,000,000");
     EXPECT_EQ(utils::human_number(1000000000ll), "1,000,000,000");
+}
+
+TEST(UtilsTest, join_std_vec_empty)
+{
+    std::vector<int> vals;
+    String s = join(", ", vals);
+    EXPECT_EQ(s, "");
+}
+
+TEST(UtilsTest, join_std_vec_int)
+{
+    std::vector<Int> vals = { 1, 3, 5, 7, 9 };
+    String s = join(", ", vals);
+    EXPECT_EQ(s, "1, 3, 5, 7, 9");
+}
+
+TEST(UtilsTest, join_std_set_int)
+{
+    std::set<Int> vals = { 1, 3, 5, 7, 9 };
+    String s = join(", ", vals);
+    EXPECT_EQ(s, "1, 3, 5, 7, 9");
+}
+
+TEST(UtilsTest, join_array_1d)
+{
+    Array1D<Int> vals(3);
+    vals[0] = 3;
+    vals[1] = 7;
+    vals[2] = 9;
+    auto s = join(", ", vals);
+    EXPECT_EQ(s, "3, 7, 9");
+}
+
+TEST(UtilsTest, split_empty)
+{
+    auto parts = split(" ", "");
+    EXPECT_EQ(parts.size(), 0);
+}
+
+TEST(UtilsTest, split_one)
+{
+    auto parts = split(" ", "hello");
+    ASSERT_EQ(parts.size(), 1);
+    EXPECT_EQ(parts[0], "hello");
+}
+
+TEST(UtilsTest, split_multi)
+{
+    auto parts = split(" ", "apple orange strawberry");
+    ASSERT_EQ(parts.size(), 3);
+    EXPECT_EQ(parts[0], "apple");
+    EXPECT_EQ(parts[1], "orange");
+    EXPECT_EQ(parts[2], "strawberry");
 }

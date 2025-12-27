@@ -68,7 +68,7 @@ TEST(ProblemTest, add_pp)
 
         MOCK_METHOD(void, output_step, ());
 
-        std::string
+        String
         get_file_ext() const override
         {
             return "none";
@@ -87,13 +87,13 @@ TEST(ProblemTest, add_pp)
 
     auto pp_params = Postprocessor::parameters();
     pp_params.set<App *>("app", &app);
-    pp_params.set<std::string>("name", "pp");
+    pp_params.set<String>("name", "pp");
     auto pp = problem.add_postprocessor<TestPostprocessor>(pp_params);
 
     auto out_params = FileOutput::parameters();
     out_params.set<App *>("app", &app);
-    out_params.set<std::string>("name", "out");
-    out_params.set<std::string>("file", "file");
+    out_params.set<String>("name", "out");
+    out_params.set<fs::path>("file", "file");
     out_params.set<ExecuteOnFlags>("on", ExecuteOn::INITIAL);
     out_params.set<Int>("interval", 1);
     auto out = problem.add_output<TestOutput>(out_params);

@@ -15,9 +15,7 @@ namespace godzilla {
 namespace {
 
 perf_log::Event
-create_event(const PrintInterface * pi,
-             const std::string & app_name,
-             const std::string & event_name)
+create_event(const PrintInterface * pi, String app_name, String event_name)
 {
     auto name = fmt::format("{}::{}", app_name, event_name);
     if (!perf_log::is_event_registered(name))
@@ -29,8 +27,8 @@ create_event(const PrintInterface * pi,
 
 PrintInterface::TimedEvent::TimedEvent(const PrintInterface * pi,
                                        unsigned int level,
-                                       const std::string & event_name,
-                                       const std::string & text) :
+                                       String event_name,
+                                       String text) :
     pi(pi),
     level(level),
     event(create_event(pi, pi->pi_app->get_name(), event_name)),
@@ -43,7 +41,7 @@ PrintInterface::TimedEvent::TimedEvent(const PrintInterface * pi,
 
         this->running = true;
         this->thread = std::thread([this] {
-            const std::string frames[] = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" };
+            const String frames[] = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" };
             std::size_t i = 0;
             while (this->running) {
                 fmt::print("\r{}{} {}...", Terminal::erase_line, frames[i++ % 10], this->text);
@@ -87,10 +85,10 @@ PrintInterface::PrintInterface(const App * app) :
     CALL_STACK_MSG();
 }
 
-PrintInterface::PrintInterface(const mpi::Communicator & comm,
+PrintInterface::PrintInterface(mpi::Communicator comm,
                                const App * app,
                                const unsigned int & verbosity_level,
-                               std::string prefix) :
+                               String prefix) :
     pi_app(app),
     proc_id(comm.rank()),
     verbosity_level(verbosity_level)

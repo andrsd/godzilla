@@ -171,13 +171,13 @@ public:
     ///
     /// @param field The field number
     /// @param name The field name
-    void set_field_name(Int field, const std::string & name);
+    void set_field_name(Int field, String name);
 
     /// Returns the name of a field in the Section
     ///
     /// @param field The field number
     /// @return The field name
-    std::string get_field_name(Int field) const;
+    String get_field_name(Int field) const;
 
     /// Return the offset into an array or `Vector` for the dof associated with the given point
     ///
@@ -227,14 +227,14 @@ public:
     /// @param field The field number
     /// @param comp The component number
     /// @param name The component name
-    void set_component_name(Int field, Int comp, const std::string & name);
+    void set_component_name(Int field, Int comp, String name);
 
     /// Gets the name of a field component in the Section
     ///
     /// @param field The field number
     /// @param comp The component number
     /// @return The component name
-    std::string get_component_name(Int field, Int comp) const;
+    String get_component_name(Int field, Int comp) const;
 
     /// Increment the number of constrained degrees of freedom associated with a given point
     ///

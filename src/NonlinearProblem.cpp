@@ -13,7 +13,7 @@ Parameters
 NonlinearProblem::parameters()
 {
     auto params = Problem::parameters();
-    params.add_param<std::string>("line_search", "bt", "The type of line search to be used")
+    params.add_param<String>("line_search", "bt", "The type of line search to be used")
         .add_param<Real>("nl_rel_tol",
                          1e-8,
                          "Relative convergence tolerance for the non-linear solver")
@@ -41,7 +41,7 @@ NonlinearProblem::NonlinearProblem(const Parameters & pars) :
     Problem(pars),
     snes(),
     ksp(),
-    line_search_type(pars.get<std::string>("line_search")),
+    line_search_type(pars.get<String>("line_search")),
     nl_rel_tol(pars.get<Real>("nl_rel_tol")),
     nl_abs_tol(pars.get<Real>("nl_abs_tol")),
     nl_step_tol(pars.get<Real>("nl_step_tol")),
@@ -52,7 +52,7 @@ NonlinearProblem::NonlinearProblem(const Parameters & pars) :
 {
     CALL_STACK_MSG();
     set_default_output_on(ExecuteOn::FINAL);
-    this->line_search_type = utils::to_lower(line_search_type);
+    this->line_search_type = this->line_search_type.to_lower();
     if (!validation::in(this->line_search_type, { "bt", "basic", "l2", "cp", "nleqerr", "shell" }))
         log_error("The 'line_search' parameter can be either 'bt', 'basic', 'l2', 'cp', 'nleqerr' "
                   "or 'shell'.");
@@ -184,17 +184,17 @@ NonlinearProblem::set_up_line_search()
     CALL_STACK_MSG();
     auto ls = this->snes.get_line_search();
     if (this->line_search_type == "basic")
-        ls.set_type(SNESolver::LineSearch::BASIC);
+        ls.set_type(SNESolver::LineSearchType::BASIC);
     else if (this->line_search_type == "l2")
-        ls.set_type(SNESolver::LineSearch::L2);
+        ls.set_type(SNESolver::LineSearchType::L2);
     else if (this->line_search_type == "cp")
-        ls.set_type(SNESolver::LineSearch::CP);
+        ls.set_type(SNESolver::LineSearchType::CP);
     else if (this->line_search_type == "nleqerr")
-        ls.set_type(SNESolver::LineSearch::NLEQERR);
+        ls.set_type(SNESolver::LineSearchType::NLEQERR);
     else if (this->line_search_type == "shell")
-        ls.set_type(SNESolver::LineSearch::SHELL);
+        ls.set_type(SNESolver::LineSearchType::SHELL);
     else
-        ls.set_type(SNESolver::LineSearch::BT);
+        ls.set_type(SNESolver::LineSearchType::BT);
     this->snes.set_line_search(ls);
     ls.set_from_options();
 }

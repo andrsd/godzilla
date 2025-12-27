@@ -53,38 +53,38 @@ main(int argc, char * argv[])
 
         auto aux_htc_pars = ConstantAuxiliaryField::parameters();
         aux_htc_pars.set<godzilla::App *>("app", &app)
-            .set<std::string>("name", "htc")
+            .set<String>("name", "htc")
             .set<std::vector<Real>>("value", { 100. });
         prob.add_auxiliary_field<ConstantAuxiliaryField>(aux_htc_pars);
 
         auto aux_Tamb_pars = ConstantAuxiliaryField::parameters();
         aux_Tamb_pars.set<godzilla::App *>("app", &app)
-            .set<std::string>("name", "T_ambient")
+            .set<String>("name", "T_ambient")
             .set<std::vector<Real>>("value", { 400. });
         prob.add_auxiliary_field<ConstantAuxiliaryField>(aux_Tamb_pars);
 
         auto ic_pars = ConstantInitialCondition::parameters();
         ic_pars.set<godzilla::App *>("app", &app)
-            .set<std::string>("name", "all")
-            .set<std::string>("field", "temp")
+            .set<String>("name", "all")
+            .set<String>("field", "temp")
             .set<std::vector<Real>>("value", { 300 });
         prob.add_initial_condition<ConstantInitialCondition>(ic_pars);
 
         auto bc_left_pars = DirichletBC::parameters();
         bc_left_pars.set<godzilla::App *>("app", &app)
-            .set<std::vector<std::string>>("boundary", { "left" });
+            .set<std::vector<String>>("boundary", { "left" });
         prob.add_boundary_condition<DirichletBC>(bc_left_pars);
 
         auto bc_right_pars = ConvectiveHeatFluxBC::parameters();
         bc_right_pars.set<godzilla::App *>("app", &app)
-            .set<std::vector<std::string>>("boundary", { "right" });
+            .set<std::vector<String>>("boundary", { "right" });
         prob.add_boundary_condition<ConvectiveHeatFluxBC>(bc_right_pars);
 
         auto out_pars = ExodusIIOutput::parameters();
         out_pars.set<godzilla::App *>("app", &app)
-            .set<std::string>("file", "2d")
+            .set<fs::path>("file", "2d")
             .set<ExecuteOnFlags>("on", ExecuteOn::INITIAL | ExecuteOn::FINAL)
-            .set<std::vector<std::string>>("variables", { "temp" });
+            .set<std::vector<String>>("variables", { "temp" });
         prob.add_output<ExodusIIOutput>(out_pars);
 
         prob.create();

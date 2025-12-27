@@ -150,7 +150,7 @@ TEST(FENonlinearProblemJFNKTest, solve)
     auto bc_params = DirichletBC::parameters();
     bc_params.set<godzilla::App *>("app", &app)
         .set<App *>("app", &app)
-        .set<std::vector<std::string>>("boundary", { "left", "right" });
+        .set<std::vector<String>>("boundary", { "left", "right" });
     prob.add_boundary_condition<DirichletBC>(bc_params);
 
     prob.create();

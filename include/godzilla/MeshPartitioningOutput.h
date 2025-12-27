@@ -4,6 +4,7 @@
 #pragma once
 
 #include "godzilla/FileOutput.h"
+#include "godzilla/String.h"
 
 namespace godzilla {
 
@@ -16,7 +17,7 @@ public:
     void output_step() override;
 
 private:
-    std::string get_file_ext() const override;
+    String get_file_ext() const override;
 
 public:
     static Parameters parameters();

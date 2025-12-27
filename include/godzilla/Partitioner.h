@@ -7,6 +7,7 @@
 #include "godzilla/Types.h"
 #include "godzilla/Section.h"
 #include "godzilla/IndexSet.h"
+#include "godzilla/String.h"
 #include "petscpartitioner.h"
 
 namespace godzilla {
@@ -20,8 +21,8 @@ public:
     void create(MPI_Comm comm);
     void destroy();
 
-    void set_type(const std::string & type);
-    std::string get_type() const;
+    void set_type(String type);
+    String get_type() const;
 
     void reset();
     void set_up();

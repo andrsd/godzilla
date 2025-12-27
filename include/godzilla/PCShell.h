@@ -4,6 +4,7 @@
 #pragma once
 
 #include "godzilla/Preconditioner.h"
+#include "godzilla/String.h"
 #include <petscpc.h>
 
 namespace godzilla {
@@ -20,12 +21,12 @@ public:
     /// Get the name of the preconditioner
     ///
     /// @return The name of the preconditioner
-    std::string get_name() const;
+    String get_name() const;
 
     /// Set the name of the preconditioner
     ///
     /// @param name The name of the preconditioner
-    void set_name(const std::string & name);
+    void set_name(String name);
 
     /// Set the apply method
     template <class T>

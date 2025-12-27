@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "godzilla/String.h"
 #include <iostream>
 #include <fmt/format.h>
 
@@ -18,11 +19,11 @@ public:
     /// We can detect that this is being put into a stream and potentially strip it
     struct Code {
         explicit Code(const char * code);
-        operator const std::string &() const; // NOLINT(google-explicit-constructor)
+        operator String() const; // NOLINT(google-explicit-constructor)
         operator const char *() const; // NOLINT(google-explicit-constructor)
 
     private:
-        std::string str;
+        String str;
     };
 
     /// Terminal color is a special code

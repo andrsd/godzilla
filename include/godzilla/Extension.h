@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include <string>
+#include "godzilla/String.h"
 
 #define EXTENSION_API extern "C"
 
@@ -15,16 +15,16 @@ public:
     /// Create an extension
     ///
     /// @param extension_name Extension name
-    Extension(const std::string & extension_name);
+    Extension(String extension_name);
 
     /// Get extension name
     ///
     /// @return Extension name
-    const std::string & get_name() const;
+    String get_name() const;
 
 private:
     /// Extension name
-    const std::string name;
+    const String name;
 };
 
 } // namespace godzilla

@@ -8,6 +8,7 @@
 #include "godzilla/Object.h"
 #include "godzilla/Registry.h"
 #include "godzilla/Exception.h"
+#include "godzilla/String.h"
 
 namespace godzilla {
 
@@ -25,11 +26,11 @@ public:
     /// @param class_name Name of the object whose parameter we are requesting
     /// @return Parameters of the object
     Parameters *
-    get_parameters(const std::string & class_name)
+    get_parameters(String class_name)
     {
         auto entry = this->registry.get(class_name);
         auto pars = new Parameters((*entry.params_ptr)());
-        pars->set<std::string>("_type", class_name);
+        pars->set<String>("_type", class_name);
         this->params.push_back(pars);
         return pars;
     }
@@ -41,11 +42,11 @@ public:
     /// @return The created object
     template <typename T>
     T *
-    create(const std::string & name, Parameters & parameters)
+    create(String name, Parameters & parameters)
     {
-        auto class_name = parameters.get<std::string>("_type");
+        auto class_name = parameters.get<String>("_type");
         auto entry = this->registry.get(class_name);
-        parameters.set<std::string>("name", name);
+        parameters.set<String>("name", name);
         auto * obj = entry.build_ptr(parameters);
         if (T * object = dynamic_cast<T *>(obj)) {
             this->objects.push_back(object);
@@ -64,7 +65,7 @@ public:
     /// @return The created object
     template <typename T>
     T *
-    create(const std::string & name, Parameters * parameters)
+    create(String name, Parameters * parameters)
     {
         return create<T>(name, *parameters);
     }
@@ -74,7 +75,7 @@ public:
     /// @param class_name Class name to check
     /// @return `true` if class name is known, `false` otherwise
     bool
-    is_registered(const std::string & class_name) const
+    is_registered(String class_name) const
     {
         return this->registry.exists(class_name);
     }

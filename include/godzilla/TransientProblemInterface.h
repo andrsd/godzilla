@@ -39,24 +39,6 @@ public:
         ADJOINT_DIVERGED_LINEAR_SOLVE = TSADJOINT_DIVERGED_LINEAR_SOLVE
     };
 
-    /// Time stepping schemes
-    enum class TimeScheme {
-        /// Backward Euler
-        BEULER,
-        /// Crank-Nicolson
-        CN,
-        /// Forward Euler
-        EULER,
-        /// Runge-Kutta 2 (midpoint)
-        RK_2,
-        /// Heun's
-        HEUN,
-        /// Strong stability preserving RK-2
-        SSP_RK_2,
-        /// Strong stability preserving RK-3
-        SSP_RK_3,
-    };
-
     enum class ProblemType {
         LINEAR = TS_LINEAR,
         NONLINEAR = TS_NONLINEAR,
@@ -105,13 +87,11 @@ public:
     ConvergedReason get_converged_reason() const;
 
     /// Set time-stepping scheme
-    void set_scheme(TimeScheme scheme);
-
-    /// Set time-stepping scheme
-    void set_scheme(const std::string & scheme_name);
+    void set_scheme(String scheme_name);
+    void set_scheme(String scheme_name, String sub_name);
 
     /// Get the name of time stepping scheme
-    std::string get_scheme() const;
+    String get_scheme() const;
 
     /// Set simulation time
     ///

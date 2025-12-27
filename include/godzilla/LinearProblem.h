@@ -9,6 +9,7 @@
 #include "godzilla/Matrix.h"
 #include "godzilla/KrylovSolver.h"
 #include "godzilla/Preconditioner.h"
+#include "godzilla/String.h"
 
 namespace godzilla {
 
@@ -37,7 +38,7 @@ public:
 
 protected:
     /// Get KSP type
-    const std::string & get_ksp_type() const;
+    String get_ksp_type() const;
 
     virtual KrylovSolver create_krylov_solver();
 
@@ -98,7 +99,7 @@ private:
     /// Preconditioner
     Preconditioner pcond;
     /// KSP type
-    std::string ksp_type;
+    String ksp_type;
     /// Relative convergence tolerance for the linear solver
     Real lin_rel_tol;
     /// Absolute convergence tolerance for the linear solver

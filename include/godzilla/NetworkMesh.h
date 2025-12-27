@@ -12,10 +12,10 @@ namespace godzilla {
 
 class MeshNetwork : public godzilla::Mesh {
 public:
-    MeshNetwork(const mpi::Communicator & comm);
+    MeshNetwork(mpi::Communicator comm);
     explicit MeshNetwork(DM dm);
 
-    Int register_component(const std::string & name, std::size_t size);
+    Int register_component(String name, std::size_t size);
 
     void add_component(Int p, Int key, void * comp, Int n_vars);
 
@@ -38,7 +38,7 @@ public:
     /// @param edge_list list of edges for this subnetwork, this is a one dimensional array with
     ///                  pairs of entries being the two vertices (in global numbering of the
     ///                  vertices) of each edge, `e0v0 e0v1 e1v0 e1v1 ...`
-    Int add_sub_network(const std::string & name, std::vector<Int> & edge_list);
+    Int add_sub_network(String name, std::vector<Int> & edge_list);
 
     ///
     void create();

@@ -126,7 +126,7 @@ CallStack::initialize()
 } // namespace internal
 
 void
-print_call_stack(const std::vector<std::string> & call_stack)
+print_call_stack(const std::vector<String> & call_stack)
 {
     fmt::println("Call stack:");
     for (auto [idx, str] : enumerate(call_stack)) {

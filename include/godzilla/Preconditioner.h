@@ -5,6 +5,7 @@
 
 #include "godzilla/Matrix.h"
 #include "godzilla/PetscObjectWrapper.h"
+#include "godzilla/String.h"
 #include "petscpc.h"
 
 namespace godzilla {
@@ -26,12 +27,12 @@ public:
     /// Builds PC for a particular preconditioner type
     ///
     /// @param type a known method, see PCType for possible values
-    void set_type(const std::string & type);
+    void set_type(String type);
 
     /// Gets the preconditioner type (as a string)
     ///
     /// @return name of preconditioner method
-    std::string get_type() const;
+    String get_type() const;
 
     /// Resets the preconditioner and removes any allocated Vectors and Matrices
     void reset();
