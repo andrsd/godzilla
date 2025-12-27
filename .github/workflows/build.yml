@@ -69,7 +69,7 @@ jobs:
             rhash=1.4.3 \
             make \
             mpich-mpicxx \
-            mpicpp-lite=2.* \
+            mpicpp-lite=2.2.* \
             spdlog=1.* \
             petsc==${{ matrix.petsc }} \
             fmt=11.* \
