@@ -115,6 +115,13 @@ TEST(UtilsTest, join_std_vec_int)
     EXPECT_EQ(s, "1, 3, 5, 7, 9");
 }
 
+TEST(UtilsTest, join_std_vec_string)
+{
+    std::vector<String> vals = { "quick", "brown", "fox" };
+    auto s = join(" ", vals);
+    EXPECT_EQ(s, "quick brown fox");
+}
+
 TEST(UtilsTest, join_std_set_int)
 {
     std::set<Int> vals = { 1, 3, 5, 7, 9 };
