@@ -185,14 +185,15 @@ public:
     add_required_param(String name, String doc_string)
     {
         CALL_STACK_MSG();
-        if (!this->has<T>(name)) {
-            auto param = Qtr<Parameter<T>>::alloc();
-            param->required = true;
-            param->is_private = false;
-            param->doc_string = doc_string;
-            param->valid = false;
-            this->params[name] = std::move(param);
-        }
+        expect_true(this->params.find(name) == this->params.end(),
+                    "Parameter '{}' already exists",
+                    name);
+        auto param = Qtr<Parameter<T>>::alloc();
+        param->required = true;
+        param->is_private = false;
+        param->doc_string = doc_string;
+        param->valid = false;
+        this->params[name] = std::move(param);
         return *this;
     }
 
@@ -206,15 +207,16 @@ public:
     add_param(String name, const S & value, String doc_string)
     {
         CALL_STACK_MSG();
-        if (!this->has<T>(name)) {
-            auto param = Qtr<Parameter<T>>::alloc();
-            param->required = false;
-            param->value = value;
-            param->is_private = false;
-            param->doc_string = doc_string;
-            param->valid = true;
-            this->params[name] = std::move(param);
-        }
+        expect_true(this->params.find(name) == this->params.end(),
+                    "Parameter '{}' already exists",
+                    name);
+        auto param = Qtr<Parameter<T>>::alloc();
+        param->required = false;
+        param->value = value;
+        param->is_private = false;
+        param->doc_string = doc_string;
+        param->valid = true;
+        this->params[name] = std::move(param);
         return *this;
     }
 
@@ -223,14 +225,15 @@ public:
     add_param(String name, String doc_string)
     {
         CALL_STACK_MSG();
-        if (!this->has<T>(name)) {
-            auto param = Qtr<Parameter<T>>::alloc();
-            param->required = false;
-            param->is_private = false;
-            param->doc_string = doc_string;
-            param->valid = false;
-            this->params[name] = std::move(param);
-        }
+        expect_true(this->params.find(name) == this->params.end(),
+                    "Parameter '{}' already exists",
+                    name);
+        auto param = Qtr<Parameter<T>>::alloc();
+        param->required = false;
+        param->is_private = false;
+        param->doc_string = doc_string;
+        param->valid = false;
+        this->params[name] = std::move(param);
         return *this;
     }
     ///@}
@@ -245,6 +248,9 @@ public:
     add_private_param(String name, const T & value)
     {
         CALL_STACK_MSG();
+        expect_true(this->params.find(name) == this->params.end(),
+                    "Parameter '{}' already exists",
+                    name);
         auto param = Qtr<Parameter<T>>::alloc();
         param->value = value;
         param->required = false;

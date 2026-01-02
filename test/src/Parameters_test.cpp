@@ -220,3 +220,11 @@ TEST(ParametersTest, dense_vector)
     Parameters params;
     params.set<DenseVector<double, 2>>("number", { 1, 2 });
 }
+
+TEST(ParametersTest, redefining_parameter_throws_an_error)
+{
+    Parameters pars;
+    pars.add_param<String>("name", "");
+    EXPECT_DEATH(pars.add_param<std::vector<String>>("name", ""),
+                 "Parameter 'name' already exists");
+}
