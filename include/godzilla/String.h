@@ -312,23 +312,23 @@ private:
     String(Rep * rep) : rep(rep) {}
 };
 
-} // namespace godzilla
-
 inline std::ostream &
-operator<<(std::ostream & os, const godzilla::String & obj)
+operator<<(std::ostream & os, const String & obj)
 {
     os << obj.c_str();
     return os;
 }
 
 inline std::istream &
-operator>>(std::istream & is, godzilla::String & obj)
+operator>>(std::istream & is, String & obj)
 {
     std::string str;
     is >> str;
     obj = str;
     return is;
 }
+
+} // namespace godzilla
 
 template <>
 struct fmt::formatter<godzilla::String> : fmt::formatter<fmt::string_view> {
