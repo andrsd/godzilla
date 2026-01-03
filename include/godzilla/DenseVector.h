@@ -10,9 +10,9 @@
 #include "godzilla/Utils.h"
 #include "godzilla/Assert.h"
 #include "mpicpp-lite/mpicpp-lite.h"
+#include "fmt/format.h"
 #include <initializer_list>
 #include <type_traits>
-#include <format>
 
 namespace godzilla {
 
@@ -52,7 +52,7 @@ public:
     {
         GODZILLA_ASSERT_TRUE(
             init.size() == N,
-            std::format("Number of entries ({}) does not match the size of DenseVector<..., {}>",
+            fmt::format("Number of entries ({}) does not match the size of DenseVector<..., {}>",
                         init.size(),
                         N));
         for (const auto & [i, v] : enumerate(init))
