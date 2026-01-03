@@ -241,3 +241,50 @@ TEST(FEGeometryTest, get_grad_fn_index_tet4)
     EXPECT_EQ((fe::get_grad_fn_index<TET4, 3, 4>(2)), 1);
     EXPECT_EQ((fe::get_grad_fn_index<TET4, 3, 4>(3)), 0);
 }
+
+TEST(FEGeometryTest, orient_tri_2d)
+{
+    mpi::Communicator comm;
+    auto mesh = UnstructuredMesh::build_from_cell_list(comm,
+                                                       2_D,
+                                                       3,
+                                                       { 0, 1, 2, 3, 1, 2 },
+                                                       2_D,
+                                                       { 0., 0., 1., 0., 0., 1., 1., 1. },
+                                                       true);
+
+    auto coords = fe::coordinates<2>(*mesh);
+    auto connect = fe::connectivity<2, 3>(*mesh);
+
+    auto tri0 = get_values(coords, connect[0]);
+    auto ori0 = fe::orient<godzilla::TRI3, 2, 3>(tri0);
+    EXPECT_GT(ori0, 0);
+
+    auto tri1 = get_values(coords, connect[1]);
+    auto ori1 = fe::orient<godzilla::TRI3, 2, 3>(tri1);
+    EXPECT_LT(ori1, 0);
+}
+
+TEST(FEGeometryTest, orient_tet_3d)
+{
+    mpi::Communicator comm;
+    auto mesh =
+        UnstructuredMesh::build_from_cell_list(comm,
+                                               3_D,
+                                               4,
+                                               { 0, 1, 2, 3, 1, 0, 2, 3 },
+                                               3_D,
+                                               { 0., 0., 0., 1., 0., 0., 0., 1., 0., 0., 0., 1. },
+                                               true);
+
+    auto coords = fe::coordinates<3>(*mesh);
+    auto connect = fe::connectivity<3, 4>(*mesh);
+
+    auto tet0 = get_values(coords, connect[0]);
+    auto ori0 = fe::orient<godzilla::TET4, 3, 4>(tet0);
+    EXPECT_GT(ori0, 0);
+
+    auto tet1 = get_values(coords, connect[1]);
+    auto ori1 = fe::orient<godzilla::TET4, 3, 4>(tet1);
+    EXPECT_LT(ori1, 0);
+}
