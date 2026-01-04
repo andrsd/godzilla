@@ -23,21 +23,21 @@ TEST(Array1DTest, const_op)
 {
     Array1D<Real> arr(10);
     for (Int i = 0; i < 10; ++i)
-        arr(i) = i;
+        arr[i] = i;
 
     const Array1D<Real> & ca = arr;
     for (Int i = 0; i < 10; ++i)
-        EXPECT_EQ(ca(i), i);
+        EXPECT_EQ(ca[i], i);
 }
 
 TEST(Array1DTest, zero)
 {
     Array1D<Real> arr(10);
     for (Int i = 0; i < 10; ++i)
-        arr(i) = i;
+        arr[i] = i;
     arr.zero();
     for (Int i = 0; i < 10; ++i)
-        EXPECT_EQ(arr(i), 0.);
+        EXPECT_EQ(arr[i], 0.);
 }
 
 TEST(Array1DTest, set_values)
@@ -45,7 +45,7 @@ TEST(Array1DTest, set_values)
     Array1D<Real> arr(10);
     arr.set(1234);
     for (Int i = 0; i < 10; ++i)
-        EXPECT_EQ(arr(i), 1234.);
+        EXPECT_EQ(arr[i], 1234.);
 }
 
 TEST(Array1DTest, set_values_idxs)
@@ -55,9 +55,9 @@ TEST(Array1DTest, set_values_idxs)
     DenseVector<Int, 3> idxs({ 1, 4, 2 });
     DenseVector<Real, 3> vals({ 8, 7, 6 });
     set_values(arr, idxs, vals);
-    EXPECT_EQ(arr(1), 8);
-    EXPECT_EQ(arr(4), 7);
-    EXPECT_EQ(arr(2), 6);
+    EXPECT_EQ(arr[1], 8);
+    EXPECT_EQ(arr[4], 7);
+    EXPECT_EQ(arr[2], 6);
 }
 
 TEST(Array1DTest, get_data)
@@ -118,14 +118,14 @@ TEST(Array1DTest, add)
     DenseVector<Real, 3> dx({ -1, 2, 1 });
     add_values(x, idx, dx);
 
-    EXPECT_EQ(x(0), 2.);
-    EXPECT_EQ(x(1), 2.);
-    EXPECT_EQ(x(2), 1.);
-    EXPECT_EQ(x(3), -1.);
-    EXPECT_EQ(x(4), 0.);
-    EXPECT_EQ(x(5), 6.);
-    EXPECT_EQ(x(6), 12.);
-    EXPECT_EQ(x(7), 8.);
+    EXPECT_EQ(x[0], 2.);
+    EXPECT_EQ(x[1], 2.);
+    EXPECT_EQ(x[2], 1.);
+    EXPECT_EQ(x[3], -1.);
+    EXPECT_EQ(x[4], 0.);
+    EXPECT_EQ(x[5], 6.);
+    EXPECT_EQ(x[6], 12.);
+    EXPECT_EQ(x[7], 8.);
 }
 
 TEST(Array1DTest, range_ops)

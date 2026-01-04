@@ -48,23 +48,23 @@ TEST(FEVolumesTest, calc_volumes)
     Array1D<DenseVector<Int, 3>> connect(N_ELEMS);
     Array1D<godzilla::Real> fe_volume(N_ELEMS);
 
-    coords(0) = DenseVector<Real, 2>({ 0, 0 });
-    coords(1) = DenseVector<Real, 2>({ 1, 0 });
-    coords(2) = DenseVector<Real, 2>({ 1, 1 });
-    coords(3) = DenseVector<Real, 2>({ 0, 1 });
-    coords(4) = DenseVector<Real, 2>({ 0.4, 0.2 });
+    coords[0] = DenseVector<Real, 2>({ 0, 0 });
+    coords[1] = DenseVector<Real, 2>({ 1, 0 });
+    coords[2] = DenseVector<Real, 2>({ 1, 1 });
+    coords[3] = DenseVector<Real, 2>({ 0, 1 });
+    coords[4] = DenseVector<Real, 2>({ 0.4, 0.2 });
 
-    connect(0) = DenseVector<Int, 3>({ 0, 1, 4 });
-    connect(1) = DenseVector<Int, 3>({ 1, 2, 4 });
-    connect(2) = DenseVector<Int, 3>({ 2, 3, 4 });
-    connect(3) = DenseVector<Int, 3>({ 3, 0, 4 });
+    connect[0] = DenseVector<Int, 3>({ 0, 1, 4 });
+    connect[1] = DenseVector<Int, 3>({ 1, 2, 4 });
+    connect[2] = DenseVector<Int, 3>({ 2, 3, 4 });
+    connect[3] = DenseVector<Int, 3>({ 3, 0, 4 });
 
     fe::calc_volumes<TRI3>(coords, connect, fe_volume);
 
-    EXPECT_DOUBLE_EQ(fe_volume(0), 0.1);
-    EXPECT_DOUBLE_EQ(fe_volume(1), 0.3);
-    EXPECT_DOUBLE_EQ(fe_volume(2), 0.4);
-    EXPECT_DOUBLE_EQ(fe_volume(3), 0.2);
+    EXPECT_DOUBLE_EQ(fe_volume[0], 0.1);
+    EXPECT_DOUBLE_EQ(fe_volume[1], 0.3);
+    EXPECT_DOUBLE_EQ(fe_volume[2], 0.4);
+    EXPECT_DOUBLE_EQ(fe_volume[3], 0.2);
 }
 
 TEST(FEVolumesTest, calc_volumes_1d_petsc)
@@ -80,9 +80,9 @@ TEST(FEVolumesTest, calc_volumes_1d_petsc)
 
     auto volumes = fe::calc_volumes<EDGE2, 1>(*mesh);
 
-    EXPECT_DOUBLE_EQ(volumes(0), 1.);
-    EXPECT_DOUBLE_EQ(volumes(1), 0.5);
-    EXPECT_DOUBLE_EQ(volumes(2), 1.5);
+    EXPECT_DOUBLE_EQ(volumes[0], 1.);
+    EXPECT_DOUBLE_EQ(volumes[1], 0.5);
+    EXPECT_DOUBLE_EQ(volumes[2], 1.5);
 }
 
 TEST(FEVolumesTest, calc_volumes_2d_petsc)
@@ -98,10 +98,10 @@ TEST(FEVolumesTest, calc_volumes_2d_petsc)
 
     auto volumes = fe::calc_volumes<TRI3, 2>(*mesh);
 
-    EXPECT_DOUBLE_EQ(volumes(0), 0.1);
-    EXPECT_DOUBLE_EQ(volumes(1), 0.3);
-    EXPECT_DOUBLE_EQ(volumes(2), 0.4);
-    EXPECT_DOUBLE_EQ(volumes(3), 0.2);
+    EXPECT_DOUBLE_EQ(volumes[0], 0.1);
+    EXPECT_DOUBLE_EQ(volumes[1], 0.3);
+    EXPECT_DOUBLE_EQ(volumes[2], 0.4);
+    EXPECT_DOUBLE_EQ(volumes[3], 0.2);
 }
 
 TEST(FEVolumesTest, face_area_edge2)

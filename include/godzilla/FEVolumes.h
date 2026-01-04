@@ -113,9 +113,9 @@ calc_volumes(const Array1D<DenseVector<Real, DIM>> & coords,
                 "Connectivity array size does not match FE volume array size");
 
     for (godzilla::Int ie = 0; ie < connect.size(); ++ie) {
-        auto idx = connect(ie);
+        auto idx = connect[ie];
         auto elem_coord = get_values(coords, idx);
-        fe_volume(ie) = volume<ELEM_TYPE, DIM>(elem_coord);
+        fe_volume[ie] = volume<ELEM_TYPE, DIM>(elem_coord);
     }
 }
 
@@ -145,7 +145,7 @@ calc_volumes(const UnstructuredMesh & mesh)
     for (godzilla::Int ie = 0; ie < n_elems; ++ie) {
         Real * data = elem_coord.data();
         PETSC_CHECK(DMPlexVecGetClosure(dm, section, vec, ie, &sz, &data));
-        vols(ie) = fe::volume<ELEM_TYPE, DIM>(elem_coord);
+        vols[ie] = fe::volume<ELEM_TYPE, DIM>(elem_coord);
     }
     return vols;
 }

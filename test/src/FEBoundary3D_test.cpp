@@ -41,7 +41,7 @@ public:
     void
     compute()
     {
-        for_each_vertex([&](Int idx, Int vtx) { this->vals(idx) = vtx; });
+        for_each_vertex([&](Int idx, Int vtx) { this->vals[idx] = vtx; });
     }
 
     Array1D<Int> vals;
@@ -74,7 +74,7 @@ public:
     void
     compute()
     {
-        for_each_facet([&](Int idx, Int facet) { this->vals(idx) = facet; });
+        for_each_facet([&](Int idx, Int facet) { this->vals[idx] = facet; });
     }
 
     Array1D<Int> vals;
@@ -107,7 +107,7 @@ TEST(FEBoundaryTest, test_3d)
 
         EXPECT_EQ(bnd.num_vertices(), 3);
 
-        EXPECT_EQ(bnd.vals(0), 1);
+        EXPECT_EQ(bnd.vals[0], 1);
 
         bnd.destroy();
     }
@@ -126,7 +126,7 @@ TEST(FEBoundaryTest, test_3d)
 
         EXPECT_DOUBLE_EQ(bnd.facet_area(0), 0.5);
 
-        EXPECT_EQ(bnd.vals(0), 8);
+        EXPECT_EQ(bnd.vals[0], 8);
 
         bnd.destroy();
     }
@@ -145,7 +145,7 @@ TEST(FEBoundaryTest, test_3d)
 
         EXPECT_DOUBLE_EQ(bnd.facet_area(0), 0.5);
 
-        EXPECT_EQ(bnd.vals(0), 6);
+        EXPECT_EQ(bnd.vals[0], 6);
 
         bnd.destroy();
     }
@@ -164,7 +164,7 @@ TEST(FEBoundaryTest, test_3d)
 
         EXPECT_DOUBLE_EQ(bnd.facet_area(0), 0.5);
 
-        EXPECT_EQ(bnd.vals(0), 5);
+        EXPECT_EQ(bnd.vals[0], 5);
 
         bnd.destroy();
     }
@@ -183,7 +183,7 @@ TEST(FEBoundaryTest, test_3d)
 
         EXPECT_DOUBLE_EQ(bnd.facet_area(0), 0.5 * std::sqrt(3));
 
-        EXPECT_EQ(bnd.vals(0), 7);
+        EXPECT_EQ(bnd.vals[0], 7);
 
         bnd.destroy();
     }

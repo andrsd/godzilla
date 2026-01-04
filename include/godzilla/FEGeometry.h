@@ -39,7 +39,7 @@ coordinates(const UnstructuredMesh & mesh)
         DenseVector<Real, DIM> c;
         for (Int i = 0; i < DIM; ++i, ++j)
             c(i) = coord_vals[j];
-        coords(vtx) = c;
+        coords[vtx] = c;
     }
     vc.restore_array(coord_vals);
     return coords;
@@ -55,7 +55,7 @@ connectivity(const UnstructuredMesh & mesh)
     for (auto elem_id : mesh.get_cell_range()) {
         auto cell_conn = mesh.get_connectivity(elem_id);
         for (Int i = 0; i < N_ELEM_NODES; ++i)
-            connect(elem_id)(i) = cell_conn[i];
+            connect[elem_id](i) = cell_conn[i];
     }
     return connect;
 }
@@ -77,7 +77,7 @@ common_elements_by_node(const UnstructuredMesh & mesh)
     for (auto & cell : mesh.get_cell_range()) {
         const auto & node_ids = mesh.get_connectivity(cell);
         for (Int j = 0; j < N_ELEM_NODES; ++j)
-            nelcom(node_ids[j] - n_all_cells).push_back(cell);
+            nelcom[node_ids[j] - n_all_cells].push_back(cell);
     }
     return nelcom;
 }
@@ -159,7 +159,7 @@ calc_element_length(const Array1D<DenseMatrix<Real, DIM, N_ELEM_NODES>> & grad_p
     CALL_STACK_MSG();
     Array1D<Real> elem_lengths(grad_phi.size());
     for (Int ie = 0; ie < grad_phi.size(); ++ie)
-        elem_lengths(ie) = element_length<ELEM_TYPE, DIM>(grad_phi(ie));
+        elem_lengths[ie] = element_length<ELEM_TYPE, DIM>(grad_phi[ie]);
     return elem_lengths;
 }
 
@@ -180,7 +180,7 @@ calc_nodal_radius<CARTESIAN, 1>(const Array1D<DenseVector<Real, 1>> & coords)
     auto n = coords.size();
     Array1D<Real> rad(n);
     for (Int in = 0; in < n; ++in)
-        rad(in) = 1.;
+        rad[in] = 1.;
     return rad;
 }
 
@@ -192,7 +192,7 @@ calc_nodal_radius<CARTESIAN, 2>(const Array1D<DenseVector<Real, 2>> & coords)
     auto n = coords.size();
     Array1D<Real> rad(n);
     for (Int in = 0; in < n; ++in)
-        rad(in) = 1.;
+        rad[in] = 1.;
     return rad;
 }
 
@@ -204,7 +204,7 @@ calc_nodal_radius<CARTESIAN, 3>(const Array1D<DenseVector<Real, 3>> & coords)
     auto n = coords.size();
     Array1D<Real> rad(n);
     for (Int in = 0; in < n; ++in)
-        rad(in) = 1.;
+        rad[in] = 1.;
     return rad;
 }
 
@@ -217,7 +217,7 @@ calc_nodal_radius<AXISYMMETRIC, 2>(const Array1D<DenseVector<Real, 2>> & coords)
     auto n = coords.size();
     Array1D<Real> rad(n);
     for (Int in = 0; in < n; ++in)
-        rad(in) = coords(in)(1);
+        rad[in] = coords[in](1);
     return rad;
 }
 

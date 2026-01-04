@@ -126,8 +126,8 @@ calc_grad_shape(const Array1D<DenseVector<Real, DIM>> & coords,
     for (Int ie = 0; ie < connect.size(); ++ie) {
         auto idx = connect[ie];
         auto elem_coord = get_values(coords, idx);
-        auto volume = volumes(ie);
-        grad_shfns(ie) = grad_shape<ELEM_TYPE, DIM>(elem_coord, volume);
+        auto volume = volumes[ie];
+        grad_shfns[ie] = grad_shape<ELEM_TYPE, DIM>(elem_coord, volume);
     }
     return grad_shfns;
 }
@@ -147,8 +147,8 @@ calc_grad_shape(const UnstructuredMesh & mesh, const Array1D<Real> & volumes)
     for (Int ie = 0; ie < n_elems; ++ie) {
         Real * data = elem_coord.data();
         PETSC_CHECK(DMPlexVecGetClosure(dm, section, vec, ie, &sz, &data));
-        auto volume = volumes(ie);
-        grad_shfns(ie) = grad_shape<ELEM_TYPE, DIM>(elem_coord, volume);
+        auto volume = volumes[ie];
+        grad_shfns[ie] = grad_shape<ELEM_TYPE, DIM>(elem_coord, volume);
     }
     return grad_shfns;
 }

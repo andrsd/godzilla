@@ -225,7 +225,7 @@ join(const char * con, const Array1D<T> & array)
     for (size_t i = 0; i < array.size(); ++i) {
         if (i > 0)
             oss << con;
-        oss << array(i);
+        oss << array[i];
     }
     return oss.str();
 }

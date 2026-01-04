@@ -38,7 +38,7 @@ public:
     void
     compute()
     {
-        for_each_vertex([&](Int idx, Int vtx) { this->vals(idx) = vtx; });
+        for_each_vertex([&](Int idx, Int vtx) { this->vals[idx] = vtx; });
     }
 
     Array1D<Int> vals;
@@ -76,7 +76,7 @@ public:
     void
     compute()
     {
-        for_each_facet([&](Int idx, Int facet) { this->vals(idx) = facet; });
+        for_each_facet([&](Int idx, Int facet) { this->vals[idx] = facet; });
     }
 
     Array1D<Int> vals;
@@ -104,7 +104,7 @@ TEST(FEBoundaryTest, test_1d)
         TestEssentialBoundary1D bnd(mesh, vertices);
         bnd.create();
         bnd.compute();
-        EXPECT_EQ(bnd.vals(0), 2);
+        EXPECT_EQ(bnd.vals[0], 2);
         bnd.destroy();
     }
 

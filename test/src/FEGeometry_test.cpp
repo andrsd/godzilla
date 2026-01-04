@@ -25,10 +25,10 @@ TEST(FEGeometryTest, coordinates)
 
     auto coords = fe::coordinates<1>(*mesh);
     ASSERT_EQ(coords.size(), 4);
-    EXPECT_DOUBLE_EQ(coords(3)(0), 0.);
-    EXPECT_DOUBLE_EQ(coords(4)(0), 0.1);
-    EXPECT_DOUBLE_EQ(coords(5)(0), 0.2);
-    EXPECT_DOUBLE_EQ(coords(6)(0), 0.3);
+    EXPECT_DOUBLE_EQ(coords[3](0), 0.);
+    EXPECT_DOUBLE_EQ(coords[4](0), 0.1);
+    EXPECT_DOUBLE_EQ(coords[5](0), 0.2);
+    EXPECT_DOUBLE_EQ(coords[6](0), 0.3);
 }
 
 TEST(FEGeometryTest, connectivity)
@@ -43,12 +43,12 @@ TEST(FEGeometryTest, connectivity)
                                                        true);
     auto connect = fe::connectivity<1, 2>(*mesh);
     ASSERT_EQ(connect.size(), 3);
-    EXPECT_EQ(connect(0)(0), 3);
-    EXPECT_EQ(connect(0)(1), 4);
-    EXPECT_EQ(connect(1)(0), 4);
-    EXPECT_EQ(connect(1)(1), 5);
-    EXPECT_EQ(connect(2)(0), 5);
-    EXPECT_EQ(connect(2)(1), 6);
+    EXPECT_EQ(connect[0](0), 3);
+    EXPECT_EQ(connect[0](1), 4);
+    EXPECT_EQ(connect[1](0), 4);
+    EXPECT_EQ(connect[1](1), 5);
+    EXPECT_EQ(connect[2](0), 5);
+    EXPECT_EQ(connect[2](1), 6);
 }
 
 TEST(FEGeometryTest, common_elements_by_node)
@@ -64,10 +64,10 @@ TEST(FEGeometryTest, common_elements_by_node)
 
     auto nelcom = fe::common_elements_by_node<2>(*mesh);
 
-    EXPECT_THAT(nelcom(0), UnorderedElementsAre(0));
-    EXPECT_THAT(nelcom(1), UnorderedElementsAre(0, 1));
-    EXPECT_THAT(nelcom(2), UnorderedElementsAre(1, 2));
-    EXPECT_THAT(nelcom(3), UnorderedElementsAre(2));
+    EXPECT_THAT(nelcom[0], UnorderedElementsAre(0));
+    EXPECT_THAT(nelcom[1], UnorderedElementsAre(0, 1));
+    EXPECT_THAT(nelcom[2], UnorderedElementsAre(1, 2));
+    EXPECT_THAT(nelcom[3], UnorderedElementsAre(2));
 }
 
 TEST(FEGeometryTest, normal_edge2)
@@ -161,56 +161,56 @@ TEST(FEGeometryTest, calc_element_length)
     auto volumes = fe::calc_volumes<ELEM_TYPE, DIM>(*mesh);
     auto grad_sh = fe::calc_grad_shape<ELEM_TYPE, DIM>(*mesh, volumes);
     auto hel = fe::calc_element_length<ELEM_TYPE, DIM>(grad_sh);
-    EXPECT_DOUBLE_EQ(hel(0), 0.48);
-    EXPECT_DOUBLE_EQ(hel(1), 0.6);
+    EXPECT_DOUBLE_EQ(hel[0], 0.48);
+    EXPECT_DOUBLE_EQ(hel[1], 0.6);
 }
 
 TEST(FEGeometryTest, calc_nodal_radius_xyz_edge2)
 {
     Array1D<DenseVector<Real, 1>> coords(2);
-    coords(0) = DenseVector<Real, 1>({ 0. });
-    coords(1) = DenseVector<Real, 1>({ 2. });
+    coords[0] = DenseVector<Real, 1>({ 0. });
+    coords[1] = DenseVector<Real, 1>({ 2. });
     auto rad = fe::calc_nodal_radius<CARTESIAN, 1>(coords);
-    EXPECT_DOUBLE_EQ(rad(0), 1.);
-    EXPECT_DOUBLE_EQ(rad(1), 1.);
+    EXPECT_DOUBLE_EQ(rad[0], 1.);
+    EXPECT_DOUBLE_EQ(rad[1], 1.);
 }
 
 TEST(FEGeometryTest, calc_nodal_radius_xyz_tri3)
 {
     Array1D<DenseVector<Real, 2>> coords(3);
-    coords(0) = DenseVector<Real, 2>({ 0., 0. });
-    coords(1) = DenseVector<Real, 2>({ 1., 0. });
-    coords(2) = DenseVector<Real, 2>({ 0., 1. });
+    coords[0] = DenseVector<Real, 2>({ 0., 0. });
+    coords[1] = DenseVector<Real, 2>({ 1., 0. });
+    coords[2] = DenseVector<Real, 2>({ 0., 1. });
     auto rad = fe::calc_nodal_radius<CARTESIAN, 2>(coords);
-    EXPECT_DOUBLE_EQ(rad(0), 1.);
-    EXPECT_DOUBLE_EQ(rad(1), 1.);
-    EXPECT_DOUBLE_EQ(rad(2), 1.);
+    EXPECT_DOUBLE_EQ(rad[0], 1.);
+    EXPECT_DOUBLE_EQ(rad[1], 1.);
+    EXPECT_DOUBLE_EQ(rad[2], 1.);
 }
 
 TEST(FEGeometryTest, calc_nodal_radius_xyz_tet4)
 {
     Array1D<DenseVector<Real, 3>> coords(4);
-    coords(0) = DenseVector<Real, 3>({ 0., 0., 0. });
-    coords(1) = DenseVector<Real, 3>({ 1., 0., 0. });
-    coords(2) = DenseVector<Real, 3>({ 0., 1., 0. });
-    coords(3) = DenseVector<Real, 3>({ 0., 0., 1. });
+    coords[0] = DenseVector<Real, 3>({ 0., 0., 0. });
+    coords[1] = DenseVector<Real, 3>({ 1., 0., 0. });
+    coords[2] = DenseVector<Real, 3>({ 0., 1., 0. });
+    coords[3] = DenseVector<Real, 3>({ 0., 0., 1. });
     auto rad = fe::calc_nodal_radius<CARTESIAN, 3>(coords);
-    EXPECT_DOUBLE_EQ(rad(0), 1.);
-    EXPECT_DOUBLE_EQ(rad(1), 1.);
-    EXPECT_DOUBLE_EQ(rad(2), 1.);
-    EXPECT_DOUBLE_EQ(rad(3), 1.);
+    EXPECT_DOUBLE_EQ(rad[0], 1.);
+    EXPECT_DOUBLE_EQ(rad[1], 1.);
+    EXPECT_DOUBLE_EQ(rad[2], 1.);
+    EXPECT_DOUBLE_EQ(rad[3], 1.);
 }
 
 TEST(FEGeometryTest, calc_nodal_radius_rz_tri3)
 {
     Array1D<DenseVector<Real, 2>> coords(3);
-    coords(0) = DenseVector<Real, 2>({ 0., 0. });
-    coords(1) = DenseVector<Real, 2>({ 1., 0. });
-    coords(2) = DenseVector<Real, 2>({ 0., 1. });
+    coords[0] = DenseVector<Real, 2>({ 0., 0. });
+    coords[1] = DenseVector<Real, 2>({ 1., 0. });
+    coords[2] = DenseVector<Real, 2>({ 0., 1. });
     auto rad = fe::calc_nodal_radius<godzilla::AXISYMMETRIC, 2>(coords);
-    EXPECT_DOUBLE_EQ(rad(0), 0.);
-    EXPECT_DOUBLE_EQ(rad(1), 0.);
-    EXPECT_DOUBLE_EQ(rad(2), 1.);
+    EXPECT_DOUBLE_EQ(rad[0], 0.);
+    EXPECT_DOUBLE_EQ(rad[1], 0.);
+    EXPECT_DOUBLE_EQ(rad[2], 1.);
 }
 
 TEST(FEGeometryTest, get_local_face_index)
