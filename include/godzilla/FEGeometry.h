@@ -4,6 +4,7 @@
 #pragma once
 
 #include "godzilla/CallStack.h"
+#include "godzilla/Enums.h"
 #include "godzilla/Types.h"
 #include "godzilla/Math.h"
 #include "godzilla/Convert.h"
@@ -278,6 +279,59 @@ get_grad_fn_index<TET4, 3, 4>(Int facet_idx)
     static std::array<Int, 4> grad_fn_index = { 3, 2, 1, 0 };
     GODZILLA_ASSERT_TRUE(facet_idx >= 0 && facet_idx < 4, "Facet index out of bound");
     return grad_fn_index[facet_idx];
+}
+
+// --- Orientation ---
+
+/// Check the orientation of an element
+///
+/// @param pt Matrix with coordinates
+/// @return Oriention:
+///   - `> 0` counter-clock wise
+///   - `< 0` clock-wise
+///   - `= 0` degenerate
+template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
+inline Real
+orient(const DenseMatrix<Real, N_ELEM_NODES, DIM> & pt)
+{
+    CALL_STACK_MSG();
+    throw NotImplementedException(
+        "Computation of a element orintation for '{}' in {} dimensions is not implemented",
+        conv::to_str(ELEM_TYPE),
+        DIM);
+}
+
+template <>
+inline Real
+orient<TRI3, 2, 3>(const DenseMatrix<Real, 3, 2> & pt)
+{
+    // pt = [ a.x, a.y ]
+    //      [ b.x, b.y ]
+    //      [ c.x, c.y ]
+    //
+    // ori = det([b-a | c-a])
+    DenseMatrix<Real, 2> A;
+    A.set_row(0, { pt(1, 0) - pt(0, 0), pt(1, 1) - pt(0, 1) });
+    A.set_row(1, { pt(2, 0) - pt(0, 0), pt(2, 1) - pt(0, 1) });
+    return determinant(A);
+}
+
+template <>
+inline Real
+orient<TET4, 3, 4>(const DenseMatrix<Real, 4, 3> & pt)
+{
+    // pt = [ a.x, a.y, a.z ]
+    //      [ b.x, b.y, b.z ]
+    //      [ c.x, c.y, c.z ]
+    //      [ d.x, d.y, d.z ]
+    //
+    // orientation is given by the signed volume of a tetrahedron
+    // V = 1/6 * det([b-a | c-a | d-a])
+    DenseMatrix<Real, 3> A;
+    A.set_row(0, { pt(1, 0) - pt(0, 0), pt(1, 1) - pt(0, 1), pt(1, 2) - pt(0, 2) });
+    A.set_row(1, { pt(2, 0) - pt(0, 0), pt(2, 1) - pt(0, 1), pt(2, 2) - pt(0, 2) });
+    A.set_row(2, { pt(3, 0) - pt(0, 0), pt(3, 1) - pt(0, 1), pt(3, 2) - pt(0, 2) });
+    return 1. / 6. * determinant(A);
 }
 
 } // namespace fe
