@@ -179,7 +179,7 @@ public:
     normal(Int ibf) const
     {
         CALL_STACK_MSG();
-        return this->normals(ibf);
+        return this->normals[ibf];
     }
 
     /// Get length/area of a boundary facet
@@ -190,7 +190,7 @@ public:
     facet_length(Int ibf) const
     {
         CALL_STACK_MSG();
-        return this->lengths(ibf);
+        return this->lengths[ibf];
     }
 
     /// Get area of a boundary facet
@@ -201,7 +201,7 @@ public:
     facet_area(Int ibf) const
     {
         CALL_STACK_MSG();
-        return this->lengths(ibf);
+        return this->lengths[ibf];
     }
 
     /// Iterate over all boundary facets
@@ -246,7 +246,7 @@ private:
     calc_grad_shape(Int cell, Real volume) const
     {
         if (this->grad_phi)
-            return this->grad_phi(cell);
+            return this->grad_phi[cell];
         else {
             auto dm = this->mesh->get_coordinate_dm();
             auto vec = this->mesh->get_coordinates_local();
@@ -273,9 +273,9 @@ private:
             auto local_face_idx = utils::index_of(cone, facet);
             auto grad_fn_idx = fe::get_grad_fn_index<ELEM_TYPE, DIM, N_ELEM_NODES>(local_face_idx);
             auto volume = this->mesh->compute_cell_volume(ie);
-            auto edge_length = this->lengths(i);
+            auto edge_length = this->lengths[i];
             DenseVector<Real, DIM> grad(calc_grad_shape(ie, volume).column(grad_fn_idx));
-            this->normals(i) = fe::normal<ELEM_TYPE>(volume, edge_length, grad);
+            this->normals[i] = fe::normal<ELEM_TYPE>(volume, edge_length, grad);
         }
     }
 
@@ -285,7 +285,7 @@ private:
     {
         CALL_STACK_MSG();
         for (Int i = 0; i < this->facets.get_local_size(); ++i)
-            this->lengths(i) = this->mesh->compute_cell_volume(this->facets(i));
+            this->lengths[i] = this->mesh->compute_cell_volume(this->facets(i));
     }
 
 private:
