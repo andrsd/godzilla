@@ -198,9 +198,9 @@ private:
     Delegate<void(const Vector & x, Matrix & J, Matrix & Jp)> compute_jacobian_method;
 
 public:
-    static ErrorCode invoke_compute_residual_delegate(SNES, Vec, Vec, void *);
-    static ErrorCode invoke_compute_jacobian_delegate(SNES, Vec, Mat, Mat, void *);
-    static ErrorCode invoke_monitor_delegate(SNES, Int, Real, void *);
+    static PetscErrorCode invoke_compute_residual_delegate(SNES, Vec, Vec, void *);
+    static PetscErrorCode invoke_compute_jacobian_delegate(SNES, Vec, Mat, Mat, void *);
+    static PetscErrorCode invoke_monitor_delegate(SNES, Int, Real, void *);
 };
 
 void print_converged_reason(PrintInterface & pi, SNESolver::ConvergedReason reason);

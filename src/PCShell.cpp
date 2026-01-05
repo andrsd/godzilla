@@ -8,7 +8,7 @@
 
 namespace godzilla {
 
-ErrorCode
+PetscErrorCode
 PCShell::invoke_apply_delegate(PC pc, Vec in_vec, Vec out_vec)
 {
     CALL_STACK_MSG();
@@ -22,7 +22,7 @@ PCShell::invoke_apply_delegate(PC pc, Vec in_vec, Vec out_vec)
     return 0;
 }
 
-ErrorCode
+PetscErrorCode
 PCShell::invoke_apply_ba_delegate(PC pc, PCSide side, Vec in_vec, Vec out_vec, Vec x_vec)
 {
     CALL_STACK_MSG();
@@ -38,7 +38,7 @@ PCShell::invoke_apply_ba_delegate(PC pc, PCSide side, Vec in_vec, Vec out_vec, V
     return 0;
 }
 
-ErrorCode
+PetscErrorCode
 PCShell::invoke_apply_transpose_delegate(PC pc, Vec in_vec, Vec out_vec)
 {
     CALL_STACK_MSG();
@@ -52,7 +52,7 @@ PCShell::invoke_apply_transpose_delegate(PC pc, Vec in_vec, Vec out_vec)
     return 0;
 }
 
-ErrorCode
+PetscErrorCode
 PCShell::invoke_set_up_delegate(PC pc)
 {
     CALL_STACK_MSG();
@@ -62,7 +62,7 @@ PCShell::invoke_set_up_delegate(PC pc)
     return 0;
 }
 
-ErrorCode
+PetscErrorCode
 PCShell::invoke_destroy_delegate(PC pc)
 {
     CALL_STACK_MSG();

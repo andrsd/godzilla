@@ -13,7 +13,7 @@
 
 namespace godzilla {
 
-ErrorCode
+PetscErrorCode
 FENonlinearProblem::invoke_compute_boundary_delegate(DM, Vec x, void * context)
 {
     CALL_STACK_MSG();
@@ -24,7 +24,7 @@ FENonlinearProblem::invoke_compute_boundary_delegate(DM, Vec x, void * context)
     return 0;
 }
 
-ErrorCode
+PetscErrorCode
 FENonlinearProblem::invoke_compute_residual_delegate(DM, Vec x, Vec F, void * context)
 {
     CALL_STACK_MSG();
@@ -37,7 +37,7 @@ FENonlinearProblem::invoke_compute_residual_delegate(DM, Vec x, Vec F, void * co
     return 0;
 }
 
-ErrorCode
+PetscErrorCode
 FENonlinearProblem::invoke_compute_jacobian_delegate(DM, Vec x, Mat J, Mat Jp, void * context)
 {
     CALL_STACK_MSG();

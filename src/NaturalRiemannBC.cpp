@@ -9,7 +9,7 @@
 
 namespace godzilla {
 
-ErrorCode
+PetscErrorCode
 NaturalRiemannBC::invoke_delegate(Real time,
                                   const Real * c,
                                   const Real * n,

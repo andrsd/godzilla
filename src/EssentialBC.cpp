@@ -11,7 +11,7 @@
 
 namespace godzilla {
 
-ErrorCode
+PetscErrorCode
 EssentialBC::invoke_delegate(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx)
 {
     CALL_STACK_MSG();
@@ -20,7 +20,7 @@ EssentialBC::invoke_delegate(Int dim, Real time, const Real x[], Int nc, Scalar 
     return 0;
 }
 
-ErrorCode
+PetscErrorCode
 EssentialBC::invoke_delegate_t(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx)
 {
     CALL_STACK_MSG();

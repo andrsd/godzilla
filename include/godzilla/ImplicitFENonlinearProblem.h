@@ -82,7 +82,7 @@ public:
     static Parameters parameters();
 
 private:
-    static ErrorCode
+    static PetscErrorCode
     invoke_compute_boundary_delegate(DM, Real time, Vec x, Vec x_t, void * context);
 };
 

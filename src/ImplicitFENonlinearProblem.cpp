@@ -12,7 +12,7 @@
 
 namespace godzilla {
 
-ErrorCode
+PetscErrorCode
 ImplicitFENonlinearProblem::invoke_compute_boundary_delegate(DM,
                                                              Real time,
                                                              Vec x,
