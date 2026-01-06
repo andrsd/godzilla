@@ -253,14 +253,14 @@ private:
     Delegate<ConvergedReason(Int it, Real rnorm)> convergence_test_method;
 
 public:
-    static ErrorCode invoke_compute_operators_delegate(KSP, Mat A, Mat B, void * ctx);
-    static ErrorCode invoke_compute_rhs_delegate(KSP, Vec b, void * ctx);
-    static ErrorCode invoke_monitor_delegate(KSP, Int it, Real rnorm, void * ctx);
-    static ErrorCode invoke_convergence_test_delegate(KSP,
-                                                      Int it,
-                                                      Real rnorm,
-                                                      KSPConvergedReason * reason,
-                                                      void * ctx);
+    static PetscErrorCode invoke_compute_operators_delegate(KSP, Mat A, Mat B, void * ctx);
+    static PetscErrorCode invoke_compute_rhs_delegate(KSP, Vec b, void * ctx);
+    static PetscErrorCode invoke_monitor_delegate(KSP, Int it, Real rnorm, void * ctx);
+    static PetscErrorCode invoke_convergence_test_delegate(KSP,
+                                                           Int it,
+                                                           Real rnorm,
+                                                           KSPConvergedReason * reason,
+                                                           void * ctx);
 };
 
 void print_converged_reason(PrintInterface & pi, KrylovSolver::ConvergedReason reason);

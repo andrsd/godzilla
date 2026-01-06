@@ -12,7 +12,7 @@
 
 namespace godzilla {
 
-ErrorCode
+PetscErrorCode
 KrylovSolver::invoke_compute_operators_delegate(KSP, Mat A, Mat B, void * ctx)
 {
     CALL_STACK_MSG();
@@ -25,7 +25,7 @@ KrylovSolver::invoke_compute_operators_delegate(KSP, Mat A, Mat B, void * ctx)
     return 0;
 }
 
-ErrorCode
+PetscErrorCode
 KrylovSolver::invoke_compute_rhs_delegate(KSP, Vec b, void * ctx)
 {
     CALL_STACK_MSG();
@@ -36,7 +36,7 @@ KrylovSolver::invoke_compute_rhs_delegate(KSP, Vec b, void * ctx)
     return 0;
 }
 
-ErrorCode
+PetscErrorCode
 KrylovSolver::invoke_monitor_delegate(KSP, Int it, Real rnorm, void * ctx)
 {
     auto * method = static_cast<Delegate<void(Int it, Real rnorm)> *>(ctx);
@@ -44,7 +44,7 @@ KrylovSolver::invoke_monitor_delegate(KSP, Int it, Real rnorm, void * ctx)
     return 0;
 }
 
-ErrorCode
+PetscErrorCode
 KrylovSolver::invoke_convergence_test_delegate(KSP,
                                                Int it,
                                                Real rnorm,

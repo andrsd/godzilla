@@ -59,7 +59,7 @@ private:
     Delegate<void(Matrix & A, Vector & x_vec, Vector & y_vec)> mult_delegate;
 
 public:
-    static ErrorCode invoke_matmult_op_delegate(Mat matrix, Vec vector, Vec action);
+    static PetscErrorCode invoke_matmult_op_delegate(Mat matrix, Vec vector, Vec action);
 };
 
 } // namespace godzilla

@@ -131,9 +131,10 @@ public:
     static Parameters parameters();
 
 private:
-    static ErrorCode invoke_compute_boundary_delegate(DM dm, Vec x, void * context);
-    static ErrorCode invoke_compute_residual_delegate(DM, Vec x, Vec F, void * context);
-    static ErrorCode invoke_compute_jacobian_delegate(DM, Vec x, Mat J, Mat Jp, void * context);
+    static PetscErrorCode invoke_compute_boundary_delegate(DM dm, Vec x, void * context);
+    static PetscErrorCode invoke_compute_residual_delegate(DM, Vec x, Vec F, void * context);
+    static PetscErrorCode
+    invoke_compute_jacobian_delegate(DM, Vec x, Mat J, Mat Jp, void * context);
 };
 
 } // namespace godzilla

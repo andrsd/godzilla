@@ -205,7 +205,7 @@ TSAbstract::inc_reject()
 
 namespace internal {
 
-ErrorCode
+PetscErrorCode
 TSReset_GodzillaTS(TS ts)
 {
     CALL_STACK_MSG();
@@ -214,7 +214,7 @@ TSReset_GodzillaTS(TS ts)
     return 0;
 }
 
-ErrorCode
+PetscErrorCode
 TSDestroy_GodzillaTS(TS ts)
 {
     CALL_STACK_MSG();
@@ -225,7 +225,7 @@ TSDestroy_GodzillaTS(TS ts)
     return 0;
 }
 
-ErrorCode
+PetscErrorCode
 TSView_GodzillaTS(TS ts, PetscViewer viewer)
 {
     CALL_STACK_MSG();
@@ -234,7 +234,7 @@ TSView_GodzillaTS(TS ts, PetscViewer viewer)
     return 0;
 }
 
-ErrorCode
+PetscErrorCode
 TSSetUp_GodzillaTS(TS ts)
 {
     CALL_STACK_MSG();
@@ -243,7 +243,7 @@ TSSetUp_GodzillaTS(TS ts)
     return 0;
 }
 
-ErrorCode
+PetscErrorCode
 TSRollBack_GodzillaTS(TS ts)
 {
     CALL_STACK_MSG();
@@ -252,7 +252,7 @@ TSRollBack_GodzillaTS(TS ts)
     return 0;
 }
 
-ErrorCode
+PetscErrorCode
 TSStep_GodzillaTS(TS ts)
 {
     CALL_STACK_MSG();
@@ -261,7 +261,7 @@ TSStep_GodzillaTS(TS ts)
     return 0;
 }
 
-ErrorCode
+PetscErrorCode
 TSEvaluateStep_GodzillaTS(TS ts, PetscInt order, Vec X, PetscBool * done)
 {
     CALL_STACK_MSG();

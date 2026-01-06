@@ -11,7 +11,7 @@
 
 namespace godzilla {
 
-ErrorCode
+PetscErrorCode
 InitialCondition::invoke_delegate(Int dim,
                                   Real time,
                                   const Real x[],

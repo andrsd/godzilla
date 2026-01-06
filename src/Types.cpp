@@ -8,7 +8,7 @@ namespace godzilla {
 
 namespace internal {
 
-ErrorCode
+PetscErrorCode
 invoke_function_delegate(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx)
 {
     auto * method = static_cast<FunctionDelegate *>(ctx);

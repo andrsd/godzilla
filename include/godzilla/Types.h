@@ -13,15 +13,15 @@ namespace godzilla {
 using Int = PetscInt;
 using Real = PetscReal;
 using Scalar = PetscScalar;
-using ErrorCode = PetscErrorCode;
 
-typedef ErrorCode PetscFunc(Int dim, Real time, const Real x[], Int Nc, Scalar u[], void * ctx);
+typedef PetscErrorCode
+PetscFunc(Int dim, Real time, const Real x[], Int Nc, Scalar u[], void * ctx);
 
 using FunctionDelegate = Delegate<void(Real, const Real[], Scalar[])>;
 
 namespace internal {
 
-ErrorCode
+PetscErrorCode
 invoke_function_delegate(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx);
 
 } // namespace internal
