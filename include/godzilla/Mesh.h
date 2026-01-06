@@ -9,6 +9,7 @@
 #include "godzilla/Label.h"
 #include "godzilla/Vector.h"
 #include "godzilla/Section.h"
+#include "godzilla/BoundingBox.h"
 #include "mpicpp-lite/mpicpp-lite.h"
 #include "petscdm.h"
 
@@ -126,6 +127,15 @@ public:
     ///
     /// @return Array of all neighboring ranks
     std::vector<int> get_neighbors() const;
+
+    template <Dimension D>
+    BoundingBox<D>
+    get_bounding_box() const
+    {
+        Real gmin[D], gmax[D];
+        PETSC_CHECK(DMGetBoundingBox(get_dm(), gmin, gmax));
+        return BoundingBox<D>(gmin, gmax);
+    }
 
 protected:
     /// Set the DM
