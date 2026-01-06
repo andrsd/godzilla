@@ -452,7 +452,7 @@ ExodusIIOutput::write_node_sets()
             node_set[j] = (int) (vertices[j] - n_elems_in_block + 1);
         this->exo->write_node_set(vertex_set_idx[i], node_set);
 
-        ns_names[i] = this->mesh->get_vertex_set_name(vertex_set_idx[i]);
+        ns_names[i] = this->mesh->get_vertex_set_name(vertex_set_idx[i]).value();
 
         vertices.restore_indices();
         vertices.destroy();

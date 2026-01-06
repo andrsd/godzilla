@@ -262,7 +262,7 @@ public:
     ///
     /// @param id The ID of the vertex set
     /// @return Vertex set name
-    String get_vertex_set_name(Int id) const;
+    Expected<String, ErrorCode> get_vertex_set_name(Int id) const;
 
     /// Get number of vertex sets
     ///

@@ -3,6 +3,8 @@
 
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/CallStack.h"
+#include "godzilla/Error.h"
+#include "godzilla/Expected.h"
 #include "godzilla/IndexSet.h"
 #include "godzilla/Exception.h"
 #include "godzilla/Partitioner.h"
@@ -508,7 +510,7 @@ UnstructuredMesh::get_face_sets() const
     return this->face_set_names;
 }
 
-String
+Expected<String, ErrorCode>
 UnstructuredMesh::get_vertex_set_name(Int id) const
 {
     CALL_STACK_MSG();
@@ -516,7 +518,7 @@ UnstructuredMesh::get_vertex_set_name(Int id) const
     if (it != this->vertex_set_names.end())
         return it->second;
     else
-        throw Exception("Vertex set ID '{}' does not exist.", id);
+        return Unexpected(ErrorCode::NotFound);
 }
 
 Int
