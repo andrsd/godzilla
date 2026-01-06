@@ -24,4 +24,9 @@ void check_petsc_error(int ierr, const char * file, int line);
 /// terminate
 #define PETSC_CHECK(ierr) godzilla::internal::check_petsc_error(ierr, __FILE__, __LINE__)
 
+enum class ErrorCode {
+    ///
+    NotFound
+};
+
 } // namespace godzilla
