@@ -26,10 +26,8 @@ DependencyEvaluator::get_functional(String name) const
 {
     CALL_STACK_MSG();
     const auto & it = this->functionals.find(name);
-    if (it != this->functionals.end())
-        return *it->second;
-    else
-        throw Exception("No functional with name '{}' found. Typo?", name);
+    expect_true(it != this->functionals.end(), "No functional with name '{}' found. Typo?", name);
+    return *it->second;
 }
 
 std::map<String, const ValueFunctional *>
@@ -40,10 +38,10 @@ DependencyEvaluator::get_suppliers() const
     for (auto & [_, fnl] : get_functionals()) {
         auto provides = fnl->get_provided_values();
         for (auto & s : provides) {
-            if (suppliers.find(s) == suppliers.end())
-                suppliers[s] = fnl;
-            else
-                throw Exception("Value '{}' is being supplied multiple times.", s);
+            expect_true(suppliers.find(s) == suppliers.end(),
+                        "Value '{}' is being supplied multiple times.",
+                        s);
+            suppliers[s] = fnl;
         }
     }
     return suppliers;
@@ -59,10 +57,10 @@ DependencyEvaluator::build_dependecy_graph(
         auto depends_on = fnl->get_dependent_values();
         for (auto & dep : depends_on) {
             auto jt = suppliers.find(dep);
-            if (jt != suppliers.end())
-                graph.add_edge(fnl, jt->second);
-            else
-                throw Exception("Did not find any functional which would supply '{}'.", dep);
+            expect_true(jt != suppliers.end(),
+                        "Did not find any functional which would supply '{}'.",
+                        dep);
+            graph.add_edge(fnl, jt->second);
         }
     }
     return graph;

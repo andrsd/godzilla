@@ -8,6 +8,7 @@
 #include "godzilla/CallStack.h"
 #include "godzilla/DependencyGraph.h"
 #include "godzilla/String.h"
+#include "godzilla/Assert.h"
 
 namespace godzilla {
 
@@ -127,12 +128,11 @@ DependencyEvaluator::declare_value(String val_name)
         return new_val->set();
     }
     else {
-        if (it->second->is_declared())
-            throw Exception("Trying to declare an already existing value '{}'.", val_name);
-        else {
-            auto val = dynamic_cast<Value<T> *>(const_cast<ValueBase *>(it->second));
-            return val->set();
-        }
+        expect_true(!it->second->is_declared(),
+                    "Trying to declare an already existing value '{}'.",
+                    val_name);
+        auto val = dynamic_cast<Value<T> *>(const_cast<ValueBase *>(it->second));
+        return val->set();
     }
 }
 
@@ -159,12 +159,9 @@ DependencyEvaluator::create_functional(String name, const Parameters & pars)
 {
     CALL_STACK_MSG();
     const auto & it = this->functionals.find(name);
-    if (it == this->functionals.end()) {
-        auto * fnl = new Fn(pars);
-        this->functionals[name] = fnl;
-    }
-    else
-        throw Exception("Functional with name '{}' already exists.", name);
+    expect_true(it == this->functionals.end(), "Functional with name '{}' already exists.", name);
+    auto * fnl = new Fn(pars);
+    this->functionals[name] = fnl;
 }
 
 } // namespace godzilla

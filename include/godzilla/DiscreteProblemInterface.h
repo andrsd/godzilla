@@ -538,14 +538,13 @@ DiscreteProblemInterface::add_initial_condition(Parameters & pars)
     auto obj = Qtr<OBJECT>::alloc(pars);
     String name = obj->get_name();
     auto it = this->ics_by_name.find(name);
-    if (it == this->ics_by_name.end()) {
-        auto ic = obj.get();
-        this->ics_by_name[name] = ic;
-        this->all_ics.push_back(std::move(obj));
-        return ic;
-    }
-    else
-        throw Exception("Cannot add initial condition object '{}'. Name already taken.", name);
+    expect_true(it == this->ics_by_name.end(),
+                "Cannot add initial condition object '{}'. Name already taken.",
+                name);
+    auto ic = obj.get();
+    this->ics_by_name[name] = ic;
+    this->all_ics.push_back(std::move(obj));
+    return ic;
 }
 
 template <AuxiliaryFieldDerived OBJECT>
@@ -557,14 +556,13 @@ DiscreteProblemInterface::add_auxiliary_field(Parameters & pars)
     auto obj = Qtr<OBJECT>::alloc(pars);
     const auto & name = obj->get_name();
     auto it = this->auxs_by_name.find(name);
-    if (it == this->auxs_by_name.end()) {
-        auto aux = obj.get();
-        this->auxs_by_name[name] = aux;
-        this->auxs.push_back(std::move(obj));
-        return aux;
-    }
-    else
-        throw Exception("Cannot add auxiliary object '{}'. Name already taken.", name);
+    expect_true(it == this->auxs_by_name.end(),
+                "Cannot add auxiliary object '{}'. Name already taken.",
+                name);
+    auto aux = obj.get();
+    this->auxs_by_name[name] = aux;
+    this->auxs.push_back(std::move(obj));
+    return aux;
 }
 
 } // namespace godzilla

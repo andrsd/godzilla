@@ -149,8 +149,8 @@ TEST_F(InitialConditionTest, duplicate_ic_name)
 
     this->prob->add_initial_condition<TestInitialCondition>(params);
 
-    EXPECT_THROW_MSG(this->prob->add_initial_condition<TestInitialCondition>(params),
-                     "Cannot add initial condition object 'obj'. Name already taken.");
+    EXPECT_DEATH(this->prob->add_initial_condition<TestInitialCondition>(params),
+                 "Cannot add initial condition object 'obj'. Name already taken.");
 }
 
 TEST_F(InitialConditionTest, constant_ic)
