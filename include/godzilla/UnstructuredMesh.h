@@ -12,6 +12,8 @@
 #include "godzilla/Section.h"
 #include "godzilla/DenseVector.h"
 #include "godzilla/StarForest.h"
+#include "godzilla/Expected.h"
+#include "godzilla/Error.h"
 #include <map>
 
 namespace godzilla {
@@ -178,7 +180,7 @@ public:
     ///
     /// @param id The ID of the cell set
     /// @return Cell set name
-    String get_cell_set_name(Int id) const;
+    Expected<String, ErrorCode> get_cell_set_name(Int id) const;
 
     /// Get cell set ID
     ///

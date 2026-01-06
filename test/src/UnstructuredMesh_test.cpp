@@ -1,6 +1,7 @@
 #include "gmock/gmock.h"
 #include <petscsystypes.h>
 #include "GodzillaApp_test.h"
+#include "godzilla/Error.h"
 #include "godzilla/FileMesh.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/MeshFactory.h"
@@ -195,9 +196,9 @@ TEST(UnstructuredMeshTest, nonexistent_cell_set)
     params.set<String>("name", "obj");
     auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh>(params);
     auto mesh = mesh_qtr.get();
-    EXPECT_THROW_MSG(
-        { auto n = mesh->get_cell_set_name(1234); },
-        "Cell set ID '1234' does not exist.");
+    auto n = mesh->get_cell_set_name(1234);
+    EXPECT_FALSE(n.has_value());
+    EXPECT_EQ(n.error(), ErrorCode::NotFound);
 }
 
 TEST(UnstructuredMeshTest, get_connectivity)

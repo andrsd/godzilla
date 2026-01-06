@@ -454,7 +454,7 @@ UnstructuredMesh::set_cell_type(Int cell, PolytopeType cell_type)
     PETSC_CHECK(DMPlexSetCellType(get_dm(), cell, (DMPolytopeType) cell_type));
 }
 
-String
+Expected<String, ErrorCode>
 UnstructuredMesh::get_cell_set_name(Int id) const
 {
     CALL_STACK_MSG();
@@ -462,7 +462,7 @@ UnstructuredMesh::get_cell_set_name(Int id) const
     if (it != this->cell_set_names.end())
         return it->second;
     else
-        throw Exception("Cell set ID '{}' does not exist.", id);
+        return Unexpected(ErrorCode::NotFound);
 }
 
 Int

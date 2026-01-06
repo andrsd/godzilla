@@ -392,7 +392,8 @@ ExodusIIOutput::write_elements()
                                                        cells.get_size(),
                                                        cells.data());
 
-            block_names[i] = this->mesh->get_cell_set_name(cell_set_idx[i]);
+            auto name = this->mesh->get_cell_set_name(cell_set_idx[i]);
+            block_names[i] = name.value();
             cells.restore_indices();
             cells.destroy();
         }
