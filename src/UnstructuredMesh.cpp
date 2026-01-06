@@ -418,7 +418,7 @@ UnstructuredMesh::get_face_set_label(String name) const
         return Label();
 }
 
-String
+Expected<String, ErrorCode>
 UnstructuredMesh::get_face_set_name(Int id) const
 {
     CALL_STACK_MSG();
@@ -426,7 +426,7 @@ UnstructuredMesh::get_face_set_name(Int id) const
     if (it != this->face_set_names.end())
         return it->second;
     else
-        throw Exception("Face set ID '{}' does not exist.", id);
+        return Unexpected(ErrorCode::NotFound);
 }
 
 void

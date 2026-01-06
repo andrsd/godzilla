@@ -516,7 +516,7 @@ ExodusIIOutput::write_face_sets()
         }
         this->exo->write_side_set(face_set_idx[fs], elem_list, side_list);
 
-        fs_names[fs] = this->mesh->get_face_set_name(face_set_idx[fs]);
+        fs_names[fs] = this->mesh->get_face_set_name(face_set_idx[fs]).value();
         faces.restore_indices();
         faces.destroy();
     }

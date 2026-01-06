@@ -220,7 +220,7 @@ public:
     ///
     /// @param id The ID of the face set
     /// @return Facet name
-    String get_face_set_name(Int id) const;
+    Expected<String, ErrorCode> get_face_set_name(Int id) const;
 
     /// Get number of face sets
     ///

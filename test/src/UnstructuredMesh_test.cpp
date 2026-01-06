@@ -182,9 +182,9 @@ TEST(UnstructuredMeshTest, nonexistent_face_set)
     auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh>(params);
     auto mesh = mesh_qtr.get();
 
-    EXPECT_THROW_MSG(
-        { auto n = mesh->get_face_set_name(1234); },
-        "Face set ID '1234' does not exist.");
+    auto n = mesh->get_face_set_name(1234);
+    EXPECT_FALSE(n);
+    EXPECT_EQ(n.error(), ErrorCode::NotFound);
 }
 
 TEST(UnstructuredMeshTest, nonexistent_cell_set)
@@ -579,12 +579,12 @@ TEST(UnstructuredMesh, face_sets)
                             Pair(5, "right"),
                             Pair(6, "left")));
 
-    EXPECT_EQ(m->get_face_set_name(1), "back");
-    EXPECT_EQ(m->get_face_set_name(2), "front");
-    EXPECT_EQ(m->get_face_set_name(3), "bottom");
-    EXPECT_EQ(m->get_face_set_name(4), "top");
-    EXPECT_EQ(m->get_face_set_name(5), "right");
-    EXPECT_EQ(m->get_face_set_name(6), "left");
+    EXPECT_EQ(m->get_face_set_name(1).value(), "back");
+    EXPECT_EQ(m->get_face_set_name(2).value(), "front");
+    EXPECT_EQ(m->get_face_set_name(3).value(), "bottom");
+    EXPECT_EQ(m->get_face_set_name(4).value(), "top");
+    EXPECT_EQ(m->get_face_set_name(5).value(), "right");
+    EXPECT_EQ(m->get_face_set_name(6).value(), "left");
 
     EXPECT_TRUE(m->has_face_set("back"));
     EXPECT_TRUE(m->has_face_set("front"));
