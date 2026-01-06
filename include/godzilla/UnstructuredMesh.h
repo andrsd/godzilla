@@ -186,7 +186,7 @@ public:
     ///
     /// @param name The name of a cell sel
     /// @return Cell set ID
-    Int get_cell_set_id(String name) const;
+    Expected<Int, ErrorCode> get_cell_set_id(String name) const;
 
     /// Get number of cell sets
     ///

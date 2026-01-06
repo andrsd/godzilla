@@ -713,7 +713,9 @@ TEST(UnstructuredMeshTest, get_block_id_from_region_via_number)
     auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh>(params);
     auto m = mesh_qtr.get();
 
-    EXPECT_EQ(get_block_id_from_region(*m, "0"), 0);
+    auto res = get_block_id_from_region(*m, "0");
+    EXPECT_TRUE(res.has_value());
+    EXPECT_EQ(res.value(), 0);
 }
 
 TEST(UnstructuredMeshTest, get_block_id_from_region_via_name)
@@ -728,5 +730,7 @@ TEST(UnstructuredMeshTest, get_block_id_from_region_via_name)
     auto mesh_qtr = MeshFactory::create<FileMesh>(params);
     auto m = mesh_qtr.get();
 
-    EXPECT_EQ(get_block_id_from_region(*m, "block"), 1);
+    auto res = get_block_id_from_region(*m, "block");
+    EXPECT_TRUE(res.has_value());
+    EXPECT_EQ(res.value(), 1);
 }

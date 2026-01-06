@@ -465,7 +465,7 @@ UnstructuredMesh::get_cell_set_name(Int id) const
         return Unexpected(ErrorCode::NotFound);
 }
 
-Int
+Expected<Int, ErrorCode>
 UnstructuredMesh::get_cell_set_id(String name) const
 {
     CALL_STACK_MSG();
@@ -473,7 +473,7 @@ UnstructuredMesh::get_cell_set_id(String name) const
     if (it != this->cell_set_ids.end())
         return it->second;
     else
-        throw Exception("Cell set '{}' does not exist.", name);
+        return Unexpected(ErrorCode::NotFound);
 }
 
 Int
