@@ -24,10 +24,9 @@ TEST(LineMeshTest, api)
 
     EXPECT_EQ(mesh->get_dimension(), 1);
 
-    Real gmin[4], gmax[4];
-    DMGetBoundingBox(dm, gmin, gmax);
-    EXPECT_EQ(gmin[0], 1);
-    EXPECT_EQ(gmax[0], 2);
+    auto bbox = mesh->get_bounding_box<1_D>();
+    EXPECT_EQ(bbox.min()[0], 1);
+    EXPECT_EQ(bbox.max()[0], 2);
 
     Vec coords;
     DMGetCoordinates(dm, &coords);
