@@ -3,8 +3,7 @@
 
 #pragma once
 
-#include "godzilla/Exception.h"
-#include "godzilla/Utils.h"
+#include "godzilla/Assert.h"
 #include <sys/types.h>
 #include <initializer_list>
 #include <vector>
@@ -57,8 +56,7 @@ inline bool
 in_range(T value, std::initializer_list<U> range)
 {
     static_assert(std::is_convertible<T, U>::value, "T must be convertible to U");
-    if (range.size() != 2)
-        throw Exception("Range must have exactly two elements.");
+    expect_true(range.size() == 2, "Range must have exactly two elements.");
     auto it = range.begin();
     U lo = *it;
     U hi = *(++it);

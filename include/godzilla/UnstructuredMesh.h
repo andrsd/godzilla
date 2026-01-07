@@ -12,6 +12,8 @@
 #include "godzilla/Section.h"
 #include "godzilla/DenseVector.h"
 #include "godzilla/StarForest.h"
+#include "godzilla/Expected.h"
+#include "godzilla/Error.h"
 #include <map>
 
 namespace godzilla {
@@ -178,13 +180,13 @@ public:
     ///
     /// @param id The ID of the cell set
     /// @return Cell set name
-    String get_cell_set_name(Int id) const;
+    Expected<String, ErrorCode> get_cell_set_name(Int id) const;
 
     /// Get cell set ID
     ///
     /// @param name The name of a cell sel
     /// @return Cell set ID
-    Int get_cell_set_id(String name) const;
+    Expected<Int, ErrorCode> get_cell_set_id(String name) const;
 
     /// Get number of cell sets
     ///
@@ -218,7 +220,7 @@ public:
     ///
     /// @param id The ID of the face set
     /// @return Facet name
-    String get_face_set_name(Int id) const;
+    Expected<String, ErrorCode> get_face_set_name(Int id) const;
 
     /// Get number of face sets
     ///
@@ -260,7 +262,7 @@ public:
     ///
     /// @param id The ID of the vertex set
     /// @return Vertex set name
-    String get_vertex_set_name(Int id) const;
+    Expected<String, ErrorCode> get_vertex_set_name(Int id) const;
 
     /// Get number of vertex sets
     ///

@@ -3,6 +3,8 @@
 
 #include "godzilla/Utils.h"
 #include "godzilla/CallStack.h"
+#include "godzilla/Error.h"
+#include "godzilla/Expected.h"
 #include "godzilla/PrintInterface.h"
 #include "godzilla/Terminal.h"
 #include "godzilla/UnstructuredMesh.h"
@@ -114,14 +116,19 @@ print_converged_reason(PrintInterface & pi, bool converged)
         pi.lprintln(8, Terminal::red, "Not converged");
 }
 
-Int
+Expected<Int, ErrorCode>
 get_block_id_from_region(const godzilla::UnstructuredMesh & mesh, String region)
 {
     auto id = parse_region(region);
     if (id.has_value())
         return id.value();
-    else
-        return mesh.get_cell_set_id(region);
+    else {
+        auto res = mesh.get_cell_set_id(region);
+        if (res.has_value())
+            return res.value();
+        else
+            return Unexpected(res.error());
+    }
 }
 
 std::vector<String>

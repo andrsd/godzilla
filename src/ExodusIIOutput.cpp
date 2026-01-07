@@ -392,7 +392,8 @@ ExodusIIOutput::write_elements()
                                                        cells.get_size(),
                                                        cells.data());
 
-            block_names[i] = this->mesh->get_cell_set_name(cell_set_idx[i]);
+            auto name = this->mesh->get_cell_set_name(cell_set_idx[i]);
+            block_names[i] = name.value();
             cells.restore_indices();
             cells.destroy();
         }
@@ -451,7 +452,7 @@ ExodusIIOutput::write_node_sets()
             node_set[j] = (int) (vertices[j] - n_elems_in_block + 1);
         this->exo->write_node_set(vertex_set_idx[i], node_set);
 
-        ns_names[i] = this->mesh->get_vertex_set_name(vertex_set_idx[i]);
+        ns_names[i] = this->mesh->get_vertex_set_name(vertex_set_idx[i]).value();
 
         vertices.restore_indices();
         vertices.destroy();
@@ -515,7 +516,7 @@ ExodusIIOutput::write_face_sets()
         }
         this->exo->write_side_set(face_set_idx[fs], elem_list, side_list);
 
-        fs_names[fs] = this->mesh->get_face_set_name(face_set_idx[fs]);
+        fs_names[fs] = this->mesh->get_face_set_name(face_set_idx[fs]).value();
         faces.restore_indices();
         faces.destroy();
     }
