@@ -5,6 +5,7 @@
 
 #include "godzilla/Terminal.h"
 #include "fmt/core.h"
+#include <mutex>
 
 namespace godzilla {
 
@@ -76,5 +77,14 @@ warning(fmt::format_string<T...> format, T... args)
     fmt::print(stdout, format, std::forward<T>(args)...);
     fmt::println(stdout, "{}", godzilla::Terminal::normal);
 }
+
+/// Calls `warning` but only once
+///
+/// @param args Arguments consumed by `warning`
+#define warning_once(...)                                          \
+    do {                                                           \
+        static std::once_flag __once__;                            \
+        std::call_once(__once__, [&]() { warning(__VA_ARGS__); }); \
+    } while (0)
 
 } // namespace godzilla

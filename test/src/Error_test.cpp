@@ -4,6 +4,16 @@
 
 using namespace godzilla;
 
+namespace {
+
+void
+warn_fn()
+{
+    warning_once("Warning");
+}
+
+} // namespace
+
 TEST(ErrorTest, mem_check)
 {
     CALL_STACK_MSG();
@@ -34,4 +44,14 @@ TEST(ErrorTest, warning)
     warning("warning");
     auto out = testing::internal::GetCapturedStdout();
     EXPECT_THAT(out, testing::HasSubstr("[WARNING] warning"));
+}
+
+TEST(ErrorTest, warning_once)
+{
+    testing::internal::CaptureStdout();
+    warn_fn();
+    warn_fn();
+    warn_fn();
+    auto out = testing::internal::GetCapturedStdout();
+    EXPECT_EQ(out, "\x1B[33m[WARNING] Warning\x1B[39m\n");
 }
