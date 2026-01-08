@@ -3,6 +3,9 @@
 
 #pragma once
 
+#include "godzilla/Terminal.h"
+#include "fmt/core.h"
+
 namespace godzilla {
 
 namespace internal {
@@ -28,5 +31,21 @@ enum class ErrorCode {
     ///
     NotFound
 };
+
+/// Error checking function with a condition
+///
+/// @param cond Condition expected to be true
+template <typename... T>
+inline void
+expect_true(bool cond, fmt::format_string<T...> format, T... args)
+{
+    if (!cond) {
+        fmt::print(stderr, "{}", Terminal::red);
+        fmt::print(stderr, "[ERROR] ");
+        fmt::print(stderr, format, std::forward<T>(args)...);
+        fmt::println(stderr, "{}", Terminal::normal);
+        godzilla::abort();
+    }
+}
 
 } // namespace godzilla
