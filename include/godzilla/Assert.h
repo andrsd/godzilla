@@ -47,16 +47,4 @@ assert_true(bool cond,
 
 #endif
 
-template <typename... T>
-inline void
-expect_true(bool cond, fmt::format_string<T...> format, T... args)
-{
-    if (!cond) {
-        fmt::print(stderr, "{}", Terminal::red);
-        fmt::print(stderr, format, std::forward<T>(args)...);
-        fmt::println(stderr, "{}", Terminal::normal);
-        godzilla::abort();
-    }
-}
-
 } // namespace godzilla
