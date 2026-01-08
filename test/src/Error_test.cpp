@@ -27,3 +27,11 @@ TEST(ErrorTest, error)
 {
     EXPECT_DEATH(error("error"), "\\[ERROR\\] error");
 }
+
+TEST(ErrorTest, warning)
+{
+    testing::internal::CaptureStdout();
+    warning("warning");
+    auto out = testing::internal::GetCapturedStdout();
+    EXPECT_THAT(out, testing::HasSubstr("[WARNING] warning"));
+}

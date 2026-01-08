@@ -63,4 +63,18 @@ error(fmt::format_string<T...> format, T... args)
     godzilla::abort();
 }
 
+/// Report a warning
+///
+/// @param format Formatting string
+/// @param args Arguments for the formatting string
+template <typename... T>
+void
+warning(fmt::format_string<T...> format, T... args)
+{
+    fmt::print(stdout, "{}", godzilla::Terminal::yellow);
+    fmt::print(stdout, "[WARNING] ");
+    fmt::print(stdout, format, std::forward<T>(args)...);
+    fmt::println(stdout, "{}", godzilla::Terminal::normal);
+}
+
 } // namespace godzilla
