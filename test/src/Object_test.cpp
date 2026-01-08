@@ -1,6 +1,5 @@
 #include "gtest/gtest.h"
 #include "TestApp.h"
-#include "godzilla/Factory.h"
 #include "godzilla/Object.h"
 
 using namespace godzilla;
@@ -13,7 +12,8 @@ TEST(ObjectTest, api)
 
     auto params = Object::parameters();
     params.set<String>("_type", "Object");
-    auto obj = app.build_object<Object>("name", params);
+    params.set<String>("name", "name");
+    auto obj = Qtr<Object>(app.build_object<Object>(params));
 
     EXPECT_EQ(obj->get_name(), "name");
 

@@ -2,7 +2,6 @@
 #include "TestApp.h"
 #include "GTestFENonlinearProblem.h"
 #include "GTest2FieldsFENonlinearProblem.h"
-#include "godzilla/Factory.h"
 #include "godzilla/MeshFactory.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/BoxMesh.h"

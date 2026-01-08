@@ -15,7 +15,6 @@ class UnstructuredMesh;
 ///
 class BoxMesh : public Object {
 public:
-    /// Constructor for building the object via Factory
     explicit BoxMesh(const Parameters & pars);
 
     /// Get lower limit in x-direction
