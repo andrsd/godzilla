@@ -22,3 +22,8 @@ TEST(ErrorTest, expect_true)
 
     EXPECT_NO_FATAL_FAILURE(expect_true(true, "error"));
 }
+
+TEST(ErrorTest, error)
+{
+    EXPECT_DEATH(error("error"), "\\[ERROR\\] error");
+}

@@ -48,4 +48,19 @@ expect_true(bool cond, fmt::format_string<T...> format, T... args)
     }
 }
 
+/// Report an error and terminate
+///
+/// @param format Formatting string
+/// @param args Arguments for the formatting string
+template <typename... T>
+void
+error(fmt::format_string<T...> format, T... args)
+{
+    fmt::print(stderr, "{}", godzilla::Terminal::red);
+    fmt::print(stderr, "[ERROR] ");
+    fmt::print(stderr, format, std::forward<T>(args)...);
+    fmt::println(stderr, "{}", godzilla::Terminal::normal);
+    godzilla::abort();
+}
+
 } // namespace godzilla
