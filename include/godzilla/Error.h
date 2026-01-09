@@ -31,7 +31,8 @@ void check_petsc_error(int ierr, const char * file, int line);
 enum class ErrorCode {
     ///
     NotFound,
-    NotSet
+    NotSet,
+    OutOfRange
 };
 
 /// Error checking function with a condition
