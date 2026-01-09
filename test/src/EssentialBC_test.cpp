@@ -1,4 +1,5 @@
 #include "gmock/gmock.h"
+#include "gtest/gtest.h"
 #include "TestApp.h"
 #include "GTestFENonlinearProblem.h"
 #include "GTest2FieldsFENonlinearProblem.h"
@@ -82,8 +83,6 @@ TEST(EssentialBCTest, test)
 
 TEST(EssentialBCTest, non_existing_field)
 {
-    testing::internal::CaptureStderr();
-
     TestApp app;
 
     Parameters mesh_pars = LineMesh::parameters();
@@ -103,19 +102,11 @@ TEST(EssentialBCTest, non_existing_field)
         .set<std::vector<String>>("boundary", {});
     problem.add_boundary_condition<DirichletBC>(params);
 
-    problem.create();
-
-    EXPECT_FALSE(app.check_integrity());
-    app.get_logger()->print();
-
-    EXPECT_THAT(testing::internal::GetCapturedStderr(),
-                HasSubstr("Field 'asdf' does not exists. Typo?"));
+    EXPECT_DEATH(problem.create(), "Field 'asdf' does not exists. Typo?");
 }
 
 TEST(EssentialBCTest, field_param_not_specified)
 {
-    testing::internal::CaptureStderr();
-
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
@@ -134,13 +125,7 @@ TEST(EssentialBCTest, field_param_not_specified)
     params.set<std::vector<String>>("boundary", {});
     problem.add_boundary_condition<DirichletBC>(params);
 
-    problem.create();
-
-    EXPECT_FALSE(app.check_integrity());
-    app.get_logger()->print();
-
-    EXPECT_THAT(
-        testing::internal::GetCapturedStderr(),
-        HasSubstr(
-            "Use the 'field' parameter to assign this boundary condition to an existing field."));
+    EXPECT_DEATH(
+        problem.create(),
+        "Use the 'field' parameter to assign this boundary condition to an existing field.");
 }

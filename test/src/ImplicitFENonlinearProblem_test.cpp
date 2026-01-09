@@ -83,8 +83,6 @@ TEST_F(ImplicitFENonlinearProblemTest, wrong_scheme)
 
 TEST_F(ImplicitFENonlinearProblemTest, wrong_time_stepping_params)
 {
-    testing::internal::CaptureStderr();
-
     auto params = GTestImplicitFENonlinearProblem::parameters();
     params.set<godzilla::App *>("app", this->app);
     params.set<String>("name", "prob");
@@ -94,23 +92,13 @@ TEST_F(ImplicitFENonlinearProblemTest, wrong_time_stepping_params)
     params.set<Real>("end_time", 20);
     params.set<Real>("dt", 5);
     params.set<String>("scheme", "beuler");
-    auto prob = this->app->build_object<GTestImplicitFENonlinearProblem>(params);
 
-    prob->create();
-
-    EXPECT_FALSE(this->app->check_integrity());
-    this->app->get_logger()->print();
-
-    EXPECT_THAT(
-        testing::internal::GetCapturedStderr(),
-        testing::HasSubstr(
-            "prob: Cannot provide 'end_time' and 'num_steps' together. Specify one or the other."));
+    EXPECT_DEATH(this->app->build_object<GTestImplicitFENonlinearProblem>(params),
+                 "Cannot provide 'end_time' and 'num_steps' together. Specify one or the other.");
 }
 
 TEST_F(ImplicitFENonlinearProblemTest, no_time_stepping_params)
 {
-    testing::internal::CaptureStderr();
-
     auto params = GTestImplicitFENonlinearProblem::parameters();
     params.set<godzilla::App *>("app", this->app);
     params.set<String>("name", "prob");
@@ -118,16 +106,9 @@ TEST_F(ImplicitFENonlinearProblemTest, no_time_stepping_params)
     params.set<Real>("start_time", 0.);
     params.set<Real>("dt", 5);
     params.set<String>("scheme", "beuler");
-    auto prob = this->app->build_object<GTestImplicitFENonlinearProblem>(params);
 
-    prob->create();
-
-    EXPECT_FALSE(this->app->check_integrity());
-    this->app->get_logger()->print();
-
-    EXPECT_THAT(
-        testing::internal::GetCapturedStderr(),
-        testing::HasSubstr("prob: You must provide either 'end_time' or 'num_steps' parameter."));
+    EXPECT_DEATH(this->app->build_object<GTestImplicitFENonlinearProblem>(params),
+                 "You must provide either 'end_time' or 'num_steps' parameter.");
 }
 
 TEST_F(ImplicitFENonlinearProblemTest, set_schemes)

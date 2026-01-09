@@ -207,10 +207,9 @@ TransientProblemInterface::TransientProblemInterface(Problem * problem, const Pa
     this->time_step_adapt = TimeStepAdapt::from_ts(this->ts);
 
     if (this->end_time.has_value() && this->num_steps.has_value())
-        this->problem->log_error(
-            "Cannot provide 'end_time' and 'num_steps' together. Specify one or the other.");
+        error("Cannot provide 'end_time' and 'num_steps' together. Specify one or the other.");
     if (!this->end_time.has_value() && !this->num_steps.has_value())
-        this->problem->log_error("You must provide either 'end_time' or 'num_steps' parameter.");
+        error("You must provide either 'end_time' or 'num_steps' parameter.");
 }
 
 TransientProblemInterface::~TransientProblemInterface()

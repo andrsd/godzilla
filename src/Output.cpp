@@ -43,13 +43,13 @@ Output::Output(const Parameters & pars) :
         const auto on = pars.get<ExecuteOnFlags>("on");
         if (on.has_flags()) {
             if (none_with_flags(on))
-                log_error("The 'none' execution flag can be used only by itself.");
+                error("The 'none' execution flag can be used only by itself.");
             else
                 this->on_mask = on;
         }
         else
-            log_error("The 'on' parameter can be either 'none' or a combination of 'initial', "
-                      "'timestep' and/or 'final'.");
+            error("The 'on' parameter can be either 'none' or a combination of 'initial', "
+                  "'timestep' and/or 'final'.");
     }
     else
         this->on_mask = this->problem->get_default_output_on();

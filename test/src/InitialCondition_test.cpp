@@ -157,20 +157,18 @@ TEST_F(InitialConditionTest, constant_ic)
 {
     auto params = ConstantInitialCondition::parameters();
     params.set<App *>("app", this->app);
-    params.set<std::vector<Real>>("value", { 3, 4, 5 });
+    params.set<std::vector<Real>>("value", { 5 });
     auto ic = this->prob->add_initial_condition<ConstantInitialCondition>(params);
     this->prob->create();
 
-    EXPECT_EQ(ic->get_num_components(), 3);
+    EXPECT_EQ(ic->get_num_components(), 1);
 
     Real time = 0.;
     Real x[] = { 0 };
-    Scalar u[] = { 0, 0, 0 };
+    Scalar u[] = { 0 };
     ic->evaluate(time, x, u);
 
-    EXPECT_EQ(u[0], 3);
-    EXPECT_EQ(u[1], 4);
-    EXPECT_EQ(u[2], 5);
+    EXPECT_EQ(u[0], 5);
 }
 
 TEST_F(InitialCondition2FieldTest, no_field_param)
@@ -185,19 +183,11 @@ TEST_F(InitialCondition2FieldTest, no_field_param)
 
 TEST_F(InitialCondition2FieldTest, non_existing_field)
 {
-    testing::internal::CaptureStderr();
-
     auto params = InitialCondition::parameters();
     params.set<App *>("app", this->app);
     params.set<String>("name", "obj");
     params.set<String>("field", "asdf");
     this->prob->add_initial_condition<MockInitialCondition>(params);
 
-    this->prob->create();
-
-    EXPECT_FALSE(this->app->check_integrity());
-    this->app->get_logger()->print();
-
-    EXPECT_THAT(testing::internal::GetCapturedStderr(),
-                testing::HasSubstr("Field 'asdf' does not exists. Typo?"));
+    EXPECT_DEATH(this->prob->create(), "Field 'asdf' does not exists. Typo?");
 }

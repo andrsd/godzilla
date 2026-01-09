@@ -58,15 +58,13 @@ EssentialBC::create()
         this->fid = dpi->get_field_id(field_names[0]);
     }
     else if (field_names.size() > 1) {
-        if (this->field_name.has_value()) {
-            if (dpi->has_field_by_name(this->field_name.value()))
-                this->fid = dpi->get_field_id(this->field_name.value());
-            else
-                log_error("Field '{}' does not exists. Typo?", this->field_name.value());
-        }
-        else
-            log_error("Use the 'field' parameter to assign this boundary condition to an existing "
-                      "field.");
+        expect_true(this->field_name.has_value(),
+                    "Use the 'field' parameter to assign this boundary condition to an existing "
+                    "field.");
+        expect_true(dpi->has_field_by_name(this->field_name.value()),
+                    "Field '{}' does not exists. Typo?",
+                    this->field_name.value());
+        this->fid = dpi->get_field_id(this->field_name.value());
     }
 
     this->components = create_components();

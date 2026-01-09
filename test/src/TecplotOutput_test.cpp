@@ -66,8 +66,6 @@ TEST(TecplotOutputTest, output)
 
 TEST(TecplotOutputTest, test)
 {
-    testing::internal::CaptureStderr();
-
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
@@ -83,16 +81,9 @@ TEST(TecplotOutputTest, test)
     auto params = TecplotOutput::parameters();
     params.set<App *>("app", &app);
     params.set<fs::path>("file", "out");
-    prob.add_output<TecplotOutput>(params);
 
-    prob.create();
-
-    EXPECT_FALSE(app.check_integrity());
-    app.get_logger()->print();
-
-    EXPECT_THAT(
-        testing::internal::GetCapturedStderr(),
-        testing::HasSubstr("Unable to use TecplotOutput, godzilla was not built with teciocpp."));
+    EXPECT_DEATH(prob.add_output<TecplotOutput>(params),
+                 "Unable to use TecplotOutput, godzilla was not built with teciocpp.");
 }
 
 #endif

@@ -61,8 +61,6 @@ TEST(BoxMeshTest, api)
 
 TEST(BoxMeshTest, incorrect_dims)
 {
-    testing::internal::CaptureStderr();
-
     TestApp app;
 
     auto params = BoxMesh::parameters();
@@ -77,13 +75,6 @@ TEST(BoxMeshTest, incorrect_dims)
         .set<Real>("zmin", 6)
         .set<Real>("zmax", 3)
         .set<Int>("nz", 7);
-    BoxMesh mesh(params);
 
-    EXPECT_FALSE(app.check_integrity());
-    app.get_logger()->print();
-
-    auto output = testing::internal::GetCapturedStderr();
-    EXPECT_THAT(output, testing::HasSubstr("obj: Parameter 'xmax' must be larger than 'xmin'."));
-    EXPECT_THAT(output, testing::HasSubstr("obj: Parameter 'ymax' must be larger than 'ymin'."));
-    EXPECT_THAT(output, testing::HasSubstr("obj: Parameter 'zmax' must be larger than 'zmin'."));
+    EXPECT_DEATH(BoxMesh mesh(params), "Parameter 'xmax' must be larger than 'xmin'.");
 }

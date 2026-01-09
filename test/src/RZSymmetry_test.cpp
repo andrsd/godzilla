@@ -31,15 +31,7 @@ TEST(RZSymmetryTest, check_dim)
     params.set<std::vector<Real>>("axis", { 1. });
     RZSymmetry rz(params);
 
-    testing::internal::CaptureStderr();
-    rz.create();
-
-    auto logger = app.get_logger();
-    EXPECT_GE(logger->get_num_errors(), 0);
-    logger->print();
-    auto stdout = testing::internal::GetCapturedStderr();
-    EXPECT_THAT(stdout,
-                testing::HasSubstr("[ERROR] 'RZSymmetry' can be used only with 2D problems"));
+    EXPECT_DEATH(rz.create(), "'RZSymmetry' can be used only with 2D problems");
 }
 
 TEST(RZSymmetryTest, check_compatible)
@@ -66,15 +58,7 @@ TEST(RZSymmetryTest, check_compatible)
     params.set<std::vector<Real>>("axis", { 1. });
     RZSymmetry rz(params);
 
-    testing::internal::CaptureStderr();
-    rz.create();
-
-    auto logger = app.get_logger();
-    EXPECT_GE(logger->get_num_errors(), 0);
-    logger->print();
-    auto stdout = testing::internal::GetCapturedStderr();
-    EXPECT_THAT(stdout, testing::HasSubstr("[ERROR] 'axis' parameter must provide 2 components."));
-    EXPECT_THAT(stdout, testing::HasSubstr("[ERROR] 'point' parameter must provide 2 components."));
+    EXPECT_DEATH(rz.create(), "'axis' parameter must provide 2 components.");
 }
 
 TEST(RZSymmetryTest, evaluate)

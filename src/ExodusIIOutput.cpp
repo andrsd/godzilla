@@ -170,9 +170,8 @@ ExodusIIOutput::create()
                 else if (pp_names.count(name) == 1)
                     this->global_var_names.push_back(name);
                 else
-                    log_error(
-                        "Variable '{}' specified in 'variables' parameter does not exist. Typo?",
-                        name);
+                    error("Variable '{}' specified in 'variables' parameter does not exist. Typo?",
+                          name);
             }
         }
     }
