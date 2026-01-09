@@ -1,4 +1,5 @@
 #include "gtest/gtest.h"
+#include "godzilla/Error.h"
 #include "godzilla/Types.h"
 #include "godzilla/Object.h"
 #include "godzilla/Parameters.h"
@@ -219,4 +220,30 @@ TEST(ParametersTest, dense_vector)
 {
     Parameters params;
     params.set<DenseVector<double, 2>>("number", { 1, 2 });
+}
+
+TEST(ParametersTest, src_loc_has_value)
+{
+    auto params = validParams1();
+    params.set<Real>("p", 123.);
+    auto rp = params.get_source_location("p");
+    ASSERT_TRUE(rp.has_value());
+    auto sl = rp.value();
+    EXPECT_TRUE(std::strlen(sl.file_name()) > 0);
+}
+
+TEST(ParametersTest, src_loc_does_has_value)
+{
+    auto params = validParams1();
+    auto rp = params.get_source_location("p");
+    ASSERT_FALSE(rp.has_value());
+    EXPECT_EQ(rp.error(), ErrorCode::NotSet);
+}
+
+TEST(ParametersTest, src_loc_of_non_existing_param)
+{
+    auto params = validParams1();
+    auto rp = params.get_source_location("q");
+    ASSERT_FALSE(rp.has_value());
+    EXPECT_EQ(rp.error(), ErrorCode::NotFound);
 }

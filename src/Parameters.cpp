@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: MIT
 
 #include "godzilla/Parameters.h"
+#include "godzilla/Error.h"
+#include "godzilla/Expected.h"
 
 namespace godzilla {
 
@@ -86,6 +88,21 @@ Parameters::get_doc_string(String name) const
         return it->second->doc_string;
     else
         return {};
+}
+
+Expected<std::source_location, ErrorCode>
+Parameters::get_source_location(String name) const
+{
+    CALL_STACK_MSG();
+    auto it = this->params.find(name);
+    if (it != this->params.end()) {
+        if (it->second->src_loc.has_value())
+            return it->second->src_loc.value();
+        else
+            return Unexpected(ErrorCode::NotSet);
+    }
+    else
+        return Unexpected(ErrorCode::NotFound);
 }
 
 Parameters::iterator

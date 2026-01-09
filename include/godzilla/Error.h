@@ -30,7 +30,8 @@ void check_petsc_error(int ierr, const char * file, int line);
 
 enum class ErrorCode {
     ///
-    NotFound
+    NotFound,
+    NotSet
 };
 
 /// Error checking function with a condition
