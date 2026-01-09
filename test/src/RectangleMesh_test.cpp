@@ -42,8 +42,6 @@ TEST(RectangleMeshTest, api)
 
 TEST(RectangleMeshTest, incorrect_dims)
 {
-    testing::internal::CaptureStderr();
-
     TestApp app;
 
     auto params = RectangleMesh::parameters();
@@ -55,12 +53,6 @@ TEST(RectangleMeshTest, incorrect_dims)
         .set<Real>("ymin", 2)
         .set<Real>("ymax", 1)
         .set<Int>("ny", 8);
-    RectangleMesh mesh(params);
 
-    EXPECT_FALSE(app.check_integrity());
-    app.get_logger()->print();
-
-    auto output = testing::internal::GetCapturedStderr();
-    EXPECT_THAT(output, testing::HasSubstr("obj: Parameter 'xmax' must be larger than 'xmin'."));
-    EXPECT_THAT(output, testing::HasSubstr("obj: Parameter 'ymax' must be larger than 'ymin'."));
+    EXPECT_DEATH(RectangleMesh mesh(params), "Parameter 'xmax' must be larger than 'xmin'.");
 }

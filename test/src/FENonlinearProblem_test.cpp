@@ -225,7 +225,7 @@ TEST_F(FENonlinearProblemTest, solve_no_ic)
 {
     auto params = DirichletBC::parameters();
     params.set<App *>("app", this->app);
-    params.set<std::vector<String>>("boundary", { "marker" });
+    params.set<std::vector<String>>("boundary", { "left" });
     this->prob->add_boundary_condition<DirichletBC>(params);
     this->prob->create();
 
@@ -235,26 +235,18 @@ TEST_F(FENonlinearProblemTest, solve_no_ic)
 
 TEST_F(FENonlinearProblemTest, err_ic_comp_mismatch)
 {
-    testing::internal::CaptureStderr();
-
     auto params = GTest2CompIC::parameters();
     params.set<String>("name", "ic");
     params.set<App *>("app", this->app);
     this->prob->add_initial_condition<GTest2CompIC>(params);
-    this->prob->create();
-    EXPECT_FALSE(this->app->check_integrity());
-    this->app->get_logger()->print();
 
-    EXPECT_THAT(
-        testing::internal::GetCapturedStderr(),
-        testing::HasSubstr("Initial condition 'ic' operates on 2 components, but is set on a field "
-                           "with 1 components."));
+    EXPECT_DEATH(this->prob->create(),
+                 "Initial condition 'ic' operates on 2 components, but is set on a field with 1 "
+                 "components.");
 }
 
 TEST(TwoFieldFENonlinearProblemTest, err_duplicate_ics)
 {
-    testing::internal::CaptureStderr();
-
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
@@ -281,21 +273,14 @@ TEST(TwoFieldFENonlinearProblemTest, err_duplicate_ics)
         .set<std::vector<Real>>("value", { 0.2 });
     prob.add_initial_condition<ConstantInitialCondition>(ic2_params);
 
-    prob.create();
-    EXPECT_FALSE(app.check_integrity());
-    app.get_logger()->print();
-
-    EXPECT_THAT(testing::internal::GetCapturedStderr(),
-                testing::HasSubstr(
-                    "Initial condition 'ic2' is being applied to a field that already has an "
-                    "initial condition."));
+    EXPECT_DEATH(prob.create(),
+                 "Initial condition 'ic2' is being applied to a field that already has an initial "
+                 "condition.");
 }
 
 TEST(TwoFieldFENonlinearProblemTest, err_not_enough_ics)
 {
-    testing::internal::CaptureStderr();
-
-    class TestApp app;
+    TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("app", &app);
@@ -314,31 +299,20 @@ TEST(TwoFieldFENonlinearProblemTest, err_not_enough_ics)
     ic_params.set<String>("field", "u");
     prob.add_initial_condition<ConstantInitialCondition>(ic_params);
 
-    prob.create();
-    EXPECT_FALSE(app.check_integrity());
-    app.get_logger()->print();
-
-    EXPECT_THAT(testing::internal::GetCapturedStderr(),
-                testing::HasSubstr("Provided 2 field(s), but 1 initial condition(s)."));
+    EXPECT_DEATH(prob.create(), "Provided 2 field\\(s\\), but 1 initial condition\\(s\\).");
 }
 
 TEST_F(FENonlinearProblemTest, err_nonexisting_bc_bnd)
 {
-    testing::internal::CaptureStderr();
-
     auto params = DirichletBC::parameters();
     params.set<String>("name", "bc1");
     params.set<App *>("app", this->app);
     params.set<std::vector<String>>("boundary", { "asdf" });
     this->prob->add_boundary_condition<DirichletBC>(params);
-    this->prob->create();
-    EXPECT_FALSE(this->app->check_integrity());
-    this->app->get_logger()->print();
 
-    EXPECT_THAT(testing::internal::GetCapturedStderr(),
-                testing::HasSubstr(
-                    "Boundary condition 'bc1' is set on boundary 'asdf' which does not exist "
-                    "in the mesh."));
+    EXPECT_DEATH(
+        this->prob->create(),
+        "Boundary condition 'bc1' is set on boundary 'asdf' which does not exist in the mesh.");
 }
 
 TEST(TwoFieldFENonlinearProblemTest, field_decomposition)

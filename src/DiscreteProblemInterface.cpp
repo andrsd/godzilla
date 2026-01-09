@@ -209,35 +209,34 @@ DiscreteProblemInterface::check_initial_conditions(const std::vector<InitialCond
         return;
 
     auto n_fields = field_comps.size();
-    if (n_ics == n_fields) {
-        std::map<FieldID, InitialCondition *> ics_by_fields;
-        for (auto & ic : ics) {
-            auto fid = ic->get_field_id();
-            if (fid == FieldID::INVALID)
-                continue;
-            const auto & it = ics_by_fields.find(fid);
-            if (it == ics_by_fields.end()) {
-                Int ic_nc = ic->get_num_components();
-                Int field_nc = field_comps.at(fid);
-                if (ic_nc == field_nc)
-                    ics_by_fields[fid] = ic;
-                else
-                    this->logger->error("Initial condition '{}' operates on {} components, but is "
-                                        "set on a field with {} components.",
-                                        ic->get_name(),
-                                        ic_nc,
-                                        field_nc);
-            }
+    expect_true(n_ics == n_fields,
+                "Provided {} field(s), but {} initial condition(s).",
+                n_fields,
+                n_ics);
+    std::map<FieldID, InitialCondition *> ics_by_fields;
+    for (auto & ic : ics) {
+        auto fid = ic->get_field_id();
+        if (fid == FieldID::INVALID)
+            continue;
+        const auto & it = ics_by_fields.find(fid);
+        if (it == ics_by_fields.end()) {
+            Int ic_nc = ic->get_num_components();
+            Int field_nc = field_comps.at(fid);
+            if (ic_nc == field_nc)
+                ics_by_fields[fid] = ic;
             else
-                // TODO: improve this error message
-                this->logger->error(
-                    "Initial condition '{}' is being applied to a field that already "
-                    "has an initial condition.",
-                    ic->get_name());
+                error("Initial condition '{}' operates on {} components, but is set on a field "
+                      "with {} components.",
+                      ic->get_name(),
+                      ic_nc,
+                      field_nc);
         }
+        else
+            // TODO: improve this error message
+            error("Initial condition '{}' is being applied to a field that already has an "
+                  "initial condition.",
+                  ic->get_name());
     }
-    else
-        this->logger->error("Provided {} field(s), but {} initial condition(s).", n_fields, n_ics);
 }
 
 void
@@ -319,16 +318,16 @@ DiscreteProblemInterface::set_up_auxiliary_dm(DM dm)
             }
             else {
                 no_errors = false;
-                this->logger->error("Auxiliary field '{}' has {} component(s), but is set on a "
-                                    "field with {} component(s).",
-                                    aux->get_name(),
-                                    aux_nc,
-                                    field_nc);
+                error("Auxiliary field '{}' has {} component(s), but is set on a field with {} "
+                      "component(s).",
+                      aux->get_name(),
+                      aux_nc,
+                      field_nc);
             }
         }
         catch (Exception & e) {
             no_errors = false;
-            this->logger->error("Auxiliary field '{}' does not exist.", aux->get_field());
+            error("Auxiliary field '{}' does not exist.", aux->get_field());
         }
     }
     if (no_errors) {
@@ -438,10 +437,10 @@ DiscreteProblemInterface::check_bcs_boundaries()
                           this->unstr_mesh->has_vertex_set(bnd_name);
             if (!exists) {
                 no_errors = false;
-                this->logger->error("Boundary condition '{}' is set on boundary '{}' which does "
-                                    "not exist in the mesh.",
-                                    bc->get_name(),
-                                    bnd_name);
+                error("Boundary condition '{}' is set on boundary '{}' which does not exist in the "
+                      "mesh.",
+                      bc->get_name(),
+                      bnd_name);
             }
         }
     }

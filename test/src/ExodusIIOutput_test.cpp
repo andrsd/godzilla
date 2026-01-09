@@ -55,8 +55,6 @@ TEST(ExodusIIOutputTest, create)
 
 TEST(ExodusIIOutputTest, non_existent_var)
 {
-    testing::internal::CaptureStderr();
-
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
@@ -75,14 +73,8 @@ TEST(ExodusIIOutputTest, non_existent_var)
     params.set<std::vector<String>>("variables", { "asdf" });
     prob.add_output<ExodusIIOutput>(params);
 
-    prob.create();
-
-    EXPECT_FALSE(app.check_integrity());
-    app.get_logger()->print();
-
-    EXPECT_THAT(testing::internal::GetCapturedStderr(),
-                testing::HasSubstr(
-                    "Variable 'asdf' specified in 'variables' parameter does not exist. Typo?"));
+    EXPECT_DEATH(prob.create(),
+                 "Variable 'asdf' specified in 'variables' parameter does not exist. Typo?");
 }
 
 TEST(ExodusIIOutputTest, output)

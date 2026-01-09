@@ -60,12 +60,11 @@ AuxiliaryField::create()
     CALL_STACK_MSG();
     this->mesh = this->dpi->get_mesh();
     if (this->region.length() > 0) {
-        if (this->mesh->has_label(this->region)) {
-            this->label = this->mesh->get_label(this->region);
-            this->block_id = this->mesh->get_cell_set_id(this->region).value();
-        }
-        else
-            log_error("Region '{}' does not exists. Typo?", this->region);
+        expect_true(this->mesh->has_label(this->region),
+                    "Region '{}' does not exists. Typo?",
+                    this->region);
+        this->label = this->mesh->get_label(this->region);
+        this->block_id = this->mesh->get_cell_set_id(this->region).value();
     }
 }
 

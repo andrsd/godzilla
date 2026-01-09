@@ -48,15 +48,11 @@ TEST_F(AuxiliaryFieldTest, api)
     prob->set_aux_field(FieldID(0), "fld", 1, Order(1));
 
     auto params = AuxiliaryField::parameters();
-    params.set<App *>("app", app)
-        .set<String>("name", "aux")
-        .set<String>("field", "fld")
-        .set<String>("region", "rgn");
+    params.set<App *>("app", app).set<String>("name", "aux").set<String>("field", "fld");
     auto aux = prob->add_auxiliary_field<TestAuxFld>(params);
     prob->create();
 
     EXPECT_EQ(aux->get_label(), nullptr);
-    EXPECT_EQ(aux->get_region(), "rgn");
     EXPECT_EQ(aux->get_block_id(), -1);
     EXPECT_EQ(aux->get_field(), "fld");
     EXPECT_EQ(aux->get_field_id(), FieldID(0));
@@ -86,8 +82,6 @@ TEST_F(AuxiliaryFieldTest, non_existent_field)
         }
     };
 
-    testing::internal::CaptureStderr();
-
     prob->set_aux_field(FieldID(0), "aux1", 1, Order(1));
 
     auto params = AuxiliaryField::parameters();
@@ -95,13 +89,7 @@ TEST_F(AuxiliaryFieldTest, non_existent_field)
     params.set<String>("name", "aux");
     prob->add_auxiliary_field<TestAuxFld>(params);
 
-    prob->create();
-
-    EXPECT_FALSE(app->check_integrity());
-    app->get_logger()->print();
-
-    EXPECT_THAT(testing::internal::GetCapturedStderr(),
-                testing::HasSubstr("Auxiliary field 'aux' does not exist."));
+    EXPECT_DEATH(prob->create(), "Auxiliary field 'aux' does not exist.");
 }
 
 TEST_F(AuxiliaryFieldTest, inconsistent_comp_number)
@@ -120,8 +108,6 @@ TEST_F(AuxiliaryFieldTest, inconsistent_comp_number)
         }
     };
 
-    testing::internal::CaptureStderr();
-
     prob->set_aux_field(FieldID(0), "aux", 1, Order(1));
 
     auto params = AuxiliaryField::parameters();
@@ -129,14 +115,9 @@ TEST_F(AuxiliaryFieldTest, inconsistent_comp_number)
     params.set<String>("name", "aux");
     prob->add_auxiliary_field<TestAuxFld>(params);
 
-    prob->create();
-
-    EXPECT_FALSE(app->check_integrity());
-    app->get_logger()->print();
-
-    EXPECT_THAT(testing::internal::GetCapturedStderr(),
-                testing::HasSubstr("Auxiliary field 'aux' has 2 component(s), but is set on a "
-                                   "field with 1 component(s)."));
+    EXPECT_DEATH(prob->create(),
+                 "Auxiliary field 'aux' has 2 component\\(s\\), but is set on a field with 1 "
+                 "component\\(s\\).");
 }
 
 TEST_F(AuxiliaryFieldTest, non_existent_region)
@@ -155,21 +136,13 @@ TEST_F(AuxiliaryFieldTest, non_existent_region)
         }
     };
 
-    testing::internal::CaptureStderr();
-
     prob->set_aux_field(FieldID(0), "aux", 1, Order(1));
 
     auto params = AuxiliaryField::parameters();
     params.set<App *>("app", app).set<String>("name", "aux").set<String>("region", "asdf");
     prob->add_auxiliary_field<TestAuxFld>(params);
 
-    prob->create();
-
-    EXPECT_FALSE(app->check_integrity());
-    app->get_logger()->print();
-
-    EXPECT_THAT(testing::internal::GetCapturedStderr(),
-                testing::HasSubstr("Region 'asdf' does not exists. Typo?"));
+    EXPECT_DEATH(prob->create(), "Region 'asdf' does not exists. Typo?");
 }
 
 TEST_F(AuxiliaryFieldTest, name_already_taken)
@@ -204,7 +177,7 @@ TEST_F(AuxiliaryFieldTest, get_value)
     prob->set_aux_field(FieldID(0), "aux", 1, Order(1));
 
     auto params = AuxiliaryField::parameters();
-    params.set<App *>("app", app).set<String>("name", "aux").set<String>("region", "asdf");
+    params.set<App *>("app", app).set<String>("name", "aux");
     auto aux = prob->add_auxiliary_field<TestAuxFld>(params);
 
     prob->create();
@@ -233,10 +206,10 @@ TEST_F(AuxiliaryFieldTest, get_vector_value)
         }
     };
 
-    prob->set_aux_field(FieldID(0), "aux", 1, Order(1));
+    prob->set_aux_field(FieldID(0), "aux", 3, Order(1));
 
     auto params = AuxiliaryField::parameters();
-    params.set<App *>("app", app).set<String>("name", "aux").set<String>("region", "asdf");
+    params.set<App *>("app", app).set<String>("name", "aux");
     auto aux = prob->add_auxiliary_field<TestAuxFld>(params);
 
     prob->create();

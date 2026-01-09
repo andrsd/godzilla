@@ -35,14 +35,9 @@ RZSymmetry::create()
     Object::create();
     auto problem = this->dpi->get_problem();
     auto dim = problem->get_dimension();
-    if (dim == 2_D) {
-        if (this->axis.size() != 2)
-            log_error("'axis' parameter must provide 2 components.");
-        if (this->pt.size() != 2)
-            log_error("'point' parameter must provide 2 components.");
-    }
-    else
-        log_error("'RZSymmetry' can be used only with 2D problems.");
+    expect_true(dim == 2_D, "'RZSymmetry' can be used only with 2D problems.");
+    expect_true(this->axis.size() == 2, "'axis' parameter must provide 2 components.");
+    expect_true(this->pt.size() == 2, "'point' parameter must provide 2 components.");
 }
 
 Real

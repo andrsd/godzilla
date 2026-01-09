@@ -56,7 +56,7 @@ InitialCondition::create()
         else if (this->dpi->has_aux_field_by_name(fld))
             this->fid = this->dpi->get_aux_field_id(fld);
         else
-            log_error("Field '{}' does not exists. Typo?", fld);
+            error("Field '{}' does not exists. Typo?", fld);
     }
     else {
         auto field_names = this->dpi->get_field_names();

@@ -35,10 +35,8 @@ RectangleMesh::RectangleMesh(const Parameters & pars) :
     interpolate(true)
 {
     CALL_STACK_MSG();
-    if (this->xmax <= this->xmin)
-        log_error("Parameter 'xmax' must be larger than 'xmin'.");
-    if (this->ymax <= this->ymin)
-        log_error("Parameter 'ymax' must be larger than 'ymin'.");
+    expect_true(this->xmax > this->xmin, "Parameter 'xmax' must be larger than 'xmin'.");
+    expect_true(this->ymax > this->ymin, "Parameter 'ymax' must be larger than 'ymin'.");
 }
 
 Real

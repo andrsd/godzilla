@@ -99,7 +99,7 @@ TEST(BndJacobianFuncTest, test)
     auto bc_pars = NaturalBC::parameters();
     bc_pars.set<App *>("app", &app)
         .set<String>("field", "u")
-        .set<std::vector<String>>("boundary", { "marker" });
+        .set<std::vector<String>>("boundary", { "left" });
     auto bc = prob.add_boundary_condition<TestBC>(bc_pars);
 
     prob.create();
