@@ -92,9 +92,6 @@ TEST_F(InitialConditionTest, test)
 
     this->prob->create();
 
-    EXPECT_TRUE(this->app->check_integrity());
-    this->app->get_logger()->print();
-
     EXPECT_EQ(ic->get_field_id(), FieldID(0));
     EXPECT_EQ(ic->get_dimension(), 1);
 

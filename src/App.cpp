@@ -171,13 +171,6 @@ App::run()
 {
     CALL_STACK_MSG();
 
-    if (!check_integrity()) {
-        // NOTE: logger could return a string containing the number of errors and warnirngs and that
-        // can be thorwn as the text of the exception
-        this->logger->print();
-        throw Exception("");
-    }
-
     auto start_time = std::chrono::high_resolution_clock::now();
     run_problem();
     auto end_time = std::chrono::high_resolution_clock::now();
@@ -204,17 +197,6 @@ App::export_parameters_yaml() const
     yaml << YAML::EndSeq;
     yaml << YAML::EndMap;
     std::cout << yaml.c_str() << std::endl;
-}
-
-bool
-App::check_integrity()
-{
-    CALL_STACK_MSG();
-    lprintln(9, "Checking integrity");
-    if (this->logger->get_num_entries() > 0)
-        return false;
-    else
-        return true;
 }
 
 void

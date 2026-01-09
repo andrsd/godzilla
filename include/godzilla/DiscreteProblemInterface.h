@@ -378,9 +378,6 @@ private:
     /// Unstructured mesh
     UnstructuredMesh * unstr_mesh;
 
-    /// Logger object
-    Logger * logger;
-
     /// Object that manages a discrete system
     PetscDS ds;
 

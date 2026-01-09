@@ -22,7 +22,6 @@ namespace godzilla {
 DiscreteProblemInterface::DiscreteProblemInterface(Problem * problem, const Parameters & pars) :
     problem(problem),
     unstr_mesh(dynamic_cast<UnstructuredMesh *>(pars.get<Mesh *>("mesh"))),
-    logger(pars.get<App *>("app")->get_logger()),
     ds(nullptr),
     dm_aux(nullptr),
     ds_aux(nullptr)
