@@ -55,7 +55,7 @@ Output::Output(const Parameters & pars) :
         this->on_mask = this->problem->get_default_output_on();
 
     if (pars.is_param_valid("interval") && ((this->on_mask & ExecuteOn::TIMESTEP) == 0))
-        log_warning("Parameter 'interval' was specified, but 'on' is missing 'timestep'.");
+        warning("Parameter 'interval' was specified, but 'on' is missing 'timestep'.");
 }
 
 void
