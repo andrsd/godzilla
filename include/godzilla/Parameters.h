@@ -10,6 +10,7 @@
 #include "godzilla/Qtr.h"
 #include "godzilla/Utils.h"
 #include <map>
+#include <source_location>
 
 namespace godzilla {
 
@@ -28,14 +29,16 @@ protected:
         /// Create a copy of this value
         virtual Value * copy() const = 0;
 
-        /// Is required
-        bool required;
         /// Doco string
         String doc_string;
-        ///
-        bool valid;
+        /// Source location where the parameter was set
+        Optional<std::source_location> src_loc;
+        /// Is required
+        bool required : 1;
+        /// Is valid
+        bool valid : 1;
         /// The set of parameters that will NOT appear in the the dump of the parser tree
-        bool is_private;
+        bool is_private : 1;
     };
 
     /// Parameter value
@@ -166,13 +169,15 @@ public:
     /// Set parameter
     template <typename T>
     inline Parameters &
-    set(String name, T value)
+    set(String name, T value, std::source_location loc = std::source_location::current())
     {
         CALL_STACK_MSG();
         if (!this->has<T>(name))
             this->params[name] = Qtr<Parameter<T>>::alloc();
 
-        this->params[name]->valid = true;
+        auto & par = this->params[name];
+        par->valid = true;
+        par->src_loc = loc;
         dynamic_cast<Parameter<T> *>(this->params[name].get())->set(value);
         return *this;
     }
@@ -242,7 +247,9 @@ public:
     /// an optional default value.
     template <typename T>
     Parameters &
-    add_private_param(String name, const T & value)
+    add_private_param(String name,
+                      const T & value,
+                      std::source_location loc = std::source_location::current())
     {
         CALL_STACK_MSG();
         auto param = Qtr<Parameter<T>>::alloc();
@@ -298,6 +305,9 @@ public:
 
     ///
     String get_doc_string(String name) const;
+
+    ///
+    Expected<std::source_location, ErrorCode> get_source_location(String name) const;
 
     /// Parameter map iterator.
     using iterator = std::map<String, Qtr<Parameters::Value>>::iterator;
