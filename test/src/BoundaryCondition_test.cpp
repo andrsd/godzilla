@@ -40,13 +40,13 @@ TEST_F(BoundaryConditionTest, api)
 
     auto params = BoundaryCondition::parameters();
     params.set<App *>("app", this->app)
-        .set<DiscreteProblemInterface *>("_dpi", this->prob)
+        .set<DiscreteProblemInterface *>("_dpi", this->prob.get())
         .set<String>("name", "obj")
         .set<std::vector<String>>("boundary", { "side1" });
     MockBoundaryCondition bc(params);
     bc.create();
 
     EXPECT_THAT(bc.get_boundary(), ElementsAre("side1"));
-    EXPECT_THAT(bc.get_prob(), this->prob);
+    EXPECT_THAT(bc.get_prob(), this->prob.get());
     EXPECT_THAT(bc.get_dimension(), 1_D);
 }

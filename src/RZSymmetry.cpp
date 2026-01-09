@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: MIT
 
 #include "godzilla/RZSymmetry.h"
-#include "godzilla/Factory.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/DiscreteProblemInterface.h"
 

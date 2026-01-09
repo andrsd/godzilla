@@ -55,8 +55,7 @@ App::App(mpi::Communicator comm, String name) :
     verbosity_level(1),
     cout_buf_(nullptr),
     cerr_buf_(nullptr),
-    problem(nullptr),
-    factory(registry)
+    problem(nullptr)
 {
     CALL_STACK_MSG();
 }
@@ -70,8 +69,7 @@ App::App(mpi::Communicator comm, Registry & registry, String name) :
     verbosity_level(1),
     cout_buf_(nullptr),
     cerr_buf_(nullptr),
-    problem(nullptr),
-    factory(registry)
+    problem(nullptr)
 {
     CALL_STACK_MSG();
 }
@@ -79,7 +77,6 @@ App::App(mpi::Communicator comm, Registry & registry, String name) :
 App::~App()
 {
     CALL_STACK_MSG();
-    this->factory.destroy();
 
     if (this->cout_buf_ != nullptr) {
         std::cout.rdbuf(this->cout_buf_);
@@ -111,12 +108,6 @@ App::get_logger()
 {
     CALL_STACK_MSG();
     return this->logger.get();
-}
-
-Factory &
-App::get_factory()
-{
-    return this->factory;
 }
 
 Problem *
@@ -173,12 +164,6 @@ App::get_comm() const
 {
     CALL_STACK_MSG();
     return this->mpi_comm;
-}
-
-Parameters *
-App::get_parameters(String class_name)
-{
-    return this->factory.get_parameters(class_name);
 }
 
 int

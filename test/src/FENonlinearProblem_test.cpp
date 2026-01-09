@@ -4,7 +4,6 @@
 #include "godzilla/MeshFactory.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/InitialCondition.h"
-#include "godzilla/Factory.h"
 #include "godzilla/Parameters.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/InitialCondition.h"

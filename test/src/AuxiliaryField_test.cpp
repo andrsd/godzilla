@@ -61,7 +61,7 @@ TEST_F(AuxiliaryFieldTest, api)
     EXPECT_EQ(aux->get_field(), "fld");
     EXPECT_EQ(aux->get_field_id(), FieldID(0));
     // EXPECT_EQ(aux.get_msh(), this->mesh->get_mesh<Mesh>());
-    EXPECT_EQ(aux->get_prblm(), prob);
+    EXPECT_EQ(aux->get_prblm(), prob.get());
     EXPECT_EQ(aux->get_dimension(), 1_D);
 
     EXPECT_TRUE(prob->has_aux("aux"));
