@@ -90,20 +90,6 @@ TEST(AppTest, verbose)
     EXPECT_EQ(app.get_verbosity_level(), 2);
 }
 
-TEST(AppTest, check_integrity)
-{
-    testing::internal::CaptureStderr();
-    TestApp app;
-    app.get_logger()->error("error1");
-
-    EXPECT_FALSE(app.check_integrity());
-    app.get_logger()->print();
-
-    auto out = testing::internal::GetCapturedStderr();
-    EXPECT_THAT(out, testing::HasSubstr("[ERROR] error1"));
-    EXPECT_THAT(out, testing::HasSubstr("1 error(s) found"));
-}
-
 TEST(AppTest, command_line_opt)
 {
     class TestApp : public App {

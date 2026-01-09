@@ -98,9 +98,6 @@ TEST(ExodusIIOutputTest, output)
 
     prob.create();
 
-    EXPECT_TRUE(app.check_integrity());
-    app.get_logger()->print();
-
     out->output_step();
 }
 

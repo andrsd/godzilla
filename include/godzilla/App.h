@@ -81,11 +81,6 @@ public:
 
     void set_problem(Problem * problem);
 
-    /// Check integrity of the application
-    ///
-    /// @return `true` if the check passed, `false` otherwise
-    bool check_integrity();
-
     /// Run the application
     ///
     /// @return Exit code

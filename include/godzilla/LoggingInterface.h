@@ -4,7 +4,6 @@
 #pragma once
 
 #include "godzilla/Logger.h"
-#include "godzilla/String.h"
 
 namespace godzilla {
 
@@ -12,42 +11,7 @@ namespace godzilla {
 ///
 class LoggingInterface {
 public:
-    explicit LoggingInterface(Logger * logger, String prefix = "") :
-        logger(logger),
-        prefix(std::move(prefix))
-    {
-    }
-
-    /// Log an error
-    template <typename... T>
-    void
-    log_error(fmt::format_string<T...> format, T... args)
-    {
-        this->logger->error(this->prefix, format, std::forward<T>(args)...);
-    }
-
-    /// Log a warning
-    template <typename... T>
-    void
-    log_warning(fmt::format_string<T...> format, T... args)
-    {
-        this->logger->warning(this->prefix, format, std::forward<T>(args)...);
-    }
-
-    /// Log a deprecated message
-    template <typename... T>
-    void
-    deprecated(fmt::format_string<T...> message)
-    {
-        this->logger->warning(this->prefix, message);
-    }
-
-private:
-    /// Logger object
-    Logger * logger;
-
-    /// Prefix for each logger line
-    String prefix;
+    explicit LoggingInterface(Logger * /*logger*/) {}
 };
 
 } // namespace godzilla
