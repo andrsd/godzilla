@@ -56,7 +56,7 @@ expect_true(bool cond, fmt::format_string<T...> format, T... args)
 /// @param format Formatting string
 /// @param args Arguments for the formatting string
 template <typename... T>
-void
+[[noreturn]] void
 error(fmt::format_string<T...> format, T... args)
 {
     fmt::print(stderr, "{}", godzilla::Terminal::red);
