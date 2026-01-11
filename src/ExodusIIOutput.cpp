@@ -703,7 +703,9 @@ ExodusIIOutput::write_elem_variables()
         cell_set_idx.get_indices();
         for (Int i = 0; i < n_cells_sets; ++i) {
             auto cells = cell_sets_label.get_stratum(cell_set_idx[i]);
+            cells.get_indices();
             write_block_elem_variables((int) cell_set_idx[i], cells.get_size(), cells.data());
+            cells.restore_indices();
             cells.destroy();
         }
         cell_set_idx.restore_indices();
