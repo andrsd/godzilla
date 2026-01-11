@@ -712,10 +712,8 @@ ExodusIIOutput::write_elem_variables()
             cells.get_indices();
             write_block_elem_variables((int) cell_set_idx[i], cells.get_size(), cells.data());
             cells.restore_indices();
-            cells.destroy();
         }
         cell_set_idx.restore_indices();
-        cell_set_idx.destroy();
     }
     else
         write_block_elem_variables(SINGLE_BLK_ID);
