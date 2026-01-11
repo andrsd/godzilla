@@ -599,7 +599,7 @@ ExodusIIOutput::write_nodal_variables_continuous()
     auto dpi = get_discrete_problem_interface();
 
     auto sln = dpi->get_solution_vector_local();
-    const Scalar * sln_vals = sln.get_array_read();
+    const Scalar * sln_vals = sln ? sln.get_array_read() : nullptr;
 
     auto aux_sln = dpi->get_aux_solution_vector_local();
     const Scalar * aux_sln_vals = (Vec) aux_sln != nullptr ? aux_sln.get_array_read() : nullptr;
@@ -608,16 +608,18 @@ ExodusIIOutput::write_nodal_variables_continuous()
 
     for (auto n : this->mesh->get_vertex_range()) {
         int exo_var_id = 1;
-        for (auto fid : this->nodal_var_fids) {
-            auto offset = dpi->get_field_dof(n, fid);
-            auto nc = dpi->get_field_num_components(fid);
-            for (Int c = 0; c < nc; ++c, ++exo_var_id) {
-                int exo_idx = (int) (n - n_all_elems + 1);
-                this->exo->write_partial_nodal_var(this->step_num,
-                                                   exo_var_id,
-                                                   1,
-                                                   exo_idx,
-                                                   sln_vals[offset + c]);
+        if (sln_vals) {
+            for (auto fid : this->nodal_var_fids) {
+                auto offset = dpi->get_field_dof(n, fid);
+                auto nc = dpi->get_field_num_components(fid);
+                for (Int c = 0; c < nc; ++c, ++exo_var_id) {
+                    int exo_idx = (int) (n - n_all_elems + 1);
+                    this->exo->write_partial_nodal_var(this->step_num,
+                                                       exo_var_id,
+                                                       1,
+                                                       exo_idx,
+                                                       sln_vals[offset + c]);
+                }
             }
         }
         if (aux_sln_vals) {
@@ -638,7 +640,8 @@ ExodusIIOutput::write_nodal_variables_continuous()
 
     if (aux_sln)
         aux_sln.restore_array_read(aux_sln_vals);
-    sln.restore_array_read(sln_vals);
+    if (sln)
+        sln.restore_array_read(sln_vals);
 }
 
 void
@@ -647,7 +650,7 @@ ExodusIIOutput::write_nodal_variables_discontinuous()
     CALL_STACK_MSG();
     auto dgpi = this->dgpi;
     auto sln = dgpi->get_solution_vector_local();
-    const Scalar * sln_vals = sln.get_array_read();
+    const Scalar * sln_vals = sln ? sln.get_array_read() : nullptr;
 
     auto aux_sln = dgpi->get_aux_solution_vector_local();
     const Scalar * aux_sln_vals = (Vec) aux_sln != nullptr ? aux_sln.get_array_read() : nullptr;
@@ -655,17 +658,19 @@ ExodusIIOutput::write_nodal_variables_discontinuous()
     int n_nodes_per_elem = get_num_nodes_per_element();
     for (auto & cid : this->mesh->get_cell_range()) {
         int exo_var_id = 1;
-        for (auto fid : this->nodal_var_fids) {
-            Int nc = dgpi->get_field_num_components(fid);
-            for (Int c = 0; c < nc; ++c, ++exo_var_id) {
-                for (Int lni = 0; lni < n_nodes_per_elem; ++lni) {
-                    Int exo_idx = (cid * n_nodes_per_elem + lni) + 1;
-                    Int offset = dgpi->get_field_dof(cid, lni, fid);
-                    this->exo->write_partial_nodal_var(this->step_num,
-                                                       exo_var_id,
-                                                       1,
-                                                       exo_idx,
-                                                       sln_vals[offset + c]);
+        if (sln_vals) {
+            for (auto fid : this->nodal_var_fids) {
+                Int nc = dgpi->get_field_num_components(fid);
+                for (Int c = 0; c < nc; ++c, ++exo_var_id) {
+                    for (Int lni = 0; lni < n_nodes_per_elem; ++lni) {
+                        Int exo_idx = (cid * n_nodes_per_elem + lni) + 1;
+                        Int offset = dgpi->get_field_dof(cid, lni, fid);
+                        this->exo->write_partial_nodal_var(this->step_num,
+                                                           exo_var_id,
+                                                           1,
+                                                           exo_idx,
+                                                           sln_vals[offset + c]);
+                    }
                 }
             }
         }
@@ -689,7 +694,8 @@ ExodusIIOutput::write_nodal_variables_discontinuous()
 
     if (aux_sln)
         aux_sln.restore_array_read(aux_sln_vals);
-    sln.restore_array_read(sln_vals);
+    if (sln)
+        sln.restore_array_read(sln_vals);
 }
 
 void
@@ -703,11 +709,11 @@ ExodusIIOutput::write_elem_variables()
         cell_set_idx.get_indices();
         for (Int i = 0; i < n_cells_sets; ++i) {
             auto cells = cell_sets_label.get_stratum(cell_set_idx[i]);
+            cells.get_indices();
             write_block_elem_variables((int) cell_set_idx[i], cells.get_size(), cells.data());
-            cells.destroy();
+            cells.restore_indices();
         }
         cell_set_idx.restore_indices();
-        cell_set_idx.destroy();
     }
     else
         write_block_elem_variables(SINGLE_BLK_ID);
@@ -726,7 +732,7 @@ ExodusIIOutput::write_block_elem_variables(int blk_id, Int n_elems_in_block, con
     }
 
     auto sln = dpi->get_solution_vector_local();
-    const Scalar * sln_vals = sln.get_array_read();
+    const Scalar * sln_vals = sln ? sln.get_array_read() : nullptr;
 
     auto aux_sln = dpi->get_aux_solution_vector_local();
     const Scalar * aux_sln_vals = (Vec) aux_sln != nullptr ? aux_sln.get_array_read() : nullptr;
@@ -739,16 +745,18 @@ ExodusIIOutput::write_block_elem_variables(int blk_id, Int n_elems_in_block, con
             elem_id = cells[i];
 
         int exo_var_id = 1;
-        for (auto & fid : this->elem_var_fids) {
-            auto offset = dpi->get_field_dof(elem_id, fid);
-            auto nc = dpi->get_field_num_components(fid);
-            for (Int c = 0; c < nc; ++c, ++exo_var_id) {
-                int exo_idx = (int) (i + 1);
-                this->exo->write_partial_elem_var(this->step_num,
-                                                  exo_var_id,
-                                                  blk_id,
-                                                  exo_idx,
-                                                  sln_vals[offset + c]);
+        if (sln_vals) {
+            for (auto & fid : this->elem_var_fids) {
+                auto offset = dpi->get_field_dof(elem_id, fid);
+                auto nc = dpi->get_field_num_components(fid);
+                for (Int c = 0; c < nc; ++c, ++exo_var_id) {
+                    int exo_idx = (int) (i + 1);
+                    this->exo->write_partial_elem_var(this->step_num,
+                                                      exo_var_id,
+                                                      blk_id,
+                                                      exo_idx,
+                                                      sln_vals[offset + c]);
+                }
             }
         }
         if (aux_sln_vals) {
@@ -769,7 +777,8 @@ ExodusIIOutput::write_block_elem_variables(int blk_id, Int n_elems_in_block, con
 
     if (aux_sln)
         aux_sln.restore_array_read(aux_sln_vals);
-    sln.restore_array_read(sln_vals);
+    if (sln)
+        sln.restore_array_read(sln_vals);
 }
 
 void
