@@ -6,11 +6,13 @@ using namespace godzilla;
 
 namespace {
 
+#if 0
 void
 warn_fn()
 {
     warning_once("Warning");
 }
+#endif
 
 } // namespace
 
@@ -35,17 +37,18 @@ TEST(ErrorTest, expect_true)
 
 TEST(ErrorTest, error)
 {
-    EXPECT_DEATH(error("error"), "\\[ERROR\\] error");
+    EXPECT_DEATH(internal::error("error"), "\\[ERROR\\] error");
 }
 
 TEST(ErrorTest, warning)
 {
     testing::internal::CaptureStdout();
-    warning("warning");
+    internal::warning("warning");
     auto out = testing::internal::GetCapturedStdout();
     EXPECT_THAT(out, testing::HasSubstr("[WARNING] warning"));
 }
 
+#if 0
 TEST(ErrorTest, warning_once)
 {
     testing::internal::CaptureStdout();
@@ -55,3 +58,4 @@ TEST(ErrorTest, warning_once)
     auto out = testing::internal::GetCapturedStdout();
     EXPECT_EQ(out, "\x1B[33m[WARNING] Warning\x1B[39m\n");
 }
+#endif

@@ -53,6 +53,7 @@ CommandLineInterface::create_command_line_options()
                           "Save performance log into a file",
                           cxxopts::value<String>(),
                           "");
+    cmdln_opts.add_option("", "", "log-file", "Save into a log file", cxxopts::value<String>(), "");
     return cmdln_opts;
 }
 
@@ -92,6 +93,9 @@ CommandLineInterface::process_command_line(cxxopts::Options & opts,
 
         if (result.count("perf-log"))
             this->app.set_perf_log_file_name(result["perf-log"].as<std::string>());
+
+        if (result.count("log-file"))
+            this->app.get_logger()->set_log_file_name(result["log-file"].as<String>());
 
         if (result.count("redirect-stdout")) {
             auto fname = fmt::format("output.{}.txt", this->app.get_comm().rank());
