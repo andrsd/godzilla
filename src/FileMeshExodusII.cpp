@@ -250,20 +250,20 @@ FileMesh::create_from_exodus()
                 auto num_side_in_set = side_set.get_size();
                 for (Int j = 0, k = 0; j < num_side_in_set; ++j) {
                     Int face_size = node_count_list[j];
-                    if (face_size > MAX_FACE_VERTICES)
-                        throw Exception("ExodusII side cannot have more than {} vertices.",
-                                        MAX_FACE_VERTICES);
+                    expect_true(face_size <= MAX_FACE_VERTICES,
+                                "ExodusII side cannot have more than {} vertices.",
+                                MAX_FACE_VERTICES);
 
                     std::vector<Int> face_nodes(face_size);
                     for (Int l = 0; l < face_size; ++l, ++k)
                         face_nodes[l] = node_list[k] + n_cells - 1;
 
                     auto faces = m->get_full_join(face_nodes);
-                    if (faces.size() != 1)
-                        throw Exception("Invalid ExodusII side {} in set {} maps to {} faces.",
-                                        j,
-                                        i,
-                                        faces.size());
+                    expect_true(faces.size() == 1,
+                                "Invalid ExodusII side {} in set {} maps to {} faces.",
+                                j,
+                                i,
+                                faces.size());
 
                     face_sets.set_value(faces[0], id);
                     face_set_label.set_value(faces[0], id);
