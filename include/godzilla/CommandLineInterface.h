@@ -35,30 +35,30 @@ public:
     /// Parse command line arguments
     ///
     /// @return Result of parsing the command line
-    virtual cxxopts::ParseResult parse_command_line(cxxopts::Options & opts);
+    cxxopts::ParseResult parse(cxxopts::Options & opts);
 
     /// Entry point into command line parameter processing
     ///
     /// @return Process exit code. This can be reported back into calling process if needed.
-    int run();
+    int run(const cxxopts::Options & opts, const cxxopts::ParseResult & result);
 
 protected:
     String get_app_name() const;
 
-    /// Create command line options
-    ///
-    virtual cxxopts::Options create_command_line_options();
-
     /// Process command line
     ///
     /// @param result Result from calling `parse_command_line` or `cxxopt::parse`
-    virtual void process_command_line(cxxopts::Options & opts, const cxxopts::ParseResult & result);
+    void process_command_line(const cxxopts::ParseResult & result);
 
 private:
     /// Application we are part of
     App & app;
     /// Command line arguments
     std::vector<String> args;
+
+public:
+    /// Create default command line options
+    static cxxopts::Options default_command_line_options();
 };
 
 } // namespace godzilla

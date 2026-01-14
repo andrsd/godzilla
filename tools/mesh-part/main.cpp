@@ -30,25 +30,24 @@ public:
         return version;
     }
 
-    int
-    run() override
-    {
-        return CommandLineInterface::run();
-    }
+    int run() override;
 
 protected:
-    cxxopts::Options create_command_line_options() override;
-    cxxopts::ParseResult parse_command_line(cxxopts::Options & opts) override;
-    void process_command_line(cxxopts::Options & opts,
-                              const cxxopts::ParseResult & result) override;
+    cxxopts::Options create_command_line_options();
+    cxxopts::ParseResult parse(cxxopts::Options & opts);
     Qtr<UnstructuredMesh> load_mesh(const std::string & file_name);
     void partition_mesh_file(const std::string & mesh_file_name);
     void save_partition(UnstructuredMesh * mesh, const std::string & file_name);
+
+    cxxopts::Options cli_opts;
+    cxxopts::ParseResult cli_result;
 };
 
 MeshPartApp::MeshPartApp(int argc, const char * const * argv) :
     App(comm_world, "mesh-part"),
-    CommandLineInterface(*this, argc, argv)
+    CommandLineInterface(*this, argc, argv),
+    cli_opts(create_command_line_options()),
+    cli_result(parse(this->cli_opts))
 {
 }
 
@@ -71,23 +70,24 @@ MeshPartApp::create_command_line_options()
 }
 
 cxxopts::ParseResult
-MeshPartApp::parse_command_line(cxxopts::Options & opts)
+MeshPartApp::parse(cxxopts::Options & opts)
 {
     opts.parse_positional({ "mesh-file" });
-    return CommandLineInterface::parse_command_line(opts);
+    return CommandLineInterface::parse(opts);
 }
 
-void
-MeshPartApp::process_command_line(cxxopts::Options & opts, const cxxopts::ParseResult & res)
+int
+MeshPartApp::run()
 {
-    if (res.count("help"))
-        fmt::print("{}", opts.help());
-    else if (res.count("version"))
+    if (this->cli_result.count("help"))
+        fmt::print("{}", this->cli_opts.help());
+    else if (this->cli_result.count("version"))
         fmt::print("{}, version {}\n", get_name(), get_version());
-    else if (res.count("mesh-file"))
-        partition_mesh_file(res["mesh-file"].as<std::string>());
+    else if (this->cli_result.count("mesh-file"))
+        partition_mesh_file(this->cli_result["mesh-file"].as<std::string>());
     else
-        fmt::print("{}", opts.help());
+        fmt::print("{}", this->cli_opts.help());
+    return 0;
 }
 
 Qtr<UnstructuredMesh>
