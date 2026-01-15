@@ -3,12 +3,33 @@
 
 #pragma once
 
+#include "godzilla/String.h"
+#include "spdlog/spdlog.h"
+
 namespace godzilla {
 
 /// Class for logging errors and warnings
 class Logger {
 public:
     Logger();
+    ~Logger();
+
+    /// Set log file name
+    ///
+    /// @param file_name The name of the log file
+    void set_log_file_name(String file_name);
+
+    /// Set format string
+    ///
+    /// @note: This is a forward call into `spdlog`
+    /// See [custom-formatting](https://github.com/gabime/spdlog/wiki/Custom-formatting) page
+    void set_format_string(std::string pattern,
+                           spdlog::pattern_time_type time_type = spdlog::pattern_time_type::local);
+
+private:
+    std::shared_ptr<spdlog::logger> spdlgr;
+
+    friend class LoggingInterface;
 };
 
 } // namespace godzilla

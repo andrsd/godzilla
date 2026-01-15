@@ -224,17 +224,19 @@ DiscreteProblemInterface::check_initial_conditions(const std::vector<InitialCond
             if (ic_nc == field_nc)
                 ics_by_fields[fid] = ic;
             else
-                error("Initial condition '{}' operates on {} components, but is set on a field "
-                      "with {} components.",
-                      ic->get_name(),
-                      ic_nc,
-                      field_nc);
+                this->problem->error(
+                    "Initial condition '{}' operates on {} components, but is set on a field "
+                    "with {} components.",
+                    ic->get_name(),
+                    ic_nc,
+                    field_nc);
         }
         else
             // TODO: improve this error message
-            error("Initial condition '{}' is being applied to a field that already has an "
-                  "initial condition.",
-                  ic->get_name());
+            this->problem->error(
+                "Initial condition '{}' is being applied to a field that already has an "
+                "initial condition.",
+                ic->get_name());
     }
 }
 
@@ -317,16 +319,17 @@ DiscreteProblemInterface::set_up_auxiliary_dm(DM dm)
             }
             else {
                 no_errors = false;
-                error("Auxiliary field '{}' has {} component(s), but is set on a field with {} "
-                      "component(s).",
-                      aux->get_name(),
-                      aux_nc,
-                      field_nc);
+                this->problem->error(
+                    "Auxiliary field '{}' has {} component(s), but is set on a field with {} "
+                    "component(s).",
+                    aux->get_name(),
+                    aux_nc,
+                    field_nc);
             }
         }
         catch (Exception & e) {
             no_errors = false;
-            error("Auxiliary field '{}' does not exist.", aux->get_field());
+            this->problem->error("Auxiliary field '{}' does not exist.", aux->get_field());
         }
     }
     if (no_errors) {
@@ -436,10 +439,11 @@ DiscreteProblemInterface::check_bcs_boundaries()
                           this->unstr_mesh->has_vertex_set(bnd_name);
             if (!exists) {
                 no_errors = false;
-                error("Boundary condition '{}' is set on boundary '{}' which does not exist in the "
-                      "mesh.",
-                      bc->get_name(),
-                      bnd_name);
+                this->problem->error(
+                    "Boundary condition '{}' is set on boundary '{}' which does not exist in the "
+                    "mesh.",
+                    bc->get_name(),
+                    bnd_name);
             }
         }
     }

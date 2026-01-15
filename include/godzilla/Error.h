@@ -9,16 +9,45 @@
 
 namespace godzilla {
 
+/// Abort the run in MPI-friendly fashion
+[[noreturn]] void abort();
+
 namespace internal {
 
 void mem_check(int line, const char * func, const char * file, void * var);
 
 void check_petsc_error(int ierr, const char * file, int line);
 
-} // namespace internal
+/// Report an error and terminate
+///
+/// @param format Formatting string
+/// @param args Arguments for the formatting string
+template <typename... T>
+[[noreturn]] void
+error(fmt::format_string<T...> format, T &&... args)
+{
+    fmt::print(stderr, "{}", godzilla::Terminal::red);
+    fmt::print(stderr, "[ERROR] ");
+    fmt::print(stderr, format, std::forward<T>(args)...);
+    fmt::println(stderr, "{}", godzilla::Terminal::normal);
+    godzilla::abort();
+}
 
-/// Abort the run in MPI-friendly fashion
-[[noreturn]] void abort();
+/// Report a warning
+///
+/// @param format Formatting string
+/// @param args Arguments for the formatting string
+template <typename... T>
+void
+warning(fmt::format_string<T...> format, T &&... args)
+{
+    fmt::print(stdout, "{}", godzilla::Terminal::yellow);
+    fmt::print(stdout, "[WARNING] ");
+    fmt::print(stdout, format, std::forward<T>(args)...);
+    fmt::println(stdout, "{}", godzilla::Terminal::normal);
+}
+
+} // namespace internal
 
 /// Check that memory allocation was ok. If not, report an error (also dump call stack) and
 /// terminate
@@ -49,35 +78,6 @@ expect_true(bool cond, fmt::format_string<T...> format, T... args)
         fmt::println(stderr, "{}", Terminal::normal);
         godzilla::abort();
     }
-}
-
-/// Report an error and terminate
-///
-/// @param format Formatting string
-/// @param args Arguments for the formatting string
-template <typename... T>
-[[noreturn]] void
-error(fmt::format_string<T...> format, T... args)
-{
-    fmt::print(stderr, "{}", godzilla::Terminal::red);
-    fmt::print(stderr, "[ERROR] ");
-    fmt::print(stderr, format, std::forward<T>(args)...);
-    fmt::println(stderr, "{}", godzilla::Terminal::normal);
-    godzilla::abort();
-}
-
-/// Report a warning
-///
-/// @param format Formatting string
-/// @param args Arguments for the formatting string
-template <typename... T>
-void
-warning(fmt::format_string<T...> format, T... args)
-{
-    fmt::print(stdout, "{}", godzilla::Terminal::yellow);
-    fmt::print(stdout, "[WARNING] ");
-    fmt::print(stdout, format, std::forward<T>(args)...);
-    fmt::println(stdout, "{}", godzilla::Terminal::normal);
 }
 
 /// Calls `warning` but only once
