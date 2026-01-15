@@ -3,8 +3,10 @@
 
 #pragma once
 
-#include "godzilla/String.h"
 #include "spdlog/spdlog.h"
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 namespace godzilla {
 
@@ -17,7 +19,7 @@ public:
     /// Set log file name
     ///
     /// @param file_name The name of the log file
-    void set_log_file_name(String file_name);
+    void set_log_file_name(fs::path file_name);
 
     /// Set format string
     ///

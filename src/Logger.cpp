@@ -20,7 +20,7 @@ Logger::~Logger()
 }
 
 void
-Logger::set_log_file_name(String file_name)
+Logger::set_log_file_name(fs::path file_name)
 {
     CALL_STACK_MSG();
     spdlog::drop("file_logger");
