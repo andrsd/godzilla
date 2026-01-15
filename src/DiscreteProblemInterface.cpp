@@ -254,13 +254,13 @@ DiscreteProblemInterface::set_up_initial_conditions()
 
     std::map<FieldID, Int> field_comps;
     for (auto & name : get_field_names()) {
-        auto fid = get_field_id(name);
-        field_comps[fid] = get_field_num_components(fid);
+        auto fid = get_field_id(name).value();
+        field_comps[fid] = get_field_num_components(fid).value();
     }
     std::map<FieldID, Int> aux_field_comps;
     for (auto & name : get_aux_field_names()) {
-        auto fid = get_aux_field_id(name);
-        aux_field_comps[fid] = get_aux_field_num_components(fid);
+        auto fid = get_aux_field_id(name).value();
+        aux_field_comps[fid] = get_aux_field_num_components(fid).value();
     }
     check_initial_conditions(this->ics, field_comps);
     check_initial_conditions(this->ics_aux, aux_field_comps);
@@ -312,7 +312,7 @@ DiscreteProblemInterface::set_up_auxiliary_dm(DM dm)
         try {
             auto fid = aux->get_field_id();
             Int aux_nc = aux->get_num_components();
-            Int field_nc = get_aux_field_num_components(fid);
+            auto field_nc = get_aux_field_num_components(fid).value();
             if (aux_nc == field_nc) {
                 String region_name = aux->get_region();
                 this->auxs_by_region[region_name].push_back(aux.get());

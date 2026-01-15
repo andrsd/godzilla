@@ -16,7 +16,7 @@ class G0Identity : public JacobianFunc {
 public:
     explicit G0Identity(ExplicitFELinearProblem * prob) :
         JacobianFunc(prob),
-        n_comp(prob->get_field_num_components(FieldID(0)))
+        n_comp(prob->get_field_num_components(FieldID(0)).value())
     {
     }
 

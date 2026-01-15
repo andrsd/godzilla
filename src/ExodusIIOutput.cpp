@@ -538,8 +538,8 @@ ExodusIIOutput::write_all_variable_names()
     std::vector<std::string> nodal_var_names;
     std::vector<std::string> elem_var_names;
     for (auto & name : this->field_var_names) {
-        auto fid = dpi->get_field_id(name);
-        auto order = dpi->get_field_order(fid);
+        auto fid = dpi->get_field_id(name).value();
+        auto order = dpi->get_field_order(fid).value();
         if (order == 0) {
             add_var_names(fid, elem_var_names);
             this->elem_var_fids.push_back(fid);
@@ -550,8 +550,8 @@ ExodusIIOutput::write_all_variable_names()
         }
     }
     for (auto & name : this->aux_field_var_names) {
-        auto fid = dpi->get_aux_field_id(name);
-        auto order = dpi->get_aux_field_order(fid);
+        auto fid = dpi->get_aux_field_id(name).value();
+        auto order = dpi->get_aux_field_order(fid).value();
         if (order == 0) {
             add_aux_var_names(fid, elem_var_names);
             this->elem_aux_var_fids.push_back(fid);
@@ -611,7 +611,7 @@ ExodusIIOutput::write_nodal_variables_continuous()
         if (sln_vals) {
             for (auto fid : this->nodal_var_fids) {
                 auto offset = dpi->get_field_dof(n, fid);
-                auto nc = dpi->get_field_num_components(fid);
+                auto nc = dpi->get_field_num_components(fid).value();
                 for (Int c = 0; c < nc; ++c, ++exo_var_id) {
                     int exo_idx = (int) (n - n_all_elems + 1);
                     this->exo->write_partial_nodal_var(this->step_num,
@@ -625,7 +625,7 @@ ExodusIIOutput::write_nodal_variables_continuous()
         if (aux_sln_vals) {
             for (auto fid : this->nodal_aux_var_fids) {
                 auto offset = dpi->get_aux_field_dof(n, fid);
-                auto nc = dpi->get_aux_field_num_components(fid);
+                auto nc = dpi->get_aux_field_num_components(fid).value();
                 for (Int c = 0; c < nc; ++c, ++exo_var_id) {
                     int exo_idx = (int) (n - n_all_elems + 1);
                     this->exo->write_partial_nodal_var(this->step_num,
@@ -660,7 +660,7 @@ ExodusIIOutput::write_nodal_variables_discontinuous()
         int exo_var_id = 1;
         if (sln_vals) {
             for (auto fid : this->nodal_var_fids) {
-                Int nc = dgpi->get_field_num_components(fid);
+                Int nc = dgpi->get_field_num_components(fid).value();
                 for (Int c = 0; c < nc; ++c, ++exo_var_id) {
                     for (Int lni = 0; lni < n_nodes_per_elem; ++lni) {
                         Int exo_idx = (cid * n_nodes_per_elem + lni) + 1;
@@ -676,7 +676,7 @@ ExodusIIOutput::write_nodal_variables_discontinuous()
         }
         if (aux_sln_vals) {
             for (auto fid : this->nodal_aux_var_fids) {
-                Int nc = dgpi->get_aux_field_num_components(fid);
+                Int nc = dgpi->get_aux_field_num_components(fid).value();
                 for (Int c = 0; c < nc; ++c, ++exo_var_id) {
                     for (Int lni = 0; lni < n_nodes_per_elem; ++lni) {
                         Int exo_idx = (cid * n_nodes_per_elem + lni) + 1;
@@ -748,7 +748,7 @@ ExodusIIOutput::write_block_elem_variables(int blk_id, Int n_elems_in_block, con
         if (sln_vals) {
             for (auto & fid : this->elem_var_fids) {
                 auto offset = dpi->get_field_dof(elem_id, fid);
-                auto nc = dpi->get_field_num_components(fid);
+                auto nc = dpi->get_field_num_components(fid).value();
                 for (Int c = 0; c < nc; ++c, ++exo_var_id) {
                     int exo_idx = (int) (i + 1);
                     this->exo->write_partial_elem_var(this->step_num,
@@ -762,7 +762,7 @@ ExodusIIOutput::write_block_elem_variables(int blk_id, Int n_elems_in_block, con
         if (aux_sln_vals) {
             for (auto & fid : this->elem_aux_var_fids) {
                 auto offset = dpi->get_aux_field_dof(elem_id, fid);
-                auto nc = dpi->get_aux_field_num_components(fid);
+                auto nc = dpi->get_aux_field_num_components(fid).value();
                 for (Int c = 0; c < nc; ++c, ++exo_var_id) {
                     int exo_idx = (int) (i + 1);
                     this->exo->write_partial_elem_var(this->step_num,

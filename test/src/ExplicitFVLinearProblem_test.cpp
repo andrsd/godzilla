@@ -1,5 +1,6 @@
 #include "gmock/gmock.h"
 #include "godzilla/CallStack.h"
+#include "godzilla/Error.h"
 #include "godzilla/MeshFactory.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/RectangleMesh.h"
@@ -137,10 +138,9 @@ TEST(ExplicitFVLinearProblemTest, api)
     EXPECT_EQ(prob.get_num_fields(), 1);
     EXPECT_THAT(prob.get_field_names(), testing::ElementsAre(""));
 
-    EXPECT_EQ(prob.get_field_name(FieldID(0)), "u");
-    EXPECT_THROW_MSG(
-        { [[maybe_unused]] auto n = prob.get_field_name(FieldID(65536)); },
-        "Field with ID = '65536' does not exist.");
+    EXPECT_EQ(prob.get_field_name(FieldID(0)).value(), "u");
+    ASSERT_FALSE(prob.get_field_name(FieldID(65536)).has_value());
+    EXPECT_EQ(prob.get_field_name(FieldID(65536)).error(), ErrorCode::NotFound);
 
     EXPECT_EQ(prob.get_field_num_components(FieldID(0)), 1);
     EXPECT_THROW_MSG(

@@ -50,20 +50,20 @@ InitialCondition::create()
     CALL_STACK_MSG();
     expect_true(this->dpi != nullptr, "DiscreteProblemInterface is null");
     if (this->field_name.has_value()) {
-        auto fld = this->field_name.value();
-        if (this->dpi->has_field_by_name(fld))
-            this->fid = this->dpi->get_field_id(fld);
-        else if (this->dpi->has_aux_field_by_name(fld))
-            this->fid = this->dpi->get_aux_field_id(fld);
+        auto fld_name = this->field_name.value();
+        if (auto id = this->dpi->get_field_id(fld_name); id.has_value())
+            this->fid = id.value();
+        else if (auto id = this->dpi->get_aux_field_id(fld_name); id.has_value())
+            this->fid = id.value();
         else
-            error("Field '{}' does not exists. Typo?", fld);
+            error("Field '{}' does not exist. Typo?", fld_name);
     }
     else {
         auto field_names = this->dpi->get_field_names();
         auto aux_field_names = this->dpi->get_aux_field_names();
         if ((field_names.size() == 1) && (aux_field_names.empty())) {
-            this->fid = this->dpi->get_field_id(field_names[0]);
-            this->field_name = this->dpi->get_field_name(this->fid);
+            this->fid = this->dpi->get_field_id(field_names[0]).value();
+            this->field_name = this->dpi->get_field_name(this->fid).value();
         }
         else
             throw Exception(
@@ -109,9 +109,9 @@ InitialCondition::create_components()
     auto fld = this->field_name.value();
     Int n_comps = 0;
     if (this->dpi->has_field_by_name(fld))
-        n_comps = this->dpi->get_field_num_components(this->fid);
+        n_comps = this->dpi->get_field_num_components(this->fid).value();
     else if (this->dpi->has_aux_field_by_name(fld))
-        n_comps = this->dpi->get_aux_field_num_components(this->fid);
+        n_comps = this->dpi->get_aux_field_num_components(this->fid).value();
 
     std::vector<Int> comps(n_comps);
     std::iota(comps.begin(), comps.end(), 0);

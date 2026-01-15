@@ -3,6 +3,7 @@
 
 #include "godzilla/AuxiliaryField.h"
 #include "godzilla/CallStack.h"
+#include "godzilla/Exception.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Problem.h"
 #include "godzilla/DiscreteProblemInterface.h"
@@ -93,7 +94,11 @@ FieldID
 AuxiliaryField::get_field_id() const
 {
     CALL_STACK_MSG();
-    return this->dpi->get_aux_field_id(this->field);
+    auto fid = this->dpi->get_aux_field_id(this->field);
+    if (fid.has_value())
+        return fid.value();
+    else
+        throw Exception("Auxiliary field '{}' does not exist", this->field);
 }
 
 String

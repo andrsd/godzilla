@@ -78,13 +78,13 @@ void
 FileOutput::add_var_names(FieldID fid, std::vector<std::string> & var_names)
 {
     CALL_STACK_MSG();
-    const auto & name = this->dpi->get_field_name(fid);
-    Int nc = this->dpi->get_field_num_components(fid);
+    auto name = this->dpi->get_field_name(fid).value();
+    Int nc = this->dpi->get_field_num_components(fid).value();
     if (nc == 1)
         var_names.push_back(name);
     else {
         for (Int c = 0; c < nc; ++c) {
-            auto comp_name = this->dpi->get_field_component_name(fid, c);
+            auto comp_name = this->dpi->get_field_component_name(fid, c).value();
             String s;
             if (comp_name.length() == 0)
                 s = fmt::format("{}_{}", name, c);
@@ -99,13 +99,13 @@ void
 FileOutput::add_aux_var_names(FieldID fid, std::vector<std::string> & var_names)
 {
     CALL_STACK_MSG();
-    const auto & name = this->dpi->get_aux_field_name(fid);
-    Int nc = this->dpi->get_aux_field_num_components(fid);
+    auto name = this->dpi->get_aux_field_name(fid).value();
+    auto nc = this->dpi->get_aux_field_num_components(fid).value();
     if (nc == 1)
         var_names.push_back(name);
     else {
         for (Int c = 0; c < nc; ++c) {
-            auto comp_name = this->dpi->get_aux_field_component_name(fid, c);
+            auto comp_name = this->dpi->get_aux_field_component_name(fid, c).value();
             String s;
             if (comp_name.length() == 0)
                 s = fmt::format("{}_{}", name, c);

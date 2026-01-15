@@ -1,6 +1,7 @@
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
 #include "FENonlinearProblem_test.h"
+#include "godzilla/Error.h"
 #include "godzilla/MeshFactory.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/InitialCondition.h"
@@ -58,14 +59,14 @@ TEST_F(FENonlinearProblemTest, fields)
 
     prob->create();
 
-    EXPECT_EQ(prob->get_field_name(FieldID(0)), "u");
+    EXPECT_EQ(prob->get_field_name(FieldID(0)).value(), "u");
     EXPECT_EQ(prob->get_field_id("u"), FieldID(0));
     EXPECT_EQ(prob->has_field_by_id(FieldID(0)), true);
     EXPECT_EQ(prob->has_field_by_name("u"), true);
 
-    EXPECT_THROW_MSG(
-        { auto n = prob->get_field_name(FieldID(65536)); },
-        "Field with ID = '65536' does not exist.");
+    ASSERT_FALSE(prob->get_field_name(FieldID(65536)).has_value());
+    EXPECT_EQ(prob->get_field_name(FieldID(65536)).error(), ErrorCode::NotFound);
+
     EXPECT_THROW_MSG(
         { [[maybe_unused]] auto id = prob->get_field_id("nonexistent"); },
         "Field 'nonexistent' does not exist. Typo?");

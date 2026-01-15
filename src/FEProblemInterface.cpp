@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 #include "godzilla/FEProblemInterface.h"
+#include "godzilla/Error.h"
 #include "godzilla/Types.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Problem.h"
@@ -138,7 +139,7 @@ FEProblemInterface::get_field_names() const
     return infos;
 }
 
-String
+Expected<String, ErrorCode>
 FEProblemInterface::get_field_name(FieldID fid) const
 {
     CALL_STACK_MSG();
@@ -146,10 +147,10 @@ FEProblemInterface::get_field_name(FieldID fid) const
     if (it != this->fields.end())
         return it->second.name;
     else
-        throw Exception("Field with ID = '{}' does not exist.", fid);
+        return Unexpected(ErrorCode::NotFound);
 }
 
-Order
+Expected<Order, ErrorCode>
 FEProblemInterface::get_field_order(FieldID fid) const
 {
     CALL_STACK_MSG();
@@ -157,10 +158,10 @@ FEProblemInterface::get_field_order(FieldID fid) const
     if (it != this->fields.end())
         return it->second.k;
     else
-        throw Exception("Field with ID = '{}' does not exist.", fid);
+        return Unexpected(ErrorCode::NotFound);
 }
 
-Int
+Expected<Int, ErrorCode>
 FEProblemInterface::get_field_num_components(FieldID fid) const
 {
     CALL_STACK_MSG();
@@ -168,10 +169,10 @@ FEProblemInterface::get_field_num_components(FieldID fid) const
     if (it != this->fields.end())
         return it->second.nc;
     else
-        throw Exception("Field with ID = '{}' does not exist.", fid);
+        return Unexpected(ErrorCode::NotFound);
 }
 
-FieldID
+Expected<FieldID, ErrorCode>
 FEProblemInterface::get_field_id(String name) const
 {
     CALL_STACK_MSG();
@@ -179,7 +180,7 @@ FEProblemInterface::get_field_id(String name) const
     if (it != this->fields_by_name.end())
         return it->second;
     else
-        throw Exception("Field '{}' does not exist. Typo?", name);
+        return Unexpected(ErrorCode::NotFound);
 }
 
 const WeakForm &
@@ -205,7 +206,7 @@ FEProblemInterface::has_field_by_name(String name) const
     return it != this->fields_by_name.end();
 }
 
-PetscFE
+Expected<PetscFE, ErrorCode>
 FEProblemInterface::get_fe(FieldID fid) const
 {
     const auto & it = this->fields.find(fid);
@@ -214,10 +215,10 @@ FEProblemInterface::get_fe(FieldID fid) const
         return fi.fe;
     }
     else
-        throw Exception("Field with ID = '{}' does not exist.", fid);
+        return Unexpected(ErrorCode::NotFound);
 }
 
-String
+Expected<String, ErrorCode>
 FEProblemInterface::get_field_component_name(FieldID fid, Int component) const
 {
     CALL_STACK_MSG();
@@ -234,7 +235,7 @@ FEProblemInterface::get_field_component_name(FieldID fid, Int component) const
         }
     }
     else
-        throw Exception("Field with ID = '{}' does not exist.", fid);
+        return Unexpected(ErrorCode::NotFound);
 }
 
 void
@@ -274,7 +275,7 @@ FEProblemInterface::get_aux_field_names() const
     return names;
 }
 
-String
+Expected<String, ErrorCode>
 FEProblemInterface::get_aux_field_name(FieldID fid) const
 {
     CALL_STACK_MSG();
@@ -282,10 +283,10 @@ FEProblemInterface::get_aux_field_name(FieldID fid) const
     if (it != this->aux_fields.end())
         return it->second.name;
     else
-        throw Exception("Auxiliary field with ID = '{}' does not exist.", fid);
+        return Unexpected(ErrorCode::NotFound);
 }
 
-Int
+Expected<Int, ErrorCode>
 FEProblemInterface::get_aux_field_num_components(FieldID fid) const
 {
     CALL_STACK_MSG();
@@ -293,10 +294,10 @@ FEProblemInterface::get_aux_field_num_components(FieldID fid) const
     if (it != this->aux_fields.end())
         return it->second.nc;
     else
-        throw Exception("Auxiliary field with ID = '{}' does not exist.", fid);
+        return Unexpected(ErrorCode::NotFound);
 }
 
-FieldID
+Expected<FieldID, ErrorCode>
 FEProblemInterface::get_aux_field_id(String name) const
 {
     CALL_STACK_MSG();
@@ -304,7 +305,7 @@ FEProblemInterface::get_aux_field_id(String name) const
     if (it != this->aux_fields_by_name.end())
         return it->second;
     else
-        throw Exception("Auxiliary field '{}' does not exist. Typo?", name);
+        return Unexpected(ErrorCode::NotFound);
 }
 
 bool
@@ -323,7 +324,7 @@ FEProblemInterface::has_aux_field_by_name(String name) const
     return it != this->aux_fields_by_name.end();
 }
 
-Order
+Expected<Order, ErrorCode>
 FEProblemInterface::get_aux_field_order(FieldID fid) const
 {
     CALL_STACK_MSG();
@@ -331,10 +332,10 @@ FEProblemInterface::get_aux_field_order(FieldID fid) const
     if (it != this->aux_fields.end())
         return it->second.k;
     else
-        throw Exception("Auxiliary field with ID = '{}' does not exist.", fid);
+        return Unexpected(ErrorCode::NotFound);
 }
 
-String
+Expected<String, ErrorCode>
 FEProblemInterface::get_aux_field_component_name(FieldID fid, Int component) const
 {
     CALL_STACK_MSG();
@@ -351,7 +352,7 @@ FEProblemInterface::get_aux_field_component_name(FieldID fid, Int component) con
         }
     }
     else
-        throw Exception("Auxiliary field with ID = '{}' does not exist.", fid);
+        return Unexpected(ErrorCode::NotFound);
 }
 
 void
@@ -541,13 +542,11 @@ const FieldValue &
 FEProblemInterface::get_field_value(String field_name) const
 {
     CALL_STACK_MSG();
-    if (has_field_by_name(field_name)) {
-        auto fid = get_field_id(field_name);
-        return this->fields.at(fid).values;
+    if (auto fid = get_field_id(field_name); fid.has_value()) {
+        return this->fields.at(fid.value()).values;
     }
-    else if (has_aux_field_by_name(field_name)) {
-        auto fid = get_aux_field_id(field_name);
-        return this->aux_fields.at(fid).values;
+    else if (auto fid = get_aux_field_id(field_name); fid.has_value()) {
+        return this->aux_fields.at(fid.value()).values;
     }
     else
         throw Exception("Field '{}' does not exist. Typo?", field_name);
@@ -557,13 +556,11 @@ const FieldGradient &
 FEProblemInterface::get_field_gradient(String field_name) const
 {
     CALL_STACK_MSG();
-    if (has_field_by_name(field_name)) {
-        auto fid = get_field_id(field_name);
-        return this->fields.at(fid).derivs;
+    if (auto fid = get_field_id(field_name); fid.has_value()) {
+        return this->fields.at(fid.value()).derivs;
     }
-    else if (has_aux_field_by_name(field_name)) {
-        auto fid = get_aux_field_id(field_name);
-        return this->aux_fields.at(fid).derivs;
+    else if (auto fid = get_aux_field_id(field_name); fid.has_value()) {
+        return this->aux_fields.at(fid.value()).derivs;
     }
     else
         throw Exception("Field '{}' does not exist. Typo?", field_name);
@@ -573,13 +570,11 @@ const FieldValue &
 FEProblemInterface::get_field_dot(String field_name) const
 {
     CALL_STACK_MSG();
-    if (has_field_by_name(field_name)) {
-        auto fid = get_field_id(field_name);
-        return this->fields.at(fid).dots;
+    if (auto fid = get_field_id(field_name); fid.has_value()) {
+        return this->fields.at(fid.value()).dots;
     }
-    else if (has_aux_field_by_name(field_name)) {
-        auto fid = get_aux_field_id(field_name);
-        return this->aux_fields.at(fid).dots;
+    else if (auto fid = get_aux_field_id(field_name); fid.has_value()) {
+        return this->aux_fields.at(fid.value()).dots;
     }
     else
         throw Exception("Field '{}' does not exist. Typo?", field_name);

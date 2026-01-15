@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "godzilla/Error.h"
 #include "godzilla/InitialCondition.h"
 #include "godzilla/Types.h"
 #include "godzilla/Qtr.h"
@@ -59,19 +60,19 @@ public:
     /// Get field name
     ///
     /// @param fid Field ID
-    virtual String get_field_name(FieldID fid) const = 0;
+    virtual Expected<String, ErrorCode> get_field_name(FieldID fid) const = 0;
 
     /// Get number of field components
     ///
     /// @param fid Field ID
     /// @return Number of components
-    virtual Int get_field_num_components(FieldID fid) const = 0;
+    virtual Expected<Int, ErrorCode> get_field_num_components(FieldID fid) const = 0;
 
     /// Get field ID
     ///
     /// @param name Field name
     /// @param Field ID
-    virtual FieldID get_field_id(String name) const = 0;
+    virtual Expected<FieldID, ErrorCode> get_field_id(String name) const = 0;
 
     /// Do we have field with specified ID
     ///
@@ -89,14 +90,15 @@ public:
     ///
     /// @param fid Field ID
     /// @return Field order
-    virtual Order get_field_order(FieldID fid) const = 0;
+    virtual Expected<Order, ErrorCode> get_field_order(FieldID fid) const = 0;
 
     /// Get component name of a field
     ///
     /// @param fid Field ID
     /// @param component Component index
     /// @return Component name
-    virtual String get_field_component_name(FieldID fid, Int component) const = 0;
+    virtual Expected<String, ErrorCode> get_field_component_name(FieldID fid,
+                                                                 Int component) const = 0;
 
     /// Set the name of a component of afield variable
     ///
@@ -119,19 +121,19 @@ public:
     ///
     /// @param fid Auxiliary field ID
     /// @return Auxiliary field name
-    virtual String get_aux_field_name(FieldID fid) const = 0;
+    virtual Expected<String, ErrorCode> get_aux_field_name(FieldID fid) const = 0;
 
     /// Get number of auxiliary field components
     ///
     /// @param fid Auxiliary field ID
     /// @return Number of components
-    virtual Int get_aux_field_num_components(FieldID fid) const = 0;
+    virtual Expected<Int, ErrorCode> get_aux_field_num_components(FieldID fid) const = 0;
 
     /// Get auxiliary field ID
     ///
     /// @param name Auxiliary field name
     /// @return Auxiliary field ID
-    virtual FieldID get_aux_field_id(String name) const = 0;
+    virtual Expected<FieldID, ErrorCode> get_aux_field_id(String name) const = 0;
 
     /// Do we have auxiliary field with specified ID
     ///
@@ -149,14 +151,15 @@ public:
     ///
     /// @param fid Auxiliary field ID
     /// @return Auxiliary field order
-    virtual Order get_aux_field_order(FieldID fid) const = 0;
+    virtual Expected<Order, ErrorCode> get_aux_field_order(FieldID fid) const = 0;
 
     /// Get component name of an auxiliary field
     ///
     /// @param fid Auxiliary field ID
     /// @param component Component index
     /// @return Component name
-    virtual String get_aux_field_component_name(FieldID fid, Int component) const = 0;
+    virtual Expected<String, ErrorCode> get_aux_field_component_name(FieldID fid,
+                                                                     Int component) const = 0;
 
     /// Set the name of a component of an auxiliary field variable
     ///
