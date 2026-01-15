@@ -4,6 +4,7 @@
 #pragma once
 
 #include "spdlog/spdlog.h"
+#include "spdlog/details/periodic_worker.h"
 #include <filesystem>
 
 namespace fs = std::filesystem;
@@ -37,8 +38,23 @@ public:
     /// Set a flush level
     void flush_on(spdlog::level::level_enum log_level);
 
+    /// Start/Restart a periodic flusher thread
+    template <typename Rep, typename Period>
+    void
+    flush_every(std::chrono::duration<Rep, Period> interval)
+    {
+        std::lock_guard<std::mutex> lock(this->flusher_mutex);
+        auto clbk = [this]() {
+            this->spdlgr->flush();
+        };
+        this->periodic_flusher =
+            spdlog::details::make_unique<spdlog::details::periodic_worker>(clbk, interval);
+    }
+
 private:
     std::shared_ptr<spdlog::logger> spdlgr;
+    std::mutex flusher_mutex;
+    std::unique_ptr<spdlog::details::periodic_worker> periodic_flusher;
 
     friend class LoggingInterface;
 };
