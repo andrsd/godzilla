@@ -28,6 +28,12 @@ public:
     void set_format_string(std::string pattern,
                            spdlog::pattern_time_type time_type = spdlog::pattern_time_type::local);
 
+    /// Get logging level
+    spdlog::level::level_enum get_level();
+
+    /// Set the logging level
+    void set_level(spdlog::level::level_enum log_level);
+
 private:
     std::shared_ptr<spdlog::logger> spdlgr;
 
