@@ -34,6 +34,9 @@ public:
     /// Set the logging level
     void set_level(spdlog::level::level_enum log_level);
 
+    /// Set a flush level
+    void flush_on(spdlog::level::level_enum log_level);
+
 private:
     std::shared_ptr<spdlog::logger> spdlgr;
 

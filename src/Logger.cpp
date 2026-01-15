@@ -47,4 +47,10 @@ Logger::set_level(spdlog::level::level_enum log_level)
     this->spdlgr->set_level(log_level);
 }
 
+void
+Logger::flush_on(spdlog::level::level_enum log_level)
+{
+    this->spdlgr->flush_on(log_level);
+}
+
 } // namespace godzilla
