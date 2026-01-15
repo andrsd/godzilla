@@ -20,11 +20,12 @@ public:
     int run() override;
 
 private:
-    cxxopts::Options create_command_line_options() override;
-    void process_command_line(cxxopts::Options & opts,
-                              const cxxopts::ParseResult & result) override;
+    cxxopts::Options create_command_line_options();
     void solve_problem(godzilla::Int dim);
     godzilla::Qtr<godzilla::Mesh> create_mesh(godzilla::Int dim);
     void create_auxs(godzilla::DiscreteProblemInterface & prob, godzilla::Int dim);
     void create_bcs(godzilla::DiscreteProblemInterface & prob, godzilla::Int dim);
+
+    cxxopts::Options cli_opts;
+    cxxopts::ParseResult cli_result;
 };
