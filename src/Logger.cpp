@@ -35,4 +35,22 @@ Logger::set_format_string(std::string pattern, spdlog::pattern_time_type time_ty
     this->spdlgr->set_pattern(pattern, time_type);
 }
 
+spdlog::level::level_enum
+Logger::get_level()
+{
+    return this->spdlgr->level();
+}
+
+void
+Logger::set_level(spdlog::level::level_enum log_level)
+{
+    this->spdlgr->set_level(log_level);
+}
+
+void
+Logger::flush_on(spdlog::level::level_enum log_level)
+{
+    this->spdlgr->flush_on(log_level);
+}
+
 } // namespace godzilla
