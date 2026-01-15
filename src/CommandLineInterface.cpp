@@ -36,7 +36,7 @@ CommandLineInterface::create_command_line_options()
     cxxopts::Options cmdln_opts("");
     cmdln_opts.add_option("", "h", "help", "Show this help page", cxxopts::value<bool>(), "");
     cmdln_opts
-        .add_option("", "", "restart-from", "Restart file name", cxxopts::value<String>(), "");
+        .add_option("", "", "restart-from", "Restart file name", cxxopts::value<std::string>(), "");
     cmdln_opts.add_option("", "v", "version", "Show the version", cxxopts::value<bool>(), "");
     cmdln_opts.add_option("", "", "verbose", "Verbosity level", cxxopts::value<unsigned int>(), "");
     cmdln_opts
@@ -51,7 +51,7 @@ CommandLineInterface::create_command_line_options()
                           "",
                           "perf-log",
                           "Save performance log into a file",
-                          cxxopts::value<String>(),
+                          cxxopts::value<std::string>(),
                           "");
     return cmdln_opts;
 }
