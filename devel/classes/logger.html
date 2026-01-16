@@ -67,7 +67,6 @@
 <li class="toctree-l1"><a class="reference internal" href="exodusii-output.html">ExodusIIOutput</a></li>
 <li class="toctree-l1"><a class="reference internal" href="explicit-fe-linear-problem.html">ExplicitFELinearProblem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="explicit-fv-linear-problem.html">ExplicitFVLinearProblem</a></li>
-<li class="toctree-l1"><a class="reference internal" href="factory.html">Factory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fe-nonlinear-problem.html">FENonlinearProblem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fe-problem-interface.html">FEProblemInterface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="file-mesh.html">FileMesh</a></li>
@@ -80,12 +79,12 @@
 <li class="toctree-l1"><a class="reference internal" href="linear-problem.html">LinearProblem</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Logger</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#_CPPv4N8godzilla6LoggerE"><code class="docutils literal notranslate"><span class="pre">Logger</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4IDpEN8godzilla6Logger5errorEvN3fmt13format_stringIDp1TEEDp1T"><code class="docutils literal notranslate"><span class="pre">Logger::error()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4IDpEN8godzilla6Logger7warningEvN3fmt13format_stringIDp1TEEDp1T"><code class="docutils literal notranslate"><span class="pre">Logger::warning()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla6Logger15get_num_entriesEv"><code class="docutils literal notranslate"><span class="pre">Logger::get_num_entries()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla6Logger14get_num_errorsEv"><code class="docutils literal notranslate"><span class="pre">Logger::get_num_errors()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla6Logger16get_num_warningsEv"><code class="docutils literal notranslate"><span class="pre">Logger::get_num_warnings()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla6Logger5printEv"><code class="docutils literal notranslate"><span class="pre">Logger::print()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla6Logger17set_log_file_nameEN2fs4pathE"><code class="docutils literal notranslate"><span class="pre">Logger::set_log_file_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla6Logger17set_format_stringENSt6stringEN6spdlog17pattern_time_typeE"><code class="docutils literal notranslate"><span class="pre">Logger::set_format_string()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla6Logger9get_levelEv"><code class="docutils literal notranslate"><span class="pre">Logger::get_level()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla6Logger9set_levelEN6spdlog5level10level_enumE"><code class="docutils literal notranslate"><span class="pre">Logger::set_level()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla6Logger8flush_onEN6spdlog5level10level_enumE"><code class="docutils literal notranslate"><span class="pre">Logger::flush_on()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4I00EN8godzilla6Logger11flush_everyEvNSt6chrono8durationI3Rep6PeriodEE"><code class="docutils literal notranslate"><span class="pre">Logger::flush_every()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -138,54 +137,48 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4IDpEN8godzilla6Logger5errorEvN3fmt13format_stringIDp1TEEDp1T">
-<span id="_CPPv3IDpEN8godzilla6Logger5errorEN3fmt13format_stringIDp1TEEDp1T"></span><span id="_CPPv2IDpEN8godzilla6Logger5errorEN3fmt13format_stringIDp1TEEDp1T"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classgodzilla_1_1_logger_1a23d89d42973273180d991cd42eca0659"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">error</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">fmt</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">format_string</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4IDpEN8godzilla6Logger5errorEvN3fmt13format_stringIDp1TEEDp1T" title="godzilla::Logger::error::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">format</span></span>, <a class="reference internal" href="#_CPPv4IDpEN8godzilla6Logger5errorEvN3fmt13format_stringIDp1TEEDp1T" title="godzilla::Logger::error::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">...</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">args</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IDpEN8godzilla6Logger5errorEvN3fmt13format_stringIDp1TEEDp1T" title="Link to this definition"></a><br /></dt>
-<dd><p>Log an error. </p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4IDpEN8godzilla6Logger7warningEvN3fmt13format_stringIDp1TEEDp1T">
-<span id="_CPPv3IDpEN8godzilla6Logger7warningEN3fmt13format_stringIDp1TEEDp1T"></span><span id="_CPPv2IDpEN8godzilla6Logger7warningEN3fmt13format_stringIDp1TEEDp1T"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classgodzilla_1_1_logger_1a477e50f13d83b7c7231f9e781238f2d3"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">warning</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">fmt</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">format_string</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4IDpEN8godzilla6Logger7warningEvN3fmt13format_stringIDp1TEEDp1T" title="godzilla::Logger::warning::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">format</span></span>, <a class="reference internal" href="#_CPPv4IDpEN8godzilla6Logger7warningEvN3fmt13format_stringIDp1TEEDp1T" title="godzilla::Logger::warning::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">...</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">args</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IDpEN8godzilla6Logger7warningEvN3fmt13format_stringIDp1TEEDp1T" title="Link to this definition"></a><br /></dt>
-<dd><p>Log a warning. </p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla6Logger15get_num_entriesEv">
-<span id="_CPPv3NK8godzilla6Logger15get_num_entriesEv"></span><span id="_CPPv2NK8godzilla6Logger15get_num_entriesEv"></span><span id="godzilla::Logger::get_num_entriesC"></span><span class="target" id="classgodzilla_1_1_logger_1a9aca866aa7089e2918801acf3a6eaff1"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_num_entries</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla6Logger15get_num_entriesEv" title="Link to this definition"></a><br /></dt>
-<dd><p>Get the number of logged errors/warnings. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla6Logger17set_log_file_nameEN2fs4pathE">
+<span id="_CPPv3N8godzilla6Logger17set_log_file_nameEN2fs4pathE"></span><span id="_CPPv2N8godzilla6Logger17set_log_file_nameEN2fs4pathE"></span><span id="godzilla::Logger::set_log_file_name__fs::path"></span><span class="target" id="classgodzilla_1_1_logger_1a67e7bbe8712879aabd6e81ebc46ea459"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_log_file_name</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">file_name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla6Logger17set_log_file_nameEN2fs4pathE" title="Link to this definition"></a><br /></dt>
+<dd><p>Set log file name. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Number of logger errors/warnings </p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_name</strong> – The name of the log file </p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla6Logger14get_num_errorsEv">
-<span id="_CPPv3NK8godzilla6Logger14get_num_errorsEv"></span><span id="_CPPv2NK8godzilla6Logger14get_num_errorsEv"></span><span id="godzilla::Logger::get_num_errorsC"></span><span class="target" id="classgodzilla_1_1_logger_1a439fa7f91740ceba6db144a50e7f8d3c"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_num_errors</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla6Logger14get_num_errorsEv" title="Link to this definition"></a><br /></dt>
-<dd><p>Get the number of errors. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Number of errors </p>
-</dd>
-</dl>
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla6Logger17set_format_stringENSt6stringEN6spdlog17pattern_time_typeE">
+<span id="_CPPv3N8godzilla6Logger17set_format_stringENSt6stringEN6spdlog17pattern_time_typeE"></span><span id="_CPPv2N8godzilla6Logger17set_format_stringENSt6stringEN6spdlog17pattern_time_typeE"></span><span id="godzilla::Logger::set_format_string__ss.spdlog::pattern_time_type"></span><span class="target" id="classgodzilla_1_1_logger_1a08112df9a26808e17c6022178436baac"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_format_string</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">pattern</span></span>, <span class="n"><span class="pre">spdlog</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pattern_time_type</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">time_type</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">spdlog</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pattern_time_type</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">local</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla6Logger17set_format_stringENSt6stringEN6spdlog17pattern_time_typeE" title="Link to this definition"></a><br /></dt>
+<dd><p>Set format string. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>: This is a forward call into <code class="docutils literal notranslate"><span class="pre">spdlog</span></code> See <a class="reference external" href="https://github.com/gabime/spdlog/wiki/Custom-formatting">custom-formatting</a> page </p>
+</div>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla6Logger16get_num_warningsEv">
-<span id="_CPPv3NK8godzilla6Logger16get_num_warningsEv"></span><span id="_CPPv2NK8godzilla6Logger16get_num_warningsEv"></span><span id="godzilla::Logger::get_num_warningsC"></span><span class="target" id="classgodzilla_1_1_logger_1ac2addb97f565f8f6a695c4f834c1361c"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_num_warnings</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla6Logger16get_num_warningsEv" title="Link to this definition"></a><br /></dt>
-<dd><p>Get the number of warnings. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Number of warnings </p>
-</dd>
-</dl>
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla6Logger9get_levelEv">
+<span id="_CPPv3N8godzilla6Logger9get_levelEv"></span><span id="_CPPv2N8godzilla6Logger9get_levelEv"></span><span id="godzilla::Logger::get_level"></span><span class="target" id="classgodzilla_1_1_logger_1a7940d591e07b1bc66563abd37ea91aed"></span><span class="n"><span class="pre">spdlog</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">level_enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_level</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla6Logger9get_levelEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Get logging level. </p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla6Logger5printEv">
-<span id="_CPPv3NK8godzilla6Logger5printEv"></span><span id="_CPPv2NK8godzilla6Logger5printEv"></span><span id="godzilla::Logger::printC"></span><span class="target" id="classgodzilla_1_1_logger_1ae99fbcf562fbb841e22ddb6344742fd2"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">print</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla6Logger5printEv" title="Link to this definition"></a><br /></dt>
-<dd><p>Print logged errors and warnings. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla6Logger9set_levelEN6spdlog5level10level_enumE">
+<span id="_CPPv3N8godzilla6Logger9set_levelEN6spdlog5level10level_enumE"></span><span id="_CPPv2N8godzilla6Logger9set_levelEN6spdlog5level10level_enumE"></span><span id="godzilla::Logger::set_level__spdlog::level::level_enum"></span><span class="target" id="classgodzilla_1_1_logger_1a9ee6c3965e5ffa06308db4e3cad6e205"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_level</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">spdlog</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">level_enum</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">log_level</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla6Logger9set_levelEN6spdlog5level10level_enumE" title="Link to this definition"></a><br /></dt>
+<dd><p>Set the logging level. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla6Logger8flush_onEN6spdlog5level10level_enumE">
+<span id="_CPPv3N8godzilla6Logger8flush_onEN6spdlog5level10level_enumE"></span><span id="_CPPv2N8godzilla6Logger8flush_onEN6spdlog5level10level_enumE"></span><span id="godzilla::Logger::flush_on__spdlog::level::level_enum"></span><span class="target" id="classgodzilla_1_1_logger_1af6c4dfab3d9899b0530d46a0ba18ed35"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flush_on</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">spdlog</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">level_enum</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">log_level</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla6Logger8flush_onEN6spdlog5level10level_enumE" title="Link to this definition"></a><br /></dt>
+<dd><p>Set a flush level. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN8godzilla6Logger11flush_everyEvNSt6chrono8durationI3Rep6PeriodEE">
+<span id="_CPPv3I00EN8godzilla6Logger11flush_everyENSt6chrono8durationI3Rep6PeriodEE"></span><span id="_CPPv2I00EN8godzilla6Logger11flush_everyENSt6chrono8durationI3Rep6PeriodEE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Rep</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Period</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classgodzilla_1_1_logger_1a51cf469318db7d1b6cf9f5392c5f9292"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flush_every</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">chrono</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">duration</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00EN8godzilla6Logger11flush_everyEvNSt6chrono8durationI3Rep6PeriodEE" title="godzilla::Logger::flush_every::Rep"><span class="n"><span class="pre">Rep</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN8godzilla6Logger11flush_everyEvNSt6chrono8durationI3Rep6PeriodEE" title="godzilla::Logger::flush_every::Period"><span class="n"><span class="pre">Period</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">interval</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00EN8godzilla6Logger11flush_everyEvNSt6chrono8durationI3Rep6PeriodEE" title="Link to this definition"></a><br /></dt>
+<dd><p>Start/Restart a periodic flusher thread. </p>
 </dd></dl>
 
 </div>
