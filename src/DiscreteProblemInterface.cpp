@@ -310,9 +310,11 @@ DiscreteProblemInterface::set_up_auxiliary_dm(DM dm)
     bool no_errors = true;
     for (auto & aux : this->auxs) {
         try {
-            auto fid = aux->get_field_id();
-            Int aux_nc = aux->get_num_components();
-            auto field_nc = get_aux_field_num_components(fid).value();
+            auto fld_name = aux->get_field();
+            auto fid = get_aux_field_id(fld_name);
+            expect_true(fid.has_value(), "Auxiliary field '{}' does not exist", fld_name);
+            auto aux_nc = aux->get_num_components();
+            auto field_nc = get_aux_field_num_components(fid.value()).value();
             if (aux_nc == field_nc) {
                 String region_name = aux->get_region();
                 this->auxs_by_region[region_name].push_back(aux.get());
