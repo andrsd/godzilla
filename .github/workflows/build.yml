@@ -95,9 +95,10 @@ jobs:
 
       - name: Upload test results to codecov.io
         if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@v1
+        uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          report_type: test_results
           file: ${{ github.workspace }}/build/gtest-results.xml
           name: ${{ matrix.os }}-${{ matrix.build }}-petsc-${{ matrix.petsc }}-teciocpp-${{ matrix.teciocpp }}
 
