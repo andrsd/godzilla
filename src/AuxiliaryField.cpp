@@ -26,6 +26,7 @@ AuxiliaryField::AuxiliaryField(const Parameters & pars) :
     dpi(pars.get<DiscreteProblemInterface *>("_dpi")),
     mesh(nullptr),
     field(pars.get<String>("field")),
+    fid(FieldID::INVALID),
     region(pars.get<String>("region")),
     block_id(-1)
 {
@@ -67,6 +68,10 @@ AuxiliaryField::create()
         this->label = this->mesh->get_label(this->region);
         this->block_id = this->mesh->get_cell_set_id(this->region).value();
     }
+
+    auto id = this->dpi->get_aux_field_id(this->field);
+    expect_true(id.has_value(), "Auxiliary field '{}' does not exist. Typo?", this->field);
+    this->fid = id.value();
 }
 
 String
@@ -94,11 +99,7 @@ FieldID
 AuxiliaryField::get_field_id() const
 {
     CALL_STACK_MSG();
-    auto fid = this->dpi->get_aux_field_id(this->field);
-    if (fid.has_value())
-        return fid.value();
-    else
-        throw Exception("Auxiliary field '{}' does not exist", this->field);
+    return this->fid;
 }
 
 String
