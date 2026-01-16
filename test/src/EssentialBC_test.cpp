@@ -102,7 +102,7 @@ TEST(EssentialBCTest, non_existing_field)
         .set<std::vector<String>>("boundary", {});
     problem.add_boundary_condition<DirichletBC>(params);
 
-    EXPECT_DEATH(problem.create(), "Field 'asdf' does not exists. Typo?");
+    EXPECT_DEATH(problem.create(), "Field 'asdf' does not exist. Typo?");
 }
 
 TEST(EssentialBCTest, field_param_not_specified)

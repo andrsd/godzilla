@@ -60,37 +60,33 @@ TEST_F(FENonlinearProblemTest, fields)
     prob->create();
 
     EXPECT_EQ(prob->get_field_name(FieldID(0)).value(), "u");
-    EXPECT_EQ(prob->get_field_id("u"), FieldID(0));
+    EXPECT_EQ(prob->get_field_id("u").value(), FieldID(0));
     EXPECT_EQ(prob->has_field_by_id(FieldID(0)), true);
     EXPECT_EQ(prob->has_field_by_name("u"), true);
 
     ASSERT_FALSE(prob->get_field_name(FieldID(65536)).has_value());
     EXPECT_EQ(prob->get_field_name(FieldID(65536)).error(), ErrorCode::NotFound);
 
-    EXPECT_THROW_MSG(
-        { [[maybe_unused]] auto id = prob->get_field_id("nonexistent"); },
-        "Field 'nonexistent' does not exist. Typo?");
+    ASSERT_FALSE(prob->get_field_id("nonexistent").has_value());
+    EXPECT_EQ(prob->get_field_id("nonexistent").error(), ErrorCode::NotFound);
     EXPECT_EQ(prob->has_field_by_id(FieldID(65536)), false);
     EXPECT_EQ(prob->has_field_by_name("nonexistent"), false);
 
-    EXPECT_EQ(prob->get_field_order(FieldID(0)), 1);
-    EXPECT_THROW_MSG(
-        { [[maybe_unused]] auto o = prob->get_field_order(FieldID(65536)); },
-        "Field with ID = '65536' does not exist.");
+    EXPECT_EQ(prob->get_field_order(FieldID(0)).value(), 1);
+    ASSERT_FALSE(prob->get_field_order(FieldID(65536)).has_value());
+    EXPECT_EQ(prob->get_field_order(FieldID(65536)).error(), ErrorCode::NotFound);
 
-    EXPECT_THROW_MSG(
-        { [[maybe_unused]] auto nc = prob->get_field_num_components(FieldID(65536)); },
-        "Field with ID = '65536' does not exist.");
+    ASSERT_FALSE(prob->get_field_num_components(FieldID(65536)).has_value());
+    EXPECT_EQ(prob->get_field_num_components(FieldID(65536)).error(), ErrorCode::NotFound);
 
-    EXPECT_EQ(prob->get_field_component_name(FieldID(0), 0).compare(""), 0);
-    EXPECT_EQ(prob->get_field_component_name(FieldID(1), 0).compare("0"), 0);
-    EXPECT_EQ(prob->get_field_component_name(FieldID(1), 1).compare("1"), 0);
-    EXPECT_EQ(prob->get_field_component_name(FieldID(1), 2).compare("2"), 0);
+    EXPECT_EQ(prob->get_field_component_name(FieldID(0), 0).value(), "");
+    EXPECT_EQ(prob->get_field_component_name(FieldID(1), 0).value(), "0");
+    EXPECT_EQ(prob->get_field_component_name(FieldID(1), 1).value(), "1");
+    EXPECT_EQ(prob->get_field_component_name(FieldID(1), 2).value(), "2");
     prob->set_field_component_name(FieldID(1), 0, "x");
-    EXPECT_EQ(prob->get_field_component_name(FieldID(1), 0).compare("x"), 0);
-    EXPECT_THROW_MSG(
-        { auto n = prob->get_field_component_name(FieldID(65536), 0); },
-        "Field with ID = '65536' does not exist.");
+    EXPECT_EQ(prob->get_field_component_name(FieldID(1), 0).value(), "x");
+    ASSERT_FALSE(prob->get_field_component_name(FieldID(65536), 0).has_value());
+    EXPECT_EQ(prob->get_field_component_name(FieldID(65536), 0).error(), ErrorCode::NotFound);
     EXPECT_THROW_MSG(prob->set_field_component_name(FieldID(0), 0, "x"),
                      "Unable to set component name for single-component field");
     EXPECT_THROW_MSG(prob->set_field_component_name(FieldID(65536), 0, "x"),
@@ -121,36 +117,31 @@ TEST_F(FENonlinearProblemTest, get_aux_fields)
     prob->add_aux_field("aux_two", 2, Order(1));
     prob->create();
 
-    EXPECT_EQ(prob->get_aux_field_name(FieldID(0)), "aux_one");
-    EXPECT_EQ(prob->get_aux_field_num_components(FieldID(0)), 1);
-    EXPECT_EQ(prob->get_aux_field_num_components(FieldID(1)), 2);
-    EXPECT_EQ(prob->get_aux_field_id("aux_one"), FieldID(0));
+    EXPECT_EQ(prob->get_aux_field_name(FieldID(0)).value(), "aux_one");
+    EXPECT_EQ(prob->get_aux_field_num_components(FieldID(0)).value(), 1);
+    EXPECT_EQ(prob->get_aux_field_num_components(FieldID(1)).value(), 2);
+    EXPECT_EQ(prob->get_aux_field_id("aux_one").value(), FieldID(0));
     EXPECT_EQ(prob->has_aux_field_by_id(FieldID(0)), true);
     EXPECT_EQ(prob->has_aux_field_by_name("aux_one"), true);
-    EXPECT_EQ(prob->get_aux_field_order(FieldID(0)), 1);
+    EXPECT_EQ(prob->get_aux_field_order(FieldID(0)).value(), 1);
 
     prob->set_aux_field_component_name(FieldID(1), 1, "Y");
-    EXPECT_TRUE(prob->get_aux_field_component_name(FieldID(0), 0) == "");
-    EXPECT_TRUE(prob->get_aux_field_component_name(FieldID(1), 0) == "0");
-    EXPECT_TRUE(prob->get_aux_field_component_name(FieldID(1), 1) == "Y");
-    EXPECT_THROW_MSG(
-        { auto n = prob->get_aux_field_component_name(FieldID(2), 1); },
-        "Auxiliary field with ID = '2' does not exist.");
+    EXPECT_EQ(prob->get_aux_field_component_name(FieldID(0), 0).value(), "");
+    EXPECT_EQ(prob->get_aux_field_component_name(FieldID(1), 0).value(), "0");
+    EXPECT_EQ(prob->get_aux_field_component_name(FieldID(1), 1).value(), "Y");
+    ASSERT_FALSE(prob->get_aux_field_component_name(FieldID(2), 1).has_value());
+    EXPECT_EQ(prob->get_aux_field_component_name(FieldID(2), 1).error(), ErrorCode::NotFound);
 
-    EXPECT_THROW_MSG(
-        { auto n = prob->get_aux_field_name(FieldID(2)); },
-        "Auxiliary field with ID = '2' does not exist.");
-    EXPECT_THROW_MSG(
-        { [[maybe_unused]] auto nc = prob->get_aux_field_num_components(FieldID(2)); },
-        "Auxiliary field with ID = '2' does not exist.");
-    EXPECT_THROW_MSG(
-        { [[maybe_unused]] auto id = prob->get_aux_field_id("aux_none"); },
-        "Auxiliary field 'aux_none' does not exist. Typo?");
+    ASSERT_FALSE(prob->get_aux_field_name(FieldID(2)).has_value());
+    EXPECT_EQ(prob->get_aux_field_name(FieldID(2)).error(), ErrorCode::NotFound);
+    ASSERT_FALSE(prob->get_aux_field_num_components(FieldID(2)).has_value());
+    EXPECT_EQ(prob->get_aux_field_num_components(FieldID(2)).error(), ErrorCode::NotFound);
+    ASSERT_FALSE(prob->get_aux_field_id("aux_none").has_value());
+    EXPECT_EQ(prob->get_aux_field_id("aux_none").error(), ErrorCode::NotFound);
     EXPECT_EQ(prob->has_aux_field_by_id(FieldID(2)), false);
     EXPECT_EQ(prob->has_aux_field_by_name("aux_none"), false);
-    EXPECT_THROW_MSG(
-        { [[maybe_unused]] auto o = prob->get_aux_field_order(FieldID(2)); },
-        "Auxiliary field with ID = '2' does not exist.");
+    ASSERT_FALSE(prob->get_aux_field_order(FieldID(2)).has_value());
+    EXPECT_EQ(prob->get_aux_field_order(FieldID(2)).error(), ErrorCode::NotFound);
     EXPECT_THROW_MSG(prob->set_aux_field_component_name(FieldID(0), 1, "C"),
                      "Unable to set component name for single-component field");
     EXPECT_THROW_MSG(prob->set_aux_field_component_name(FieldID(2), 1, "C"),

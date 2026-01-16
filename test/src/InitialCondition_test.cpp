@@ -186,5 +186,5 @@ TEST_F(InitialCondition2FieldTest, non_existing_field)
     params.set<String>("field", "asdf");
     this->prob->add_initial_condition<MockInitialCondition>(params);
 
-    EXPECT_DEATH(this->prob->create(), "Field 'asdf' does not exists. Typo?");
+    EXPECT_DEATH(this->prob->create(), "Field 'asdf' does not exist. Typo?");
 }
