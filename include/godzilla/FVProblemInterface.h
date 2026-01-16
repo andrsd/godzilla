@@ -25,24 +25,25 @@ public:
 
     Int get_num_fields() const override;
     std::vector<String> get_field_names() const override;
-    String get_field_name(FieldID fid) const override;
-    Int get_field_num_components(FieldID fid) const override;
-    FieldID get_field_id(String name) const override;
+    Expected<String, ErrorCode> get_field_name(FieldID fid) const override;
+    Expected<Int, ErrorCode> get_field_num_components(FieldID fid) const override;
+    Expected<FieldID, ErrorCode> get_field_id(String name) const override;
     bool has_field_by_id(FieldID fid) const override;
     bool has_field_by_name(String name) const override;
-    Order get_field_order(FieldID fid) const override;
-    String get_field_component_name(FieldID fid, Int component) const override;
+    Expected<Order, ErrorCode> get_field_order(FieldID fid) const override;
+    Expected<String, ErrorCode> get_field_component_name(FieldID fid, Int component) const override;
     void set_field_component_name(FieldID fid, Int component, String name) override;
 
     Int get_num_aux_fields() const override;
     std::vector<String> get_aux_field_names() const override;
-    String get_aux_field_name(FieldID fid) const override;
-    Int get_aux_field_num_components(FieldID fid) const override;
-    FieldID get_aux_field_id(String name) const override;
+    Expected<String, ErrorCode> get_aux_field_name(FieldID fid) const override;
+    Expected<Int, ErrorCode> get_aux_field_num_components(FieldID fid) const override;
+    Expected<FieldID, ErrorCode> get_aux_field_id(String name) const override;
     bool has_aux_field_by_id(FieldID fid) const override;
     bool has_aux_field_by_name(String name) const override;
-    Order get_aux_field_order(FieldID fid) const override;
-    String get_aux_field_component_name(FieldID fid, Int component) const override;
+    Expected<Order, ErrorCode> get_aux_field_order(FieldID fid) const override;
+    Expected<String, ErrorCode> get_aux_field_component_name(FieldID fid,
+                                                             Int component) const override;
     void set_aux_field_component_name(FieldID fid, Int component, String name) override;
 
     /// Adds a volumetric field

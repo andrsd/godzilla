@@ -3,6 +3,7 @@
 
 #include "godzilla/CallStack.h"
 #include "godzilla/FVProblemInterface.h"
+#include "godzilla/Expected.h"
 #include "godzilla/Types.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Problem.h"
@@ -95,7 +96,7 @@ FVProblemInterface::get_field_names() const
     return infos;
 }
 
-String
+Expected<String, ErrorCode>
 FVProblemInterface::get_field_name(FieldID fid) const
 {
     CALL_STACK_MSG();
@@ -106,10 +107,10 @@ FVProblemInterface::get_field_name(FieldID fid) const
             return empty_name;
     }
     else
-        throw Exception("Field with ID = '{}' does not exist.", fid);
+        return Unexpected(ErrorCode::NotFound);
 }
 
-Int
+Expected<Int, ErrorCode>
 FVProblemInterface::get_field_num_components(FieldID fid) const
 {
     CALL_STACK_MSG();
@@ -120,10 +121,10 @@ FVProblemInterface::get_field_num_components(FieldID fid) const
         return n_comps;
     }
     else
-        throw Exception("Field with ID = '{}' does not exist.", fid);
+        return Unexpected(ErrorCode::NotFound);
 }
 
-FieldID
+Expected<FieldID, ErrorCode>
 FVProblemInterface::get_field_id(String name) const
 {
     CALL_STACK_MSG();
@@ -148,7 +149,7 @@ FVProblemInterface::has_field_by_name(String name) const
     return it != this->fields_by_name.end();
 }
 
-Order
+Expected<Order, ErrorCode>
 FVProblemInterface::get_field_order(FieldID fid) const
 {
     CALL_STACK_MSG();
@@ -158,7 +159,7 @@ FVProblemInterface::get_field_order(FieldID fid) const
         throw NotImplementedException("Multiple-field problems are not implemented");
 }
 
-String
+Expected<String, ErrorCode>
 FVProblemInterface::get_field_component_name(FieldID fid, Int component) const
 {
     CALL_STACK_MSG();
@@ -208,7 +209,7 @@ FVProblemInterface::get_aux_field_names() const
     return names;
 }
 
-String
+Expected<String, ErrorCode>
 FVProblemInterface::get_aux_field_name(FieldID fid) const
 {
     CALL_STACK_MSG();
@@ -216,10 +217,10 @@ FVProblemInterface::get_aux_field_name(FieldID fid) const
     if (it != this->aux_fields.end())
         return it->second.name;
     else
-        throw Exception("Auxiliary field with ID = '{}' does not exist.", fid);
+        return Unexpected(ErrorCode::NotFound);
 }
 
-Int
+Expected<Int, ErrorCode>
 FVProblemInterface::get_aux_field_num_components(FieldID fid) const
 {
     CALL_STACK_MSG();
@@ -227,10 +228,10 @@ FVProblemInterface::get_aux_field_num_components(FieldID fid) const
     if (it != this->aux_fields.end())
         return it->second.nc;
     else
-        throw Exception("Auxiliary field with ID = '{}' does not exist.", fid);
+        return Unexpected(ErrorCode::NotFound);
 }
 
-FieldID
+Expected<FieldID, ErrorCode>
 FVProblemInterface::get_aux_field_id(String name) const
 {
     CALL_STACK_MSG();
@@ -238,7 +239,7 @@ FVProblemInterface::get_aux_field_id(String name) const
     if (it != this->aux_fields_by_name.end())
         return it->second;
     else
-        throw Exception("Auxiliary field '{}' does not exist. Typo?", name);
+        return Unexpected(ErrorCode::NotFound);
 }
 
 bool
@@ -257,7 +258,7 @@ FVProblemInterface::has_aux_field_by_name(String name) const
     return it != this->aux_fields_by_name.end();
 }
 
-Order
+Expected<Order, ErrorCode>
 FVProblemInterface::get_aux_field_order(FieldID fid) const
 {
     CALL_STACK_MSG();
@@ -265,10 +266,10 @@ FVProblemInterface::get_aux_field_order(FieldID fid) const
     if (it != this->aux_fields.end())
         return it->second.k;
     else
-        throw Exception("Auxiliary field with ID = '{}' does not exist.", fid);
+        return Unexpected(ErrorCode::NotFound);
 }
 
-String
+Expected<String, ErrorCode>
 FVProblemInterface::get_aux_field_component_name(FieldID fid, Int component) const
 {
     CALL_STACK_MSG();
@@ -285,7 +286,7 @@ FVProblemInterface::get_aux_field_component_name(FieldID fid, Int component) con
         }
     }
     else
-        throw Exception("Auxiliary field with ID = '{}' does not exist.", fid);
+        return Unexpected(ErrorCode::NotFound);
 }
 
 void

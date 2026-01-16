@@ -170,7 +170,7 @@ TEST(NaturalBCTest, non_existing_field)
     params.set<String>("field", "asdf");
     problem.add_boundary_condition<TestNaturalBC>(params);
 
-    EXPECT_DEATH(problem.create(), "Field 'asdf' does not exists. Typo?");
+    EXPECT_DEATH(problem.create(), "Field 'asdf' does not exist. Typo?");
 }
 
 TEST(NaturalBCTest, field_param_not_specified)
