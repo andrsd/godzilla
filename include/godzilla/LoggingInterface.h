@@ -34,16 +34,16 @@ public:
     void
     error(fmt::format_string<ARGS...> fmt, ARGS &&... args) const
     {
-        internal::error(fmt, std::forward<ARGS>(args)...);
         this->log->spdlgr->error(fmt, std::forward<ARGS>(args)...);
+        internal::error(fmt, std::forward<ARGS>(args)...);
     }
 
     template <typename... ARGS>
     void
     critical(fmt::format_string<ARGS...> fmt, ARGS &&... args) const
     {
-        internal::error(fmt, std::forward<ARGS>(args)...);
         this->log->spdlgr->critical(fmt, std::forward<ARGS>(args)...);
+        internal::error(fmt, std::forward<ARGS>(args)...);
     }
 
     template <typename... ARGS>
