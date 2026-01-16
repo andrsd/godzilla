@@ -9,7 +9,7 @@
 
 namespace godzilla {
 
-ErrorCode
+PetscErrorCode
 ShellMatrix::invoke_matmult_op_delegate(Mat matrix, Vec vector, Vec action)
 {
     CALL_STACK_MSG();

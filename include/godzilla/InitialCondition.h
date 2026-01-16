@@ -64,7 +64,7 @@ public:
     static Parameters parameters();
 
 private:
-    static ErrorCode
+    static PetscErrorCode
     invoke_delegate(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx);
 
     friend class DiscreteProblemInterface;

@@ -1,5 +1,6 @@
 #include "gmock/gmock.h"
 #include "godzilla/CallStack.h"
+#include "godzilla/Error.h"
 #include "godzilla/MeshFactory.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/RectangleMesh.h"
@@ -137,18 +138,16 @@ TEST(ExplicitFVLinearProblemTest, api)
     EXPECT_EQ(prob.get_num_fields(), 1);
     EXPECT_THAT(prob.get_field_names(), testing::ElementsAre(""));
 
-    EXPECT_EQ(prob.get_field_name(FieldID(0)), "u");
-    EXPECT_THROW_MSG(
-        { [[maybe_unused]] auto n = prob.get_field_name(FieldID(65536)); },
-        "Field with ID = '65536' does not exist.");
+    EXPECT_EQ(prob.get_field_name(FieldID(0)).value(), "u");
+    ASSERT_FALSE(prob.get_field_name(FieldID(65536)).has_value());
+    EXPECT_EQ(prob.get_field_name(FieldID(65536)).error(), ErrorCode::NotFound);
 
-    EXPECT_EQ(prob.get_field_num_components(FieldID(0)), 1);
-    EXPECT_THROW_MSG(
-        { [[maybe_unused]] auto id = prob.get_field_num_components(FieldID(65536)); },
-        "Field with ID = '65536' does not exist.");
+    EXPECT_EQ(prob.get_field_num_components(FieldID(0)).value(), 1);
+    ASSERT_FALSE(prob.get_field_num_components(FieldID(65536)).has_value());
+    EXPECT_EQ(prob.get_field_num_components(FieldID(65536)).error(), ErrorCode::NotFound);
 
-    EXPECT_EQ(prob.get_field_id("u"), FieldID(0));
-    EXPECT_EQ(prob.get_field_id("nonexistent"), FieldID(0));
+    EXPECT_EQ(prob.get_field_id("u").value(), FieldID(0));
+    EXPECT_EQ(prob.get_field_id("nonexistent").value(), FieldID(0));
 
     EXPECT_TRUE(prob.has_field_by_id(FieldID(0)));
     EXPECT_FALSE(prob.has_field_by_id(FieldID(65536)));
@@ -156,12 +155,12 @@ TEST(ExplicitFVLinearProblemTest, api)
     EXPECT_TRUE(prob.has_field_by_name("u"));
     EXPECT_FALSE(prob.has_field_by_name("nonexistent"));
 
-    EXPECT_EQ(prob.get_field_order(FieldID(0)), 0);
+    EXPECT_EQ(prob.get_field_order(FieldID(0)).value(), 0);
     EXPECT_THROW_MSG(
         { [[maybe_unused]] auto o = prob.get_field_order(FieldID(65536)); },
         "Multiple-field problems are not implemented");
 
-    EXPECT_EQ(prob.get_field_component_name(FieldID(0), 0).compare("u"), 0);
+    EXPECT_EQ(prob.get_field_component_name(FieldID(0), 0).value(), "u");
     EXPECT_THROW_MSG(
         { auto n = prob.get_field_component_name(FieldID(65536), 0); },
         "Multiple-field problems are not implemented");
@@ -171,41 +170,36 @@ TEST(ExplicitFVLinearProblemTest, api)
 
     EXPECT_EQ(prob.get_num_aux_fields(), 2);
     EXPECT_THAT(prob.get_aux_field_names(), ElementsAre("a0", "a1"));
-    EXPECT_TRUE(prob.get_aux_field_name(FieldID(0)) == "a0");
-    EXPECT_TRUE(prob.get_aux_field_name(FieldID(1)) == "a1");
-    EXPECT_THROW_MSG(
-        { auto n = prob.get_aux_field_name(FieldID(99)); },
-        "Auxiliary field with ID = '99' does not exist.");
-    EXPECT_EQ(prob.get_aux_field_num_components(FieldID(0)), 1);
-    EXPECT_EQ(prob.get_aux_field_num_components(FieldID(1)), 2);
-    EXPECT_THROW_MSG(
-        { [[maybe_unused]] auto nc = prob.get_aux_field_num_components(FieldID(99)); },
-        "Auxiliary field with ID = '99' does not exist.");
-    EXPECT_EQ(prob.get_aux_field_id("a0"), FieldID(0));
-    EXPECT_EQ(prob.get_aux_field_id("a1"), FieldID(1));
-    EXPECT_THROW_MSG(
-        { [[maybe_unused]] auto id = prob.get_aux_field_id("non-existent"); },
-        "Auxiliary field 'non-existent' does not exist. Typo?");
+    EXPECT_EQ(prob.get_aux_field_name(FieldID(0)).value(), "a0");
+    EXPECT_EQ(prob.get_aux_field_name(FieldID(1)).value(), "a1");
+    ASSERT_FALSE(prob.get_aux_field_name(FieldID(99)).has_value());
+    EXPECT_EQ(prob.get_aux_field_name(FieldID(99)).error(), ErrorCode::NotFound);
+    EXPECT_EQ(prob.get_aux_field_num_components(FieldID(0)).value(), 1);
+    EXPECT_EQ(prob.get_aux_field_num_components(FieldID(1)).value(), 2);
+    ASSERT_FALSE(prob.get_aux_field_num_components(FieldID(99)).has_value());
+    EXPECT_EQ(prob.get_aux_field_num_components(FieldID(99)).error(), ErrorCode::NotFound);
+    EXPECT_EQ(prob.get_aux_field_id("a0").value(), FieldID(0));
+    EXPECT_EQ(prob.get_aux_field_id("a1").value(), FieldID(1));
+    ASSERT_FALSE(prob.get_aux_field_id("non-existent").has_value());
+    EXPECT_EQ(prob.get_aux_field_id("non-existent").error(), ErrorCode::NotFound);
     EXPECT_TRUE(prob.has_aux_field_by_id(FieldID(0)));
     EXPECT_TRUE(prob.has_aux_field_by_id(FieldID(1)));
     EXPECT_FALSE(prob.has_aux_field_by_id(FieldID(99)));
     EXPECT_TRUE(prob.has_aux_field_by_name("a0"));
     EXPECT_TRUE(prob.has_aux_field_by_name("a1"));
     EXPECT_FALSE(prob.has_aux_field_by_name("non-existent"));
-    EXPECT_EQ(prob.get_aux_field_order(FieldID(0)), 0);
-    EXPECT_EQ(prob.get_aux_field_order(FieldID(1)), 0);
-    EXPECT_THROW_MSG(
-        { [[maybe_unused]] auto o = prob.get_aux_field_order(FieldID(99)); },
-        "Auxiliary field with ID = '99' does not exist.");
-    EXPECT_TRUE(prob.get_aux_field_component_name(FieldID(0), 1) == "");
-    EXPECT_TRUE(prob.get_aux_field_component_name(FieldID(1), 0) == "0");
-    EXPECT_THROW_MSG(
-        { auto n = prob.get_aux_field_component_name(FieldID(99), 0); },
-        "Auxiliary field with ID = '99' does not exist.");
+    EXPECT_EQ(prob.get_aux_field_order(FieldID(0)).value(), 0);
+    EXPECT_EQ(prob.get_aux_field_order(FieldID(1)).value(), 0);
+    ASSERT_FALSE(prob.get_aux_field_order(FieldID(99)).has_value());
+    EXPECT_EQ(prob.get_aux_field_order(FieldID(99)).error(), ErrorCode::NotFound);
+    EXPECT_EQ(prob.get_aux_field_component_name(FieldID(0), 1).value(), "");
+    EXPECT_EQ(prob.get_aux_field_component_name(FieldID(1), 0).value(), "0");
+    ASSERT_FALSE(prob.get_aux_field_component_name(FieldID(99), 0).has_value());
+    EXPECT_EQ(prob.get_aux_field_component_name(FieldID(99), 0).error(), ErrorCode::NotFound);
     EXPECT_THROW_MSG(prob.set_aux_field_component_name(FieldID(0), 0, "C"),
                      "Unable to set component name for single-component field");
     prob.set_aux_field_component_name(FieldID(1), 1, "Y");
-    EXPECT_TRUE(prob.get_aux_field_component_name(FieldID(1), 1) == "Y");
+    EXPECT_EQ(prob.get_aux_field_component_name(FieldID(1), 1).value(), "Y");
     EXPECT_THROW_MSG(prob.set_aux_field_component_name(FieldID(99), 0, "A"),
                      "Auxiliary field with ID = '99' does not exist.");
 }
@@ -238,7 +232,7 @@ TEST(ExplicitFVLinearProblemTest, fields)
     app.set_problem(&prob);
 
     prob.add_field(FieldID(1), "vec", 3);
-    EXPECT_EQ(prob.get_field_id("vec"), FieldID(0));
+    EXPECT_EQ(prob.get_field_id("vec").value(), FieldID(0));
 
     EXPECT_THROW_MSG(prob.add_field(FieldID(1), "dup", 1),
                      "Cannot add field 'dup' with ID = 1. ID already exists.");
@@ -253,9 +247,9 @@ TEST(ExplicitFVLinearProblemTest, fields)
     EXPECT_EQ(prob.get_num_fields(), 1);
     EXPECT_THAT(prob.get_field_names(), testing::ElementsAre(""));
 
-    EXPECT_EQ(prob.get_field_component_name(FieldID(0), 1).compare("vec_x"), 0);
-    EXPECT_EQ(prob.get_field_component_name(FieldID(0), 2).compare("vec_y"), 0);
-    EXPECT_EQ(prob.get_field_component_name(FieldID(0), 3).compare("vec_z"), 0);
+    EXPECT_EQ(prob.get_field_component_name(FieldID(0), 1).value(), "vec_x");
+    EXPECT_EQ(prob.get_field_component_name(FieldID(0), 2).value(), "vec_y");
+    EXPECT_EQ(prob.get_field_component_name(FieldID(0), 3).value(), "vec_z");
 
     EXPECT_EQ(prob.get_field_dof(1, FieldID(0)), 4);
 }

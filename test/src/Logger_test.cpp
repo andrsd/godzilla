@@ -1,64 +1,35 @@
-#include "gtest/gtest.h"
 #include "gmock/gmock.h"
 #include "godzilla/Logger.h"
+#include "godzilla/LoggingInterface.h"
 
 using namespace godzilla;
+
+namespace {
+
+class TestLogging : public LoggingInterface {
+public:
+    TestLogging(Logger & logger) : LoggingInterface(&logger) {}
+
+    void
+    log(String msg)
+    {
+        info("{}", msg);
+    }
+};
+
+} // namespace
 
 TEST(LoggerTest, ctor)
 {
     Logger log;
-
-    EXPECT_EQ(log.get_num_entries(), 0);
-    EXPECT_EQ(log.get_num_errors(), 0);
-    EXPECT_EQ(log.get_num_warnings(), 0);
 }
 
-TEST(LoggerTest, log_error)
+TEST(LoggerTest, log_into_a_file)
 {
-    testing::internal::CaptureStderr();
-    Logger log;
+    Logger logger;
+    TestLogging obj(logger);
 
-    log.error("error1");
-    EXPECT_EQ(log.get_num_entries(), 1);
-    EXPECT_EQ(log.get_num_errors(), 1);
-    EXPECT_EQ(log.get_num_warnings(), 0);
-
-    log.print();
-    String output = testing::internal::GetCapturedStderr();
-    EXPECT_THAT(output, testing::HasSubstr("error1"));
-    EXPECT_THAT(output, testing::HasSubstr("1 error(s) found."));
-}
-
-TEST(LoggerTest, log_warning)
-{
-    testing::internal::CaptureStderr();
-    Logger log;
-
-    log.warning("warn1");
-    EXPECT_EQ(log.get_num_entries(), 1);
-    EXPECT_EQ(log.get_num_errors(), 0);
-    EXPECT_EQ(log.get_num_warnings(), 1);
-
-    log.print();
-    String output = testing::internal::GetCapturedStderr();
-    EXPECT_THAT(output, testing::HasSubstr("warn1"));
-    EXPECT_THAT(output, testing::HasSubstr("1 warning(s) found."));
-}
-
-TEST(LoggerTest, log_err_warning)
-{
-    testing::internal::CaptureStderr();
-    Logger log;
-
-    log.error("error1");
-    log.warning("warn1");
-    EXPECT_EQ(log.get_num_entries(), 2);
-    EXPECT_EQ(log.get_num_errors(), 1);
-    EXPECT_EQ(log.get_num_warnings(), 1);
-
-    log.print();
-    String output = testing::internal::GetCapturedStderr();
-    EXPECT_THAT(output, testing::HasSubstr("error1"));
-    EXPECT_THAT(output, testing::HasSubstr("warn1"));
-    EXPECT_THAT(output, testing::HasSubstr("1 error(s), 1 warning(s) found."));
+    logger.set_log_file_name("test_log.txt");
+    logger.set_format_string("%Y-%m-%d %H:%M:%S %n %l: %v");
+    obj.log("Test a log line");
 }

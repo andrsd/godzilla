@@ -232,8 +232,6 @@ TEST(NonlinearProblemTest, line_search_type)
 
 TEST(NonlinearProblemTest, invalid_line_search_type)
 {
-    testing::internal::CaptureStderr();
-
     class MockNonlinearProblem : public NonlinearProblem {
     public:
         explicit MockNonlinearProblem(const Parameters & pars) : NonlinearProblem(pars) {}
@@ -250,15 +248,10 @@ TEST(NonlinearProblemTest, invalid_line_search_type)
     prob_pars.set<App *>("app", &app);
     prob_pars.set<Mesh *>("mesh", mesh.get());
     prob_pars.set<String>("line_search", "asdf");
-    MockNonlinearProblem prob(prob_pars);
-    prob.create();
 
-    EXPECT_FALSE(app.check_integrity());
-    app.get_logger()->print();
-
-    EXPECT_THAT(testing::internal::GetCapturedStderr(),
-                testing::HasSubstr("The 'line_search' parameter can be either 'bt', 'basic', 'l2', "
-                                   "'cp', 'nleqerr' or 'shell'."));
+    EXPECT_DEATH(MockNonlinearProblem prob(prob_pars),
+                 "The 'line_search' parameter can be either 'bt', 'basic', 'l2', 'cp', 'nleqerr' "
+                 "or 'shell'.");
 }
 
 TEST(NonlinearProblemTest, restart_file)

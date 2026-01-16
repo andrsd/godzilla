@@ -28,8 +28,7 @@ LineMesh::LineMesh(const Parameters & pars) :
     interpolate(true)
 {
     CALL_STACK_MSG();
-    if (this->xmax <= this->xmin)
-        log_error("Parameter 'xmax' must be larger than 'xmin'.");
+    expect_true(this->xmax > this->xmin, "Parameter 'xmax' must be larger than 'xmin'.");
 }
 
 Real

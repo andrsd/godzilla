@@ -9,7 +9,7 @@
 
 namespace godzilla {
 
-ErrorCode
+PetscErrorCode
 NaturalRiemannBC::invoke_delegate(Real time,
                                   const Real * c,
                                   const Real * n,
@@ -46,7 +46,7 @@ NaturalRiemannBC::create()
 
     auto field_names = dpi->get_field_names();
     if (field_names.size() == 1)
-        this->fid = dpi->get_field_id(field_names[0]);
+        this->fid = dpi->get_field_id(field_names[0]).value();
 
     this->components = create_components();
 }
@@ -71,7 +71,8 @@ NaturalRiemannBC::create_components()
     CALL_STACK_MSG();
     auto dpi = get_discrete_problem_interface();
     auto n_comps = dpi->get_field_num_components(this->fid);
-    std::vector<Int> comps(n_comps);
+    expect_true(n_comps.has_value(), "Field {} not found", this->fid);
+    std::vector<Int> comps(n_comps.value());
     std::iota(comps.begin(), comps.end(), 0);
     return comps;
 }

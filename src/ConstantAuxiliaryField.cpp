@@ -20,8 +20,7 @@ ConstantAuxiliaryField::ConstantAuxiliaryField(const Parameters & pars) :
     values(pars.get<std::vector<Real>>("value"))
 {
     CALL_STACK_MSG();
-    if (this->values.empty())
-        log_error("No values provided");
+    expect_true(!this->values.empty(), "No values provided");
 }
 
 Int

@@ -228,13 +228,13 @@ public:
 
     // operators
 
-    const T &
+    [[deprecated("Use [] instead")]] const T &
     operator()(Int i) const
     {
         return (*this)[i];
     }
 
-    T &
+    [[deprecated("Use [] instead")]] T &
     operator()(Int i)
     {
         return (*this)[i];
@@ -351,7 +351,7 @@ operator<<(std::ostream & os, const Array1D<T> & obj)
 {
     os << "(";
     for (Int i = 0; i < obj.size(); ++i) {
-        os << obj(i);
+        os << obj[i];
         if (i < obj.size() - 1)
             os << ", ";
     }

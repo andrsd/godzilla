@@ -41,18 +41,17 @@ TEST(BoxMeshTest, api)
 
     EXPECT_EQ(m->get_dimension(), 3_D);
 
+    auto bbox = m->get_bounding_box<3_D>();
+    EXPECT_EQ(bbox.min()[0], 1);
+    EXPECT_EQ(bbox.max()[0], 4);
+
+    EXPECT_EQ(bbox.min()[1], 2);
+    EXPECT_EQ(bbox.max()[1], 5);
+
+    EXPECT_EQ(bbox.min()[2], 3);
+    EXPECT_EQ(bbox.max()[2], 6);
+
     auto dm = m->get_dm();
-    Real gmin[4], gmax[4];
-    DMGetBoundingBox(dm, gmin, gmax);
-    EXPECT_EQ(gmin[0], 1);
-    EXPECT_EQ(gmax[0], 4);
-
-    EXPECT_EQ(gmin[1], 2);
-    EXPECT_EQ(gmax[1], 5);
-
-    EXPECT_EQ(gmin[2], 3);
-    EXPECT_EQ(gmax[2], 6);
-
     Vec coords;
     DMGetCoordinates(dm, &coords);
     Int n;
@@ -62,8 +61,6 @@ TEST(BoxMeshTest, api)
 
 TEST(BoxMeshTest, incorrect_dims)
 {
-    testing::internal::CaptureStderr();
-
     TestApp app;
 
     auto params = BoxMesh::parameters();
@@ -78,13 +75,6 @@ TEST(BoxMeshTest, incorrect_dims)
         .set<Real>("zmin", 6)
         .set<Real>("zmax", 3)
         .set<Int>("nz", 7);
-    BoxMesh mesh(params);
 
-    EXPECT_FALSE(app.check_integrity());
-    app.get_logger()->print();
-
-    auto output = testing::internal::GetCapturedStderr();
-    EXPECT_THAT(output, testing::HasSubstr("obj: Parameter 'xmax' must be larger than 'xmin'."));
-    EXPECT_THAT(output, testing::HasSubstr("obj: Parameter 'ymax' must be larger than 'ymin'."));
-    EXPECT_THAT(output, testing::HasSubstr("obj: Parameter 'zmax' must be larger than 'zmin'."));
+    EXPECT_DEATH(BoxMesh mesh(params), "Parameter 'xmax' must be larger than 'xmin'.");
 }

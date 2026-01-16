@@ -64,8 +64,10 @@ CSVOutput::open_file()
 {
     CALL_STACK_MSG();
     this->f = fopen(get_file_name().c_str(), "w");
-    if (this->f == nullptr)
-        log_error("Unable to open '{}' for writing: {}.", get_file_name(), strerror(errno));
+    expect_true(this->f != nullptr,
+                "Unable to open '{}' for writing: {}.",
+                get_file_name(),
+                strerror(errno));
 }
 
 void

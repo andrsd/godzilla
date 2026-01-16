@@ -11,7 +11,7 @@
 
 namespace godzilla {
 
-ErrorCode
+PetscErrorCode
 EssentialBC::invoke_delegate(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx)
 {
     CALL_STACK_MSG();
@@ -20,7 +20,7 @@ EssentialBC::invoke_delegate(Int dim, Real time, const Real x[], Int nc, Scalar 
     return 0;
 }
 
-ErrorCode
+PetscErrorCode
 EssentialBC::invoke_delegate_t(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx)
 {
     CALL_STACK_MSG();
@@ -55,18 +55,15 @@ EssentialBC::create()
 
     auto field_names = dpi->get_field_names();
     if (field_names.size() == 1) {
-        this->fid = dpi->get_field_id(field_names[0]);
+        this->fid = dpi->get_field_id(field_names[0]).value();
     }
     else if (field_names.size() > 1) {
-        if (this->field_name.has_value()) {
-            if (dpi->has_field_by_name(this->field_name.value()))
-                this->fid = dpi->get_field_id(this->field_name.value());
-            else
-                log_error("Field '{}' does not exists. Typo?", this->field_name.value());
-        }
-        else
-            log_error("Use the 'field' parameter to assign this boundary condition to an existing "
-                      "field.");
+        expect_true(this->field_name.has_value(),
+                    "Use the 'field' parameter to assign this boundary condition to an existing "
+                    "field.");
+        auto fld = dpi->get_field_id(this->field_name.value());
+        expect_true(fld.has_value(), "Field '{}' does not exist. Typo?", this->field_name.value());
+        this->fid = fld.value();
     }
 
     this->components = create_components();
@@ -119,7 +116,8 @@ EssentialBC::create_components()
     CALL_STACK_MSG();
     auto dpi = get_discrete_problem_interface();
     auto n_comps = dpi->get_field_num_components(this->fid);
-    std::vector<Int> comps(n_comps);
+    expect_true(n_comps.has_value(), "Field {} not found", this->fid);
+    std::vector<Int> comps(n_comps.value());
     std::iota(comps.begin(), comps.end(), 0);
     return comps;
 }

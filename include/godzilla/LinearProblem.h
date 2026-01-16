@@ -115,8 +115,8 @@ public:
     static Parameters parameters();
 
 private:
-    static ErrorCode invoke_compute_operators_delegate(KSP, Mat, Mat, void *);
-    static ErrorCode invoke_compute_rhs_delegate(KSP, Vec, void *);
+    static PetscErrorCode invoke_compute_operators_delegate(KSP, Mat, Mat, void *);
+    static PetscErrorCode invoke_compute_rhs_delegate(KSP, Vec, void *);
 };
 
 } // namespace godzilla

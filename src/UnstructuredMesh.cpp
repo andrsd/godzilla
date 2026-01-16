@@ -3,6 +3,8 @@
 
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/CallStack.h"
+#include "godzilla/Error.h"
+#include "godzilla/Expected.h"
 #include "godzilla/IndexSet.h"
 #include "godzilla/Exception.h"
 #include "godzilla/Partitioner.h"
@@ -416,7 +418,7 @@ UnstructuredMesh::get_face_set_label(String name) const
         return Label();
 }
 
-String
+Expected<String, ErrorCode>
 UnstructuredMesh::get_face_set_name(Int id) const
 {
     CALL_STACK_MSG();
@@ -424,7 +426,7 @@ UnstructuredMesh::get_face_set_name(Int id) const
     if (it != this->face_set_names.end())
         return it->second;
     else
-        throw Exception("Face set ID '{}' does not exist.", id);
+        return Unexpected(ErrorCode::NotFound);
 }
 
 void
@@ -454,7 +456,7 @@ UnstructuredMesh::set_cell_type(Int cell, PolytopeType cell_type)
     PETSC_CHECK(DMPlexSetCellType(get_dm(), cell, (DMPolytopeType) cell_type));
 }
 
-String
+Expected<String, ErrorCode>
 UnstructuredMesh::get_cell_set_name(Int id) const
 {
     CALL_STACK_MSG();
@@ -462,10 +464,10 @@ UnstructuredMesh::get_cell_set_name(Int id) const
     if (it != this->cell_set_names.end())
         return it->second;
     else
-        throw Exception("Cell set ID '{}' does not exist.", id);
+        return Unexpected(ErrorCode::NotFound);
 }
 
-Int
+Expected<Int, ErrorCode>
 UnstructuredMesh::get_cell_set_id(String name) const
 {
     CALL_STACK_MSG();
@@ -473,7 +475,7 @@ UnstructuredMesh::get_cell_set_id(String name) const
     if (it != this->cell_set_ids.end())
         return it->second;
     else
-        throw Exception("Cell set '{}' does not exist.", name);
+        return Unexpected(ErrorCode::NotFound);
 }
 
 Int
@@ -508,7 +510,7 @@ UnstructuredMesh::get_face_sets() const
     return this->face_set_names;
 }
 
-String
+Expected<String, ErrorCode>
 UnstructuredMesh::get_vertex_set_name(Int id) const
 {
     CALL_STACK_MSG();
@@ -516,7 +518,7 @@ UnstructuredMesh::get_vertex_set_name(Int id) const
     if (it != this->vertex_set_names.end())
         return it->second;
     else
-        throw Exception("Vertex set ID '{}' does not exist.", id);
+        return Unexpected(ErrorCode::NotFound);
 }
 
 Int

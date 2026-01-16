@@ -8,6 +8,7 @@
 #include <cstdint>
 #include <cstring>
 #include <optional>
+#include <stdexcept>
 #include <string>
 #include <cassert>
 #include <yaml-cpp/yaml.h>
@@ -260,6 +261,32 @@ public:
             return std::nullopt;
     }
 
+    /// Replaces the characters in the range [pos, pos + count) with given characters
+    ///
+    /// @param pos Start of the substring that is going to be replaced
+    /// @param count Length of the substring that is going to be replaced
+    /// @param str String to use for replacement
+    String &
+    replace(uint32_t pos, uint32_t count, String str)
+    {
+        if (pos + count < length()) {
+            auto new_len = length() - count + str.length();
+            auto len_end = length() - (pos + count);
+
+            detach();
+            ensure_capacity(new_len);
+
+            std::memcpy(this->rep->data + pos + str.length(),
+                        this->rep->data + pos + count,
+                        len_end + 1);
+            std::memcpy(this->rep->data + pos, str.rep->data, str.length());
+
+            return *this;
+        }
+        else
+            throw std::runtime_error("'pos' + 'count' is larger then length");
+    }
+
     const char *
     c_str() const
     {
@@ -312,23 +339,23 @@ private:
     String(Rep * rep) : rep(rep) {}
 };
 
-} // namespace godzilla
-
 inline std::ostream &
-operator<<(std::ostream & os, const godzilla::String & obj)
+operator<<(std::ostream & os, const String & obj)
 {
     os << obj.c_str();
     return os;
 }
 
 inline std::istream &
-operator>>(std::istream & is, godzilla::String & obj)
+operator>>(std::istream & is, String & obj)
 {
     std::string str;
     is >> str;
     obj = str;
     return is;
 }
+
+} // namespace godzilla
 
 template <>
 struct fmt::formatter<godzilla::String> : fmt::formatter<fmt::string_view> {

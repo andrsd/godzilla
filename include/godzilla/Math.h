@@ -217,6 +217,33 @@ tan(T arg)
     return std::tan(arg);
 }
 
+/// Compute arc sine of an argument
+template <typename T>
+    requires std::is_floating_point_v<T>
+T
+asin(T arg)
+{
+    return std::asin(arg);
+}
+
+/// Compute arc cosine of an argument
+template <typename T>
+    requires std::is_floating_point_v<T>
+T
+acos(T arg)
+{
+    return std::acos(arg);
+}
+
+/// Compute arc tangent of an argument
+template <typename T>
+    requires std::is_floating_point_v<T>
+T
+atan(T arg)
+{
+    return std::atan(arg);
+}
+
 /// Compute natural logarithm
 template <typename T>
     requires std::is_floating_point_v<T>

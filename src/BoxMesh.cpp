@@ -41,12 +41,9 @@ BoxMesh::BoxMesh(const Parameters & pars) :
     interpolate(true)
 {
     CALL_STACK_MSG();
-    if (this->xmax <= this->xmin)
-        log_error("Parameter 'xmax' must be larger than 'xmin'.");
-    if (this->ymax <= this->ymin)
-        log_error("Parameter 'ymax' must be larger than 'ymin'.");
-    if (this->zmax <= this->zmin)
-        log_error("Parameter 'zmax' must be larger than 'zmin'.");
+    expect_true(this->xmax > this->xmin, "Parameter 'xmax' must be larger than 'xmin'.");
+    expect_true(this->ymax > this->ymin, "Parameter 'ymax' must be larger than 'ymin'.");
+    expect_true(this->zmax > this->zmin, "Parameter 'zmax' must be larger than 'zmin'.");
 }
 
 Real

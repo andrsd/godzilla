@@ -24,10 +24,9 @@ TEST(LineMeshTest, api)
 
     EXPECT_EQ(mesh->get_dimension(), 1);
 
-    Real gmin[4], gmax[4];
-    DMGetBoundingBox(dm, gmin, gmax);
-    EXPECT_EQ(gmin[0], 1);
-    EXPECT_EQ(gmax[0], 2);
+    auto bbox = mesh->get_bounding_box<1_D>();
+    EXPECT_EQ(bbox.min()[0], 1);
+    EXPECT_EQ(bbox.max()[0], 2);
 
     Vec coords;
     DMGetCoordinates(dm, &coords);
@@ -38,8 +37,6 @@ TEST(LineMeshTest, api)
 
 TEST(LineMeshTest, incorrect_dims)
 {
-    testing::internal::CaptureStderr();
-
     TestApp app;
 
     auto params = LineMesh::parameters();
@@ -48,11 +45,6 @@ TEST(LineMeshTest, incorrect_dims)
     params.set<Real>("xmin", 2);
     params.set<Real>("xmax", 1);
     params.set<Int>("nx", 2);
-    LineMesh mesh(params);
 
-    EXPECT_FALSE(app.check_integrity());
-    app.get_logger()->print();
-
-    EXPECT_THAT(testing::internal::GetCapturedStderr(),
-                testing::HasSubstr("line_mesh: Parameter 'xmax' must be larger than 'xmin'."));
+    EXPECT_DEATH(LineMesh mesh(params), "Parameter 'xmax' must be larger than 'xmin'.");
 }

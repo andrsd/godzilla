@@ -55,8 +55,7 @@ App::App(mpi::Communicator comm, String name) :
     verbosity_level(1),
     cout_buf_(nullptr),
     cerr_buf_(nullptr),
-    problem(nullptr),
-    factory(registry)
+    problem(nullptr)
 {
     CALL_STACK_MSG();
 }
@@ -70,8 +69,7 @@ App::App(mpi::Communicator comm, Registry & registry, String name) :
     verbosity_level(1),
     cout_buf_(nullptr),
     cerr_buf_(nullptr),
-    problem(nullptr),
-    factory(registry)
+    problem(nullptr)
 {
     CALL_STACK_MSG();
 }
@@ -79,7 +77,6 @@ App::App(mpi::Communicator comm, Registry & registry, String name) :
 App::~App()
 {
     CALL_STACK_MSG();
-    this->factory.destroy();
 
     if (this->cout_buf_ != nullptr) {
         std::cout.rdbuf(this->cout_buf_);
@@ -111,12 +108,6 @@ App::get_logger()
 {
     CALL_STACK_MSG();
     return this->logger.get();
-}
-
-Factory &
-App::get_factory()
-{
-    return this->factory;
 }
 
 Problem *
@@ -175,23 +166,10 @@ App::get_comm() const
     return this->mpi_comm;
 }
 
-Parameters *
-App::get_parameters(String class_name)
-{
-    return this->factory.get_parameters(class_name);
-}
-
 int
 App::run()
 {
     CALL_STACK_MSG();
-
-    if (!check_integrity()) {
-        // NOTE: logger could return a string containing the number of errors and warnirngs and that
-        // can be thorwn as the text of the exception
-        this->logger->print();
-        throw Exception("");
-    }
 
     auto start_time = std::chrono::high_resolution_clock::now();
     run_problem();
@@ -219,17 +197,6 @@ App::export_parameters_yaml() const
     yaml << YAML::EndSeq;
     yaml << YAML::EndMap;
     std::cout << yaml.c_str() << std::endl;
-}
-
-bool
-App::check_integrity()
-{
-    CALL_STACK_MSG();
-    lprintln(9, "Checking integrity");
-    if (this->logger->get_num_entries() > 0)
-        return false;
-    else
-        return true;
 }
 
 void

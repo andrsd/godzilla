@@ -3,110 +3,60 @@
 
 #pragma once
 
-#include "godzilla/Terminal.h"
-#include "godzilla/String.h"
-#include "fmt/core.h"
-#include <array>
-#include <stdexcept>
+#include "spdlog/spdlog.h"
+#include "spdlog/details/periodic_worker.h"
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 namespace godzilla {
 
 /// Class for logging errors and warnings
 class Logger {
-    /// Type of the message
-    enum class Type {
-        /// Error
-        ERROR,
-        /// Warning
-        WARNING,
-        ///
-        Count
-    };
-
-    constexpr static std::array<std::string_view, static_cast<size_t>(Type::Count)> type_name = {
-        "ERROR",
-        "WARNING"
-    };
-
-    constexpr std::string_view
-    to_string(Type c)
-    {
-        return Logger::type_name[static_cast<size_t>(c)];
-    }
-
 public:
     Logger();
+    ~Logger();
 
-    /// Log an error
-    template <typename... T>
-    void
-    error(fmt::format_string<T...> format, T... args)
-    {
-        error(String(""), format, std::forward<T>(args)...);
-    }
-
-    template <typename... T>
-    void
-    error(const String prefix, fmt::format_string<T...> format, T... args)
-    {
-        auto str = format_msg(Type::ERROR, prefix, format, std::forward<T>(args)...);
-        fmt::println(stderr, "{}{}{}", Terminal::red, str, Terminal::normal);
-        ++this->num_errors;
-    }
-
-    /// Log a warning
-    template <typename... T>
-    void
-    warning(fmt::format_string<T...> format, T... args)
-    {
-        warning(String(""), format, std::forward<T>(args)...);
-    }
-
-    template <typename... T>
-    void
-    warning(const String prefix, fmt::format_string<T...> format, T... args)
-    {
-        auto str = format_msg(Type::WARNING, prefix, format, std::forward<T>(args)...);
-        fmt::println(stderr, "{}{}{}", Terminal::yellow, str, Terminal::normal);
-        ++this->num_warnings;
-    }
-
-    /// Get the number of logged errors/warnings
+    /// Set log file name
     ///
-    /// @return Number of logger errors/warnings
-    std::size_t get_num_entries() const;
+    /// @param file_name The name of the log file
+    void set_log_file_name(fs::path file_name);
 
-    /// Get the number of errors
+    /// Set format string
     ///
-    /// @return Number of errors
-    std::size_t get_num_errors() const;
+    /// @note: This is a forward call into `spdlog`
+    /// See [custom-formatting](https://github.com/gabime/spdlog/wiki/Custom-formatting) page
+    void set_format_string(std::string pattern,
+                           spdlog::pattern_time_type time_type = spdlog::pattern_time_type::local);
 
-    /// Get the number of warnings
-    ///
-    /// @return Number of warnings
-    std::size_t get_num_warnings() const;
+    /// Get logging level
+    spdlog::level::level_enum get_level();
 
-    /// Print logged errors and warnings
-    void print() const;
+    /// Set the logging level
+    void set_level(spdlog::level::level_enum log_level);
 
-protected:
-    template <typename... T>
-    String
-    format_msg(Type type, const String prefix, fmt::format_string<T...> format, T... args)
+    /// Set a flush level
+    void flush_on(spdlog::level::level_enum log_level);
+
+    /// Start/Restart a periodic flusher thread
+    template <typename Rep, typename Period>
+    void
+    flush_every(std::chrono::duration<Rep, Period> interval)
     {
-        String str;
-        str.append(fmt::format("[{}] ", to_string(type)));
-        if (prefix.length() > 0)
-            str.append(fmt::format("{}: ", prefix));
-        str.append(fmt::format(format, std::forward<T>(args)...));
-        return str;
+        std::lock_guard<std::mutex> lock(this->flusher_mutex);
+        auto clbk = [this]() {
+            this->spdlgr->flush();
+        };
+        this->periodic_flusher =
+            spdlog::details::make_unique<spdlog::details::periodic_worker>(clbk, interval);
     }
 
 private:
-    /// Number of errors
-    std::size_t num_errors;
-    /// Number of warnings
-    std::size_t num_warnings;
+    std::shared_ptr<spdlog::logger> spdlgr;
+    std::mutex flusher_mutex;
+    std::unique_ptr<spdlog::details::periodic_worker> periodic_flusher;
+
+    friend class LoggingInterface;
 };
 
 } // namespace godzilla

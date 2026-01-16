@@ -3,51 +3,65 @@
 
 #pragma once
 
+#include "godzilla/Error.h"
 #include "godzilla/Logger.h"
-#include "godzilla/String.h"
+#include "fmt/core.h"
 
 namespace godzilla {
 
-/// Logging interface to give objects capability to logger problems like errors and warnings
+/// Logging interface to give objects capability to report problems like errors and warnings
 ///
 class LoggingInterface {
 public:
-    explicit LoggingInterface(Logger * logger, String prefix = "") :
-        logger(logger),
-        prefix(std::move(prefix))
+    explicit LoggingInterface(Logger * logger) : log(logger) {}
+
+    template <typename... ARGS>
+    void
+    info(fmt::format_string<ARGS...> fmt, ARGS &&... args) const
     {
+        this->log->spdlgr->info(fmt, std::forward<ARGS>(args)...);
     }
 
-    /// Log an error
-    template <typename... T>
+    template <typename... ARGS>
     void
-    log_error(fmt::format_string<T...> format, T... args)
+    warning(fmt::format_string<ARGS...> fmt, ARGS &&... args) const
     {
-        this->logger->error(this->prefix, format, std::forward<T>(args)...);
+        internal::warning(fmt, std::forward<ARGS>(args)...);
+        this->log->spdlgr->warn(fmt, std::forward<ARGS>(args)...);
     }
 
-    /// Log a warning
-    template <typename... T>
+    template <typename... ARGS>
     void
-    log_warning(fmt::format_string<T...> format, T... args)
+    error(fmt::format_string<ARGS...> fmt, ARGS &&... args) const
     {
-        this->logger->warning(this->prefix, format, std::forward<T>(args)...);
+        internal::error(fmt, std::forward<ARGS>(args)...);
+        this->log->spdlgr->error(fmt, std::forward<ARGS>(args)...);
     }
 
-    /// Log a deprecated message
-    template <typename... T>
+    template <typename... ARGS>
     void
-    deprecated(fmt::format_string<T...> message)
+    critical(fmt::format_string<ARGS...> fmt, ARGS &&... args) const
     {
-        this->logger->warning(this->prefix, message);
+        internal::error(fmt, std::forward<ARGS>(args)...);
+        this->log->spdlgr->critical(fmt, std::forward<ARGS>(args)...);
+    }
+
+    template <typename... ARGS>
+    void
+    debug(fmt::format_string<ARGS...> fmt, ARGS &&... args) const
+    {
+        this->log->spdlgr->debug(fmt, std::forward<ARGS>(args)...);
+    }
+
+    template <typename... ARGS>
+    void
+    trace(fmt::format_string<ARGS...> fmt, ARGS &&... args) const
+    {
+        this->log->spdlgr->trace(fmt, std::forward<ARGS>(args)...);
     }
 
 private:
-    /// Logger object
-    Logger * logger;
-
-    /// Prefix for each logger line
-    String prefix;
+    Logger * log;
 };
 
 } // namespace godzilla

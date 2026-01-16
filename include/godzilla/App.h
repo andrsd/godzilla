@@ -7,7 +7,7 @@
 #include "cxxopts/cxxopts.hpp"
 #include "godzilla/CallStack.h"
 #include "godzilla/Parameters.h"
-#include "godzilla/Factory.h"
+#include "godzilla/Registry.h"
 #include "godzilla/PrintInterface.h"
 #include "godzilla/Qtr.h"
 #include "godzilla/Logger.h"
@@ -63,11 +63,6 @@ public:
     /// @return Instance of the Registry class
     Registry & get_registry();
 
-    /// Get the factory for building objects
-    ///
-    /// @return Factory that builds objects
-    Factory & get_factory();
-
     /// Get pointer to the `Problem` class in this application
     ///
     /// @return Get problem this application is representing
@@ -85,11 +80,6 @@ public:
     }
 
     void set_problem(Problem * problem);
-
-    /// Check integrity of the application
-    ///
-    /// @return `true` if the check passed, `false` otherwise
-    bool check_integrity();
 
     /// Run the application
     ///
@@ -121,25 +111,15 @@ public:
     /// @return MPI communicator
     mpi::Communicator get_comm() const;
 
-    /// Get parameters for a class
+    /// Build object
     ///
-    /// @param class_name Class name to get parameters for
-    /// @return Parameters for class `class_name`
-    Parameters * get_parameters(String class_name);
-
-    /// Build object using the Factory
-    ///
-    /// This is convenience API for building object with having the `_app` parameter set to this
+    /// This is convenience API for building object with having the `app` parameter set to this
     /// application object.
     ///
-    /// @param obj_name Name of the object
     /// @param parameters Input parameters
     /// @return The constructed object
     template <typename T>
-    T * build_object(String obj_name, Parameters & parameters);
-
-    template <typename T>
-    T * build_object(String obj_name, Parameters * parameters);
+    T * build_object(Parameters & parameters);
 
     /// Export parameters into a YAML format
     void export_parameters_yaml() const;
@@ -194,8 +174,6 @@ private:
     std::streambuf * cerr_buf_;
     /// Pointer to `Problem`
     Problem * problem;
-    /// Factory for building objects
-    Factory factory;
 
 public:
     static void register_objects(Registry & registry);
@@ -203,18 +181,10 @@ public:
 
 template <typename T>
 T *
-App::build_object(String obj_name, Parameters & parameters)
+App::build_object(Parameters & parameters)
 {
     parameters.set<App *>("app", this);
-    return this->factory.create<T>(obj_name, parameters);
-}
-
-template <typename T>
-T *
-App::build_object(String obj_name, Parameters * parameters)
-{
-    parameters->set<App *>("app", this);
-    return this->factory.create<T>(obj_name, parameters);
+    return new T(parameters);
 }
 
 } // namespace godzilla

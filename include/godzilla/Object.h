@@ -14,12 +14,10 @@ namespace mpi = mpicpp_lite;
 
 class App;
 
-/// The base class for objects that can be created by Factory
+/// The base class for objects
 ///
-/// @see Factory
 class Object : public LoggingInterface {
 public:
-    /// Constructor for building the object via Factory
     explicit Object(const Parameters & pars);
     virtual ~Object() = default;
 

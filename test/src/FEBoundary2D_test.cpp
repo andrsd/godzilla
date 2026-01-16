@@ -39,7 +39,7 @@ public:
     void
     compute()
     {
-        for_each_vertex([&](Int idx, Int vtx) { this->vals(idx) = vtx; });
+        for_each_vertex([&](Int idx, Int vtx) { this->vals[idx] = vtx; });
     }
 
     Array1D<Int> vals;
@@ -72,7 +72,7 @@ public:
     void
     compute()
     {
-        for_each_facet([&](Int idx, Int facet) { this->vals(idx) = facet; });
+        for_each_facet([&](Int idx, Int facet) { this->vals[idx] = facet; });
     }
 
     Array1D<Int> vals;
@@ -103,8 +103,8 @@ TEST(FEBoundaryTest, test_2d)
 
         EXPECT_EQ(bnd.num_vertices(), 2);
 
-        EXPECT_EQ(bnd.vals(0), 2);
-        EXPECT_EQ(bnd.vals(1), 4);
+        EXPECT_EQ(bnd.vals[0], 2);
+        EXPECT_EQ(bnd.vals[1], 4);
 
         bnd.destroy();
     }
@@ -123,7 +123,7 @@ TEST(FEBoundaryTest, test_2d)
 
         EXPECT_DOUBLE_EQ(bnd.facet_length(0), 1.);
 
-        EXPECT_EQ(bnd.vals(0), 6);
+        EXPECT_EQ(bnd.vals[0], 6);
 
         bnd.destroy();
     }
@@ -146,8 +146,8 @@ TEST(FEBoundaryTest, test_2d)
         EXPECT_DOUBLE_EQ(bnd.facet_length(0), 1.);
         EXPECT_DOUBLE_EQ(bnd.facet_length(1), 1.);
 
-        EXPECT_EQ(bnd.vals(0), 9);
-        EXPECT_EQ(bnd.vals(1), 10);
+        EXPECT_EQ(bnd.vals[0], 9);
+        EXPECT_EQ(bnd.vals[1], 10);
 
         bnd.destroy();
     }

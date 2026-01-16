@@ -32,7 +32,7 @@ RestartOutput::create()
     CALL_STACK_MSG();
     FileOutput::create();
     if (ri == nullptr)
-        log_warning("RestartOutput works only with problems that support restart.");
+        warning("RestartOutput works only with problems that support restart.");
 }
 
 void

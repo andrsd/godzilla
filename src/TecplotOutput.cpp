@@ -91,10 +91,10 @@ TecplotOutput::TecplotOutput(const Parameters & pars) :
 {
     CALL_STACK_MSG();
 #ifdef GODZILLA_WITH_TECIOCPP
-    if (get_discrete_problem_interface() == nullptr)
-        log_error("Tecplot output can be only used with finite element problems.");
+    expect_true(get_discrete_problem_interface() != nullptr,
+                "Tecplot output can be only used with finite element problems.");
 #else
-    log_error("Unable to use TecplotOutput, godzilla was not built with teciocpp.");
+    error("Unable to use TecplotOutput, godzilla was not built with teciocpp.");
 #endif
 }
 
@@ -130,8 +130,7 @@ TecplotOutput::create()
     expect_true(get_problem() != nullptr, "Problem is null");
 
     this->mesh = dpi->get_mesh();
-    if (this->mesh == nullptr)
-        log_error("Tecplot output can be only used with unstructured meshes.");
+    expect_true(this->mesh != nullptr, "Tecplot output can be only used with unstructured meshes.");
 
     // Get names of all variables that will be stored
     auto flds = dpi->get_field_names();
@@ -150,8 +149,8 @@ TecplotOutput::create()
             else if (aux_field_names.count(name) == 1)
                 this->aux_field_var_names.push_back(name);
             else
-                log_error("Variable '{}' specified in 'variables' parameter does not exist. Typo?",
-                          name);
+                error("Variable '{}' specified in 'variables' parameter does not exist. Typo?",
+                      name);
         }
     }
 
@@ -160,19 +159,15 @@ TecplotOutput::create()
     this->nodal_aux_var_fids.clear();
     for (auto & name : this->field_var_names) {
         auto fid = dpi->get_field_id(name);
-        auto order = dpi->get_field_order(fid);
-        if (order == 0)
-            log_error("Elemental fields are not supported yet");
-        else
-            this->nodal_var_fids.push_back(fid);
+        auto order = dpi->get_field_order(fid.value()).value();
+        expect_true(order.value() > 0, "Elemental fields are not supported yet");
+        this->nodal_var_fids.push_back(fid.value());
     }
     for (auto & name : this->aux_field_var_names) {
         auto fid = dpi->get_aux_field_id(name);
-        auto order = dpi->get_aux_field_order(fid);
-        if (order == 0)
-            log_error("Auxiliary elemental fields are not supported yet");
-        else
-            this->nodal_aux_var_fids.push_back(fid);
+        auto order = dpi->get_aux_field_order(fid.value()).value();
+        expect_true(order.value() > 0, "Auxiliary elemental fields are not supported yet");
+        this->nodal_aux_var_fids.push_back(fid.value());
     }
 
     expect_true(this->mesh != nullptr, "Mesh is null");
@@ -182,14 +177,14 @@ TecplotOutput::create()
         this->shared_vars.push_back(true);
     int32_t var_idx = dim;
     for (auto & fid : this->nodal_var_fids) {
-        auto nc = dpi->get_field_num_components(fid);
+        auto nc = dpi->get_field_num_components(fid).value();
         for (Int i = 0; i < nc; ++i) {
             this->nodal_var_idxs.push_back(++var_idx);
             this->shared_vars.push_back(false);
         }
     }
     for (auto & fid : this->nodal_aux_var_fids) {
-        auto nc = dpi->get_aux_field_num_components(fid);
+        auto nc = dpi->get_aux_field_num_components(fid).value();
         for (Int i = 0; i < nc; ++i) {
             this->nodal_aux_var_idxs.push_back(++var_idx);
             this->shared_vars.push_back(false);
@@ -360,7 +355,7 @@ TecplotOutput::write_nodal_field_variable_values(int32_t zone)
     auto sln = dpi->get_solution_vector_local();
     const Scalar * sln_vals = sln.get_array_read();
     for (auto [j, fid] : enumerate(this->nodal_var_fids)) {
-        auto nc = dpi->get_field_num_components(fid);
+        auto nc = dpi->get_field_num_components(fid).value();
         for (Int c = 0; c < nc; ++c, ++j) {
             for (auto n : this->mesh->get_vertex_range()) {
                 auto offset = dpi->get_field_dof(n, fid);
@@ -375,7 +370,7 @@ TecplotOutput::write_nodal_field_variable_values(int32_t zone)
     const Scalar * aux_sln_vals = (Vec) aux_sln != nullptr ? aux_sln.get_array_read() : nullptr;
     if (aux_sln_vals) {
         for (auto [j, fid] : enumerate(this->nodal_aux_var_fids)) {
-            auto nc = dpi->get_aux_field_num_components(fid);
+            auto nc = dpi->get_aux_field_num_components(fid).value();
             for (Int c = 0; c < nc; ++c, ++j) {
                 for (auto n : this->mesh->get_vertex_range()) {
                     auto offset = dpi->get_aux_field_dof(n, fid);

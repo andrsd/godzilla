@@ -56,7 +56,7 @@ SNESolver::LineSearch::operator SNESLineSearch() const
 
 //
 
-ErrorCode
+PetscErrorCode
 SNESolver::invoke_compute_residual_delegate(SNES, Vec x, Vec f, void * ctx)
 {
     CALL_STACK_MSG();
@@ -69,7 +69,7 @@ SNESolver::invoke_compute_residual_delegate(SNES, Vec x, Vec f, void * ctx)
     return 0;
 }
 
-ErrorCode
+PetscErrorCode
 SNESolver::invoke_compute_jacobian_delegate(SNES, Vec x, Mat J, Mat Jp, void * ctx)
 {
     CALL_STACK_MSG();
@@ -84,7 +84,7 @@ SNESolver::invoke_compute_jacobian_delegate(SNES, Vec x, Mat J, Mat Jp, void * c
     return 0;
 }
 
-ErrorCode
+PetscErrorCode
 SNESolver::invoke_monitor_delegate(SNES, Int it, Real rnorm, void * ctx)
 {
     CALL_STACK_MSG();

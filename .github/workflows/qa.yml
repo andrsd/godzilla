@@ -4,7 +4,7 @@ on:
   pull_request:
     branches:
       - main
-      - 0.11.x
+      - 0.12.x
 
 jobs:
   cpp-linter:
@@ -58,68 +58,6 @@ jobs:
           database: build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  analyze:
-    name: CodeQL
-    runs-on: ubuntu-22.04
-    permissions:
-      actions: read
-      contents: read
-      security-events: write
-
-    defaults:
-      run:
-        shell: bash -el {0}
-
-    strategy:
-      fail-fast: false
-      matrix:
-        language: ["cpp"]
-
-    steps:
-      - name: Set up miniconda
-        uses: conda-incubator/setup-miniconda@v3
-        with:
-          python-version: 3.11
-          auto-update-conda: false
-          channels: andrsd,defaults
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Install dependencies
-        run: |
-          conda install \
-            cmake=3.31.2 \
-            rhash=1.4.3 \
-            make \
-            mpich-mpicxx \
-            mpicpp-lite=2.2.* \
-            spdlog=1.* \
-            fmt=11.* \
-            petsc==3.23.* \
-            yaml-cpp==0.8.0 \
-            exodusIIcpp=3.* \
-            teciocpp \
-            gtest
-
-      - name: Configure
-        run: |
-          cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build \
-            -DGODZILLA_WITH_TECIOCPP=ON \
-            -DGODZILLA_BUILD_EXAMPLES=YES \
-            -DGODZILLA_BUILD_TESTS=YES
-
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
-        with:
-          languages: ${{ matrix.language }}
-
-      - name: Build
-        run: make -C ${{ github.workspace }}/build
-
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
 
   check-spdx-tags:
     name: check spdx tags

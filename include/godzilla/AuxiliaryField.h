@@ -81,19 +81,16 @@ protected:
 private:
     /// Discrete problem this object is part of
     DiscreteProblemInterface * dpi;
-
     /// Unstructured mesh this field is defined on
     UnstructuredMesh * mesh;
-
     /// Field name
     String field;
-
+    /// Field ID this boundary condition is attached to
+    FieldID fid;
     /// Region name this auxiliary field is defined on
     const String region;
-
     /// Block here the auxiliary field lives
     Label label;
-
     /// Block ID associated with the label where this field is defined
     Int block_id;
 

@@ -1,7 +1,8 @@
 #include "gtest/gtest.h"
+#include "godzilla/Error.h"
 #include "godzilla/Types.h"
+#include "godzilla/Object.h"
 #include "godzilla/Parameters.h"
-#include "godzilla/Factory.h"
 #include "godzilla/DenseVector.h"
 #include "ExceptionTestMacros.h"
 
@@ -21,13 +22,13 @@ validParams1()
 
 TEST(ParametersTest, get_nonexisting_param)
 {
-    Parameters params = Object::parameters();
+    auto params = Object::parameters();
     EXPECT_THROW_MSG(params.get<int>("i"), "No parameter 'i' found.");
 }
 
 TEST(ParametersTest, get_uninitialized_param)
 {
-    Parameters params = Object::parameters();
+    auto params = Object::parameters();
     params.add_param<Real>("param", "doco");
 
     EXPECT_THROW_MSG(params.get<Real>("param"), "Parameter 'param' is uninitialized");
@@ -35,7 +36,7 @@ TEST(ParametersTest, get_uninitialized_param)
 
 TEST(ParametersTest, get_param_with_incorrect_type)
 {
-    Parameters params = Object::parameters();
+    auto params = Object::parameters();
     params.add_param<double>("param", "doco");
 
     EXPECT_THROW_MSG(params.get<int>("param"), "Parameter 'param' has unexpected type (double)");
@@ -63,7 +64,7 @@ TEST(ParametersTest, assign)
     Parameters params1;
     params1.add_param<Real>("param", 12.34, "doco");
 
-    Parameters params2 = params1;
+    auto params2 = params1;
     EXPECT_TRUE(params2.has<Real>("param"));
     EXPECT_EQ(params2.get<Real>("param"), 12.34);
     EXPECT_EQ(params2.get_doc_string("param"), String("doco"));
@@ -87,14 +88,14 @@ TEST(ParametersTest, add_params)
 
 TEST(ParametersTest, valid_params)
 {
-    Parameters params1 = validParams1();
+    auto params1 = validParams1();
     EXPECT_EQ(params1.get<Real>("p"), 78.56);
     EXPECT_EQ(params1.get_doc_string("p"), String("doco p"));
 }
 
 TEST(ParametersTest, empty_doc_str)
 {
-    Parameters params = Object::parameters();
+    auto params = Object::parameters();
 
     EXPECT_EQ(params.get_doc_string("i"), String(""));
 }
@@ -227,4 +228,30 @@ TEST(ParametersTest, redefining_parameter_throws_an_error)
     pars.add_param<String>("name", "");
     EXPECT_DEATH(pars.add_param<std::vector<String>>("name", ""),
                  "Parameter 'name' already exists");
+}
+
+TEST(ParametersTest, src_loc_has_value)
+{
+    auto params = validParams1();
+    params.set<Real>("p", 123.);
+    auto rp = params.get_source_location("p");
+    ASSERT_TRUE(rp.has_value());
+    auto sl = rp.value();
+    EXPECT_TRUE(std::strlen(sl.file_name()) > 0);
+}
+
+TEST(ParametersTest, src_loc_does_has_value)
+{
+    auto params = validParams1();
+    auto rp = params.get_source_location("p");
+    ASSERT_FALSE(rp.has_value());
+    EXPECT_EQ(rp.error(), ErrorCode::NotSet);
+}
+
+TEST(ParametersTest, src_loc_of_non_existing_param)
+{
+    auto params = validParams1();
+    auto rp = params.get_source_location("q");
+    ASSERT_FALSE(rp.has_value());
+    EXPECT_EQ(rp.error(), ErrorCode::NotFound);
 }

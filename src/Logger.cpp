@@ -3,54 +3,54 @@
 
 #include "godzilla/Logger.h"
 #include "godzilla/CallStack.h"
-#include "fmt/printf.h"
+#include "spdlog/sinks/null_sink.h"
+#include "spdlog/sinks/basic_file_sink.h"
 
 namespace godzilla {
 
-Logger::Logger() : num_errors(0), num_warnings(0)
+Logger::Logger()
 {
     CALL_STACK_MSG();
+    this->spdlgr = spdlog::null_logger_mt("file_logger");
 }
 
-std::size_t
-Logger::get_num_entries() const
+Logger::~Logger()
 {
-    CALL_STACK_MSG();
-    return this->num_errors + this->num_warnings;
-}
-
-std::size_t
-Logger::get_num_errors() const
-{
-    CALL_STACK_MSG();
-    return this->num_errors;
-}
-
-std::size_t
-Logger::get_num_warnings() const
-{
-    CALL_STACK_MSG();
-    return this->num_warnings;
+    spdlog::drop("file_logger");
 }
 
 void
-Logger::print() const
+Logger::set_log_file_name(fs::path file_name)
 {
     CALL_STACK_MSG();
-    if (this->num_errors == 0 && this->num_warnings == 0)
-        return;
+    spdlog::drop("file_logger");
+    this->spdlgr = spdlog::basic_logger_mt("file_logger", file_name, true);
+    this->spdlgr->set_pattern("[%Y %b %d %H:%M:%S.%e] [%l] %v");
+}
 
-    fmt::print(stderr, "{}", Terminal::magenta);
-    if (this->num_errors > 0)
-        fmt::print(stderr, "{} error(s)", this->num_errors);
+void
+Logger::set_format_string(std::string pattern, spdlog::pattern_time_type time_type)
+{
+    CALL_STACK_MSG();
+    this->spdlgr->set_pattern(pattern, time_type);
+}
 
-    if (this->num_warnings > 0) {
-        if (this->num_errors > 0)
-            fmt::print(stderr, ", ");
+spdlog::level::level_enum
+Logger::get_level()
+{
+    return this->spdlgr->level();
+}
 
-        fmt::print(stderr, "{} warning(s)", this->num_warnings);
-    }
-    fmt::print(stderr, " found.{}\n", Terminal::normal);
+void
+Logger::set_level(spdlog::level::level_enum log_level)
+{
+    this->spdlgr->set_level(log_level);
+}
+
+void
+Logger::flush_on(spdlog::level::level_enum log_level)
+{
+    this->spdlgr->flush_on(log_level);
 }
 
 } // namespace godzilla

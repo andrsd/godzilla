@@ -11,7 +11,7 @@
 
 namespace godzilla {
 
-ErrorCode
+PetscErrorCode
 TransientProblemInterface::invoke_pre_step(TS ts)
 {
     CALL_STACK_MSG();
@@ -22,7 +22,7 @@ TransientProblemInterface::invoke_pre_step(TS ts)
     return 0;
 }
 
-ErrorCode
+PetscErrorCode
 TransientProblemInterface::invoke_post_step(TS ts)
 {
     CALL_STACK_MSG();
@@ -33,7 +33,7 @@ TransientProblemInterface::invoke_post_step(TS ts)
     return 0;
 }
 
-ErrorCode
+PetscErrorCode
 TransientProblemInterface::invoke_monitor_delegate(TS, Int stepi, Real time, Vec x, void * ctx)
 {
     CALL_STACK_MSG();
@@ -44,7 +44,7 @@ TransientProblemInterface::invoke_monitor_delegate(TS, Int stepi, Real time, Vec
     return 0;
 }
 
-ErrorCode
+PetscErrorCode
 TransientProblemInterface::invoke_compute_rhs_function_delegate(TS,
                                                                 Real time,
                                                                 Vec x,
@@ -61,7 +61,7 @@ TransientProblemInterface::invoke_compute_rhs_function_delegate(TS,
     return 0;
 }
 
-ErrorCode
+PetscErrorCode
 TransientProblemInterface::invoke_compute_rhs_jacobian_delegate(TS,
                                                                 Real time,
                                                                 Vec x,
@@ -82,7 +82,7 @@ TransientProblemInterface::invoke_compute_rhs_jacobian_delegate(TS,
     return 0;
 }
 
-ErrorCode
+PetscErrorCode
 TransientProblemInterface::invoke_compute_ifunction_delegate(TS,
                                                              Real time,
                                                              Vec x,
@@ -102,7 +102,7 @@ TransientProblemInterface::invoke_compute_ifunction_delegate(TS,
     return 0;
 }
 
-ErrorCode
+PetscErrorCode
 TransientProblemInterface::invoke_compute_ijacobian_delegate(TS,
                                                              Real time,
                                                              Vec x,
@@ -128,7 +128,7 @@ TransientProblemInterface::invoke_compute_ijacobian_delegate(TS,
     return 0;
 }
 
-ErrorCode
+PetscErrorCode
 TransientProblemInterface::invoke_compute_ifunction_delegate(DM,
                                                              Real time,
                                                              Vec x,
@@ -150,7 +150,7 @@ TransientProblemInterface::invoke_compute_ifunction_delegate(DM,
     return 0;
 }
 
-ErrorCode
+PetscErrorCode
 TransientProblemInterface::invoke_compute_ijacobian_delegate(DM,
                                                              Real time,
                                                              Vec x,
@@ -202,15 +202,17 @@ TransientProblemInterface::TransientProblemInterface(Problem * problem, const Pa
     step_num(0)
 {
     CALL_STACK_MSG();
+    GODZILLA_ASSERT_TRUE(problem != nullptr, "Problem is null");
+
     PETSC_CHECK(TSCreate(this->problem->get_comm(), &this->ts));
     PETSC_CHECK(TSSetApplicationContext(this->ts, this));
     this->time_step_adapt = TimeStepAdapt::from_ts(this->ts);
 
     if (this->end_time.has_value() && this->num_steps.has_value())
-        this->problem->log_error(
+        this->problem->error(
             "Cannot provide 'end_time' and 'num_steps' together. Specify one or the other.");
     if (!this->end_time.has_value() && !this->num_steps.has_value())
-        this->problem->log_error("You must provide either 'end_time' or 'num_steps' parameter.");
+        this->problem->error("You must provide either 'end_time' or 'num_steps' parameter.");
 }
 
 TransientProblemInterface::~TransientProblemInterface()

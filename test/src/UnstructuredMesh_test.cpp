@@ -1,6 +1,7 @@
 #include "gmock/gmock.h"
 #include <petscsystypes.h>
 #include "GodzillaApp_test.h"
+#include "godzilla/Error.h"
 #include "godzilla/FileMesh.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/MeshFactory.h"
@@ -181,9 +182,9 @@ TEST(UnstructuredMeshTest, nonexistent_face_set)
     auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh>(params);
     auto mesh = mesh_qtr.get();
 
-    EXPECT_THROW_MSG(
-        { auto n = mesh->get_face_set_name(1234); },
-        "Face set ID '1234' does not exist.");
+    auto n = mesh->get_face_set_name(1234);
+    EXPECT_FALSE(n);
+    EXPECT_EQ(n.error(), ErrorCode::NotFound);
 }
 
 TEST(UnstructuredMeshTest, nonexistent_cell_set)
@@ -195,9 +196,9 @@ TEST(UnstructuredMeshTest, nonexistent_cell_set)
     params.set<String>("name", "obj");
     auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh>(params);
     auto mesh = mesh_qtr.get();
-    EXPECT_THROW_MSG(
-        { auto n = mesh->get_cell_set_name(1234); },
-        "Cell set ID '1234' does not exist.");
+    auto n = mesh->get_cell_set_name(1234);
+    EXPECT_FALSE(n.has_value());
+    EXPECT_EQ(n.error(), ErrorCode::NotFound);
 }
 
 TEST(UnstructuredMeshTest, get_connectivity)
@@ -578,12 +579,12 @@ TEST(UnstructuredMesh, face_sets)
                             Pair(5, "right"),
                             Pair(6, "left")));
 
-    EXPECT_EQ(m->get_face_set_name(1), "back");
-    EXPECT_EQ(m->get_face_set_name(2), "front");
-    EXPECT_EQ(m->get_face_set_name(3), "bottom");
-    EXPECT_EQ(m->get_face_set_name(4), "top");
-    EXPECT_EQ(m->get_face_set_name(5), "right");
-    EXPECT_EQ(m->get_face_set_name(6), "left");
+    EXPECT_EQ(m->get_face_set_name(1).value(), "back");
+    EXPECT_EQ(m->get_face_set_name(2).value(), "front");
+    EXPECT_EQ(m->get_face_set_name(3).value(), "bottom");
+    EXPECT_EQ(m->get_face_set_name(4).value(), "top");
+    EXPECT_EQ(m->get_face_set_name(5).value(), "right");
+    EXPECT_EQ(m->get_face_set_name(6).value(), "left");
 
     EXPECT_TRUE(m->has_face_set("back"));
     EXPECT_TRUE(m->has_face_set("front"));
@@ -712,7 +713,9 @@ TEST(UnstructuredMeshTest, get_block_id_from_region_via_number)
     auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh>(params);
     auto m = mesh_qtr.get();
 
-    EXPECT_EQ(get_block_id_from_region(*m, "0"), 0);
+    auto res = get_block_id_from_region(*m, "0");
+    EXPECT_TRUE(res.has_value());
+    EXPECT_EQ(res.value(), 0);
 }
 
 TEST(UnstructuredMeshTest, get_block_id_from_region_via_name)
@@ -727,5 +730,7 @@ TEST(UnstructuredMeshTest, get_block_id_from_region_via_name)
     auto mesh_qtr = MeshFactory::create<FileMesh>(params);
     auto m = mesh_qtr.get();
 
-    EXPECT_EQ(get_block_id_from_region(*m, "block"), 1);
+    auto res = get_block_id_from_region(*m, "block");
+    EXPECT_TRUE(res.has_value());
+    EXPECT_EQ(res.value(), 1);
 }

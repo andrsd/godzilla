@@ -3,6 +3,7 @@
 
 #include "godzilla/AuxiliaryField.h"
 #include "godzilla/CallStack.h"
+#include "godzilla/Exception.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Problem.h"
 #include "godzilla/DiscreteProblemInterface.h"
@@ -25,6 +26,7 @@ AuxiliaryField::AuxiliaryField(const Parameters & pars) :
     dpi(pars.get<DiscreteProblemInterface *>("_dpi")),
     mesh(nullptr),
     field(pars.get<String>("field")),
+    fid(FieldID::INVALID),
     region(pars.get<String>("region")),
     block_id(-1)
 {
@@ -60,13 +62,16 @@ AuxiliaryField::create()
     CALL_STACK_MSG();
     this->mesh = this->dpi->get_mesh();
     if (this->region.length() > 0) {
-        if (this->mesh->has_label(this->region)) {
-            this->label = this->mesh->get_label(this->region);
-            this->block_id = this->mesh->get_cell_set_id(this->region);
-        }
-        else
-            log_error("Region '{}' does not exists. Typo?", this->region);
+        expect_true(this->mesh->has_label(this->region),
+                    "Region '{}' does not exists. Typo?",
+                    this->region);
+        this->label = this->mesh->get_label(this->region);
+        this->block_id = this->mesh->get_cell_set_id(this->region).value();
     }
+
+    auto id = this->dpi->get_aux_field_id(this->field);
+    expect_true(id.has_value(), "Auxiliary field '{}' does not exist. Typo?", this->field);
+    this->fid = id.value();
 }
 
 String
@@ -94,7 +99,7 @@ FieldID
 AuxiliaryField::get_field_id() const
 {
     CALL_STACK_MSG();
-    return this->dpi->get_aux_field_id(this->field);
+    return this->fid;
 }
 
 String

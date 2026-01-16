@@ -116,8 +116,8 @@ TEST(DependencyEvaluator, create_existing_functional)
     params.set<FEProblemInterface *>("_fepi", &prob);
     prob.create_functional<SimpleFnl>("test", params);
 
-    EXPECT_THROW_MSG(prob.create_functional<SimpleFnl>("test", params),
-                     "Functional with name 'test' already exists.");
+    EXPECT_DEATH(prob.create_functional<SimpleFnl>("test", params),
+                 "Functional with name 'test' already exists.");
 }
 
 TEST(DependencyEvaluator, get_non_existent_functional)
@@ -136,9 +136,7 @@ TEST(DependencyEvaluator, get_non_existent_functional)
 
     prob.create();
 
-    EXPECT_THROW_MSG(
-        { [[maybe_unused]] auto & f = prob.get_functional("asdf"); },
-        "No functional with name 'asdf' found. Typo?");
+    EXPECT_DEATH(prob.get_functional("asdf"), "No functional with name 'asdf' found. Typo?");
 }
 
 TEST(DependencyEvaluator, eval)
@@ -203,8 +201,8 @@ TEST(DependencyEvaluator, redeclare_a_value)
     Parameters params;
     params.set<FEProblemInterface *>("_fepi", &prob);
     prob.create_functional<SimpleFnl>("b", params);
-    EXPECT_THROW_MSG(prob.create_functional<SimpleFnl>("a", params),
-                     "Trying to declare an already existing value 'a@region'.");
+    EXPECT_DEATH(prob.create_functional<SimpleFnl>("a", params),
+                 "Trying to declare an already existing value 'a@region'.");
 }
 
 TEST(DependencyEvaluator, get_suppliers)

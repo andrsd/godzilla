@@ -88,11 +88,11 @@ private:
     Delegate<void(void)> destroy_method;
 
 public:
-    static ErrorCode invoke_apply_delegate(PC, Vec, Vec);
-    static ErrorCode invoke_apply_ba_delegate(PC, PCSide, Vec, Vec, Vec);
-    static ErrorCode invoke_apply_transpose_delegate(PC, Vec, Vec);
-    static ErrorCode invoke_set_up_delegate(PC);
-    static ErrorCode invoke_destroy_delegate(PC);
+    static PetscErrorCode invoke_apply_delegate(PC, Vec, Vec);
+    static PetscErrorCode invoke_apply_ba_delegate(PC, PCSide, Vec, Vec, Vec);
+    static PetscErrorCode invoke_apply_transpose_delegate(PC, Vec, Vec);
+    static PetscErrorCode invoke_set_up_delegate(PC);
+    static PetscErrorCode invoke_destroy_delegate(PC);
 };
 
 } // namespace godzilla

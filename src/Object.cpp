@@ -18,7 +18,7 @@ Object::parameters()
 }
 
 Object::Object(const Parameters & pars) :
-    LoggingInterface(pars.get<App *>("app")->get_logger(), pars.get<String>("name", "")),
+    LoggingInterface(pars.get<App *>("app")->get_logger()),
     app(pars.get<App *>("app")),
     type(pars.get<String>("_type")),
     name(pars.get<String>("name", ""))

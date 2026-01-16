@@ -347,16 +347,16 @@ TEST(ProblemTest, loc_glob_arithmetic_type)
     local_to_global(dm, l, ADD_VALUES, g);
     global_to_local(dm, g, INSERT_VALUES, l);
 
-    EXPECT_NEAR(l(0), 1., 1e-10);
-    EXPECT_NEAR(l(1), 1., 1e-10);
-    EXPECT_NEAR(l(2), 1., 1e-10);
-    EXPECT_NEAR(l(3), 1., 1e-10);
-    EXPECT_NEAR(l(4), 1., 1e-10);
-    EXPECT_NEAR(l(5), 1., 1e-10);
-    EXPECT_NEAR(l(6), 1., 1e-10);
-    EXPECT_NEAR(l(7), 1., 1e-10);
-    EXPECT_NEAR(l(8), 1., 1e-10);
-    EXPECT_NEAR(l(9), 1., 1e-10);
+    EXPECT_NEAR(l[0], 1., 1e-10);
+    EXPECT_NEAR(l[1], 1., 1e-10);
+    EXPECT_NEAR(l[2], 1., 1e-10);
+    EXPECT_NEAR(l[3], 1., 1e-10);
+    EXPECT_NEAR(l[4], 1., 1e-10);
+    EXPECT_NEAR(l[5], 1., 1e-10);
+    EXPECT_NEAR(l[6], 1., 1e-10);
+    EXPECT_NEAR(l[7], 1., 1e-10);
+    EXPECT_NEAR(l[8], 1., 1e-10);
+    EXPECT_NEAR(l[9], 1., 1e-10);
 
     PETSC_CHECK(PetscFEDestroy(&fe));
     PETSC_CHECK(DMDestroy(&dm));
@@ -401,16 +401,16 @@ TEST(ProblemTest, loc_glob_arithmetic_type_min_max)
     local_to_global(dm, l1, MAX_VALUES, g);
     global_to_local(dm, g, INSERT_VALUES, l1);
 
-    EXPECT_NEAR(l1(0), 1., 1e-10);
-    EXPECT_NEAR(l1(1), 1., 1e-10);
-    EXPECT_NEAR(l1(2), 1., 1e-10);
-    EXPECT_NEAR(l1(3), 1., 1e-10);
-    EXPECT_NEAR(l1(4), 1., 1e-10);
-    EXPECT_NEAR(l1(5), 1., 1e-10);
-    EXPECT_NEAR(l1(6), 1., 1e-10);
-    EXPECT_NEAR(l1(7), 1., 1e-10);
-    EXPECT_NEAR(l1(8), 1., 1e-10);
-    EXPECT_NEAR(l1(9), 1., 1e-10);
+    EXPECT_NEAR(l1[0], 1., 1e-10);
+    EXPECT_NEAR(l1[1], 1., 1e-10);
+    EXPECT_NEAR(l1[2], 1., 1e-10);
+    EXPECT_NEAR(l1[3], 1., 1e-10);
+    EXPECT_NEAR(l1[4], 1., 1e-10);
+    EXPECT_NEAR(l1[5], 1., 1e-10);
+    EXPECT_NEAR(l1[6], 1., 1e-10);
+    EXPECT_NEAR(l1[7], 1., 1e-10);
+    EXPECT_NEAR(l1[8], 1., 1e-10);
+    EXPECT_NEAR(l1[9], 1., 1e-10);
 
     // test min
     auto l2 = create_local_array1d<Real>(dm);
@@ -419,16 +419,16 @@ TEST(ProblemTest, loc_glob_arithmetic_type_min_max)
     local_to_global(dm, l2, MIN_VALUES, g);
     global_to_local(dm, g, INSERT_VALUES, l2);
 
-    EXPECT_NEAR(l2(0), 0., 1e-10);
-    EXPECT_NEAR(l2(1), 0., 1e-10);
-    EXPECT_NEAR(l2(2), 0., 1e-10);
-    EXPECT_NEAR(l2(3), 0., 1e-10);
-    EXPECT_NEAR(l2(4), 0., 1e-10);
-    EXPECT_NEAR(l2(5), 0., 1e-10);
-    EXPECT_NEAR(l2(6), 0., 1e-10);
-    EXPECT_NEAR(l2(7), 0., 1e-10);
-    EXPECT_NEAR(l2(8), 0., 1e-10);
-    EXPECT_NEAR(l2(9), 0., 1e-10);
+    EXPECT_NEAR(l2[0], 0., 1e-10);
+    EXPECT_NEAR(l2[1], 0., 1e-10);
+    EXPECT_NEAR(l2[2], 0., 1e-10);
+    EXPECT_NEAR(l2[3], 0., 1e-10);
+    EXPECT_NEAR(l2[4], 0., 1e-10);
+    EXPECT_NEAR(l2[5], 0., 1e-10);
+    EXPECT_NEAR(l2[6], 0., 1e-10);
+    EXPECT_NEAR(l2[7], 0., 1e-10);
+    EXPECT_NEAR(l2[8], 0., 1e-10);
+    EXPECT_NEAR(l2[9], 0., 1e-10);
 
     PETSC_CHECK(PetscFEDestroy(&fe));
     PETSC_CHECK(DMDestroy(&dm));
@@ -473,26 +473,26 @@ TEST(ProblemTest, loc_glob_vec_type)
     local_to_global(dm, l, ADD_VALUES, g);
     global_to_local(dm, g, INSERT_VALUES, l);
 
-    EXPECT_NEAR(l(0)(0), 5., 1e-10);
-    EXPECT_NEAR(l(0)(1), 6., 1e-10);
-    EXPECT_NEAR(l(1)(0), 5., 1e-10);
-    EXPECT_NEAR(l(1)(1), 6., 1e-10);
-    EXPECT_NEAR(l(2)(0), 5., 1e-10);
-    EXPECT_NEAR(l(2)(1), 6., 1e-10);
-    EXPECT_NEAR(l(3)(0), 5., 1e-10);
-    EXPECT_NEAR(l(3)(1), 6., 1e-10);
-    EXPECT_NEAR(l(4)(0), 5., 1e-10);
-    EXPECT_NEAR(l(4)(1), 6., 1e-10);
-    EXPECT_NEAR(l(5)(0), 5., 1e-10);
-    EXPECT_NEAR(l(5)(1), 6., 1e-10);
-    EXPECT_NEAR(l(6)(0), 5., 1e-10);
-    EXPECT_NEAR(l(6)(1), 6., 1e-10);
-    EXPECT_NEAR(l(7)(0), 5., 1e-10);
-    EXPECT_NEAR(l(7)(1), 6., 1e-10);
-    EXPECT_NEAR(l(8)(0), 5., 1e-10);
-    EXPECT_NEAR(l(8)(1), 6., 1e-10);
-    EXPECT_NEAR(l(9)(0), 5., 1e-10);
-    EXPECT_NEAR(l(9)(1), 6., 1e-10);
+    EXPECT_NEAR(l[0](0), 5., 1e-10);
+    EXPECT_NEAR(l[0](1), 6., 1e-10);
+    EXPECT_NEAR(l[1](0), 5., 1e-10);
+    EXPECT_NEAR(l[1](1), 6., 1e-10);
+    EXPECT_NEAR(l[2](0), 5., 1e-10);
+    EXPECT_NEAR(l[2](1), 6., 1e-10);
+    EXPECT_NEAR(l[3](0), 5., 1e-10);
+    EXPECT_NEAR(l[3](1), 6., 1e-10);
+    EXPECT_NEAR(l[4](0), 5., 1e-10);
+    EXPECT_NEAR(l[4](1), 6., 1e-10);
+    EXPECT_NEAR(l[5](0), 5., 1e-10);
+    EXPECT_NEAR(l[5](1), 6., 1e-10);
+    EXPECT_NEAR(l[6](0), 5., 1e-10);
+    EXPECT_NEAR(l[6](1), 6., 1e-10);
+    EXPECT_NEAR(l[7](0), 5., 1e-10);
+    EXPECT_NEAR(l[7](1), 6., 1e-10);
+    EXPECT_NEAR(l[8](0), 5., 1e-10);
+    EXPECT_NEAR(l[8](1), 6., 1e-10);
+    EXPECT_NEAR(l[9](0), 5., 1e-10);
+    EXPECT_NEAR(l[9](1), 6., 1e-10);
 
     PETSC_CHECK(PetscFEDestroy(&fe));
     PETSC_CHECK(DMDestroy(&dm));

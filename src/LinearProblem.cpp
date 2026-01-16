@@ -9,7 +9,7 @@
 
 namespace godzilla {
 
-ErrorCode
+PetscErrorCode
 LinearProblem::invoke_compute_operators_delegate(KSP, Mat A, Mat B, void * context)
 {
     CALL_STACK_MSG();
@@ -22,7 +22,7 @@ LinearProblem::invoke_compute_operators_delegate(KSP, Mat A, Mat B, void * conte
     return 0;
 }
 
-ErrorCode
+PetscErrorCode
 LinearProblem::invoke_compute_rhs_delegate(KSP, Vec b, void * context)
 {
     CALL_STACK_MSG();

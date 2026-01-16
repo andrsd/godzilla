@@ -159,3 +159,17 @@ TEST(StringTest, find_non_existing_substring)
     auto r = hello.find("asdf");
     ASSERT_FALSE(r.has_value());
 }
+
+TEST(StringTest, replace_1a_with_shorter_str)
+{
+    String str("The quick brown fox jumps");
+    str.replace(10, 9, "red cat");
+    EXPECT_EQ(str, "The quick red cat jumps");
+}
+
+TEST(StringTest, replace_1b_with_longer_str)
+{
+    String str("The quick brown fox jumps");
+    str.replace(10, 9, "green chameleon");
+    EXPECT_EQ(str, "The quick green chameleon jumps");
+}

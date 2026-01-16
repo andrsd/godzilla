@@ -49,12 +49,12 @@ public:
     static Parameters parameters();
 
 private:
-    static ErrorCode invoke_delegate(Real time,
-                                     const Real * c,
-                                     const Real * n,
-                                     const Scalar * xI,
-                                     Scalar * xG,
-                                     void * ctx);
+    static PetscErrorCode invoke_delegate(Real time,
+                                          const Real * c,
+                                          const Real * n,
+                                          const Scalar * xI,
+                                          Scalar * xG,
+                                          void * ctx);
 };
 
 template <typename T>

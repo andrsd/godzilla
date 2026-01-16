@@ -390,32 +390,33 @@ public:
     static Parameters parameters();
 
 private:
-    static ErrorCode invoke_pre_step(TS ts);
-    static ErrorCode invoke_post_step(TS ts);
-    static ErrorCode invoke_monitor_delegate(TS ts, Int stepi, Real time, Vec x, void * ctx);
-    static ErrorCode invoke_compute_rhs_function_delegate(TS, Real time, Vec x, Vec F, void * ctx);
-    static ErrorCode
+    static PetscErrorCode invoke_pre_step(TS ts);
+    static PetscErrorCode invoke_post_step(TS ts);
+    static PetscErrorCode invoke_monitor_delegate(TS ts, Int stepi, Real time, Vec x, void * ctx);
+    static PetscErrorCode
+    invoke_compute_rhs_function_delegate(TS, Real time, Vec x, Vec F, void * ctx);
+    static PetscErrorCode
     invoke_compute_rhs_jacobian_delegate(TS, Real time, Vec x, Mat A, Mat B, void * ctx);
-    static ErrorCode
+    static PetscErrorCode
     invoke_compute_ifunction_delegate(TS, Real time, Vec x, Vec x_t, Vec F, void * context);
-    static ErrorCode invoke_compute_ijacobian_delegate(TS,
-                                                       Real time,
-                                                       Vec x,
-                                                       Vec x_t,
-                                                       Real x_t_shift,
-                                                       Mat J,
-                                                       Mat Jp,
-                                                       void * context);
-    static ErrorCode
+    static PetscErrorCode invoke_compute_ijacobian_delegate(TS,
+                                                            Real time,
+                                                            Vec x,
+                                                            Vec x_t,
+                                                            Real x_t_shift,
+                                                            Mat J,
+                                                            Mat Jp,
+                                                            void * context);
+    static PetscErrorCode
     invoke_compute_ifunction_delegate(DM, Real time, Vec x, Vec x_t, Vec F, void * context);
-    static ErrorCode invoke_compute_ijacobian_delegate(DM,
-                                                       Real time,
-                                                       Vec x,
-                                                       Vec x_t,
-                                                       Real x_t_shift,
-                                                       Mat J,
-                                                       Mat Jp,
-                                                       void * context);
+    static PetscErrorCode invoke_compute_ijacobian_delegate(DM,
+                                                            Real time,
+                                                            Vec x,
+                                                            Vec x_t,
+                                                            Real x_t_shift,
+                                                            Mat J,
+                                                            Mat Jp,
+                                                            void * context);
 };
 
 } // namespace godzilla

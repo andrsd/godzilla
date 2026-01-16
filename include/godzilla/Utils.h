@@ -5,6 +5,8 @@
 
 #include "godzilla/Types.h"
 #include "godzilla/String.h"
+#include "godzilla/Expected.h"
+#include "godzilla/Error.h"
 #include <vector>
 #include <map>
 #include <typeinfo>
@@ -207,7 +209,7 @@ void print_converged_reason(PrintInterface & pi, bool converged);
 /// @param mesh Unstructure mesh we operate on for cell set lookups
 /// @param region Region name/Block ID
 /// @return Block ID corresponding to the region
-Int get_block_id_from_region(const UnstructuredMesh & mesh, String region);
+Expected<Int, ErrorCode> get_block_id_from_region(const UnstructuredMesh & mesh, String region);
 
 template <typename T>
 class Array1D;
@@ -225,7 +227,7 @@ join(const char * con, const Array1D<T> & array)
     for (size_t i = 0; i < array.size(); ++i) {
         if (i > 0)
             oss << con;
-        oss << array(i);
+        oss << array[i];
     }
     return oss.str();
 }

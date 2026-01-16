@@ -50,6 +50,7 @@ target_link_libraries(
     ${PROJECT_NAME}
     PUBLIC
         fmt::fmt
+        spdlog::spdlog
         mpicpp-lite::mpicpp-lite
         HDF5::HDF5
         PETSc::petsc

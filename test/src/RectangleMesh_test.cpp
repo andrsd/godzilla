@@ -26,13 +26,12 @@ TEST(RectangleMeshTest, api)
 
     EXPECT_EQ(mesh->get_dimension(), 2);
 
-    Real gmin[4], gmax[4];
-    DMGetBoundingBox(dm, gmin, gmax);
-    EXPECT_EQ(gmin[0], 1);
-    EXPECT_EQ(gmax[0], 3);
+    auto bbox = mesh->get_bounding_box<2_D>();
+    EXPECT_EQ(bbox.min()[0], 1);
+    EXPECT_EQ(bbox.max()[0], 3);
 
-    EXPECT_EQ(gmin[1], 2);
-    EXPECT_EQ(gmax[1], 4);
+    EXPECT_EQ(bbox.min()[1], 2);
+    EXPECT_EQ(bbox.max()[1], 4);
 
     Vec coords;
     DMGetCoordinates(dm, &coords);
@@ -43,8 +42,6 @@ TEST(RectangleMeshTest, api)
 
 TEST(RectangleMeshTest, incorrect_dims)
 {
-    testing::internal::CaptureStderr();
-
     TestApp app;
 
     auto params = RectangleMesh::parameters();
@@ -56,12 +53,6 @@ TEST(RectangleMeshTest, incorrect_dims)
         .set<Real>("ymin", 2)
         .set<Real>("ymax", 1)
         .set<Int>("ny", 8);
-    RectangleMesh mesh(params);
 
-    EXPECT_FALSE(app.check_integrity());
-    app.get_logger()->print();
-
-    auto output = testing::internal::GetCapturedStderr();
-    EXPECT_THAT(output, testing::HasSubstr("obj: Parameter 'xmax' must be larger than 'xmin'."));
-    EXPECT_THAT(output, testing::HasSubstr("obj: Parameter 'ymax' must be larger than 'ymin'."));
+    EXPECT_DEATH(RectangleMesh mesh(params), "Parameter 'xmax' must be larger than 'xmin'.");
 }

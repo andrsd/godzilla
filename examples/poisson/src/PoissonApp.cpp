@@ -49,9 +49,12 @@ public:
 
 PoissonApp::PoissonApp(mpi::Communicator comm, const std::string & name, int argc, char * argv[]) :
     App(comm, name),
-    CommandLineInterface(*this, argc, argv)
+    CommandLineInterface(*this, argc, argv),
+    cli_opts(create_command_line_options()),
+    cli_result(CommandLineInterface::parse(this->cli_opts))
 {
     CALL_STACK_MSG();
+    CommandLineInterface::process_command_line(this->cli_result);
 }
 
 cxxopts::Options
@@ -64,24 +67,18 @@ PoissonApp::create_command_line_options()
     return opts;
 }
 
-void
-PoissonApp::process_command_line(cxxopts::Options & opts, const cxxopts::ParseResult & result)
-{
-    CALL_STACK_MSG();
-    if (result.count("help")) {
-        fmt::print("{}", opts.help());
-    }
-    else if (result.count("dimension")) {
-        auto dim = result["dimension"].as<int>();
-        solve_problem(dim);
-    }
-}
-
 int
 PoissonApp::run()
 {
     CALL_STACK_MSG();
-    return CommandLineInterface::run();
+    if (this->cli_result.count("help")) {
+        fmt::print("{}", this->cli_opts.help());
+    }
+    else if (this->cli_result.count("dimension")) {
+        auto dim = this->cli_result["dimension"].as<int>();
+        solve_problem(dim);
+    }
+    return 0;
 }
 
 Qtr<Mesh>

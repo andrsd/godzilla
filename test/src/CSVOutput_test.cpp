@@ -27,7 +27,7 @@ TEST_F(CSVOutputTest, get_file_ext)
 {
     auto params = CSVOutput::parameters();
     params.set<App *>("app", this->app)
-        .set<Problem *>("_problem", this->prob)
+        .set<Problem *>("_problem", this->prob.get())
         .set<fs::path>("file", "asdf");
     CSVOutput out(params);
     out.create();
@@ -101,7 +101,7 @@ TEST_F(CSVOutputTest, set_file_name)
 {
     auto params = CSVOutput::parameters();
     params.set<App *>("app", this->app)
-        .set<Problem *>("_problem", this->prob)
+        .set<Problem *>("_problem", this->prob.get())
         .set<fs::path>("file", "asdf");
     CSVOutput out(params);
 

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(godzilla
-    VERSION 0.11.0
+    VERSION 0.12.0
     LANGUAGES C CXX
 )
 
@@ -25,6 +25,7 @@ option(GODZILLA_BUILD_EXAMPLES "Build examples" NO)
 option(GODZILLA_BUILD_TESTS "Build tests" NO)
 
 find_package(fmt 11 REQUIRED)
+find_package(spdlog 1 REQUIRED)
 find_package(yaml-cpp 0.8 REQUIRED)
 if (GODZILLA_WITH_MPI)
     find_package(MPI REQUIRED)
