@@ -9,9 +9,6 @@
 
 namespace godzilla {
 
-template <typename T>
-using IsConstructibleFromParams = std::is_constructible<T, const Parameters &>;
-
 template <typename Producer, typename = void>
 struct CreateMeshResult {
     using type = void;

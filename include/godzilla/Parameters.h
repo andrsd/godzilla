@@ -344,4 +344,7 @@ private:
     std::map<String, Qtr<Value>> params;
 };
 
+template <typename T>
+using IsConstructibleFromParams = std::is_constructible<T, const Parameters &>;
+
 } // namespace godzilla
