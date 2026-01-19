@@ -101,9 +101,8 @@ main(int argc, char * argv[])
         App app(comm, "ns-incomp");
         app.set_verbosity_level(9);
 
-        auto mesh_pars = RectangleMesh::parameters();
-        mesh_pars.set<godzilla::App *>("app", &app)
-            .set<Int>("nx", 2)
+        auto mesh_pars = app.make_parameters<RectangleMesh>();
+        mesh_pars.set<Int>("nx", 2)
             .set<Int>("ny", 2)
             .set<Real>("xmin", -1)
             .set<Real>("xmax", 1)
@@ -111,9 +110,8 @@ main(int argc, char * argv[])
             .set<Real>("ymax", 1);
         auto mesh = MeshFactory::create<RectangleMesh>(mesh_pars);
 
-        auto prob_pars = NSIncompressibleProblem::parameters();
-        prob_pars.set<godzilla::App *>("app", &app)
-            .set<Mesh *>("mesh", mesh.get())
+        auto prob_pars = app.make_parameters<NSIncompressibleProblem>();
+        prob_pars.set<Mesh *>("mesh", mesh.get())
             .set<Real>("start_time", 0)
             .set<Real>("end_time", 1.)
             .set<Real>("dt", 0.2)
@@ -121,34 +119,29 @@ main(int argc, char * argv[])
         NSIncompressibleProblem prob(prob_pars);
         app.set_problem(&prob);
 
-        auto ic_vel_pars = VelocityIC::parameters();
-        ic_vel_pars.set<godzilla::App *>("app", &app)
-            .set<String>("name", "velocity")
-            .set<String>("field", "velocity");
+        auto ic_vel_pars = app.make_parameters<VelocityIC>();
+        ic_vel_pars.set<String>("name", "velocity");
+        ic_vel_pars.set<String>("field", "velocity");
         prob.add_initial_condition<VelocityIC>(ic_vel_pars);
 
-        auto ic_p_pars = PressureIC::parameters();
-        ic_p_pars.set<godzilla::App *>("app", &app)
-            .set<String>("name", "pressure")
-            .set<String>("field", "pressure");
+        auto ic_p_pars = app.make_parameters<PressureIC>();
+        ic_p_pars.set<String>("name", "pressure");
+        ic_p_pars.set<String>("field", "pressure");
         prob.add_initial_condition<PressureIC>(ic_p_pars);
 
-        auto aux_pars = ForcingFnAux::parameters();
-        aux_pars.set<godzilla::App *>("app", &app);
+        auto aux_pars = app.make_parameters<ForcingFnAux>();
         aux_pars.set<String>("name", "ffn");
         prob.add_auxiliary_field<ForcingFnAux>(aux_pars);
 
-        auto bc_pars = VelocityBC::parameters();
-        bc_pars.set<godzilla::App *>("app", &app)
-            .set<String>("name", "all")
-            .set<String>("field", "velocity")
-            .set<std::vector<String>>("boundary", { "left", "right", "top", "bottom" });
+        auto bc_pars = app.make_parameters<VelocityBC>();
+        bc_pars.set<String>("name", "all");
+        bc_pars.set<String>("field", "velocity");
+        bc_pars.set<std::vector<String>>("boundary", { "left", "right", "top", "bottom" });
         prob.add_boundary_condition<VelocityBC>(bc_pars);
 
-        auto out_pars = ExodusIIOutput::parameters();
-        out_pars.set<godzilla::App *>("app", &app)
-            .set<std::vector<String>>("variables", { "pressure", "velocity" })
-            .set<fs::path>("file", "mms-2d");
+        auto out_pars = app.make_parameters<ExodusIIOutput>();
+        out_pars.set<std::vector<String>>("variables", { "pressure", "velocity" });
+        out_pars.set<fs::path>("file", "mms-2d");
         prob.add_output<ExodusIIOutput>(out_pars);
 
         prob.create();

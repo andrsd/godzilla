@@ -36,53 +36,45 @@ main(int argc, char * argv[])
         App app(comm, "heat-eqn");
         app.set_verbosity_level(9);
 
-        auto mesh_pars = RectangleMesh::parameters();
-        mesh_pars.set<godzilla::App *>("app", &app);
+        auto mesh_pars = app.make_parameters<RectangleMesh>();
         mesh_pars.set<Int>("nx", 2);
         mesh_pars.set<Int>("ny", 2);
         auto mesh = MeshFactory::create<RectangleMesh>(mesh_pars);
 
-        auto prob_pars = HeatEquationProblem::parameters();
-        prob_pars.set<godzilla::App *>("app", &app)
-            .set<Mesh *>("mesh", mesh.get())
+        auto prob_pars = app.make_parameters<HeatEquationProblem>();
+        prob_pars.set<Mesh *>("mesh", mesh.get())
             .set<Real>("start_time", 0.)
             .set<Real>("end_time", 0.1)
             .set<Real>("dt", 0.01);
         HeatEquationProblem prob(prob_pars);
         app.set_problem(&prob);
 
-        auto aux_htc_pars = ConstantAuxiliaryField::parameters();
-        aux_htc_pars.set<godzilla::App *>("app", &app)
-            .set<String>("name", "htc")
-            .set<std::vector<Real>>("value", { 100. });
+        auto aux_htc_pars = app.make_parameters<ConstantAuxiliaryField>();
+        aux_htc_pars.set<String>("name", "htc");
+        aux_htc_pars.set<std::vector<Real>>("value", { 100. });
         prob.add_auxiliary_field<ConstantAuxiliaryField>(aux_htc_pars);
 
-        auto aux_Tamb_pars = ConstantAuxiliaryField::parameters();
-        aux_Tamb_pars.set<godzilla::App *>("app", &app)
-            .set<String>("name", "T_ambient")
-            .set<std::vector<Real>>("value", { 400. });
+        auto aux_Tamb_pars = app.make_parameters<ConstantAuxiliaryField>();
+        aux_Tamb_pars.set<String>("name", "T_ambient");
+        aux_Tamb_pars.set<std::vector<Real>>("value", { 400. });
         prob.add_auxiliary_field<ConstantAuxiliaryField>(aux_Tamb_pars);
 
-        auto ic_pars = ConstantInitialCondition::parameters();
-        ic_pars.set<godzilla::App *>("app", &app)
-            .set<String>("name", "all")
+        auto ic_pars = app.make_parameters<ConstantInitialCondition>();
+        ic_pars.set<String>("name", "all")
             .set<String>("field", "temp")
             .set<std::vector<Real>>("value", { 300 });
         prob.add_initial_condition<ConstantInitialCondition>(ic_pars);
 
-        auto bc_left_pars = DirichletBC::parameters();
-        bc_left_pars.set<godzilla::App *>("app", &app)
-            .set<std::vector<String>>("boundary", { "left" });
+        auto bc_left_pars = app.make_parameters<DirichletBC>();
+        bc_left_pars.set<std::vector<String>>("boundary", { "left" });
         prob.add_boundary_condition<DirichletBC>(bc_left_pars);
 
-        auto bc_right_pars = ConvectiveHeatFluxBC::parameters();
-        bc_right_pars.set<godzilla::App *>("app", &app)
-            .set<std::vector<String>>("boundary", { "right" });
+        auto bc_right_pars = app.make_parameters<ConvectiveHeatFluxBC>();
+        bc_right_pars.set<std::vector<String>>("boundary", { "right" });
         prob.add_boundary_condition<ConvectiveHeatFluxBC>(bc_right_pars);
 
-        auto out_pars = ExodusIIOutput::parameters();
-        out_pars.set<godzilla::App *>("app", &app)
-            .set<fs::path>("file", "2d")
+        auto out_pars = app.make_parameters<ExodusIIOutput>();
+        out_pars.set<fs::path>("file", "2d")
             .set<ExecuteOnFlags>("on", ExecuteOn::INITIAL | ExecuteOn::FINAL)
             .set<std::vector<String>>("variables", { "temp" });
         prob.add_output<ExodusIIOutput>(out_pars);

@@ -46,16 +46,14 @@ main(int argc, char * argv[])
         godzilla::App app(comm, "burgers-eqn");
         app.set_verbosity_level(9);
 
-        auto mesh_pars = LineMesh::parameters();
-        mesh_pars.set<godzilla::App *>("app", &app)
-            .set<Int>("nx", 100)
-            .set<Real>("xmin", 0)
-            .set<Real>("xmax", 1);
+        auto mesh_pars = app.make_parameters<LineMesh>();
+        mesh_pars.set<Int>("nx", 100);
+        mesh_pars.set<Real>("xmin", 0);
+        mesh_pars.set<Real>("xmax", 1);
         auto lm = MeshFactory::create<LineMesh>(mesh_pars);
 
-        auto prob_pars = BurgersEquation::parameters();
-        prob_pars.set<godzilla::App *>("app", &app)
-            .set<Mesh *>("mesh", lm.get())
+        auto prob_pars = app.make_parameters<BurgersEquation>();
+        prob_pars.set<Mesh *>("mesh", lm.get())
             .set<Real>("dt", 0.002)
             .set<Real>("start_time", 0)
             .set<Real>("end_time", 0.01)
@@ -63,26 +61,22 @@ main(int argc, char * argv[])
         BurgersEquation prob(prob_pars);
         app.set_problem(&prob);
 
-        auto ic_pars = ConstantInitialCondition::parameters();
-        ic_pars.set<godzilla::App *>("app", &app);
+        auto ic_pars = app.make_parameters<ConstantInitialCondition>();
         ic_pars.set<std::vector<Real>>("value", { 0 });
         prob.add_initial_condition<ConstantInitialCondition>(ic_pars);
 
-        auto bc_left_pars = VelocityBC::parameters();
-        bc_left_pars.set<godzilla::App *>("app", &app)
-            .set<std::vector<String>>("boundary", { "left" })
-            .set<Real>("value", 1);
+        auto bc_left_pars = app.make_parameters<VelocityBC>();
+        bc_left_pars.set<std::vector<String>>("boundary", { "left" });
+        bc_left_pars.set<Real>("value", 1);
         prob.add_boundary_condition<VelocityBC>(bc_left_pars);
 
-        auto bc_right_pars = VelocityBC::parameters();
-        bc_right_pars.set<godzilla::App *>("app", &app)
-            .set<std::vector<String>>("boundary", { "right" })
-            .set<Real>("value", -1);
+        auto bc_right_pars = app.make_parameters<VelocityBC>();
+        bc_right_pars.set<std::vector<String>>("boundary", { "right" });
+        bc_right_pars.set<Real>("value", -1);
         prob.add_boundary_condition<VelocityBC>(bc_right_pars);
 
-        auto out_pars = ExodusIIOutput::parameters();
-        out_pars.set<godzilla::App *>("app", &app)
-            .set<Problem *>("_problem", &prob)
+        auto out_pars = app.make_parameters<ExodusIIOutput>();
+        out_pars.set<Problem *>("_problem", &prob)
             .set<fs::path>("file", "burgers")
             .set<std::vector<String>>("on", { "initial", "final" });
         prob.add_output<ExodusIIOutput>(out_pars);

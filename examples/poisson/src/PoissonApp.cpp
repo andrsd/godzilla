@@ -85,17 +85,15 @@ Qtr<Mesh>
 PoissonApp::create_mesh(Int dim)
 {
     if (dim == 1) {
-        auto mesh_pars = LineMesh::parameters();
-        mesh_pars.set<godzilla::App *>("app", this)
-            .set<Int>("nx", 2)
-            .set<Real>("xmin", 0)
-            .set<Real>("xmax", 2);
+        auto mesh_pars = make_parameters<LineMesh>();
+        mesh_pars.set<Int>("nx", 2);
+        mesh_pars.set<Real>("xmin", 0);
+        mesh_pars.set<Real>("xmax", 2);
         return MeshFactory::create<LineMesh>(mesh_pars);
     }
     else if (dim == 2) {
-        auto mesh_pars = RectangleMesh::parameters();
-        mesh_pars.set<godzilla::App *>("app", this)
-            .set<Int>("nx", 2)
+        auto mesh_pars = make_parameters<RectangleMesh>();
+        mesh_pars.set<Int>("nx", 2)
             .set<Int>("ny", 2)
             .set<Real>("xmin", 0)
             .set<Real>("xmax", 2)
@@ -104,9 +102,8 @@ PoissonApp::create_mesh(Int dim)
         return MeshFactory::create<RectangleMesh>(mesh_pars);
     }
     else if (dim == 3) {
-        auto mesh_pars = BoxMesh::parameters();
-        mesh_pars.set<godzilla::App *>("app", this)
-            .set<Int>("nx", 2)
+        auto mesh_pars = make_parameters<BoxMesh>();
+        mesh_pars.set<Int>("nx", 2)
             .set<Int>("ny", 2)
             .set<Int>("nz", 2)
             .set<Real>("xmin", 0)
@@ -135,10 +132,9 @@ PoissonApp::create_auxs(godzilla::DiscreteProblemInterface & prob, godzilla::Int
     else
         throw Exception("Unsupported dimension {}", dim);
 
-    auto aux_pars = ConstantAuxiliaryField::parameters();
-    aux_pars.set<godzilla::App *>("app", this)
-        .set<String>("name", "forcing_fn")
-        .set<std::vector<Real>>("value", { value });
+    auto aux_pars = make_parameters<ConstantAuxiliaryField>();
+    aux_pars.set<String>("name", "forcing_fn");
+    aux_pars.set<std::vector<Real>>("value", { value });
     prob.add_auxiliary_field<ConstantAuxiliaryField>(aux_pars);
 }
 
@@ -156,9 +152,8 @@ PoissonApp::create_bcs(DiscreteProblemInterface & prob, Int dim)
     else
         throw Exception("Unsupported dimension {}", dim);
 
-    auto bc_pars = DirichletBC::parameters();
-    bc_pars.set<godzilla::App *>("app", this)
-        .set<String>("name", "all")
+    auto bc_pars = make_parameters<DirichletBC>();
+    bc_pars.set<String>("name", "all")
         .set<Int>("dim", dim)
         .set<std::vector<String>>("boundary", boundaries);
     prob.add_boundary_condition<DirichletBC>(bc_pars);
@@ -174,15 +169,13 @@ PoissonApp::solve_problem(Int dim)
 
     auto mo = create_mesh(dim);
 
-    auto prob_pars = PoissonEquation::parameters();
-    prob_pars.set<godzilla::App *>("app", this);
+    auto prob_pars = make_parameters<PoissonEquation>();
     prob_pars.set<Mesh *>("mesh", mo.get());
     PoissonEquation prob(prob_pars);
     set_problem(&prob);
 
-    auto ic_pars = ConstantInitialCondition::parameters();
-    ic_pars.set<godzilla::App *>("app", this)
-        .set<String>("name", "all")
+    auto ic_pars = make_parameters<ConstantInitialCondition>();
+    ic_pars.set<String>("name", "all")
         .set<String>("field", "u")
         .set<std::vector<Real>>("value", { 0 });
     prob.add_initial_condition<ConstantInitialCondition>(ic_pars);
@@ -190,10 +183,9 @@ PoissonApp::solve_problem(Int dim)
     create_auxs(prob, dim);
     create_bcs(prob, dim);
 
-    auto out_pars = ExodusIIOutput::parameters();
-    out_pars.set<godzilla::App *>("app", this)
-        .set<fs::path>("file", out_file_name)
-        .set<std::vector<String>>("variables", { "u" });
+    auto out_pars = make_parameters<ExodusIIOutput>();
+    out_pars.set<fs::path>("file", out_file_name);
+    out_pars.set<std::vector<String>>("variables", { "u" });
     prob.add_output<ExodusIIOutput>(out_pars);
 
     prob.create();
