@@ -1,6 +1,7 @@
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
 #include "godzilla/Mesh.h"
+#include "godzilla/Object.h"
 #include "godzilla/Problem.h"
 #include "godzilla/LineMesh.h"
 #include "ExceptionTestMacros.h"
@@ -162,3 +163,11 @@ TEST(AppTest, version)
     EXPECT_THAT(out, testing::HasSubstr("godzilla, version"));
 }
 #endif
+
+TEST(AppTest, make_parametrs)
+{
+    TestApp app;
+
+    auto pars = app.make_parameters<godzilla::Object>();
+    EXPECT_EQ(pars.get<godzilla::App *>("app"), &app);
+}

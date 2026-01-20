@@ -53,15 +53,13 @@ main(int argc, char * argv[])
         App app(comm, "heat-eqn");
         app.set_verbosity_level(9);
 
-        auto mesh_pars = RectangleMesh::parameters();
-        mesh_pars.set<godzilla::App *>("app", &app);
+        auto mesh_pars = app.make_parameters<RectangleMesh>();
         mesh_pars.set<Int>("nx", 4);
         mesh_pars.set<Int>("ny", 4);
         auto mesh = MeshFactory::create<RectangleMesh>(mesh_pars);
 
-        auto prob_pars = HeatEquationExplicit::parameters();
-        prob_pars.set<godzilla::App *>("app", &app)
-            .set<Mesh *>("mesh", mesh.get())
+        auto prob_pars = app.make_parameters<HeatEquationExplicit>();
+        prob_pars.set<Mesh *>("mesh", mesh.get())
             .set<Real>("start_time", 0.)
             .set<Real>("end_time", 5e-3)
             .set<Real>("dt", 1e-3)
@@ -69,28 +67,24 @@ main(int argc, char * argv[])
         HeatEquationExplicit prob(prob_pars);
         app.set_problem(&prob);
 
-        auto aux_ffn_pars = ConstantAuxiliaryField::parameters();
-        aux_ffn_pars.set<godzilla::App *>("app", &app)
-            .set<String>("name", "forcing_fn")
-            .set<std::vector<Real>>("value", { 2. });
+        auto aux_ffn_pars = app.make_parameters<ConstantAuxiliaryField>();
+        aux_ffn_pars.set<String>("name", "forcing_fn");
+        aux_ffn_pars.set<std::vector<Real>>("value", { 2. });
         prob.add_auxiliary_field<ConstantAuxiliaryField>(aux_ffn_pars);
 
-        auto ic_pars = TempIC::parameters();
-        ic_pars.set<godzilla::App *>("app", &app)
-            .set<String>("name", "all")
+        auto ic_pars = app.make_parameters<TempIC>();
+        ic_pars.set<String>("name", "all")
             .set<String>("field", "temp")
             .set<std::vector<Real>>("value", { 300 });
         prob.add_initial_condition<TempIC>(ic_pars);
 
-        auto bc_all_pars = DirichletBC::parameters();
-        bc_all_pars.set<godzilla::App *>("app", &app)
-            .set<String>("name", "all")
+        auto bc_all_pars = app.make_parameters<DirichletBC>();
+        bc_all_pars.set<String>("name", "all")
             .set<std::vector<String>>("boundary", { "left", "right", "top", "bottom" });
         prob.add_boundary_condition<DirichletBC>(bc_all_pars);
 
-        auto out_pars = ExodusIIOutput::parameters();
-        out_pars.set<godzilla::App *>("app", &app)
-            .set<fs::path>("file", "2d-explicit")
+        auto out_pars = app.make_parameters<ExodusIIOutput>();
+        out_pars.set<fs::path>("file", "2d-explicit")
             .set<ExecuteOnFlags>("on", ExecuteOn::INITIAL | ExecuteOn::FINAL)
             .set<std::vector<String>>("variables", { "temp" });
         prob.add_output<ExodusIIOutput>(out_pars);

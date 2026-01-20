@@ -121,6 +121,25 @@ public:
     template <typename T>
     T * build_object(Parameters & parameters);
 
+    /// Create parameters for type T
+    ///
+    /// @tparam C++ object that provides `parameters()`
+    /// @return Parameters for class T
+    template <typename T>
+        requires requires {
+            { T::parameters() } -> std::same_as<Parameters>;
+        }
+    Parameters
+    make_parameters()
+    {
+        static_assert(IsConstructibleFromParams<T>::value,
+                      "T must be constructible from `const Parameters &`");
+
+        auto pars = T::parameters();
+        pars.template set<App *>("app", this);
+        return pars;
+    }
+
     /// Export parameters into a YAML format
     void export_parameters_yaml() const;
 

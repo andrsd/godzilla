@@ -18,34 +18,29 @@ main(int argc, char * argv[])
 
         godzilla::App app(comm, "advect-eqn");
 
-        auto mesh_pars = LineMesh::parameters();
-        mesh_pars.set<godzilla::App *>("app", &app)
-            .set<Int>("nx", 5)
-            .set<Real>("xmin", 0)
-            .set<Real>("xmax", 1);
+        auto mesh_pars = app.make_parameters<LineMesh>();
+        mesh_pars.set<Int>("nx", 5);
+        mesh_pars.set<Real>("xmin", 0);
+        mesh_pars.set<Real>("xmax", 1);
         auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
-        auto prob_pars = AdvectionEquation::parameters();
-        prob_pars.set<godzilla::App *>("app", &app)
-            .set<Mesh *>("mesh", mesh.get())
-            .set<Real>("dt", 1e-3)
-            .set<Real>("end_time", 5e-3);
+        auto prob_pars = app.make_parameters<AdvectionEquation>();
+        prob_pars.set<Mesh *>("mesh", mesh.get());
+        prob_pars.set<Real>("dt", 1e-3);
+        prob_pars.set<Real>("end_time", 5e-3);
         AdvectionEquation prob(prob_pars);
         app.set_problem(&prob);
 
-        auto bc_left_pars = InflowBC::parameters();
-        bc_left_pars.set<godzilla::App *>("app", &app)
-            .set<std::vector<String>>("boundary", { "left" })
-            .set<Real>("vel", 1.);
+        auto bc_left_pars = app.make_parameters<InflowBC>();
+        bc_left_pars.set<std::vector<String>>("boundary", { "left" });
+        bc_left_pars.set<Real>("vel", 1.);
         prob.add_boundary_condition<InflowBC>(bc_left_pars);
 
-        auto bc_right_pars = OutflowBC::parameters();
-        bc_right_pars.set<godzilla::App *>("app", &app)
-            .set<std::vector<String>>("boundary", { "right" });
+        auto bc_right_pars = app.make_parameters<OutflowBC>();
+        bc_right_pars.set<std::vector<String>>("boundary", { "right" });
         prob.add_boundary_condition<OutflowBC>(bc_right_pars);
 
-        auto out_pars = ExodusIIOutput::parameters();
-        out_pars.set<App *>("app", &app);
+        auto out_pars = app.make_parameters<ExodusIIOutput>();
         out_pars.set<fs::path>("file", "out");
         prob.add_output<ExodusIIOutput>(out_pars);
 
