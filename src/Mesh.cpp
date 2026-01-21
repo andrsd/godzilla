@@ -3,6 +3,7 @@
 
 #include "godzilla/Mesh.h"
 #include "godzilla/CallStack.h"
+#include "godzilla/StarForest.h"
 #include "godzilla/Types.h"
 
 namespace godzilla {
@@ -192,6 +193,14 @@ Mesh::get_neighbors() const
     for (Int i = 0; i < n; ++i)
         res[i] = ranks[i];
     return res;
+}
+
+StarForest
+Mesh::locate_points(Vector coords, DMPointLocationType ltype)
+{
+    StarForest sf;
+    PETSC_CHECK(DMLocatePoints(this->obj, coords, ltype, sf));
+    return sf;
 }
 
 } // namespace godzilla

@@ -17,6 +17,8 @@ namespace mpi = mpicpp_lite;
 
 namespace godzilla {
 
+class StarForest;
+
 /// Base class for meshes
 ///
 class Mesh : public PetscObjectWrapper<DM> {
@@ -136,6 +138,14 @@ public:
         PETSC_CHECK(DMGetBoundingBox(get_dm(), gmin, gmax));
         return BoundingBox<D>(gmin, gmax);
     }
+
+    /// Locate points in mesh
+    ///
+    /// @param coords Vector with coordinates: x0, y0, z0, x1, y1, z1, ... (in 3D)
+    /// @param ltype Behavior when point is not located:
+    /// - `DM_POINTLOCATION_NONE` - return nothing
+    /// - `DM_POINTLOCATION_NEAREST` - the (approximate) nearest point
+    StarForest locate_points(Vector coords, DMPointLocationType ltype);
 
 protected:
     /// Set the DM

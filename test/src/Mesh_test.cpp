@@ -186,3 +186,27 @@ TEST(MeshTest, get_neighbors)
         EXPECT_TRUE(neighbors.empty());
     }
 }
+
+TEST(MeshTest, locate_points)
+{
+    TestApp app;
+
+    auto comm = app.get_comm();
+
+    auto params = app.make_parameters<TestMesh>();
+    params.set<App *>("app", &app);
+    auto mesh = MeshFactory::create<TestMesh>(params);
+
+    auto coords = Vector::create_seq(comm, 3);
+    coords.set_block_size(1);
+    coords.set_values({ 0, 1, 2 }, { -0.1, 0.1, 0.5 });
+    auto sf = mesh->locate_points(coords, DM_POINTLOCATION_NONE);
+    ASSERT_TRUE(sf);
+    auto gr = sf.get_graph();
+    EXPECT_EQ(gr.n_leaves, 3);
+    EXPECT_EQ(gr.leaves, nullptr);
+    EXPECT_NE(gr.remote_leaves, nullptr);
+    EXPECT_EQ(gr.remote_leaves[0].index, 0);
+    EXPECT_EQ(gr.remote_leaves[1].index, 1);
+    EXPECT_EQ(gr.remote_leaves[2].index, 1);
+}
