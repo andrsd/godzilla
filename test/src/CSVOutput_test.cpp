@@ -25,10 +25,9 @@ public:
 
 TEST_F(CSVOutputTest, get_file_ext)
 {
-    auto params = CSVOutput::parameters();
-    params.set<App *>("app", this->app)
-        .set<Problem *>("_problem", this->prob.get())
-        .set<fs::path>("file", "asdf");
+    auto params = this->app->make_parameters<CSVOutput>();
+    params.set<Problem *>("_problem", this->prob);
+    params.set<fs::path>("file", "asdf");
     CSVOutput out(params);
     out.create();
 
@@ -37,8 +36,7 @@ TEST_F(CSVOutputTest, get_file_ext)
 
 TEST_F(CSVOutputTest, create)
 {
-    auto params = CSVOutput::parameters();
-    params.set<App *>("app", this->app);
+    auto params = this->app->make_parameters<CSVOutput>();
     params.set<fs::path>("file", "asdf");
     auto out = prob->add_output<TestCSVOutput>(params);
 
@@ -63,13 +61,11 @@ TEST_F(CSVOutputTest, output)
         }
     };
 
-    auto pp_params = Postprocessor::parameters();
+    auto pp_params = this->app->make_parameters<TestPostprocessor>();
     pp_params.set<String>("name", "pp");
-    pp_params.set<App *>("app", this->app);
     this->prob->add_postprocessor<TestPostprocessor>(pp_params);
 
-    auto params = CSVOutput::parameters();
-    params.set<App *>("app", this->app);
+    auto params = this->app->make_parameters<CSVOutput>();
     params.set<fs::path>("file", "out");
     auto out = this->prob->add_output<TestCSVOutput>(params);
 
@@ -99,10 +95,9 @@ TEST_F(CSVOutputTest, output)
 
 TEST_F(CSVOutputTest, set_file_name)
 {
-    auto params = CSVOutput::parameters();
-    params.set<App *>("app", this->app)
-        .set<Problem *>("_problem", this->prob.get())
-        .set<fs::path>("file", "asdf");
+    auto params = this->app->make_parameters<CSVOutput>();
+    params.set<Problem *>("_problem", this->prob);
+    params.set<fs::path>("file", "asdf");
     CSVOutput out(params);
 
     this->prob->create();

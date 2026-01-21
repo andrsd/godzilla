@@ -82,27 +82,23 @@ TEST(BndJacobianFuncTest, test)
 {
     TestApp app;
 
-    auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("app", &app);
+    auto mesh_pars = app.make_parameters<LineMesh>();
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
-    auto prob_pars = GTestProblem::parameters();
-    prob_pars.set<App *>("app", &app)
-        .set<Mesh *>("mesh", mesh.get())
+    auto prob_pars = app.make_parameters<GTestProblem>();
+    prob_pars.set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 20)
         .set<Real>("dt", 5);
-    GTestProblem prob(prob_pars);
-    app.set_problem(&prob);
+    auto prob = app.make_problem<GTestProblem>(prob_pars);
 
-    auto bc_pars = NaturalBC::parameters();
-    bc_pars.set<App *>("app", &app)
-        .set<String>("field", "u")
-        .set<std::vector<String>>("boundary", { "left" });
-    auto bc = prob.add_boundary_condition<TestBC>(bc_pars);
+    auto bc_pars = app.make_parameters<TestBC>();
+    bc_pars.set<String>("field", "u");
+    bc_pars.set<std::vector<String>>("boundary", { "left" });
+    auto bc = prob->add_boundary_condition<TestBC>(bc_pars);
 
-    prob.create();
+    prob->create();
     bc->create();
 
     TestJ jac(bc);

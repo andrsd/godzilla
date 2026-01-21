@@ -164,34 +164,32 @@ TEST(NeumannProblemTest, solve)
     mesh_params.set<Int>("ny", 1);
     auto mesh = MeshFactory::create<RectangleMesh>(mesh_params);
 
-    auto prob_params = TestNeumannProblem::parameters();
-    prob_params.set<App *>("app", &app);
+    auto prob_params = app.make_parameters<TestNeumannProblem>();
     prob_params.set<Mesh *>("mesh", mesh.get());
-    TestNeumannProblem prob(prob_params);
-    app.set_problem(&prob);
+    auto prob = app.make_problem<TestNeumannProblem>(prob_params);
 
     auto bc_left_pars = TestNeumannBC::parameters();
     bc_left_pars.set<App *>("app", &app);
     bc_left_pars.set<String>("name", "bc1");
     bc_left_pars.set<std::vector<String>>("boundary", { "left" });
-    prob.add_boundary_condition<TestNeumannBC>(bc_left_pars);
+    prob->add_boundary_condition<TestNeumannBC>(bc_left_pars);
 
     auto bc_right_pars = TestNeumannBC::parameters();
     bc_right_pars.set<App *>("app", &app);
     bc_right_pars.set<String>("name", "bc2");
     bc_right_pars.set<std::vector<String>>("boundary", { "right" });
-    prob.add_boundary_condition<TestNeumannBC>(bc_right_pars);
+    prob->add_boundary_condition<TestNeumannBC>(bc_right_pars);
 
-    prob.create();
+    prob->create();
 
-    prob.run();
+    prob->run();
 
-    bool conv = prob.converged();
+    bool conv = prob->converged();
     EXPECT_EQ(conv, true);
 
     std::vector<Scalar> sln = { 0.0625, 0.5625, 0.,     0.25,   1., 0.,   0.25, 1,
                                 0.0625, 0.5625, 0.0625, 0.5625, 0., 0.25, 1. };
-    auto x = prob.get_solution_vector();
+    auto x = prob->get_solution_vector();
     EXPECT_EQ(x.get_size(), sln.size());
     auto * xx = x.get_array();
     for (Int i = 0; i < x.get_size(); ++i)

@@ -171,23 +171,22 @@ PoissonApp::solve_problem(Int dim)
 
     auto prob_pars = make_parameters<PoissonEquation>();
     prob_pars.set<Mesh *>("mesh", mo.get());
-    PoissonEquation prob(prob_pars);
-    set_problem(&prob);
+    auto prob = make_problem<PoissonEquation>(prob_pars);
 
     auto ic_pars = make_parameters<ConstantInitialCondition>();
     ic_pars.set<String>("name", "all")
         .set<String>("field", "u")
         .set<std::vector<Real>>("value", { 0 });
-    prob.add_initial_condition<ConstantInitialCondition>(ic_pars);
+    prob->add_initial_condition<ConstantInitialCondition>(ic_pars);
 
-    create_auxs(prob, dim);
-    create_bcs(prob, dim);
+    create_auxs(*prob, dim);
+    create_bcs(*prob, dim);
 
     auto out_pars = make_parameters<ExodusIIOutput>();
     out_pars.set<fs::path>("file", out_file_name);
     out_pars.set<std::vector<String>>("variables", { "u" });
-    prob.add_output<ExodusIIOutput>(out_pars);
+    prob->add_output<ExodusIIOutput>(out_pars);
 
-    prob.create();
-    prob.run();
+    prob->create();
+    prob->run();
 }

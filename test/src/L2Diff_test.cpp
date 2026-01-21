@@ -42,30 +42,28 @@ TEST(L2DiffTest, compute)
     mesh_params.set<Int>("nx", 20);
     auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
-    auto prob_params = GTestFENonlinearProblem::parameters();
-    prob_params.set<App *>("app", &app);
+    auto prob_params = app.make_parameters<GTestFENonlinearProblem>();
     prob_params.set<Mesh *>("mesh", mesh.get());
-    GTestFENonlinearProblem prob(prob_params);
-    app.set_problem(&prob);
+    auto prob = app.make_problem<GTestFENonlinearProblem>(prob_params);
 
     auto bc_left_params = DirichletBC::parameters();
     bc_left_params.set<App *>("app", &app);
     bc_left_params.set<std::vector<String>>("boundary", { "left" });
-    prob.add_boundary_condition<DirichletBC>(bc_left_params);
+    prob->add_boundary_condition<DirichletBC>(bc_left_params);
 
     auto bc_right_params = DirichletBC::parameters();
     bc_right_params.set<App *>("app", &app);
     bc_right_params.set<std::vector<String>>("boundary", { "right" });
-    prob.add_boundary_condition<DirichletBC>(bc_right_params);
+    prob->add_boundary_condition<DirichletBC>(bc_right_params);
 
     auto ps_params = L2Error::parameters();
     ps_params.set<App *>("app", &app);
-    auto ps = prob.add_postprocessor<L2Error>(ps_params);
+    auto ps = prob->add_postprocessor<L2Error>(ps_params);
 
-    prob.create();
+    prob->create();
 
-    prob.run();
-    prob.compute_postprocessors();
+    prob->run();
+    prob->compute_postprocessors();
 
     auto l2_err = ps->get_value();
     ASSERT_TRUE(!l2_err.empty());

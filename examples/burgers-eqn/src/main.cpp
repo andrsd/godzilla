@@ -58,31 +58,29 @@ main(int argc, char * argv[])
             .set<Real>("start_time", 0)
             .set<Real>("end_time", 0.01)
             .set<Real>("viscosity", 0.005);
-        BurgersEquation prob(prob_pars);
-        app.set_problem(&prob);
+        auto prob = app.make_problem<BurgersEquation>(prob_pars);
 
         auto ic_pars = app.make_parameters<ConstantInitialCondition>();
         ic_pars.set<std::vector<Real>>("value", { 0 });
-        prob.add_initial_condition<ConstantInitialCondition>(ic_pars);
+        prob->add_initial_condition<ConstantInitialCondition>(ic_pars);
 
         auto bc_left_pars = app.make_parameters<VelocityBC>();
         bc_left_pars.set<std::vector<String>>("boundary", { "left" });
         bc_left_pars.set<Real>("value", 1);
-        prob.add_boundary_condition<VelocityBC>(bc_left_pars);
+        prob->add_boundary_condition<VelocityBC>(bc_left_pars);
 
         auto bc_right_pars = app.make_parameters<VelocityBC>();
         bc_right_pars.set<std::vector<String>>("boundary", { "right" });
         bc_right_pars.set<Real>("value", -1);
-        prob.add_boundary_condition<VelocityBC>(bc_right_pars);
+        prob->add_boundary_condition<VelocityBC>(bc_right_pars);
 
         auto out_pars = app.make_parameters<ExodusIIOutput>();
-        out_pars.set<Problem *>("_problem", &prob)
-            .set<fs::path>("file", "burgers")
+        out_pars.set<fs::path>("file", "burgers")
             .set<std::vector<String>>("on", { "initial", "final" });
-        prob.add_output<ExodusIIOutput>(out_pars);
+        prob->add_output<ExodusIIOutput>(out_pars);
 
-        prob.create();
-        prob.run();
+        prob->create();
+        prob->run();
 
         return 0;
     }

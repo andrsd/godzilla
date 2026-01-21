@@ -124,83 +124,81 @@ TEST(ExplicitFVLinearProblemTest, api)
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 #endif
 
-    auto prob_pars = TestExplicitFVLinearProblem::parameters();
-    prob_pars.set<App *>("app", &app)
-        .set<Mesh *>("mesh", mesh.get())
+    auto prob_pars = app.make_parameters<TestExplicitFVLinearProblem>();
+    prob_pars.set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3);
-    TestExplicitFVLinearProblem prob(prob_pars);
-    app.set_problem(&prob);
+    auto prob = app.make_problem<TestExplicitFVLinearProblem>(prob_pars);
 
-    prob.create();
+    prob->create();
 
-    EXPECT_EQ(prob.get_num_fields(), 1);
-    EXPECT_THAT(prob.get_field_names(), testing::ElementsAre(""));
+    EXPECT_EQ(prob->get_num_fields(), 1);
+    EXPECT_THAT(prob->get_field_names(), testing::ElementsAre(""));
 
-    EXPECT_EQ(prob.get_field_name(FieldID(0)).value(), "u");
-    ASSERT_FALSE(prob.get_field_name(FieldID(65536)).has_value());
-    EXPECT_EQ(prob.get_field_name(FieldID(65536)).error(), ErrorCode::NotFound);
+    EXPECT_EQ(prob->get_field_name(FieldID(0)).value(), "u");
+    ASSERT_FALSE(prob->get_field_name(FieldID(65536)).has_value());
+    EXPECT_EQ(prob->get_field_name(FieldID(65536)).error(), ErrorCode::NotFound);
 
-    EXPECT_EQ(prob.get_field_num_components(FieldID(0)).value(), 1);
-    ASSERT_FALSE(prob.get_field_num_components(FieldID(65536)).has_value());
-    EXPECT_EQ(prob.get_field_num_components(FieldID(65536)).error(), ErrorCode::NotFound);
+    EXPECT_EQ(prob->get_field_num_components(FieldID(0)).value(), 1);
+    ASSERT_FALSE(prob->get_field_num_components(FieldID(65536)).has_value());
+    EXPECT_EQ(prob->get_field_num_components(FieldID(65536)).error(), ErrorCode::NotFound);
 
-    EXPECT_EQ(prob.get_field_id("u").value(), FieldID(0));
-    EXPECT_EQ(prob.get_field_id("nonexistent").value(), FieldID(0));
+    EXPECT_EQ(prob->get_field_id("u").value(), FieldID(0));
+    EXPECT_EQ(prob->get_field_id("nonexistent").value(), FieldID(0));
 
-    EXPECT_TRUE(prob.has_field_by_id(FieldID(0)));
-    EXPECT_FALSE(prob.has_field_by_id(FieldID(65536)));
+    EXPECT_TRUE(prob->has_field_by_id(FieldID(0)));
+    EXPECT_FALSE(prob->has_field_by_id(FieldID(65536)));
 
-    EXPECT_TRUE(prob.has_field_by_name("u"));
-    EXPECT_FALSE(prob.has_field_by_name("nonexistent"));
+    EXPECT_TRUE(prob->has_field_by_name("u"));
+    EXPECT_FALSE(prob->has_field_by_name("nonexistent"));
 
-    EXPECT_EQ(prob.get_field_order(FieldID(0)).value(), 0);
+    EXPECT_EQ(prob->get_field_order(FieldID(0)).value(), 0);
     EXPECT_THROW_MSG(
-        { [[maybe_unused]] auto o = prob.get_field_order(FieldID(65536)); },
+        { [[maybe_unused]] auto o = prob->get_field_order(FieldID(65536)); },
         "Multiple-field problems are not implemented");
 
-    EXPECT_EQ(prob.get_field_component_name(FieldID(0), 0).value(), "u");
+    EXPECT_EQ(prob->get_field_component_name(FieldID(0), 0).value(), "u");
     EXPECT_THROW_MSG(
-        { auto n = prob.get_field_component_name(FieldID(65536), 0); },
+        { auto n = prob->get_field_component_name(FieldID(65536), 0); },
         "Multiple-field problems are not implemented");
 
-    EXPECT_THROW_MSG(prob.set_field_component_name(FieldID(0), 0, "x"),
+    EXPECT_THROW_MSG(prob->set_field_component_name(FieldID(0), 0, "x"),
                      "Unable to set component name for single-component field");
 
-    EXPECT_EQ(prob.get_num_aux_fields(), 2);
-    EXPECT_THAT(prob.get_aux_field_names(), ElementsAre("a0", "a1"));
-    EXPECT_EQ(prob.get_aux_field_name(FieldID(0)).value(), "a0");
-    EXPECT_EQ(prob.get_aux_field_name(FieldID(1)).value(), "a1");
-    ASSERT_FALSE(prob.get_aux_field_name(FieldID(99)).has_value());
-    EXPECT_EQ(prob.get_aux_field_name(FieldID(99)).error(), ErrorCode::NotFound);
-    EXPECT_EQ(prob.get_aux_field_num_components(FieldID(0)).value(), 1);
-    EXPECT_EQ(prob.get_aux_field_num_components(FieldID(1)).value(), 2);
-    ASSERT_FALSE(prob.get_aux_field_num_components(FieldID(99)).has_value());
-    EXPECT_EQ(prob.get_aux_field_num_components(FieldID(99)).error(), ErrorCode::NotFound);
-    EXPECT_EQ(prob.get_aux_field_id("a0").value(), FieldID(0));
-    EXPECT_EQ(prob.get_aux_field_id("a1").value(), FieldID(1));
-    ASSERT_FALSE(prob.get_aux_field_id("non-existent").has_value());
-    EXPECT_EQ(prob.get_aux_field_id("non-existent").error(), ErrorCode::NotFound);
-    EXPECT_TRUE(prob.has_aux_field_by_id(FieldID(0)));
-    EXPECT_TRUE(prob.has_aux_field_by_id(FieldID(1)));
-    EXPECT_FALSE(prob.has_aux_field_by_id(FieldID(99)));
-    EXPECT_TRUE(prob.has_aux_field_by_name("a0"));
-    EXPECT_TRUE(prob.has_aux_field_by_name("a1"));
-    EXPECT_FALSE(prob.has_aux_field_by_name("non-existent"));
-    EXPECT_EQ(prob.get_aux_field_order(FieldID(0)).value(), 0);
-    EXPECT_EQ(prob.get_aux_field_order(FieldID(1)).value(), 0);
-    ASSERT_FALSE(prob.get_aux_field_order(FieldID(99)).has_value());
-    EXPECT_EQ(prob.get_aux_field_order(FieldID(99)).error(), ErrorCode::NotFound);
-    EXPECT_EQ(prob.get_aux_field_component_name(FieldID(0), 1).value(), "");
-    EXPECT_EQ(prob.get_aux_field_component_name(FieldID(1), 0).value(), "0");
-    ASSERT_FALSE(prob.get_aux_field_component_name(FieldID(99), 0).has_value());
-    EXPECT_EQ(prob.get_aux_field_component_name(FieldID(99), 0).error(), ErrorCode::NotFound);
-    EXPECT_THROW_MSG(prob.set_aux_field_component_name(FieldID(0), 0, "C"),
+    EXPECT_EQ(prob->get_num_aux_fields(), 2);
+    EXPECT_THAT(prob->get_aux_field_names(), ElementsAre("a0", "a1"));
+    EXPECT_EQ(prob->get_aux_field_name(FieldID(0)).value(), "a0");
+    EXPECT_EQ(prob->get_aux_field_name(FieldID(1)).value(), "a1");
+    ASSERT_FALSE(prob->get_aux_field_name(FieldID(99)).has_value());
+    EXPECT_EQ(prob->get_aux_field_name(FieldID(99)).error(), ErrorCode::NotFound);
+    EXPECT_EQ(prob->get_aux_field_num_components(FieldID(0)).value(), 1);
+    EXPECT_EQ(prob->get_aux_field_num_components(FieldID(1)).value(), 2);
+    ASSERT_FALSE(prob->get_aux_field_num_components(FieldID(99)).has_value());
+    EXPECT_EQ(prob->get_aux_field_num_components(FieldID(99)).error(), ErrorCode::NotFound);
+    EXPECT_EQ(prob->get_aux_field_id("a0").value(), FieldID(0));
+    EXPECT_EQ(prob->get_aux_field_id("a1").value(), FieldID(1));
+    ASSERT_FALSE(prob->get_aux_field_id("non-existent").has_value());
+    EXPECT_EQ(prob->get_aux_field_id("non-existent").error(), ErrorCode::NotFound);
+    EXPECT_TRUE(prob->has_aux_field_by_id(FieldID(0)));
+    EXPECT_TRUE(prob->has_aux_field_by_id(FieldID(1)));
+    EXPECT_FALSE(prob->has_aux_field_by_id(FieldID(99)));
+    EXPECT_TRUE(prob->has_aux_field_by_name("a0"));
+    EXPECT_TRUE(prob->has_aux_field_by_name("a1"));
+    EXPECT_FALSE(prob->has_aux_field_by_name("non-existent"));
+    EXPECT_EQ(prob->get_aux_field_order(FieldID(0)).value(), 0);
+    EXPECT_EQ(prob->get_aux_field_order(FieldID(1)).value(), 0);
+    ASSERT_FALSE(prob->get_aux_field_order(FieldID(99)).has_value());
+    EXPECT_EQ(prob->get_aux_field_order(FieldID(99)).error(), ErrorCode::NotFound);
+    EXPECT_EQ(prob->get_aux_field_component_name(FieldID(0), 1).value(), "");
+    EXPECT_EQ(prob->get_aux_field_component_name(FieldID(1), 0).value(), "0");
+    ASSERT_FALSE(prob->get_aux_field_component_name(FieldID(99), 0).has_value());
+    EXPECT_EQ(prob->get_aux_field_component_name(FieldID(99), 0).error(), ErrorCode::NotFound);
+    EXPECT_THROW_MSG(prob->set_aux_field_component_name(FieldID(0), 0, "C"),
                      "Unable to set component name for single-component field");
-    prob.set_aux_field_component_name(FieldID(1), 1, "Y");
-    EXPECT_EQ(prob.get_aux_field_component_name(FieldID(1), 1).value(), "Y");
-    EXPECT_THROW_MSG(prob.set_aux_field_component_name(FieldID(99), 0, "A"),
+    prob->set_aux_field_component_name(FieldID(1), 1, "Y");
+    EXPECT_EQ(prob->get_aux_field_component_name(FieldID(1), 1).value(), "Y");
+    EXPECT_THROW_MSG(prob->set_aux_field_component_name(FieldID(99), 0, "A"),
                      "Auxiliary field with ID = '99' does not exist.");
 }
 
@@ -222,36 +220,34 @@ TEST(ExplicitFVLinearProblemTest, fields)
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 #endif
 
-    auto prob_pars = TestExplicitFVLinearProblem::parameters();
-    prob_pars.set<App *>("app", &app)
-        .set<Mesh *>("mesh", mesh.get())
+    auto prob_pars = app.make_parameters<TestExplicitFVLinearProblem>();
+    prob_pars.set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3);
-    TestExplicitFVLinearProblem prob(prob_pars);
-    app.set_problem(&prob);
+    auto prob = app.make_problem<TestExplicitFVLinearProblem>(prob_pars);
 
-    prob.add_field(FieldID(1), "vec", 3);
-    EXPECT_EQ(prob.get_field_id("vec").value(), FieldID(0));
+    prob->add_field(FieldID(1), "vec", 3);
+    EXPECT_EQ(prob->get_field_id("vec").value(), FieldID(0));
 
-    EXPECT_THROW_MSG(prob.add_field(FieldID(1), "dup", 1),
+    EXPECT_THROW_MSG(prob->add_field(FieldID(1), "dup", 1),
                      "Cannot add field 'dup' with ID = 1. ID already exists.");
-    prob.set_field_component_name(FieldID(1), 0, "x");
-    prob.set_field_component_name(FieldID(1), 1, "y");
-    prob.set_field_component_name(FieldID(1), 2, "z");
-    EXPECT_THROW_MSG(prob.set_field_component_name(FieldID(65536), 0, "A"),
+    prob->set_field_component_name(FieldID(1), 0, "x");
+    prob->set_field_component_name(FieldID(1), 1, "y");
+    prob->set_field_component_name(FieldID(1), 2, "z");
+    EXPECT_THROW_MSG(prob->set_field_component_name(FieldID(65536), 0, "A"),
                      "Field with ID = '65536' does not exist.");
 
-    prob.create();
+    prob->create();
 
-    EXPECT_EQ(prob.get_num_fields(), 1);
-    EXPECT_THAT(prob.get_field_names(), testing::ElementsAre(""));
+    EXPECT_EQ(prob->get_num_fields(), 1);
+    EXPECT_THAT(prob->get_field_names(), testing::ElementsAre(""));
 
-    EXPECT_EQ(prob.get_field_component_name(FieldID(0), 1).value(), "vec_x");
-    EXPECT_EQ(prob.get_field_component_name(FieldID(0), 2).value(), "vec_y");
-    EXPECT_EQ(prob.get_field_component_name(FieldID(0), 3).value(), "vec_z");
+    EXPECT_EQ(prob->get_field_component_name(FieldID(0), 1).value(), "vec_x");
+    EXPECT_EQ(prob->get_field_component_name(FieldID(0), 2).value(), "vec_y");
+    EXPECT_EQ(prob->get_field_component_name(FieldID(0), 3).value(), "vec_z");
 
-    EXPECT_EQ(prob.get_field_dof(1, FieldID(0)), 4);
+    EXPECT_EQ(prob->get_field_dof(1, FieldID(0)), 4);
 }
 
 TEST(ExplicitFVLinearProblemTest, test_mass_matrix)
@@ -273,18 +269,16 @@ TEST(ExplicitFVLinearProblemTest, test_mass_matrix)
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 #endif
 
-    auto prob_pars = TestExplicitFVLinearProblem::parameters();
-    prob_pars.set<App *>("app", &app)
-        .set<Mesh *>("mesh", mesh.get())
+    auto prob_pars = app.make_parameters<TestExplicitFVLinearProblem>();
+    prob_pars.set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3);
-    TestExplicitFVLinearProblem prob(prob_pars);
-    app.set_problem(&prob);
+    auto prob = app.make_problem<TestExplicitFVLinearProblem>(prob_pars);
 
-    prob.create();
+    prob->create();
 
-    auto M = prob.get_mass_matrix();
+    auto M = prob->get_mass_matrix();
     EXPECT_NEAR(M(0, 0), 1., 1e-9);
     EXPECT_NEAR(M(0, 1), 0., 1e-9);
     EXPECT_NEAR(M(1, 0), 0., 1e-9);
@@ -306,44 +300,42 @@ TEST(ExplicitFVLinearProblemTest, solve)
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
-    auto prob_pars = TestExplicitFVLinearProblem::parameters();
-    prob_pars.set<App *>("app", &app)
-        .set<Mesh *>("mesh", mesh.get())
+    auto prob_pars = app.make_parameters<TestExplicitFVLinearProblem>();
+    prob_pars.set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3);
-    TestExplicitFVLinearProblem prob(prob_pars);
-    app.set_problem(&prob);
+    auto prob = app.make_problem<TestExplicitFVLinearProblem>(prob_pars);
 
     auto bc_left_pars = TestBC::parameters();
     bc_left_pars.set<App *>("app", &app)
         .set<std::vector<String>>("boundary", { "left" })
         .set<bool>("inlet", true);
-    auto bc_left = prob.add_boundary_condition<TestBC>(bc_left_pars);
+    auto bc_left = prob->add_boundary_condition<TestBC>(bc_left_pars);
 
     auto bc_right_pars = TestBC::parameters();
     bc_right_pars.set<App *>("app", &app)
         .set<std::vector<String>>("boundary", { "right" })
         .set<bool>("inlet", false);
-    auto bc_right = prob.add_boundary_condition<TestBC>(bc_right_pars);
+    auto bc_right = prob->add_boundary_condition<TestBC>(bc_right_pars);
 
     mesh.create();
-    prob.create();
+    prob->create();
 
-    prob.run();
+    prob->run();
 
-    EXPECT_TRUE(prob.converged());
-    EXPECT_DOUBLE_EQ(prob.get_time(), 1e-3);
-    EXPECT_EQ(prob.get_step_num(), 1);
+    EXPECT_TRUE(prob->converged());
+    EXPECT_DOUBLE_EQ(prob->get_time(), 1e-3);
+    EXPECT_EQ(prob->get_step_num(), 1);
 
-    auto sln = prob.get_solution_vector();
+    auto sln = prob->get_solution_vector();
     auto x = sln.get_array_read();
     EXPECT_NEAR(x[0], 0.001, 1e-15);
     EXPECT_NEAR(x[1], 0., 1e-15);
     sln.restore_array_read(x);
 
-    prob.compute_solution_vector_local();
-    auto loc_sln = prob.get_solution_vector_local();
+    prob->compute_solution_vector_local();
+    auto loc_sln = prob->get_solution_vector_local();
     auto lx = loc_sln.get_array_read();
     EXPECT_NEAR(lx[0], 0.001, 1e-15);
     EXPECT_NEAR(lx[1], 0., 1e-15);
@@ -371,19 +363,18 @@ TEST(ExplicitFVLinearProblemTest, set_schemes)
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 #endif
 
-    auto prob_pars = TestExplicitFVLinearProblem::parameters();
-    prob_pars.set<App *>("app", &app)
-        .set<Mesh *>("mesh", mesh.get())
+    auto prob_pars = app.make_parameters<TestExplicitFVLinearProblem>();
+    prob_pars.set<Mesh *>("mesh", mesh.get())
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3);
-    TestExplicitFVLinearProblem prob(prob_pars);
+    auto prob = app.make_problem<TestExplicitFVLinearProblem>(prob_pars);
 
-    prob.create();
+    prob->create();
 
     std::vector<TSType> types = { TSEULER, TSSSP, TSSSP, TSRK, TSRK };
     for (std::size_t i = 0; i < types.size(); ++i) {
-        prob.set_scheme(types[i]);
-        EXPECT_EQ(prob.get_scheme(), types[i]);
+        prob->set_scheme(types[i]);
+        EXPECT_EQ(prob->get_scheme(), types[i]);
     }
 }

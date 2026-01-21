@@ -28,23 +28,22 @@ main(int argc, char * argv[])
         prob_pars.set<Mesh *>("mesh", mesh.get());
         prob_pars.set<Real>("dt", 1e-3);
         prob_pars.set<Real>("end_time", 5e-3);
-        AdvectionEquation prob(prob_pars);
-        app.set_problem(&prob);
+        auto prob = app.make_problem<AdvectionEquation>(prob_pars);
 
         auto bc_left_pars = app.make_parameters<InflowBC>();
         bc_left_pars.set<std::vector<String>>("boundary", { "left" });
         bc_left_pars.set<Real>("vel", 1.);
-        prob.add_boundary_condition<InflowBC>(bc_left_pars);
+        prob->add_boundary_condition<InflowBC>(bc_left_pars);
 
         auto bc_right_pars = app.make_parameters<OutflowBC>();
         bc_right_pars.set<std::vector<String>>("boundary", { "right" });
-        prob.add_boundary_condition<OutflowBC>(bc_right_pars);
+        prob->add_boundary_condition<OutflowBC>(bc_right_pars);
 
         auto out_pars = app.make_parameters<ExodusIIOutput>();
         out_pars.set<fs::path>("file", "out");
-        prob.add_output<ExodusIIOutput>(out_pars);
+        prob->add_output<ExodusIIOutput>(out_pars);
 
-        prob.create();
+        prob->create();
 
         app.run();
 
