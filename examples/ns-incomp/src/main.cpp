@@ -116,35 +116,34 @@ main(int argc, char * argv[])
             .set<Real>("end_time", 1.)
             .set<Real>("dt", 0.2)
             .set<Real>("Re", Re);
-        NSIncompressibleProblem prob(prob_pars);
-        app.set_problem(&prob);
+        auto prob = app.make_problem<NSIncompressibleProblem>(prob_pars);
 
         auto ic_vel_pars = app.make_parameters<VelocityIC>();
         ic_vel_pars.set<String>("name", "velocity");
         ic_vel_pars.set<String>("field", "velocity");
-        prob.add_initial_condition<VelocityIC>(ic_vel_pars);
+        prob->add_initial_condition<VelocityIC>(ic_vel_pars);
 
         auto ic_p_pars = app.make_parameters<PressureIC>();
         ic_p_pars.set<String>("name", "pressure");
         ic_p_pars.set<String>("field", "pressure");
-        prob.add_initial_condition<PressureIC>(ic_p_pars);
+        prob->add_initial_condition<PressureIC>(ic_p_pars);
 
         auto aux_pars = app.make_parameters<ForcingFnAux>();
         aux_pars.set<String>("name", "ffn");
-        prob.add_auxiliary_field<ForcingFnAux>(aux_pars);
+        prob->add_auxiliary_field<ForcingFnAux>(aux_pars);
 
         auto bc_pars = app.make_parameters<VelocityBC>();
         bc_pars.set<String>("name", "all");
         bc_pars.set<String>("field", "velocity");
         bc_pars.set<std::vector<String>>("boundary", { "left", "right", "top", "bottom" });
-        prob.add_boundary_condition<VelocityBC>(bc_pars);
+        prob->add_boundary_condition<VelocityBC>(bc_pars);
 
         auto out_pars = app.make_parameters<ExodusIIOutput>();
         out_pars.set<std::vector<String>>("variables", { "pressure", "velocity" });
         out_pars.set<fs::path>("file", "mms-2d");
-        prob.add_output<ExodusIIOutput>(out_pars);
+        prob->add_output<ExodusIIOutput>(out_pars);
 
-        prob.create();
+        prob->create();
 
         app.run();
 

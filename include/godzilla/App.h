@@ -76,10 +76,15 @@ public:
     get_problem() const
     {
         CALL_STACK_MSG();
-        return dynamic_cast<T *>(this->problem);
+        if (this->problem)
+            return dynamic_cast<T *>(this->problem);
+        else if (this->prob.get())
+            return dynamic_cast<T *>(this->prob.get());
+        else
+            return nullptr;
     }
 
-    void set_problem(Problem * problem);
+    [[deprecated("Use make_problem")]] void set_problem(Problem * problem);
 
     /// Run the application
     ///
@@ -119,7 +124,7 @@ public:
     /// @param parameters Input parameters
     /// @return The constructed object
     template <typename T>
-    T * build_object(Parameters & parameters);
+    [[deprecated("This will be removed")]] T * build_object(Parameters & parameters);
 
     /// Create parameters for type T
     ///
@@ -138,6 +143,27 @@ public:
         auto pars = T::parameters();
         pars.template set<App *>("app", this);
         return pars;
+    }
+
+    /// Create parameters for type T
+    ///
+    /// @tparam C++ object that provides `parameters()`
+    /// @return Parameters for class T
+    template <typename T>
+        requires requires {
+            { T::parameters() } -> std::same_as<Parameters>;
+        }
+    T *
+    make_problem(Parameters & pars)
+    {
+        CALL_STACK_MSG();
+        static_assert(IsConstructibleFromParams<T>::value,
+                      "T must be constructible from `const Parameters &`");
+
+        auto obj = Qtr<T>::alloc(pars);
+        auto problem = obj.get();
+        this->prob = std::move(obj);
+        return problem;
     }
 
     /// Export parameters into a YAML format
@@ -193,6 +219,8 @@ private:
     std::streambuf * cerr_buf_;
     /// Pointer to `Problem`
     Problem * problem;
+    ///
+    Qtr<Problem> prob;
 
 public:
     static void register_objects(Registry & registry);

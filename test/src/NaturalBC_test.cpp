@@ -21,11 +21,9 @@ TEST(NaturalBCTest, api)
     mesh_params.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
-    auto prob_params = GTestFENonlinearProblem::parameters();
-    prob_params.set<App *>("app", &app);
+    auto prob_params = app.make_parameters<GTestFENonlinearProblem>();
     prob_params.set<Mesh *>("mesh", mesh.get());
-    GTestFENonlinearProblem prob(prob_params);
-    app.set_problem(&prob);
+    auto prob = app.make_problem<GTestFENonlinearProblem>(prob_params);
 
     class MockNaturalBC : public NaturalBC {
     public:
@@ -43,13 +41,12 @@ TEST(NaturalBCTest, api)
         }
     };
 
-    auto params = NaturalBC::parameters();
-    params.set<App *>("app", &app);
-    params.set<DiscreteProblemInterface *>("_dpi", &prob);
+    auto params = app.make_parameters<MockNaturalBC>();
+    params.set<DiscreteProblemInterface *>("_dpi", prob);
     params.set<std::vector<String>>("boundary", { "left" });
     MockNaturalBC bc(params);
 
-    prob.create();
+    prob->create();
     bc.create();
 
     std::vector<Int> comps = bc.get_components();
@@ -113,30 +110,28 @@ TEST(NaturalBCTest, fe)
     mesh_params.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
-    auto prob_params = GTest2FieldsFENonlinearProblem::parameters();
-    prob_params.set<App *>("app", &app);
+    auto prob_params = app.make_parameters<GTest2FieldsFENonlinearProblem>();
     prob_params.set<Mesh *>("mesh", mesh.get());
-    GTest2FieldsFENonlinearProblem prob(prob_params);
-    app.set_problem(&prob);
+    auto prob = app.make_problem<GTest2FieldsFENonlinearProblem>(prob_params);
 
     auto bc_params = TestNaturalBC::parameters();
     bc_params.set<App *>("app", &app);
     bc_params.set<String>("name", "bc1");
     bc_params.set<std::vector<String>>("boundary", { "left" });
     bc_params.set<String>("field", "u");
-    auto bc = prob.add_boundary_condition<TestNaturalBC>(bc_params);
+    auto bc = prob->add_boundary_condition<TestNaturalBC>(bc_params);
 
-    prob.set_aux_field(FieldID(0), "aux1", 1, Order(1));
-    prob.create();
+    prob->set_aux_field(FieldID(0), "aux1", 1, Order(1));
+    prob->create();
 
-    PetscDS ds = prob.get_ds();
+    PetscDS ds = prob->get_ds();
     //
     Int num_bd;
     PetscDSGetNumBoundary(ds, &num_bd);
     EXPECT_EQ(num_bd, 1);
     //
     auto field = bc->get_field_id();
-    auto & wf = prob.get_weak_form();
+    auto & wf = prob->get_weak_form();
     auto label = mesh->get_label("left");
     auto ids = label.get_values();
 
@@ -158,19 +153,17 @@ TEST(NaturalBCTest, non_existing_field)
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
-    auto prob_pars = GTest2FieldsFENonlinearProblem::parameters();
-    prob_pars.set<App *>("app", &app);
+    auto prob_pars = app.make_parameters<GTest2FieldsFENonlinearProblem>();
     prob_pars.set<Mesh *>("mesh", mesh.get());
-    GTest2FieldsFENonlinearProblem problem(prob_pars);
-    app.set_problem(&problem);
+    auto problem = app.make_problem<GTest2FieldsFENonlinearProblem>(prob_pars);
 
     auto params = TestNaturalBC::parameters();
     params.set<App *>("app", &app);
     params.set<std::vector<String>>("boundary", { "left" });
     params.set<String>("field", "asdf");
-    problem.add_boundary_condition<TestNaturalBC>(params);
+    problem->add_boundary_condition<TestNaturalBC>(params);
 
-    EXPECT_DEATH(problem.create(), "Field 'asdf' does not exist. Typo?");
+    EXPECT_DEATH(problem->create(), "Field 'asdf' does not exist. Typo?");
 }
 
 TEST(NaturalBCTest, field_param_not_specified)
@@ -182,18 +175,15 @@ TEST(NaturalBCTest, field_param_not_specified)
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
-    auto prob_pars = GTest2FieldsFENonlinearProblem::parameters();
-    prob_pars.set<App *>("app", &app);
+    auto prob_pars = app.make_parameters<GTest2FieldsFENonlinearProblem>();
     prob_pars.set<Mesh *>("mesh", mesh.get());
-    GTest2FieldsFENonlinearProblem problem(prob_pars);
-    app.set_problem(&problem);
+    auto problem = app.make_problem<GTest2FieldsFENonlinearProblem>(prob_pars);
 
-    auto params = TestNaturalBC::parameters();
-    params.set<App *>("app", &app);
+    auto params = app.make_parameters<TestNaturalBC>();
     params.set<std::vector<String>>("boundary", { "left" });
-    problem.add_boundary_condition<TestNaturalBC>(params);
+    problem->add_boundary_condition<TestNaturalBC>(params);
 
     EXPECT_DEATH(
-        problem.create(),
+        problem->create(),
         "Use the 'field' parameter to assign this boundary condition to an existing field.");
 }

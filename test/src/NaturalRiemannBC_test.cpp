@@ -75,24 +75,22 @@ TEST(NaturalRiemannBCTest, api)
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
-    auto prob_pars = TestExplicitFVLinearProblem::parameters();
-    prob_pars.set<App *>("app", &app);
+    auto prob_pars = app.make_parameters<TestExplicitFVLinearProblem>();
     prob_pars.set<Mesh *>("mesh", mesh.get());
     prob_pars.set<Real>("start_time", 0.);
     prob_pars.set<Real>("end_time", 1e-3);
     prob_pars.set<Real>("dt", 1e-3);
-    TestExplicitFVLinearProblem prob(prob_pars);
-    app.set_problem(&prob);
+    auto prob = app.make_problem<TestExplicitFVLinearProblem>(prob_pars);
 
     auto bc_pars = TestBC::parameters();
     bc_pars.set<App *>("app", &app);
     bc_pars.set<std::vector<String>>("boundary", { "left" });
-    prob.add_boundary_condition<TestBC>(bc_pars);
+    prob->add_boundary_condition<TestBC>(bc_pars);
 
 #if PETSC_VERSION_GE(3, 21, 0)
-    EXPECT_THROW(prob.create(), Exception);
+    EXPECT_THROW(prob->create(), Exception);
 #else
-    prob.create();
+    prob->create();
 
     EXPECT_THAT(bc->get_components(), ElementsAre(0));
     EXPECT_EQ(bc->get_field_id(), FieldID(0));

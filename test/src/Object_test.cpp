@@ -10,18 +10,18 @@ TEST(ObjectTest, api)
     TestApp app;
     app.get_registry().add<Object>("Object");
 
-    auto params = Object::parameters();
+    auto params = app.make_parameters<Object>();
     params.set<String>("_type", "Object");
     params.set<String>("name", "name");
-    auto obj = Qtr<Object>(app.build_object<Object>(params));
+    Object obj(params);
 
-    EXPECT_EQ(obj->get_name(), "name");
+    EXPECT_EQ(obj.get_name(), "name");
 
-    EXPECT_EQ(obj->get_processor_id(), 0);
+    EXPECT_EQ(obj.get_processor_id(), 0);
 
     int sz;
     MPI_Comm_size(app.get_comm(), &sz);
-    EXPECT_EQ(obj->get_comm().size(), sz);
+    EXPECT_EQ(obj.get_comm().size(), sz);
 
-    obj->create();
+    obj.create();
 }

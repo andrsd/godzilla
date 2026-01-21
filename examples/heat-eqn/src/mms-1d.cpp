@@ -69,30 +69,29 @@ main(int argc, char * argv[])
             .set<Real>("end_time", 1)
             .set<Real>("dt", 0.5)
             .set<Int>("p_order", 2);
-        HeatEquationProblem prob(prob_pars);
-        app.set_problem(&prob);
+        auto prob = app.make_problem<HeatEquationProblem>(prob_pars);
 
         auto aux_pars = app.make_parameters<ConstantAuxiliaryField>();
         aux_pars.set<String>("name", "q_ppp");
         aux_pars.set<std::vector<Real>>("value", { -1. });
-        prob.add_auxiliary_field<ConstantAuxiliaryField>(aux_pars);
+        prob->add_auxiliary_field<ConstantAuxiliaryField>(aux_pars);
 
         auto ic_pars = app.make_parameters<TempIC>();
         ic_pars.set<String>("name", "all");
         ic_pars.set<String>("field", "temp");
-        prob.add_initial_condition<TempIC>(ic_pars);
+        prob->add_initial_condition<TempIC>(ic_pars);
 
         auto bc_pars = app.make_parameters<DirichletBC>();
         bc_pars.set<std::vector<String>>("boundary", { "left", "right" });
-        prob.add_boundary_condition<DirichletBC>(bc_pars);
+        prob->add_boundary_condition<DirichletBC>(bc_pars);
 
         auto out_pars = app.make_parameters<ExodusIIOutput>();
         out_pars.set<fs::path>("file", "mms-1d")
             .set<ExecuteOnFlags>("on", ExecuteOn::INITIAL | ExecuteOn::FINAL)
             .set<std::vector<String>>("variables", { "temp" });
-        prob.add_output<ExodusIIOutput>(out_pars);
+        prob->add_output<ExodusIIOutput>(out_pars);
 
-        prob.create();
+        prob->create();
 
         app.run();
 

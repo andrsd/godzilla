@@ -136,31 +136,30 @@ TEST(FENonlinearProblemJFNKTest, solve)
     mesh_params.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
-    auto prob_params = GTestFENonlinearProblemJFNK::parameters();
+    auto prob_params = app.make_parameters<GTestFENonlinearProblemJFNK>();
     prob_params.set<godzilla::App *>("app", &app);
     prob_params.set<Mesh *>("mesh", mesh.get());
-    GTestFENonlinearProblemJFNK prob(prob_params);
-    app.set_problem(&prob);
+    auto prob = app.make_problem<GTestFENonlinearProblemJFNK>(prob_params);
 
     auto ic_params = ConstantInitialCondition::parameters();
     ic_params.set<godzilla::App *>("app", &app);
     ic_params.set<std::vector<Real>>("value", { 0.1 });
-    prob.add_initial_condition<ConstantInitialCondition>(ic_params);
+    prob->add_initial_condition<ConstantInitialCondition>(ic_params);
 
     auto bc_params = DirichletBC::parameters();
     bc_params.set<godzilla::App *>("app", &app)
         .set<App *>("app", &app)
         .set<std::vector<String>>("boundary", { "left", "right" });
-    prob.add_boundary_condition<DirichletBC>(bc_params);
+    prob->add_boundary_condition<DirichletBC>(bc_params);
 
-    prob.create();
+    prob->create();
 
-    prob.run();
+    prob->run();
 
-    bool conv = prob.converged();
+    bool conv = prob->converged();
     EXPECT_EQ(conv, true);
 
-    auto x = prob.get_solution_vector();
+    auto x = prob->get_solution_vector();
     std::vector<Scalar> vals(1);
     x.get_values({ 0 }, vals);
     EXPECT_NEAR(vals[0], 0.25, 1e-9);

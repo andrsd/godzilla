@@ -59,7 +59,7 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
         lx.restore_array_read(lxx);
     }
     {
-        const auto * c_prob = this->prob.get();
+        const auto * c_prob = this->prob;
         auto lx = c_prob->get_solution_vector_local();
         EXPECT_NEAR(lx(0), 0., 1e-7);
         EXPECT_NEAR(lx(1), 0.5, 1e-7);
@@ -69,7 +69,7 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
 
 TEST_F(ImplicitFENonlinearProblemTest, wrong_scheme)
 {
-    auto params = GTestImplicitFENonlinearProblem::parameters();
+    auto params = this->app->make_parameters<GTestImplicitFENonlinearProblem>();
     params.set<godzilla::App *>("app", this->app);
     params.set<Mesh *>("mesh", this->mesh.get());
     params.set<Real>("start_time", 0.);
@@ -77,13 +77,13 @@ TEST_F(ImplicitFENonlinearProblemTest, wrong_scheme)
     params.set<Real>("dt", 5);
     params.set<String>("scheme", "asdf");
 
-    EXPECT_DEATH(this->app->build_object<GTestImplicitFENonlinearProblem>(params),
+    EXPECT_DEATH(GTestImplicitFENonlinearProblem prob(params),
                  testing::HasSubstr("The 'scheme' parameter can be either 'beuler' or 'cn'."));
 }
 
 TEST_F(ImplicitFENonlinearProblemTest, wrong_time_stepping_params)
 {
-    auto params = GTestImplicitFENonlinearProblem::parameters();
+    auto params = this->app->make_parameters<GTestImplicitFENonlinearProblem>();
     params.set<godzilla::App *>("app", this->app);
     params.set<String>("name", "prob");
     params.set<Mesh *>("mesh", this->mesh.get());
@@ -93,13 +93,13 @@ TEST_F(ImplicitFENonlinearProblemTest, wrong_time_stepping_params)
     params.set<Real>("dt", 5);
     params.set<String>("scheme", "beuler");
 
-    EXPECT_DEATH(this->app->build_object<GTestImplicitFENonlinearProblem>(params),
+    EXPECT_DEATH(GTestImplicitFENonlinearProblem prob(params),
                  "Cannot provide 'end_time' and 'num_steps' together. Specify one or the other.");
 }
 
 TEST_F(ImplicitFENonlinearProblemTest, no_time_stepping_params)
 {
-    auto params = GTestImplicitFENonlinearProblem::parameters();
+    auto params = this->app->make_parameters<GTestImplicitFENonlinearProblem>();
     params.set<godzilla::App *>("app", this->app);
     params.set<String>("name", "prob");
     params.set<Mesh *>("mesh", this->mesh.get());
@@ -107,14 +107,12 @@ TEST_F(ImplicitFENonlinearProblemTest, no_time_stepping_params)
     params.set<Real>("dt", 5);
     params.set<String>("scheme", "beuler");
 
-    EXPECT_DEATH(this->app->build_object<GTestImplicitFENonlinearProblem>(params),
+    EXPECT_DEATH(GTestImplicitFENonlinearProblem prob(params),
                  "You must provide either 'end_time' or 'num_steps' parameter.");
 }
 
 TEST_F(ImplicitFENonlinearProblemTest, set_schemes)
 {
-    this->app->set_problem(this->prob.get());
-
     auto ic_params = ConstantInitialCondition::parameters();
     ic_params.set<godzilla::App *>("app", this->app);
     ic_params.set<String>("name", "ic");
@@ -141,8 +139,6 @@ TEST_F(ImplicitFENonlinearProblemTest, set_schemes)
 
 TEST_F(ImplicitFENonlinearProblemTest, converged_reason)
 {
-    this->app->set_problem(this->prob.get());
-
     auto ic_params = ConstantInitialCondition::parameters();
     ic_params.set<godzilla::App *>("app", this->app);
     ic_params.set<String>("name", "ic");

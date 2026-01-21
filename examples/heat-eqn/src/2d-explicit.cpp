@@ -64,32 +64,31 @@ main(int argc, char * argv[])
             .set<Real>("end_time", 5e-3)
             .set<Real>("dt", 1e-3)
             .set<Int>("order", 2);
-        HeatEquationExplicit prob(prob_pars);
-        app.set_problem(&prob);
+        auto prob = app.make_problem<HeatEquationExplicit>(prob_pars);
 
         auto aux_ffn_pars = app.make_parameters<ConstantAuxiliaryField>();
         aux_ffn_pars.set<String>("name", "forcing_fn");
         aux_ffn_pars.set<std::vector<Real>>("value", { 2. });
-        prob.add_auxiliary_field<ConstantAuxiliaryField>(aux_ffn_pars);
+        prob->add_auxiliary_field<ConstantAuxiliaryField>(aux_ffn_pars);
 
         auto ic_pars = app.make_parameters<TempIC>();
         ic_pars.set<String>("name", "all")
             .set<String>("field", "temp")
             .set<std::vector<Real>>("value", { 300 });
-        prob.add_initial_condition<TempIC>(ic_pars);
+        prob->add_initial_condition<TempIC>(ic_pars);
 
         auto bc_all_pars = app.make_parameters<DirichletBC>();
         bc_all_pars.set<String>("name", "all")
             .set<std::vector<String>>("boundary", { "left", "right", "top", "bottom" });
-        prob.add_boundary_condition<DirichletBC>(bc_all_pars);
+        prob->add_boundary_condition<DirichletBC>(bc_all_pars);
 
         auto out_pars = app.make_parameters<ExodusIIOutput>();
         out_pars.set<fs::path>("file", "2d-explicit")
             .set<ExecuteOnFlags>("on", ExecuteOn::INITIAL | ExecuteOn::FINAL)
             .set<std::vector<String>>("variables", { "temp" });
-        prob.add_output<ExodusIIOutput>(out_pars);
+        prob->add_output<ExodusIIOutput>(out_pars);
 
-        prob.create();
+        prob->create();
 
         app.run();
 

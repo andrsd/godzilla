@@ -67,7 +67,7 @@ TEST_F(InitialConditionTest, api)
 {
     auto params = InitialCondition::parameters();
     params.set<App *>("app", this->app);
-    params.set<DiscreteProblemInterface *>("_dpi", this->prob.get());
+    params.set<DiscreteProblemInterface *>("_dpi", this->prob);
     params.set<String>("name", "obj");
     MockInitialCondition ic(params);
 
@@ -124,7 +124,7 @@ TEST_F(InitialConditionTest, get_value)
 {
     auto params = TestInitialCondition::parameters();
     params.set<App *>("app", this->app);
-    params.set<DiscreteProblemInterface *>("_dpi", this->prob.get());
+    params.set<DiscreteProblemInterface *>("_dpi", this->prob);
     params.set<String>("name", "obj");
     TestInitialCondition ic(params);
 }
@@ -133,7 +133,7 @@ TEST_F(InitialConditionTest, get_vector_value)
 {
     auto params = TestVectorInitialCondition::parameters();
     params.set<App *>("app", this->app);
-    params.set<DiscreteProblemInterface *>("_dpi", this->prob.get());
+    params.set<DiscreteProblemInterface *>("_dpi", this->prob);
     params.set<String>("name", "obj");
     TestVectorInitialCondition ic(params);
 }

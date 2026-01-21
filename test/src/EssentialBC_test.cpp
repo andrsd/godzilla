@@ -42,28 +42,24 @@ TEST(EssentialBCTest, test)
 {
     TestApp app;
 
-    auto mesh_pars = BoxMesh::parameters();
+    auto mesh_pars = app.make_parameters<BoxMesh>();
     // clang-format off
     mesh_pars
-        .set<App *>("app", &app)
         .set<Int>("nx", 2)
         .set<Int>("ny", 2)
         .set<Int>("nz", 2);
     // clang-format on
     auto mesh = MeshFactory::create<BoxMesh>(mesh_pars);
 
-    auto prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<App *>("app", &app);
+    auto prob_pars = app.make_parameters<GTestFENonlinearProblem>();
     prob_pars.set<Mesh *>("mesh", mesh.get());
-    GTestFENonlinearProblem problem(prob_pars);
-    app.set_problem(&problem);
+    auto problem = app.make_problem<GTestFENonlinearProblem>(prob_pars);
 
-    auto params = DirichletBC::parameters();
-    params.set<App *>("app", &app);
+    auto params = app.make_parameters<DirichletBC>();
     params.set<std::vector<String>>("boundary", {});
-    auto bc = problem.add_boundary_condition<DirichletBC>(params);
+    auto bc = problem->add_boundary_condition<DirichletBC>(params);
 
-    problem.create();
+    problem->create();
 
     const auto & components = bc->get_components();
     ASSERT_EQ(components.size(), 1);
@@ -85,47 +81,39 @@ TEST(EssentialBCTest, non_existing_field)
 {
     TestApp app;
 
-    Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("app", &app);
+    auto mesh_pars = app.make_parameters<LineMesh>();
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
-    Parameters prob_pars = GTest2FieldsFENonlinearProblem::parameters();
-    prob_pars.set<App *>("app", &app);
+    auto prob_pars = app.make_parameters<GTest2FieldsFENonlinearProblem>();
     prob_pars.set<Mesh *>("mesh", mesh.get());
-    GTest2FieldsFENonlinearProblem problem(prob_pars);
-    app.set_problem(&problem);
+    auto problem = app.make_problem<GTest2FieldsFENonlinearProblem>(prob_pars);
 
-    Parameters params = DirichletBC::parameters();
-    params.set<App *>("app", &app)
-        .set<String>("field", "asdf")
-        .set<std::vector<String>>("boundary", {});
-    problem.add_boundary_condition<DirichletBC>(params);
+    auto params = app.make_parameters<DirichletBC>();
+    params.set<String>("field", "asdf");
+    params.set<std::vector<String>>("boundary", {});
+    problem->add_boundary_condition<DirichletBC>(params);
 
-    EXPECT_DEATH(problem.create(), "Field 'asdf' does not exist. Typo?");
+    EXPECT_DEATH(problem->create(), "Field 'asdf' does not exist. Typo?");
 }
 
 TEST(EssentialBCTest, field_param_not_specified)
 {
     TestApp app;
 
-    auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("app", &app);
+    auto mesh_pars = app.make_parameters<LineMesh>();
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
-    auto prob_pars = GTest2FieldsFENonlinearProblem::parameters();
-    prob_pars.set<App *>("app", &app);
+    auto prob_pars = app.make_parameters<GTest2FieldsFENonlinearProblem>();
     prob_pars.set<Mesh *>("mesh", mesh.get());
-    GTest2FieldsFENonlinearProblem problem(prob_pars);
-    app.set_problem(&problem);
+    auto problem = app.make_problem<GTest2FieldsFENonlinearProblem>(prob_pars);
 
-    auto params = DirichletBC::parameters();
-    params.set<App *>("app", &app);
+    auto params = app.make_parameters<DirichletBC>();
     params.set<std::vector<String>>("boundary", {});
-    problem.add_boundary_condition<DirichletBC>(params);
+    problem->add_boundary_condition<DirichletBC>(params);
 
     EXPECT_DEATH(
-        problem.create(),
+        problem->create(),
         "Use the 'field' parameter to assign this boundary condition to an existing field.");
 }
