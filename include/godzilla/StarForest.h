@@ -55,7 +55,6 @@ public:
         operator bool() const;
         operator bool();
 
-    private:
         Int n_roots, n_leaves;
         const Int * leaves;
         const Node * remote_leaves;
