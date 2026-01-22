@@ -124,4 +124,13 @@ Quadrature::create_simplex(Dimension dim, Int degree, SimplexQuadratureType type
     return q;
 }
 
+Quadrature
+Quadrature::create_stroud_conical(Dimension dim, Int n_comp, Int n_points, Real a, Real b)
+{
+    CALL_STACK_MSG();
+    Quadrature q;
+    PETSC_CHECK(PetscDTStroudConicalQuadrature(dim, n_comp, n_points, a, b, &q.obj));
+    return q;
+}
+
 } // namespace godzilla

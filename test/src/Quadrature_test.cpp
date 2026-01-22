@@ -44,3 +44,11 @@ TEST(QuadratureTest, simplex)
     EXPECT_EQ(q.get_num_components(), 1);
     EXPECT_EQ(q.get_order(), 3);
 }
+
+TEST(QuadratureTest, stroud_conical)
+{
+    auto q = Quadrature::create_stroud_conical(2_D, 1, 2);
+    EXPECT_EQ(q.get_dim(), 2);
+    EXPECT_EQ(q.get_num_components(), 1);
+    EXPECT_EQ(q.get_order(), 3);
+}
