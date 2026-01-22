@@ -101,6 +101,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla4Mesh17clear_label_valueEPKc3Int3Int"><code class="docutils literal notranslate"><span class="pre">Mesh::clear_label_value()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla4Mesh4viewE11PetscViewer"><code class="docutils literal notranslate"><span class="pre">Mesh::view()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla4Mesh13get_neighborsEv"><code class="docutils literal notranslate"><span class="pre">Mesh::get_neighbors()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla4Mesh13locate_pointsE6Vector19DMPointLocationType"><code class="docutils literal notranslate"><span class="pre">Mesh::locate_points()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -373,6 +374,24 @@
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Array of all neighboring ranks </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla4Mesh13locate_pointsE6Vector19DMPointLocationType">
+<span id="_CPPv3N8godzilla4Mesh13locate_pointsE6Vector19DMPointLocationType"></span><span id="_CPPv2N8godzilla4Mesh13locate_pointsE6Vector19DMPointLocationType"></span><span id="godzilla::Mesh::locate_points__Vector.DMPointLocationType"></span><span class="target" id="classgodzilla_1_1_mesh_1a1d8e5e4dcda8993cd19294bd5807e1d4"></span><span class="n"><span class="pre">StarForest</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">locate_points</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Vector</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">coords</span></span>, <span class="n"><span class="pre">DMPointLocationType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ltype</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla4Mesh13locate_pointsE6Vector19DMPointLocationType" title="Link to this definition"></a><br /></dt>
+<dd><p>Locate points in mesh. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>coords</strong> – Vector with coordinates: x0, y0, z0, x1, y1, z1, … (in 3D) </p></li>
+<li><p><strong>ltype</strong> – Behavior when point is not located:<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">DM_POINTLOCATION_NONE</span></code> - return nothing</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DM_POINTLOCATION_NEAREST</span></code> - the (approximate) nearest point </p></li>
+</ul>
+</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
