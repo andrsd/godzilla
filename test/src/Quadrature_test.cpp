@@ -52,3 +52,14 @@ TEST(QuadratureTest, stroud_conical)
     EXPECT_EQ(q.get_num_components(), 1);
     EXPECT_EQ(q.get_order(), 3);
 }
+
+TEST(QuadratureTest, tensor_quadrature)
+{
+    auto q1 = Quadrature::create_simplex(1_D, 3);
+    auto q2 = Quadrature::create_simplex(2_D, 3);
+
+    auto q = Quadrature::create_tensor_quadrature(q1, q2);
+    EXPECT_EQ(q.get_dim(), 3);
+    EXPECT_EQ(q.get_num_components(), 1);
+    EXPECT_EQ(q.get_order(), 3);
+}

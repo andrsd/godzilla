@@ -101,6 +101,13 @@ public:
     /// @return Quadrature object
     static Quadrature
     create_stroud_conical(Dimension dim, Int n_comp, Int n_points, Real a = -1, Real b = 1);
+
+    /// Create the tensor product quadrature from two lower-dimensional quadratures
+    ///
+    /// @param q1 The first quadrature
+    /// @param q2 The second quadrature
+    /// @return Resulting quadrature
+    static Quadrature create_tensor_quadrature(Quadrature q1, Quadrature q2);
 };
 
 } // namespace godzilla
