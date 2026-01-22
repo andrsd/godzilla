@@ -9,6 +9,12 @@
 
 namespace godzilla {
 
+enum class SimplexQuadratureType {
+    DEFAULT = PETSCDTSIMPLEXQUAD_DEFAULT,
+    CONIC = PETSCDTSIMPLEXQUAD_CONIC,
+    MINSYM = PETSCDTSIMPLEXQUAD_MINSYM
+};
+
 class Quadrature : public PetscObjectWrapper<PetscQuadrature> {
 public:
     Quadrature();
@@ -74,6 +80,16 @@ public:
     /// @param b Right end of interval (often `1`)
     /// @return Quadrature object
     static Quadrature create_gauss_tensor(Dimension dim, Int n_comp, Int n_points, Real a, Real b);
+
+    /// Create a quadrature rule for a simplex that exactly integrates polynomials up to a given
+    /// degree.
+    ///
+    /// @param dim Spatial dimension of the simplex (1 = segment, 2 = triangle, 3 = tetrahedron)
+    /// @param degree The largest polynomial degree that is required to be integrated exactly
+    /// @param type Indicating the type of quadrature rule
+    static Quadrature create_simplex(Dimension dim,
+                                     Int degree,
+                                     SimplexQuadratureType type = SimplexQuadratureType::DEFAULT);
 };
 
 } // namespace godzilla
