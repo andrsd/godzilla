@@ -133,4 +133,13 @@ Quadrature::create_stroud_conical(Dimension dim, Int n_comp, Int n_points, Real 
     return q;
 }
 
+Quadrature
+Quadrature::create_tensor_quadrature(Quadrature q1, Quadrature q2)
+{
+    CALL_STACK_MSG();
+    Quadrature q;
+    PETSC_CHECK(PetscDTTensorQuadratureCreate(q1, q2, &q.obj));
+    return q;
+}
+
 } // namespace godzilla
