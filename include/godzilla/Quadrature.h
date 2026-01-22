@@ -90,6 +90,17 @@ public:
     static Quadrature create_simplex(Dimension dim,
                                      Int degree,
                                      SimplexQuadratureType type = SimplexQuadratureType::DEFAULT);
+
+    /// Create Stroud conical quadrature for a simplex
+    ///
+    /// @param dim Spatial dimension
+    /// @param n_comp Number of components
+    /// @param n_points Number of points in one dimension
+    /// @param a Left end of interval (often `-1`)
+    /// @param b Right end of interval (often `1`)
+    /// @return Quadrature object
+    static Quadrature
+    create_stroud_conical(Dimension dim, Int n_comp, Int n_points, Real a = -1, Real b = 1);
 };
 
 } // namespace godzilla
