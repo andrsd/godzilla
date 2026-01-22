@@ -112,4 +112,16 @@ Quadrature::create_gauss_tensor(Dimension dim, Int n_comp, Int n_points, Real a,
     return q;
 }
 
+Quadrature
+Quadrature::create_simplex(Dimension dim, Int degree, SimplexQuadratureType type)
+{
+    CALL_STACK_MSG();
+    Quadrature q;
+    PETSC_CHECK(PetscDTSimplexQuadrature(dim,
+                                         degree,
+                                         static_cast<PetscDTSimplexQuadratureType>(type),
+                                         &q.obj));
+    return q;
+}
+
 } // namespace godzilla

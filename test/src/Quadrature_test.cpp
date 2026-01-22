@@ -36,3 +36,11 @@ TEST(QuadratureTest, shallow)
     PetscQuadratureEqual(pq, (PetscQuadrature) q, &eq);
     EXPECT_TRUE(eq == PETSC_TRUE);
 }
+
+TEST(QuadratureTest, simplex)
+{
+    auto q = Quadrature::create_simplex(2_D, 3);
+    EXPECT_EQ(q.get_dim(), 2);
+    EXPECT_EQ(q.get_num_components(), 1);
+    EXPECT_EQ(q.get_order(), 3);
+}
