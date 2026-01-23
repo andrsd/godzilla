@@ -22,6 +22,7 @@ struct DefaultDelete {
     void
     operator()(T * ptr) const noexcept
     {
+        static_assert(sizeof(T), "Qtr<T>: T must be complete at destruction time.");
         static_assert(!std::is_void<T>::value, "Can't delete incomplete type");
         delete ptr;
     }
