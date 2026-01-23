@@ -24,6 +24,18 @@ namespace internal {
 PetscErrorCode
 invoke_function_delegate(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx);
 
+class PetscObjectView {
+public:
+    PetscObjectView() = default;
+    virtual ~PetscObjectView() = default;
+
+    PetscObjectView(const PetscObjectView &) = delete;
+    PetscObjectView & operator=(const PetscObjectView &) = delete;
+
+    PetscObjectView(PetscObjectView &&) = default;
+    PetscObjectView & operator=(PetscObjectView &&) = default;
+};
+
 } // namespace internal
 
 //

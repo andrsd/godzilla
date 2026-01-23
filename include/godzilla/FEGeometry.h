@@ -33,7 +33,7 @@ coordinates(const UnstructuredMesh & mesh)
     auto vtx_range = mesh.get_vertex_range();
     Array1D<DenseVector<Real, DIM>> coords(vtx_range);
     Vector vc = mesh.get_coordinates_local();
-    Scalar * coord_vals = vc.get_array();
+    auto coord_vals = vc.borrow_array();
     Int j = 0;
     for (auto & vtx : vtx_range) {
         DenseVector<Real, DIM> c;
@@ -41,7 +41,6 @@ coordinates(const UnstructuredMesh & mesh)
             c(i) = coord_vals[j];
         coords[vtx] = c;
     }
-    vc.restore_array(coord_vals);
     return coords;
 }
 

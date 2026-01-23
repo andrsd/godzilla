@@ -91,9 +91,8 @@ HDF5File::Group::write_global_vector(String name, const Vector & data)
 
     auto memspace = Dataspace::create(rng.size());
 
-    auto * vals = data.get_array_read();
-    dset.write(memspace, filespace, vals);
-    data.restore_array_read(vals);
+    auto vals = data.borrow_array_read();
+    dset.write(memspace, filespace, vals.data());
 }
 
 void
@@ -108,9 +107,8 @@ HDF5File::Group::read_global_vector(String name, Vector & data)
 
     auto memspace = Dataspace::create(rng.size());
 
-    auto * vals = data.get_array();
-    dset.read(memspace, filespace, vals);
-    data.restore_array(vals);
+    auto vals = data.borrow_array();
+    dset.read(memspace, filespace, vals.data());
 }
 
 } // namespace godzilla

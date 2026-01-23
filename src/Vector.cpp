@@ -338,6 +338,20 @@ Vector::restore_array_read(const Scalar * array) const
     PETSC_CHECK(VecRestoreArrayRead(this->obj, &array));
 }
 
+VectorBorrowedArray
+Vector::borrow_array()
+{
+    CALL_STACK_MSG();
+    return VectorBorrowedArray(*this);
+}
+
+VectorBorrowedArrayRead
+Vector::borrow_array_read() const
+{
+    CALL_STACK_MSG();
+    return VectorBorrowedArrayRead(*this);
+}
+
 void
 Vector::view(PetscViewer viewer) const
 {

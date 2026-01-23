@@ -45,18 +45,16 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
     this->prob->run();
 
     auto x = this->prob->get_solution_vector();
-    auto xx = x.get_array_read();
+    auto xx = x.borrow_array_read();
     EXPECT_NEAR(xx[0], 0.5, 1e-7);
-    x.restore_array_read(xx);
 
     this->prob->compute_solution_vector_local();
     {
         auto lx = this->prob->get_solution_vector_local();
-        auto lxx = lx.get_array_read();
+        auto lxx = lx.borrow_array_read();
         EXPECT_NEAR(lxx[0], 0., 1e-7);
         EXPECT_NEAR(lxx[1], 0.5, 1e-7);
         EXPECT_NEAR(lxx[2], 1., 1e-7);
-        lx.restore_array_read(lxx);
     }
     {
         const auto * c_prob = this->prob;

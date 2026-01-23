@@ -3,6 +3,9 @@
 
 #pragma once
 
+#include "godzilla/Assert.h"
+#include "godzilla/CallStack.h"
+#include "godzilla/Error.h"
 #include "godzilla/PetscObjectWrapper.h"
 #include "godzilla/IndexSet.h"
 #include "godzilla/Types.h"
@@ -15,6 +18,8 @@
 namespace godzilla {
 
 class NestVector;
+class VectorBorrowedArray;
+class VectorBorrowedArrayRead;
 
 class Vector : public PetscObjectWrapper<Vec> {
 public:
@@ -41,6 +46,9 @@ public:
     const Scalar * get_array_read() const;
     void restore_array(Scalar * arr);
     void restore_array_read(const Scalar * arr) const;
+
+    VectorBorrowedArray borrow_array();
+    VectorBorrowedArrayRead borrow_array_read() const;
 
     /// Returns the global number of elements of the vector
     Int get_size() const;
@@ -272,6 +280,148 @@ Vector::set_values_local(const DenseVector<Int, N> & ix,
     CALL_STACK_MSG();
     PETSC_CHECK(VecSetValuesLocal(this->obj, N, ix.data(), y.data(), mode));
 }
+
+//
+
+///
+class VectorBorrowedArray {
+public:
+    VectorBorrowedArray() = default;
+
+    explicit VectorBorrowedArray(Vector & v) : vec_(v)
+    {
+        CALL_STACK_MSG();
+        PETSC_CHECK(VecGetLocalSize(this->vec_, &this->size_));
+        PETSC_CHECK(VecGetArray(this->vec_, &this->data_));
+    }
+
+    VectorBorrowedArray(VectorBorrowedArray && other) noexcept :
+        vec_(other.vec_),
+        data_(std::exchange(other.data_, nullptr)),
+        size_(other.size_)
+    {
+    }
+
+    VectorBorrowedArray &
+    operator=(VectorBorrowedArray && other) noexcept
+    {
+        // release current borrow
+        if (this->data_) {
+            PETSC_CHECK(VecRestoreArray(this->vec_, &this->data_));
+        }
+
+        this->vec_ = other.vec_;
+        this->size_ = other.size_;
+        this->data_ = std::exchange(other.data_, nullptr);
+        return *this;
+    }
+
+    ~VectorBorrowedArray()
+    {
+        CALL_STACK_MSG();
+        if (this->data_) {
+            PETSC_CHECK(VecRestoreArray(this->vec_, &this->data_));
+        }
+    }
+
+    Scalar &
+    operator[](Int i) noexcept
+    {
+        GODZILLA_ASSERT_TRUE(
+            (i >= 0) && (i < this->size_),
+            fmt::format("Access out of bounds: index={}, size={}", i, this->size_));
+        return this->data_[i];
+    }
+
+    const Scalar &
+    operator[](Int i) const noexcept
+    {
+        GODZILLA_ASSERT_TRUE(
+            (i >= 0) && (i < this->size_),
+            fmt::format("Access out of bounds: index={}, size={}", i, this->size_));
+        return this->data_[i];
+    }
+
+    Scalar *
+    data() noexcept
+    {
+        return this->data_;
+    }
+
+    const Scalar *
+    data() const noexcept
+    {
+        return this->data_;
+    }
+
+private:
+    Vec vec_;
+    Scalar * data_ = nullptr;
+    Int size_ = 0;
+};
+
+class VectorBorrowedArrayRead {
+public:
+    VectorBorrowedArrayRead() = default;
+
+    explicit VectorBorrowedArrayRead(const Vector & v) : vec_(v)
+    {
+        CALL_STACK_MSG();
+        PETSC_CHECK(VecGetLocalSize(this->vec_, &this->size_));
+        PETSC_CHECK(VecGetArrayRead(this->vec_, &this->data_));
+    }
+
+    VectorBorrowedArrayRead(VectorBorrowedArrayRead && other) noexcept :
+        vec_(other.vec_),
+        data_(std::exchange(other.data_, nullptr)),
+        size_(other.size_)
+    {
+    }
+
+    VectorBorrowedArrayRead &
+    operator=(VectorBorrowedArrayRead && other) noexcept
+    {
+        // release current borrow
+        if (this->data_) {
+            PETSC_CHECK(VecRestoreArrayRead(this->vec_, &this->data_));
+        }
+
+        this->vec_ = other.vec_;
+        this->size_ = other.size_;
+        this->data_ = std::exchange(other.data_, nullptr);
+        return *this;
+    }
+
+    ~VectorBorrowedArrayRead()
+    {
+        CALL_STACK_MSG();
+        if (this->data_) {
+            PETSC_CHECK(VecRestoreArrayRead(this->vec_, &this->data_));
+        }
+    }
+
+    const Scalar &
+    operator[](Int i) const noexcept
+    {
+        GODZILLA_ASSERT_TRUE(
+            (i >= 0) && (i < this->size_),
+            fmt::format("Access out of bounds: index={}, size={}", i, this->size_));
+        return this->data_[i];
+    }
+
+    const Scalar *
+    data() const noexcept
+    {
+        return this->data_;
+    }
+
+private:
+    Vec vec_;
+    const Scalar * data_ = nullptr;
+    Int size_ = 0;
+};
+
+//
 
 /// Copy vector `x` into `y`
 ///
