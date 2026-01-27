@@ -85,10 +85,8 @@ Label::get_values() const
 {
     CALL_STACK_MSG();
     auto is = get_value_index_set();
-    is.get_indices();
-    auto values = is.to_std_vector();
-    is.restore_indices();
-    return values;
+    auto vals = is.borrow_indices();
+    return to_std_vector(vals);
 }
 
 void

@@ -2,6 +2,7 @@
 #include "TestApp.h"
 #include "GTestFENonlinearProblem.h"
 #include "GTest2FieldsFENonlinearProblem.h"
+#include "godzilla/IndexSet.h"
 #include "godzilla/PCFieldSplit.h"
 #include "godzilla/MeshFactory.h"
 #include "godzilla/LineMesh.h"
@@ -192,22 +193,27 @@ TEST(PCFieldSplit, schur)
         fs.set_is(fld_name[i], fdecomp.is[i]);
 
     auto is0 = fs.get_is("split0");
-    is0.get_indices();
-    EXPECT_THAT(is0.to_std_vector(), ElementsAre(0, 2, 4));
-    is0.restore_indices();
+    {
+        auto vals = is0.borrow_indices();
+        EXPECT_THAT(to_std_vector(vals), ElementsAre(0, 2, 4));
+    }
+
     auto is1 = fs.get_is("split1");
-    is1.get_indices();
-    EXPECT_THAT(is1.to_std_vector(), ElementsAre(1, 3, 5));
-    is1.restore_indices();
+    {
+        auto vals = is1.borrow_indices();
+        EXPECT_THAT(to_std_vector(vals), ElementsAre(1, 3, 5));
+    }
 
     auto is_idx0 = fs.get_is_by_index(0);
-    is_idx0.get_indices();
-    EXPECT_THAT(is_idx0.to_std_vector(), ElementsAre(0, 2, 4));
-    is_idx0.restore_indices();
+    {
+        auto vals = is_idx0.borrow_indices();
+        EXPECT_THAT(to_std_vector(vals), ElementsAre(0, 2, 4));
+    }
     auto is_idx1 = fs.get_is_by_index(1);
-    is_idx1.get_indices();
-    EXPECT_THAT(is_idx1.to_std_vector(), ElementsAre(1, 3, 5));
-    is_idx1.restore_indices();
+    {
+        auto vals = is_idx1.borrow_indices();
+        EXPECT_THAT(to_std_vector(vals), ElementsAre(1, 3, 5));
+    }
 
     auto J = prob.get_jacobian();
     fs.set_operators(J, J);

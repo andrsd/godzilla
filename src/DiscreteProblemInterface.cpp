@@ -398,19 +398,18 @@ DiscreteProblemInterface::compute_label_aux_fields(DM dm,
             contexts.push_back(nullptr);
     }
     auto ids = label.get_value_index_set();
-    ids.get_indices();
+    auto vals = ids.borrow_indices();
     PETSC_CHECK(DMProjectFunctionLabelLocal(dm,
                                             get_problem()->get_time(),
                                             label,
-                                            ids.get_size(),
-                                            ids.data(),
+                                            vals.size(),
+                                            vals.data(),
                                             PETSC_DETERMINE,
                                             nullptr,
                                             funcs.data(),
                                             contexts.data(),
                                             INSERT_ALL_VALUES,
                                             a));
-    ids.restore_indices();
 }
 
 void

@@ -374,36 +374,32 @@ ExodusIIOutput::write_elements()
         block_names.resize(n_cells_sets);
 
         auto cell_sets_label = this->mesh->get_label("Cell Sets");
-        auto cell_set_idx = cell_sets_label.get_value_index_set();
-        cell_set_idx.get_indices();
+        auto cell_set_is = cell_sets_label.get_value_index_set();
+        auto cell_set_idx = cell_set_is.borrow_indices();
         for (Int i = 0; i < n_cells_sets; ++i) {
-            auto cells = cell_sets_label.get_stratum(cell_set_idx[i]);
-            cells.get_indices();
+            auto cell_stratum = cell_sets_label.get_stratum(cell_set_idx[i]);
+            auto cells = cell_stratum.borrow_indices();
             auto polytope_type = this->mesh->get_cell_type(cells[0]);
             if (this->cont)
                 write_block_connectivity_continuous((int) cell_set_idx[i],
                                                     polytope_type,
-                                                    cells.get_size(),
+                                                    cells.size(),
                                                     cells.data());
             else if (this->discont)
                 write_block_connectivity_discontinuous((int) cell_set_idx[i],
                                                        polytope_type,
-                                                       cells.get_size(),
+                                                       cells.size(),
                                                        cells.data());
 
             auto name = this->mesh->get_cell_set_name(cell_set_idx[i]);
             block_names[i] = name.value();
-            cells.restore_indices();
-            cells.destroy();
         }
-        cell_set_idx.restore_indices();
-        cell_set_idx.destroy();
     }
     else {
         auto depth_label = this->mesh->get_depth_label();
         auto dim = this->mesh->get_dimension();
-        IndexSet cells = depth_label.get_stratum(dim);
-        cells.get_indices();
+        auto cell_stratum = depth_label.get_stratum(dim);
+        auto cells = cell_stratum.borrow_indices();
         auto polytope_type = this->mesh->get_cell_type(cells[0]);
         auto n_elems = this->mesh->get_num_cells();
         if (this->cont)
@@ -416,8 +412,6 @@ ExodusIIOutput::write_elements()
                                                    polytope_type,
                                                    n_elems,
                                                    cells.data());
-        cells.restore_indices();
-        cells.destroy();
     }
 
     this->exo->write_block_names(block_names);
@@ -440,24 +434,19 @@ ExodusIIOutput::write_node_sets()
     auto elem_range = this->mesh->get_cell_range();
     Int n_elems_in_block = elem_range.size();
 
-    auto vertex_set_idx = vertex_sets_label.get_value_index_set();
-    vertex_set_idx.get_indices();
+    auto vertex_set_is = vertex_sets_label.get_value_index_set();
+    auto vertex_set_idx = vertex_set_is.borrow_indices();
     for (Int i = 0; i < n_node_sets; ++i) {
-        auto vertices = vertex_sets_label.get_stratum(vertex_set_idx[i]);
-        vertices.get_indices();
-        Int n_nodes_in_set = vertices.get_size();
+        auto vertex_stratum = vertex_sets_label.get_stratum(vertex_set_idx[i]);
+        auto vertices = vertex_stratum.borrow_indices();
+        Int n_nodes_in_set = vertices.size();
         std::vector<int> node_set(n_nodes_in_set);
         for (Int j = 0; j < n_nodes_in_set; ++j)
             node_set[j] = (int) (vertices[j] - n_elems_in_block + 1);
         this->exo->write_node_set(vertex_set_idx[i], node_set);
 
         ns_names[i] = this->mesh->get_vertex_set_name(vertex_set_idx[i]).value();
-
-        vertices.restore_indices();
-        vertices.destroy();
     }
-    vertex_set_idx.restore_indices();
-    vertex_set_idx.destroy();
 
     this->exo->write_node_set_names(ns_names);
 }
@@ -477,12 +466,12 @@ ExodusIIOutput::write_face_sets()
     Int n_side_sets = this->mesh->get_num_face_sets();
     fs_names.resize(n_side_sets);
 
-    auto face_set_idx = face_sets_label.get_value_index_set();
-    face_set_idx.get_indices();
+    auto face_set_is = face_sets_label.get_value_index_set();
+    auto face_set_idx = face_set_is.borrow_indices();
     for (Int fs = 0; fs < n_side_sets; ++fs) {
-        auto faces = face_sets_label.get_stratum(face_set_idx[fs]);
-        faces.get_indices();
-        Int face_set_size = faces.get_size();
+        auto face_stratum = face_sets_label.get_stratum(face_set_idx[fs]);
+        auto faces = face_stratum.borrow_indices();
+        Int face_set_size = faces.size();
         std::vector<int> elem_list(face_set_size);
         std::vector<int> side_list(face_set_size);
         for (Int i = 0; i < face_set_size; ++i) {
@@ -516,11 +505,7 @@ ExodusIIOutput::write_face_sets()
         this->exo->write_side_set(face_set_idx[fs], elem_list, side_list);
 
         fs_names[fs] = this->mesh->get_face_set_name(face_set_idx[fs]).value();
-        faces.restore_indices();
-        faces.destroy();
     }
-    face_set_idx.restore_indices();
-    face_set_idx.destroy();
 
     this->exo->write_side_set_names(fs_names);
 }
@@ -705,15 +690,13 @@ ExodusIIOutput::write_elem_variables()
     Int n_cells_sets = this->mesh->get_num_cell_sets();
     if (n_cells_sets > 1) {
         auto cell_sets_label = this->mesh->get_label("Cell Sets");
-        auto cell_set_idx = cell_sets_label.get_value_index_set();
-        cell_set_idx.get_indices();
+        auto cell_set_is = cell_sets_label.get_value_index_set();
+        auto cell_set_idx = cell_set_is.borrow_indices();
         for (Int i = 0; i < n_cells_sets; ++i) {
-            auto cells = cell_sets_label.get_stratum(cell_set_idx[i]);
-            cells.get_indices();
-            write_block_elem_variables((int) cell_set_idx[i], cells.get_size(), cells.data());
-            cells.restore_indices();
+            auto cell_stratum = cell_sets_label.get_stratum(cell_set_idx[i]);
+            auto cells = cell_stratum.borrow_indices();
+            write_block_elem_variables((int) cell_set_idx[i], cells.size(), cells.data());
         }
-        cell_set_idx.restore_indices();
     }
     else
         write_block_elem_variables(SINGLE_BLK_ID);

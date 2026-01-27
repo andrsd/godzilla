@@ -246,12 +246,11 @@ TEST(UnstructuredMeshTest, get_connectivity)
 
     auto depth_lbl = m->get_depth_label();
     auto facets = depth_lbl.get_stratum(0);
-    facets.get_indices();
+    auto vals = facets.borrow_indices();
     EXPECT_EQ(facets.get_local_size(), 3);
-    EXPECT_EQ(facets(0), 2);
-    EXPECT_EQ(facets(1), 3);
-    EXPECT_EQ(facets(2), 4);
-    facets.restore_indices();
+    EXPECT_EQ(vals[0], 2);
+    EXPECT_EQ(vals[1], 3);
+    EXPECT_EQ(vals[2], 4);
 }
 
 TEST(UnstructuredMeshTest, get_num_cell_nodes)
@@ -313,10 +312,8 @@ TEST(UnstructuredMesh, get_cone_recursive_vertices)
     IndexSet left_facet = points_from_label(left);
     IndexSet left_points = m->get_cone_recursive_vertices(left_facet);
     left_points.sort_remove_dups();
-    left_points.get_indices();
-    auto idxs = left_points.to_std_vector();
-    EXPECT_THAT(idxs, ::UnorderedElementsAre(1, 3, 5, 7));
-    left_points.restore_indices();
+    auto idxs = left_points.borrow_indices();
+    EXPECT_THAT(to_std_vector(idxs), ::UnorderedElementsAre(1, 3, 5, 7));
 }
 
 TEST(UnstructuredMesh, compute_cell_geometry)
@@ -530,11 +527,9 @@ TEST(UnstructuredMesh, mark_boundary_faces)
 
     auto face_set = m->get_label("face sets");
     auto facets = face_set.get_stratum(10);
-    facets.get_indices();
+    auto facets_idxs = facets.borrow_indices();
     EXPECT_EQ(facets.get_local_size(), 4);
-    auto facets_idxs = facets.to_std_vector();
-    EXPECT_THAT(facets_idxs, ElementsAre(6, 8, 9, 10));
-    facets.restore_indices();
+    EXPECT_THAT(to_std_vector(facets_idxs), ElementsAre(6, 8, 9, 10));
 }
 
 TEST(UnstructuredMesh, point_star_forrest)
@@ -632,11 +627,9 @@ TEST(UnstructuredMesh, get_cell_numbering)
 
     mesh->distribute(1);
     auto global_is = mesh->get_cell_numbering();
-    global_is.get_indices();
-    auto gids = global_is.data();
+    auto gids = global_is.borrow_indices();
     for (auto i = 0; i < 10; ++i)
         EXPECT_EQ(gids[i], i);
-    global_is.restore_indices();
 }
 
 TEST(UnstructuredMesh, get_point_depth)
@@ -676,14 +669,16 @@ TEST(UnstructuredMeshTest, index_sets)
     auto m = mesh_qtr.get();
 
     auto cell_is = m->get_all_cells();
-    cell_is.get_indices();
-    EXPECT_THAT(cell_is.to_std_vector(), ElementsAre(0, 1));
-    cell_is.restore_indices();
+    {
+        auto vals = cell_is.borrow_indices();
+        EXPECT_THAT(to_std_vector(vals), ElementsAre(0, 1));
+    }
 
     auto face_is = m->get_facets();
-    face_is.get_indices();
-    EXPECT_THAT(face_is.to_std_vector(), ElementsAre(14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24));
-    face_is.restore_indices();
+    {
+        auto vals = face_is.borrow_indices();
+        EXPECT_THAT(to_std_vector(vals), ElementsAre(14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24));
+    }
 }
 
 TEST(UnstructuredMeshTest, clone)

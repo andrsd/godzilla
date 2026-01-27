@@ -43,15 +43,16 @@ TEST(Partitioning, partition)
     mpart.set_adjacency(adj);
     auto p = mpart.apply();
 
-    p.get_indices();
-    EXPECT_EQ(p[0], 2);
-    EXPECT_EQ(p[1], 2);
-    EXPECT_EQ(p[2], 2);
-    EXPECT_EQ(p[3], 1);
-    EXPECT_EQ(p[4], 1);
-    EXPECT_EQ(p[5], 0);
-    EXPECT_EQ(p[6], 0);
-    p.restore_indices();
+    {
+        auto vals = p.borrow_indices();
+        EXPECT_EQ(vals[0], 2);
+        EXPECT_EQ(vals[1], 2);
+        EXPECT_EQ(vals[2], 2);
+        EXPECT_EQ(vals[3], 1);
+        EXPECT_EQ(vals[4], 1);
+        EXPECT_EQ(vals[5], 0);
+        EXPECT_EQ(vals[6], 0);
+    }
 
     p.destroy();
     mpart.destroy();
@@ -79,18 +80,19 @@ TEST(Partitioning, edge_weights)
     mpart.set_use_edge_weights(true);
     auto p = mpart.apply();
 
-    p.get_indices();
-    EXPECT_EQ(p[0], 1);
-    EXPECT_EQ(p[1], 1);
-    EXPECT_EQ(p[2], 1);
-    EXPECT_EQ(p[3], 2);
-    EXPECT_EQ(p[4], 2);
-    EXPECT_EQ(p[5], 2);
-    EXPECT_EQ(p[6], 2);
-    EXPECT_EQ(p[7], 0);
-    EXPECT_EQ(p[8], 0);
-    EXPECT_EQ(p[9], 0);
-    p.restore_indices();
+    {
+        auto vals = p.borrow_indices();
+        EXPECT_EQ(vals[0], 1);
+        EXPECT_EQ(vals[1], 1);
+        EXPECT_EQ(vals[2], 1);
+        EXPECT_EQ(vals[3], 2);
+        EXPECT_EQ(vals[4], 2);
+        EXPECT_EQ(vals[5], 2);
+        EXPECT_EQ(vals[6], 2);
+        EXPECT_EQ(vals[7], 0);
+        EXPECT_EQ(vals[8], 0);
+        EXPECT_EQ(vals[9], 0);
+    }
 
     EXPECT_TRUE(mpart.get_use_edge_weights());
 
@@ -113,13 +115,14 @@ TEST(Partitioning, vertex_weights)
     mpart.set_vertex_weights({ 10, 1, 1, 1, 1 });
     auto p = mpart.apply();
 
-    p.get_indices();
-    EXPECT_EQ(p[0], 0);
-    EXPECT_EQ(p[1], 1);
-    EXPECT_EQ(p[2], 1);
-    EXPECT_EQ(p[3], 1);
-    EXPECT_EQ(p[4], 1);
-    p.restore_indices();
+    {
+        auto vals = p.borrow_indices();
+        EXPECT_EQ(vals[0], 0);
+        EXPECT_EQ(vals[1], 1);
+        EXPECT_EQ(vals[2], 1);
+        EXPECT_EQ(vals[3], 1);
+        EXPECT_EQ(vals[4], 1);
+    }
 
     p.destroy();
     mpart.destroy();
@@ -140,18 +143,19 @@ TEST(Partitioning, partition_weights)
     mpart.set_adjacency(adj);
     auto p = mpart.apply();
 
-    p.get_indices();
-    EXPECT_EQ(p[0], 0);
-    EXPECT_EQ(p[1], 0);
-    EXPECT_EQ(p[2], 0);
-    EXPECT_EQ(p[3], 0);
-    EXPECT_EQ(p[4], 0);
-    EXPECT_EQ(p[5], 0);
-    EXPECT_EQ(p[6], 0);
-    EXPECT_EQ(p[7], 0);
-    EXPECT_EQ(p[8], 1);
-    EXPECT_EQ(p[9], 1);
-    p.restore_indices();
+    {
+        auto vals = p.borrow_indices();
+        EXPECT_EQ(vals[0], 0);
+        EXPECT_EQ(vals[1], 0);
+        EXPECT_EQ(vals[2], 0);
+        EXPECT_EQ(vals[3], 0);
+        EXPECT_EQ(vals[4], 0);
+        EXPECT_EQ(vals[5], 0);
+        EXPECT_EQ(vals[6], 0);
+        EXPECT_EQ(vals[7], 0);
+        EXPECT_EQ(vals[8], 1);
+        EXPECT_EQ(vals[9], 1);
+    }
 
     p.destroy();
     mpart.destroy();

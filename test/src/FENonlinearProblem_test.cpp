@@ -328,15 +328,17 @@ TEST(TwoFieldFENonlinearProblemTest, field_decomposition)
     EXPECT_EQ(fdecomp.field_name[0], "Q1");
     EXPECT_EQ(fdecomp.field_name[1], "Q1");
 
-    fdecomp.is[0].get_indices();
-    auto idx0 = fdecomp.is[0].to_std_vector();
-    EXPECT_THAT(idx0, ElementsAre(0, 2, 4));
-    fdecomp.is[0].restore_indices();
+    {
+        auto f0_idxs = fdecomp.is[0].borrow_indices();
+        auto idx0 = to_std_vector(f0_idxs);
+        EXPECT_THAT(idx0, ElementsAre(0, 2, 4));
+    }
 
-    fdecomp.is[1].get_indices();
-    auto idx1 = fdecomp.is[1].to_std_vector();
-    EXPECT_THAT(idx1, ElementsAre(1, 3, 5));
-    fdecomp.is[1].restore_indices();
+    {
+        auto f1_idxs = fdecomp.is[1].borrow_indices();
+        auto idx1 = to_std_vector(f1_idxs);
+        EXPECT_THAT(idx1, ElementsAre(1, 3, 5));
+    }
 
     fdecomp.destroy();
     EXPECT_EQ(fdecomp.get_num_fields(), 0);

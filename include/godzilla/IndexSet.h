@@ -13,87 +13,12 @@
 
 namespace godzilla {
 
+class IndexSetBorrowedIndices;
+
 /// `IndexSet`s are objects used to do efficient indexing into other data structures such as
 /// `Vector` and `Matrix`
 class IndexSet : public PetscObjectWrapper<IS> {
 public:
-    struct Iterator {
-        using iterator_category = std::forward_iterator_tag;
-        using value_type = Int;
-        using difference_type = Int;
-        using pointer = Int *;
-        using reference = Int &;
-
-        explicit Iterator(IndexSet * is, Int idx);
-        ~Iterator() = default;
-
-        const value_type & operator*() const;
-
-        /// Prefix increment
-        Iterator & operator++();
-
-        /// Postfix increment
-        Iterator operator++(int);
-
-        friend bool operator==(const Iterator & a, const Iterator & b);
-
-        friend bool operator!=(const Iterator & a, const Iterator & b);
-
-    private:
-        /// IndexSet to iterate over
-        IndexSet * is;
-        /// Index pointing to the `is`
-        Int idx;
-    };
-
-    struct ConstIterator {
-        using iterator_category = std::forward_iterator_tag;
-        using value_type = Int;
-        using difference_type = Int;
-        using pointer = const Int *;
-        using reference = const Int &;
-
-        explicit ConstIterator(const IndexSet * is, Int idx) : is(is), idx(idx) {}
-        ~ConstIterator() = default;
-
-        const value_type &
-        operator*()
-        {
-            return this->is->indices[this->idx];
-        }
-
-        ConstIterator &
-        operator++()
-        {
-            ++this->idx;
-            return *this;
-        }
-
-        ConstIterator
-        operator++(int)
-        {
-            auto tmp = *this;
-            ++(*this);
-            return tmp;
-        }
-
-        friend bool
-        operator==(const ConstIterator & a, const ConstIterator & b)
-        {
-            return ((IS) a.is == (IS) b.is) && (a.idx == b.idx);
-        }
-
-        friend bool
-        operator!=(const ConstIterator & a, const ConstIterator & b)
-        {
-            return ((IS) a.is != (IS) b.is) || (a.idx != b.idx);
-        }
-
-    private:
-        const IndexSet * is;
-        Int idx;
-    };
-
     IndexSet();
     explicit IndexSet(IS is);
     ~IndexSet() = default;
@@ -144,14 +69,13 @@ public:
     /// made, i.e., the order of indices is important.
     bool equal_unsorted(const IndexSet & other) const;
 
-    void get_indices();
+    /// Borrow the indices from this index set
+    IndexSetBorrowedIndices borrow_indices();
 
     /// Gets the index set type name
     ///
     /// @return The type name
     String get_type() const;
-
-    void restore_indices();
 
     /// Returns a description of the points in an IndexSet suitable for traversal
     ///
@@ -189,23 +113,12 @@ public:
     /// @return The local size of the index set
     Int get_local_size() const;
 
-    const Int * data() const;
-
     /// Determine the location of an index within the local component of an index set
     ///
     /// @param key The index to locate
     /// @return if >= 0, a location within the index set that is equal to the key, otherwise the key
     ///         is not in the index set
     Int locate(Int key) const;
-
-    Int operator[](Int i) const;
-
-    Int operator()(Int i) const;
-
-    /// Convert indices from this index set into std::vector
-    ///
-    /// @return std::vector containing the indices
-    std::vector<Int> to_std_vector();
 
     /// Determines whether index set is the identity mapping.
     ///
@@ -253,17 +166,6 @@ public:
     ///
     /// @param viewer The PETSc viewer
     void view(PetscViewer viewer = PETSC_VIEWER_STDOUT_WORLD) const;
-
-    /// Begin iterator for range-based for-loops
-    Iterator begin();
-    ConstIterator begin() const;
-
-    /// End iterator for range-based for-loops
-    Iterator end();
-    ConstIterator end() const;
-
-private:
-    const Int * indices;
 
 public:
     /// Creates a data structure for an index set containing a list of integers.
@@ -317,5 +219,153 @@ public:
     /// @return The sum of `is1` and `is2`
     static IndexSet sum(const IndexSet & is1, const IndexSet & is2);
 };
+
+//
+
+///
+class IndexSetBorrowedIndices {
+public:
+    struct ConstIterator {
+        using iterator_category = std::forward_iterator_tag;
+        using value_type = Int;
+        using difference_type = Int;
+        using pointer = const Int *;
+        using reference = const Int &;
+
+        explicit ConstIterator(const Int * data, Int idx) : data_(data), idx_(idx) {}
+        ~ConstIterator() = default;
+
+        const value_type &
+        operator*()
+        {
+            return this->data_[this->idx_];
+        }
+
+        ConstIterator &
+        operator++()
+        {
+            ++this->idx_;
+            return *this;
+        }
+
+        ConstIterator
+        operator++(int)
+        {
+            auto tmp = *this;
+            ++(*this);
+            return tmp;
+        }
+
+        friend bool
+        operator==(const ConstIterator & a, const ConstIterator & b)
+        {
+            return (a.data_ == b.data_) && (a.idx_ == b.idx_);
+        }
+
+        friend bool
+        operator!=(const ConstIterator & a, const ConstIterator & b)
+        {
+            return (a.data_ != b.data_) || (a.idx_ != b.idx_);
+        }
+
+    private:
+        const Int * data_;
+        Int idx_;
+    };
+
+    IndexSetBorrowedIndices() = default;
+
+    explicit IndexSetBorrowedIndices(IndexSet & is) : is_(is)
+    {
+        CALL_STACK_MSG();
+        PETSC_CHECK(ISGetLocalSize(this->is_, &this->size_));
+        if (this->size_ > 0)
+            PETSC_CHECK(ISGetIndices(this->is_, &this->data_));
+        else
+            this->data_ = nullptr;
+    }
+
+    IndexSetBorrowedIndices(IndexSetBorrowedIndices && other) noexcept :
+        is_(other.is_),
+        data_(std::exchange(other.data_, nullptr)),
+        size_(other.size_)
+    {
+    }
+
+    IndexSetBorrowedIndices &
+    operator=(IndexSetBorrowedIndices && other) noexcept
+    {
+        // release current borrow
+        if (this->data_) {
+            PETSC_CHECK(ISRestoreIndices(this->is_, &this->data_));
+        }
+
+        this->is_ = other.is_;
+        this->size_ = other.size_;
+        this->data_ = std::exchange(other.data_, nullptr);
+        return *this;
+    }
+
+    ~IndexSetBorrowedIndices()
+    {
+        CALL_STACK_MSG();
+        if (this->data_) {
+            PETSC_CHECK(ISRestoreIndices(this->is_, &this->data_));
+        }
+    }
+
+    const Int &
+    operator[](Int i) const noexcept
+    {
+        GODZILLA_ASSERT_TRUE(
+            (i >= 0) && (i < this->size_),
+            fmt::format("Access out of bounds: index={}, size={}", i, this->size_));
+        return this->data_[i];
+    }
+
+    const Int *
+    data() const noexcept
+    {
+        return this->data_;
+    }
+
+    Int
+    size() const
+    {
+        return this->size_;
+    }
+
+    /// Begin iterator for range-based for-loops
+    ConstIterator begin() const;
+
+    /// End iterator for range-based for-loops
+    ConstIterator end() const;
+
+private:
+    IS is_;
+    const Int * data_ = nullptr;
+    Int size_ = 0;
+};
+
+/// Convert index set indices into std::vector
+///
+/// @return std::vector containing the indices
+inline std::vector<Int>
+to_std_vector(const IndexSetBorrowedIndices & indices)
+{
+    CALL_STACK_MSG();
+    std::vector<Int> vec;
+    if (indices.data() != nullptr) {
+        Int n = indices.size();
+        vec.assign(indices.data(), indices.data() + n);
+    }
+    return vec;
+}
+
+bool operator==(const IndexSetBorrowedIndices::ConstIterator & a,
+                const IndexSetBorrowedIndices::ConstIterator & b);
+
+bool operator!=(const IndexSetBorrowedIndices::ConstIterator & a,
+                const IndexSetBorrowedIndices::ConstIterator & b);
 
 } // namespace godzilla

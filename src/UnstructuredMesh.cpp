@@ -369,12 +369,11 @@ UnstructuredMesh::create_face_set_labels(const std::map<Int, String> & names)
     if (fs_label) {
         auto n_fs = fs_label.get_num_values();
         auto fs_ids = fs_label.get_value_index_set();
-        fs_ids.get_indices();
+        auto vals = fs_ids.borrow_indices();
         for (Int i = 0; i < n_fs; ++i) {
-            auto id = fs_ids[i];
+            auto id = vals[i];
             create_face_set(id, names.at(id));
         }
-        fs_ids.restore_indices();
     }
 }
 
@@ -564,12 +563,11 @@ UnstructuredMesh::create_vertex_set_labels(const std::map<Int, String> & names)
     if (vs_label) {
         auto n_vs = vs_label.get_num_values();
         auto vs_ids = vs_label.get_value_index_set();
-        vs_ids.get_indices();
+        auto vals = vs_ids.borrow_indices();
         for (Int i = 0; i < n_vs; ++i) {
-            Int id = vs_ids[i];
+            Int id = vals[i];
             create_vertex_set(id, names.at(id));
         }
-        vs_ids.restore_indices();
     }
 }
 
