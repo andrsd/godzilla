@@ -160,30 +160,30 @@ IndexSet
 UnstructuredMesh::get_all_cells() const
 {
     CALL_STACK_MSG();
+    auto dm = get_dm();
     Int depth;
-    PETSC_CHECK(DMPlexGetDepth(get_dm(), &depth));
-    IndexSet cell_is;
-    PETSC_CHECK(DMGetStratumIS(get_dm(), "dim", depth, cell_is));
+    PETSC_CHECK(DMPlexGetDepth(dm, &depth));
+    IS cell_is;
+    PETSC_CHECK(DMGetStratumIS(dm, "dim", depth, &cell_is));
     if (!cell_is) {
-        PETSC_CHECK(DMGetStratumIS(get_dm(), "depth", depth, cell_is));
-        cell_is.inc_reference();
+        PETSC_CHECK(DMGetStratumIS(dm, "depth", depth, &cell_is));
     }
-    return cell_is;
+    return IndexSet(cell_is);
 }
 
 IndexSet
 UnstructuredMesh::get_facets() const
 {
     CALL_STACK_MSG();
+    auto dm = get_dm();
     Int depth;
-    PETSC_CHECK(DMPlexGetDepth(get_dm(), &depth));
-    IndexSet face_is;
-    PETSC_CHECK(DMGetStratumIS(get_dm(), "dim", depth - 1, face_is));
+    PETSC_CHECK(DMPlexGetDepth(dm, &depth));
+    IS face_is;
+    PETSC_CHECK(DMGetStratumIS(dm, "dim", depth - 1, &face_is));
     if (!face_is) {
-        PETSC_CHECK(DMGetStratumIS(get_dm(), "depth", depth - 1, face_is));
-        face_is.inc_reference();
+        PETSC_CHECK(DMGetStratumIS(dm, "depth", depth - 1, &face_is));
     }
-    return face_is;
+    return IndexSet(face_is);
 }
 
 Range

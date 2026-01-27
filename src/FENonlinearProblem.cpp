@@ -134,7 +134,6 @@ FENonlinearProblem::compute_residual_local(const Vector & x, Vector & f)
     for (auto & region : get_weak_form().get_residual_regions()) {
         IndexSet cells;
         if (region.label.is_null()) {
-            all_cells.inc_reference();
             cells = all_cells;
         }
         else {
@@ -611,7 +610,6 @@ FENonlinearProblem::compute_jacobian_local(const Vector & x, Matrix & J, Matrix 
     for (auto & region : wf.get_jacobian_regions()) {
         IndexSet cells;
         if (region.label.is_null()) {
-            all_cells.inc_reference();
             cells = all_cells;
         }
         else {
