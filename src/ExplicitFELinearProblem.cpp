@@ -199,7 +199,6 @@ ExplicitFELinearProblem::compute_rhs_function_fem(Real time, const Vector & loc_
         region.value = 0;
         region.part = 100;
         if (region.label.is_null()) {
-            all_cells.inc_reference();
             cells = all_cells;
         }
         else {

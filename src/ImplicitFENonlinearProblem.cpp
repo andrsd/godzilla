@@ -166,7 +166,6 @@ ImplicitFENonlinearProblem::compute_ifunction_fem(Real time,
     for (auto & region : get_weak_form().get_residual_regions()) {
         IndexSet cells;
         if (region.label.is_null()) {
-            all_cells.inc_reference();
             cells = all_cells;
         }
         else {
@@ -196,7 +195,6 @@ ImplicitFENonlinearProblem::compute_ijacobian_fem(Real time,
     for (auto & region : get_weak_form().get_jacobian_regions()) {
         IndexSet cells;
         if (region.label.is_null()) {
-            all_cells.inc_reference();
             cells = all_cells;
         }
         else {
