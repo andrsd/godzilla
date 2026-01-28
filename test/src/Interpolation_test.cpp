@@ -60,20 +60,22 @@ TEST(InterpolationTest, test_1d)
     interp.set_up(dm, false, true);
 
     auto coord = interp.get_coordinates();
-    auto * c = coord.get_array_read();
-    EXPECT_NEAR(c[0], 0.125, 1.0e-12);
-    EXPECT_NEAR(c[1], 0.875, 1.0e-12);
-    coord.restore_array_read(c);
+    {
+        auto c = coord.borrow_array_read();
+        EXPECT_NEAR(c[0], 0.125, 1.0e-12);
+        EXPECT_NEAR(c[1], 0.875, 1.0e-12);
+    }
 
     EXPECT_EQ(interp.get_dim(), 1);
     EXPECT_EQ(interp.get_dof(), 1);
 
     auto vals = interp.get_vector();
     interp.evaluate(dm, sln, vals);
-    auto * v = vals.get_array_read();
-    EXPECT_NEAR(v[0], 2.25, 1e-10);
-    EXPECT_NEAR(v[1], 3.75, 1e-10);
-    vals.restore_array_read(v);
+    {
+        auto v = vals.borrow_array_read();
+        EXPECT_NEAR(v[0], 2.25, 1e-10);
+        EXPECT_NEAR(v[1], 3.75, 1e-10);
+    }
 
     interp.restore_vector(vals);
 

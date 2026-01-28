@@ -297,7 +297,7 @@ TecplotOutput::write_coordinates(int32_t zone)
 
     auto dim = this->mesh->get_dimension();
     auto coord_vec = this->mesh->get_coordinates_local();
-    auto coord = coord_vec.get_array_read();
+    auto coord = coord_vec.borrow_array_read();
     auto n_coords = coord_vec.get_size() / dim;
     std::vector<double> xyz(n_coords);
     for (Int d = 0; d < dim; ++d) {
@@ -306,7 +306,6 @@ TecplotOutput::write_coordinates(int32_t zone)
         }
         this->file->zone_var_write(zone, d + 1, rank, xyz);
     }
-    coord_vec.restore_array_read(coord);
 #endif
 }
 
@@ -353,7 +352,7 @@ TecplotOutput::write_nodal_field_variable_values(int32_t zone)
 
     dpi->compute_solution_vector_local();
     auto sln = dpi->get_solution_vector_local();
-    const Scalar * sln_vals = sln.get_array_read();
+    auto sln_vals = sln.borrow_array_read();
     for (auto [j, fid] : enumerate(this->nodal_var_fids)) {
         auto nc = dpi->get_field_num_components(fid).value();
         for (Int c = 0; c < nc; ++c, ++j) {
@@ -364,7 +363,6 @@ TecplotOutput::write_nodal_field_variable_values(int32_t zone)
             this->file->zone_var_write(zone, this->nodal_var_idxs[j], rank, vals);
         }
     }
-    sln.restore_array_read(sln_vals);
 
     auto aux_sln = dpi->get_aux_solution_vector_local();
     const Scalar * aux_sln_vals = (Vec) aux_sln != nullptr ? aux_sln.get_array_read() : nullptr;

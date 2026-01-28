@@ -329,14 +329,13 @@ TEST(ExplicitFVLinearProblemTest, solve)
     EXPECT_EQ(prob->get_step_num(), 1);
 
     auto sln = prob->get_solution_vector();
-    auto x = sln.get_array_read();
+    auto x = sln.get_borrowed_array_read();
     EXPECT_NEAR(x[0], 0.001, 1e-15);
     EXPECT_NEAR(x[1], 0., 1e-15);
-    sln.restore_array_read(x);
 
     prob->compute_solution_vector_local();
     auto loc_sln = prob->get_solution_vector_local();
-    auto lx = loc_sln.get_array_read();
+    auto lx = loc_sln.get_borrowed_array_read();
     EXPECT_NEAR(lx[0], 0.001, 1e-15);
     EXPECT_NEAR(lx[1], 0., 1e-15);
     EXPECT_NEAR(lx[2], 0., 1e-15);

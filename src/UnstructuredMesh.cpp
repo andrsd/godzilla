@@ -741,9 +741,8 @@ UnstructuredMesh::get_vertex_coordinates(Int pt) const
     Real * data;
     auto dm_coord = get_coordinate_dm();
     auto coord_vec = get_coordinates_local();
-    auto coord_array = coord_vec.get_array_read();
-    PETSC_CHECK(DMPlexPointLocalRead(dm_coord, pt, coord_array, &data));
-    coord_vec.restore_array_read(coord_array);
+    auto coord_array = coord_vec.borrow_array_read();
+    PETSC_CHECK(DMPlexPointLocalRead(dm_coord, pt, coord_array.data(), &data));
     auto dim = get_coordinate_dim();
     std::vector<Real> coord(dim);
     for (Int i = 0; i < dim; ++i)

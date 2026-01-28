@@ -55,10 +55,9 @@ RestartFile::write<Vector>(String path, String name, const Vector & data)
     auto norm_path = normalize_path(path);
     try {
         auto group = this->h5f.create_group(norm_path);
-        auto * vals = data.get_array_read();
+        auto vals = data.borrow_array_read();
         auto len = data.get_local_size();
-        group.write_dataset(name, len, vals);
-        data.restore_array_read(vals);
+        group.write_dataset(name, len, vals.data());
     }
     catch (std::exception & e) {
         throw Exception("Error writing '{}' to {}: {}",
@@ -97,10 +96,9 @@ RestartFile::read<Vector>(String path, String name, Vector & data) const
     auto norm_path = normalize_path(path);
     try {
         auto group = this->h5f.open_group(norm_path);
-        auto * vals = data.get_array();
+        auto vals = data.borrow_array();
         auto len = data.get_local_size();
-        group.read_dataset(name, len, vals);
-        data.restore_array(vals);
+        group.read_dataset(name, len, vals.data());
     }
     catch (std::exception & e) {
         throw Exception("Error writing '{}' to {}: {}",
