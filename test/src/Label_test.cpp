@@ -1,4 +1,5 @@
 #include "gmock/gmock.h"
+#include "godzilla/IndexSet.h"
 #include "godzilla/Label.h"
 #include "TestApp.h"
 
@@ -100,10 +101,8 @@ TEST(Label, get_stratum)
     l.set_value(7, 101);
     EXPECT_EQ(l.get_stratum_size(101), 4);
     auto is = l.get_stratum(101);
-    is.get_indices();
-    auto vals = is.to_std_vector();
-    EXPECT_THAT(vals, ::UnorderedElementsAre(1, 3, 4, 7));
-    is.restore_indices();
+    auto vals = is.borrow_indices();
+    EXPECT_THAT(to_std_vector(vals), ::UnorderedElementsAre(1, 3, 4, 7));
 }
 
 TEST(Label, get_stratum_bounds)

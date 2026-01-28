@@ -10,69 +10,9 @@
 
 namespace godzilla {
 
-IndexSet::Iterator::Iterator(IndexSet * is, Int idx) : is(is), idx(idx) {}
+IndexSet::IndexSet() : PetscObjectWrapper(nullptr) {}
 
-const IndexSet::Iterator::value_type &
-IndexSet::Iterator::operator*() const
-{
-    return this->is->indices[this->idx];
-}
-
-IndexSet::Iterator &
-IndexSet::Iterator::operator++()
-{
-    ++this->idx;
-    return *this;
-}
-
-IndexSet::Iterator
-IndexSet::Iterator::operator++(int)
-{
-    Iterator tmp = *this;
-    ++(*this);
-    return tmp;
-}
-
-bool
-operator==(const IndexSet::Iterator & a, const IndexSet::Iterator & b)
-{
-    return ((IS) a.is == (IS) b.is) && (a.idx == b.idx);
-}
-
-bool
-operator!=(const IndexSet::Iterator & a, const IndexSet::Iterator & b)
-{
-    return ((IS) a.is != (IS) b.is) || (a.idx != b.idx);
-}
-
-//
-
-IndexSet::IndexSet() : PetscObjectWrapper(nullptr), indices(nullptr) {}
-
-IndexSet::IndexSet(IS is) : PetscObjectWrapper(is), indices(nullptr) {}
-
-const Int *
-IndexSet::data() const
-{
-    CALL_STACK_MSG();
-    return this->indices;
-}
-
-Int
-IndexSet::operator[](Int i) const
-{
-    CALL_STACK_MSG();
-    GODZILLA_ASSERT_TRUE(this->indices != nullptr, "Indices are not allocated");
-    return this->indices[i];
-}
-
-Int
-IndexSet::operator()(Int i) const
-{
-    CALL_STACK_MSG();
-    GODZILLA_ASSERT_TRUE(this->indices != nullptr, "Indices are not allocated");
-    return this->indices[i];
-}
+IndexSet::IndexSet(IS is) : PetscObjectWrapper(is) {}
 
 void
 IndexSet::create(MPI_Comm comm)
@@ -92,17 +32,6 @@ IndexSet::is_null() const
 {
     CALL_STACK_MSG();
     return this->obj == nullptr;
-}
-
-void
-IndexSet::restore_indices()
-{
-    CALL_STACK_MSG();
-    if (this->indices != nullptr) {
-        GODZILLA_ASSERT_TRUE(this->obj != nullptr, "IndexSet is null");
-        PETSC_CHECK(ISRestoreIndices(this->obj, &this->indices));
-        this->indices = nullptr;
-    }
 }
 
 void
@@ -156,26 +85,6 @@ IndexSet::duplicate() const
     IndexSet new_is;
     PETSC_CHECK(ISDuplicate(this->obj, new_is));
     return new_is;
-}
-
-void
-IndexSet::get_indices()
-{
-    CALL_STACK_MSG();
-    if (this->obj != nullptr)
-        PETSC_CHECK(ISGetIndices(this->obj, &this->indices));
-}
-
-std::vector<Int>
-IndexSet::to_std_vector()
-{
-    CALL_STACK_MSG();
-    std::vector<Int> idxs;
-    if (this->indices != nullptr) {
-        Int n = get_local_size();
-        idxs.assign(this->indices, this->indices + n);
-    }
-    return idxs;
 }
 
 IndexSet
@@ -283,49 +192,6 @@ IndexSet::copy(const IndexSet & src, IndexSet & dest)
     PETSC_CHECK(ISCopy(src, dest));
 }
 
-IndexSet::Iterator
-IndexSet::begin()
-{
-    CALL_STACK_MSG();
-    if (this->obj == nullptr || this->indices == nullptr)
-        return Iterator(this, -1);
-    else
-        return Iterator(this, 0);
-}
-
-IndexSet::ConstIterator
-IndexSet::begin() const
-{
-    if (this->obj == nullptr || this->indices == nullptr)
-        return ConstIterator(this, -1);
-    else
-        return ConstIterator(this, 0);
-}
-
-IndexSet::Iterator
-IndexSet::end()
-{
-    CALL_STACK_MSG();
-    if (this->obj == nullptr || this->indices == nullptr)
-        return Iterator(this, -1);
-    else {
-        auto n = get_local_size();
-        return Iterator(this, n);
-    }
-}
-
-IndexSet::ConstIterator
-IndexSet::end() const
-{
-    CALL_STACK_MSG();
-    if (this->obj == nullptr || this->indices == nullptr)
-        return ConstIterator(this, -1);
-    else {
-        auto n = get_local_size();
-        return ConstIterator(this, n);
-    }
-}
-
 IndexSet
 IndexSet::complement(Int nmin, Int nmax) const
 {
@@ -392,6 +258,16 @@ IndexSet::get_min_max() const
     return std::make_tuple(min, max);
 }
 
+IndexSetBorrowedIndices
+IndexSet::borrow_indices()
+{
+    CALL_STACK_MSG();
+    if (this->obj)
+        return IndexSetBorrowedIndices(*this);
+    else
+        return IndexSetBorrowedIndices();
+}
+
 String
 IndexSet::get_type() const
 {
@@ -456,6 +332,27 @@ IndexSet::sum(const IndexSet & is1, const IndexSet & is2)
     IndexSet out;
     PETSC_CHECK(ISSum(is1, is2, out));
     return out;
+}
+
+//
+
+IndexSetBorrowedIndices::ConstIterator
+IndexSetBorrowedIndices::begin() const
+{
+    if (this->data_ == nullptr)
+        return ConstIterator(nullptr, -1);
+    else
+        return ConstIterator(this->data_, 0);
+}
+
+IndexSetBorrowedIndices::ConstIterator
+IndexSetBorrowedIndices::end() const
+{
+    CALL_STACK_MSG();
+    if (this->data_ == nullptr)
+        return ConstIterator(this->data_, -1);
+    else
+        return ConstIterator(this->data_, this->size_);
 }
 
 } // namespace godzilla

@@ -483,7 +483,7 @@ FENonlinearProblem::compute_bnd_residual_single_internal(DM dm,
         points = isect;
 
         Int n_faces = points.get_local_size();
-        points.get_indices();
+        auto point_idxs = points.borrow_indices();
 
         PETSC_CHECK(PetscMalloc4(n_faces * tot_dim,
                                  &u,
@@ -514,7 +514,7 @@ FENonlinearProblem::compute_bnd_residual_single_internal(DM dm,
 #endif
         for (Int face = 0; face < n_faces; ++face) {
             const Int * support;
-            PETSC_CHECK(DMPlexGetSupport(dm, points[face], &support));
+            PETSC_CHECK(DMPlexGetSupport(dm, point_idxs[face], &support));
             Scalar * x = nullptr;
             PETSC_CHECK(DMPlexVecGetClosure(plex, section, loc_x, support[0], nullptr, &x));
             for (Int i = 0; i < tot_dim; ++i)
@@ -575,7 +575,7 @@ FENonlinearProblem::compute_bnd_residual_single_internal(DM dm,
 
         for (Int face = 0; face < n_faces; ++face) {
             const Int * support;
-            PETSC_CHECK(DMPlexGetSupport(plex, points[face], &support));
+            PETSC_CHECK(DMPlexGetSupport(plex, point_idxs[face], &support));
             PETSC_CHECK(DMPlexVecSetClosure(plex,
                                             nullptr,
                                             loc_f,
@@ -585,7 +585,6 @@ FENonlinearProblem::compute_bnd_residual_single_internal(DM dm,
         }
         PETSC_CHECK(DMSNESRestoreFEGeom(coord_field, points, q_geom, PETSC_TRUE, &fgeom));
         PETSC_CHECK(PetscQuadratureDestroy(&q_geom));
-        points.restore_indices();
         points.destroy();
         PETSC_CHECK(PetscFree4(u, u_t, elem_vec, a));
     }
@@ -1012,7 +1011,7 @@ FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
         points = isect;
 
         Int n_faces = points.get_local_size();
-        points.get_indices();
+        auto point_idxs = points.borrow_indices();
 
         Scalar *u = nullptr, *u_t = nullptr, *a = nullptr, *elem_mat = nullptr;
         PETSC_CHECK(PetscMalloc4(n_faces * tot_dim,
@@ -1045,7 +1044,7 @@ FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
 #endif
         for (Int face = 0; face < n_faces; ++face) {
             const Int * support;
-            PETSC_CHECK(DMPlexGetSupport(dm, points[face], &support));
+            PETSC_CHECK(DMPlexGetSupport(dm, point_idxs[face], &support));
             Scalar * x = nullptr;
             PETSC_CHECK(DMPlexVecGetClosure(plex, section, X_loc, support[0], nullptr, &x));
             for (Int i = 0; i < tot_dim; ++i)
@@ -1118,7 +1117,7 @@ FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
         for (Int face = 0; face < n_faces; ++face) {
             // Transform to global basis before insertion in Jacobian
             const Int * support;
-            PETSC_CHECK(DMPlexGetSupport(plex, points[face], &support));
+            PETSC_CHECK(DMPlexGetSupport(plex, point_idxs[face], &support));
             if (transform)
                 PETSC_CHECK(
                     DMPlexBasisTransformPointTensor_Internal(dm,
@@ -1138,7 +1137,6 @@ FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
         }
         PETSC_CHECK(DMSNESRestoreFEGeom(coord_field, points, q_geom, PETSC_TRUE, &fgeom));
         PETSC_CHECK(PetscQuadratureDestroy(&q_geom));
-        points.restore_indices();
         points.destroy();
         PETSC_CHECK(PetscFree4(u, u_t, elem_mat, a));
     }

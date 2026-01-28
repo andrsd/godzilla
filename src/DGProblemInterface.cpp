@@ -467,9 +467,10 @@ DGProblemInterface::set_up_section_constraint_dofs(Section & section)
             auto ids = label.get_values();
             IndexSet points = label.get_stratum(ids[0]);
             if (points) {
-                IndexSet facets = IndexSet::intersect(all_facets, points);
-                for (Int i = 0; i < facets.get_local_size(); ++i) {
-                    auto facet = facets(i);
+                auto facets = IndexSet::intersect(all_facets, points);
+                auto facet_idxs = facets.borrow_indices();
+                for (Int i = 0; i < facet_idxs.size(); ++i) {
+                    auto facet = facet_idxs[i];
                     auto support = unstr_mesh->get_support(facet);
                     GODZILLA_ASSERT_TRUE(
                         support.size() == 1,
@@ -504,9 +505,10 @@ DGProblemInterface::set_up_section_constraint_indicies(Section & section)
             auto ids = label.get_values();
             IndexSet points = label.get_stratum(ids[0]);
             if (points) {
-                IndexSet facets = IndexSet::intersect(all_facets, points);
-                for (Int i = 0; i < facets.get_local_size(); ++i) {
-                    auto facet = facets(i);
+                auto facets = IndexSet::intersect(all_facets, points);
+                auto facet_idxs = facets.borrow_indices();
+                for (Int i = 0; i < facet_idxs.size(); ++i) {
+                    auto facet = facet_idxs[i];
                     auto support = unstr_mesh->get_support(facet);
                     GODZILLA_ASSERT_TRUE(
                         support.size() == 1,

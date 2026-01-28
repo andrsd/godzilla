@@ -57,14 +57,12 @@ public:
     create() override
     {
         CALL_STACK_MSG();
-        this->vertices.get_indices();
+        this->vtx_idxs = this->vertices.borrow_indices();
     }
 
     void
     destroy() override
     {
-        CALL_STACK_MSG();
-        this->vertices.restore_indices();
     }
 
     /// Get vertex index
@@ -75,7 +73,7 @@ public:
     vertex(Int ibn) const
     {
         CALL_STACK_MSG();
-        return this->vertices(ibn);
+        return this->vtx_idxs[ibn];
     }
 
     /// Get the number of boundary vertices
@@ -94,7 +92,7 @@ public:
     for_each_vertex(Func fn)
     {
         for (auto & ibn : make_range(this->num_vertices())) {
-            auto vertex_idx = this->vertices(ibn);
+            auto vertex_idx = this->vtx_idxs[ibn];
             fn(ibn, vertex_idx);
         }
     }
@@ -104,6 +102,8 @@ private:
     UnstructuredMesh * mesh;
     /// IndexSet with boundary vertices
     IndexSet vertices;
+    /// Vertex indices
+    IndexSetBorrowedIndices vtx_idxs;
 };
 
 /// Natural boundary information
@@ -168,7 +168,7 @@ public:
     facet(Int ibf) const
     {
         CALL_STACK_MSG();
-        return this->facets(ibf);
+        return this->facet_idxs[ibf];
     }
 
     /// Get face normal for a given local boundary facet index
@@ -210,7 +210,7 @@ public:
     for_each_facet(Func fn)
     {
         for (auto & ibf : make_range(this->num_facets())) {
-            auto facet = this->facets(ibf);
+            auto facet = this->facet_idxs[ibf];
             fn(ibf, facet);
         }
     }
@@ -221,7 +221,7 @@ protected:
     {
         CALL_STACK_MSG();
         if (this->facets) {
-            this->facets.get_indices();
+            this->facet_idxs = this->facets.borrow_indices();
             Int n = this->facets.get_local_size();
             this->lengths = Array1D<Real>(n);
             this->normals = Array1D<DenseVector<Real, DIM>>(n);
@@ -235,10 +235,6 @@ protected:
     free()
     {
         CALL_STACK_MSG();
-        if (this->facets) {
-            this->facets.restore_indices();
-            this->facets.destroy();
-        }
     }
 
 private:
@@ -265,7 +261,7 @@ private:
     {
         CALL_STACK_MSG();
         for (Int i = 0; i < this->facets.get_local_size(); ++i) {
-            auto facet = this->facets(i);
+            auto facet = this->facet_idxs[i];
             auto face_conn = this->mesh->get_connectivity(facet);
             auto support = this->mesh->get_support(facet);
             Int ie = support[0];
@@ -285,7 +281,7 @@ private:
     {
         CALL_STACK_MSG();
         for (Int i = 0; i < this->facets.get_local_size(); ++i)
-            this->lengths[i] = this->mesh->compute_cell_volume(this->facets(i));
+            this->lengths[i] = this->mesh->compute_cell_volume(this->facet_idxs[i]);
     }
 
 private:
@@ -295,6 +291,8 @@ private:
     Array1D<DenseMatrix<Real, DIM, N_ELEM_NODES>> grad_phi;
     /// IndexSet with boundary facets
     IndexSet facets;
+    /// Facet indices
+    IndexSetBorrowedIndices facet_idxs;
     /// Boundary facet length
     Array1D<Real> lengths;
     /// Boundary facet unit outward normal
