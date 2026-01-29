@@ -114,14 +114,7 @@ Problem *
 App::get_problem() const
 {
     CALL_STACK_MSG();
-    return this->problem;
-}
-
-void
-App::set_problem(Problem * problem)
-{
-    CALL_STACK_MSG();
-    this->problem = problem;
+    return this->problem.get();
 }
 
 const unsigned int &

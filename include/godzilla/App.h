@@ -78,13 +78,9 @@ public:
         CALL_STACK_MSG();
         if (this->problem)
             return dynamic_cast<T *>(this->problem);
-        else if (this->prob.get())
-            return dynamic_cast<T *>(this->prob.get());
         else
             return nullptr;
     }
-
-    [[deprecated("Use make_problem")]] void set_problem(Problem * problem);
 
     /// Run the application
     ///
@@ -162,7 +158,7 @@ public:
 
         auto obj = Qtr<T>::alloc(pars);
         auto problem = obj.get();
-        this->prob = std::move(obj);
+        this->problem = std::move(obj);
         return problem;
     }
 
@@ -218,9 +214,7 @@ private:
     /// Stream buffer for redirected stderr.
     std::streambuf * cerr_buf_;
     /// Pointer to `Problem`
-    Problem * problem;
-    ///
-    Qtr<Problem> prob;
+    Qtr<Problem> problem;
 
 public:
     static void register_objects(Registry & registry);
