@@ -4,7 +4,7 @@ on:
   pull_request:
     branches:
       - main
-      - 0.12.x
+      - 0.13.x
 
 jobs:
   cpp-linter:
