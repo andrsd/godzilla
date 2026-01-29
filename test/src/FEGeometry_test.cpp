@@ -272,7 +272,7 @@ TEST(FEGeometryTest, orient_tet_3d)
         UnstructuredMesh::build_from_cell_list(comm,
                                                3_D,
                                                4,
-                                               { 0, 1, 2, 3, 1, 0, 2, 3 },
+                                               { 1, 0, 2, 3, 0, 1, 2, 3 },
                                                3_D,
                                                { 0., 0., 0., 1., 0., 0., 0., 1., 0., 0., 0., 1. },
                                                true);

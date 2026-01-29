@@ -327,9 +327,9 @@ orient<TET4, 3, 4>(const DenseMatrix<Real, 4, 3> & pt)
     // orientation is given by the signed volume of a tetrahedron
     // V = 1/6 * det([b-a | c-a | d-a])
     DenseMatrix<Real, 3> A;
-    A.set_row(0, { pt(1, 0) - pt(0, 0), pt(1, 1) - pt(0, 1), pt(1, 2) - pt(0, 2) });
-    A.set_row(1, { pt(2, 0) - pt(0, 0), pt(2, 1) - pt(0, 1), pt(2, 2) - pt(0, 2) });
-    A.set_row(2, { pt(3, 0) - pt(0, 0), pt(3, 1) - pt(0, 1), pt(3, 2) - pt(0, 2) });
+    A.set_row(0, { pt(0, 0) - pt(1, 0), pt(0, 1) - pt(1, 1), pt(0, 2) - pt(1, 2) });
+    A.set_row(1, { pt(2, 0) - pt(1, 0), pt(2, 1) - pt(1, 1), pt(2, 2) - pt(1, 2) });
+    A.set_row(2, { pt(3, 0) - pt(1, 0), pt(3, 1) - pt(1, 1), pt(3, 2) - pt(1, 2) });
     return 1. / 6. * determinant(A);
 }
 
