@@ -302,6 +302,13 @@ orient(const DenseMatrix<Real, N_ELEM_NODES, DIM> & pt)
 
 template <>
 inline Real
+orient<EDGE2, 1, 2>(const DenseMatrix<Real, 2, 1> & pt)
+{
+    return pt(1, 0) - pt(0, 0);
+}
+
+template <>
+inline Real
 orient<TRI3, 2, 3>(const DenseMatrix<Real, 3, 2> & pt)
 {
     // pt = [ a.x, a.y ]

@@ -242,6 +242,29 @@ TEST(FEGeometryTest, get_grad_fn_index_tet4)
     EXPECT_EQ((fe::get_grad_fn_index<TET4, 3, 4>(3)), 0);
 }
 
+TEST(FEGeometryTest, orient_edge_1d)
+{
+    mpi::Communicator comm;
+    auto mesh = UnstructuredMesh::build_from_cell_list(comm,
+                                                       1_D,
+                                                       2,
+                                                       { 0, 1, 1, 0 },
+                                                       1_D,
+                                                       { 0., 0.4 },
+                                                       true);
+
+    auto coords = fe::coordinates<1>(*mesh);
+    auto connect = fe::connectivity<1, 2>(*mesh);
+
+    auto edge0 = get_values(coords, connect[0]);
+    auto ori0 = fe::orient<godzilla::EDGE2, 1, 2>(edge0);
+    EXPECT_GT(ori0, 0);
+
+    auto edge1 = get_values(coords, connect[1]);
+    auto ori1 = fe::orient<godzilla::EDGE2, 1, 2>(edge1);
+    EXPECT_LT(ori1, 0);
+}
+
 TEST(FEGeometryTest, orient_tri_2d)
 {
     mpi::Communicator comm;
