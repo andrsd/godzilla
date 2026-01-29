@@ -148,7 +148,7 @@ void
 ImplicitFENonlinearProblem::compute_solution_vector_local()
 {
     CALL_STACK_MSG();
-    auto loc_sln = get_solution_vector_local();
+    auto & loc_sln = get_solution_vector_local();
     global_to_local(get_solution_vector(), INSERT_VALUES, loc_sln);
     PETSC_CHECK(DMPlexTSComputeBoundary(get_dm(), get_time(), loc_sln, nullptr, this));
 }
