@@ -7,20 +7,20 @@
 
 namespace godzilla {
 
-MeshNetwork::MeshNetwork(mpi::Communicator comm) : godzilla::Mesh()
+NetworkMesh::NetworkMesh(mpi::Communicator comm) : godzilla::Mesh()
 {
     CALL_STACK_MSG();
     PETSC_CHECK(DMNetworkCreate(comm, &this->netw_));
     set_dm(this->netw_);
 }
 
-MeshNetwork::MeshNetwork(DM dm) : godzilla::Mesh(dm)
+NetworkMesh::NetworkMesh(DM dm) : godzilla::Mesh(dm)
 {
     CALL_STACK_MSG();
 }
 
 Int
-MeshNetwork::register_component(String name, std::size_t size)
+NetworkMesh::register_component(String name, std::size_t size)
 {
     CALL_STACK_MSG();
     Int key;
@@ -29,14 +29,14 @@ MeshNetwork::register_component(String name, std::size_t size)
 }
 
 void
-MeshNetwork::add_component(Int p, Int key, void * comp, Int n_vars)
+NetworkMesh::add_component(Int p, Int key, void * comp, Int n_vars)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(DMNetworkAddComponent(this->netw_, p, key, comp, n_vars));
 }
 
 void *
-MeshNetwork::component(Int p)
+NetworkMesh::component(Int p)
 {
     CALL_STACK_MSG();
     void * ptr;
@@ -45,7 +45,7 @@ MeshNetwork::component(Int p)
 }
 
 std::tuple<Int, Int>
-MeshNetwork::num_sub_networks() const
+NetworkMesh::num_sub_networks() const
 {
     CALL_STACK_MSG();
     Int l, g;
@@ -54,14 +54,14 @@ MeshNetwork::num_sub_networks() const
 }
 
 void
-MeshNetwork::set_num_sub_networks(Int n, Int N)
+NetworkMesh::set_num_sub_networks(Int n, Int N)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(DMNetworkSetNumSubNetworks(this->netw_, n, N));
 }
 
 Int
-MeshNetwork::add_sub_network(String name, std::vector<Int> & edge_list)
+NetworkMesh::add_sub_network(String name, std::vector<Int> & edge_list)
 {
     CALL_STACK_MSG();
     if (edge_list.size() % 2 == 0) {
@@ -75,14 +75,14 @@ MeshNetwork::add_sub_network(String name, std::vector<Int> & edge_list)
 }
 
 void
-MeshNetwork::create()
+NetworkMesh::create()
 {
     CALL_STACK_MSG();
     PETSC_CHECK(DMNetworkCreate(get_comm(), &this->netw_));
 }
 
 int
-MeshNetwork::num_components(Int p) const
+NetworkMesh::num_components(Int p) const
 {
     CALL_STACK_MSG();
     Int n;
@@ -91,7 +91,7 @@ MeshNetwork::num_components(Int p) const
 }
 
 std::tuple<Int, Int>
-MeshNetwork::num_vertices() const
+NetworkMesh::num_vertices() const
 {
     CALL_STACK_MSG();
     Int loc, glob;
@@ -100,7 +100,7 @@ MeshNetwork::num_vertices() const
 }
 
 Range
-MeshNetwork::vertex_range() const
+NetworkMesh::vertex_range() const
 {
     CALL_STACK_MSG();
     Int start, end;
@@ -109,7 +109,7 @@ MeshNetwork::vertex_range() const
 }
 
 std::vector<Int>
-MeshNetwork::supporting_edges(Int vertex)
+NetworkMesh::supporting_edges(Int vertex)
 {
     CALL_STACK_MSG();
     Int n_edges;
@@ -119,7 +119,7 @@ MeshNetwork::supporting_edges(Int vertex)
 }
 
 bool
-MeshNetwork::is_ghost_vertex(Int p) const
+NetworkMesh::is_ghost_vertex(Int p) const
 {
     CALL_STACK_MSG();
     PetscBool isghost;
@@ -128,7 +128,7 @@ MeshNetwork::is_ghost_vertex(Int p) const
 }
 
 std::tuple<Int, Int>
-MeshNetwork::num_edges() const
+NetworkMesh::num_edges() const
 {
     CALL_STACK_MSG();
     Int loc, glob;
@@ -137,7 +137,7 @@ MeshNetwork::num_edges() const
 }
 
 Range
-MeshNetwork::edge_range() const
+NetworkMesh::edge_range() const
 {
     CALL_STACK_MSG();
     Int start, end;
@@ -146,7 +146,7 @@ MeshNetwork::edge_range() const
 }
 
 std::array<Int, 2>
-MeshNetwork::connected_vertices(Int edge)
+NetworkMesh::connected_vertices(Int edge)
 {
     CALL_STACK_MSG();
     const Int * verts;
@@ -155,28 +155,28 @@ MeshNetwork::connected_vertices(Int edge)
 }
 
 void
-MeshNetwork::layout_set_up()
+NetworkMesh::layout_set_up()
 {
     CALL_STACK_MSG();
     PETSC_CHECK(DMNetworkLayoutSetUp(this->netw_));
 }
 
 void
-MeshNetwork::distribute(Int overlap)
+NetworkMesh::distribute(Int overlap)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(DMNetworkDistribute(&this->netw_, overlap));
 }
 
 void
-MeshNetwork::finalize_components()
+NetworkMesh::finalize_components()
 {
     CALL_STACK_MSG();
     PETSC_CHECK(DMNetworkFinalizeComponents(this->netw_));
 }
 
 Int
-MeshNetwork::edge_offset(Int p) const
+NetworkMesh::edge_offset(Int p) const
 {
     CALL_STACK_MSG();
     Int offset;
@@ -185,7 +185,7 @@ MeshNetwork::edge_offset(Int p) const
 }
 
 Int
-MeshNetwork::global_edge_index(Int p) const
+NetworkMesh::global_edge_index(Int p) const
 {
     CALL_STACK_MSG();
     Int idx;
@@ -194,7 +194,7 @@ MeshNetwork::global_edge_index(Int p) const
 }
 
 Int
-MeshNetwork::global_vec_offset(Int p, Int comp_num) const
+NetworkMesh::global_vec_offset(Int p, Int comp_num) const
 {
     CALL_STACK_MSG();
     Int offset;
@@ -203,7 +203,7 @@ MeshNetwork::global_vec_offset(Int p, Int comp_num) const
 }
 
 Int
-MeshNetwork::global_vertex_index(Int p) const
+NetworkMesh::global_vertex_index(Int p) const
 {
     CALL_STACK_MSG();
     Int idx;
@@ -212,7 +212,7 @@ MeshNetwork::global_vertex_index(Int p) const
 }
 
 Int
-MeshNetwork::local_vec_offset(Int p, Int comp_num) const
+NetworkMesh::local_vec_offset(Int p, Int comp_num) const
 {
     CALL_STACK_MSG();
     Int offset;
@@ -221,7 +221,7 @@ MeshNetwork::local_vec_offset(Int p, Int comp_num) const
 }
 
 Int
-MeshNetwork::vertex_offset(Int p) const
+NetworkMesh::vertex_offset(Int p) const
 {
     CALL_STACK_MSG();
     Int offset;
@@ -230,7 +230,7 @@ MeshNetwork::vertex_offset(Int p) const
 }
 
 void
-MeshNetwork::edge_set_matrix(Int p, const std::array<Matrix, 3> & J)
+NetworkMesh::edge_set_matrix(Int p, const std::array<Matrix, 3> & J)
 {
     CALL_STACK_MSG();
     Mat Jarr[3] = { J[0], J[1], J[2] };
@@ -238,7 +238,7 @@ MeshNetwork::edge_set_matrix(Int p, const std::array<Matrix, 3> & J)
 }
 
 void
-MeshNetwork::vertex_set_matrix(Int p, const std::vector<Matrix> & J)
+NetworkMesh::vertex_set_matrix(Int p, const std::vector<Matrix> & J)
 {
     CALL_STACK_MSG();
     std::vector<Mat> Jarr(J.size());
@@ -248,7 +248,7 @@ MeshNetwork::vertex_set_matrix(Int p, const std::vector<Matrix> & J)
 }
 
 void
-MeshNetwork::set_user_jacobian(bool eflg, bool vflg)
+NetworkMesh::set_user_jacobian(bool eflg, bool vflg)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(DMNetworkHasJacobian(this->netw_,

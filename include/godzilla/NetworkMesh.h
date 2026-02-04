@@ -10,10 +10,10 @@
 
 namespace godzilla {
 
-class MeshNetwork : public godzilla::Mesh {
+class NetworkMesh : public godzilla::Mesh {
 public:
-    MeshNetwork(mpi::Communicator comm);
-    explicit MeshNetwork(DM dm);
+    NetworkMesh(mpi::Communicator comm);
+    explicit NetworkMesh(DM dm);
 
     Int register_component(String name, std::size_t size);
 
