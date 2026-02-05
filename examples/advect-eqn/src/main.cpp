@@ -43,8 +43,6 @@ main(int argc, char * argv[])
         out_pars.set<fs::path>("file", "out");
         prob->add_output<ExodusIIOutput>(out_pars);
 
-        prob->create();
-
         app.run();
 
         return 0;

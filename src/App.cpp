@@ -196,8 +196,10 @@ void
 App::run_problem()
 {
     CALL_STACK_MSG();
-    lprintln(9, "Running");
     expect_true(this->problem != nullptr, "Problem is null");
+    this->problem->create();
+
+    lprintln(9, "Running");
     this->problem->run();
 }
 
