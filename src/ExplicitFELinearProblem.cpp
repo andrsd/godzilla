@@ -14,7 +14,7 @@ namespace {
 
 class G0Identity : public JacobianFunc {
 public:
-    explicit G0Identity(ExplicitFELinearProblem * prob) :
+    explicit G0Identity(Ref<ExplicitFELinearProblem> prob) :
         JacobianFunc(prob),
         n_comp(prob->get_field_num_components(FieldID(0)).value())
     {
@@ -43,7 +43,7 @@ ExplicitFELinearProblem::parameters()
 
 ExplicitFELinearProblem::ExplicitFELinearProblem(const Parameters & pars) :
     FENonlinearProblem(pars),
-    ExplicitProblemInterface(this, pars)
+    ExplicitProblemInterface(*this, pars)
 {
     CALL_STACK_MSG();
     set_default_output_on(ExecuteOn::INITIAL | ExecuteOn::TIMESTEP);
@@ -78,7 +78,12 @@ ExplicitFELinearProblem::init()
     FEProblemInterface::init();
     // so that the call to DMTSCreateRHSMassMatrix would form the mass matrix
     for (Int i = 0; i < get_num_fields(); ++i)
-        add_jacobian_block(FieldID(i), FieldID(i), new G0Identity(this), nullptr, nullptr, nullptr);
+        add_jacobian_block(FieldID(i),
+                           FieldID(i),
+                           new G0Identity(ref(*this)),
+                           nullptr,
+                           nullptr,
+                           nullptr);
 
     auto ds = get_ds();
     for (auto & [_, info] : get_fields())

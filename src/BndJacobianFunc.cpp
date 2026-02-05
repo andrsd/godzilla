@@ -8,8 +8,8 @@
 
 namespace godzilla {
 
-BndJacobianFunc::BndJacobianFunc(const BoundaryCondition * bc) :
-    JacobianFunc(dynamic_cast<FEProblemInterface *>(bc->get_discrete_problem_interface()))
+BndJacobianFunc::BndJacobianFunc(Ref<BoundaryCondition> bc) :
+    JacobianFunc(dynamic_ref_cast<FEProblemInterface>(bc->get_discrete_problem_interface()))
 {
 }
 

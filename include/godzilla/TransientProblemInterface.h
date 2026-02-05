@@ -44,7 +44,7 @@ public:
         NONLINEAR = TS_NONLINEAR,
     };
 
-    TransientProblemInterface(Problem * problem, const Parameters & pars);
+    TransientProblemInterface(Problem & problem, const Parameters & pars);
     virtual ~TransientProblemInterface();
 
     /// Get TS object
@@ -374,7 +374,7 @@ private:
                   Matrix & Jp)>
         compute_ijacobian_local_method;
     /// Problem this interface is part of
-    Problem * problem;
+    Ref<Problem> problem;
     /// Simulation start time
     Real start_time;
     /// Simulation end time

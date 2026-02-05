@@ -17,11 +17,11 @@ Postprocessor::parameters()
 Postprocessor::Postprocessor(const Parameters & pars) :
     Object(pars),
     PrintInterface(this),
-    problem(pars.get<Problem *>("_problem"))
+    problem(*pars.get<Problem *>("_problem"))
 {
 }
 
-Problem *
+Ref<Problem>
 Postprocessor::get_problem() const
 {
     CALL_STACK_MSG();

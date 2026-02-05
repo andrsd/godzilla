@@ -14,7 +14,7 @@ namespace godzilla {
 
 class ExplicitProblemInterface : public TransientProblemInterface {
 public:
-    explicit ExplicitProblemInterface(NonlinearProblem * problem, const Parameters & pars);
+    explicit ExplicitProblemInterface(NonlinearProblem & problem, const Parameters & pars);
 
     const Matrix & get_mass_matrix() const;
 
@@ -55,7 +55,7 @@ private:
     void compute_rhs_function(Real time, const Vector & x, Vector & F);
 
     /// Nonlinear problem
-    NonlinearProblem * nl_problem;
+    Ref<NonlinearProblem> nl_problem;
     /// Mass matrix
     Matrix M;
     /// Inverse of the lumped mass matrix

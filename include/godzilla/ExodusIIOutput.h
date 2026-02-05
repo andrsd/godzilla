@@ -69,13 +69,13 @@ private:
     String get_file_ext() const override;
 
     /// Unstructured mesh
-    UnstructuredMesh * mesh;
+    Ref<UnstructuredMesh> mesh;
     bool cont;
     bool discont;
     /// Variable names to be stored
     std::vector<String> variable_names;
     /// DG problem interface
-    DGProblemInterface * dgpi;
+    Optional<Ref<DGProblemInterface>> dgpi;
     /// ExodusII file
     Qtr<exodusIIcpp::File> exo;
     /// Step number

@@ -32,7 +32,7 @@ private:
     virtual void set_up_callbacks() = 0;
 
     /// FE problem
-    const FEProblemInterface * fepi;
+    Optional<Ref<const FEProblemInterface>> fepi;
     /// Number of fields
     Int n_fields;
     /// Computed L_2 errors

@@ -15,7 +15,7 @@ class FEProblemInterface;
 
 class Functional {
 public:
-    Functional(FEProblemInterface * fepi, String region = "");
+    Functional(Ref<FEProblemInterface> fepi, String region = "");
     virtual ~Functional() = default;
 
     /// Get value names this functional depends on
@@ -39,7 +39,7 @@ protected:
     /// Get pointer to FEProblemInterface
     ///
     /// @return Pointer to FEProblemInterface
-    FEProblemInterface * get_fe_problem() const;
+    Ref<FEProblemInterface> get_fe_problem() const;
 
     /// Get spatial dimension
     ///
@@ -91,7 +91,7 @@ protected:
 
 private:
     /// FEProblemInterface this functional is part of
-    FEProblemInterface * fepi;
+    Ref<FEProblemInterface> fepi;
     /// region where this functional is defined
     String region;
     /// Value names this functional depends on

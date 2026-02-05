@@ -47,14 +47,14 @@ protected:
     /// Get problem
     ///
     /// @return Problem this output is part of
-    Problem * get_problem() const;
+    Ref<Problem> get_problem() const;
 
     /// Set up the execution mask
     // void set_up_exec();
 
 private:
     /// Problem to get data from
-    Problem * problem;
+    Ref<Problem> problem;
 
     /// Bitwise mask for determining when this output object should output its content
     ExecuteOnFlags on_mask;

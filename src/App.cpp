@@ -103,18 +103,20 @@ App::get_version() const
     return ver;
 }
 
-Logger *
+Ref<Logger>
 App::get_logger()
 {
     CALL_STACK_MSG();
-    return this->logger.get();
+    expect_true(this->logger != nullptr, "Logger is null");
+    return ref(*this->logger);
 }
 
-Problem *
+Ref<Problem>
 App::get_problem() const
 {
     CALL_STACK_MSG();
-    return this->problem.get();
+    expect_true(this->problem != nullptr, "Problem is null");
+    return ref(*this->problem);
 }
 
 const unsigned int &

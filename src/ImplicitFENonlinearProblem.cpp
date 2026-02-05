@@ -42,7 +42,7 @@ ImplicitFENonlinearProblem::parameters()
 
 ImplicitFENonlinearProblem::ImplicitFENonlinearProblem(const Parameters & pars) :
     FENonlinearProblem(pars),
-    TransientProblemInterface(this, pars),
+    TransientProblemInterface(*this, pars),
     scheme(pars.get<String>("scheme"))
 {
     CALL_STACK_MSG();

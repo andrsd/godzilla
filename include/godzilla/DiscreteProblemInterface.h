@@ -7,8 +7,7 @@
 #include "godzilla/InitialCondition.h"
 #include "godzilla/Types.h"
 #include "godzilla/Qtr.h"
-#include "godzilla/Ptr.h"
-#include "godzilla/Qtr.h"
+#include "godzilla/Ref.h"
 #include "godzilla/Label.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Problem.h"
@@ -36,16 +35,16 @@ class NaturalBC;
 ///
 class DiscreteProblemInterface {
 public:
-    DiscreteProblemInterface(Problem * problem, const Parameters & pars);
+    DiscreteProblemInterface(Problem & problem, const Parameters & pars);
     virtual ~DiscreteProblemInterface();
 
     /// Get unstructured mesh associated with this problem
-    UnstructuredMesh * get_mesh() const;
+    Ref<UnstructuredMesh> get_mesh() const;
 
     /// Get problem
     ///
     /// @return Problem this interface is part of
-    Problem * get_problem() const;
+    Ref<Problem> get_problem() const;
 
     /// Get number of fields
     ///
@@ -171,19 +170,19 @@ public:
     /// Get list of all initial conditions
     ///
     /// @return List of all initial conditions
-    std::vector<InitialCondition *> get_initial_conditions();
+    std::vector<Ref<InitialCondition>> get_initial_conditions();
 
     /// Get list of all auxiliary initial conditions
     ///
     /// @return List of all auxiliary initial conditions
-    std::vector<InitialCondition *> get_aux_initial_conditions();
+    std::vector<Ref<InitialCondition>> get_aux_initial_conditions();
 
     /// Add initial condition
     ///
     /// @param pars Parameters used to construct InitialCondition object
     /// @return Built InitialCondition object
     template <InitialConditionDerived OBJECT>
-    OBJECT * add_initial_condition(Parameters & pars);
+    Ref<OBJECT> add_initial_condition(Parameters & pars);
 
     /// Check if we have an initial condition object with a specified name
     ///
@@ -195,33 +194,27 @@ public:
     ///
     /// @param name The name of the object
     /// @return Pointer to the initial condition object
-    Optional<InitialCondition *> get_initial_condition(String name) const;
+    Optional<Ref<InitialCondition>> get_initial_condition(String name) const;
 
     /// Add boundary condition
     ///
     /// @param pars Paremeters used to construct BoundaryCondition object
     /// @return Built BoundaryCondition object
     template <BoundaryConditionDerived OBJECT>
-    OBJECT * add_boundary_condition(Parameters & pars);
+    Ref<OBJECT> add_boundary_condition(Parameters & pars);
 
     /// Add auxiliary field
     ///
     /// @param pars Parameters used to construct the AuxiliaryField object
     /// @return Built AuxiliaryField object
     template <AuxiliaryFieldDerived OBJECT>
-    OBJECT * add_auxiliary_field(Parameters & pars);
-
-    /// Check if we have an auxiliary object with a specified name
-    ///
-    /// @param name The name of the object
-    /// @return True if the object exists, otherwise false
-    bool has_aux(String name) const;
+    Ref<OBJECT> add_auxiliary_field(Parameters & pars);
 
     /// Get auxiliary object with a specified name
     ///
     /// @param name The name of the object
     /// @return Pointer to the auxiliary object
-    AuxiliaryField * get_aux(String name) const;
+    Expected<Ref<AuxiliaryField>, ErrorCode> get_aux(String name) const;
 
     /// Return the offset into an array or local Vec for the dof associated with the given point
     ///
@@ -307,11 +300,11 @@ public:
 
 protected:
     /// Get list of all boundary conditions
-    std::vector<BoundaryCondition *> get_boundary_conditions() const;
+    std::vector<Ref<BoundaryCondition>> get_boundary_conditions() const;
     /// Get list of all essential boundary conditions
-    std::vector<EssentialBC *> get_essential_bcs() const;
+    std::vector<Ref<EssentialBC>> get_essential_bcs() const;
     /// Get list of all natural boundary conditions
-    std::vector<NaturalBC *> get_natural_bcs() const;
+    std::vector<Ref<NaturalBC>> get_natural_bcs() const;
     /// Distribute the problem among processors for parallel execution
     void distribute();
 
@@ -324,7 +317,7 @@ protected:
     PetscDS get_ds() const;
 
     /// Check initial conditions
-    void check_initial_conditions(const std::vector<InitialCondition *> & ics,
+    void check_initial_conditions(const std::vector<Ref<InitialCondition>> & ics,
                                   const std::map<FieldID, Int> & field_comps);
 
     void set_initial_guess_from_ics();
@@ -351,11 +344,12 @@ protected:
 
     void set_up_auxiliary_dm(DM dm);
 
-    void compute_global_aux_fields(DM dm, const std::vector<AuxiliaryField *> & auxs, Vector & a);
+    void
+    compute_global_aux_fields(DM dm, const std::vector<Ref<AuxiliaryField>> & auxs, Vector & a);
 
     void compute_label_aux_fields(DM dm,
                                   const Label & label,
-                                  const std::vector<AuxiliaryField *> & auxs,
+                                  const std::vector<Ref<AuxiliaryField>> & auxs,
                                   Vector & a);
 
     /// Compute auxiliary fields
@@ -376,10 +370,10 @@ private:
     virtual void set_up_ds() = 0;
 
     /// Problem this interface is part of
-    Problem * problem;
+    Ref<Problem> problem;
 
     /// Unstructured mesh
-    UnstructuredMesh * unstr_mesh;
+    Ref<UnstructuredMesh> unstr_mesh;
 
     /// Object that manages a discrete system
     PetscDS ds;
@@ -388,31 +382,31 @@ private:
     std::vector<Qtr<InitialCondition>> all_ics;
 
     /// Initial conditions for primary fields
-    std::vector<InitialCondition *> ics;
+    std::vector<Ref<InitialCondition>> ics;
 
     /// Initial conditions for auxiliary fields
-    std::vector<InitialCondition *> ics_aux;
+    std::vector<Ref<InitialCondition>> ics_aux;
 
     /// Map from aux object name to the aux object
-    std::map<String, InitialCondition *> ics_by_name;
+    std::map<String, Ref<InitialCondition>> ics_by_name;
 
     /// List of all boundary conditions
     std::vector<Qtr<BoundaryCondition>> bcs;
 
     /// List of essential boundary conditions
-    std::vector<EssentialBC *> essential_bcs;
+    std::vector<Ref<EssentialBC>> essential_bcs;
 
     /// List of natural boundary conditions
-    std::vector<NaturalBC *> natural_bcs;
+    std::vector<Ref<NaturalBC>> natural_bcs;
 
     /// List of auxiliary field objects
     std::vector<Qtr<AuxiliaryField>> auxs;
 
     /// Map from aux object name to the aux object
-    std::map<String, AuxiliaryField *> auxs_by_name;
+    std::map<String, Ref<AuxiliaryField>> auxs_by_name;
 
     /// Map from region to list of auxiliary field objects
-    std::map<String, std::vector<AuxiliaryField *>> auxs_by_region;
+    std::map<String, std::vector<Ref<AuxiliaryField>>> auxs_by_region;
 
     /// Local solution vector
     Vector sln;
@@ -513,56 +507,56 @@ DiscreteProblemInterface::get_point_local_field_ref(Int point, FieldID field, Sc
     return var;
 }
 
-template <BoundaryConditionDerived OBJECT>
-OBJECT *
+template <BoundaryConditionDerived T>
+Ref<T>
 DiscreteProblemInterface::add_boundary_condition(Parameters & pars)
 {
     CALL_STACK_MSG();
     pars.set<DiscreteProblemInterface *>("_dpi", this);
-    auto obj = Qtr<OBJECT>::alloc(pars);
+    auto obj = Qtr<T>::alloc(pars);
     auto ptr = obj.get();
     if (auto essbc = dynamic_cast<EssentialBC *>(ptr))
-        this->essential_bcs.push_back(essbc);
+        this->essential_bcs.push_back(Ref<EssentialBC>(*essbc));
     else if (auto natbc = dynamic_cast<NaturalBC *>(ptr))
-        this->natural_bcs.push_back(natbc);
+        this->natural_bcs.push_back(Ref<NaturalBC>(*natbc));
     this->bcs.push_back(std::move(obj));
-    return ptr;
+    return Ref<T> { *ptr };
 }
 
-template <InitialConditionDerived OBJECT>
-OBJECT *
+template <InitialConditionDerived T>
+Ref<T>
 DiscreteProblemInterface::add_initial_condition(Parameters & pars)
 {
     CALL_STACK_MSG();
     pars.set<DiscreteProblemInterface *>("_dpi", this);
-    auto obj = Qtr<OBJECT>::alloc(pars);
-    String name = obj->get_name();
+    auto obj = Qtr<T>::alloc(pars);
+    auto name = obj->get_name();
     auto it = this->ics_by_name.find(name);
     expect_true(it == this->ics_by_name.end(),
                 "Cannot add initial condition object '{}'. Name already taken.",
                 name);
     auto ic = obj.get();
-    this->ics_by_name[name] = ic;
+    this->ics_by_name.emplace(name, Ref<InitialCondition>(*ic));
     this->all_ics.push_back(std::move(obj));
-    return ic;
+    return Ref<T> { *ic };
 }
 
-template <AuxiliaryFieldDerived OBJECT>
-OBJECT *
+template <AuxiliaryFieldDerived T>
+Ref<T>
 DiscreteProblemInterface::add_auxiliary_field(Parameters & pars)
 {
     CALL_STACK_MSG();
     pars.set<DiscreteProblemInterface *>("_dpi", this);
-    auto obj = Qtr<OBJECT>::alloc(pars);
-    const auto & name = obj->get_name();
+    auto obj = Qtr<T>::alloc(pars);
+    auto name = obj->get_name();
     auto it = this->auxs_by_name.find(name);
     expect_true(it == this->auxs_by_name.end(),
                 "Cannot add auxiliary object '{}'. Name already taken.",
                 name);
     auto aux = obj.get();
-    this->auxs_by_name[name] = aux;
+    this->auxs_by_name.emplace(name, Ref<AuxiliaryField>(*aux));
     this->auxs.push_back(std::move(obj));
-    return aux;
+    return Ref<T> { *aux };
 }
 
 } // namespace godzilla

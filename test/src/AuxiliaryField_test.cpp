@@ -38,7 +38,7 @@ TEST_F(AuxiliaryFieldTest, api)
             return AuxiliaryField::get_mesh();
         }
 
-        Problem *
+        Ref<Problem>
         get_prblm() const
         {
             return AuxiliaryField::get_problem();

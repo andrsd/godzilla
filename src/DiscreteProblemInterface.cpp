@@ -1,6 +1,8 @@
 // SPDX-FileCopyrightText: 2022 David Andrs <andrsd@gmail.com>
 // SPDX-License-Identifier: MIT
 
+#include "godzilla/Error.h"
+#include "godzilla/Expected.h"
 #include "godzilla/Parameters.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/App.h"
@@ -19,16 +21,14 @@
 
 namespace godzilla {
 
-DiscreteProblemInterface::DiscreteProblemInterface(Problem * problem, const Parameters & pars) :
+DiscreteProblemInterface::DiscreteProblemInterface(Problem & problem, const Parameters & pars) :
     problem(problem),
-    unstr_mesh(dynamic_cast<UnstructuredMesh *>(pars.get<Mesh *>("mesh"))),
+    unstr_mesh(dynamic_ref_cast<UnstructuredMesh>(Ref<Mesh>(*pars.get<Mesh *>("mesh")))),
     ds(nullptr),
     dm_aux(nullptr),
     ds_aux(nullptr)
 {
     CALL_STACK_MSG();
-    expect_true(this->problem != nullptr, "Problem is null");
-    expect_true(this->unstr_mesh != nullptr, "Mesh must be UnstructuredMesh");
 }
 
 DiscreteProblemInterface::~DiscreteProblemInterface()
@@ -37,21 +37,21 @@ DiscreteProblemInterface::~DiscreteProblemInterface()
     DMDestroy(&this->dm_aux);
 }
 
-Problem *
+Ref<Problem>
 DiscreteProblemInterface::get_problem() const
 {
     CALL_STACK_MSG();
     return this->problem;
 }
 
-std::vector<InitialCondition *>
+std::vector<Ref<InitialCondition>>
 DiscreteProblemInterface::get_initial_conditions()
 {
     CALL_STACK_MSG();
     return this->ics;
 }
 
-std::vector<InitialCondition *>
+std::vector<Ref<InitialCondition>>
 DiscreteProblemInterface::get_aux_initial_conditions()
 {
     CALL_STACK_MSG();
@@ -66,7 +66,7 @@ DiscreteProblemInterface::has_initial_condition(String name) const
     return it != this->ics_by_name.end();
 }
 
-Optional<InitialCondition *>
+Optional<Ref<InitialCondition>>
 DiscreteProblemInterface::get_initial_condition(String name) const
 {
     CALL_STACK_MSG();
@@ -77,15 +77,7 @@ DiscreteProblemInterface::get_initial_condition(String name) const
         return {};
 }
 
-bool
-DiscreteProblemInterface::has_aux(String name) const
-{
-    CALL_STACK_MSG();
-    const auto & it = this->auxs_by_name.find(name);
-    return it != this->auxs_by_name.end();
-}
-
-AuxiliaryField *
+Expected<Ref<AuxiliaryField>, ErrorCode>
 DiscreteProblemInterface::get_aux(String name) const
 {
     CALL_STACK_MSG();
@@ -93,10 +85,10 @@ DiscreteProblemInterface::get_aux(String name) const
     if (it != this->auxs_by_name.end())
         return it->second;
     else
-        return nullptr;
+        return Unexpected(ErrorCode::NotFound);
 }
 
-UnstructuredMesh *
+Ref<UnstructuredMesh>
 DiscreteProblemInterface::get_mesh() const
 {
     CALL_STACK_MSG();
@@ -117,26 +109,26 @@ DiscreteProblemInterface::get_solution_vector_local()
     return this->sln;
 }
 
-std::vector<BoundaryCondition *>
+std::vector<Ref<BoundaryCondition>>
 DiscreteProblemInterface::get_boundary_conditions() const
 {
     CALL_STACK_MSG();
-    std::vector<BoundaryCondition *> ret;
+    std::vector<Ref<BoundaryCondition>> ret;
     ret.reserve(this->bcs.size());
     for (auto & bc : this->bcs) {
-        ret.push_back(bc.get());
+        ret.push_back(ref(*bc));
     }
     return ret;
 }
 
-std::vector<EssentialBC *>
+std::vector<Ref<EssentialBC>>
 DiscreteProblemInterface::get_essential_bcs() const
 {
     CALL_STACK_MSG();
     return this->essential_bcs;
 }
 
-std::vector<NaturalBC *>
+std::vector<Ref<NaturalBC>>
 DiscreteProblemInterface::get_natural_bcs() const
 {
     CALL_STACK_MSG();
@@ -199,7 +191,7 @@ DiscreteProblemInterface::get_ds() const
 }
 
 void
-DiscreteProblemInterface::check_initial_conditions(const std::vector<InitialCondition *> & ics,
+DiscreteProblemInterface::check_initial_conditions(const std::vector<Ref<InitialCondition>> & ics,
                                                    const std::map<FieldID, Int> & field_comps)
 {
     CALL_STACK_MSG();
@@ -212,7 +204,8 @@ DiscreteProblemInterface::check_initial_conditions(const std::vector<InitialCond
                 "Provided {} field(s), but {} initial condition(s).",
                 n_fields,
                 n_ics);
-    std::map<FieldID, InitialCondition *> ics_by_fields;
+    // std::map<FieldID, Ref<InitialCondition>> ics_by_fields;
+    std::map<FieldID, bool> ics_by_fields;
     for (auto & ic : ics) {
         auto fid = ic->get_field_id();
         if (fid == FieldID::INVALID)
@@ -222,7 +215,7 @@ DiscreteProblemInterface::check_initial_conditions(const std::vector<InitialCond
             Int ic_nc = ic->get_num_components();
             Int field_nc = field_comps.at(fid);
             if (ic_nc == field_nc)
-                ics_by_fields[fid] = ic;
+                ics_by_fields[fid] = true;
             else
                 this->problem->error(
                     "Initial condition '{}' operates on {} components, but is set on a field "
@@ -247,9 +240,9 @@ DiscreteProblemInterface::set_up_initial_conditions()
     for (auto & ic : this->all_ics) {
         auto field_name = ic->get_field_name();
         if (has_field_by_name(field_name))
-            this->ics.push_back(ic.get());
+            this->ics.push_back(ref(*ic));
         else if (has_aux_field_by_name(field_name))
-            this->ics_aux.push_back(ic.get());
+            this->ics_aux.push_back(ref(*ic));
     }
 
     std::map<FieldID, Int> field_comps;
@@ -317,7 +310,7 @@ DiscreteProblemInterface::set_up_auxiliary_dm(DM dm)
             auto field_nc = get_aux_field_num_components(fid.value()).value();
             if (aux_nc == field_nc) {
                 String region_name = aux->get_region();
-                this->auxs_by_region[region_name].push_back(aux.get());
+                this->auxs_by_region[region_name].push_back(ref(*aux));
             }
             else {
                 no_errors = false;
@@ -348,7 +341,7 @@ DiscreteProblemInterface::set_up_auxiliary_dm(DM dm)
 
 void
 DiscreteProblemInterface::compute_global_aux_fields(DM dm,
-                                                    const std::vector<AuxiliaryField *> & auxs,
+                                                    const std::vector<Ref<AuxiliaryField>> & auxs,
                                                     Vector & a)
 {
     CALL_STACK_MSG();
@@ -378,7 +371,7 @@ DiscreteProblemInterface::compute_global_aux_fields(DM dm,
 void
 DiscreteProblemInterface::compute_label_aux_fields(DM dm,
                                                    const Label & label,
-                                                   const std::vector<AuxiliaryField *> & auxs,
+                                                   const std::vector<Ref<AuxiliaryField>> & auxs,
                                                    Vector & a)
 {
     CALL_STACK_MSG();
@@ -471,7 +464,7 @@ DiscreteProblemInterface::set_initial_guess_from_ics()
     for (auto & ic : this->ics) {
         auto fid = ic->get_field_id();
         funcs[fid.value()] = InitialCondition::invoke_delegate;
-        contexts[fid.value()] = ic;
+        contexts[fid.value()] = ic.operator->();
     }
     PETSC_CHECK(DMProjectFunction(this->unstr_mesh->get_dm(),
                                   this->problem->get_time(),

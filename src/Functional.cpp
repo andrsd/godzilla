@@ -6,7 +6,7 @@
 
 namespace godzilla {
 
-Functional::Functional(FEProblemInterface * fepi, String region) : fepi(fepi), region(region) {}
+Functional::Functional(Ref<FEProblemInterface> fepi, String region) : fepi(fepi), region(region) {}
 
 const std::set<String> &
 Functional::get_dependent_values() const
@@ -22,7 +22,7 @@ Functional::get_region() const
     return this->region;
 }
 
-FEProblemInterface *
+Ref<FEProblemInterface>
 Functional::get_fe_problem() const
 {
     CALL_STACK_MSG();

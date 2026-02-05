@@ -10,6 +10,7 @@
 #include "godzilla/Registry.h"
 #include "godzilla/PrintInterface.h"
 #include "godzilla/Qtr.h"
+#include "godzilla/Ref.h"
 #include "godzilla/Logger.h"
 #include <chrono>
 #include <fstream>
@@ -46,7 +47,7 @@ public:
     /// Get logger associated with the application
     ///
     /// @return Logger
-    Logger * get_logger();
+    Ref<Logger> get_logger();
 
     /// Get Application name
     ///
@@ -66,20 +67,20 @@ public:
     /// Get pointer to the `Problem` class in this application
     ///
     /// @return Get problem this application is representing
-    Problem * get_problem() const;
+    Ref<Problem> get_problem() const;
 
     /// Get pointer to the `Problem`-derived class in this application
     ///
     /// @return The problem this application is solving
     template <typename T>
-    T *
+    Ref<T>
     get_problem() const
     {
         CALL_STACK_MSG();
         if (this->problem)
-            return dynamic_cast<T *>(this->problem);
+            return dynamic_ref_cast<T>(ref(*this->problem));
         else
-            return nullptr;
+            throw Exception("Bad cast");
     }
 
     /// Run the application
@@ -120,7 +121,7 @@ public:
     /// @param parameters Input parameters
     /// @return The constructed object
     template <typename T>
-    [[deprecated("This will be removed")]] T * build_object(Parameters & parameters);
+    [[deprecated("This will be removed")]] Ref<T> build_object(Parameters & parameters);
 
     /// Create parameters for type T
     ///
@@ -149,7 +150,7 @@ public:
         requires requires {
             { T::parameters() } -> std::same_as<Parameters>;
         }
-    T *
+    Ref<T>
     make_problem(Parameters & pars)
     {
         CALL_STACK_MSG();
@@ -159,7 +160,7 @@ public:
         auto obj = Qtr<T>::alloc(pars);
         auto problem = obj.get();
         this->problem = std::move(obj);
-        return problem;
+        return ref(*problem);
     }
 
     /// Export parameters into a YAML format
@@ -221,7 +222,7 @@ public:
 };
 
 template <typename T>
-T *
+Ref<T>
 App::build_object(Parameters & parameters)
 {
     parameters.set<App *>("app", this);

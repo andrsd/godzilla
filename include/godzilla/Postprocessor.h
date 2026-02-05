@@ -30,11 +30,11 @@ public:
     /// Get problem this post-processor is part of
     ///
     /// @return Problem this postprocessor is part of
-    Problem * get_problem() const;
+    Ref<Problem> get_problem() const;
 
 private:
     /// Problem this object is part of
-    Problem * problem;
+    Ref<Problem> problem;
 
 public:
     static Parameters parameters();

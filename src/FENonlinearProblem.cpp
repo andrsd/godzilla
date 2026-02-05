@@ -64,7 +64,7 @@ FENonlinearProblem::parameters()
 
 FENonlinearProblem::FENonlinearProblem(const Parameters & pars) :
     NonlinearProblem(pars),
-    FEProblemInterface(this, pars),
+    FEProblemInterface(*this, pars),
     state(INITIAL)
 {
     CALL_STACK_MSG();

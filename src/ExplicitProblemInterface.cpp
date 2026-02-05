@@ -13,7 +13,7 @@ ExplicitProblemInterface::parameters()
     return params;
 }
 
-ExplicitProblemInterface::ExplicitProblemInterface(NonlinearProblem * problem,
+ExplicitProblemInterface::ExplicitProblemInterface(NonlinearProblem & problem,
                                                    const Parameters & pars) :
     TransientProblemInterface(problem, pars),
     nl_problem(problem)

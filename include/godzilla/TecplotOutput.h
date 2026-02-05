@@ -39,7 +39,7 @@ private:
 
 #ifdef GODZILLA_WITH_TECIOCPP
     /// Unstructured mesh
-    UnstructuredMesh * mesh;
+    Ref<UnstructuredMesh> mesh;
     /// File to write into
     teciocpp::File * file;
     /// Variable value locations

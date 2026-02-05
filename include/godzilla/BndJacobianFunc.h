@@ -14,7 +14,7 @@ class NaturalBC;
 
 class BndJacobianFunc : public JacobianFunc {
 public:
-    explicit BndJacobianFunc(const BoundaryCondition * bc);
+    explicit BndJacobianFunc(Ref<BoundaryCondition> bc);
 
 protected:
     /// Get normal

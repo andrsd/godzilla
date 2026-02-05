@@ -21,7 +21,7 @@ RestartOutput::parameters()
 
 RestartOutput::RestartOutput(const Parameters & pars) :
     FileOutput(pars),
-    ri(dynamic_cast<RestartInterface *>(get_problem())),
+    ri(dynamic_ref_cast<RestartInterface>(get_problem())),
     file_base(pars.get<fs::path>("file"))
 {
 }
@@ -31,7 +31,7 @@ RestartOutput::create()
 {
     CALL_STACK_MSG();
     FileOutput::create();
-    if (ri == nullptr)
+    if (!this->ri.has_value())
         warning("RestartOutput works only with problems that support restart.");
 }
 
@@ -41,7 +41,7 @@ RestartOutput::output_step()
     CALL_STACK_MSG();
     auto comm = get_comm();
     RestartFile file(comm, get_file_name(), FileAccess::CREATE);
-    this->ri->write_restart_file(file);
+    this->ri.value()->write_restart_file(file);
 }
 
 String

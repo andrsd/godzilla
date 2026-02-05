@@ -11,7 +11,7 @@ class FEProblemInterface;
 
 class ResidualFunc : public Functional {
 public:
-    ResidualFunc(FEProblemInterface * fepi, String region = "");
+    ResidualFunc(Ref<FEProblemInterface> fepi, String region = "");
 
     /// Evaluate this functional
     ///

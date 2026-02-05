@@ -5,6 +5,7 @@
 
 #include "godzilla/Error.h"
 #include "godzilla/Logger.h"
+#include "godzilla/Ref.h"
 #include "fmt/core.h"
 
 namespace godzilla {
@@ -13,7 +14,7 @@ namespace godzilla {
 ///
 class LoggingInterface {
 public:
-    explicit LoggingInterface(Logger * logger) : log(logger) {}
+    explicit LoggingInterface(Ref<Logger> logger) : log(logger) {}
 
     template <typename... ARGS>
     void
@@ -61,7 +62,7 @@ public:
     }
 
 private:
-    Logger * log;
+    Ref<Logger> log;
 };
 
 } // namespace godzilla

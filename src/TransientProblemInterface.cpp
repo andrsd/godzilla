@@ -192,7 +192,7 @@ TransientProblemInterface::parameters()
     return params;
 }
 
-TransientProblemInterface::TransientProblemInterface(Problem * problem, const Parameters & pars) :
+TransientProblemInterface::TransientProblemInterface(Problem & problem, const Parameters & pars) :
     ts(nullptr),
     problem(problem),
     start_time(pars.get<Real>("start_time")),
@@ -202,7 +202,6 @@ TransientProblemInterface::TransientProblemInterface(Problem * problem, const Pa
     step_num(0)
 {
     CALL_STACK_MSG();
-    GODZILLA_ASSERT_TRUE(problem != nullptr, "Problem is null");
 
     PETSC_CHECK(TSCreate(this->problem->get_comm(), &this->ts));
     PETSC_CHECK(TSSetApplicationContext(this->ts, this));
@@ -314,7 +313,6 @@ void
 TransientProblemInterface::init()
 {
     CALL_STACK_MSG();
-    GODZILLA_ASSERT_TRUE(this->problem != nullptr, "Problem is null");
     PETSC_CHECK(TSSetDM(this->ts, this->problem->get_dm()));
 }
 

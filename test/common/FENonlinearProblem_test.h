@@ -39,7 +39,7 @@ public:
     }
 
     godzilla::Qtr<godzilla::Mesh> mesh;
-    GTestFENonlinearProblem * prob;
+    godzilla::Ref<GTestFENonlinearProblem> prob;
 };
 
 class FENonlinear2FieldProblemTest : public GodzillaAppTest {
@@ -73,5 +73,5 @@ public:
     }
 
     godzilla::Qtr<godzilla::Mesh> mesh;
-    GTest2FieldsFENonlinearProblem * prob;
+    godzilla::Ref<GTest2FieldsFENonlinearProblem> prob;
 };

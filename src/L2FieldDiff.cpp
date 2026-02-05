@@ -18,18 +18,19 @@ L2FieldDiff::parameters()
 
 L2FieldDiff::L2FieldDiff(const Parameters & pars) :
     Postprocessor(pars),
-    fepi(dynamic_cast<const FEProblemInterface *>(get_problem())),
+    fepi(try_dynamic_ref_cast<const FEProblemInterface>(get_problem())),
     n_fields(0)
 {
     CALL_STACK_MSG();
-    expect_true(this->fepi != nullptr, "FEProblemInterface is null");
+    expect_true(this->fepi.has_value(), "FEProblemInterface is null");
 }
 
 void
 L2FieldDiff::create()
 {
     CALL_STACK_MSG();
-    this->n_fields = this->fepi->get_num_fields();
+    auto fpi = this->fepi.value();
+    this->n_fields = fpi->get_num_fields();
     this->l2_diff.resize(this->n_fields, 0.);
     set_up_callbacks();
 }
@@ -52,7 +53,7 @@ L2FieldDiff::compute()
             funcs[fid] = internal::invoke_function_delegate;
         }
     }
-    auto * problem = get_problem();
+    auto problem = get_problem();
     PETSC_CHECK(DMComputeL2FieldDiff(problem->get_dm(),
                                      problem->get_time(),
                                      funcs.data(),

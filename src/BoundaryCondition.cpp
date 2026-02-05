@@ -13,22 +13,21 @@ Parameters
 BoundaryCondition::parameters()
 {
     auto params = Object::parameters();
-    params.add_required_param<std::vector<String>>("boundary", "Boundary name")
-        .add_private_param<DiscreteProblemInterface *>("_dpi");
+    params.add_required_param<std::vector<String>>("boundary", "Boundary name");
+    // .add_private_param<Ref<DiscreteProblemInterface>>("_dpi");
     return params;
 }
 
 BoundaryCondition::BoundaryCondition(const Parameters & pars) :
     Object(pars),
     PrintInterface(this),
-    dpi(pars.get<DiscreteProblemInterface *>("_dpi")),
+    dpi(pars.get<Ref<DiscreteProblemInterface>>("_dpi")),
     boundary(pars.get<std::vector<String>>("boundary"))
 {
     CALL_STACK_MSG();
-    expect_true(this->dpi, "DiscreteProblemInterface is null");
 }
 
-Problem *
+Ref<Problem>
 BoundaryCondition::get_problem() const
 {
     CALL_STACK_MSG();
@@ -49,7 +48,7 @@ BoundaryCondition::get_boundary() const
     return this->boundary;
 }
 
-DiscreteProblemInterface *
+Ref<DiscreteProblemInterface>
 BoundaryCondition::get_discrete_problem_interface() const
 {
     CALL_STACK_MSG();

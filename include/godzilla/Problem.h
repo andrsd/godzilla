@@ -17,6 +17,7 @@
 #include "godzilla/StarForest.h"
 #include "godzilla/Output.h"
 #include "godzilla/Postprocessor.h"
+#include "godzilla/Ref.h"
 
 namespace godzilla {
 
@@ -76,21 +77,21 @@ public:
     ///
     /// @param pars Parameters used to construct the Output object
     /// @return Built Output object
-    template <OutputDerived OBJECT>
-    OBJECT * add_output(Parameters & pars);
+    template <OutputDerived T>
+    Ref<T> add_output(Parameters & pars);
 
     /// Add a postprocessor object
     ///
     /// @param pars Postprocessor object parameters
     /// @return Newly created postprocessor
-    template <PostprocessorDerived OBJECT>
-    OBJECT * add_postprocessor(Parameters & pars);
+    template <PostprocessorDerived T>
+    Ref<T> add_postprocessor(Parameters & pars);
 
     /// Get postprocessor by name
     ///
     /// @param name The name of the postprocessor
     /// @return Pointer to the postprocessor with name 'name' if it exists, otherwise `nullptr`
-    Postprocessor * get_postprocessor(String name) const;
+    Expected<Ref<Postprocessor>, ErrorCode> get_postprocessor(String name) const;
 
     /// Get postprocessor names
     ///
@@ -324,33 +325,33 @@ public:
     static Parameters parameters();
 };
 
-template <OutputDerived OBJECT>
-OBJECT *
+template <OutputDerived T>
+Ref<T>
 Problem::add_output(Parameters & pars)
 {
     CALL_STACK_MSG();
     pars.set<Problem *>("_problem", this);
-    auto obj = Qtr<OBJECT>::alloc(pars);
+    auto obj = Qtr<T>::alloc(pars);
     auto output = obj.get();
     auto fo = dynamic_cast<FileOutput *>(output);
     if (fo)
         this->file_outputs.push_back(fo);
     this->outputs.push_back(std::move(obj));
-    return output;
+    return Ref<T>(*output);
 }
 
-template <PostprocessorDerived OBJECT>
-OBJECT *
+template <PostprocessorDerived T>
+Ref<T>
 Problem::add_postprocessor(Parameters & pars)
 {
     CALL_STACK_MSG();
     pars.set<Problem *>("_problem", this);
-    auto obj = Qtr<OBJECT>::alloc(pars);
+    auto obj = Qtr<T>::alloc(pars);
     auto pp = obj.get();
     auto name = pp->get_name();
     this->pps_names.push_back(name);
     this->pps[name] = std::move(obj);
-    return pp;
+    return Ref<T>(*pp);
 }
 
 /// Move values from a local vector to a global one

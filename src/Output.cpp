@@ -34,7 +34,7 @@ Output::parameters()
 Output::Output(const Parameters & pars) :
     Object(pars),
     PrintInterface(this),
-    problem(pars.get<Problem *>("_problem")),
+    problem(ref(*pars.get<Problem *>("_problem"))),
     interval(pars.get<Int>("interval", 1)),
     last_output_time(std::nan(""))
 {
@@ -71,7 +71,7 @@ Output::set_exec_mask(ExecuteOnFlags flags)
     this->on_mask = flags;
 }
 
-Problem *
+Ref<Problem>
 Output::get_problem() const
 {
     CALL_STACK_MSG();

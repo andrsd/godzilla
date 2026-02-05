@@ -33,18 +33,18 @@ public:
     /// Get DiscreteProblemInterface
     ///
     /// @return Discrete problem this BC is part of
-    DiscreteProblemInterface * get_discrete_problem_interface() const;
+    Ref<DiscreteProblemInterface> get_discrete_problem_interface() const;
 
     /// Set up this boundary condition
     virtual void set_up() = 0;
 
 protected:
     /// Get problem this auxiliary field is part of
-    Problem * get_problem() const;
+    Ref<Problem> get_problem() const;
 
 private:
     /// Discrete problem this object is part of
-    DiscreteProblemInterface * dpi;
+    Ref<DiscreteProblemInterface> dpi;
 
     /// List of boundary names
     const std::vector<String> boundary;

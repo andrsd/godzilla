@@ -19,7 +19,7 @@ namespace godzilla {
 
 const String DGProblemInterface::empty_name;
 
-DGProblemInterface::DGProblemInterface(Problem * problem, const Parameters & pars) :
+DGProblemInterface::DGProblemInterface(Problem & problem, const Parameters & pars) :
     DiscreteProblemInterface(problem, pars),
     qorder(PETSC_DETERMINE)
 {

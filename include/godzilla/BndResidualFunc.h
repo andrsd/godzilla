@@ -14,7 +14,7 @@ class FEProblemInterface;
 
 class BndResidualFunc : public ResidualFunc {
 public:
-    explicit BndResidualFunc(const BoundaryCondition * bc);
+    explicit BndResidualFunc(Ref<BoundaryCondition> bc);
 
 protected:
     /// Get normal

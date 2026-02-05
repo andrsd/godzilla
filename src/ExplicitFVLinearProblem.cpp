@@ -16,8 +16,8 @@ ExplicitFVLinearProblem::parameters()
 
 ExplicitFVLinearProblem::ExplicitFVLinearProblem(const Parameters & pars) :
     NonlinearProblem(pars),
-    FVProblemInterface(this, pars),
-    ExplicitProblemInterface(this, pars)
+    FVProblemInterface(*this, pars),
+    ExplicitProblemInterface(*this, pars)
 {
     CALL_STACK_MSG();
     set_default_output_on(ExecuteOn::INITIAL | ExecuteOn::TIMESTEP);

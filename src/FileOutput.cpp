@@ -7,6 +7,7 @@
 #include "godzilla/Problem.h"
 #include "godzilla/App.h"
 #include "godzilla/DiscreteProblemInterface.h"
+#include "godzilla/Ref.h"
 
 namespace godzilla {
 
@@ -21,7 +22,7 @@ FileOutput::parameters()
 FileOutput::FileOutput(const Parameters & pars) :
     Output(pars),
     file_base(pars.get<fs::path>("file")),
-    dpi(dynamic_cast<DiscreteProblemInterface *>(get_problem()))
+    dpi(dynamic_ref_cast<DiscreteProblemInterface>(get_problem()))
 {
     CALL_STACK_MSG();
     expect_true(!this->file_base.empty(), "The 'file' parameter cannot be empty");
@@ -116,14 +117,14 @@ FileOutput::add_aux_var_names(FieldID fid, std::vector<std::string> & var_names)
     }
 }
 
-const DiscreteProblemInterface *
+Ref<const DiscreteProblemInterface>
 FileOutput::get_discrete_problem_interface() const
 {
     CALL_STACK_MSG();
-    return this->dpi;
+    return cref(*this->dpi);
 }
 
-DiscreteProblemInterface *
+Ref<DiscreteProblemInterface>
 FileOutput::get_discrete_problem_interface()
 {
     CALL_STACK_MSG();
