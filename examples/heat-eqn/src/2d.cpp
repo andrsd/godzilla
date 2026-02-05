@@ -78,8 +78,6 @@ main(int argc, char * argv[])
             .set<std::vector<String>>("variables", { "temp" });
         prob->add_output<ExodusIIOutput>(out_pars);
 
-        prob->create();
-
         app.run();
 
         return 0;
