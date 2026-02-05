@@ -204,8 +204,12 @@ App::run_problem()
 {
     CALL_STACK_MSG();
     lprintln(9, "Running");
-    expect_true(this->problem != nullptr, "Problem is null");
-    this->problem->run();
+    if (this->problem)
+        this->problem->run();
+    else if (this->prob)
+        this->prob->run();
+    else
+        throw Exception("Problem is null");
 }
 
 Registry &
