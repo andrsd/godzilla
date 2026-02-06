@@ -84,12 +84,12 @@ TEST(PCShellTest, run)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("app", &app);
+    mesh_pars.set<Ref<App>>("app", ref(app));
     mesh_pars.set<Int>("nx", 1);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = LinearProblem::parameters();
-    prob_pars.set<App *>("app", &app);
+    prob_pars.set<Ref<App>>("app", ref(app));
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     CustomLinearProblem prob(prob_pars);
 

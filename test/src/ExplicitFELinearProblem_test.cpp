@@ -191,12 +191,12 @@ TEST(ExplicitFELinearProblemTest, solve)
     auto prob = app.make_problem<TestExplicitFELinearProblem>(prob_pars);
 
     auto bc_left_pars = app.make_parameters<DirichletBC>();
-    bc_left_pars.set<App *>("app", &app);
+    bc_left_pars.set<Ref<App>>("app", ref(app));
     bc_left_pars.set<std::vector<String>>("boundary", { "left" });
     prob->add_boundary_condition<DirichletBC>(bc_left_pars);
 
     auto bc_right_pars = app.make_parameters<DirichletBC>();
-    bc_right_pars.set<App *>("app", &app);
+    bc_right_pars.set<Ref<App>>("app", ref(app));
     bc_right_pars.set<std::vector<String>>("boundary", { "right" });
     prob->add_boundary_condition<DirichletBC>(bc_right_pars);
 
@@ -238,12 +238,12 @@ TEST(ExplicitFELinearProblemTest, solve_w_lumped_mass_matrix)
     auto prob = app.make_problem<TestExplicitFELinearProblem>(prob_pars);
 
     auto bc_left_pars = app.make_parameters<DirichletBC>();
-    bc_left_pars.set<App *>("app", &app);
+    bc_left_pars.set<Ref<App>>("app", ref(app));
     bc_left_pars.set<std::vector<String>>("boundary", { "left" });
     prob->add_boundary_condition<DirichletBC>(bc_left_pars);
 
     auto bc_right_pars = app.make_parameters<DirichletBC>();
-    bc_right_pars.set<App *>("app", &app);
+    bc_right_pars.set<Ref<App>>("app", ref(app));
     bc_right_pars.set<std::vector<String>>("boundary", { "right" });
     prob->add_boundary_condition<DirichletBC>(bc_right_pars);
 
@@ -300,7 +300,7 @@ TEST(ExplicitFELinearProblemTest, allocate_lumped_mass_matrix)
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = app.make_parameters<TestExplicitFELinearProblem>();
-    prob_pars.set<App *>("app", &app)
+    prob_pars.set<Ref<App>>("app", ref(app))
         .set<Ref<Mesh>>("mesh", ref(*mesh))
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)

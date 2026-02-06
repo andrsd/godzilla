@@ -16,7 +16,7 @@ TEST(NaturalBCTest, api)
     TestApp app;
 
     auto mesh_params = LineMesh::parameters();
-    mesh_params.set<App *>("app", &app);
+    mesh_params.set<Ref<App>>("app", ref(app));
     mesh_params.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
@@ -105,7 +105,7 @@ TEST(NaturalBCTest, fe)
     TestApp app;
 
     auto mesh_params = LineMesh::parameters();
-    mesh_params.set<App *>("app", &app);
+    mesh_params.set<Ref<App>>("app", ref(app));
     mesh_params.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
@@ -114,7 +114,7 @@ TEST(NaturalBCTest, fe)
     auto prob = app.make_problem<GTest2FieldsFENonlinearProblem>(prob_params);
 
     auto bc_params = TestNaturalBC::parameters();
-    bc_params.set<App *>("app", &app);
+    bc_params.set<Ref<App>>("app", ref(app));
     bc_params.set<String>("name", "bc1");
     bc_params.set<std::vector<String>>("boundary", { "left" });
     bc_params.set<String>("field", "u");
@@ -148,7 +148,7 @@ TEST(NaturalBCTest, non_existing_field)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("app", &app);
+    mesh_pars.set<Ref<App>>("app", ref(app));
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
@@ -157,7 +157,7 @@ TEST(NaturalBCTest, non_existing_field)
     auto problem = app.make_problem<GTest2FieldsFENonlinearProblem>(prob_pars);
 
     auto params = TestNaturalBC::parameters();
-    params.set<App *>("app", &app);
+    params.set<Ref<App>>("app", ref(app));
     params.set<std::vector<String>>("boundary", { "left" });
     params.set<String>("field", "asdf");
     problem->add_boundary_condition<TestNaturalBC>(params);
@@ -170,7 +170,7 @@ TEST(NaturalBCTest, field_param_not_specified)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("app", &app);
+    mesh_pars.set<Ref<App>>("app", ref(app));
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 

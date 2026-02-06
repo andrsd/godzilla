@@ -14,17 +14,17 @@ TEST(TecplotOutputTest, get_file_ext)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("app", &app);
+    mesh_pars.set<Ref<App>>("app", ref(app));
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<App *>("app", &app);
+    prob_pars.set<Ref<App>>("app", ref(app));
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_pars);
 
     auto params = TecplotOutput::parameters();
-    params.set<App *>("app", &app);
+    params.set<Ref<App>>("app", ref(app));
     params.set<Problem *>("_problem", &prob);
     params.set<fs::path>("file", "out");
     TecplotOutput out(params);
@@ -40,17 +40,17 @@ TEST(TecplotOutputTest, output)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("app", &app);
+    mesh_pars.set<Ref<App>>("app", ref(app));
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<App *>("app", &app);
+    prob_pars.set<Ref<App>>("app", ref(app));
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_pars);
 
     auto params = TecplotOutput::parameters();
-    params.set<App *>("app", &app);
+    params.set<Ref<App>>("app", ref(app));
     params.set<fs::path>("file", "out");
     auto out = prob.add_output<TecplotOutput>(params);
 
@@ -66,17 +66,17 @@ TEST(TecplotOutputTest, test)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("app", &app);
+    mesh_pars.set<Ref<App>>("app", ref(app));
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<App *>("app", &app);
+    prob_pars.set<Ref<App>>("app", ref(app));
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_pars);
 
     auto params = TecplotOutput::parameters();
-    params.set<App *>("app", &app);
+    params.set<Ref<App>>("app", ref(app));
     params.set<fs::path>("file", "out");
 
     EXPECT_DEATH(prob.add_output<TecplotOutput>(params),

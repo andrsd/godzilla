@@ -29,13 +29,13 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
     auto prob = this->app->get_problem<GTestImplicitFENonlinearProblem>();
 
     auto ic_params = ConstantInitialCondition::parameters();
-    ic_params.set<godzilla::App *>("app", this->app);
+    ic_params.set<Ref<godzilla::App>>("app", ref(*this->app));
     ic_params.set<String>("name", "ic");
     ic_params.set<std::vector<Real>>("value", { 0 });
     prob->add_initial_condition<ConstantInitialCondition>(ic_params);
 
     auto bc_params = DirichletBC::parameters();
-    bc_params.set<godzilla::App *>("app", this->app);
+    bc_params.set<Ref<godzilla::App>>("app", ref(*this->app));
     bc_params.set<std::vector<String>>("boundary", { "left", "right" });
     prob->add_boundary_condition<DirichletBC>(bc_params);
 
@@ -70,7 +70,7 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
 TEST_F(ImplicitFENonlinearProblemTest, wrong_scheme)
 {
     auto params = this->app->make_parameters<GTestImplicitFENonlinearProblem>();
-    params.set<godzilla::App *>("app", this->app);
+    params.set<Ref<godzilla::App>>("app", ref(*this->app));
     params.set<Ref<Mesh>>("mesh", ref(*this->mesh));
     params.set<Real>("start_time", 0.);
     params.set<Real>("end_time", 20);
@@ -84,7 +84,7 @@ TEST_F(ImplicitFENonlinearProblemTest, wrong_scheme)
 TEST_F(ImplicitFENonlinearProblemTest, wrong_time_stepping_params)
 {
     auto params = this->app->make_parameters<GTestImplicitFENonlinearProblem>();
-    params.set<godzilla::App *>("app", this->app);
+    params.set<Ref<godzilla::App>>("app", ref(*this->app));
     params.set<String>("name", "prob");
     params.set<Ref<Mesh>>("mesh", ref(*this->mesh));
     params.set<Real>("start_time", 0.);
@@ -100,7 +100,7 @@ TEST_F(ImplicitFENonlinearProblemTest, wrong_time_stepping_params)
 TEST_F(ImplicitFENonlinearProblemTest, no_time_stepping_params)
 {
     auto params = this->app->make_parameters<GTestImplicitFENonlinearProblem>();
-    params.set<godzilla::App *>("app", this->app);
+    params.set<Ref<godzilla::App>>("app", ref(*this->app));
     params.set<String>("name", "prob");
     params.set<Ref<Mesh>>("mesh", ref(*this->mesh));
     params.set<Real>("start_time", 0.);
@@ -116,13 +116,13 @@ TEST_F(ImplicitFENonlinearProblemTest, set_schemes)
     auto prob = this->app->get_problem<GTestImplicitFENonlinearProblem>();
 
     auto ic_params = ConstantInitialCondition::parameters();
-    ic_params.set<godzilla::App *>("app", this->app);
+    ic_params.set<Ref<godzilla::App>>("app", ref(*this->app));
     ic_params.set<String>("name", "ic");
     ic_params.set<std::vector<Real>>("value", { 0 });
     prob->add_initial_condition<ConstantInitialCondition>(ic_params);
 
     auto bc_params = DirichletBC::parameters();
-    bc_params.set<godzilla::App *>("app", this->app);
+    bc_params.set<Ref<godzilla::App>>("app", ref(*this->app));
     bc_params.set<std::vector<String>>("boundary", { "left", "right" });
     prob->add_boundary_condition<DirichletBC>(bc_params);
 
@@ -144,13 +144,13 @@ TEST_F(ImplicitFENonlinearProblemTest, converged_reason)
     auto prob = this->app->get_problem<GTestImplicitFENonlinearProblem>();
 
     auto ic_params = ConstantInitialCondition::parameters();
-    ic_params.set<godzilla::App *>("app", this->app);
+    ic_params.set<Ref<godzilla::App>>("app", ref(*this->app));
     ic_params.set<String>("name", "ic");
     ic_params.set<std::vector<Real>>("value", { 0 });
     prob->add_initial_condition<ConstantInitialCondition>(ic_params);
 
     auto bc_params = DirichletBC::parameters();
-    bc_params.set<godzilla::App *>("app", this->app);
+    bc_params.set<Ref<godzilla::App>>("app", ref(*this->app));
     bc_params.set<std::vector<String>>("boundary", { "left", "right" });
     prob->add_boundary_condition<DirichletBC>(bc_params);
 

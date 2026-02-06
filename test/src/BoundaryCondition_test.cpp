@@ -4,7 +4,6 @@
 #include "godzilla/Parameters.h"
 
 using namespace godzilla;
-// using namespace testing;
 
 namespace {
 
@@ -35,7 +34,7 @@ TEST_F(BoundaryConditionTest, api)
     prob->create();
 
     auto params = BoundaryCondition::parameters();
-    params.set<App *>("app", this->app)
+    params.set<Ref<App>>("app", ref(*this->app))
         .set<Ref<DiscreteProblemInterface>>("_dpi", prob)
         .set<String>("name", "obj")
         .set<std::vector<String>>("boundary", { "side1" });

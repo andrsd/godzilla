@@ -17,14 +17,14 @@ public:
         {
             auto pars = LineMesh::parameters();
             // clang-format off
-            pars.set<godzilla::App *>("app", this->app)
+            pars.set<Ref<godzilla::App>>("app", ref(*this->app))
                 .set<Int>("nx", 2);
             // clang-format on
             this->mesh = MeshFactory::create<LineMesh>(pars);
         }
         {
             auto pars = GTestImplicitFENonlinearProblem::parameters();
-            pars.set<godzilla::App *>("app", this->app)
+            pars.set<Ref<godzilla::App>>("app", ref(*this->app))
                 // FIXME: after app creates params and not pointers
                 .set<String>("_type", "GTestImplicitFENonlinearProblem")
                 .set<Ref<Mesh>>("mesh", ref(*mesh))

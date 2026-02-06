@@ -13,7 +13,7 @@ TEST(LineMeshTest, api)
     TestApp app;
 
     auto params = LineMesh::parameters();
-    params.set<App *>("app", &app);
+    params.set<Ref<App>>("app", ref(app));
     params.set<String>("name", "line_mesh");
     params.set<Real>("xmin", 1);
     params.set<Real>("xmax", 2);
@@ -40,7 +40,7 @@ TEST(LineMeshTest, incorrect_dims)
     TestApp app;
 
     auto params = LineMesh::parameters();
-    params.set<App *>("app", &app);
+    params.set<Ref<App>>("app", ref(app));
     params.set<String>("name", "line_mesh");
     params.set<Real>("xmin", 2);
     params.set<Real>("xmax", 1);

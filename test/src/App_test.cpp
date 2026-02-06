@@ -4,11 +4,13 @@
 #include "godzilla/Object.h"
 #include "godzilla/Problem.h"
 #include "godzilla/LineMesh.h"
+#include "godzilla/Ref.h"
 #include "ExceptionTestMacros.h"
 #include <filesystem>
 
-#if 0
 using namespace godzilla;
+
+#if 0
 namespace fs = std::filesystem;
 
 namespace {
@@ -164,10 +166,10 @@ TEST(AppTest, version)
 }
 #endif
 
-TEST(AppTest, make_parametrs)
+TEST(AppTest, make_parameters)
 {
     TestApp app;
 
     auto pars = app.make_parameters<godzilla::Object>();
-    EXPECT_EQ(pars.get<godzilla::App *>("app"), &app);
+    EXPECT_EQ(pars.get<Ref<godzilla::App>>("app"), ref(app));
 }

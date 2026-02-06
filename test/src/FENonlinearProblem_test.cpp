@@ -167,7 +167,7 @@ TEST_F(FENonlinearProblemTest, set_up_initial_guess)
     auto prob = this->app->get_problem<GTestFENonlinearProblem>();
 
     auto ic_pars = ConstantInitialCondition::parameters();
-    ic_pars.set<App *>("app", app);
+    ic_pars.set<Ref<App>>("app", ref(*app));
     ic_pars.set<std::vector<Real>>("value", { 0 });
     prob->add_initial_condition<ConstantInitialCondition>(ic_pars);
 
@@ -199,12 +199,12 @@ TEST_F(FENonlinearProblemTest, solve)
     auto prob = this->app->get_problem<GTestFENonlinearProblem>();
 
     auto ic_pars = ConstantInitialCondition::parameters();
-    ic_pars.set<App *>("app", this->app);
+    ic_pars.set<Ref<App>>("app", ref(*this->app));
     ic_pars.set<std::vector<Real>>("value", { 0.1 });
     prob->add_initial_condition<ConstantInitialCondition>(ic_pars);
 
     auto params = DirichletBC::parameters();
-    params.set<App *>("app", this->app);
+    params.set<Ref<App>>("app", ref(*this->app));
     params.set<std::vector<String>>("boundary", { "left", "right" });
     auto bc = prob->add_boundary_condition<DirichletBC>(params);
     prob->create();
@@ -231,7 +231,7 @@ TEST_F(FENonlinearProblemTest, solve_no_ic)
     auto prob = this->app->get_problem<GTestFENonlinearProblem>();
 
     auto params = DirichletBC::parameters();
-    params.set<App *>("app", this->app);
+    params.set<Ref<App>>("app", ref(*this->app));
     params.set<std::vector<String>>("boundary", { "left" });
     prob->add_boundary_condition<DirichletBC>(params);
     prob->create();
@@ -246,7 +246,7 @@ TEST_F(FENonlinearProblemTest, err_ic_comp_mismatch)
 
     auto params = GTest2CompIC::parameters();
     params.set<String>("name", "ic");
-    params.set<App *>("app", this->app);
+    params.set<Ref<App>>("app", ref(*this->app));
     prob->add_initial_condition<GTest2CompIC>(params);
 
     EXPECT_DEATH(prob->create(),
@@ -259,25 +259,25 @@ TEST(TwoFieldFENonlinearProblemTest, err_duplicate_ics)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("app", &app);
+    mesh_pars.set<Ref<App>>("app", ref(app));
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_params = GTest2FieldsFENonlinearProblem::parameters();
-    prob_params.set<App *>("app", &app);
+    prob_params.set<Ref<App>>("app", ref(app));
     prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTest2FieldsFENonlinearProblem prob(prob_params);
 
     auto ic1_params = ConstantInitialCondition::parameters();
     ic1_params.set<String>("name", "ic1")
-        .set<App *>("app", &app)
+        .set<Ref<App>>("app", ref(app))
         .set<String>("field", "u")
         .set<std::vector<Real>>("value", { 0.1 });
     prob.add_initial_condition<ConstantInitialCondition>(ic1_params);
 
     auto ic2_params = ConstantInitialCondition::parameters();
     ic2_params.set<String>("name", "ic2")
-        .set<App *>("app", &app)
+        .set<Ref<App>>("app", ref(app))
         .set<String>("field", "u")
         .set<std::vector<Real>>("value", { 0.2 });
     prob.add_initial_condition<ConstantInitialCondition>(ic2_params);
@@ -292,17 +292,17 @@ TEST(TwoFieldFENonlinearProblemTest, err_not_enough_ics)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("app", &app);
+    mesh_pars.set<Ref<App>>("app", ref(app));
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_params = GTest2FieldsFENonlinearProblem::parameters();
-    prob_params.set<App *>("app", &app);
+    prob_params.set<Ref<App>>("app", ref(app));
     prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTest2FieldsFENonlinearProblem prob(prob_params);
 
     auto ic_params = ConstantInitialCondition::parameters();
-    ic_params.set<App *>("app", &app);
+    ic_params.set<Ref<App>>("app", ref(app));
     ic_params.set<String>("name", "ic1");
     ic_params.set<std::vector<Real>>("value", { 0.1 });
     ic_params.set<String>("field", "u");
@@ -317,7 +317,7 @@ TEST_F(FENonlinearProblemTest, err_nonexisting_bc_bnd)
 
     auto params = DirichletBC::parameters();
     params.set<String>("name", "bc1");
-    params.set<App *>("app", this->app);
+    params.set<Ref<App>>("app", ref(*this->app));
     params.set<std::vector<String>>("boundary", { "asdf" });
     prob->add_boundary_condition<DirichletBC>(params);
 
@@ -331,12 +331,12 @@ TEST(TwoFieldFENonlinearProblemTest, field_decomposition)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("app", &app);
+    mesh_pars.set<Ref<App>>("app", ref(app));
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_params = GTest2FieldsFENonlinearProblem::parameters();
-    prob_params.set<App *>("app", &app);
+    prob_params.set<Ref<App>>("app", ref(app));
     prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTest2FieldsFENonlinearProblem prob(prob_params);
 
@@ -370,7 +370,7 @@ TEST_F(FENonlinearProblemTest, steady_state_output)
     auto prob = this->app->get_problem<GTestFENonlinearProblem>();
 
     auto params = DirichletBC::parameters();
-    params.set<App *>("app", this->app);
+    params.set<Ref<App>>("app", ref(*this->app));
     params.set<std::vector<String>>("boundary", { "left", "right" });
     prob->add_boundary_condition<DirichletBC>(params);
 

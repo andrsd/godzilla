@@ -9,7 +9,6 @@
 #include "TestApp.h"
 
 using namespace godzilla;
-using namespace testing;
 
 TEST(KrylovSolver, tolerances)
 {
@@ -155,7 +154,8 @@ TEST(KrylovSolver, set_monitor)
     Vector x = b.duplicate();
     ks.solve(b, x);
 
-    EXPECT_THAT(solver.norms, ElementsAre(DoubleEq(5.), DoubleNear(1.1e-15, 1e-14)));
+    EXPECT_THAT(solver.norms,
+                testing::ElementsAre(testing::DoubleEq(5.), testing::DoubleNear(1.1e-15, 1e-14)));
 }
 
 TEST(KrylovSolver, set_opers_rhs)
@@ -182,7 +182,7 @@ TEST(KrylovSolver, set_opers_rhs)
     auto comm = app.get_comm();
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<godzilla::App *>("app", &app);
+    mesh_pars.set<Ref<godzilla::App>>("app", ref(app));
     mesh_pars.set<Real>("xmin", 0);
     mesh_pars.set<Real>("xmax", 1);
     mesh_pars.set<Int>("nx", 1);
@@ -318,5 +318,5 @@ TEST(KrylovSolver, view)
     testing::internal::CaptureStdout();
     ks.view();
     auto out = testing::internal::GetCapturedStdout();
-    EXPECT_THAT(out, HasSubstr("type: cg"));
+    EXPECT_THAT(out, testing::HasSubstr("type: cg"));
 }

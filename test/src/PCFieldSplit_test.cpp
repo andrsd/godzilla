@@ -161,11 +161,11 @@ TEST(PCFieldSplit, schur)
     auto comm = app.get_comm();
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("app", &app).set<Int>("nx", 2);
+    mesh_pars.set<Ref<App>>("app", ref(app)).set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = GTest2FieldsFENonlinearProblem::parameters();
-    prob_pars.set<App *>("app", &app).set<Ref<Mesh>>("mesh", ref(*mesh));
+    prob_pars.set<Ref<App>>("app", ref(app)).set<Ref<Mesh>>("mesh", ref(*mesh));
     GTest2FieldsFENonlinearProblem prob(prob_pars);
 
     prob.create();

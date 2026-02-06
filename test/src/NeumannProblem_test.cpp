@@ -163,7 +163,7 @@ TEST(NeumannProblemTest, solve)
     TestApp app;
 
     auto mesh_params = RectangleMesh::parameters();
-    mesh_params.set<App *>("app", &app);
+    mesh_params.set<Ref<App>>("app", ref(app));
     mesh_params.set<Int>("nx", 2);
     mesh_params.set<Int>("ny", 1);
     auto mesh = MeshFactory::create<RectangleMesh>(mesh_params);
@@ -173,13 +173,13 @@ TEST(NeumannProblemTest, solve)
     auto prob = app.make_problem<TestNeumannProblem>(prob_params);
 
     auto bc_left_pars = TestNeumannBC::parameters();
-    bc_left_pars.set<App *>("app", &app);
+    bc_left_pars.set<Ref<App>>("app", ref(app));
     bc_left_pars.set<String>("name", "bc1");
     bc_left_pars.set<std::vector<String>>("boundary", { "left" });
     prob->add_boundary_condition<TestNeumannBC>(bc_left_pars);
 
     auto bc_right_pars = TestNeumannBC::parameters();
-    bc_right_pars.set<App *>("app", &app);
+    bc_right_pars.set<Ref<App>>("app", ref(app));
     bc_right_pars.set<String>("name", "bc2");
     bc_right_pars.set<std::vector<String>>("boundary", { "right" });
     prob->add_boundary_condition<TestNeumannBC>(bc_right_pars);

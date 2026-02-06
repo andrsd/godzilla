@@ -47,7 +47,7 @@ namespace godzilla {
 Registry registry;
 
 App::App(mpi::Communicator comm, String name) :
-    PrintInterface(comm, this, this->verbosity_level, name),
+    PrintInterface(comm, cref(*this), this->verbosity_level, name),
     name(name),
     mpi_comm(comm),
     registry(godzilla::registry),
@@ -61,7 +61,7 @@ App::App(mpi::Communicator comm, String name) :
 }
 
 App::App(mpi::Communicator comm, Registry & registry, String name) :
-    PrintInterface(comm, this, this->verbosity_level, name),
+    PrintInterface(comm, cref(*this), this->verbosity_level, name),
     name(name),
     mpi_comm(comm),
     registry(registry),

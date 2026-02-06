@@ -94,7 +94,7 @@ Qtr<UnstructuredMesh>
 MeshPartApp::load_mesh(const std::string & file_name)
 {
     auto pars = FileMesh::parameters();
-    pars.set<App *>("app", this);
+    pars.set<Ref<App>>("app", ref(*this));
     pars.set<fs::path>("file", file_name);
     return MeshFactory::create<FileMesh>(pars);
 }
@@ -113,7 +113,7 @@ void
 MeshPartApp::save_partition(UnstructuredMesh * mesh, const std::string & file_name)
 {
     auto pars = ExodusIIOutput::parameters();
-    pars.set<App *>("app", this);
+    pars.set<Ref<App>>("app", ref(*this));
     pars.set<fs::path>("file", file_name);
     ExodusIIOutput out(pars);
     // FIXME: this needs exodusII refactoring done

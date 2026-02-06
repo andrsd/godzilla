@@ -138,7 +138,7 @@ public:
                       "T must be constructible from `const Parameters &`");
 
         auto pars = T::parameters();
-        pars.template set<App *>("app", this);
+        pars.template set<Ref<App>>("app", ref(*this));
         return pars;
     }
 
@@ -225,7 +225,7 @@ template <typename T>
 Ref<T>
 App::build_object(Parameters & parameters)
 {
-    parameters.set<App *>("app", this);
+    parameters.set<Ref<App>>("app", ref(*this));
     return new T(parameters);
 }
 

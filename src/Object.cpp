@@ -11,15 +11,15 @@ Parameters
 Object::parameters()
 {
     Parameters params;
-    params.add_required_param<App *>("app", "Application we are part of")
+    params.add_required_param<LateRef<App>>("app", "Application we are part of")
         .add_private_param<String>("_type", "")
         .add_param<String>("name", "Name of the object");
     return params;
 }
 
 Object::Object(const Parameters & pars) :
-    LoggingInterface(pars.get<App *>("app")->get_logger()),
-    app(pars.get<App *>("app")),
+    LoggingInterface(pars.get<Ref<App>>("app")->get_logger()),
+    app(pars.get<Ref<App>>("app")),
     type(pars.get<String>("_type")),
     name(pars.get<String>("name", ""))
 {
@@ -40,7 +40,7 @@ Object::get_name() const
     return this->name;
 }
 
-App *
+Ref<App>
 Object::get_app() const
 {
     CALL_STACK_MSG();
