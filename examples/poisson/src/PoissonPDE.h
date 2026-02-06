@@ -8,7 +8,9 @@ using namespace godzilla;
 
 class Residual0 : public ResidualFunc {
 public:
-    Residual0(FEProblemInterface * fepi) : ResidualFunc(fepi), ffn(get_field_value("forcing_fn")) {}
+    Residual0(Ref<FEProblemInterface> fepi) : ResidualFunc(fepi), ffn(get_field_value("forcing_fn"))
+    {
+    }
 
     void
     evaluate(Scalar f[]) const override
@@ -23,7 +25,7 @@ protected:
 
 class Residual1 : public ResidualFunc {
 public:
-    Residual1(FEProblemInterface * fepi) :
+    Residual1(Ref<FEProblemInterface> fepi) :
         ResidualFunc(fepi),
         dim(get_spatial_dimension()),
         u_x(get_field_gradient("u"))
@@ -45,7 +47,7 @@ protected:
 
 class Jacobian3 : public JacobianFunc {
 public:
-    Jacobian3(FEProblemInterface * fepi) : JacobianFunc(fepi), dim(get_spatial_dimension()) {}
+    Jacobian3(Ref<FEProblemInterface> fepi) : JacobianFunc(fepi), dim(get_spatial_dimension()) {}
 
     void
     evaluate(Scalar g[]) const override

@@ -9,7 +9,7 @@ namespace {
 
 class F1 : public ResidualFunc {
 public:
-    explicit F1(BurgersEquation * prob) :
+    explicit F1(Ref<BurgersEquation> prob) :
         ResidualFunc(prob),
         visc(prob->get_viscosity()),
         u(get_field_value("u")),
@@ -76,7 +76,7 @@ void
 BurgersEquation::set_up_weak_form()
 {
     CALL_STACK_MSG();
-    add_residual_block(this->u_id, nullptr, new F1(this));
+    add_residual_block(this->u_id, nullptr, new F1(ref(*this)));
 }
 
 void

@@ -9,7 +9,7 @@ namespace {
 
 class Residual0 : public BndResidualFunc {
 public:
-    explicit Residual0(const NaturalBC * nbc) :
+    explicit Residual0(Ref<NaturalBC> nbc) :
         BndResidualFunc(nbc),
         T(get_field_value("temp")),
         htc(get_field_value("htc")),
@@ -32,7 +32,7 @@ protected:
 
 class Jacobian0 : public BndJacobianFunc {
 public:
-    explicit Jacobian0(const NaturalBC * nbc) : BndJacobianFunc(nbc), htc(get_field_value("htc")) {}
+    explicit Jacobian0(Ref<NaturalBC> nbc) : BndJacobianFunc(nbc), htc(get_field_value("htc")) {}
 
     void
     evaluate(Scalar g[]) const override
@@ -69,6 +69,6 @@ void
 ConvectiveHeatFluxBC::set_up_weak_form()
 {
     CALL_STACK_MSG();
-    add_residual_block(new Residual0(this), nullptr);
-    add_jacobian_block(get_field_id(), new Jacobian0(this), nullptr, nullptr, nullptr);
+    add_residual_block(new Residual0(ref(*this)), nullptr);
+    add_jacobian_block(get_field_id(), new Jacobian0(ref(*this)), nullptr, nullptr, nullptr);
 }

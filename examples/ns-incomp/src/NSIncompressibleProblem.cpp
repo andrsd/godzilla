@@ -17,7 +17,7 @@ namespace {
 
 class ResidualVeloc0 : public ResidualFunc {
 public:
-    explicit ResidualVeloc0(NSIncompressibleProblem * prob) :
+    explicit ResidualVeloc0(Ref<NSIncompressibleProblem> prob) :
         ResidualFunc(prob),
         n_comp(get_spatial_dimension()),
         dim(get_spatial_dimension()),
@@ -53,7 +53,7 @@ protected:
 
 class ResidualVeloc1 : public ResidualFunc {
 public:
-    explicit ResidualVeloc1(NSIncompressibleProblem * prob) :
+    explicit ResidualVeloc1(Ref<NSIncompressibleProblem> prob) :
         ResidualFunc(prob),
         n_comp(get_spatial_dimension()),
         dim(get_spatial_dimension()),
@@ -85,7 +85,7 @@ protected:
 
 class ResidualPress0 : public ResidualFunc {
 public:
-    explicit ResidualPress0(NSIncompressibleProblem * prob) :
+    explicit ResidualPress0(Ref<NSIncompressibleProblem> prob) :
         ResidualFunc(prob),
         dim(get_spatial_dimension()),
         vel_x(get_field_gradient("velocity"))
@@ -108,7 +108,7 @@ protected:
 
 class ResidualPress1 : public ResidualFunc {
 public:
-    explicit ResidualPress1(NSIncompressibleProblem * prob) :
+    explicit ResidualPress1(Ref<NSIncompressibleProblem> prob) :
         ResidualFunc(prob),
         dim(get_spatial_dimension())
     {
@@ -128,7 +128,7 @@ protected:
 
 class JacobianVV0 : public JacobianFunc {
 public:
-    explicit JacobianVV0(NSIncompressibleProblem * prob) :
+    explicit JacobianVV0(Ref<NSIncompressibleProblem> prob) :
         JacobianFunc(prob),
         dim(get_spatial_dimension()),
         vel_x(get_field_gradient("velocity")),
@@ -162,7 +162,7 @@ protected:
 
 class JacobianVV1 : public JacobianFunc {
 public:
-    explicit JacobianVV1(NSIncompressibleProblem * prob) :
+    explicit JacobianVV1(Ref<NSIncompressibleProblem> prob) :
         JacobianFunc(prob),
         dim(get_spatial_dimension()),
         vel(get_field_value("velocity"))
@@ -194,7 +194,7 @@ protected:
 
 class JacobianPV1 : public JacobianFunc {
 public:
-    explicit JacobianPV1(NSIncompressibleProblem * prob) :
+    explicit JacobianPV1(Ref<NSIncompressibleProblem> prob) :
         JacobianFunc(prob),
         dim(get_spatial_dimension())
     {
@@ -214,7 +214,7 @@ protected:
 
 class JacobianVP2 : public JacobianFunc {
 public:
-    explicit JacobianVP2(NSIncompressibleProblem * prob) :
+    explicit JacobianVP2(Ref<NSIncompressibleProblem> prob) :
         JacobianFunc(prob),
         dim(get_spatial_dimension())
     {
@@ -234,7 +234,7 @@ protected:
 
 class JacobianVV3 : public JacobianFunc {
 public:
-    explicit JacobianVV3(NSIncompressibleProblem * prob) :
+    explicit JacobianVV3(Ref<NSIncompressibleProblem> prob) :
         JacobianFunc(prob),
         n_comp(get_spatial_dimension()),
         dim(get_spatial_dimension()),
@@ -306,25 +306,29 @@ void
 NSIncompressibleProblem::set_up_weak_form()
 {
     CALL_STACK_MSG();
-    add_residual_block(this->velocity_id, new ResidualVeloc0(this), new ResidualVeloc1(this));
-    add_residual_block(this->pressure_id, new ResidualPress0(this), new ResidualPress1(this));
+    add_residual_block(this->velocity_id,
+                       new ResidualVeloc0(ref(*this)),
+                       new ResidualVeloc1(ref(*this)));
+    add_residual_block(this->pressure_id,
+                       new ResidualPress0(ref(*this)),
+                       new ResidualPress1(ref(*this)));
 
     add_jacobian_block(this->velocity_id,
                        this->velocity_id,
-                       new JacobianVV0(this),
-                       new JacobianVV1(this),
+                       new JacobianVV0(ref(*this)),
+                       new JacobianVV1(ref(*this)),
                        nullptr,
-                       new JacobianVV3(this));
+                       new JacobianVV3(ref(*this)));
     add_jacobian_block(this->velocity_id,
                        this->pressure_id,
                        nullptr,
                        nullptr,
-                       new JacobianVP2(this),
+                       new JacobianVP2(ref(*this)),
                        nullptr);
     add_jacobian_block(this->pressure_id,
                        this->velocity_id,
                        nullptr,
-                       new JacobianPV1(this),
+                       new JacobianPV1(ref(*this)),
                        nullptr,
                        nullptr);
 }

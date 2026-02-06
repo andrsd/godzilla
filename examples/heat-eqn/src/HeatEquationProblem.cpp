@@ -10,7 +10,7 @@ namespace {
 
 class Residual0 : public ResidualFunc {
 public:
-    explicit Residual0(FEProblemInterface * fepi) :
+    explicit Residual0(Ref<FEProblemInterface> fepi) :
         ResidualFunc(fepi),
         T_t(get_field_dot("temp")),
         q_ppp(get_field_value("q_ppp"))
@@ -31,7 +31,7 @@ protected:
 
 class Residual1 : public ResidualFunc {
 public:
-    explicit Residual1(FEProblemInterface * fepi) :
+    explicit Residual1(Ref<FEProblemInterface> fepi) :
         ResidualFunc(fepi),
         dim(get_spatial_dimension()),
         T_x(get_field_gradient("temp"))
@@ -53,7 +53,9 @@ protected:
 
 class Jacobian0 : public JacobianFunc {
 public:
-    explicit Jacobian0(FEProblemInterface * fepi) : JacobianFunc(fepi), T_t_shift(get_time_shift())
+    explicit Jacobian0(Ref<FEProblemInterface> fepi) :
+        JacobianFunc(fepi),
+        T_t_shift(get_time_shift())
     {
     }
 
@@ -70,7 +72,9 @@ protected:
 
 class Jacobian3 : public JacobianFunc {
 public:
-    explicit Jacobian3(FEProblemInterface * fepi) : JacobianFunc(fepi), dim(get_spatial_dimension())
+    explicit Jacobian3(Ref<FEProblemInterface> fepi) :
+        JacobianFunc(fepi),
+        dim(get_spatial_dimension())
     {
     }
 
@@ -122,11 +126,11 @@ void
 HeatEquationProblem::set_up_weak_form()
 {
     CALL_STACK_MSG();
-    add_residual_block(this->temp_id, new Residual0(this), new Residual1(this));
+    add_residual_block(this->temp_id, new Residual0(ref(*this)), new Residual1(ref(*this)));
     add_jacobian_block(this->temp_id,
                        this->temp_id,
-                       new Jacobian0(this),
+                       new Jacobian0(ref(*this)),
                        nullptr,
                        nullptr,
-                       new Jacobian3(this));
+                       new Jacobian3(ref(*this)));
 }
