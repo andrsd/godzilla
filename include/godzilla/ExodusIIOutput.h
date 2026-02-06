@@ -4,6 +4,7 @@
 #pragma once
 
 #include "godzilla/FileOutput.h"
+#include "godzilla/DiscreteProblemInterface.h"
 #include "godzilla/Types.h"
 #include "godzilla/Qtr.h"
 #include "exodusIIcpp/exodusIIcpp.h"
@@ -26,7 +27,7 @@ class DGProblemInterface;
 /// ```
 ///
 /// This output works only with finite element problems
-class ExodusIIOutput : public FileOutput {
+class ExodusIIOutput : public FileOutput, public DiscreteProblemOutputInterface {
 public:
     explicit ExodusIIOutput(const Parameters & pars);
     ~ExodusIIOutput() override;

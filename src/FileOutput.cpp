@@ -21,8 +21,7 @@ FileOutput::parameters()
 
 FileOutput::FileOutput(const Parameters & pars) :
     Output(pars),
-    file_base(pars.get<fs::path>("file")),
-    dpi(dynamic_ref_cast<DiscreteProblemInterface>(get_problem()))
+    file_base(pars.get<fs::path>("file"))
 {
     CALL_STACK_MSG();
     expect_true(!this->file_base.empty(), "The 'file' parameter cannot be empty");
@@ -73,62 +72,6 @@ FileOutput::set_sequence_file_base(unsigned int stepi)
     CALL_STACK_MSG();
     this->file_base = fmt::format("{}.{}", this->file_base, stepi);
     this->file_name = create_file_name();
-}
-
-void
-FileOutput::add_var_names(FieldID fid, std::vector<std::string> & var_names)
-{
-    CALL_STACK_MSG();
-    auto name = this->dpi->get_field_name(fid).value();
-    Int nc = this->dpi->get_field_num_components(fid).value();
-    if (nc == 1)
-        var_names.push_back(name);
-    else {
-        for (Int c = 0; c < nc; ++c) {
-            auto comp_name = this->dpi->get_field_component_name(fid, c).value();
-            String s;
-            if (comp_name.length() == 0)
-                s = fmt::format("{}_{}", name, c);
-            else
-                s = fmt::format("{}", comp_name);
-            var_names.push_back(s);
-        }
-    }
-}
-
-void
-FileOutput::add_aux_var_names(FieldID fid, std::vector<std::string> & var_names)
-{
-    CALL_STACK_MSG();
-    auto name = this->dpi->get_aux_field_name(fid).value();
-    auto nc = this->dpi->get_aux_field_num_components(fid).value();
-    if (nc == 1)
-        var_names.push_back(name);
-    else {
-        for (Int c = 0; c < nc; ++c) {
-            auto comp_name = this->dpi->get_aux_field_component_name(fid, c).value();
-            String s;
-            if (comp_name.length() == 0)
-                s = fmt::format("{}_{}", name, c);
-            else
-                s = fmt::format("{}", comp_name);
-            var_names.push_back(s);
-        }
-    }
-}
-
-Ref<const DiscreteProblemInterface>
-FileOutput::get_discrete_problem_interface() const
-{
-    CALL_STACK_MSG();
-    return cref(*this->dpi);
-}
-
-Ref<DiscreteProblemInterface>
-FileOutput::get_discrete_problem_interface()
-{
-    CALL_STACK_MSG();
-    return this->dpi;
 }
 
 } // namespace godzilla

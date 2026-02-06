@@ -105,7 +105,8 @@ ExodusIIOutput::parameters()
 
 ExodusIIOutput::ExodusIIOutput(const Parameters & pars) :
     FileOutput(pars),
-    mesh(get_discrete_problem_interface()->get_mesh()),
+    DiscreteProblemOutputInterface(pars),
+    mesh(get_mesh()),
     cont(false),
     discont(false),
     variable_names(pars.get<std::vector<String>>("variables"), {}),
