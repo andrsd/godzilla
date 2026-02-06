@@ -28,7 +28,7 @@ TEST_F(CSVOutputTest, get_file_ext)
     auto prob = this->app->get_problem<GTestFENonlinearProblem>();
 
     auto params = this->app->make_parameters<CSVOutput>();
-    // params.set<Problem *>("_problem", prob);
+    params.set<Ref<Problem>>("_problem", prob);
     params.set<fs::path>("file", "asdf");
     CSVOutput out(params);
     out.create();
@@ -104,7 +104,7 @@ TEST_F(CSVOutputTest, set_file_name)
     auto prob = this->app->get_problem<GTestFENonlinearProblem>();
 
     auto params = this->app->make_parameters<CSVOutput>();
-    // params.set<Problem *>("_problem", this->prob);
+    params.set<Ref<Problem>>("_problem", prob);
     params.set<fs::path>("file", "asdf");
     CSVOutput out(params);
 

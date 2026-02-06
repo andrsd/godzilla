@@ -10,14 +10,14 @@ Parameters
 Postprocessor::parameters()
 {
     auto params = Object::parameters();
-    params.add_private_param<Problem *>("_problem");
+    params.add_private_param<LateRef<Problem>>("_problem");
     return params;
 }
 
 Postprocessor::Postprocessor(const Parameters & pars) :
     Object(pars),
     PrintInterface(this),
-    problem(*pars.get<Problem *>("_problem"))
+    problem(pars.get<Ref<Problem>>("_problem"))
 {
 }
 

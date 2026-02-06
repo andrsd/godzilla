@@ -23,7 +23,7 @@ TEST(ExodusIIOutputTest, get_file_ext)
 
     auto params = ExodusIIOutput::parameters();
     params.set<Ref<App>>("app", ref(app));
-    params.set<Problem *>("_problem", &prob);
+    params.set<Ref<Problem>>("_problem", ref(prob));
     params.set<fs::path>("file", "out");
     ExodusIIOutput out(params);
     out.create();

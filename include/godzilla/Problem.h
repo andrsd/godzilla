@@ -330,7 +330,7 @@ Ref<T>
 Problem::add_output(Parameters & pars)
 {
     CALL_STACK_MSG();
-    pars.set<Problem *>("_problem", this);
+    pars.set<Ref<Problem>>("_problem", ref(*this));
     auto obj = Qtr<T>::alloc(pars);
     auto output = obj.get();
     auto fo = dynamic_cast<FileOutput *>(output);
@@ -345,7 +345,7 @@ Ref<T>
 Problem::add_postprocessor(Parameters & pars)
 {
     CALL_STACK_MSG();
-    pars.set<Problem *>("_problem", this);
+    pars.set<Ref<Problem>>("_problem", ref(*this));
     auto obj = Qtr<T>::alloc(pars);
     auto pp = obj.get();
     auto name = pp->get_name();

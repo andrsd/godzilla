@@ -27,14 +27,14 @@ Output::parameters()
     auto params = Object::parameters();
     params.add_param<ExecuteOnFlags>("on", "When output should happen")
         .add_param<Int>("interval", "Interval")
-        .add_private_param<Problem *>("_problem");
+        .add_private_param<LateRef<Problem>>("_problem");
     return params;
 }
 
 Output::Output(const Parameters & pars) :
     Object(pars),
     PrintInterface(this),
-    problem(ref(*pars.get<Problem *>("_problem"))),
+    problem(pars.get<Ref<Problem>>("_problem")),
     interval(pars.get<Int>("interval", 1)),
     last_output_time(std::nan(""))
 {

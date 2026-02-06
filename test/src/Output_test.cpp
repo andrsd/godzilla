@@ -32,7 +32,7 @@ TEST_F(OutputTest, exec_masks_1)
 
     auto pars = Output::parameters();
     pars.set<Ref<App>>("app", ref(*this->app));
-    // pars.set<Problem *>("_problem", this->prob);
+    pars.set<Ref<Problem>>("_problem", prob);
     pars.set<ExecuteOnFlags>("on", ExecuteOn::NONE);
     MockOutput out(pars);
     out.create();
@@ -48,7 +48,7 @@ TEST_F(OutputTest, exec_masks_2)
 
     auto pars = Output::parameters();
     pars.set<Ref<App>>("app", ref(*this->app));
-    // pars.set<Problem *>("_problem", this->prob);
+    pars.set<Ref<Problem>>("_problem", prob);
     pars.set<ExecuteOnFlags>("on", ExecuteOn::FINAL);
     MockOutput out(pars);
     out.create();
@@ -65,7 +65,7 @@ TEST_F(OutputTest, exec_masks_3)
 
     auto pars = Output::parameters();
     pars.set<Ref<App>>("app", ref(*this->app));
-    // pars.set<Problem *>("_problem", this->prob);
+    pars.set<Ref<Problem>>("_problem", prob);
     pars.set<ExecuteOnFlags>("on", ExecuteOn::FINAL | ExecuteOn::INITIAL | ExecuteOn::TIMESTEP);
     MockOutput out(pars);
     out.create();
@@ -89,7 +89,7 @@ TEST_F(OutputTest, empty_on)
 
     auto pars = Output::parameters();
     pars.set<Ref<App>>("app", ref(*app));
-    // pars.set<Problem *>("_problem", this->prob);
+    pars.set<Ref<Problem>>("_problem", prob);
     pars.set<ExecuteOnFlags>("on", 0);
 
     EXPECT_DEATH(MockOutput out(pars),
@@ -103,7 +103,7 @@ TEST_F(OutputTest, none_plus_mask)
 
     auto pars = Output::parameters();
     pars.set<Ref<App>>("app", ref(*this->app));
-    // pars.set<Problem *>("_problem", this->prob);
+    pars.set<Ref<Problem>>("_problem", prob);
     pars.set<ExecuteOnFlags>("on", ExecuteOn::NONE | ExecuteOn::FINAL | ExecuteOn::TIMESTEP);
 
     EXPECT_DEATH(MockOutput out(pars), "The 'none' execution flag can be used only by itself.");
@@ -117,7 +117,7 @@ TEST_F(OutputTest, interval_with_no_timestep_output)
 
     auto pars = Output::parameters();
     pars.set<Ref<App>>("app", ref(*app));
-    // pars.set<Problem *>("_problem", this->prob);
+    pars.set<Ref<Problem>>("_problem", prob);
     pars.set<ExecuteOnFlags>("on", ExecuteOn::INITIAL | ExecuteOn::FINAL);
     pars.set<Int>("interval", 10);
     MockOutput out(pars);
