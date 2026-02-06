@@ -38,7 +38,7 @@ class GTestProblem : public Problem, public TransientProblemInterface {
 public:
     explicit GTestProblem(const Parameters & pars) :
         Problem(pars),
-        TransientProblemInterface(this, pars)
+        TransientProblemInterface(*this, pars)
     {
     }
 

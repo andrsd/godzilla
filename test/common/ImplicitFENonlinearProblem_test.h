@@ -31,7 +31,7 @@ public:
                 .set<Real>("start_time", 0.)
                 .set<Real>("end_time", 20)
                 .set<Real>("dt", 5);
-            this->prob = this->app->make_problem<GTestImplicitFENonlinearProblem>(pars);
+            this->app->make_problem<GTestImplicitFENonlinearProblem>(pars);
         }
     }
 
@@ -42,5 +42,4 @@ public:
     }
 
     Qtr<Mesh> mesh;
-    GTestImplicitFENonlinearProblem * prob;
 };

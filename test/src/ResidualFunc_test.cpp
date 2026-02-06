@@ -8,7 +8,6 @@
 #include "godzilla/Types.h"
 
 using namespace godzilla;
-using namespace testing;
 
 TEST(ResidualFuncTest, test)
 {
@@ -31,7 +30,7 @@ TEST(ResidualFuncTest, test)
 
     class TestF : public ResidualFunc {
     public:
-        explicit TestF(GTestProblem * prob) :
+        explicit TestF(Ref<GTestProblem> prob) :
             ResidualFunc(prob),
             dim(get_spatial_dimension()),
             u(get_field_value("u")),
@@ -72,7 +71,7 @@ TEST(ResidualFuncTest, test)
 
     prob.create();
 
-    TestF res(&prob);
+    TestF res(ref(prob));
 }
 
 TEST(ResidualFuncTest, test_vals)
@@ -96,7 +95,7 @@ TEST(ResidualFuncTest, test_vals)
 
     class TestF : public ResidualFunc {
     public:
-        explicit TestF(GTestProblem * prob) :
+        explicit TestF(Ref<GTestProblem> prob) :
             ResidualFunc(prob),
             dim(get_spatial_dimension()),
             u(get_field_value("u")),
@@ -141,7 +140,7 @@ TEST(ResidualFuncTest, test_vals)
 
     prob.create();
 
-    TestF res(&prob);
+    TestF res(ref(prob));
     Scalar vals[5];
     res.evaluate(vals);
     EXPECT_DOUBLE_EQ(vals[0], 1);

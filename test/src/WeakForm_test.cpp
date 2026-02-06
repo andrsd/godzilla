@@ -33,7 +33,7 @@ private:
 
 class TestF : public ResidualFunc {
 public:
-    explicit TestF(GTestFENonlinearProblem * prob) : ResidualFunc(prob) {}
+    explicit TestF(Ref<GTestFENonlinearProblem> prob) : ResidualFunc(prob) {}
 
     void
     evaluate(Scalar f[]) const override
@@ -44,7 +44,7 @@ public:
 
 class BndTestF : public BndResidualFunc {
 public:
-    explicit BndTestF(TestBC * bc) : BndResidualFunc(bc) {}
+    explicit BndTestF(Ref<TestBC> bc) : BndResidualFunc(bc) {}
 
     void
     evaluate(Scalar f[]) const override
@@ -55,7 +55,7 @@ public:
 
 class TestJ : public JacobianFunc {
 public:
-    explicit TestJ(GTestFENonlinearProblem * prob) : JacobianFunc(prob) {}
+    explicit TestJ(Ref<GTestFENonlinearProblem> prob) : JacobianFunc(prob) {}
 
     void
     evaluate(Scalar g[]) const override
@@ -66,7 +66,7 @@ public:
 
 class BndTestJ : public BndJacobianFunc {
 public:
-    explicit BndTestJ(TestBC * bc) : BndJacobianFunc(bc) {}
+    explicit BndTestJ(Ref<TestBC> bc) : BndJacobianFunc(bc) {}
 
     void
     evaluate(Scalar g[]) const override
@@ -99,8 +99,8 @@ TEST(WeakFormTest, test)
     FieldID fid(0);
     WeakForm wf;
     Label label;
-    wf.add(WeakForm::F0, label, 0, fid, 0, new TestF(&prob));
-    wf.add(WeakForm::G0, label, 0, fid, fid, 0, new TestJ(&prob));
+    wf.add(WeakForm::F0, label, 0, fid, 0, new TestF(ref(prob)));
+    wf.add(WeakForm::G0, label, 0, fid, fid, 0, new TestJ(ref(prob)));
     // bnd
     wf.add(WeakForm::BND_F0, label, 0, fid, 0, new BndTestF(bc));
     wf.add(WeakForm::BND_G0, label, 0, fid, fid, 0, new BndTestJ(bc));

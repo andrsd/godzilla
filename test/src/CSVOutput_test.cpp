@@ -25,8 +25,10 @@ public:
 
 TEST_F(CSVOutputTest, get_file_ext)
 {
+    auto prob = this->app->get_problem<GTestFENonlinearProblem>();
+
     auto params = this->app->make_parameters<CSVOutput>();
-    params.set<Problem *>("_problem", this->prob);
+    // params.set<Problem *>("_problem", prob);
     params.set<fs::path>("file", "asdf");
     CSVOutput out(params);
     out.create();
@@ -36,11 +38,13 @@ TEST_F(CSVOutputTest, get_file_ext)
 
 TEST_F(CSVOutputTest, create)
 {
+    auto prob = this->app->get_problem<GTestFENonlinearProblem>();
+
     auto params = this->app->make_parameters<CSVOutput>();
     params.set<fs::path>("file", "asdf");
     auto out = prob->add_output<TestCSVOutput>(params);
 
-    this->prob->create();
+    prob->create();
 
     auto pps_names = out->get_pps_names();
     EXPECT_EQ(pps_names.size(), 0);
@@ -61,15 +65,17 @@ TEST_F(CSVOutputTest, output)
         }
     };
 
+    auto prob = this->app->get_problem<GTestFENonlinearProblem>();
+
     auto pp_params = this->app->make_parameters<TestPostprocessor>();
     pp_params.set<String>("name", "pp");
-    this->prob->add_postprocessor<TestPostprocessor>(pp_params);
+    prob->add_postprocessor<TestPostprocessor>(pp_params);
 
     auto params = this->app->make_parameters<CSVOutput>();
     params.set<fs::path>("file", "out");
-    auto out = this->prob->add_output<TestCSVOutput>(params);
+    auto out = prob->add_output<TestCSVOutput>(params);
 
-    this->prob->create();
+    prob->create();
 
     auto pps_names = out->get_pps_names();
     EXPECT_EQ(pps_names.size(), 1);
@@ -95,12 +101,14 @@ TEST_F(CSVOutputTest, output)
 
 TEST_F(CSVOutputTest, set_file_name)
 {
+    auto prob = this->app->get_problem<GTestFENonlinearProblem>();
+
     auto params = this->app->make_parameters<CSVOutput>();
-    params.set<Problem *>("_problem", this->prob);
+    // params.set<Problem *>("_problem", this->prob);
     params.set<fs::path>("file", "asdf");
     CSVOutput out(params);
 
-    this->prob->create();
+    prob->create();
     out.create();
 
     EXPECT_EQ(out.get_file_name(), "asdf.csv");

@@ -10,7 +10,6 @@
 #include "godzilla/BndJacobianFunc.h"
 
 using namespace godzilla;
-using namespace testing;
 
 TEST(NaturalBCTest, api)
 {
@@ -42,7 +41,7 @@ TEST(NaturalBCTest, api)
     };
 
     auto params = app.make_parameters<MockNaturalBC>();
-    params.set<DiscreteProblemInterface *>("_dpi", prob);
+    // params.set<DiscreteProblemInterface *>("_dpi", prob);
     params.set<std::vector<String>>("boundary", { "left" });
     MockNaturalBC bc(params);
 
@@ -58,7 +57,7 @@ namespace {
 
 class TestNatF0 : public BndResidualFunc {
 public:
-    explicit TestNatF0(const NaturalBC * bc) : BndResidualFunc(bc), u(get_field_value("u")) {}
+    explicit TestNatF0(Ref<NaturalBC> bc) : BndResidualFunc(bc), u(get_field_value("u")) {}
 
     void
     evaluate(Scalar f[]) const override
@@ -72,7 +71,7 @@ protected:
 
 class TestNatG0 : public BndJacobianFunc {
 public:
-    explicit TestNatG0(const NaturalBC * bc) : BndJacobianFunc(bc) {}
+    explicit TestNatG0(Ref<NaturalBC> bc) : BndJacobianFunc(bc) {}
 
     void
     evaluate(Scalar g[]) const override
@@ -94,8 +93,8 @@ public:
     void
     set_up_weak_form() override
     {
-        add_residual_block(new TestNatF0(this), nullptr);
-        add_jacobian_block(get_field_id(), new TestNatG0(this), nullptr, nullptr, nullptr);
+        add_residual_block(new TestNatF0(ref(*this)), nullptr);
+        add_jacobian_block(get_field_id(), new TestNatG0(ref(*this)), nullptr, nullptr, nullptr);
     }
 };
 

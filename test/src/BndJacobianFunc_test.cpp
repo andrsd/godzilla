@@ -8,7 +8,6 @@
 #include "godzilla/Types.h"
 
 using namespace godzilla;
-using namespace testing;
 
 namespace {
 
@@ -48,7 +47,7 @@ protected:
 
 class TestJ : public BndJacobianFunc {
 public:
-    explicit TestJ(const TestBC * bc) :
+    explicit TestJ(Ref<TestBC> bc) :
         BndJacobianFunc(bc),
         dim(get_spatial_dimension()),
         u(get_field_value("u")),

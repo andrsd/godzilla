@@ -8,7 +8,7 @@ namespace {
 
 class TestLogging : public LoggingInterface {
 public:
-    TestLogging(Logger & logger) : LoggingInterface(&logger) {}
+    TestLogging(Logger & logger) : LoggingInterface(ref(logger)) {}
 
     void
     log(String msg)

@@ -8,7 +8,6 @@
 #include "godzilla/Types.h"
 
 using namespace godzilla;
-using namespace testing;
 
 namespace {
 
@@ -48,7 +47,7 @@ protected:
 
 class TestF : public BndResidualFunc {
 public:
-    explicit TestF(const TestBC * bc) :
+    explicit TestF(Ref<TestBC> bc) :
         BndResidualFunc(bc),
         dim(get_spatial_dimension()),
         u(get_field_value("u")),

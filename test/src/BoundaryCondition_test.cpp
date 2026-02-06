@@ -4,7 +4,7 @@
 #include "godzilla/Parameters.h"
 
 using namespace godzilla;
-using namespace testing;
+// using namespace testing;
 
 namespace {
 
@@ -30,16 +30,18 @@ public:
 
 TEST_F(BoundaryConditionTest, api)
 {
-    this->prob->create();
+    auto prob = this->app->get_problem<GTestFENonlinearProblem>();
+
+    prob->create();
 
     auto params = BoundaryCondition::parameters();
     params.set<App *>("app", this->app)
-        .set<DiscreteProblemInterface *>("_dpi", this->prob)
+        .set<Ref<DiscreteProblemInterface>>("_dpi", prob)
         .set<String>("name", "obj")
         .set<std::vector<String>>("boundary", { "side1" });
     MockBoundaryCondition bc(params);
     bc.create();
 
-    EXPECT_THAT(bc.get_boundary(), ElementsAre("side1"));
+    EXPECT_THAT(bc.get_boundary(), testing::ElementsAre("side1"));
     EXPECT_THAT(bc.get_dimension(), 1_D);
 }

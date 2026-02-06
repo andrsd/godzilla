@@ -28,7 +28,7 @@ public:
             pars.set<godzilla::App *>("app", this->app)
                 .set<godzilla::String>("_type", "GTestFENonlinearProblem")
                 .set<godzilla::Mesh *>("mesh", this->mesh.get());
-            this->prob = this->app->make_problem<GTestFENonlinearProblem>(pars);
+            this->app->make_problem<GTestFENonlinearProblem>(pars);
         }
     }
 
@@ -39,7 +39,6 @@ public:
     }
 
     godzilla::Qtr<godzilla::Mesh> mesh;
-    godzilla::Ref<GTestFENonlinearProblem> prob;
 };
 
 class FENonlinear2FieldProblemTest : public GodzillaAppTest {
@@ -62,7 +61,7 @@ public:
             pars.set<godzilla::App *>("app", this->app)
                 .set<godzilla::String>("_type", "GTest2FieldsFENonlinearProblem")
                 .set<godzilla::Mesh *>("mesh", this->mesh.get());
-            this->prob = this->app->make_problem<GTest2FieldsFENonlinearProblem>(pars);
+            this->app->make_problem<GTest2FieldsFENonlinearProblem>(pars);
         }
     }
 
@@ -73,5 +72,4 @@ public:
     }
 
     godzilla::Qtr<godzilla::Mesh> mesh;
-    godzilla::Ref<GTest2FieldsFENonlinearProblem> prob;
 };

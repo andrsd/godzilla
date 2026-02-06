@@ -94,8 +94,9 @@ TEST(ProblemTest, add_pp)
     out_params.set<Int>("interval", 1);
     auto out = problem.add_output<TestOutput>(out_params);
 
-    EXPECT_EQ(problem.get_postprocessor("pp"), pp);
-    EXPECT_EQ(problem.get_postprocessor("asdf"), nullptr);
+    EXPECT_EQ(problem.get_postprocessor("pp").value(), pp);
+    EXPECT_FALSE(problem.get_postprocessor("asdf").has_value());
+    EXPECT_EQ(problem.get_postprocessor("asdf").error(), ErrorCode::NotFound);
 
     auto & pps_names = problem.get_postprocessor_names();
     EXPECT_EQ(pps_names.size(), 1);

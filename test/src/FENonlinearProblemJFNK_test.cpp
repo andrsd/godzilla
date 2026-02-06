@@ -32,7 +32,7 @@ protected:
 
 class F0 : public ResidualFunc {
 public:
-    explicit F0(GTestFENonlinearProblemJFNK * prob) : ResidualFunc(prob) {}
+    explicit F0(Ref<GTestFENonlinearProblemJFNK> prob) : ResidualFunc(prob) {}
 
     void
     evaluate(Scalar f[]) const override
@@ -43,7 +43,7 @@ public:
 
 class F1 : public ResidualFunc {
 public:
-    explicit F1(GTestFENonlinearProblemJFNK * prob) :
+    explicit F1(Ref<GTestFENonlinearProblemJFNK> prob) :
         ResidualFunc(prob),
         dim(get_spatial_dimension()),
         u_x(get_field_gradient("u"))
@@ -64,7 +64,7 @@ protected:
 
 class G3 : public JacobianFunc {
 public:
-    explicit G3(GTestFENonlinearProblemJFNK * prob) :
+    explicit G3(Ref<GTestFENonlinearProblemJFNK> prob) :
         JacobianFunc(prob),
         dim(get_spatial_dimension())
     {
@@ -96,8 +96,13 @@ GTestFENonlinearProblemJFNK::set_up_fields()
 void
 GTestFENonlinearProblemJFNK::set_up_weak_form()
 {
-    add_residual_block(this->iu, new F0(this), new F1(this));
-    add_jacobian_preconditioner_block(this->iu, this->iu, nullptr, nullptr, nullptr, new G3(this));
+    add_residual_block(this->iu, new F0(ref(*this)), new F1(ref(*this)));
+    add_jacobian_preconditioner_block(this->iu,
+                                      this->iu,
+                                      nullptr,
+                                      nullptr,
+                                      nullptr,
+                                      new G3(ref(*this)));
 }
 
 void

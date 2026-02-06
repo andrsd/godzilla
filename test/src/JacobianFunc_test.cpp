@@ -7,7 +7,6 @@
 #include "godzilla/Types.h"
 
 using namespace godzilla;
-using namespace testing;
 
 namespace {
 
@@ -30,7 +29,7 @@ protected:
 
 class TestJ : public JacobianFunc {
 public:
-    explicit TestJ(GTestProblem * prob) :
+    explicit TestJ(Ref<GTestProblem> prob) :
         JacobianFunc(prob),
         dim(get_spatial_dimension()),
         u(get_field_value("u")),
@@ -75,5 +74,5 @@ TEST(JacobianFuncTest, test)
 
     prob.create();
 
-    TestJ jac(&prob);
+    TestJ jac(ref(prob));
 }

@@ -10,7 +10,7 @@ namespace {
 
 class F0 : public ResidualFunc {
 public:
-    explicit F0(GTestImplicitFENonlinearProblem * prob) :
+    explicit F0(Ref<GTestImplicitFENonlinearProblem> prob) :
         ResidualFunc(prob),
         u_t(get_field_dot("u"))
     {
@@ -28,7 +28,7 @@ protected:
 
 class F1 : public ResidualFunc {
 public:
-    explicit F1(GTestImplicitFENonlinearProblem * prob) :
+    explicit F1(Ref<GTestImplicitFENonlinearProblem> prob) :
         ResidualFunc(prob),
         dim(get_spatial_dimension()),
         u_x(get_field_gradient("u"))
@@ -49,7 +49,7 @@ protected:
 
 class G0 : public JacobianFunc {
 public:
-    explicit G0(GTestImplicitFENonlinearProblem * prob) :
+    explicit G0(Ref<GTestImplicitFENonlinearProblem> prob) :
         JacobianFunc(prob),
         u_t_shift(get_time_shift())
     {
@@ -67,7 +67,7 @@ protected:
 
 class G3 : public JacobianFunc {
 public:
-    explicit G3(GTestImplicitFENonlinearProblem * prob) :
+    explicit G3(Ref<GTestImplicitFENonlinearProblem> prob) :
         JacobianFunc(prob),
         dim(get_spatial_dimension())
     {
@@ -108,6 +108,11 @@ GTestImplicitFENonlinearProblem::set_up_fields()
 void
 GTestImplicitFENonlinearProblem::set_up_weak_form()
 {
-    add_residual_block(this->iu, new F0(this), new F1(this));
-    add_jacobian_block(this->iu, this->iu, new G0(this), nullptr, nullptr, new G3(this));
+    add_residual_block(this->iu, new F0(ref(*this)), new F1(ref(*this)));
+    add_jacobian_block(this->iu,
+                       this->iu,
+                       new G0(ref(*this)),
+                       nullptr,
+                       nullptr,
+                       new G3(ref(*this)));
 }

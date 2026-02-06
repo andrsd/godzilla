@@ -1,5 +1,6 @@
 #include <gmock/gmock.h>
 #include "godzilla/Ref.h"
+#include "godzilla/Qtr.h"
 
 using namespace godzilla;
 
@@ -44,4 +45,22 @@ TEST(RefTest, test_cref)
         copy.push_back(a);
     EXPECT_EQ(*copy[0], 1);
     EXPECT_EQ(*copy[1], 2);
+}
+
+TEST(RefTest, compare)
+{
+    class Base {
+    public:
+        int i;
+    };
+
+    class Derived : public Base {
+    public:
+        double d;
+    };
+
+    auto ptr = Qtr<Derived>::alloc();
+    auto d = Ref<Derived>(*ptr);
+    auto b = Ref<Base>(*ptr);
+    EXPECT_TRUE(b == d);
 }
