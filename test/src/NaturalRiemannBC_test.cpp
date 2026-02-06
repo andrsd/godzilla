@@ -7,7 +7,6 @@
 #include "TestApp.h"
 
 using namespace godzilla;
-using namespace testing;
 
 namespace {
 
@@ -76,7 +75,7 @@ TEST(NaturalRiemannBCTest, api)
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = app.make_parameters<TestExplicitFVLinearProblem>();
-    prob_pars.set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     prob_pars.set<Real>("start_time", 0.);
     prob_pars.set<Real>("end_time", 1e-3);
     prob_pars.set<Real>("dt", 1e-3);

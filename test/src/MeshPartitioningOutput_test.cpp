@@ -47,7 +47,7 @@ TEST(MeshPartitioningOutputTest, get_file_ext)
 
     auto prob_params = TestProblem::parameters();
     prob_params.set<App *>("app", &app);
-    prob_params.set<Mesh *>("mesh", mesh.get());
+    prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     TestProblem prob(prob_params);
 
     auto params = MeshPartitioningOutput::parameters();
@@ -73,7 +73,7 @@ TEST(MeshPartitioningOutputTest, output)
 
     auto prob_params = TestProblem::parameters();
     prob_params.set<App *>("app", &app);
-    prob_params.set<Mesh *>("mesh", mesh.get());
+    prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     TestProblem prob(prob_params);
 
     auto params = MeshPartitioningOutput::parameters();

@@ -169,7 +169,7 @@ TEST(NeumannProblemTest, solve)
     auto mesh = MeshFactory::create<RectangleMesh>(mesh_params);
 
     auto prob_params = app.make_parameters<TestNeumannProblem>();
-    prob_params.set<Mesh *>("mesh", mesh.get());
+    prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     auto prob = app.make_problem<TestNeumannProblem>(prob_params);
 
     auto bc_left_pars = TestNeumannBC::parameters();

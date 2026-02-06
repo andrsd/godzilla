@@ -27,7 +27,7 @@ public:
             pars.set<godzilla::App *>("app", this->app)
                 // FIXME: after app creates params and not pointers
                 .set<String>("_type", "GTestImplicitFENonlinearProblem")
-                .set<Mesh *>("mesh", mesh.get())
+                .set<Ref<Mesh>>("mesh", ref(*mesh))
                 .set<Real>("start_time", 0.)
                 .set<Real>("end_time", 20)
                 .set<Real>("dt", 5);

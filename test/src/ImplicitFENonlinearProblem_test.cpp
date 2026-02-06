@@ -71,7 +71,7 @@ TEST_F(ImplicitFENonlinearProblemTest, wrong_scheme)
 {
     auto params = this->app->make_parameters<GTestImplicitFENonlinearProblem>();
     params.set<godzilla::App *>("app", this->app);
-    params.set<Mesh *>("mesh", this->mesh.get());
+    params.set<Ref<Mesh>>("mesh", ref(*this->mesh));
     params.set<Real>("start_time", 0.);
     params.set<Real>("end_time", 20);
     params.set<Real>("dt", 5);
@@ -86,7 +86,7 @@ TEST_F(ImplicitFENonlinearProblemTest, wrong_time_stepping_params)
     auto params = this->app->make_parameters<GTestImplicitFENonlinearProblem>();
     params.set<godzilla::App *>("app", this->app);
     params.set<String>("name", "prob");
-    params.set<Mesh *>("mesh", this->mesh.get());
+    params.set<Ref<Mesh>>("mesh", ref(*this->mesh));
     params.set<Real>("start_time", 0.);
     params.set<Int>("num_steps", 2);
     params.set<Real>("end_time", 20);
@@ -102,7 +102,7 @@ TEST_F(ImplicitFENonlinearProblemTest, no_time_stepping_params)
     auto params = this->app->make_parameters<GTestImplicitFENonlinearProblem>();
     params.set<godzilla::App *>("app", this->app);
     params.set<String>("name", "prob");
-    params.set<Mesh *>("mesh", this->mesh.get());
+    params.set<Ref<Mesh>>("mesh", ref(*this->mesh));
     params.set<Real>("start_time", 0.);
     params.set<Real>("dt", 5);
     params.set<String>("scheme", "beuler");

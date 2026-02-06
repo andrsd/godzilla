@@ -86,7 +86,7 @@ TEST(BndResidualFuncTest, test)
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = app.make_parameters<GTestProblem>();
-    prob_pars.set<Mesh *>("mesh", mesh.get())
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh))
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 20)
         .set<Real>("dt", 5);

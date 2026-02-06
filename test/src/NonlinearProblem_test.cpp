@@ -97,7 +97,7 @@ TEST(NonlinearProblemTest, initial_guess)
 
     auto prob_pars = G1DTestNonlinearProblem::parameters();
     prob_pars.set<App *>("app", &app);
-    prob_pars.set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     G1DTestNonlinearProblem prob(prob_pars);
     prob.create();
     prob.call_initial_guess();
@@ -119,7 +119,7 @@ TEST(NonlinearProblemTest, solve)
 
     auto prob_pars = G1DTestNonlinearProblem::parameters();
     prob_pars.set<App *>("app", &app);
-    prob_pars.set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     G1DTestNonlinearProblem prob(prob_pars);
 
     prob.create();
@@ -181,7 +181,7 @@ TEST(NonlinearProblemTest, run)
 
     auto prob_pars = NonlinearProblem::parameters();
     prob_pars.set<App *>("app", &app);
-    prob_pars.set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     MockNonlinearProblem prob(prob_pars);
     prob.create();
 
@@ -216,7 +216,7 @@ TEST(NonlinearProblemTest, line_search_type)
     for (auto & lst : ls_type) {
         auto prob_pars = NonlinearProblem::parameters();
         prob_pars.set<App *>("app", &app);
-        prob_pars.set<Mesh *>("mesh", mesh.get());
+        prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
         prob_pars.set<String>("line_search", lst);
         MockNonlinearProblem prob(prob_pars);
         prob.create();
@@ -246,7 +246,7 @@ TEST(NonlinearProblemTest, invalid_line_search_type)
 
     auto prob_pars = NonlinearProblem::parameters();
     prob_pars.set<App *>("app", &app);
-    prob_pars.set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     prob_pars.set<String>("line_search", "asdf");
 
     EXPECT_DEATH(MockNonlinearProblem prob(prob_pars),
@@ -265,7 +265,7 @@ TEST(NonlinearProblemTest, restart_file)
 
     auto prob_pars = G1DTestNonlinearProblem::parameters();
     prob_pars.set<App *>("app", &app);
-    prob_pars.set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     G1DTestNonlinearProblem prob(prob_pars);
 
     auto ro_pars = RestartOutput::parameters();

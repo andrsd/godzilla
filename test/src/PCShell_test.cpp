@@ -90,7 +90,7 @@ TEST(PCShellTest, run)
 
     auto prob_pars = LinearProblem::parameters();
     prob_pars.set<App *>("app", &app);
-    prob_pars.set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     CustomLinearProblem prob(prob_pars);
 
     prob.create();

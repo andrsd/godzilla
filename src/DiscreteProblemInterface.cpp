@@ -23,7 +23,7 @@ namespace godzilla {
 
 DiscreteProblemInterface::DiscreteProblemInterface(Problem & problem, const Parameters & pars) :
     problem(problem),
-    unstr_mesh(dynamic_ref_cast<UnstructuredMesh>(Ref<Mesh>(*pars.get<Mesh *>("mesh")))),
+    unstr_mesh(dynamic_ref_cast<UnstructuredMesh>(pars.get<Ref<Mesh>>("mesh"))),
     ds(nullptr),
     dm_aux(nullptr),
     ds_aux(nullptr)

@@ -19,7 +19,7 @@ TEST(ConstantAuxiliaryFieldTest, create)
 
     auto prob_params = GTestFENonlinearProblem::parameters();
     prob_params.set<App *>("app", &app);
-    prob_params.set<Mesh *>("mesh", mesh.get());
+    prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_params);
 
     prob.set_aux_field(FieldID(0), "aux1", 1, Order(1));

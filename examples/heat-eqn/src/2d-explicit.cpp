@@ -59,7 +59,7 @@ main(int argc, char * argv[])
         auto mesh = MeshFactory::create<RectangleMesh>(mesh_pars);
 
         auto prob_pars = app.make_parameters<HeatEquationExplicit>();
-        prob_pars.set<Mesh *>("mesh", mesh.get())
+        prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh))
             .set<Real>("start_time", 0.)
             .set<Real>("end_time", 5e-3)
             .set<Real>("dt", 1e-3)

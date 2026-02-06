@@ -64,7 +64,7 @@ main(int argc, char * argv[])
         auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
         auto prob_pars = app.make_parameters<HeatEquationProblem>();
-        prob_pars.set<Mesh *>("mesh", mesh.get())
+        prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh))
             .set<Real>("start_time", 0.)
             .set<Real>("end_time", 1)
             .set<Real>("dt", 0.5)

@@ -66,7 +66,7 @@ TEST(JacobianFuncTest, test)
 
     auto prob_pars = GTestProblem::parameters();
     prob_pars.set<App *>("app", &app);
-    prob_pars.set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     prob_pars.set<Real>("start_time", 0.);
     prob_pars.set<Real>("end_time", 20);
     prob_pars.set<Real>("dt", 5);

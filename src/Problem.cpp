@@ -33,14 +33,15 @@ Parameters
 Problem::parameters()
 {
     auto params = Object::parameters();
-    params.add_param<Mesh *>("mesh", nullptr, "Mesh to be used");
+    params.add_param<LateRef<Mesh>>("mesh", "Mesh to be used");
     return params;
 }
 
 Problem::Problem(const Parameters & pars) :
     Object(pars),
     PrintInterface(this),
-    mesh(pars.get<Mesh *>("mesh")),
+    mesh(pars.is_param_valid("mesh") ? pars.get<Ref<Mesh>>("mesh")
+                                     : Optional<Ref<Mesh>>(std::nullopt)),
     partitioner(nullptr),
     partition_overlap(0),
     default_output_on()
@@ -53,8 +54,7 @@ DM
 Problem::get_dm() const
 {
     CALL_STACK_MSG();
-    expect_true(this->mesh != nullptr, "Mesh is null");
-    return this->mesh->get_dm();
+    return this->mesh.value()->get_dm();
 }
 
 const Vector &

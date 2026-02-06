@@ -45,12 +45,11 @@ TEST(VTKOutputTest, test)
 
     auto prob_pars = TestProblem::parameters();
     prob_pars.set<App *>("app", &app);
-    prob_pars.set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     TestProblem prob(prob_pars);
 
     auto pars = VTKOutput::parameters();
     pars.set<App *>("app", &app);
-    pars.set<Mesh *>("mesh", mesh.get());
     pars.set<fs::path>("file", "file");
     auto out = prob.add_output<VTKOutput>(pars);
 

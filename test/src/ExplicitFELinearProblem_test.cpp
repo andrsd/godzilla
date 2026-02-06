@@ -114,7 +114,7 @@ TEST(ExplicitFELinearProblemTest, test_mass_matrix)
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = app.make_parameters<TestExplicitFELinearProblem>();
-    prob_pars.set<Mesh *>("mesh", mesh.get())
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh))
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3);
@@ -160,7 +160,7 @@ TEST(ExplicitFELinearProblemTest, test_lumped_mass_matrix)
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = app.make_parameters<TestExplicitFELinearProblem>();
-    prob_pars.set<Mesh *>("mesh", mesh.get())
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh))
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3);
@@ -184,7 +184,7 @@ TEST(ExplicitFELinearProblemTest, solve)
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = app.make_parameters<TestExplicitFELinearProblem>();
-    prob_pars.set<Mesh *>("mesh", mesh.get())
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh))
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3);
@@ -231,7 +231,7 @@ TEST(ExplicitFELinearProblemTest, solve_w_lumped_mass_matrix)
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = app.make_parameters<TestExplicitFELinearProblem>();
-    prob_pars.set<Mesh *>("mesh", mesh.get())
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh))
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3);
@@ -278,7 +278,7 @@ TEST(ExplicitFELinearProblemTest, allocate_mass_matrix)
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = app.make_parameters<TestExplicitFELinearProblem>();
-    prob_pars.set<Mesh *>("mesh", mesh.get())
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh))
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3);
@@ -301,7 +301,7 @@ TEST(ExplicitFELinearProblemTest, allocate_lumped_mass_matrix)
 
     auto prob_pars = app.make_parameters<TestExplicitFELinearProblem>();
     prob_pars.set<App *>("app", &app)
-        .set<Mesh *>("mesh", mesh.get())
+        .set<Ref<Mesh>>("mesh", ref(*mesh))
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3);

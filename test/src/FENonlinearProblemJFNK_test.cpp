@@ -143,7 +143,7 @@ TEST(FENonlinearProblemJFNKTest, solve)
 
     auto prob_params = app.make_parameters<GTestFENonlinearProblemJFNK>();
     prob_params.set<godzilla::App *>("app", &app);
-    prob_params.set<Mesh *>("mesh", mesh.get());
+    prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     auto prob = app.make_problem<GTestFENonlinearProblemJFNK>(prob_params);
 
     auto ic_params = ConstantInitialCondition::parameters();

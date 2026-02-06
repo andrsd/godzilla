@@ -61,7 +61,7 @@ TEST(ValueFunctional, DISABLED_eval)
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
     prob_pars.set<App *>("app", &app);
-    prob_pars.set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_pars);
 
     prob.create();

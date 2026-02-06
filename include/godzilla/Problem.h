@@ -294,7 +294,7 @@ private:
     void output_monitor(String file_name) const;
 
     /// Mesh
-    Mesh * mesh;
+    Optional<Ref<Mesh>> mesh;
 
     /// Mesh partitioner
     Partitioner partitioner;

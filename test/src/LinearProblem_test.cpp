@@ -67,7 +67,7 @@ TEST(LinearProblemTest, run)
 
     auto prob_pars = LinearProblem::parameters();
     prob_pars.set<App *>("app", &app);
-    prob_pars.set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     prob_pars.set<String>("ksp_type", KSPCG);
     CustomLinearProblem prob(prob_pars);
 
@@ -95,7 +95,7 @@ TEST(LinearProblemTest, restart_file)
 
     auto prob_pars = LinearProblem::parameters();
     prob_pars.set<App *>("app", &app);
-    prob_pars.set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     prob_pars.set<String>("ksp_type", KSPCG);
     CustomLinearProblem prob(prob_pars);
 

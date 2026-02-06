@@ -9,7 +9,6 @@
 #include "godzilla/EssentialBC.h"
 
 using namespace godzilla;
-using namespace testing;
 
 namespace {
 
@@ -52,7 +51,7 @@ TEST(EssentialBCTest, test)
     auto mesh = MeshFactory::create<BoxMesh>(mesh_pars);
 
     auto prob_pars = app.make_parameters<GTestFENonlinearProblem>();
-    prob_pars.set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     auto problem = app.make_problem<GTestFENonlinearProblem>(prob_pars);
 
     auto params = app.make_parameters<DirichletBC>();
@@ -86,7 +85,7 @@ TEST(EssentialBCTest, non_existing_field)
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = app.make_parameters<GTest2FieldsFENonlinearProblem>();
-    prob_pars.set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     auto problem = app.make_problem<GTest2FieldsFENonlinearProblem>(prob_pars);
 
     auto params = app.make_parameters<DirichletBC>();
@@ -106,7 +105,7 @@ TEST(EssentialBCTest, field_param_not_specified)
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = app.make_parameters<GTest2FieldsFENonlinearProblem>();
-    prob_pars.set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     auto problem = app.make_problem<GTest2FieldsFENonlinearProblem>(prob_pars);
 
     auto params = app.make_parameters<DirichletBC>();

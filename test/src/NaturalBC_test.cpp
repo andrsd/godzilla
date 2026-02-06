@@ -21,7 +21,7 @@ TEST(NaturalBCTest, api)
     auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = app.make_parameters<GTestFENonlinearProblem>();
-    prob_params.set<Mesh *>("mesh", mesh.get());
+    prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     auto prob = app.make_problem<GTestFENonlinearProblem>(prob_params);
 
     class MockNaturalBC : public NaturalBC {
@@ -110,7 +110,7 @@ TEST(NaturalBCTest, fe)
     auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = app.make_parameters<GTest2FieldsFENonlinearProblem>();
-    prob_params.set<Mesh *>("mesh", mesh.get());
+    prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     auto prob = app.make_problem<GTest2FieldsFENonlinearProblem>(prob_params);
 
     auto bc_params = TestNaturalBC::parameters();
@@ -153,7 +153,7 @@ TEST(NaturalBCTest, non_existing_field)
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = app.make_parameters<GTest2FieldsFENonlinearProblem>();
-    prob_pars.set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     auto problem = app.make_problem<GTest2FieldsFENonlinearProblem>(prob_pars);
 
     auto params = TestNaturalBC::parameters();
@@ -175,7 +175,7 @@ TEST(NaturalBCTest, field_param_not_specified)
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = app.make_parameters<GTest2FieldsFENonlinearProblem>();
-    prob_pars.set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     auto problem = app.make_problem<GTest2FieldsFENonlinearProblem>(prob_pars);
 
     auto params = app.make_parameters<TestNaturalBC>();

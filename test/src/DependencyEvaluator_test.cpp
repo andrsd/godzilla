@@ -82,7 +82,7 @@ TEST(DependencyEvaluator, DISABLED_create_functional)
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
     prob_pars.set<Ref<App>>("app", ref(app));
-    prob_pars.set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_pars);
 
     prob.create();
@@ -106,7 +106,7 @@ TEST(DependencyEvaluator, DISABLED_create_existing_functional)
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
     prob_pars.set<Ref<App>>("app", ref(app));
-    prob_pars.set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_pars);
 
     prob.create();
@@ -130,7 +130,7 @@ TEST(DependencyEvaluator, DISABLED_get_non_existent_functional)
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
     prob_pars.set<Ref<App>>("app", ref(app));
-    prob_pars.set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_pars);
 
     prob.create();
@@ -149,7 +149,7 @@ TEST(DependencyEvaluator, DISABLED_eval)
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
     prob_pars.set<Ref<App>>("app", ref(app));
-    prob_pars.set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_pars);
 
     prob.create();
@@ -192,7 +192,7 @@ TEST(DependencyEvaluator, DISABLED_redeclare_a_value)
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
     prob_pars.set<Ref<App>>("app", ref(app));
-    prob_pars.set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_pars);
 
     prob.create();
@@ -215,7 +215,7 @@ TEST(DependencyEvaluator, DISABLED_get_suppliers)
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
     prob_pars.set<Ref<App>>("app", ref(app));
-    prob_pars.set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_pars);
 
     prob.create();
@@ -249,7 +249,7 @@ TEST(DependencyEvaluator, DISABLED_build_dep_graph)
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
     prob_pars.set<Ref<App>>("app", ref(app));
-    prob_pars.set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_pars);
 
     prob.create();

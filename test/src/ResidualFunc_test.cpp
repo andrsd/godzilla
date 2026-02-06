@@ -63,7 +63,7 @@ TEST(ResidualFuncTest, test)
 
     auto prob_pars = GTestProblem::parameters();
     prob_pars.set<App *>("app", &app)
-        .set<Mesh *>("mesh", mesh.get())
+        .set<Ref<Mesh>>("mesh", ref(*mesh))
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 20)
         .set<Real>("dt", 5);
@@ -132,7 +132,7 @@ TEST(ResidualFuncTest, test_vals)
 
     auto prob_pars = GTestProblem::parameters();
     prob_pars.set<App *>("app", &app)
-        .set<Mesh *>("mesh", mesh.get())
+        .set<Ref<Mesh>>("mesh", ref(*mesh))
         .set<Real>("start_time", 1.23)
         .set<Real>("end_time", 20)
         .set<Real>("dt", 5);

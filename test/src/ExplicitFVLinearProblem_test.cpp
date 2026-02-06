@@ -11,7 +11,6 @@
 #include "ExceptionTestMacros.h"
 
 using namespace godzilla;
-using namespace testing;
 
 namespace {
 
@@ -125,7 +124,7 @@ TEST(ExplicitFVLinearProblemTest, api)
 #endif
 
     auto prob_pars = app.make_parameters<TestExplicitFVLinearProblem>();
-    prob_pars.set<Mesh *>("mesh", mesh.get())
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh))
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3);
@@ -167,7 +166,7 @@ TEST(ExplicitFVLinearProblemTest, api)
                      "Unable to set component name for single-component field");
 
     EXPECT_EQ(prob->get_num_aux_fields(), 2);
-    EXPECT_THAT(prob->get_aux_field_names(), ElementsAre("a0", "a1"));
+    EXPECT_THAT(prob->get_aux_field_names(), testing::ElementsAre("a0", "a1"));
     EXPECT_EQ(prob->get_aux_field_name(FieldID(0)).value(), "a0");
     EXPECT_EQ(prob->get_aux_field_name(FieldID(1)).value(), "a1");
     ASSERT_FALSE(prob->get_aux_field_name(FieldID(99)).has_value());
@@ -221,7 +220,7 @@ TEST(ExplicitFVLinearProblemTest, fields)
 #endif
 
     auto prob_pars = app.make_parameters<TestExplicitFVLinearProblem>();
-    prob_pars.set<Mesh *>("mesh", mesh.get())
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh))
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3);
@@ -270,7 +269,7 @@ TEST(ExplicitFVLinearProblemTest, test_mass_matrix)
 #endif
 
     auto prob_pars = app.make_parameters<TestExplicitFVLinearProblem>();
-    prob_pars.set<Mesh *>("mesh", mesh.get())
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh))
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3);
@@ -301,7 +300,7 @@ TEST(ExplicitFVLinearProblemTest, solve)
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = app.make_parameters<TestExplicitFVLinearProblem>();
-    prob_pars.set<Mesh *>("mesh", mesh.get())
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh))
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3);
@@ -363,7 +362,7 @@ TEST(ExplicitFVLinearProblemTest, set_schemes)
 #endif
 
     auto prob_pars = app.make_parameters<TestExplicitFVLinearProblem>();
-    prob_pars.set<Mesh *>("mesh", mesh.get())
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh))
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3);

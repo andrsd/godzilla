@@ -13,7 +13,6 @@
 #include "ExceptionTestMacros.h"
 #include "petscvec.h"
 
-using namespace ::testing;
 using namespace godzilla;
 
 namespace {
@@ -266,7 +265,7 @@ TEST(TwoFieldFENonlinearProblemTest, err_duplicate_ics)
 
     auto prob_params = GTest2FieldsFENonlinearProblem::parameters();
     prob_params.set<App *>("app", &app);
-    prob_params.set<Mesh *>("mesh", mesh.get());
+    prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTest2FieldsFENonlinearProblem prob(prob_params);
 
     auto ic1_params = ConstantInitialCondition::parameters();
@@ -299,7 +298,7 @@ TEST(TwoFieldFENonlinearProblemTest, err_not_enough_ics)
 
     auto prob_params = GTest2FieldsFENonlinearProblem::parameters();
     prob_params.set<App *>("app", &app);
-    prob_params.set<Mesh *>("mesh", mesh.get());
+    prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTest2FieldsFENonlinearProblem prob(prob_params);
 
     auto ic_params = ConstantInitialCondition::parameters();
@@ -338,7 +337,7 @@ TEST(TwoFieldFENonlinearProblemTest, field_decomposition)
 
     auto prob_params = GTest2FieldsFENonlinearProblem::parameters();
     prob_params.set<App *>("app", &app);
-    prob_params.set<Mesh *>("mesh", mesh.get());
+    prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTest2FieldsFENonlinearProblem prob(prob_params);
 
     prob.create();
@@ -351,13 +350,13 @@ TEST(TwoFieldFENonlinearProblemTest, field_decomposition)
     {
         auto f0_idxs = fdecomp.is[0].borrow_indices();
         auto idx0 = to_std_vector(f0_idxs);
-        EXPECT_THAT(idx0, ElementsAre(0, 2, 4));
+        EXPECT_THAT(idx0, testing::ElementsAre(0, 2, 4));
     }
 
     {
         auto f1_idxs = fdecomp.is[1].borrow_indices();
         auto idx1 = to_std_vector(f1_idxs);
-        EXPECT_THAT(idx1, ElementsAre(1, 3, 5));
+        EXPECT_THAT(idx1, testing::ElementsAre(1, 3, 5));
     }
 
     fdecomp.destroy();

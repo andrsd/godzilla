@@ -5,7 +5,6 @@
 #include "godzilla/LineMesh.h"
 #include "GTestImplicitFENonlinearProblem.h"
 
-using namespace testing;
 using namespace godzilla;
 
 TEST(TimeStepAdapt, test)
@@ -18,7 +17,7 @@ TEST(TimeStepAdapt, test)
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_param = GTestImplicitFENonlinearProblem::parameters();
-    prob_param.set<Mesh *>("mesh", mesh.get());
+    prob_param.set<Ref<Mesh>>("mesh", ref(*mesh));
     prob_param.set<godzilla::App *>("app", &app);
     prob_param.set<Real>("start_time", 0.);
     prob_param.set<Real>("end_time", 20);
