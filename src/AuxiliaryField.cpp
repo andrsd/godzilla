@@ -4,6 +4,7 @@
 #include "godzilla/AuxiliaryField.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/Exception.h"
+#include "godzilla/Ref.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Problem.h"
 #include "godzilla/DiscreteProblemInterface.h"
@@ -14,7 +15,7 @@ Parameters
 AuxiliaryField::parameters()
 {
     auto params = Object::parameters();
-    params.add_private_param<DiscreteProblemInterface *>("_dpi")
+    params.add_private_param<LateRef<DiscreteProblemInterface>>("_dpi")
         .add_param<String>("field", "", "Name of the field.")
         .add_param<String>("region", "", "Label name where this auxiliary field is defined.");
     return params;
@@ -23,7 +24,7 @@ AuxiliaryField::parameters()
 AuxiliaryField::AuxiliaryField(const Parameters & pars) :
     Object(pars),
     PrintInterface(this),
-    dpi(pars.get<DiscreteProblemInterface *>("_dpi")),
+    dpi(pars.get<Ref<DiscreteProblemInterface>>("_dpi")),
     mesh(this->dpi->get_mesh()),
     field(pars.get<String>("field")),
     fid(FieldID::INVALID),

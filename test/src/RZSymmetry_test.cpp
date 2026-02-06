@@ -26,7 +26,7 @@ TEST(RZSymmetryTest, check_dim)
 
     auto params = RZSymmetry::parameters();
     params.set<Ref<App>>("app", ref(app));
-    params.set<DiscreteProblemInterface *>("_dpi", &prob);
+    params.set<Ref<DiscreteProblemInterface>>("_dpi", ref(prob));
     params.set<std::vector<Real>>("point", { 0. });
     params.set<std::vector<Real>>("axis", { 1. });
     RZSymmetry rz(params);
@@ -53,7 +53,7 @@ TEST(RZSymmetryTest, check_compatible)
 
     auto params = RZSymmetry::parameters();
     params.set<Ref<App>>("app", ref(app));
-    params.set<DiscreteProblemInterface *>("_dpi", &prob);
+    params.set<Ref<DiscreteProblemInterface>>("_dpi", ref(prob));
     params.set<std::vector<Real>>("point", { 0. });
     params.set<std::vector<Real>>("axis", { 1. });
     RZSymmetry rz(params);
@@ -80,7 +80,7 @@ TEST(RZSymmetryTest, evaluate)
 
     auto params = RZSymmetry::parameters();
     params.set<Ref<App>>("app", ref(app));
-    params.set<DiscreteProblemInterface *>("_dpi", &prob);
+    params.set<Ref<DiscreteProblemInterface>>("_dpi", ref(prob));
     params.set<std::vector<Real>>("point", { 1., 1. });
     params.set<std::vector<Real>>("axis", { 1., 0. });
     RZSymmetry rz(params);

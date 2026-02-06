@@ -11,7 +11,7 @@ Parameters
 RZSymmetry::parameters()
 {
     auto params = Object::parameters();
-    params.add_private_param<DiscreteProblemInterface *>("_dpi")
+    params.add_private_param<LateRef<DiscreteProblemInterface>>("_dpi")
         .add_required_param<std::vector<Real>>("axis", "Axis vector")
         .add_param<std::vector<Real>>("point",
                                       std::vector<Real>({ 0, 0 }),
@@ -21,7 +21,7 @@ RZSymmetry::parameters()
 
 RZSymmetry::RZSymmetry(const Parameters & pars) :
     Object(pars),
-    dpi(pars.get<DiscreteProblemInterface *>("_dpi")),
+    dpi(pars.get<Ref<DiscreteProblemInterface>>("_dpi")),
     axis(pars.get<std::vector<Real>>("axis")),
     pt(pars.get<std::vector<Real>>("point"))
 {

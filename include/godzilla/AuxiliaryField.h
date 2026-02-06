@@ -80,7 +80,7 @@ protected:
 
 private:
     /// Discrete problem this object is part of
-    DiscreteProblemInterface * dpi;
+    Ref<DiscreteProblemInterface> dpi;
     /// Unstructured mesh this field is defined on
     Ref<UnstructuredMesh> mesh;
     /// Field name

@@ -26,7 +26,7 @@ TEST(ConstantAuxiliaryFieldTest, create)
     auto aux_params = ConstantAuxiliaryField::parameters();
     aux_params.set<Ref<App>>("app", ref(app))
         .set<String>("name", "aux1")
-        .set<DiscreteProblemInterface *>("_dpi", &prob)
+        .set<Ref<DiscreteProblemInterface>>("_dpi", ref(prob))
         .set<std::vector<Real>>("value", { 1234 });
     auto aux = prob.add_auxiliary_field<ConstantAuxiliaryField>(aux_params);
 

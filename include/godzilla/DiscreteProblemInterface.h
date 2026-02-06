@@ -512,7 +512,7 @@ Ref<T>
 DiscreteProblemInterface::add_boundary_condition(Parameters & pars)
 {
     CALL_STACK_MSG();
-    pars.set<DiscreteProblemInterface *>("_dpi", this);
+    pars.set<Ref<DiscreteProblemInterface>>("_dpi", ref(*this));
     auto obj = Qtr<T>::alloc(pars);
     auto ptr = obj.get();
     if (auto essbc = dynamic_cast<EssentialBC *>(ptr))
@@ -528,7 +528,7 @@ Ref<T>
 DiscreteProblemInterface::add_initial_condition(Parameters & pars)
 {
     CALL_STACK_MSG();
-    pars.set<DiscreteProblemInterface *>("_dpi", this);
+    pars.set<Ref<DiscreteProblemInterface>>("_dpi", ref(*this));
     auto obj = Qtr<T>::alloc(pars);
     auto name = obj->get_name();
     auto it = this->ics_by_name.find(name);
@@ -546,7 +546,7 @@ Ref<T>
 DiscreteProblemInterface::add_auxiliary_field(Parameters & pars)
 {
     CALL_STACK_MSG();
-    pars.set<DiscreteProblemInterface *>("_dpi", this);
+    pars.set<Ref<DiscreteProblemInterface>>("_dpi", ref(*this));
     auto obj = Qtr<T>::alloc(pars);
     auto name = obj->get_name();
     auto it = this->auxs_by_name.find(name);

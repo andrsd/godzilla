@@ -41,7 +41,7 @@ TEST(NaturalBCTest, api)
     };
 
     auto params = app.make_parameters<MockNaturalBC>();
-    // params.set<DiscreteProblemInterface *>("_dpi", prob);
+    params.set<Ref<DiscreteProblemInterface>>("_dpi", ref(*prob));
     params.set<std::vector<String>>("boundary", { "left" });
     MockNaturalBC bc(params);
 

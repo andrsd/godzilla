@@ -52,7 +52,7 @@ private:
     virtual std::vector<Int> create_components();
 
     /// Discrete problem this object is part of
-    DiscreteProblemInterface * dpi;
+    Ref<DiscreteProblemInterface> dpi;
     /// Field name this initial condition is attached to
     Optional<String> field_name;
     /// Field ID this initial condition is attached to

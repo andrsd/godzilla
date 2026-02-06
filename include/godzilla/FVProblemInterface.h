@@ -181,7 +181,7 @@ Ref<T>
 FVProblemInterface::add_boundary_condition(Parameters & pars)
 {
     CALL_STACK_MSG();
-    pars.set<DiscreteProblemInterface *>("_dpi", this);
+    pars.set<Ref<DiscreteProblemInterface>>("_dpi", ref(*this));
     auto obj = Qtr<T>::alloc(pars);
     auto ptr = obj.get();
     this->riemann_bcs.push_back(std::move(obj));

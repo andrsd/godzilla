@@ -13,8 +13,8 @@ Parameters
 BoundaryCondition::parameters()
 {
     auto params = Object::parameters();
-    params.add_required_param<std::vector<String>>("boundary", "Boundary name");
-    // .add_private_param<Ref<DiscreteProblemInterface>>("_dpi");
+    params.add_required_param<std::vector<String>>("boundary", "Boundary name")
+        .add_private_param<LateRef<DiscreteProblemInterface>>("_dpi");
     return params;
 }
 
