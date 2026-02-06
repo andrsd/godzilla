@@ -15,7 +15,7 @@ namespace {
 
 class TestEssentialBoundary2D : public fe::EssentialBoundaryInfo<TRI3, 2_D, 3> {
 public:
-    TestEssentialBoundary2D(UnstructuredMesh * mesh, const IndexSet & facets) :
+    TestEssentialBoundary2D(Ref<UnstructuredMesh> mesh, const IndexSet & facets) :
         fe::EssentialBoundaryInfo<TRI3, 2_D, 3>(mesh, facets)
     {
     }
@@ -46,7 +46,7 @@ public:
 
 class TestNaturalBoundary2D : public fe::NaturalBoundaryInfo<TRI3, 2_D, 3> {
 public:
-    TestNaturalBoundary2D(UnstructuredMesh * mesh,
+    TestNaturalBoundary2D(Ref<UnstructuredMesh> mesh,
                           Array1D<DenseMatrix<Real, 2, 3>> grad_phi,
                           const IndexSet & facets) :
         fe::NaturalBoundaryInfo<TRI3, 2_D, 3>(mesh, grad_phi, facets)
@@ -96,7 +96,7 @@ TEST(FEBoundaryTest, test_2d)
         auto bnd_facets = points_from_label(label);
         auto vertices = mesh->get_cone_recursive_vertices(bnd_facets);
         vertices.sort_remove_dups();
-        TestEssentialBoundary2D bnd(mesh, vertices);
+        TestEssentialBoundary2D bnd(ref(*mesh), vertices);
         bnd.create();
         bnd.compute();
 
@@ -111,7 +111,7 @@ TEST(FEBoundaryTest, test_2d)
     {
         auto label = mesh->get_label("bottom");
         auto bnd_facets = points_from_label(label);
-        TestNaturalBoundary2D bnd(mesh, grad_phi, bnd_facets);
+        TestNaturalBoundary2D bnd(ref(*mesh), grad_phi, bnd_facets);
         bnd.create();
         bnd.compute();
 
@@ -130,7 +130,7 @@ TEST(FEBoundaryTest, test_2d)
     {
         auto label = mesh->get_label("top_right");
         IndexSet bnd_facets = points_from_label(label);
-        TestNaturalBoundary2D bnd(mesh, grad_phi, bnd_facets);
+        TestNaturalBoundary2D bnd(ref(*mesh), grad_phi, bnd_facets);
         bnd.create();
         bnd.compute();
 

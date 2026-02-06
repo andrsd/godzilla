@@ -39,7 +39,7 @@ public:
 template <ElementType ELEM_TYPE, Dimension DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
 class EssentialBoundaryInfo : public AbstractBoundaryInfo {
 public:
-    EssentialBoundaryInfo(UnstructuredMesh * mesh, IndexSet vertices) :
+    EssentialBoundaryInfo(Ref<UnstructuredMesh> mesh, IndexSet vertices) :
         mesh(mesh),
         vertices(vertices)
     {
@@ -47,7 +47,7 @@ public:
         expect_true(mesh->get_dimension() == DIM, "Mesh dimension mismatch");
     }
 
-    UnstructuredMesh *
+    Ref<UnstructuredMesh>
     get_mesh() const
     {
         return this->mesh;
@@ -99,7 +99,7 @@ public:
 
 private:
     /// Mesh
-    UnstructuredMesh * mesh;
+    Ref<UnstructuredMesh> mesh;
     /// IndexSet with boundary vertices
     IndexSet vertices;
     /// Vertex indices
@@ -111,7 +111,7 @@ private:
 template <ElementType ELEM_TYPE, Dimension DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
 class NaturalBoundaryInfo : public AbstractBoundaryInfo {
 public:
-    NaturalBoundaryInfo(UnstructuredMesh * mesh,
+    NaturalBoundaryInfo(Ref<UnstructuredMesh> mesh,
                         Array1D<DenseMatrix<Real, DIM, N_ELEM_NODES>> grad_phi,
                         IndexSet facets) :
         mesh(mesh),
@@ -123,7 +123,7 @@ public:
         this->facets.sort();
     }
 
-    NaturalBoundaryInfo(UnstructuredMesh * mesh, IndexSet facets) : mesh(mesh), facets(facets)
+    NaturalBoundaryInfo(Ref<UnstructuredMesh> mesh, IndexSet facets) : mesh(mesh), facets(facets)
     {
         CALL_STACK_MSG();
         expect_true(mesh->get_dimension() == DIM, "Mesh dimension mismatch");
@@ -144,7 +144,7 @@ public:
         this->free();
     }
 
-    UnstructuredMesh *
+    Ref<UnstructuredMesh>
     get_mesh() const
     {
         return this->mesh;
@@ -286,7 +286,7 @@ private:
 
 private:
     /// Mesh
-    UnstructuredMesh * mesh;
+    Ref<UnstructuredMesh> mesh;
     /// Gradients of shape functions
     Array1D<DenseMatrix<Real, DIM, N_ELEM_NODES>> grad_phi;
     /// IndexSet with boundary facets
