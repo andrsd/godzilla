@@ -38,6 +38,12 @@ protected:
                                          &this->compute_boundary_local_method));
     }
 
+    ExecuteOnFlags
+    default_execute_on(PostprocessorTag) const override
+    {
+        return ExecuteOn::INITIAL | ExecuteOn::TIMESTEP;
+    }
+
 private:
     SNESolver create_sne_solver() override;
 

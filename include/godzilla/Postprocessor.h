@@ -12,11 +12,20 @@ namespace godzilla {
 
 class Problem;
 
+struct PostprocessorTag {};
+
 /// Base class for postprocessors
 ///
 class Postprocessor : public Object, public PrintInterface {
 public:
+    using category = PostprocessorTag;
+
     explicit Postprocessor(const Parameters & pars);
+
+    /// Get execution mask
+    ///
+    /// @return execution mask
+    ExecuteOnFlags execute_on() const;
 
     /// Compute the postprocessor value
     ///
@@ -27,6 +36,12 @@ public:
     /// @return The value computed by the postprocessor
     virtual std::vector<Real> get_value() = 0;
 
+    /// Should execute happen at a specified occasion
+    ///
+    /// @param mask Bit mask specifying the occasion, see ON_XYZ below
+    /// @return `true` if output should happen, otherwise `false`
+    bool should_execute(ExecuteOn flags);
+
     /// Get problem this post-processor is part of
     ///
     /// @return Problem this postprocessor is part of
@@ -35,6 +50,10 @@ public:
 private:
     /// Problem this object is part of
     Ref<Problem> problem;
+    /// Bitwise mask for determining when this output object should output its content
+    ExecuteOnFlags on_mask;
+    /// Last simulation time when execute happened
+    Real last_execute_time;
 
 public:
     static Parameters parameters();

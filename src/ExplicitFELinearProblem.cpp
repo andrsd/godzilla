@@ -161,7 +161,7 @@ ExplicitFELinearProblem::post_step()
     CALL_STACK_MSG();
     ExplicitProblemInterface::post_step();
     update_aux_vector();
-    compute_postprocessors();
+    compute_postprocessors(ExecuteOn::TIMESTEP);
     output(ExecuteOn::TIMESTEP);
 }
 

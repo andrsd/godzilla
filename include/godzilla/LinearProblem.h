@@ -93,6 +93,12 @@ protected:
             DMKSPSetComputeRHS(get_dm(), invoke_compute_rhs_delegate, &this->compute_rhs_delegate));
     }
 
+    ExecuteOnFlags
+    default_execute_on(PostprocessorTag) const override
+    {
+        return ExecuteOn::FINAL;
+    }
+
 private:
     /// KSP object
     KrylovSolver ks;

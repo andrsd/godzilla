@@ -33,6 +33,12 @@ protected:
                             String region = "") override;
     void post_step() override;
 
+    ExecuteOnFlags
+    default_execute_on(PostprocessorTag) const override
+    {
+        return ExecuteOn::INITIAL | ExecuteOn::TIMESTEP;
+    }
+
 private:
     SNESolver create_sne_solver() override;
     void compute_rhs_local(Real time, const Vector & x, Vector & F) override;
