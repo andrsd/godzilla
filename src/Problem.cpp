@@ -43,8 +43,7 @@ Problem::Problem(const Parameters & pars) :
     mesh(pars.is_param_valid("mesh") ? pars.get<Ref<Mesh>>("mesh")
                                      : Optional<Ref<Mesh>>(std::nullopt)),
     partitioner(nullptr),
-    partition_overlap(0),
-    default_output_on()
+    partition_overlap(0)
 {
     set_output_monitor(ref(*this), &Problem::output_monitor);
     this->partitioner.create(get_comm());
@@ -301,18 +300,6 @@ Problem::set_global_section(const Section & section) const
 {
     CALL_STACK_MSG();
     PETSC_CHECK(DMSetGlobalSection(get_dm(), section));
-}
-
-void
-Problem::set_default_output_on(ExecuteOnFlags flags)
-{
-    this->default_output_on = flags;
-}
-
-ExecuteOnFlags
-Problem::get_default_output_on() const
-{
-    return this->default_output_on;
 }
 
 Problem::FieldDecomposition

@@ -23,24 +23,18 @@ Output::Output(const Parameters & pars) :
     Object(pars),
     PrintInterface(this),
     problem(pars.get<Ref<Problem>>("_problem")),
+    on_mask(pars.get<ExecuteOnFlags>("on")),
     interval(pars.get<Int>("interval", 1)),
     last_output_time(std::nan(""))
 {
     CALL_STACK_MSG();
-    if (pars.is_param_valid("on")) {
-        const auto on = pars.get<ExecuteOnFlags>("on");
-        if (on.has_flags()) {
-            if (none_with_flags(on))
-                error("The 'none' execution flag can be used only by itself.");
-            else
-                this->on_mask = on;
-        }
-        else
-            error("The 'on' parameter can be either 'none' or a combination of 'initial', "
-                  "'timestep' and/or 'final'.");
+    if (this->on_mask.has_flags()) {
+        if (none_with_flags(this->on_mask))
+            error("The 'none' execution flag can be used only by itself.");
     }
     else
-        this->on_mask = this->problem->get_default_output_on();
+        error("The 'on' parameter can be either 'none' or a combination of 'initial', "
+              "'timestep' and/or 'final'.");
 
     if (pars.is_param_valid("interval") && ((this->on_mask & ExecuteOn::TIMESTEP) == 0))
         warning("Parameter 'interval' was specified, but 'on' is missing 'timestep'.");
@@ -64,13 +58,6 @@ Output::get_problem() const
 {
     CALL_STACK_MSG();
     return this->problem;
-}
-
-ExecuteOnFlags
-Output::get_exec_mask() const
-{
-    CALL_STACK_MSG();
-    return this->on_mask;
 }
 
 ExecuteOnFlags

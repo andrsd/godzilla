@@ -51,7 +51,6 @@ NonlinearProblem::NonlinearProblem(const Parameters & pars) :
     lin_max_iter(pars.get<Int>("lin_max_iter"))
 {
     CALL_STACK_MSG();
-    set_default_output_on(ExecuteOn::FINAL);
     this->line_search_type = this->line_search_type.to_lower();
     expect_true(
         validation::in(this->line_search_type, { "bt", "basic", "l2", "cp", "nleqerr", "shell" }),

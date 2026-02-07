@@ -46,7 +46,6 @@ ImplicitFENonlinearProblem::ImplicitFENonlinearProblem(const Parameters & pars) 
     scheme(pars.get<String>("scheme"))
 {
     CALL_STACK_MSG();
-    set_default_output_on(ExecuteOn::INITIAL | ExecuteOn::TIMESTEP);
     expect_true(validation::in(this->scheme, { "beuler", "cn" }),
                 "The 'scheme' parameter can be either 'beuler' or 'cn'.");
 }

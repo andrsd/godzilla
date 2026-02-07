@@ -4,6 +4,7 @@
 #include "godzilla/ExodusIIOutput.h"
 #include "godzilla/MeshFactory.h"
 #include "godzilla/LineMesh.h"
+#include "godzilla/Types.h"
 
 using namespace godzilla;
 
@@ -25,6 +26,7 @@ TEST(ExodusIIOutputTest, get_file_ext)
     params.set<Ref<App>>("app", ref(app));
     params.set<Ref<Problem>>("_problem", ref(prob));
     params.set<fs::path>("file", "out");
+    params.set<ExecuteOnFlags>("on", ExecuteOn::NONE);
     ExodusIIOutput out(params);
     out.create();
 

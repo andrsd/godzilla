@@ -94,6 +94,12 @@ protected:
     }
 
     ExecuteOnFlags
+    default_execute_on(OutputTag) const override
+    {
+        return ExecuteOn::FINAL;
+    }
+
+    ExecuteOnFlags
     default_execute_on(PostprocessorTag) const override
     {
         return ExecuteOn::FINAL;

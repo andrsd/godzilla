@@ -4,6 +4,7 @@
 #include "godzilla/Problem.h"
 #include "godzilla/CSVOutput.h"
 #include "godzilla/Postprocessor.h"
+#include "godzilla/Types.h"
 
 using namespace godzilla;
 
@@ -30,6 +31,7 @@ TEST_F(CSVOutputTest, get_file_ext)
     auto params = this->app->make_parameters<CSVOutput>();
     params.set<Ref<Problem>>("_problem", prob);
     params.set<fs::path>("file", "asdf");
+    params.set<ExecuteOnFlags>("on", ExecuteOn::NONE);
     CSVOutput out(params);
     out.create();
 
@@ -106,6 +108,7 @@ TEST_F(CSVOutputTest, set_file_name)
     auto params = this->app->make_parameters<CSVOutput>();
     params.set<Ref<Problem>>("_problem", prob);
     params.set<fs::path>("file", "asdf");
+    params.set<ExecuteOnFlags>("on", ExecuteOn::NONE);
     CSVOutput out(params);
 
     prob->create();
