@@ -23,7 +23,7 @@ public:
 protected:
     template <class T>
     void
-    set_function(FieldID fid, T * instance, void (T::*method)(Real time, const Real[], Scalar[]))
+    set_function(FieldID fid, Ref<T> instance, void (T::*method)(Real time, const Real[], Scalar[]))
     {
         this->delegates[fid.value()].bind(instance, method);
     }

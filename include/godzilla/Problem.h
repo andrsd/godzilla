@@ -245,7 +245,7 @@ public:
     /// @param monitor Member function in class T
     template <class T>
     void
-    set_output_monitor(T * instance, void (T::*method)(String) const)
+    set_output_monitor(Ref<T> instance, void (T::*method)(String) const)
     {
         this->output_monitor_delegate.bind(instance, method);
     }

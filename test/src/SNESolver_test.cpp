@@ -39,10 +39,10 @@ TEST(SNESolverTest, solver_cls)
     snes.create(comm);
 
     Vector r = Vector::create_seq(comm, 2);
-    snes.set_function(r, &prob, &TestNLProblem::compute_f);
+    snes.set_function(r, ref(prob), &TestNLProblem::compute_f);
 
     Matrix J = Matrix::create_seq_aij(comm, 2, 2, 1);
-    snes.set_jacobian(J, J, &prob, &TestNLProblem::compute_jacobian);
+    snes.set_jacobian(J, J, ref(prob), &TestNLProblem::compute_jacobian);
 
     Vector x = r.duplicate();
     snes.solve(x);
@@ -64,7 +64,7 @@ TEST(SNESolverTest, mat_create_mf)
     snes.create(comm);
 
     Vector r = Vector::create_seq(comm, 2);
-    snes.set_function(r, &prob, &TestNLProblem::compute_f);
+    snes.set_function(r, ref(prob), &TestNLProblem::compute_f);
 
     auto m = snes.mat_create_mf();
     EXPECT_EQ(m.get_type(), "mffd");

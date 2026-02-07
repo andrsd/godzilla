@@ -53,7 +53,7 @@ ExplicitProblemInterface::set_up_callbacks()
 {
     CALL_STACK_MSG();
     TransientProblemInterface::set_up_callbacks();
-    set_rhs_function(this, &ExplicitProblemInterface::compute_rhs_function);
+    set_rhs_function(ref(*this), &ExplicitProblemInterface::compute_rhs_function);
 }
 
 void

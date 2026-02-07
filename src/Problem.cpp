@@ -46,7 +46,7 @@ Problem::Problem(const Parameters & pars) :
     partition_overlap(0),
     default_output_on()
 {
-    set_output_monitor(this, &Problem::output_monitor);
+    set_output_monitor(ref(*this), &Problem::output_monitor);
     this->partitioner.create(get_comm());
 }
 

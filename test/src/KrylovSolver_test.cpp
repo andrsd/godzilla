@@ -138,7 +138,7 @@ TEST(KrylovSolver, set_monitor)
     auto comm = app.get_comm();
     KrylovSolver ks;
     ks.create(comm);
-    ks.monitor_set(&solver, &TestSolver::monitor);
+    ks.monitor_set(ref(solver), &TestSolver::monitor);
 
     Matrix m = Matrix::create_seq_aij(comm, 2, 2, 1);
     m.set_value(0, 0, 2);
@@ -200,8 +200,8 @@ TEST(KrylovSolver, set_opers_rhs)
     KrylovSolver ks;
     ks.create(comm);
     ks.set_dm(dm);
-    ks.set_compute_operators(&sys, &TestSystem::compute_operators);
-    ks.set_compute_rhs(&sys, &TestSystem::compute_rhs);
+    ks.set_compute_operators(ref(sys), &TestSystem::compute_operators);
+    ks.set_compute_rhs(ref(sys), &TestSystem::compute_rhs);
 
     Vector b = Vector::create_seq(comm, 2);
     ks.solve(b);

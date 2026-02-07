@@ -90,9 +90,9 @@ void
 FENonlinearProblem::set_up_callbacks()
 {
     CALL_STACK_MSG();
-    set_boundary_local(this, &FENonlinearProblem::compute_boundary_local);
-    set_function_local(this, &FENonlinearProblem::compute_residual_local);
-    set_jacobian_local(this, &FENonlinearProblem::compute_jacobian_local);
+    set_boundary_local(ref(*this), &FENonlinearProblem::compute_boundary_local);
+    set_function_local(ref(*this), &FENonlinearProblem::compute_residual_local);
+    set_jacobian_local(ref(*this), &FENonlinearProblem::compute_jacobian_local);
 }
 
 void

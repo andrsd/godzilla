@@ -44,7 +44,7 @@ protected:
     void
     set_up_weak_form() override
     {
-        set_riemann_solver(FieldID(0), this, &TestExplicitFVLinearProblem::compute_flux);
+        set_riemann_solver(FieldID(0), ref(*this), &TestExplicitFVLinearProblem::compute_flux);
     }
 
     void

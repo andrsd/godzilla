@@ -62,8 +62,8 @@ G1DTestNonlinearProblem::call_initial_guess()
 void
 G1DTestNonlinearProblem::set_up_callbacks()
 {
-    set_function(this, &G1DTestNonlinearProblem::compute_residual);
-    set_jacobian(this, &G1DTestNonlinearProblem::compute_jacobian);
+    set_function(ref(*this), &G1DTestNonlinearProblem::compute_residual);
+    set_jacobian(ref(*this), &G1DTestNonlinearProblem::compute_jacobian);
 }
 
 void
@@ -164,8 +164,8 @@ TEST(NonlinearProblemTest, run)
         void
         set_up_callbacks()
         {
-            set_function(this, &MockNonlinearProblem::compute_residual);
-            set_jacobian(this, &MockNonlinearProblem::compute_jacobian);
+            set_function(ref(*this), &MockNonlinearProblem::compute_residual);
+            set_jacobian(ref(*this), &MockNonlinearProblem::compute_jacobian);
         }
 
         bool compute_residual_called = false;

@@ -212,7 +212,7 @@ protected:
     /// @param method Member function in class T
     template <class T>
     void
-    monitor_set(T * instance, void (T::*method)(Int, Real, const Vector &))
+    monitor_set(Ref<T> instance, void (T::*method)(Int, Real, const Vector &))
     {
         this->monitor_method.bind(instance, method);
         PETSC_CHECK(
@@ -222,7 +222,7 @@ protected:
     template <class T>
     void
     set_rhs_function(Vector & r,
-                     T * instance,
+                     Ref<T> instance,
                      void (T::*method)(Real time, const Vector & x, Vector & F))
     {
         this->compute_rhs_function_method.bind(instance, method);
@@ -236,7 +236,7 @@ protected:
     void
     set_rhs_jacobian(Matrix & J,
                      Matrix & Jp,
-                     T * instance,
+                     Ref<T> instance,
                      void (T::*method)(Real, const Vector &, Matrix &, Matrix &))
     {
         this->compute_rhs_jacobian_method.bind(instance, method);
@@ -256,7 +256,7 @@ protected:
     template <class T>
     void
     set_ifunction(Vector & r,
-                  T * instance,
+                  Ref<T> instance,
                   void (T::*method)(Real, const Vector &, const Vector &, Vector &))
     {
         this->compute_ifunction_local_method.bind(instance, method);
@@ -277,7 +277,7 @@ protected:
     void
     set_ijacobian(Matrix & J,
                   Matrix & Jp,
-                  T * instance,
+                  Ref<T> instance,
                   void (T::*method)(Real, const Vector &, const Vector &, Real, Matrix &, Matrix &))
     {
         this->compute_ijacobian_local_method.bind(instance, method);
@@ -295,7 +295,7 @@ protected:
     /// @param method Member function in class T
     template <class T>
     void
-    set_rhs_function(T * instance, void (T::*method)(Real time, const Vector & x, Vector & F))
+    set_rhs_function(Ref<T> instance, void (T::*method)(Real time, const Vector & x, Vector & F))
     {
         this->compute_rhs_function_method.bind(instance, method);
         auto dm = this->problem->get_dm();
@@ -306,7 +306,7 @@ protected:
 
     template <class T>
     void
-    set_rhs_jacobian(T * instance, void (T::*method)(Real, const Vector &, Matrix &, Matrix &))
+    set_rhs_jacobian(Ref<T> instance, void (T::*method)(Real, const Vector &, Matrix &, Matrix &))
     {
         this->compute_rhs_jacobian_method.bind(instance, method);
         auto dm = this->problem->get_dm();
@@ -318,7 +318,7 @@ protected:
     template <class T>
     void
     set_ifunction_local(
-        T * instance,
+        Ref<T> instance,
         void (T::*method)(Real time, const Vector & x, const Vector & x_t, Vector & F))
     {
         this->compute_ifunction_local_method.bind(instance, method);
@@ -331,7 +331,7 @@ protected:
     template <class T>
     void
     set_ijacobian_local(
-        T * instance,
+        Ref<T> instance,
         void (T::*method)(Real, const Vector &, const Vector &, Real, Matrix &, Matrix &))
     {
         this->compute_ijacobian_local_method.bind(instance, method);

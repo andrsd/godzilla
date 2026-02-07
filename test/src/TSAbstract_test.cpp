@@ -47,7 +47,7 @@ public:
         Problem::create();
         TransientProblemInterface::init();
         set_up_time_scheme();
-        set_rhs_function(this, &GTestProblem::compute_rhs);
+        set_rhs_function(ref(*this), &GTestProblem::compute_rhs);
         set_problem_type(ProblemType::LINEAR);
     }
 

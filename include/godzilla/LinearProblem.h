@@ -76,7 +76,7 @@ protected:
     /// @param method Member function in class T to compute the operators
     template <class T>
     void
-    set_compute_operators(T * instance, void (T::*method)(Matrix &, Matrix &))
+    set_compute_operators(Ref<T> instance, void (T::*method)(Matrix &, Matrix &))
     {
         this->compute_operators_delegate.bind(instance, method);
         PETSC_CHECK(DMKSPSetComputeOperators(get_dm(),
@@ -86,7 +86,7 @@ protected:
 
     template <class T>
     void
-    set_compute_rhs(T * instance, void (T::*method)(Vector &))
+    set_compute_rhs(Ref<T> instance, void (T::*method)(Vector &))
     {
         this->compute_rhs_delegate.bind(instance, method);
         PETSC_CHECK(

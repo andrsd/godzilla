@@ -47,8 +47,8 @@ public:
     void
     set_up_callbacks() override
     {
-        set_compute_operators(this, &CustomLinearProblem::compute_operators);
-        set_compute_rhs(this, &CustomLinearProblem::compute_rhs);
+        set_compute_operators(ref(*this), &CustomLinearProblem::compute_operators);
+        set_compute_rhs(ref(*this), &CustomLinearProblem::compute_rhs);
     }
 
     Section s;

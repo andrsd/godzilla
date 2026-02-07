@@ -46,16 +46,16 @@ public:
     void
     set_up_callbacks() override
     {
-        set_compute_operators(this, &CustomLinearProblem::compute_operators);
-        set_compute_rhs(this, &CustomLinearProblem::compute_rhs);
+        set_compute_operators(ref(*this), &CustomLinearProblem::compute_operators);
+        set_compute_rhs(ref(*this), &CustomLinearProblem::compute_rhs);
     }
 
     Preconditioner
     create_preconditioner(PC pc) override
     {
         this->pcshell = PCShell(pc);
-        this->pcshell.set_apply(this, &CustomLinearProblem::apply_pc);
-        this->pcshell.set_apply_transpose(this, &CustomLinearProblem::apply_transpose_pc);
+        this->pcshell.set_apply(ref(*this), &CustomLinearProblem::apply_pc);
+        this->pcshell.set_apply_transpose(ref(*this), &CustomLinearProblem::apply_transpose_pc);
         return this->pcshell;
     }
 

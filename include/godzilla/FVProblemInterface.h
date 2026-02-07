@@ -99,7 +99,7 @@ protected:
     void
     set_riemann_solver(
         FieldID field,
-        T * instance,
+        Ref<T> instance,
         void (T::*method)(const Real[], const Real[], const Scalar[], const Scalar[], Scalar[]))
     {
         this->compute_flux_methods[field].bind(instance, method);

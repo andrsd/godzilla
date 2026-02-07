@@ -343,7 +343,7 @@ void
 TransientProblemInterface::set_up_monitors()
 {
     CALL_STACK_MSG();
-    monitor_set(this, &TransientProblemInterface::monitor);
+    monitor_set(ref(*this), &TransientProblemInterface::monitor);
 }
 
 void
