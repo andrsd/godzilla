@@ -150,4 +150,12 @@ split(const char * delim, String line)
     return parts;
 }
 
+bool
+none_with_flags(ExecuteOnFlags flags)
+{
+    auto mask = flags.get_mask();
+    auto none_flag = ExecuteOn::NONE;
+    return (flags & none_flag) && ((mask & ~static_cast<unsigned int>(none_flag)) != 0);
+}
+
 } // namespace godzilla

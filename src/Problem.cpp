@@ -141,6 +141,16 @@ Problem::compute_postprocessors()
         pp->compute();
 }
 
+void
+Problem::compute_postprocessors(ExecuteOn flag)
+{
+    CALL_STACK_MSG();
+    for (auto & [_, pp] : this->pps)
+        if (pp->should_execute(flag)) {
+            pp->compute();
+        }
+}
+
 Expected<Ref<Postprocessor>, ErrorCode>
 Problem::get_postprocessor(String name) const
 {
@@ -175,7 +185,7 @@ void
 Problem::on_initial()
 {
     CALL_STACK_MSG();
-    compute_postprocessors();
+    compute_postprocessors(ExecuteOn::INITIAL);
     output(ExecuteOn::INITIAL);
 }
 
@@ -183,7 +193,7 @@ void
 Problem::on_final()
 {
     CALL_STACK_MSG();
-    compute_postprocessors();
+    compute_postprocessors(ExecuteOn::FINAL);
     output(ExecuteOn::FINAL);
 }
 

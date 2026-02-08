@@ -101,6 +101,9 @@ public:
     /// Compute all postprocessors
     void compute_postprocessors();
 
+    /// Compute all postprocessors with specified execute on flag
+    void compute_postprocessors(ExecuteOn flag);
+
     /// Output
     ///
     /// @param mask Bit mask for an output event, see `Output` for valid options.
@@ -287,6 +290,23 @@ protected:
     /// Set solution vector
     void set_solution_vector(const Vector & x);
 
+    virtual ExecuteOnFlags
+    default_execute_on(PostprocessorTag) const
+    {
+        return ExecuteOn::NONE;
+    }
+
+    /// Provide default execute on flags
+    ///
+    /// @tparam C++ Base class for the subsystem
+    /// @return Default execute on flags
+    template <typename T>
+    ExecuteOnFlags
+    default_execute_on() const
+    {
+        return default_execute_on(typename T::category {});
+    }
+
 private:
     /// Output monitor
     ///
@@ -346,6 +366,10 @@ Problem::add_postprocessor(Parameters & pars)
 {
     CALL_STACK_MSG();
     pars.set<Ref<Problem>>("_problem", ref(*this));
+    if (!pars.is_param_valid("on")) {
+        pars.set<ExecuteOnFlags>("on", default_execute_on<T>());
+    }
+
     auto obj = Qtr<T>::alloc(pars);
     auto pp = obj.get();
     auto name = pp->get_name();

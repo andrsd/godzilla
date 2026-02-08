@@ -259,4 +259,10 @@ join(const char * con, const RANGE & vals)
 /// @return Individual parts
 std::vector<String> split(const char * delim, String line);
 
+/// Check if the flags were specified with the NONE flags
+///
+/// @param flags Flags to check
+/// @return `true` if flags were specified with NONE, otherwise `false`
+bool none_with_flags(ExecuteOnFlags flags);
+
 } // namespace godzilla

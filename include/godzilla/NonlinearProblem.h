@@ -115,6 +115,12 @@ protected:
         this->snes.set_jacobian(this->J, this->J, instance, method);
     }
 
+    ExecuteOnFlags
+    default_execute_on(PostprocessorTag) const override
+    {
+        return ExecuteOn::FINAL;
+    }
+
 private:
     /// Create a SNESolver
     virtual SNESolver create_sne_solver();

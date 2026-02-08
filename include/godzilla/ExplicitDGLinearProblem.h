@@ -32,6 +32,12 @@ protected:
     void set_up_monitors() override;
     void post_step() override;
 
+    ExecuteOnFlags
+    default_execute_on(PostprocessorTag) const override
+    {
+        return ExecuteOn::INITIAL | ExecuteOn::TIMESTEP;
+    }
+
 private:
     SNESolver create_sne_solver() override;
 
