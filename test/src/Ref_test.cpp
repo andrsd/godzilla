@@ -1,5 +1,6 @@
 #include <gmock/gmock.h>
 #include "godzilla/Ref.h"
+#include "godzilla/Qtr.h"
 
 using namespace godzilla;
 
@@ -14,14 +15,14 @@ TEST(RefTest, test_ref)
     for (auto & r : int_refs)
         r.get() += 10;
 
-    EXPECT_EQ(int_refs[0], 11);
-    EXPECT_EQ(int_refs[1], 12);
+    EXPECT_EQ(*int_refs[0], 11);
+    EXPECT_EQ(*int_refs[1], 12);
 
     std::vector<Ref<int>> copy;
     for (auto & a : int_refs)
         copy.push_back(a);
-    EXPECT_EQ(copy[0], 11);
-    EXPECT_EQ(copy[1], 12);
+    EXPECT_EQ(*copy[0], 11);
+    EXPECT_EQ(*copy[1], 12);
 }
 
 TEST(RefTest, test_cref)
@@ -42,6 +43,24 @@ TEST(RefTest, test_cref)
     std::vector<Ref<const int>> copy;
     for (auto & a : int_refs)
         copy.push_back(a);
-    EXPECT_EQ(copy[0], 1);
-    EXPECT_EQ(copy[1], 2);
+    EXPECT_EQ(*copy[0], 1);
+    EXPECT_EQ(*copy[1], 2);
+}
+
+TEST(RefTest, compare)
+{
+    class Base {
+    public:
+        int i;
+    };
+
+    class Derived : public Base {
+    public:
+        double d;
+    };
+
+    auto ptr = Qtr<Derived>::alloc();
+    auto d = Ref<Derived>(*ptr);
+    auto b = Ref<Base>(*ptr);
+    EXPECT_TRUE(b == d);
 }

@@ -42,7 +42,7 @@ ImplicitFENonlinearProblem::parameters()
 
 ImplicitFENonlinearProblem::ImplicitFENonlinearProblem(const Parameters & pars) :
     FENonlinearProblem(pars),
-    TransientProblemInterface(this, pars),
+    TransientProblemInterface(*this, pars),
     scheme(pars.get<String>("scheme"))
 {
     CALL_STACK_MSG();
@@ -118,9 +118,9 @@ ImplicitFENonlinearProblem::set_up_callbacks()
 {
     CALL_STACK_MSG();
     TransientProblemInterface::set_up_callbacks();
-    set_time_boundary_local(this, &ImplicitFENonlinearProblem::compute_boundary_fem);
-    set_ifunction_local(this, &ImplicitFENonlinearProblem::compute_ifunction_fem);
-    set_ijacobian_local(this, &ImplicitFENonlinearProblem::compute_ijacobian_fem);
+    set_time_boundary_local(ref(*this), &ImplicitFENonlinearProblem::compute_boundary_fem);
+    set_ifunction_local(ref(*this), &ImplicitFENonlinearProblem::compute_ifunction_fem);
+    set_ijacobian_local(ref(*this), &ImplicitFENonlinearProblem::compute_ijacobian_fem);
 }
 
 void

@@ -10,19 +10,18 @@
 #include "godzilla/BndJacobianFunc.h"
 
 using namespace godzilla;
-using namespace testing;
 
 TEST(NaturalBCTest, api)
 {
     TestApp app;
 
     auto mesh_params = LineMesh::parameters();
-    mesh_params.set<App *>("app", &app);
+    mesh_params.set<Ref<App>>("app", ref(app));
     mesh_params.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = app.make_parameters<GTestFENonlinearProblem>();
-    prob_params.set<Mesh *>("mesh", mesh.get());
+    prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     auto prob = app.make_problem<GTestFENonlinearProblem>(prob_params);
 
     class MockNaturalBC : public NaturalBC {
@@ -42,7 +41,7 @@ TEST(NaturalBCTest, api)
     };
 
     auto params = app.make_parameters<MockNaturalBC>();
-    params.set<DiscreteProblemInterface *>("_dpi", prob);
+    params.set<Ref<DiscreteProblemInterface>>("_dpi", ref(*prob));
     params.set<std::vector<String>>("boundary", { "left" });
     MockNaturalBC bc(params);
 
@@ -58,7 +57,7 @@ namespace {
 
 class TestNatF0 : public BndResidualFunc {
 public:
-    explicit TestNatF0(const NaturalBC * bc) : BndResidualFunc(bc), u(get_field_value("u")) {}
+    explicit TestNatF0(Ref<NaturalBC> bc) : BndResidualFunc(bc), u(get_field_value("u")) {}
 
     void
     evaluate(Scalar f[]) const override
@@ -72,7 +71,7 @@ protected:
 
 class TestNatG0 : public BndJacobianFunc {
 public:
-    explicit TestNatG0(const NaturalBC * bc) : BndJacobianFunc(bc) {}
+    explicit TestNatG0(Ref<NaturalBC> bc) : BndJacobianFunc(bc) {}
 
     void
     evaluate(Scalar g[]) const override
@@ -94,8 +93,8 @@ public:
     void
     set_up_weak_form() override
     {
-        add_residual_block(new TestNatF0(this), nullptr);
-        add_jacobian_block(get_field_id(), new TestNatG0(this), nullptr, nullptr, nullptr);
+        add_residual_block(new TestNatF0(ref(*this)), nullptr);
+        add_jacobian_block(get_field_id(), new TestNatG0(ref(*this)), nullptr, nullptr, nullptr);
     }
 };
 
@@ -106,16 +105,16 @@ TEST(NaturalBCTest, fe)
     TestApp app;
 
     auto mesh_params = LineMesh::parameters();
-    mesh_params.set<App *>("app", &app);
+    mesh_params.set<Ref<App>>("app", ref(app));
     mesh_params.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = app.make_parameters<GTest2FieldsFENonlinearProblem>();
-    prob_params.set<Mesh *>("mesh", mesh.get());
+    prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     auto prob = app.make_problem<GTest2FieldsFENonlinearProblem>(prob_params);
 
     auto bc_params = TestNaturalBC::parameters();
-    bc_params.set<App *>("app", &app);
+    bc_params.set<Ref<App>>("app", ref(app));
     bc_params.set<String>("name", "bc1");
     bc_params.set<std::vector<String>>("boundary", { "left" });
     bc_params.set<String>("field", "u");
@@ -149,16 +148,16 @@ TEST(NaturalBCTest, non_existing_field)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("app", &app);
+    mesh_pars.set<Ref<App>>("app", ref(app));
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = app.make_parameters<GTest2FieldsFENonlinearProblem>();
-    prob_pars.set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     auto problem = app.make_problem<GTest2FieldsFENonlinearProblem>(prob_pars);
 
     auto params = TestNaturalBC::parameters();
-    params.set<App *>("app", &app);
+    params.set<Ref<App>>("app", ref(app));
     params.set<std::vector<String>>("boundary", { "left" });
     params.set<String>("field", "asdf");
     problem->add_boundary_condition<TestNaturalBC>(params);
@@ -171,12 +170,12 @@ TEST(NaturalBCTest, field_param_not_specified)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("app", &app);
+    mesh_pars.set<Ref<App>>("app", ref(app));
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = app.make_parameters<GTest2FieldsFENonlinearProblem>();
-    prob_pars.set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     auto problem = app.make_problem<GTest2FieldsFENonlinearProblem>(prob_pars);
 
     auto params = app.make_parameters<TestNaturalBC>();

@@ -80,7 +80,7 @@ TEST(ProblemTest, add_pp)
     auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = app.make_parameters<TestProblem>();
-    prob_params.set<Mesh *>("mesh", mesh.get());
+    prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     TestProblem problem(prob_params);
 
     auto pp_params = app.make_parameters<TestPostprocessor>();
@@ -94,8 +94,9 @@ TEST(ProblemTest, add_pp)
     out_params.set<Int>("interval", 1);
     auto out = problem.add_output<TestOutput>(out_params);
 
-    EXPECT_EQ(problem.get_postprocessor("pp"), pp);
-    EXPECT_EQ(problem.get_postprocessor("asdf"), nullptr);
+    EXPECT_EQ(problem.get_postprocessor("pp").value(), pp);
+    EXPECT_FALSE(problem.get_postprocessor("asdf").has_value());
+    EXPECT_EQ(problem.get_postprocessor("asdf").error(), ErrorCode::NotFound);
 
     auto & pps_names = problem.get_postprocessor_names();
     EXPECT_EQ(pps_names.size(), 1);
@@ -114,7 +115,7 @@ TEST(ProblemTest, local_vec)
     auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = app.make_parameters<TestProblem>();
-    prob_params.set<Mesh *>("mesh", mesh.get());
+    prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     TestProblem problem(prob_params);
     problem.set_local_section(create_section(mesh->get_dm()));
 
@@ -136,7 +137,7 @@ TEST(ProblemTest, global_vec)
     auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = app.make_parameters<TestProblem>();
-    prob_params.set<Mesh *>("mesh", mesh.get());
+    prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     TestProblem problem(prob_params);
 
     problem.set_local_section(create_section(mesh->get_dm()));
@@ -159,7 +160,7 @@ TEST(ProblemTest, create_matrix)
     auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = app.make_parameters<TestProblem>();
-    prob_params.set<Mesh *>("mesh", mesh.get());
+    prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     TestProblem problem(prob_params);
     problem.create();
 
@@ -181,7 +182,7 @@ TEST(ProblemTest, get_local_section)
     auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = app.make_parameters<TestProblem>();
-    prob_params.set<Mesh *>("mesh", mesh.get());
+    prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     TestProblem problem(prob_params);
     problem.create();
 
@@ -205,7 +206,7 @@ TEST(ProblemTest, get_global_section)
     auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = app.make_parameters<TestProblem>();
-    prob_params.set<Mesh *>("mesh", mesh.get());
+    prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     TestProblem problem(prob_params);
     problem.create();
 
@@ -230,7 +231,7 @@ TEST(ProblemTest, aux_vecs)
     auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = app.make_parameters<TestProblem>();
-    prob_params.set<Mesh *>("mesh", mesh.get());
+    prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     auto problem = app.make_problem<TestProblem>(prob_params);
 
     problem->create();
@@ -258,7 +259,7 @@ TEST(ProblemTest, aux_vecs_clear)
     auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = app.make_parameters<TestProblem>();
-    prob_params.set<Mesh *>("mesh", mesh.get());
+    prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     auto problem = app.make_problem<TestProblem>(prob_params);
 
     problem->create();
@@ -280,7 +281,7 @@ TEST(ProblemTest, mat_vec_types)
     auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = app.make_parameters<TestProblem>();
-    prob_params.set<Mesh *>("mesh", mesh.get());
+    prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     auto problem = app.make_problem<TestProblem>(prob_params);
 
     EXPECT_EQ(problem->get_vector_type(), VECSTANDARD);
@@ -297,7 +298,7 @@ TEST(ProblemTest, loc_glob_arithmetic_type)
     auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = app.make_parameters<TestProblem>();
-    prob_params.set<Mesh *>("mesh", mesh.get());
+    prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     auto problem = app.make_problem<TestProblem>(prob_params);
 
     problem->create();
@@ -348,7 +349,7 @@ TEST(ProblemTest, loc_glob_arithmetic_type_min_max)
     auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = app.make_parameters<TestProblem>();
-    prob_params.set<Mesh *>("mesh", mesh.get());
+    prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     auto problem = app.make_problem<TestProblem>(prob_params);
 
     problem->create();
@@ -418,7 +419,7 @@ TEST(ProblemTest, loc_glob_vec_type)
     auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = app.make_parameters<TestProblem>();
-    prob_params.set<Mesh *>("mesh", mesh.get());
+    prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     auto problem = app.make_problem<TestProblem>(prob_params);
 
     problem->create();

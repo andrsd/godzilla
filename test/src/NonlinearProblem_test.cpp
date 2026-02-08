@@ -62,8 +62,8 @@ G1DTestNonlinearProblem::call_initial_guess()
 void
 G1DTestNonlinearProblem::set_up_callbacks()
 {
-    set_function(this, &G1DTestNonlinearProblem::compute_residual);
-    set_jacobian(this, &G1DTestNonlinearProblem::compute_jacobian);
+    set_function(ref(*this), &G1DTestNonlinearProblem::compute_residual);
+    set_jacobian(ref(*this), &G1DTestNonlinearProblem::compute_jacobian);
 }
 
 void
@@ -91,13 +91,13 @@ TEST(NonlinearProblemTest, initial_guess)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("app", &app);
+    mesh_pars.set<Ref<App>>("app", ref(app));
     mesh_pars.set<Int>("nx", 1);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = G1DTestNonlinearProblem::parameters();
-    prob_pars.set<App *>("app", &app);
-    prob_pars.set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<App>>("app", ref(app));
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     G1DTestNonlinearProblem prob(prob_pars);
     prob.create();
     prob.call_initial_guess();
@@ -113,13 +113,13 @@ TEST(NonlinearProblemTest, solve)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("app", &app);
+    mesh_pars.set<Ref<App>>("app", ref(app));
     mesh_pars.set<Int>("nx", 1);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = G1DTestNonlinearProblem::parameters();
-    prob_pars.set<App *>("app", &app);
-    prob_pars.set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<App>>("app", ref(app));
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     G1DTestNonlinearProblem prob(prob_pars);
 
     prob.create();
@@ -164,8 +164,8 @@ TEST(NonlinearProblemTest, run)
         void
         set_up_callbacks()
         {
-            set_function(this, &MockNonlinearProblem::compute_residual);
-            set_jacobian(this, &MockNonlinearProblem::compute_jacobian);
+            set_function(ref(*this), &MockNonlinearProblem::compute_residual);
+            set_jacobian(ref(*this), &MockNonlinearProblem::compute_jacobian);
         }
 
         bool compute_residual_called = false;
@@ -175,13 +175,13 @@ TEST(NonlinearProblemTest, run)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("app", &app);
+    mesh_pars.set<Ref<App>>("app", ref(app));
     mesh_pars.set<Int>("nx", 1);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = NonlinearProblem::parameters();
-    prob_pars.set<App *>("app", &app);
-    prob_pars.set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<App>>("app", ref(app));
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     MockNonlinearProblem prob(prob_pars);
     prob.create();
 
@@ -208,15 +208,15 @@ TEST(NonlinearProblemTest, line_search_type)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("app", &app);
+    mesh_pars.set<Ref<App>>("app", ref(app));
     mesh_pars.set<Int>("nx", 1);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     std::vector<String> ls_type = { "basic", "l2", "cp", "nleqerr", "shell" };
     for (auto & lst : ls_type) {
         auto prob_pars = NonlinearProblem::parameters();
-        prob_pars.set<App *>("app", &app);
-        prob_pars.set<Mesh *>("mesh", mesh.get());
+        prob_pars.set<Ref<App>>("app", ref(app));
+        prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
         prob_pars.set<String>("line_search", lst);
         MockNonlinearProblem prob(prob_pars);
         prob.create();
@@ -240,13 +240,13 @@ TEST(NonlinearProblemTest, invalid_line_search_type)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("app", &app);
+    mesh_pars.set<Ref<App>>("app", ref(app));
     mesh_pars.set<Int>("nx", 1);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = NonlinearProblem::parameters();
-    prob_pars.set<App *>("app", &app);
-    prob_pars.set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<App>>("app", ref(app));
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     prob_pars.set<String>("line_search", "asdf");
 
     EXPECT_DEATH(MockNonlinearProblem prob(prob_pars),
@@ -259,17 +259,17 @@ TEST(NonlinearProblemTest, restart_file)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("app", &app);
+    mesh_pars.set<Ref<App>>("app", ref(app));
     mesh_pars.set<Int>("nx", 1);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = G1DTestNonlinearProblem::parameters();
-    prob_pars.set<App *>("app", &app);
-    prob_pars.set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<App>>("app", ref(app));
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     G1DTestNonlinearProblem prob(prob_pars);
 
     auto ro_pars = RestartOutput::parameters();
-    ro_pars.set<App *>("app", &app);
+    ro_pars.set<Ref<App>>("app", ref(app));
     ro_pars.set<fs::path>("file", "nl");
     prob.add_output<RestartOutput>(ro_pars);
 

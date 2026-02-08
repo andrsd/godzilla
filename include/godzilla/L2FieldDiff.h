@@ -23,7 +23,7 @@ public:
 protected:
     template <class T>
     void
-    set_function(FieldID fid, T * instance, void (T::*method)(Real time, const Real[], Scalar[]))
+    set_function(FieldID fid, Ref<T> instance, void (T::*method)(Real time, const Real[], Scalar[]))
     {
         this->delegates[fid.value()].bind(instance, method);
     }
@@ -32,7 +32,7 @@ private:
     virtual void set_up_callbacks() = 0;
 
     /// FE problem
-    const FEProblemInterface * fepi;
+    Optional<Ref<const FEProblemInterface>> fepi;
     /// Number of fields
     Int n_fields;
     /// Computed L_2 errors

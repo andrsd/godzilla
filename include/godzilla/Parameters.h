@@ -5,6 +5,7 @@
 
 #include "godzilla/CallStack.h"
 #include "godzilla/Exception.h"
+#include "godzilla/Ref.h"
 #include "godzilla/Types.h"
 #include "godzilla/Assert.h"
 #include "godzilla/Qtr.h"
@@ -46,6 +47,8 @@ protected:
     class Parameter : public Value {
     public:
         Parameter() = default;
+
+        explicit Parameter(T val) : value(val) {}
 
         /// @returns A read-only reference to the parameter value.
         T
@@ -112,42 +115,69 @@ public:
         return true;
     }
 
-    /// Get parameter value
+    /// Get parameter value for `Optional<T>`
+    template <IsOptional T>
+    inline T
+    get(String name) const
+    {
+        CALL_STACK_MSG();
+        using V = typename T::value_type;
+        auto it = this->params.find(name);
+        if (it == this->params.end())
+            return {};
+
+        auto par = it->second.get();
+        auto tpar = dynamic_cast<Parameter<V> *>(par);
+        if (tpar == nullptr)
+            throw Exception("Parameter '{}' has unexpected type ({})", name, par->type());
+        if (tpar->valid)
+            return tpar->get();
+        else
+            return {};
+    }
+
+    /// Get parameter value for `Ref<T>`
+    template <RefType R>
+    inline R
+    get(String name) const
+    {
+        using U = typename R::element_type;
+
+        CALL_STACK_MSG();
+        auto it = this->params.find(name);
+        if (it == this->params.end())
+            throw Exception("No parameter '{}' found.", name);
+
+        auto par = it->second.get();
+        auto tpar = dynamic_cast<Parameter<LateRef<U>> *>(par);
+        if (tpar == nullptr)
+            throw Exception("Parameter '{}' has unexpected type ({})", name, par->type());
+        if (tpar->valid)
+            return tpar->get().get();
+        if (tpar->required)
+            throw Exception("Required parameter '{}' is not set", name);
+        throw Exception("Parameter '{}' is uninitialized", name);
+    }
+
+    /// Get parameter value for `T`
     template <typename T>
     inline T
     get(String name) const
     {
         CALL_STACK_MSG();
-        if constexpr (IsOptional<T>) {
-            using V = typename T::value_type;
-            auto it = this->params.find(name);
-            if (it == this->params.end())
-                return {};
+        auto it = this->params.find(name);
+        if (it == this->params.end())
+            throw Exception("No parameter '{}' found.", name);
 
-            auto par = it->second.get();
-            auto tpar = dynamic_cast<Parameter<V> *>(par);
-            if (tpar == nullptr)
-                throw Exception("Parameter '{}' has unexpected type ({})", name, par->type());
-            if (tpar->valid)
-                return tpar->get();
-            else
-                return {};
-        }
-        else {
-            auto it = this->params.find(name);
-            if (it == this->params.end())
-                throw Exception("No parameter '{}' found.", name);
-
-            auto par = it->second.get();
-            auto tpar = dynamic_cast<Parameter<T> *>(par);
-            if (tpar == nullptr)
-                throw Exception("Parameter '{}' has unexpected type ({})", name, par->type());
-            if (tpar->valid)
-                return tpar->get();
-            if (tpar->required)
-                throw Exception("Required parameter '{}' is not set", name);
-            throw Exception("Parameter '{}' is uninitialized", name);
-        }
+        auto par = it->second.get();
+        auto tpar = dynamic_cast<Parameter<T> *>(par);
+        if (tpar == nullptr)
+            throw Exception("Parameter '{}' has unexpected type ({})", name, par->type());
+        if (tpar->valid)
+            return tpar->get();
+        if (tpar->required)
+            throw Exception("Required parameter '{}' is not set", name);
+        throw Exception("Parameter '{}' is uninitialized", name);
     }
 
     template <typename T>
@@ -168,6 +198,7 @@ public:
 
     /// Set parameter
     template <typename T>
+        requires(!RefType<T>)
     inline Parameters &
     set(String name, T value, std::source_location loc = std::source_location::current())
     {
@@ -179,6 +210,25 @@ public:
         par->valid = true;
         par->src_loc = loc;
         dynamic_cast<Parameter<T> *>(this->params[name].get())->set(value);
+        return *this;
+    }
+
+    /// Set Ref<T> parameters
+    template <RefType R>
+    inline Parameters &
+    set(String name, R value, std::source_location loc = std::source_location::current())
+    {
+        CALL_STACK_MSG();
+        using U = typename R::element_type;
+
+        expect_true(this->has<LateRef<U>>(name),
+                    "Parameter '{}' does not exist or is not LateRef",
+                    name);
+
+        auto & par = this->params[name];
+        par->valid = true;
+        par->src_loc = loc;
+        dynamic_cast<Parameter<LateRef<U>> *>(par.get())->set(LateRef<U>::from_ref(value));
         return *this;
     }
 

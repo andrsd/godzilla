@@ -25,7 +25,7 @@ main(int argc, char * argv[])
         auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
         auto prob_pars = app.make_parameters<AdvectionEquation>();
-        prob_pars.set<Mesh *>("mesh", mesh.get());
+        prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
         prob_pars.set<Real>("dt", 1e-3);
         prob_pars.set<Real>("end_time", 5e-3);
         auto prob = app.make_problem<AdvectionEquation>(prob_pars);

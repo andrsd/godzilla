@@ -32,7 +32,7 @@ protected:
 
 class F0 : public ResidualFunc {
 public:
-    explicit F0(GTestFENonlinearProblemJFNK * prob) : ResidualFunc(prob) {}
+    explicit F0(Ref<GTestFENonlinearProblemJFNK> prob) : ResidualFunc(prob) {}
 
     void
     evaluate(Scalar f[]) const override
@@ -43,7 +43,7 @@ public:
 
 class F1 : public ResidualFunc {
 public:
-    explicit F1(GTestFENonlinearProblemJFNK * prob) :
+    explicit F1(Ref<GTestFENonlinearProblemJFNK> prob) :
         ResidualFunc(prob),
         dim(get_spatial_dimension()),
         u_x(get_field_gradient("u"))
@@ -64,7 +64,7 @@ protected:
 
 class G3 : public JacobianFunc {
 public:
-    explicit G3(GTestFENonlinearProblemJFNK * prob) :
+    explicit G3(Ref<GTestFENonlinearProblemJFNK> prob) :
         JacobianFunc(prob),
         dim(get_spatial_dimension())
     {
@@ -96,8 +96,13 @@ GTestFENonlinearProblemJFNK::set_up_fields()
 void
 GTestFENonlinearProblemJFNK::set_up_weak_form()
 {
-    add_residual_block(this->iu, new F0(this), new F1(this));
-    add_jacobian_preconditioner_block(this->iu, this->iu, nullptr, nullptr, nullptr, new G3(this));
+    add_residual_block(this->iu, new F0(ref(*this)), new F1(ref(*this)));
+    add_jacobian_preconditioner_block(this->iu,
+                                      this->iu,
+                                      nullptr,
+                                      nullptr,
+                                      nullptr,
+                                      new G3(ref(*this)));
 }
 
 void
@@ -132,23 +137,23 @@ TEST(FENonlinearProblemJFNKTest, solve)
     TestApp app;
 
     auto mesh_params = LineMesh::parameters();
-    mesh_params.set<godzilla::App *>("app", &app);
+    mesh_params.set<Ref<godzilla::App>>("app", ref(app));
     mesh_params.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = app.make_parameters<GTestFENonlinearProblemJFNK>();
-    prob_params.set<godzilla::App *>("app", &app);
-    prob_params.set<Mesh *>("mesh", mesh.get());
+    prob_params.set<Ref<godzilla::App>>("app", ref(app));
+    prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     auto prob = app.make_problem<GTestFENonlinearProblemJFNK>(prob_params);
 
     auto ic_params = ConstantInitialCondition::parameters();
-    ic_params.set<godzilla::App *>("app", &app);
+    ic_params.set<Ref<godzilla::App>>("app", ref(app));
     ic_params.set<std::vector<Real>>("value", { 0.1 });
     prob->add_initial_condition<ConstantInitialCondition>(ic_params);
 
     auto bc_params = DirichletBC::parameters();
-    bc_params.set<godzilla::App *>("app", &app)
-        .set<App *>("app", &app)
+    bc_params.set<Ref<godzilla::App>>("app", ref(app))
+        .set<Ref<App>>("app", ref(app))
         .set<std::vector<String>>("boundary", { "left", "right" });
     prob->add_boundary_condition<DirichletBC>(bc_params);
 

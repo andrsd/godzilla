@@ -12,13 +12,12 @@
 #include "godzilla/Types.h"
 
 using namespace godzilla;
-using namespace testing;
 
 namespace {
 
 class TestEssentialBoundary3D : public fe::EssentialBoundaryInfo<TET4, 3_D, 4> {
 public:
-    TestEssentialBoundary3D(UnstructuredMesh * mesh, const IndexSet & facets) :
+    TestEssentialBoundary3D(Ref<UnstructuredMesh> mesh, const IndexSet & facets) :
         fe::EssentialBoundaryInfo<TET4, 3_D, 4>(mesh, facets)
     {
     }
@@ -49,7 +48,7 @@ public:
 
 class TestNaturalBoundary3D : public fe::NaturalBoundaryInfo<TET4, 3_D, 4> {
 public:
-    TestNaturalBoundary3D(UnstructuredMesh * mesh,
+    TestNaturalBoundary3D(Ref<UnstructuredMesh> mesh,
                           Array1D<DenseMatrix<Real, 3, 4>> grad_phi,
                           const IndexSet & facets) :
         fe::NaturalBoundaryInfo<TET4, 3_D, 4>(mesh, grad_phi, facets)
@@ -87,7 +86,7 @@ TEST(FEBoundaryTest, test_3d)
     TestApp app;
 
     auto mesh_pars = TestMesh3D::parameters();
-    mesh_pars.set<godzilla::App *>("app", &app);
+    mesh_pars.set<Ref<godzilla::App>>("app", ref(app));
     auto mesh_qtr = MeshFactory::create<TestMesh3D>(mesh_pars);
     auto mesh = mesh_qtr.get();
 
@@ -101,7 +100,7 @@ TEST(FEBoundaryTest, test_3d)
         auto vertices = mesh->get_cone_recursive_vertices(bnd_facets);
         vertices.sort_remove_dups();
 
-        TestEssentialBoundary3D bnd(mesh, vertices);
+        TestEssentialBoundary3D bnd(ref(*mesh), vertices);
         bnd.create();
         bnd.compute();
 
@@ -114,7 +113,7 @@ TEST(FEBoundaryTest, test_3d)
     {
         auto label = mesh->get_label("left");
         auto bnd_facets = points_from_label(label);
-        TestNaturalBoundary3D bnd(mesh, grad_phi, bnd_facets);
+        TestNaturalBoundary3D bnd(ref(*mesh), grad_phi, bnd_facets);
         bnd.create();
         bnd.compute();
 
@@ -133,7 +132,7 @@ TEST(FEBoundaryTest, test_3d)
     {
         auto label = mesh->get_label("front");
         auto bnd_facets = points_from_label(label);
-        TestNaturalBoundary3D bnd(mesh, grad_phi, bnd_facets);
+        TestNaturalBoundary3D bnd(ref(*mesh), grad_phi, bnd_facets);
         bnd.create();
         bnd.compute();
 
@@ -152,7 +151,7 @@ TEST(FEBoundaryTest, test_3d)
     {
         auto label = mesh->get_label("bottom");
         auto bnd_facets = points_from_label(label);
-        TestNaturalBoundary3D bnd(mesh, grad_phi, bnd_facets);
+        TestNaturalBoundary3D bnd(ref(*mesh), grad_phi, bnd_facets);
         bnd.create();
         bnd.compute();
 
@@ -171,7 +170,7 @@ TEST(FEBoundaryTest, test_3d)
     {
         auto label = mesh->get_label("slanted");
         auto bnd_facets = points_from_label(label);
-        TestNaturalBoundary3D bnd(mesh, grad_phi, bnd_facets);
+        TestNaturalBoundary3D bnd(ref(*mesh), grad_phi, bnd_facets);
         bnd.create();
         bnd.compute();
 

@@ -133,7 +133,7 @@ public:
     /// @param method Member function in class T
     template <class T>
     void
-    set_compute_rhs(T * instance, void (T::*method)(Vector &))
+    set_compute_rhs(Ref<T> instance, void (T::*method)(Vector &))
     {
         this->compute_rhs_method.bind(instance, method);
         PETSC_CHECK(
@@ -147,7 +147,7 @@ public:
     /// @param method Member function in class T
     template <class T>
     void
-    set_compute_operators(T * instance, void (T::*method)(Matrix &, Matrix &))
+    set_compute_operators(Ref<T> instance, void (T::*method)(Matrix &, Matrix &))
     {
         this->compute_operators_method.bind(instance, method);
         PETSC_CHECK(KSPSetComputeOperators(this->obj,
@@ -163,7 +163,7 @@ public:
     /// @param method Member function in class T
     template <class T>
     void
-    monitor_set(T * instance, void (T::*method)(Int, Real))
+    monitor_set(Ref<T> instance, void (T::*method)(Int, Real))
     {
         this->monitor_method.bind(instance, method);
         PETSC_CHECK(
@@ -172,7 +172,7 @@ public:
 
     template <class T>
     void
-    set_convergence_test(T * instance, ConvergedReason (T::*method)(Int, Real))
+    set_convergence_test(Ref<T> instance, ConvergedReason (T::*method)(Int, Real))
     {
         this->convergence_test_method.bind(instance, method);
         PETSC_CHECK(KSPSetConvergenceTest(this->obj,

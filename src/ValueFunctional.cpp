@@ -6,7 +6,7 @@
 
 namespace godzilla {
 
-ValueFunctional::ValueFunctional(FEProblemInterface * fepi, String region) :
+ValueFunctional::ValueFunctional(Ref<FEProblemInterface> fepi, String region) :
     Functional(fepi, region),
     evalr(fepi)
 {

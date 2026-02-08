@@ -34,7 +34,7 @@ FVProblemInterface::compute_flux(Int dim,
 
 const String FVProblemInterface::empty_name;
 
-FVProblemInterface::FVProblemInterface(Problem * problem, const Parameters & pars) :
+FVProblemInterface::FVProblemInterface(Problem & problem, const Parameters & pars) :
     DiscreteProblemInterface(problem, pars),
     fvm(nullptr)
 {

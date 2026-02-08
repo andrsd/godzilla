@@ -30,7 +30,7 @@ public:
     String get_name() const;
 
     /// Get the App this object is associated with
-    App * get_app() const;
+    Ref<App> get_app() const;
 
     /// Get the MPI comm this object works on
     mpi::Communicator get_comm() const;
@@ -43,7 +43,7 @@ public:
 
 private:
     /// The application owning this object
-    App * app;
+    Ref<App> app;
 
     /// The type of this object
     const String type;

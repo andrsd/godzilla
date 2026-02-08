@@ -31,7 +31,7 @@ public:
     /// Set the apply method
     template <class T>
     void
-    set_apply(T * instance, void (T::*method)(const Vector &, Vector &))
+    set_apply(Ref<T> instance, void (T::*method)(const Vector &, Vector &))
     {
         this->apply_method.bind(instance, method);
         PETSC_CHECK(PCShellSetApply(*this, invoke_apply_delegate));
@@ -40,7 +40,7 @@ public:
     /// Set the apply BA method
     template <class T>
     void
-    set_apply_ba(T * instance, void (T::*method)(PCSide, const Vector &, Vector &, Vector &))
+    set_apply_ba(Ref<T> instance, void (T::*method)(PCSide, const Vector &, Vector &, Vector &))
     {
         this->apply_ba_method.bind(instance, method);
         PETSC_CHECK(PCShellSetApplyBA(*this, invoke_apply_ba_delegate));
@@ -49,7 +49,7 @@ public:
     /// Set the apply transpose method
     template <class T>
     void
-    set_apply_transpose(T * instance, void (T::*method)(const Vector &, Vector &))
+    set_apply_transpose(Ref<T> instance, void (T::*method)(const Vector &, Vector &))
     {
         this->apply_transpose_method.bind(instance, method);
         PETSC_CHECK(PCShellSetApplyTranspose(*this, invoke_apply_transpose_delegate));
@@ -58,7 +58,7 @@ public:
     /// Set the set up method
     template <class T>
     void
-    set_set_up(T * instance, void (T::*method)(void))
+    set_set_up(Ref<T> instance, void (T::*method)(void))
     {
         this->set_up_method.bind(instance, method);
         PETSC_CHECK(PCShellSetSetUp(*this, invoke_set_up_delegate));
@@ -67,7 +67,7 @@ public:
     /// Set the destroy method
     template <class T>
     void
-    set_destroy(T * instance, void (T::*method)(void))
+    set_destroy(Ref<T> instance, void (T::*method)(void))
     {
         this->destroy_method.bind(instance, method);
         PETSC_CHECK(PCShellSetDestroy(*this, invoke_destroy_delegate));

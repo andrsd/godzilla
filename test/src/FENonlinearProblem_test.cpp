@@ -13,7 +13,6 @@
 #include "ExceptionTestMacros.h"
 #include "petscvec.h"
 
-using namespace ::testing;
 using namespace godzilla;
 
 namespace {
@@ -53,6 +52,8 @@ public:
 
 TEST_F(FENonlinearProblemTest, fields)
 {
+    auto prob = this->app->get_problem<GTestFENonlinearProblem>();
+
     prob->set_field(FieldID(1), "vec", 3, Order(1));
 
     auto aux_fld1_idx = prob->add_aux_field("aux_fld1", 2, Order(1));
@@ -106,6 +107,8 @@ TEST_F(FENonlinearProblemTest, fields)
 
 TEST_F(FENonlinearProblemTest, add_duplicate_field_id)
 {
+    auto prob = this->app->get_problem<GTestFENonlinearProblem>();
+
     prob->set_field(FieldID(0), "first", 1, Order(1));
     EXPECT_THROW_MSG(prob->set_field(FieldID(0), "second", 1, Order(1)),
                      "Cannot add field 'second' with ID = 0. ID already exists.");
@@ -113,6 +116,8 @@ TEST_F(FENonlinearProblemTest, add_duplicate_field_id)
 
 TEST_F(FENonlinearProblemTest, get_aux_fields)
 {
+    auto prob = this->app->get_problem<GTestFENonlinearProblem>();
+
     prob->set_aux_field(FieldID(0), "aux_one", 1, Order(1));
     prob->add_aux_field("aux_two", 2, Order(1));
     prob->create();
@@ -150,6 +155,8 @@ TEST_F(FENonlinearProblemTest, get_aux_fields)
 
 TEST_F(FENonlinearProblemTest, add_duplicate_aux_field_id)
 {
+    auto prob = this->app->get_problem<GTestFENonlinearProblem>();
+
     prob->set_aux_field(FieldID(0), "first", 1, Order(1));
     EXPECT_THROW_MSG(prob->set_aux_field(FieldID(0), "second", 1, Order(1)),
                      "Cannot add auxiliary field 'second' with ID = 0. ID is already taken.");
@@ -157,8 +164,10 @@ TEST_F(FENonlinearProblemTest, add_duplicate_aux_field_id)
 
 TEST_F(FENonlinearProblemTest, set_up_initial_guess)
 {
+    auto prob = this->app->get_problem<GTestFENonlinearProblem>();
+
     auto ic_pars = ConstantInitialCondition::parameters();
-    ic_pars.set<App *>("app", app);
+    ic_pars.set<Ref<App>>("app", ref(*app));
     ic_pars.set<std::vector<Real>>("value", { 0 });
     prob->add_initial_condition<ConstantInitialCondition>(ic_pars);
 
@@ -174,6 +183,8 @@ TEST_F(FENonlinearProblemTest, set_up_initial_guess)
 
 TEST_F(FENonlinearProblemTest, zero_initial_guess)
 {
+    auto prob = this->app->get_problem<GTestFENonlinearProblem>();
+
     prob->create();
     prob->set_up_initial_guess();
 
@@ -185,41 +196,45 @@ TEST_F(FENonlinearProblemTest, zero_initial_guess)
 
 TEST_F(FENonlinearProblemTest, solve)
 {
+    auto prob = this->app->get_problem<GTestFENonlinearProblem>();
+
     auto ic_pars = ConstantInitialCondition::parameters();
-    ic_pars.set<App *>("app", this->app);
+    ic_pars.set<Ref<App>>("app", ref(*this->app));
     ic_pars.set<std::vector<Real>>("value", { 0.1 });
-    this->prob->add_initial_condition<ConstantInitialCondition>(ic_pars);
+    prob->add_initial_condition<ConstantInitialCondition>(ic_pars);
 
     auto params = DirichletBC::parameters();
-    params.set<App *>("app", this->app);
+    params.set<Ref<App>>("app", ref(*this->app));
     params.set<std::vector<String>>("boundary", { "left", "right" });
-    auto bc = this->prob->add_boundary_condition<DirichletBC>(params);
-    this->prob->create();
+    auto bc = prob->add_boundary_condition<DirichletBC>(params);
+    prob->create();
 
-    auto bcs = this->prob->get_boundary_conditions();
+    auto bcs = prob->get_boundary_conditions();
     EXPECT_EQ(bcs.size(), 1);
     EXPECT_EQ(bcs[0], bc);
 
-    auto ess_bcs = this->prob->get_essential_bcs();
+    auto ess_bcs = prob->get_essential_bcs();
     ASSERT_EQ(ess_bcs.size(), 1);
     EXPECT_EQ(bcs[0], bc);
 
-    this->prob->run();
+    prob->run();
 
-    bool conv = this->prob->converged();
+    bool conv = prob->converged();
     EXPECT_EQ(conv, true);
 
-    auto x = this->prob->get_solution_vector();
+    auto x = prob->get_solution_vector();
     EXPECT_DOUBLE_EQ(x(0), 0.25);
 }
 
 TEST_F(FENonlinearProblemTest, solve_no_ic)
 {
+    auto prob = this->app->get_problem<GTestFENonlinearProblem>();
+
     auto params = DirichletBC::parameters();
-    params.set<App *>("app", this->app);
+    params.set<Ref<App>>("app", ref(*this->app));
     params.set<std::vector<String>>("boundary", { "left" });
-    this->prob->add_boundary_condition<DirichletBC>(params);
-    this->prob->create();
+    prob->add_boundary_condition<DirichletBC>(params);
+    prob->create();
 
     auto x = prob->get_solution_vector();
     EXPECT_DOUBLE_EQ(x(0), 0.);
@@ -227,12 +242,14 @@ TEST_F(FENonlinearProblemTest, solve_no_ic)
 
 TEST_F(FENonlinearProblemTest, err_ic_comp_mismatch)
 {
+    auto prob = this->app->get_problem<GTestFENonlinearProblem>();
+
     auto params = GTest2CompIC::parameters();
     params.set<String>("name", "ic");
-    params.set<App *>("app", this->app);
-    this->prob->add_initial_condition<GTest2CompIC>(params);
+    params.set<Ref<App>>("app", ref(*this->app));
+    prob->add_initial_condition<GTest2CompIC>(params);
 
-    EXPECT_DEATH(this->prob->create(),
+    EXPECT_DEATH(prob->create(),
                  "Initial condition 'ic' operates on 2 components, but is set on a field with 1 "
                  "components.");
 }
@@ -242,25 +259,25 @@ TEST(TwoFieldFENonlinearProblemTest, err_duplicate_ics)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("app", &app);
+    mesh_pars.set<Ref<App>>("app", ref(app));
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_params = GTest2FieldsFENonlinearProblem::parameters();
-    prob_params.set<App *>("app", &app);
-    prob_params.set<Mesh *>("mesh", mesh.get());
+    prob_params.set<Ref<App>>("app", ref(app));
+    prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTest2FieldsFENonlinearProblem prob(prob_params);
 
     auto ic1_params = ConstantInitialCondition::parameters();
     ic1_params.set<String>("name", "ic1")
-        .set<App *>("app", &app)
+        .set<Ref<App>>("app", ref(app))
         .set<String>("field", "u")
         .set<std::vector<Real>>("value", { 0.1 });
     prob.add_initial_condition<ConstantInitialCondition>(ic1_params);
 
     auto ic2_params = ConstantInitialCondition::parameters();
     ic2_params.set<String>("name", "ic2")
-        .set<App *>("app", &app)
+        .set<Ref<App>>("app", ref(app))
         .set<String>("field", "u")
         .set<std::vector<Real>>("value", { 0.2 });
     prob.add_initial_condition<ConstantInitialCondition>(ic2_params);
@@ -275,17 +292,17 @@ TEST(TwoFieldFENonlinearProblemTest, err_not_enough_ics)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("app", &app);
+    mesh_pars.set<Ref<App>>("app", ref(app));
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_params = GTest2FieldsFENonlinearProblem::parameters();
-    prob_params.set<App *>("app", &app);
-    prob_params.set<Mesh *>("mesh", mesh.get());
+    prob_params.set<Ref<App>>("app", ref(app));
+    prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTest2FieldsFENonlinearProblem prob(prob_params);
 
     auto ic_params = ConstantInitialCondition::parameters();
-    ic_params.set<App *>("app", &app);
+    ic_params.set<Ref<App>>("app", ref(app));
     ic_params.set<String>("name", "ic1");
     ic_params.set<std::vector<Real>>("value", { 0.1 });
     ic_params.set<String>("field", "u");
@@ -296,14 +313,16 @@ TEST(TwoFieldFENonlinearProblemTest, err_not_enough_ics)
 
 TEST_F(FENonlinearProblemTest, err_nonexisting_bc_bnd)
 {
+    auto prob = this->app->get_problem<GTestFENonlinearProblem>();
+
     auto params = DirichletBC::parameters();
     params.set<String>("name", "bc1");
-    params.set<App *>("app", this->app);
+    params.set<Ref<App>>("app", ref(*this->app));
     params.set<std::vector<String>>("boundary", { "asdf" });
-    this->prob->add_boundary_condition<DirichletBC>(params);
+    prob->add_boundary_condition<DirichletBC>(params);
 
     EXPECT_DEATH(
-        this->prob->create(),
+        prob->create(),
         "Boundary condition 'bc1' is set on boundary 'asdf' which does not exist in the mesh.");
 }
 
@@ -312,13 +331,13 @@ TEST(TwoFieldFENonlinearProblemTest, field_decomposition)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("app", &app);
+    mesh_pars.set<Ref<App>>("app", ref(app));
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_params = GTest2FieldsFENonlinearProblem::parameters();
-    prob_params.set<App *>("app", &app);
-    prob_params.set<Mesh *>("mesh", mesh.get());
+    prob_params.set<Ref<App>>("app", ref(app));
+    prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTest2FieldsFENonlinearProblem prob(prob_params);
 
     prob.create();
@@ -331,13 +350,13 @@ TEST(TwoFieldFENonlinearProblemTest, field_decomposition)
     {
         auto f0_idxs = fdecomp.is[0].borrow_indices();
         auto idx0 = to_std_vector(f0_idxs);
-        EXPECT_THAT(idx0, ElementsAre(0, 2, 4));
+        EXPECT_THAT(idx0, testing::ElementsAre(0, 2, 4));
     }
 
     {
         auto f1_idxs = fdecomp.is[1].borrow_indices();
         auto idx1 = to_std_vector(f1_idxs);
-        EXPECT_THAT(idx1, ElementsAre(1, 3, 5));
+        EXPECT_THAT(idx1, testing::ElementsAre(1, 3, 5));
     }
 
     fdecomp.destroy();
@@ -348,13 +367,15 @@ TEST(TwoFieldFENonlinearProblemTest, field_decomposition)
 
 TEST_F(FENonlinearProblemTest, steady_state_output)
 {
-    auto params = DirichletBC::parameters();
-    params.set<App *>("app", this->app);
-    params.set<std::vector<String>>("boundary", { "left", "right" });
-    this->prob->add_boundary_condition<DirichletBC>(params);
+    auto prob = this->app->get_problem<GTestFENonlinearProblem>();
 
-    this->prob->create();
-    EXPECT_DOUBLE_EQ(this->prob->get_time(), 0.);
-    this->prob->run();
-    EXPECT_DOUBLE_EQ(this->prob->get_time(), 1.);
+    auto params = DirichletBC::parameters();
+    params.set<Ref<App>>("app", ref(*this->app));
+    params.set<std::vector<String>>("boundary", { "left", "right" });
+    prob->add_boundary_condition<DirichletBC>(params);
+
+    prob->create();
+    EXPECT_DOUBLE_EQ(prob->get_time(), 0.);
+    prob->run();
+    EXPECT_DOUBLE_EQ(prob->get_time(), 1.);
 }

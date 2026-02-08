@@ -19,8 +19,6 @@ VTKOutput::parameters()
 VTKOutput::VTKOutput(const Parameters & pars) : FileOutput(pars), viewer(nullptr)
 {
     CALL_STACK_MSG();
-    expect_true(get_discrete_problem_interface() != nullptr,
-                "VTKOutput works only with problems that inherit from DiscreteProblemInterface");
 }
 
 VTKOutput::~VTKOutput()

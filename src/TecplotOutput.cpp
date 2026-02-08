@@ -82,8 +82,9 @@ TecplotOutput::parameters()
 
 TecplotOutput::TecplotOutput(const Parameters & pars) :
     FileOutput(pars),
+    DiscreteProblemOutputInterface(pars),
 #ifdef GODZILLA_WITH_TECIOCPP
-    mesh(nullptr),
+    mesh(get_mesh()),
     file(nullptr),
     n_zones(0),
 #endif
@@ -91,8 +92,6 @@ TecplotOutput::TecplotOutput(const Parameters & pars) :
 {
     CALL_STACK_MSG();
 #ifdef GODZILLA_WITH_TECIOCPP
-    expect_true(get_discrete_problem_interface() != nullptr,
-                "Tecplot output can be only used with finite element problems.");
 #else
     error("Unable to use TecplotOutput, godzilla was not built with teciocpp.");
 #endif
@@ -126,11 +125,6 @@ TecplotOutput::create()
     FileOutput::create();
 
     auto dpi = get_discrete_problem_interface();
-    expect_true(dpi != nullptr, "DiscreteProblemInterface is null");
-    expect_true(get_problem() != nullptr, "Problem is null");
-
-    this->mesh = dpi->get_mesh();
-    expect_true(this->mesh != nullptr, "Tecplot output can be only used with unstructured meshes.");
 
     // Get names of all variables that will be stored
     auto flds = dpi->get_field_names();
@@ -170,7 +164,6 @@ TecplotOutput::create()
         this->nodal_aux_var_fids.push_back(fid.value());
     }
 
-    expect_true(this->mesh != nullptr, "Mesh is null");
     auto dim = this->mesh->get_dimension();
     expect_true(dim == 1_D || dim == 2_D || dim == 3_D, "Unsupported dimension {}", dim);
     for (Int i = 0; i < dim; ++i)

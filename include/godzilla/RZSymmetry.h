@@ -20,7 +20,7 @@ public:
 
 private:
     /// Discrete problem this object is part of
-    DiscreteProblemInterface * dpi;
+    Ref<DiscreteProblemInterface> dpi;
     /// Axis vector
     const std::vector<Real> axis;
     /// Axis point

@@ -40,11 +40,6 @@ public:
 
 protected:
     fs::path get_file_base() const;
-    void add_var_names(FieldID fid, std::vector<std::string> & var_names);
-    void add_aux_var_names(FieldID fid, std::vector<std::string> & var_names);
-
-    const DiscreteProblemInterface * get_discrete_problem_interface() const;
-    DiscreteProblemInterface * get_discrete_problem_interface();
 
 private:
     /// Get file extension
@@ -57,8 +52,6 @@ private:
     fs::path file_base;
     /// The file name of the output file
     fs::path file_name;
-    /// Convenience pointer
-    DiscreteProblemInterface * dpi;
 
 public:
     static Parameters parameters();

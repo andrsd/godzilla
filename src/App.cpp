@@ -47,7 +47,7 @@ namespace godzilla {
 Registry registry;
 
 App::App(mpi::Communicator comm, String name) :
-    PrintInterface(comm, this, this->verbosity_level, name),
+    PrintInterface(comm, cref(*this), this->verbosity_level, name),
     name(name),
     mpi_comm(comm),
     registry(godzilla::registry),
@@ -61,7 +61,7 @@ App::App(mpi::Communicator comm, String name) :
 }
 
 App::App(mpi::Communicator comm, Registry & registry, String name) :
-    PrintInterface(comm, this, this->verbosity_level, name),
+    PrintInterface(comm, cref(*this), this->verbosity_level, name),
     name(name),
     mpi_comm(comm),
     registry(registry),
@@ -103,18 +103,20 @@ App::get_version() const
     return ver;
 }
 
-Logger *
+Ref<Logger>
 App::get_logger()
 {
     CALL_STACK_MSG();
-    return this->logger.get();
+    expect_true(this->logger != nullptr, "Logger is null");
+    return ref(*this->logger);
 }
 
-Problem *
+Ref<Problem>
 App::get_problem() const
 {
     CALL_STACK_MSG();
-    return this->problem.get();
+    expect_true(this->problem != nullptr, "Problem is null");
+    return ref(*this->problem);
 }
 
 const unsigned int &

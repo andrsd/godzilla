@@ -35,7 +35,7 @@ void
 AdvectionEquation::set_up_weak_form()
 {
     CALL_STACK_MSG();
-    set_riemann_solver(FieldID(0), this, &AdvectionEquation::compute_flux);
+    set_riemann_solver(FieldID(0), ref(*this), &AdvectionEquation::compute_flux);
 }
 
 void

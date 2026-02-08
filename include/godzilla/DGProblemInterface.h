@@ -15,7 +15,7 @@ class AuxiliaryField;
 ///
 class DGProblemInterface : public DiscreteProblemInterface {
 public:
-    DGProblemInterface(Problem * problem, const Parameters & pars);
+    DGProblemInterface(Problem & problem, const Parameters & pars);
     ~DGProblemInterface() override;
 
     Int get_num_fields() const override;

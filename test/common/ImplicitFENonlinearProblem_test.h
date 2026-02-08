@@ -17,21 +17,21 @@ public:
         {
             auto pars = LineMesh::parameters();
             // clang-format off
-            pars.set<godzilla::App *>("app", this->app)
+            pars.set<Ref<godzilla::App>>("app", ref(*this->app))
                 .set<Int>("nx", 2);
             // clang-format on
             this->mesh = MeshFactory::create<LineMesh>(pars);
         }
         {
             auto pars = GTestImplicitFENonlinearProblem::parameters();
-            pars.set<godzilla::App *>("app", this->app)
+            pars.set<Ref<godzilla::App>>("app", ref(*this->app))
                 // FIXME: after app creates params and not pointers
                 .set<String>("_type", "GTestImplicitFENonlinearProblem")
-                .set<Mesh *>("mesh", mesh.get())
+                .set<Ref<Mesh>>("mesh", ref(*mesh))
                 .set<Real>("start_time", 0.)
                 .set<Real>("end_time", 20)
                 .set<Real>("dt", 5);
-            this->prob = this->app->make_problem<GTestImplicitFENonlinearProblem>(pars);
+            this->app->make_problem<GTestImplicitFENonlinearProblem>(pars);
         }
     }
 
@@ -42,5 +42,4 @@ public:
     }
 
     Qtr<Mesh> mesh;
-    GTestImplicitFENonlinearProblem * prob;
 };

@@ -47,8 +47,8 @@ public:
     void
     set_up_callbacks() override
     {
-        set_compute_operators(this, &CustomLinearProblem::compute_operators);
-        set_compute_rhs(this, &CustomLinearProblem::compute_rhs);
+        set_compute_operators(ref(*this), &CustomLinearProblem::compute_operators);
+        set_compute_rhs(ref(*this), &CustomLinearProblem::compute_rhs);
     }
 
     Section s;
@@ -61,13 +61,13 @@ TEST(LinearProblemTest, run)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("app", &app);
+    mesh_pars.set<Ref<App>>("app", ref(app));
     mesh_pars.set<Int>("nx", 1);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = LinearProblem::parameters();
-    prob_pars.set<App *>("app", &app);
-    prob_pars.set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<App>>("app", ref(app));
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     prob_pars.set<String>("ksp_type", KSPCG);
     CustomLinearProblem prob(prob_pars);
 
@@ -89,18 +89,18 @@ TEST(LinearProblemTest, restart_file)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("app", &app);
+    mesh_pars.set<Ref<App>>("app", ref(app));
     mesh_pars.set<Int>("nx", 1);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = LinearProblem::parameters();
-    prob_pars.set<App *>("app", &app);
-    prob_pars.set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<App>>("app", ref(app));
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     prob_pars.set<String>("ksp_type", KSPCG);
     CustomLinearProblem prob(prob_pars);
 
     auto ro_pars = RestartOutput::parameters();
-    ro_pars.set<App *>("app", &app);
+    ro_pars.set<Ref<App>>("app", ref(app));
     ro_pars.set<fs::path>("file", "lp");
     prob.add_output<RestartOutput>(ro_pars);
 

@@ -39,20 +39,20 @@ TEST(MeshPartitioningOutputTest, get_file_ext)
     TestApp app;
 
     auto mesh_params = LineMesh::parameters();
-    mesh_params.set<App *>("app", &app);
+    mesh_params.set<Ref<App>>("app", ref(app));
     mesh_params.set<Real>("xmin", 0);
     mesh_params.set<Real>("xmax", 1);
     mesh_params.set<Int>("nx", 4);
     auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = TestProblem::parameters();
-    prob_params.set<App *>("app", &app);
-    prob_params.set<Mesh *>("mesh", mesh.get());
+    prob_params.set<Ref<App>>("app", ref(app));
+    prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     TestProblem prob(prob_params);
 
     auto params = MeshPartitioningOutput::parameters();
-    params.set<App *>("app", &app);
-    params.set<Problem *>("_problem", &prob);
+    params.set<Ref<App>>("app", ref(app));
+    params.set<Ref<Problem>>("_problem", ref(prob));
     params.set<fs::path>("file", "part");
     MeshPartitioningOutput out(params);
     out.create();
@@ -65,19 +65,19 @@ TEST(MeshPartitioningOutputTest, output)
     TestApp app;
 
     auto mesh_params = LineMesh::parameters();
-    mesh_params.set<App *>("app", &app);
+    mesh_params.set<Ref<App>>("app", ref(app));
     mesh_params.set<Real>("xmin", 0);
     mesh_params.set<Real>("xmax", 1);
     mesh_params.set<Int>("nx", 4);
     auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = TestProblem::parameters();
-    prob_params.set<App *>("app", &app);
-    prob_params.set<Mesh *>("mesh", mesh.get());
+    prob_params.set<Ref<App>>("app", ref(app));
+    prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     TestProblem prob(prob_params);
 
     auto params = MeshPartitioningOutput::parameters();
-    params.set<App *>("app", &app);
+    params.set<Ref<App>>("app", ref(app));
     params.set<fs::path>("file", "part");
     auto out = prob.add_output<MeshPartitioningOutput>(params);
 

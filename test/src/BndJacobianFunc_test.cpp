@@ -8,7 +8,6 @@
 #include "godzilla/Types.h"
 
 using namespace godzilla;
-using namespace testing;
 
 namespace {
 
@@ -48,7 +47,7 @@ protected:
 
 class TestJ : public BndJacobianFunc {
 public:
-    explicit TestJ(const TestBC * bc) :
+    explicit TestJ(Ref<TestBC> bc) :
         BndJacobianFunc(bc),
         dim(get_spatial_dimension()),
         u(get_field_value("u")),
@@ -87,7 +86,7 @@ TEST(BndJacobianFuncTest, test)
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = app.make_parameters<GTestProblem>();
-    prob_pars.set<Mesh *>("mesh", mesh.get())
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh))
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 20)
         .set<Real>("dt", 5);

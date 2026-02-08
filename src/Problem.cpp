@@ -33,19 +33,20 @@ Parameters
 Problem::parameters()
 {
     auto params = Object::parameters();
-    params.add_param<Mesh *>("mesh", nullptr, "Mesh to be used");
+    params.add_param<LateRef<Mesh>>("mesh", "Mesh to be used");
     return params;
 }
 
 Problem::Problem(const Parameters & pars) :
     Object(pars),
     PrintInterface(this),
-    mesh(pars.get<Mesh *>("mesh")),
+    mesh(pars.is_param_valid("mesh") ? pars.get<Ref<Mesh>>("mesh")
+                                     : Optional<Ref<Mesh>>(std::nullopt)),
     partitioner(nullptr),
     partition_overlap(0),
     default_output_on()
 {
-    set_output_monitor(this, &Problem::output_monitor);
+    set_output_monitor(ref(*this), &Problem::output_monitor);
     this->partitioner.create(get_comm());
 }
 
@@ -53,8 +54,7 @@ DM
 Problem::get_dm() const
 {
     CALL_STACK_MSG();
-    expect_true(this->mesh != nullptr, "Mesh is null");
-    return this->mesh->get_dm();
+    return this->mesh.value()->get_dm();
 }
 
 const Vector &
@@ -141,15 +141,15 @@ Problem::compute_postprocessors()
         pp->compute();
 }
 
-Postprocessor *
+Expected<Ref<Postprocessor>, ErrorCode>
 Problem::get_postprocessor(String name) const
 {
     CALL_STACK_MSG();
     const auto & it = this->pps.find(name);
     if (it != this->pps.end())
-        return it->second.get();
+        return Ref<Postprocessor>(*it->second.get());
     else
-        return nullptr;
+        return Unexpected(ErrorCode::NotFound);
 }
 
 const std::vector<String> &

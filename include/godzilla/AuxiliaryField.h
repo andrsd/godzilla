@@ -71,18 +71,18 @@ protected:
     /// Get mesh this auxiliary field is defined on
     ///
     /// @return Mesh this auxiliary field is defined on
-    UnstructuredMesh * get_mesh() const;
+    Ref<UnstructuredMesh> get_mesh() const;
 
     /// Get problem this auxiliary field is part of
     ///
     /// @return Problem this auxiliary field of part of
-    Problem * get_problem() const;
+    Ref<Problem> get_problem() const;
 
 private:
     /// Discrete problem this object is part of
-    DiscreteProblemInterface * dpi;
+    Ref<DiscreteProblemInterface> dpi;
     /// Unstructured mesh this field is defined on
-    UnstructuredMesh * mesh;
+    Ref<UnstructuredMesh> mesh;
     /// Field name
     String field;
     /// Field ID this boundary condition is attached to

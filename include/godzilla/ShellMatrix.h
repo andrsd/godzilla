@@ -41,7 +41,7 @@ public:
     /// @param method The method of the class
     template <class T, typename... ARGS>
     void
-    set_operation(MatOperation op, T * instance, void (T::*method)(ARGS...))
+    set_operation(MatOperation op, Ref<T> instance, void (T::*method)(ARGS...))
     {
         if (op == MATOP_MULT) {
             this->mult_delegate.bind(instance, method);

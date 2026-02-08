@@ -35,7 +35,7 @@ protected:
     /// vector
     template <class T>
     void
-    set_boundary_local(T * instance, void (T::*method)(Vector &))
+    set_boundary_local(Ref<T> instance, void (T::*method)(Vector &))
     {
         this->compute_boundary_delegate.bind(instance, method);
         PETSC_CHECK(DMSNESSetBoundaryLocal(get_dm(),
@@ -47,7 +47,7 @@ protected:
     /// containing the local vector information PLUS ghost point information.
     template <class T>
     void
-    set_function_local(T * instance, void (T::*method)(const Vector &, Vector &))
+    set_function_local(Ref<T> instance, void (T::*method)(const Vector &, Vector &))
     {
         this->compute_residual_delegate.bind(instance, method);
         PETSC_CHECK(DMSNESSetFunctionLocal(get_dm(),
@@ -58,7 +58,7 @@ protected:
     /// Set a local Jacobian evaluation function
     template <class T>
     void
-    set_jacobian_local(T * instance, void (T::*method)(const Vector &, Matrix &, Matrix &))
+    set_jacobian_local(Ref<T> instance, void (T::*method)(const Vector &, Matrix &, Matrix &))
     {
         this->compute_jacobian_delegate.bind(instance, method);
         PETSC_CHECK(DMSNESSetJacobianLocal(get_dm(),

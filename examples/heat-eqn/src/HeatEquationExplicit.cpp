@@ -9,7 +9,7 @@ namespace {
 
 class Residual0 : public ResidualFunc {
 public:
-    explicit Residual0(FEProblemInterface * fepi) :
+    explicit Residual0(Ref<FEProblemInterface> fepi) :
         ResidualFunc(fepi),
         ffn(get_field_value("forcing_fn"))
     {
@@ -28,7 +28,7 @@ protected:
 
 class Residual1 : public ResidualFunc {
 public:
-    explicit Residual1(FEProblemInterface * fepi) :
+    explicit Residual1(Ref<FEProblemInterface> fepi) :
         ResidualFunc(fepi),
         dim(get_spatial_dimension()),
         T_x(get_field_gradient("temp"))
@@ -87,7 +87,7 @@ void
 HeatEquationExplicit::set_up_weak_form()
 {
     CALL_STACK_MSG();
-    add_residual_block(temp_id, new Residual0(this), new Residual1(this));
+    add_residual_block(temp_id, new Residual0(ref(*this)), new Residual1(ref(*this)));
 }
 
 void

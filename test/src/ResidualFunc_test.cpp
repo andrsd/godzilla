@@ -8,7 +8,6 @@
 #include "godzilla/Types.h"
 
 using namespace godzilla;
-using namespace testing;
 
 TEST(ResidualFuncTest, test)
 {
@@ -31,7 +30,7 @@ TEST(ResidualFuncTest, test)
 
     class TestF : public ResidualFunc {
     public:
-        explicit TestF(GTestProblem * prob) :
+        explicit TestF(Ref<GTestProblem> prob) :
             ResidualFunc(prob),
             dim(get_spatial_dimension()),
             u(get_field_value("u")),
@@ -58,13 +57,13 @@ TEST(ResidualFuncTest, test)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("app", &app);
+    mesh_pars.set<Ref<App>>("app", ref(app));
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = GTestProblem::parameters();
-    prob_pars.set<App *>("app", &app)
-        .set<Mesh *>("mesh", mesh.get())
+    prob_pars.set<Ref<App>>("app", ref(app))
+        .set<Ref<Mesh>>("mesh", ref(*mesh))
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 20)
         .set<Real>("dt", 5);
@@ -72,7 +71,7 @@ TEST(ResidualFuncTest, test)
 
     prob.create();
 
-    TestF res(&prob);
+    TestF res(ref(prob));
 }
 
 TEST(ResidualFuncTest, test_vals)
@@ -96,7 +95,7 @@ TEST(ResidualFuncTest, test_vals)
 
     class TestF : public ResidualFunc {
     public:
-        explicit TestF(GTestProblem * prob) :
+        explicit TestF(Ref<GTestProblem> prob) :
             ResidualFunc(prob),
             dim(get_spatial_dimension()),
             u(get_field_value("u")),
@@ -127,13 +126,13 @@ TEST(ResidualFuncTest, test_vals)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("app", &app);
+    mesh_pars.set<Ref<App>>("app", ref(app));
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = GTestProblem::parameters();
-    prob_pars.set<App *>("app", &app)
-        .set<Mesh *>("mesh", mesh.get())
+    prob_pars.set<Ref<App>>("app", ref(app))
+        .set<Ref<Mesh>>("mesh", ref(*mesh))
         .set<Real>("start_time", 1.23)
         .set<Real>("end_time", 20)
         .set<Real>("dt", 5);
@@ -141,7 +140,7 @@ TEST(ResidualFuncTest, test_vals)
 
     prob.create();
 
-    TestF res(&prob);
+    TestF res(ref(prob));
     Scalar vals[5];
     res.evaluate(vals);
     EXPECT_DOUBLE_EQ(vals[0], 1);

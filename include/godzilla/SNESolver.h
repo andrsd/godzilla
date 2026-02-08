@@ -101,7 +101,7 @@ public:
     /// @param method Member function in class T to compute function values
     template <class T>
     void
-    set_function(Vector & r, T * instance, void (T::*method)(const Vector &, Vector &))
+    set_function(Vector & r, Ref<T> instance, void (T::*method)(const Vector &, Vector &))
     {
         this->compute_residual_method.bind(instance, method);
         PETSC_CHECK(SNESSetFunction(this->obj,
@@ -121,7 +121,7 @@ public:
     void
     set_jacobian(Matrix & J,
                  Matrix & Jp,
-                 T * instance,
+                 Ref<T> instance,
                  void (T::*method)(const Vector &, Matrix &, Matrix &))
     {
         this->compute_jacobian_method.bind(instance, method);
@@ -161,7 +161,7 @@ public:
     /// @param method Member function in class T
     template <class T>
     void
-    monitor_set(T * instance, void (T::*method)(Int, Real))
+    monitor_set(Ref<T> instance, void (T::*method)(Int, Real))
     {
         this->monitor_method.bind(instance, method);
         PETSC_CHECK(

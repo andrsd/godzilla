@@ -4,6 +4,7 @@
 #pragma once
 
 #include "godzilla/FileOutput.h"
+#include "godzilla/DiscreteProblemInterface.h"
 #include "godzilla/Types.h"
 #include "godzilla/Qtr.h"
 #include "exodusIIcpp/exodusIIcpp.h"
@@ -26,7 +27,7 @@ class DGProblemInterface;
 /// ```
 ///
 /// This output works only with finite element problems
-class ExodusIIOutput : public FileOutput {
+class ExodusIIOutput : public FileOutput, public DiscreteProblemOutputInterface {
 public:
     explicit ExodusIIOutput(const Parameters & pars);
     ~ExodusIIOutput() override;
@@ -69,13 +70,13 @@ private:
     String get_file_ext() const override;
 
     /// Unstructured mesh
-    UnstructuredMesh * mesh;
+    Ref<UnstructuredMesh> mesh;
     bool cont;
     bool discont;
     /// Variable names to be stored
     std::vector<String> variable_names;
     /// DG problem interface
-    DGProblemInterface * dgpi;
+    Optional<Ref<DGProblemInterface>> dgpi;
     /// ExodusII file
     Qtr<exodusIIcpp::File> exo;
     /// Step number

@@ -170,7 +170,7 @@ PoissonApp::solve_problem(Int dim)
     auto mo = create_mesh(dim);
 
     auto prob_pars = make_parameters<PoissonEquation>();
-    prob_pars.set<Mesh *>("mesh", mo.get());
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mo));
     auto prob = make_problem<PoissonEquation>(prob_pars);
 
     auto ic_pars = make_parameters<ConstantInitialCondition>();

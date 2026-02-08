@@ -20,7 +20,7 @@ public:
     using ComputeFluxDelegate =
         Delegate<void(const Real[], const Real[], const Scalar[], const Scalar[], Scalar[])>;
 
-    FVProblemInterface(Problem * problem, const Parameters & pars);
+    FVProblemInterface(Problem & problem, const Parameters & pars);
     ~FVProblemInterface() override;
 
     Int get_num_fields() const override;
@@ -77,7 +77,7 @@ public:
     ///
     /// @param bc Boundary condition object parameters to add/create
     template <NaturalRiemannBCDerived OBJECT>
-    OBJECT * add_boundary_condition(Parameters & pars);
+    Ref<OBJECT> add_boundary_condition(Parameters & pars);
 
 protected:
     void init() override;
@@ -99,7 +99,7 @@ protected:
     void
     set_riemann_solver(
         FieldID field,
-        T * instance,
+        Ref<T> instance,
         void (T::*method)(const Real[], const Real[], const Scalar[], const Scalar[], Scalar[]))
     {
         this->compute_flux_methods[field].bind(instance, method);
@@ -176,16 +176,16 @@ private:
                              void * ctx);
 };
 
-template <NaturalRiemannBCDerived OBJECT>
-OBJECT *
+template <NaturalRiemannBCDerived T>
+Ref<T>
 FVProblemInterface::add_boundary_condition(Parameters & pars)
 {
     CALL_STACK_MSG();
-    pars.set<DiscreteProblemInterface *>("_dpi", this);
-    auto obj = Qtr<OBJECT>::alloc(pars);
+    pars.set<Ref<DiscreteProblemInterface>>("_dpi", ref(*this));
+    auto obj = Qtr<T>::alloc(pars);
     auto ptr = obj.get();
     this->riemann_bcs.push_back(std::move(obj));
-    return ptr;
+    return Ref<T> { *ptr };
 }
 
 } // namespace godzilla

@@ -13,7 +13,6 @@
 #include <filesystem>
 
 using namespace godzilla;
-using namespace testing;
 namespace fs = std::filesystem;
 
 namespace {
@@ -133,7 +132,7 @@ TEST(UnstructuredMeshTest, api)
     TestApp app;
 
     auto params = TestUnstructuredMesh::parameters();
-    params.set<App *>("app", &app);
+    params.set<Ref<App>>("app", ref(app));
     params.set<String>("name", "obj");
     auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh>(params);
     auto mesh = mesh_qtr.get();
@@ -154,7 +153,7 @@ TEST(UnstructuredMeshTest, api_ghosted)
     TestApp app;
 
     auto params = TestUnstructuredMesh::parameters();
-    params.set<App *>("app", &app);
+    params.set<Ref<App>>("app", ref(app));
     params.set<String>("name", "obj");
     auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh>(params);
     auto mesh = mesh_qtr.get();
@@ -177,7 +176,7 @@ TEST(UnstructuredMeshTest, nonexistent_face_set)
     TestApp app;
 
     auto params = TestUnstructuredMesh::parameters();
-    params.set<App *>("app", &app);
+    params.set<Ref<App>>("app", ref(app));
     params.set<String>("name", "obj");
     auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh>(params);
     auto mesh = mesh_qtr.get();
@@ -192,7 +191,7 @@ TEST(UnstructuredMeshTest, nonexistent_cell_set)
     TestApp app;
 
     auto params = TestUnstructuredMesh::parameters();
-    params.set<App *>("app", &app);
+    params.set<Ref<App>>("app", ref(app));
     params.set<String>("name", "obj");
     auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh>(params);
     auto mesh = mesh_qtr.get();
@@ -206,7 +205,7 @@ TEST(UnstructuredMeshTest, get_connectivity)
     TestApp app;
 
     auto params = TestUnstructuredMesh::parameters();
-    params.set<App *>("app", &app);
+    params.set<Ref<App>>("app", ref(app));
     params.set<String>("name", "obj");
     auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh>(params);
     auto m = mesh_qtr.get();
@@ -270,7 +269,7 @@ TEST(UnstructuredMeshTest, ranges)
     TestApp app;
 
     auto params = TestUnstructuredMesh3D::parameters();
-    params.set<App *>("app", &app);
+    params.set<Ref<App>>("app", ref(app));
     params.set<String>("name", "obj");
     params.set<Int>("nx", 2);
     params.set<Int>("ny", 1);
@@ -301,7 +300,7 @@ TEST(UnstructuredMesh, get_cone_recursive_vertices)
     TestApp app;
 
     auto params = TestUnstructuredMesh3D::parameters();
-    params.set<App *>("app", &app);
+    params.set<Ref<App>>("app", ref(app));
     params.set<Int>("nx", 1);
     params.set<Int>("ny", 1);
     params.set<Int>("nz", 1);
@@ -313,7 +312,7 @@ TEST(UnstructuredMesh, get_cone_recursive_vertices)
     IndexSet left_points = m->get_cone_recursive_vertices(left_facet);
     left_points.sort_remove_dups();
     auto idxs = left_points.borrow_indices();
-    EXPECT_THAT(to_std_vector(idxs), ::UnorderedElementsAre(1, 3, 5, 7));
+    EXPECT_THAT(to_std_vector(idxs), testing::UnorderedElementsAre(1, 3, 5, 7));
 }
 
 TEST(UnstructuredMesh, compute_cell_geometry)
@@ -321,7 +320,7 @@ TEST(UnstructuredMesh, compute_cell_geometry)
     TestApp app;
 
     auto params = TestUnstructuredMesh3D::parameters();
-    params.set<App *>("app", &app);
+    params.set<Ref<App>>("app", ref(app));
     params.set<String>("name", "obj");
     params.set<Int>("nx", 2);
     params.set<Int>("ny", 1);
@@ -387,7 +386,7 @@ TEST(UnstructuredMesh, get_face_set_label_nonexistent)
     TestApp app;
 
     auto params = TestUnstructuredMesh3D::parameters();
-    params.set<App *>("app", &app);
+    params.set<Ref<App>>("app", ref(app));
     params.set<String>("name", "obj");
     params.set<Int>("nx", 2);
     params.set<Int>("ny", 1);
@@ -407,7 +406,7 @@ TEST(UnstructuredMesh, get_chart)
     TestApp app;
 
     auto params = TestUnstructuredMesh3D::parameters();
-    params.set<App *>("app", &app);
+    params.set<Ref<App>>("app", ref(app));
     params.set<String>("name", "obj");
     params.set<Int>("nx", 2);
     params.set<Int>("ny", 1);
@@ -425,7 +424,7 @@ TEST(UnstructuredMesh, common_cells_by_vertex)
     TestApp app;
 
     auto params = TestUnstructuredMesh3D::parameters();
-    params.set<App *>("app", &app);
+    params.set<Ref<App>>("app", ref(app));
     params.set<String>("name", "obj");
     params.set<Int>("nx", 2);
     params.set<Int>("ny", 1);
@@ -435,18 +434,18 @@ TEST(UnstructuredMesh, common_cells_by_vertex)
 
     auto map = common_cells_by_vertex(*m);
     EXPECT_EQ(map.size(), 12);
-    EXPECT_THAT(map[2], UnorderedElementsAre(0));
-    EXPECT_THAT(map[3], UnorderedElementsAre(0, 1));
-    EXPECT_THAT(map[4], UnorderedElementsAre(1));
-    EXPECT_THAT(map[5], UnorderedElementsAre(0));
-    EXPECT_THAT(map[6], UnorderedElementsAre(0, 1));
-    EXPECT_THAT(map[7], UnorderedElementsAre(1));
-    EXPECT_THAT(map[8], UnorderedElementsAre(0));
-    EXPECT_THAT(map[9], UnorderedElementsAre(0, 1));
-    EXPECT_THAT(map[10], UnorderedElementsAre(1));
-    EXPECT_THAT(map[11], UnorderedElementsAre(0));
-    EXPECT_THAT(map[12], UnorderedElementsAre(0, 1));
-    EXPECT_THAT(map[13], UnorderedElementsAre(1));
+    EXPECT_THAT(map[2], testing::UnorderedElementsAre(0));
+    EXPECT_THAT(map[3], testing::UnorderedElementsAre(0, 1));
+    EXPECT_THAT(map[4], testing::UnorderedElementsAre(1));
+    EXPECT_THAT(map[5], testing::UnorderedElementsAre(0));
+    EXPECT_THAT(map[6], testing::UnorderedElementsAre(0, 1));
+    EXPECT_THAT(map[7], testing::UnorderedElementsAre(1));
+    EXPECT_THAT(map[8], testing::UnorderedElementsAre(0));
+    EXPECT_THAT(map[9], testing::UnorderedElementsAre(0, 1));
+    EXPECT_THAT(map[10], testing::UnorderedElementsAre(1));
+    EXPECT_THAT(map[11], testing::UnorderedElementsAre(0));
+    EXPECT_THAT(map[12], testing::UnorderedElementsAre(0, 1));
+    EXPECT_THAT(map[13], testing::UnorderedElementsAre(1));
 }
 
 TEST(UnstructuredMesh, build_from_cell_list_2d)
@@ -473,13 +472,13 @@ TEST(UnstructuredMesh, build_from_cell_list_2d)
     TestApp app;
 
     auto mesh_pars = TestMesh2D::parameters();
-    mesh_pars.set<godzilla::App *>("app", &app);
+    mesh_pars.set<Ref<godzilla::App>>("app", ref(app));
     auto mesh_qtr = MeshFactory::create<TestMesh2D>(mesh_pars);
     auto m = mesh_qtr.get();
 
     EXPECT_EQ(m->get_num_cells(), 2);
-    EXPECT_THAT(m->get_connectivity(0), ElementsAre(2, 3, 4));
-    EXPECT_THAT(m->get_connectivity(1), ElementsAre(3, 5, 4));
+    EXPECT_THAT(m->get_connectivity(0), testing::ElementsAre(2, 3, 4));
+    EXPECT_THAT(m->get_connectivity(1), testing::ElementsAre(3, 5, 4));
     EXPECT_EQ(m->get_num_vertices(), 4);
     auto coords = m->get_coordinates();
     EXPECT_EQ(coords.get_size(), 8);
@@ -521,7 +520,7 @@ TEST(UnstructuredMesh, mark_boundary_faces)
     TestApp app;
 
     auto mesh_pars = TestMesh2D::parameters();
-    mesh_pars.set<godzilla::App *>("app", &app);
+    mesh_pars.set<Ref<godzilla::App>>("app", ref(app));
     auto mesh_qtr = MeshFactory::create<TestMesh2D>(mesh_pars);
     auto m = mesh_qtr.get();
 
@@ -529,7 +528,7 @@ TEST(UnstructuredMesh, mark_boundary_faces)
     auto facets = face_set.get_stratum(10);
     auto facets_idxs = facets.borrow_indices();
     EXPECT_EQ(facets.get_local_size(), 4);
-    EXPECT_THAT(to_std_vector(facets_idxs), ElementsAre(6, 8, 9, 10));
+    EXPECT_THAT(to_std_vector(facets_idxs), testing::ElementsAre(6, 8, 9, 10));
 }
 
 TEST(UnstructuredMesh, point_star_forrest)
@@ -538,7 +537,7 @@ TEST(UnstructuredMesh, point_star_forrest)
     auto comm = app.get_comm();
 
     auto params = TestUnstructuredMesh::parameters();
-    params.set<godzilla::App *>("app", &app);
+    params.set<Ref<godzilla::App>>("app", ref(app));
     params.set<String>("name", "obj");
     auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh>(params);
     auto m = mesh_qtr.get();
@@ -557,7 +556,7 @@ TEST(UnstructuredMesh, face_sets)
     TestApp app;
 
     auto params = TestUnstructuredMesh3D::parameters();
-    params.set<App *>("app", &app);
+    params.set<Ref<App>>("app", ref(app));
     params.set<String>("name", "obj");
     params.set<Int>("nx", 2);
     params.set<Int>("ny", 1);
@@ -567,12 +566,12 @@ TEST(UnstructuredMesh, face_sets)
 
     EXPECT_EQ(m->get_num_face_sets(), 6);
     EXPECT_THAT(m->get_face_sets(),
-                ElementsAre(Pair(1, "back"),
-                            Pair(2, "front"),
-                            Pair(3, "bottom"),
-                            Pair(4, "top"),
-                            Pair(5, "right"),
-                            Pair(6, "left")));
+                testing::ElementsAre(testing::Pair(1, "back"),
+                                     testing::Pair(2, "front"),
+                                     testing::Pair(3, "bottom"),
+                                     testing::Pair(4, "top"),
+                                     testing::Pair(5, "right"),
+                                     testing::Pair(6, "left")));
 
     EXPECT_EQ(m->get_face_set_name(1).value(), "back");
     EXPECT_EQ(m->get_face_set_name(2).value(), "front");
@@ -594,7 +593,7 @@ TEST(UnstructuredMesh, get_coordinates)
     TestApp app;
 
     auto params = TestUnstructuredMesh3D::parameters();
-    params.set<App *>("app", &app);
+    params.set<Ref<App>>("app", ref(app));
     params.set<String>("name", "obj");
     params.set<Int>("nx", 2);
     params.set<Int>("ny", 1);
@@ -620,7 +619,7 @@ TEST(UnstructuredMesh, get_cell_numbering)
     TestApp app;
 
     auto params = LineMesh::parameters();
-    params.set<App *>("app", &app);
+    params.set<Ref<App>>("app", ref(app));
     params.set<String>("name", "obj");
     params.set<Int>("nx", 10);
     auto mesh = MeshFactory::create<LineMesh>(params);
@@ -637,7 +636,7 @@ TEST(UnstructuredMesh, get_point_depth)
     TestApp app;
 
     auto params = TestUnstructuredMesh3D::parameters();
-    params.set<App *>("app", &app);
+    params.set<Ref<App>>("app", ref(app));
     params.set<String>("name", "obj");
     params.set<Int>("nx", 1);
     params.set<Int>("ny", 1);
@@ -660,7 +659,7 @@ TEST(UnstructuredMeshTest, index_sets)
     TestApp app;
 
     auto params = TestUnstructuredMesh3D::parameters();
-    params.set<App *>("app", &app);
+    params.set<Ref<App>>("app", ref(app));
     params.set<String>("name", "obj");
     params.set<Int>("nx", 2);
     params.set<Int>("ny", 1);
@@ -671,13 +670,14 @@ TEST(UnstructuredMeshTest, index_sets)
     auto cell_is = m->get_all_cells();
     {
         auto vals = cell_is.borrow_indices();
-        EXPECT_THAT(to_std_vector(vals), ElementsAre(0, 1));
+        EXPECT_THAT(to_std_vector(vals), testing::ElementsAre(0, 1));
     }
 
     auto face_is = m->get_facets();
     {
         auto vals = face_is.borrow_indices();
-        EXPECT_THAT(to_std_vector(vals), ElementsAre(14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24));
+        EXPECT_THAT(to_std_vector(vals),
+                    testing::ElementsAre(14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24));
     }
 }
 
@@ -686,7 +686,7 @@ TEST(UnstructuredMeshTest, clone)
     TestApp app;
 
     auto params = TestUnstructuredMesh::parameters();
-    params.set<App *>("app", &app);
+    params.set<Ref<App>>("app", ref(app));
     params.set<String>("name", "obj");
     auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh>(params);
     auto m = mesh_qtr.get();
@@ -704,7 +704,7 @@ TEST(UnstructuredMeshTest, get_block_id_from_region_via_number)
     TestApp app;
 
     auto params = TestUnstructuredMesh::parameters();
-    params.set<App *>("app", &app);
+    params.set<Ref<App>>("app", ref(app));
     auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh>(params);
     auto m = mesh_qtr.get();
 
@@ -720,7 +720,7 @@ TEST(UnstructuredMeshTest, get_block_id_from_region_via_name)
     auto file = fs::path(GODZILLA_UNIT_TESTS_ROOT) / "assets" / "mesh" / "square.e";
 
     auto params = FileMesh::parameters();
-    params.set<App *>("app", &app);
+    params.set<Ref<App>>("app", ref(app));
     params.set<fs::path>("file", file);
     auto mesh_qtr = MeshFactory::create<FileMesh>(params);
     auto m = mesh_qtr.get();

@@ -39,18 +39,17 @@ TEST(VTKOutputTest, test)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("app", &app);
+    mesh_pars.set<Ref<App>>("app", ref(app));
     mesh_pars.set<Int>("nx", 1);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = TestProblem::parameters();
-    prob_pars.set<App *>("app", &app);
-    prob_pars.set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<App>>("app", ref(app));
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     TestProblem prob(prob_pars);
 
     auto pars = VTKOutput::parameters();
-    pars.set<App *>("app", &app);
-    pars.set<Mesh *>("mesh", mesh.get());
+    pars.set<Ref<App>>("app", ref(app));
     pars.set<fs::path>("file", "file");
     auto out = prob.add_output<VTKOutput>(pars);
 

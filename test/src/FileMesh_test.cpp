@@ -6,7 +6,6 @@
 #include <filesystem>
 
 using namespace godzilla;
-using namespace testing;
 namespace fs = std::filesystem;
 
 TEST(FileMesh, exoii_file_format)
@@ -16,7 +15,7 @@ TEST(FileMesh, exoii_file_format)
     auto file = fs::path(GODZILLA_UNIT_TESTS_ROOT) / "assets" / "mesh" / "2blk.exo";
 
     auto mesh_pars = FileMesh::parameters();
-    mesh_pars.set<godzilla::App *>("app", &app);
+    mesh_pars.set<Ref<godzilla::App>>("app", ref(app));
     mesh_pars.set<fs::path>("file", file);
     FileMesh mesh(mesh_pars);
     mesh.create();
@@ -29,7 +28,7 @@ TEST(FileMesh, non_existing_file_stops_execution)
     TestApp app;
 
     auto mesh_pars = FileMesh::parameters();
-    mesh_pars.set<godzilla::App *>("app", &app);
+    mesh_pars.set<Ref<godzilla::App>>("app", ref(app));
     mesh_pars.set<fs::path>("file", "non-existing-file");
     EXPECT_DEATH(MeshFactory::create<FileMesh>(mesh_pars),
                  "Unable to open 'non-existing-file' for reading. Make sure it exists and you have "
@@ -43,7 +42,7 @@ TEST(FileMesh, unknown_mesh_format)
     auto file = fs::path(GODZILLA_UNIT_TESTS_ROOT) / "assets" / "yml" / "empty.yml";
 
     auto mesh_pars = FileMesh::parameters();
-    mesh_pars.set<godzilla::App *>("app", &app);
+    mesh_pars.set<Ref<godzilla::App>>("app", ref(app));
     mesh_pars.set<fs::path>("file", file);
     EXPECT_DEATH(MeshFactory::create<FileMesh>(mesh_pars), "Unknown mesh format");
 }

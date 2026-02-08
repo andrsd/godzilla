@@ -7,7 +7,6 @@
 #include "TestApp.h"
 
 using namespace godzilla;
-using namespace testing;
 
 namespace {
 
@@ -45,7 +44,7 @@ protected:
     void
     set_up_weak_form() override
     {
-        set_riemann_solver(FieldID(0), this, &TestExplicitFVLinearProblem::compute_flux);
+        set_riemann_solver(FieldID(0), ref(*this), &TestExplicitFVLinearProblem::compute_flux);
     }
 
     void
@@ -71,19 +70,19 @@ TEST(NaturalRiemannBCTest, api)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("app", &app);
+    mesh_pars.set<Ref<App>>("app", ref(app));
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = app.make_parameters<TestExplicitFVLinearProblem>();
-    prob_pars.set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     prob_pars.set<Real>("start_time", 0.);
     prob_pars.set<Real>("end_time", 1e-3);
     prob_pars.set<Real>("dt", 1e-3);
     auto prob = app.make_problem<TestExplicitFVLinearProblem>(prob_pars);
 
     auto bc_pars = TestBC::parameters();
-    bc_pars.set<App *>("app", &app);
+    bc_pars.set<Ref<App>>("app", ref(app));
     bc_pars.set<std::vector<String>>("boundary", { "left" });
     prob->add_boundary_condition<TestBC>(bc_pars);
 

@@ -64,7 +64,7 @@ private:
     ///
     Optional<String> field_name;
     /// Finite element problem this object is part of
-    FEProblemInterface * fepi;
+    Ref<FEProblemInterface> fepi;
 
 public:
     static Parameters parameters();

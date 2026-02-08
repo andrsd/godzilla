@@ -129,7 +129,7 @@ void
 LinearProblem::set_up_monitors()
 {
     CALL_STACK_MSG();
-    this->ks.monitor_set(this, &LinearProblem::monitor);
+    this->ks.monitor_set(ref(*this), &LinearProblem::monitor);
 }
 
 void

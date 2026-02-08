@@ -4,6 +4,7 @@
 #pragma once
 
 #include "godzilla/FileOutput.h"
+#include "godzilla/DiscreteProblemInterface.h"
 #include "godzilla/Types.h"
 #ifdef GODZILLA_WITH_TECIOCPP
     #include "teciocpp/teciocpp.h"
@@ -17,7 +18,7 @@ class UnstructuredMesh;
 ///
 /// This saves the solution into an Tecplot (.szplt) file.
 /// This output works only with finite element problems
-class TecplotOutput : public FileOutput {
+class TecplotOutput : public FileOutput, public DiscreteProblemOutputInterface {
 public:
     explicit TecplotOutput(const Parameters & pars);
     ~TecplotOutput() override;
@@ -39,7 +40,7 @@ private:
 
 #ifdef GODZILLA_WITH_TECIOCPP
     /// Unstructured mesh
-    UnstructuredMesh * mesh;
+    Ref<UnstructuredMesh> mesh;
     /// File to write into
     teciocpp::File * file;
     /// Variable value locations

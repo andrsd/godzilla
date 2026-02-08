@@ -53,7 +53,7 @@ main(int argc, char * argv[])
         auto lm = MeshFactory::create<LineMesh>(mesh_pars);
 
         auto prob_pars = app.make_parameters<BurgersEquation>();
-        prob_pars.set<Mesh *>("mesh", lm.get())
+        prob_pars.set<Ref<Mesh>>("mesh", ref(*lm))
             .set<Real>("dt", 0.002)
             .set<Real>("start_time", 0)
             .set<Real>("end_time", 0.01)

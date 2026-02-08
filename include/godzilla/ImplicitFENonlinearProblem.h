@@ -30,7 +30,7 @@ protected:
 
     template <class T>
     void
-    set_time_boundary_local(T * instance, void (T::*method)(Real, Vector &, Vector &))
+    set_time_boundary_local(Ref<T> instance, void (T::*method)(Real, Vector &, Vector &))
     {
         this->compute_boundary_local_method.bind(instance, method);
         PETSC_CHECK(DMTSSetBoundaryLocal(get_dm(),

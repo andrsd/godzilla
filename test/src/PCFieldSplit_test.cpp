@@ -9,7 +9,6 @@
 #include "godzilla/UnstructuredMesh.h"
 
 using namespace godzilla;
-using namespace testing;
 
 TEST(PCFieldSplit, ctor_pc)
 {
@@ -47,7 +46,7 @@ TEST(PCFieldSplit, type)
 
     auto o = testing::internal::GetCapturedStdout();
     for (auto & t : type_str)
-        EXPECT_THAT(o, HasSubstr(t));
+        EXPECT_THAT(o, testing::HasSubstr(t));
 }
 
 TEST(PCFieldSplit, schur_fact_type)
@@ -71,7 +70,7 @@ TEST(PCFieldSplit, schur_fact_type)
 
     auto o = testing::internal::GetCapturedStdout();
     for (auto & t : type_str)
-        EXPECT_THAT(o, HasSubstr(t));
+        EXPECT_THAT(o, testing::HasSubstr(t));
 }
 
 TEST(PCFieldSplit, schur_pre_type)
@@ -100,7 +99,7 @@ TEST(PCFieldSplit, schur_pre_type)
 
     auto o = testing::internal::GetCapturedStdout();
     for (auto & t : type_str)
-        EXPECT_THAT(o, HasSubstr(t));
+        EXPECT_THAT(o, testing::HasSubstr(t));
 }
 
 TEST(PCFieldSplit, schur_scale)
@@ -135,7 +134,7 @@ TEST(PCFieldSplit, block_size)
     pc.view();
 
     auto o = testing::internal::GetCapturedStdout();
-    EXPECT_THAT(o, HasSubstr("blocksize = 2"));
+    EXPECT_THAT(o, testing::HasSubstr("blocksize = 2"));
 }
 
 TEST(PCFieldSplit, diag_use_amat)
@@ -162,11 +161,11 @@ TEST(PCFieldSplit, schur)
     auto comm = app.get_comm();
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("app", &app).set<Int>("nx", 2);
+    mesh_pars.set<Ref<App>>("app", ref(app)).set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = GTest2FieldsFENonlinearProblem::parameters();
-    prob_pars.set<App *>("app", &app).set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<App>>("app", ref(app)).set<Ref<Mesh>>("mesh", ref(*mesh));
     GTest2FieldsFENonlinearProblem prob(prob_pars);
 
     prob.create();
@@ -195,24 +194,24 @@ TEST(PCFieldSplit, schur)
     auto is0 = fs.get_is("split0");
     {
         auto vals = is0.borrow_indices();
-        EXPECT_THAT(to_std_vector(vals), ElementsAre(0, 2, 4));
+        EXPECT_THAT(to_std_vector(vals), testing::ElementsAre(0, 2, 4));
     }
 
     auto is1 = fs.get_is("split1");
     {
         auto vals = is1.borrow_indices();
-        EXPECT_THAT(to_std_vector(vals), ElementsAre(1, 3, 5));
+        EXPECT_THAT(to_std_vector(vals), testing::ElementsAre(1, 3, 5));
     }
 
     auto is_idx0 = fs.get_is_by_index(0);
     {
         auto vals = is_idx0.borrow_indices();
-        EXPECT_THAT(to_std_vector(vals), ElementsAre(0, 2, 4));
+        EXPECT_THAT(to_std_vector(vals), testing::ElementsAre(0, 2, 4));
     }
     auto is_idx1 = fs.get_is_by_index(1);
     {
         auto vals = is_idx1.borrow_indices();
-        EXPECT_THAT(to_std_vector(vals), ElementsAre(1, 3, 5));
+        EXPECT_THAT(to_std_vector(vals), testing::ElementsAre(1, 3, 5));
     }
 
     auto J = prob.get_jacobian();

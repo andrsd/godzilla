@@ -7,6 +7,7 @@
 #include "godzilla/Problem.h"
 #include "godzilla/DiscreteProblemInterface.h"
 #include "godzilla/DGProblemInterface.h"
+#include "godzilla/Ref.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Postprocessor.h"
 #include "godzilla/IndexSet.h"
@@ -104,22 +105,17 @@ ExodusIIOutput::parameters()
 
 ExodusIIOutput::ExodusIIOutput(const Parameters & pars) :
     FileOutput(pars),
-    mesh(nullptr),
+    DiscreteProblemOutputInterface(pars),
+    mesh(get_mesh()),
     cont(false),
     discont(false),
     variable_names(pars.get<std::vector<String>>("variables"), {}),
-    dgpi(dynamic_cast<DGProblemInterface *>(get_problem())),
+    dgpi(try_dynamic_ref_cast<DGProblemInterface>(get_problem())),
     step_num(1),
     mesh_stored(false)
 {
     CALL_STACK_MSG();
-    auto dpi = get_discrete_problem_interface();
-    expect_true(
-        dpi != nullptr,
-        "ExodusIIOutput works only with problems that inherit from DiscreteProblemInterface");
-    this->mesh = dpi->get_mesh();
-
-    if (this->dgpi != nullptr)
+    if (this->dgpi.has_value())
         this->discont = true;
     else
         this->cont = true;
@@ -146,33 +142,31 @@ ExodusIIOutput::create()
     FileOutput::create();
 
     auto dpi = get_discrete_problem_interface();
-    if (dpi) {
-        auto flds = dpi->get_field_names();
-        auto aux_flds = dpi->get_aux_field_names();
-        auto & pps = get_problem()->get_postprocessor_names();
+    auto flds = dpi->get_field_names();
+    auto aux_flds = dpi->get_aux_field_names();
+    auto & pps = get_problem()->get_postprocessor_names();
 
-        if (this->variable_names.empty()) {
-            this->field_var_names = flds;
-            this->aux_field_var_names = aux_flds;
-            for (auto & name : pps)
+    if (this->variable_names.empty()) {
+        this->field_var_names = flds;
+        this->aux_field_var_names = aux_flds;
+        for (auto & name : pps)
+            this->global_var_names.push_back(name);
+    }
+    else {
+        std::set<String> field_names(flds.begin(), flds.end());
+        std::set<String> aux_field_names(aux_flds.begin(), aux_flds.end());
+        std::set<String> pp_names(pps.begin(), pps.end());
+
+        for (auto & name : this->variable_names) {
+            if (field_names.count(name) == 1)
+                this->field_var_names.push_back(name);
+            else if (aux_field_names.count(name) == 1)
+                this->aux_field_var_names.push_back(name);
+            else if (pp_names.count(name) == 1)
                 this->global_var_names.push_back(name);
-        }
-        else {
-            std::set<String> field_names(flds.begin(), flds.end());
-            std::set<String> aux_field_names(aux_flds.begin(), aux_flds.end());
-            std::set<String> pp_names(pps.begin(), pps.end());
-
-            for (auto & name : this->variable_names) {
-                if (field_names.count(name) == 1)
-                    this->field_var_names.push_back(name);
-                else if (aux_field_names.count(name) == 1)
-                    this->aux_field_var_names.push_back(name);
-                else if (pp_names.count(name) == 1)
-                    this->global_var_names.push_back(name);
-                else
-                    error("Variable '{}' specified in 'variables' parameter does not exist. Typo?",
-                          name);
-            }
+            else
+                error("Variable '{}' specified in 'variables' parameter does not exist. Typo?",
+                      name);
         }
     }
 }
@@ -633,7 +627,7 @@ void
 ExodusIIOutput::write_nodal_variables_discontinuous()
 {
     CALL_STACK_MSG();
-    auto dgpi = this->dgpi;
+    auto dgpi = this->dgpi.value();
     auto sln = dgpi->get_solution_vector_local();
     const Scalar * sln_vals = sln ? sln.get_array_read() : nullptr;
 
@@ -771,7 +765,7 @@ ExodusIIOutput::write_global_variables()
 
     int exo_var_id = 1;
     for (auto & name : this->global_var_names) {
-        Postprocessor * pp = get_problem()->get_postprocessor(name);
+        auto pp = get_problem()->get_postprocessor(name).value();
         auto vals = pp->get_value();
         // FIXME: store all components
         this->exo->write_global_var(this->step_num, exo_var_id, vals[0]);

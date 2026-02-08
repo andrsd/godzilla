@@ -13,20 +13,20 @@ TEST(ConstantAuxiliaryFieldTest, create)
     TestApp app;
 
     auto mesh_params = LineMesh::parameters();
-    mesh_params.set<App *>("app", &app);
+    mesh_params.set<Ref<App>>("app", ref(app));
     mesh_params.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = GTestFENonlinearProblem::parameters();
-    prob_params.set<App *>("app", &app);
-    prob_params.set<Mesh *>("mesh", mesh.get());
+    prob_params.set<Ref<App>>("app", ref(app));
+    prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_params);
 
     prob.set_aux_field(FieldID(0), "aux1", 1, Order(1));
     auto aux_params = ConstantAuxiliaryField::parameters();
-    aux_params.set<App *>("app", &app)
+    aux_params.set<Ref<App>>("app", ref(app))
         .set<String>("name", "aux1")
-        .set<DiscreteProblemInterface *>("_dpi", &prob)
+        .set<Ref<DiscreteProblemInterface>>("_dpi", ref(prob))
         .set<std::vector<Real>>("value", { 1234 });
     auto aux = prob.add_auxiliary_field<ConstantAuxiliaryField>(aux_params);
 

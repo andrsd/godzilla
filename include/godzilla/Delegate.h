@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "godzilla/Ref.h"
 #include <functional>
 
 namespace godzilla {
@@ -29,7 +30,7 @@ public:
     }
 
     template <typename T>
-    void
+    [[deprecated("")]] void
     bind(T * t, R (T::*method)(ARGS...))
     {
         this->fn = [=](ARGS... args) {
@@ -38,11 +39,29 @@ public:
     }
 
     template <typename T>
-    void
+    [[deprecated("")]] void
     bind(T * t, R (T::*method)(ARGS...) const)
     {
         this->fn = [=](ARGS... args) {
             return (t->*method)(args...);
+        };
+    }
+
+    template <typename T>
+    void
+    bind(Ref<T> t, R (T::*method)(ARGS...))
+    {
+        this->fn = [=](ARGS... args) {
+            return (*t.*method)(args...);
+        };
+    }
+
+    template <typename T>
+    void
+    bind(Ref<T> t, R (T::*method)(ARGS...) const)
+    {
+        this->fn = [=](ARGS... args) {
+            return (*t.*method)(args...);
         };
     }
 

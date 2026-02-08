@@ -46,16 +46,16 @@ public:
     void
     set_up_callbacks() override
     {
-        set_compute_operators(this, &CustomLinearProblem::compute_operators);
-        set_compute_rhs(this, &CustomLinearProblem::compute_rhs);
+        set_compute_operators(ref(*this), &CustomLinearProblem::compute_operators);
+        set_compute_rhs(ref(*this), &CustomLinearProblem::compute_rhs);
     }
 
     Preconditioner
     create_preconditioner(PC pc) override
     {
         this->pcshell = PCShell(pc);
-        this->pcshell.set_apply(this, &CustomLinearProblem::apply_pc);
-        this->pcshell.set_apply_transpose(this, &CustomLinearProblem::apply_transpose_pc);
+        this->pcshell.set_apply(ref(*this), &CustomLinearProblem::apply_pc);
+        this->pcshell.set_apply_transpose(ref(*this), &CustomLinearProblem::apply_transpose_pc);
         return this->pcshell;
     }
 
@@ -84,13 +84,13 @@ TEST(PCShellTest, run)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("app", &app);
+    mesh_pars.set<Ref<App>>("app", ref(app));
     mesh_pars.set<Int>("nx", 1);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = LinearProblem::parameters();
-    prob_pars.set<App *>("app", &app);
-    prob_pars.set<Mesh *>("mesh", mesh.get());
+    prob_pars.set<Ref<App>>("app", ref(app));
+    prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     CustomLinearProblem prob(prob_pars);
 
     prob.create();

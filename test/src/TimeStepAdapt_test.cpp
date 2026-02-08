@@ -5,7 +5,6 @@
 #include "godzilla/LineMesh.h"
 #include "GTestImplicitFENonlinearProblem.h"
 
-using namespace testing;
 using namespace godzilla;
 
 TEST(TimeStepAdapt, test)
@@ -13,13 +12,13 @@ TEST(TimeStepAdapt, test)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<godzilla::App *>("app", &app);
+    mesh_pars.set<Ref<godzilla::App>>("app", ref(app));
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_param = GTestImplicitFENonlinearProblem::parameters();
-    prob_param.set<Mesh *>("mesh", mesh.get());
-    prob_param.set<godzilla::App *>("app", &app);
+    prob_param.set<Ref<Mesh>>("mesh", ref(*mesh));
+    prob_param.set<Ref<godzilla::App>>("app", ref(app));
     prob_param.set<Real>("start_time", 0.);
     prob_param.set<Real>("end_time", 20);
     prob_param.set<Real>("dt", 5);

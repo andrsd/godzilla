@@ -7,7 +7,6 @@
 #include "TestApp.h"
 
 using namespace godzilla;
-using namespace testing;
 
 namespace {
 
@@ -38,7 +37,7 @@ class GTestProblem : public Problem, public TransientProblemInterface {
 public:
     explicit GTestProblem(const Parameters & pars) :
         Problem(pars),
-        TransientProblemInterface(this, pars)
+        TransientProblemInterface(*this, pars)
     {
     }
 
@@ -48,7 +47,7 @@ public:
         Problem::create();
         TransientProblemInterface::init();
         set_up_time_scheme();
-        set_rhs_function(this, &GTestProblem::compute_rhs);
+        set_rhs_function(ref(*this), &GTestProblem::compute_rhs);
         set_problem_type(ProblemType::LINEAR);
     }
 
@@ -144,7 +143,7 @@ TEST(TSAbstract, test)
     auto mesh = MeshFactory::create<LineMesh>(pars_mesh);
 
     auto pars_prob = app.make_parameters<GTestProblem>();
-    pars_prob.set<Mesh *>("mesh", mesh.get());
+    pars_prob.set<Ref<Mesh>>("mesh", ref(*mesh));
     pars_prob.set<Int>("num_steps", 1);
     pars_prob.set<Real>("dt", 0.1);
     GTestProblem prob(pars_prob);
@@ -179,5 +178,5 @@ TEST(TSAbstract, test)
     EXPECT_TRUE(GTestProblem::compute_rhs_called);
 
     auto out = testing::internal::GetCapturedStdout();
-    EXPECT_THAT(out, HasSubstr("type: test-ts"));
+    EXPECT_THAT(out, testing::HasSubstr("type: test-ts"));
 }

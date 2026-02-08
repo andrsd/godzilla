@@ -24,12 +24,15 @@ class PrintInterface {
 public:
     class TimedEvent {
     public:
-        TimedEvent(const PrintInterface * pi, unsigned int level, String event_name, String text);
+        TimedEvent(Ref<const PrintInterface> pi,
+                   unsigned int level,
+                   String event_name,
+                   String text);
         ~TimedEvent();
 
         template <typename... T>
         static TimedEvent
-        create(const PrintInterface * pi,
+        create(Ref<const PrintInterface> pi,
                unsigned int level,
                String event_name,
                fmt::format_string<T...> format,
@@ -40,7 +43,7 @@ public:
         }
 
     private:
-        const PrintInterface * pi;
+        Ref<const PrintInterface> pi;
         unsigned int level;
         perf_log::Event event;
         PetscLogDouble start_time;
@@ -51,9 +54,9 @@ public:
 
 public:
     explicit PrintInterface(const Object * obj);
-    explicit PrintInterface(const App * app);
+    explicit PrintInterface(Ref<const App> app);
     PrintInterface(mpi::Communicator comm,
-                   const App * app,
+                   Ref<const App> app,
                    const unsigned int & verbosity_level,
                    String prefix);
 
@@ -118,7 +121,7 @@ private:
     }
 
     /// Application
-    const App * pi_app;
+    Ref<const App> pi_app;
     /// Processor ID
     int proc_id;
     /// Verbosity level
@@ -127,6 +130,6 @@ private:
 
 #define TIMED_EVENT(level, event_name, ...) \
     auto __timed_event_obj =                \
-        PrintInterface::TimedEvent::create(this, level, event_name, __VA_ARGS__)
+        PrintInterface::TimedEvent::create(cref(*this), level, event_name, __VA_ARGS__)
 
 } // namespace godzilla

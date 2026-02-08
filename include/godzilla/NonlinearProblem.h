@@ -98,7 +98,7 @@ protected:
     /// @param method Member function in class T to compute residual
     template <class T>
     void
-    set_function(T * instance, void (T::*method)(const Vector &, Vector &))
+    set_function(Ref<T> instance, void (T::*method)(const Vector &, Vector &))
     {
         this->snes.set_function(this->r, instance, method);
     }
@@ -110,7 +110,7 @@ protected:
     /// @param method Member function in class T to compute Jacobian
     template <class T>
     void
-    set_jacobian(T * instance, void (T::*method)(const Vector &, Matrix &, Matrix &))
+    set_jacobian(Ref<T> instance, void (T::*method)(const Vector &, Matrix &, Matrix &))
     {
         this->snes.set_jacobian(this->J, this->J, instance, method);
     }

@@ -9,13 +9,12 @@
 #include "godzilla/FEBoundary.h"
 
 using namespace godzilla;
-using namespace testing;
 
 namespace {
 
 class TestEssentialBoundary1D : public fe::EssentialBoundaryInfo<EDGE2, 1_D, 2> {
 public:
-    TestEssentialBoundary1D(UnstructuredMesh * mesh, const IndexSet & vertices) :
+    TestEssentialBoundary1D(Ref<UnstructuredMesh> mesh, const IndexSet & vertices) :
         fe::EssentialBoundaryInfo<EDGE2, 1_D, 2>(mesh, vertices)
     {
     }
@@ -46,14 +45,14 @@ public:
 
 class TestNaturalBoundary1D : public fe::NaturalBoundaryInfo<EDGE2, 1_D, 2> {
 public:
-    TestNaturalBoundary1D(UnstructuredMesh * mesh,
+    TestNaturalBoundary1D(Ref<UnstructuredMesh> mesh,
                           Array1D<DenseMatrix<Real, 1, 2>> grad_phi,
                           const IndexSet & facets) :
         fe::NaturalBoundaryInfo<EDGE2, 1_D, 2>(mesh, grad_phi, facets)
     {
     }
 
-    TestNaturalBoundary1D(UnstructuredMesh * mesh, const IndexSet & facets) :
+    TestNaturalBoundary1D(Ref<UnstructuredMesh> mesh, const IndexSet & facets) :
         fe::NaturalBoundaryInfo<EDGE2, 1_D, 2>(mesh, facets)
     {
     }
@@ -89,7 +88,7 @@ TEST(FEBoundaryTest, test_1d)
     TestApp app;
 
     auto mesh_pars = TestMesh1D::parameters();
-    mesh_pars.set<godzilla::App *>("app", &app);
+    mesh_pars.set<Ref<godzilla::App>>("app", ref(app));
     auto mesh_qtr = MeshFactory::create<TestMesh1D>(mesh_pars);
     auto mesh = mesh_qtr.get();
 
@@ -101,7 +100,7 @@ TEST(FEBoundaryTest, test_1d)
         auto vertices = mesh->get_cone_recursive_vertices(bnd_facets);
         vertices.sort_remove_dups();
 
-        TestEssentialBoundary1D bnd(mesh, vertices);
+        TestEssentialBoundary1D bnd(ref(*mesh), vertices);
         bnd.create();
         bnd.compute();
         EXPECT_EQ(bnd.vals[0], 2);
@@ -110,7 +109,7 @@ TEST(FEBoundaryTest, test_1d)
 
     {
         IndexSet bnd_facets = points_from_label(mesh->get_label("right"));
-        TestNaturalBoundary1D bnd(mesh, bnd_facets);
+        TestNaturalBoundary1D bnd(ref(*mesh), bnd_facets);
         bnd.create();
         bnd.compute();
         EXPECT_DOUBLE_EQ(bnd.normal(0)(0), 1);

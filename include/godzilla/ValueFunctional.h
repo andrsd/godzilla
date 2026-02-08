@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "godzilla/Types.h"
 #include "godzilla/Functional.h"
 #include "godzilla/FEProblemInterface.h"
 
@@ -11,7 +10,7 @@ namespace godzilla {
 
 class ValueFunctional : public Functional {
 public:
-    ValueFunctional(FEProblemInterface * fepi, String region = "");
+    ValueFunctional(Ref<FEProblemInterface> fepi, String region = "");
 
     /// Get value names provided by this functional
     ///
@@ -34,7 +33,7 @@ protected:
 
 private:
     /// Dependency evaluator
-    DependencyEvaluator * evalr;
+    Ref<DependencyEvaluator> evalr;
     /// Values this object provides (i.e what was announced via `declare_value`)
     std::set<String> provides;
 };

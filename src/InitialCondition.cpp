@@ -30,14 +30,14 @@ InitialCondition::parameters()
 {
     auto params = Object::parameters();
     params.add_param<String>("field", "Field name")
-        .add_private_param<DiscreteProblemInterface *>("_dpi");
+        .add_private_param<LateRef<DiscreteProblemInterface>>("_dpi");
     return params;
 }
 
 InitialCondition::InitialCondition(const Parameters & pars) :
     Object(pars),
     PrintInterface(this),
-    dpi(pars.get<DiscreteProblemInterface *>("_dpi")),
+    dpi(pars.get<Ref<DiscreteProblemInterface>>("_dpi")),
     field_name(pars.get<Optional<String>>("field")),
     fid(FieldID::INVALID)
 {
@@ -48,7 +48,6 @@ void
 InitialCondition::create()
 {
     CALL_STACK_MSG();
-    expect_true(this->dpi != nullptr, "DiscreteProblemInterface is null");
     if (this->field_name.has_value()) {
         auto fld_name = this->field_name.value();
         if (auto id = this->dpi->get_field_id(fld_name); id.has_value())

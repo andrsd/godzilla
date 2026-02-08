@@ -5,6 +5,7 @@
 #include "godzilla/CallStack.h"
 #include "godzilla/Problem.h"
 #include "godzilla/DiscreteProblemInterface.h"
+#include "godzilla/Ref.h"
 #include "petscdmplex.h"
 
 namespace godzilla {
@@ -38,11 +39,12 @@ void
 L2Diff::compute()
 {
     CALL_STACK_MSG();
-    auto * problem = get_problem();
-    auto * dpi = dynamic_cast<DiscreteProblemInterface *>(problem);
-    GODZILLA_ASSERT_TRUE(dpi != nullptr, "Discrete problem is null");
+    auto problem = get_problem();
+    auto dpio = try_dynamic_ref_cast<DiscreteProblemInterface>(problem);
+    GODZILLA_ASSERT_TRUE(dpio.has_value(), "Discrete problem is null");
     std::vector<PetscFunc *> funcs(1, L2Diff__invoke_delegate);
     std::vector<void *> ctxs(1, this);
+    auto dpi = dpio.value();
     dpi->compute_solution_vector_local();
     PETSC_CHECK(DMPlexComputeL2DiffLocal(problem->get_dm(),
                                          problem->get_time(),

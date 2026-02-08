@@ -52,7 +52,7 @@ FEProblemInterface::AssemblyData::AssemblyData(Dimension dim) :
 {
 }
 
-FEProblemInterface::FEProblemInterface(Problem * problem, const Parameters & pars) :
+FEProblemInterface::FEProblemInterface(Problem & problem, const Parameters & pars) :
     DiscreteProblemInterface(problem, pars),
     DependencyEvaluator(),
     qorder(PETSC_DETERMINE)

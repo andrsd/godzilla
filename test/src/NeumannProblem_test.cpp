@@ -11,7 +11,6 @@
 #include "godzilla/BndJacobianFunc.h"
 
 using namespace godzilla;
-using namespace testing;
 
 namespace {
 
@@ -28,7 +27,7 @@ protected:
 
 class F0 : public ResidualFunc {
 public:
-    explicit F0(TestNeumannProblem * prob) :
+    explicit F0(Ref<TestNeumannProblem> prob) :
         ResidualFunc(prob),
         u(get_field_value("u")),
         x(get_xyz())
@@ -48,7 +47,7 @@ protected:
 
 class F1 : public ResidualFunc {
 public:
-    explicit F1(TestNeumannProblem * prob) :
+    explicit F1(Ref<TestNeumannProblem> prob) :
         ResidualFunc(prob),
         dim(get_spatial_dimension()),
         u_x(get_field_gradient("u"))
@@ -69,7 +68,7 @@ protected:
 
 class G0 : public JacobianFunc {
 public:
-    explicit G0(TestNeumannProblem * prob) : JacobianFunc(prob) {}
+    explicit G0(Ref<TestNeumannProblem> prob) : JacobianFunc(prob) {}
 
     void
     evaluate(Scalar g[]) const override
@@ -80,7 +79,7 @@ public:
 
 class G3 : public JacobianFunc {
 public:
-    explicit G3(TestNeumannProblem * prob) : JacobianFunc(prob), dim(get_spatial_dimension()) {}
+    explicit G3(Ref<TestNeumannProblem> prob) : JacobianFunc(prob), dim(get_spatial_dimension()) {}
 
     void
     evaluate(Scalar g[]) const override
@@ -104,13 +103,18 @@ TestNeumannProblem::set_up_fields()
 void
 TestNeumannProblem::set_up_weak_form()
 {
-    add_residual_block(this->iu, new F0(this), new F1(this));
-    add_jacobian_block(this->iu, this->iu, new G0(this), nullptr, nullptr, new G3(this));
+    add_residual_block(this->iu, new F0(ref(*this)), new F1(ref(*this)));
+    add_jacobian_block(this->iu,
+                       this->iu,
+                       new G0(ref(*this)),
+                       nullptr,
+                       nullptr,
+                       new G3(ref(*this)));
 }
 
 class BndF0 : public BndResidualFunc {
 public:
-    explicit BndF0(const NaturalBC * bc) : BndResidualFunc(bc), n(get_normal()), x(get_xyz()) {}
+    explicit BndF0(Ref<NaturalBC> bc) : BndResidualFunc(bc), n(get_normal()), x(get_xyz()) {}
 
     void
     evaluate(Scalar f[]) const override
@@ -125,7 +129,7 @@ protected:
 
 class BndG0 : public BndJacobianFunc {
 public:
-    explicit BndG0(const NaturalBC * bc) : BndJacobianFunc(bc) {}
+    explicit BndG0(Ref<NaturalBC> bc) : BndJacobianFunc(bc) {}
 
     void
     evaluate(Scalar g[]) const override
@@ -147,8 +151,8 @@ public:
     void
     set_up_weak_form() override
     {
-        add_residual_block(new BndF0(this), nullptr);
-        add_jacobian_block(get_field_id(), new BndG0(this), nullptr, nullptr, nullptr);
+        add_residual_block(new BndF0(ref(*this)), nullptr);
+        add_jacobian_block(get_field_id(), new BndG0(ref(*this)), nullptr, nullptr, nullptr);
     }
 };
 
@@ -159,23 +163,23 @@ TEST(NeumannProblemTest, solve)
     TestApp app;
 
     auto mesh_params = RectangleMesh::parameters();
-    mesh_params.set<App *>("app", &app);
+    mesh_params.set<Ref<App>>("app", ref(app));
     mesh_params.set<Int>("nx", 2);
     mesh_params.set<Int>("ny", 1);
     auto mesh = MeshFactory::create<RectangleMesh>(mesh_params);
 
     auto prob_params = app.make_parameters<TestNeumannProblem>();
-    prob_params.set<Mesh *>("mesh", mesh.get());
+    prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     auto prob = app.make_problem<TestNeumannProblem>(prob_params);
 
     auto bc_left_pars = TestNeumannBC::parameters();
-    bc_left_pars.set<App *>("app", &app);
+    bc_left_pars.set<Ref<App>>("app", ref(app));
     bc_left_pars.set<String>("name", "bc1");
     bc_left_pars.set<std::vector<String>>("boundary", { "left" });
     prob->add_boundary_condition<TestNeumannBC>(bc_left_pars);
 
     auto bc_right_pars = TestNeumannBC::parameters();
-    bc_right_pars.set<App *>("app", &app);
+    bc_right_pars.set<Ref<App>>("app", ref(app));
     bc_right_pars.set<String>("name", "bc2");
     bc_right_pars.set<std::vector<String>>("boundary", { "right" });
     prob->add_boundary_condition<TestNeumannBC>(bc_right_pars);

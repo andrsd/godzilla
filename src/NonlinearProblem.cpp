@@ -210,8 +210,8 @@ void
 NonlinearProblem::set_up_monitors()
 {
     CALL_STACK_MSG();
-    this->snes.monitor_set(this, &NonlinearProblem::snes_monitor);
-    this->ksp.monitor_set(this, &NonlinearProblem::ksp_monitor);
+    this->snes.monitor_set(ref(*this), &NonlinearProblem::snes_monitor);
+    this->ksp.monitor_set(ref(*this), &NonlinearProblem::ksp_monitor);
 }
 
 void

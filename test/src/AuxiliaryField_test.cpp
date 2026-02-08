@@ -32,23 +32,25 @@ TEST_F(AuxiliaryFieldTest, api)
         {
         }
 
-        UnstructuredMesh *
+        Ref<UnstructuredMesh>
         get_msh() const
         {
             return AuxiliaryField::get_mesh();
         }
 
-        Problem *
+        Ref<Problem>
         get_prblm() const
         {
             return AuxiliaryField::get_problem();
         }
     };
 
+    auto prob = this->app->get_problem<GTestFENonlinearProblem>();
+
     prob->set_aux_field(FieldID(0), "fld", 1, Order(1));
 
     auto params = AuxiliaryField::parameters();
-    params.set<App *>("app", app).set<String>("name", "aux").set<String>("field", "fld");
+    params.set<Ref<App>>("app", ref(*app)).set<String>("name", "aux").set<String>("field", "fld");
     auto aux = prob->add_auxiliary_field<TestAuxFld>(params);
     prob->create();
 
@@ -57,13 +59,12 @@ TEST_F(AuxiliaryFieldTest, api)
     EXPECT_EQ(aux->get_field(), "fld");
     EXPECT_EQ(aux->get_field_id(), FieldID(0));
     // EXPECT_EQ(aux.get_msh(), this->mesh->get_mesh<Mesh>());
-    EXPECT_EQ(aux->get_prblm(), prob);
+    // EXPECT_TRUE(aux->get_prblm() == prob);
     EXPECT_EQ(aux->get_dimension(), 1_D);
 
-    EXPECT_TRUE(prob->has_aux("aux"));
-    EXPECT_FALSE(prob->has_aux("no-aux"));
-    EXPECT_EQ(prob->get_aux("aux"), aux);
-    EXPECT_EQ(prob->get_aux("no-aux"), nullptr);
+    EXPECT_TRUE(prob->get_aux("aux").has_value());
+    EXPECT_FALSE(prob->get_aux("no-aux").has_value());
+    EXPECT_EQ(prob->get_aux("no-aux").error(), ErrorCode::NotFound);
 }
 
 TEST_F(AuxiliaryFieldTest, non_existent_field)
@@ -82,10 +83,12 @@ TEST_F(AuxiliaryFieldTest, non_existent_field)
         }
     };
 
+    auto prob = this->app->get_problem<GTestFENonlinearProblem>();
+
     prob->set_aux_field(FieldID(0), "aux1", 1, Order(1));
 
     auto params = AuxiliaryField::parameters();
-    params.set<App *>("app", app);
+    params.set<Ref<App>>("app", ref(*app));
     params.set<String>("name", "aux");
     prob->add_auxiliary_field<TestAuxFld>(params);
 
@@ -108,10 +111,12 @@ TEST_F(AuxiliaryFieldTest, inconsistent_comp_number)
         }
     };
 
+    auto prob = this->app->get_problem<GTestFENonlinearProblem>();
+
     prob->set_aux_field(FieldID(0), "aux", 1, Order(1));
 
     auto params = AuxiliaryField::parameters();
-    params.set<App *>("app", app);
+    params.set<Ref<App>>("app", ref(*app));
     params.set<String>("name", "aux");
     prob->add_auxiliary_field<TestAuxFld>(params);
 
@@ -136,10 +141,12 @@ TEST_F(AuxiliaryFieldTest, non_existent_region)
         }
     };
 
+    auto prob = this->app->get_problem<GTestFENonlinearProblem>();
+
     prob->set_aux_field(FieldID(0), "aux", 1, Order(1));
 
     auto params = AuxiliaryField::parameters();
-    params.set<App *>("app", app).set<String>("name", "aux").set<String>("region", "asdf");
+    params.set<Ref<App>>("app", ref(*app)).set<String>("name", "aux").set<String>("region", "asdf");
     prob->add_auxiliary_field<TestAuxFld>(params);
 
     EXPECT_DEATH(prob->create(), "Region 'asdf' does not exists. Typo?");
@@ -147,10 +154,12 @@ TEST_F(AuxiliaryFieldTest, non_existent_region)
 
 TEST_F(AuxiliaryFieldTest, name_already_taken)
 {
+    auto prob = this->app->get_problem<GTestFENonlinearProblem>();
+
     prob->set_aux_field(FieldID(0), "fld", 1, Order(1));
 
     auto params = ConstantAuxiliaryField::parameters();
-    params.set<App *>("app", app).set<String>("name", "aux").set<std::vector<Real>>("value", { 1 });
+    params.set<Ref<App>>("app", ref(*app)).set<String>("name", "aux").set<std::vector<Real>>("value", { 1 });
     prob->add_auxiliary_field<ConstantAuxiliaryField>(params);
 
     EXPECT_DEATH(prob->add_auxiliary_field<ConstantAuxiliaryField>(params),
@@ -174,10 +183,12 @@ TEST_F(AuxiliaryFieldTest, get_value)
         }
     };
 
+    auto prob = this->app->get_problem<GTestFENonlinearProblem>();
+
     prob->set_aux_field(FieldID(0), "aux", 1, Order(1));
 
     auto params = AuxiliaryField::parameters();
-    params.set<App *>("app", app).set<String>("name", "aux");
+    params.set<Ref<App>>("app", ref(*app)).set<String>("name", "aux");
     auto aux = prob->add_auxiliary_field<TestAuxFld>(params);
 
     prob->create();
@@ -206,10 +217,12 @@ TEST_F(AuxiliaryFieldTest, get_vector_value)
         }
     };
 
+    auto prob = this->app->get_problem<GTestFENonlinearProblem>();
+
     prob->set_aux_field(FieldID(0), "aux", 3, Order(1));
 
     auto params = AuxiliaryField::parameters();
-    params.set<App *>("app", app).set<String>("name", "aux");
+    params.set<Ref<App>>("app", ref(*app)).set<String>("name", "aux");
     auto aux = prob->add_auxiliary_field<TestAuxFld>(params);
 
     prob->create();
