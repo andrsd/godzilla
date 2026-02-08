@@ -133,7 +133,7 @@
 <h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
 <ul>
 <li><strong>Required:</strong><ul class="simple">
-<li><p><strong>app (godzilla::App*) - </strong>Application we are part of</p></li>
+<li><p><strong>app (godzilla::LateRef&lt;godzilla::App&gt;) - </strong>Application we are part of</p></li>
 <li><p><strong>file (std::filesystem::__cxx11::path) - </strong>The name of the output file.</p></li>
 </ul>
 </li>
@@ -147,7 +147,7 @@
 </ul>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla14ExodusIIOutputE">
-<span id="_CPPv3N8godzilla14ExodusIIOutputE"></span><span id="_CPPv2N8godzilla14ExodusIIOutputE"></span><span id="godzilla::ExodusIIOutput"></span><span class="target" id="classgodzilla_1_1_exodus_i_i_output"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ExodusIIOutput</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="file-output.html#_CPPv4N8godzilla10FileOutputE" title="godzilla::FileOutput"><span class="n"><span class="pre">FileOutput</span></span></a><a class="headerlink" href="#_CPPv4N8godzilla14ExodusIIOutputE" title="Link to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla14ExodusIIOutputE"></span><span id="_CPPv2N8godzilla14ExodusIIOutputE"></span><span id="godzilla::ExodusIIOutput"></span><span class="target" id="classgodzilla_1_1_exodus_i_i_output"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ExodusIIOutput</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="file-output.html#_CPPv4N8godzilla10FileOutputE" title="godzilla::FileOutput"><span class="n"><span class="pre">FileOutput</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">DiscreteProblemOutputInterface</span></span><a class="headerlink" href="#_CPPv4N8godzilla14ExodusIIOutputE" title="Link to this definition"></a><br /></dt>
 <dd><p>ExodusII output. </p>
 <p>This saves the solution into an ExodusII file.</p>
 <p>Input file example: <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">output</span><span class="p">:</span>
