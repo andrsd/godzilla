@@ -27,6 +27,7 @@ TEST(TecplotOutputTest, get_file_ext)
     params.set<Ref<App>>("app", ref(app));
     params.set<Ref<Problem>>("_problem", ref(prob));
     params.set<fs::path>("file", "out");
+    params.set<ExecuteOnFlags>("on", ExecuteOn::NONE);
     TecplotOutput out(params);
 
     prob.create();

@@ -11,10 +11,14 @@ namespace godzilla {
 
 class Problem;
 
+struct OutputTag {};
+
 /// Base class for doing output
 ///
 class Output : public Object, public PrintInterface {
 public:
+    using category = OutputTag;
+
     explicit Output(const Parameters & pars);
 
     void create() override;
@@ -23,11 +27,6 @@ public:
     ///
     /// @param mask Bit flags for execution
     void set_exec_mask(ExecuteOnFlags flags);
-
-    /// Get execution mask
-    ///
-    /// @return execution mask
-    [[deprecated("Use execute_on()")]] ExecuteOnFlags get_exec_mask() const;
 
     /// Get execution mask
     ///
@@ -48,9 +47,6 @@ protected:
     ///
     /// @return Problem this output is part of
     Ref<Problem> get_problem() const;
-
-    /// Set up the execution mask
-    // void set_up_exec();
 
 private:
     /// Problem to get data from

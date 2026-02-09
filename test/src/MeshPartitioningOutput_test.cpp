@@ -54,6 +54,7 @@ TEST(MeshPartitioningOutputTest, get_file_ext)
     params.set<Ref<App>>("app", ref(app));
     params.set<Ref<Problem>>("_problem", ref(prob));
     params.set<fs::path>("file", "part");
+    params.set<ExecuteOnFlags>("on", ExecuteOn::NONE);
     MeshPartitioningOutput out(params);
     out.create();
 

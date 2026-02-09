@@ -16,6 +16,7 @@
 #include "godzilla/Label.h"
 #include "godzilla/StarForest.h"
 #include "godzilla/Output.h"
+#include "godzilla/FileOutput.h"
 #include "godzilla/Postprocessor.h"
 #include "godzilla/Ref.h"
 
@@ -170,12 +171,6 @@ public:
     /// Set the `Section` encoding the global data layout for the `DM`.
     void set_global_section(const Section & section) const;
 
-    /// Set default execute on flags
-    void set_default_output_on(ExecuteOnFlags flags);
-
-    /// Get default execute on flags for outputs
-    ExecuteOnFlags get_default_output_on() const;
-
     /// Create field decomposition
     FieldDecomposition create_field_decomposition();
 
@@ -291,6 +286,12 @@ protected:
     void set_solution_vector(const Vector & x);
 
     virtual ExecuteOnFlags
+    default_execute_on(OutputTag) const
+    {
+        return ExecuteOn::NONE;
+    }
+
+    virtual ExecuteOnFlags
     default_execute_on(PostprocessorTag) const
     {
         return ExecuteOn::NONE;
@@ -329,9 +330,6 @@ private:
     std::vector<Qtr<Output>> outputs;
     std::vector<FileOutput *> file_outputs;
 
-    /// Default output execute mask
-    ExecuteOnFlags default_output_on;
-
     /// List of postprocessor objects
     std::map<String, Qtr<Postprocessor>> pps;
 
@@ -351,6 +349,10 @@ Problem::add_output(Parameters & pars)
 {
     CALL_STACK_MSG();
     pars.set<Ref<Problem>>("_problem", ref(*this));
+    if (!pars.is_param_valid("on")) {
+        pars.set<ExecuteOnFlags>("on", default_execute_on<T>());
+    }
+
     auto obj = Qtr<T>::alloc(pars);
     auto output = obj.get();
     auto fo = dynamic_cast<FileOutput *>(output);

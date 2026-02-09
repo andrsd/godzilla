@@ -59,7 +59,6 @@ LinearProblem::LinearProblem(const Parameters & pars) :
     lin_max_iter(pars.get<Int>("lin_max_iter"))
 {
     CALL_STACK_MSG();
-    set_default_output_on(ExecuteOn::FINAL);
 }
 
 String

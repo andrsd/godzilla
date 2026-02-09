@@ -21,7 +21,6 @@ ExplicitDGLinearProblem::ExplicitDGLinearProblem(const Parameters & pars) :
     ExplicitProblemInterface(*this, pars)
 {
     CALL_STACK_MSG();
-    set_default_output_on(ExecuteOn::INITIAL | ExecuteOn::TIMESTEP);
 }
 
 Real

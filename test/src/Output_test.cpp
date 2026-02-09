@@ -126,3 +126,17 @@ TEST_F(OutputTest, interval_with_no_timestep_output)
         testing::internal::GetCapturedStdout(),
         testing::HasSubstr("Parameter 'interval' was specified, but 'on' is missing 'timestep'."));
 }
+
+TEST_F(OutputTest, default_execute_on_mask)
+{
+    auto prob = this->app->get_problem<GTestImplicitFENonlinearProblem>();
+
+    auto pars = Postprocessor::parameters();
+    pars.set<Ref<App>>("app", ref(*this->app));
+    pars.set<Ref<Problem>>("_problem", prob);
+    auto out = prob->add_output<MockOutput>(pars);
+
+    EXPECT_FALSE(out->execute_on() & ExecuteOn::FINAL);
+    EXPECT_TRUE(out->execute_on() & ExecuteOn::INITIAL);
+    EXPECT_TRUE(out->execute_on() & ExecuteOn::TIMESTEP);
+}

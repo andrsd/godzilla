@@ -34,6 +34,12 @@ protected:
     void post_step() override;
 
     ExecuteOnFlags
+    default_execute_on(OutputTag) const override
+    {
+        return ExecuteOn::INITIAL | ExecuteOn::TIMESTEP;
+    }
+
+    ExecuteOnFlags
     default_execute_on(PostprocessorTag) const override
     {
         return ExecuteOn::INITIAL | ExecuteOn::TIMESTEP;
