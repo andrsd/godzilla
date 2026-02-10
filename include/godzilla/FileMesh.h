@@ -12,12 +12,15 @@ namespace fs = std::filesystem;
 
 namespace godzilla {
 
-/// Mesh loaded from a file
+/// Object for loading meshes from files
 ///
 class FileMesh : public Object {
 public:
     enum FileFormat { UNKNOWN, EXODUSII, GMSH } file_format;
 
+    /// Construct a FileMesh object
+    ///
+    /// @param pars Parameters to build the object
     explicit FileMesh(const Parameters & pars);
 
     /// Return file name
@@ -30,6 +33,9 @@ public:
     /// @return Mesh file format
     FileFormat get_file_format() const;
 
+    /// Create UnstructuredMesh object
+    ///
+    /// @return UnstructuredMesh object
     Qtr<UnstructuredMesh> create_mesh();
 
 protected:
