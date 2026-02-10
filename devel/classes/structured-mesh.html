@@ -1,0 +1,283 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StructuredMesh &mdash; godzilla  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="TransientProblemInterface" href="transient-problem-interface.html" />
+    <link rel="prev" title="RectangleMesh" href="rectangle-mesh.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            godzilla
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started/install.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/poisson.html">Poisson Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/heat-eqn.html">Heat Equation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developers</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="allocators.html">Allocators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="app.html">App</a></li>
+<li class="toctree-l1"><a class="reference internal" href="array-1d.html">Array1D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auxiliary-field.html">AuxiliaryField</a></li>
+<li class="toctree-l1"><a class="reference internal" href="boundary-condition.html">BoundaryCondition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bounding-box.html">BoundingBox</a></li>
+<li class="toctree-l1"><a class="reference internal" href="box-mesh.html">BoxMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="call-stack.html">CallStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command-line-interface.html">CommandLineInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="constant-initial-condition.html">ConstantInitialCondition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="csv-output.html">CSVOutput</a></li>
+<li class="toctree-l1"><a class="reference internal" href="delegate.html">Delegate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dense-matrix.html">DenseMatrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dense-matrix.html#dyndensematrix">DynDenseMatrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dense-vector.html">DenseVector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dense-vector.html#dyndensevector">DynDenseVector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dg-problem-interface.html">DGProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="discrete-problem-interface.html">DiscreteProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dynamic-library.html">DynamicLibrary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="essential-bc.html">EssentialBC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exception.html">Exception</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exodusii-output.html">ExodusIIOutput</a></li>
+<li class="toctree-l1"><a class="reference internal" href="expected.html">Expected</a></li>
+<li class="toctree-l1"><a class="reference internal" href="explicit-dg-linear-problem.html">ExplicitDGLinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="explicit-fe-linear-problem.html">ExplicitFELinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="explicit-fv-linear-problem.html">ExplicitFVLinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fe-nonlinear-problem.html">FENonlinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fe-problem-interface.html">FEProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="file-mesh.html">FileMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="file-output.html">FileOutput</a></li>
+<li class="toctree-l1"><a class="reference internal" href="flags.html">Flags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fv-problem-interface.html">FVProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hdf5-file.html">HDF5File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implicit-fe-nonlinear-problem.html">ImplicitFENonlinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index-set.html">IndexSet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="init.html">Init</a></li>
+<li class="toctree-l1"><a class="reference internal" href="initial-condition.html">InitialCondition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="krylov-solver.html">KrylovSolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="label.html">Label</a></li>
+<li class="toctree-l1"><a class="reference internal" href="line-mesh.html">LineMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="linear-problem.html">LinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logger.html">Logger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix.html">Matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory-arena.html">MemoryArena</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh.html">Mesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh-factory.html">MeshFactory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natural-bc.html">NaturalBC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natural-riemann-bc.html">NaturalRiemannBC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nest-vector.html">NestVector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network-mesh.html">NetworkMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nonlinear-problem.html">NonlinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="object.html">Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optional.html">Optional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="partitioner.html">Partitioner</a></li>
+<li class="toctree-l1"><a class="reference internal" href="piecewise-constant.html">PiecewiseConstant</a></li>
+<li class="toctree-l1"><a class="reference internal" href="piecewise-linear.html">PiecewiseLinear</a></li>
+<li class="toctree-l1"><a class="reference internal" href="print-interface.html">PrintInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problem.html">Problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ptr.html">Ptr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qtr.html">Qtr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rectangle-mesh.html">RectangleMesh</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">StructuredMesh</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#_CPPv4N8godzilla14StructuredMeshE"><code class="docutils literal notranslate"><span class="pre">StructuredMesh</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla14StructuredMesh5cloneEv"><code class="docutils literal notranslate"><span class="pre">StructuredMesh::clone()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla14StructuredMesh16set_stencil_typeE15DMDAStencilType"><code class="docutils literal notranslate"><span class="pre">StructuredMesh::set_stencil_type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla14StructuredMesh17set_stencil_widthE3Int"><code class="docutils literal notranslate"><span class="pre">StructuredMesh::set_stencil_width()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla14StructuredMesh9set_sizesE3Int3Int3Int"><code class="docutils literal notranslate"><span class="pre">StructuredMesh::set_sizes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla14StructuredMesh13set_num_procsE3Int3Int3Int"><code class="docutils literal notranslate"><span class="pre">StructuredMesh::set_num_procs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla14StructuredMesh7set_dofE3Int"><code class="docutils literal notranslate"><span class="pre">StructuredMesh::set_dof()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla14StructuredMesh11set_overlapE3Int3Int3Int"><code class="docutils literal notranslate"><span class="pre">StructuredMesh::set_overlap()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla14StructuredMesh9create_1dEN3mpi12CommunicatorE14DMBoundaryType3Int3Int3Int"><code class="docutils literal notranslate"><span class="pre">StructuredMesh::create_1d()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="transient-problem-interface.html">TransientProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="unstructured-mesh.html">UnstructuredMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vector.html">Vector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vtk-output.html">VTKOutput</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">godzilla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">StructuredMesh</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="structuredmesh">
+<h1>StructuredMesh<a class="headerlink" href="#structuredmesh" title="Link to this heading"></a></h1>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla14StructuredMeshE">
+<span id="_CPPv3N8godzilla14StructuredMeshE"></span><span id="_CPPv2N8godzilla14StructuredMeshE"></span><span id="godzilla::StructuredMesh"></span><span class="target" id="classgodzilla_1_1_structured_mesh"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">StructuredMesh</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="mesh.html#_CPPv4N8godzilla4MeshE" title="godzilla::Mesh"><span class="n"><span class="pre">Mesh</span></span></a><a class="headerlink" href="#_CPPv4N8godzilla14StructuredMeshE" title="Link to this definition"></a><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla14StructuredMesh5cloneEv">
+<span id="_CPPv3NK8godzilla14StructuredMesh5cloneEv"></span><span id="_CPPv2NK8godzilla14StructuredMesh5cloneEv"></span><span id="godzilla::StructuredMesh::cloneC"></span><span class="target" id="classgodzilla_1_1_structured_mesh_1aa60b6dd2b69a323cc66ba5356f108140"></span><a class="reference internal" href="#_CPPv4N8godzilla14StructuredMeshE" title="godzilla::StructuredMesh"><span class="n"><span class="pre">StructuredMesh</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">clone</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla14StructuredMesh5cloneEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Clone this structured mesh object. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Clone of this object </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla14StructuredMesh16set_stencil_typeE15DMDAStencilType">
+<span id="_CPPv3N8godzilla14StructuredMesh16set_stencil_typeE15DMDAStencilType"></span><span id="_CPPv2N8godzilla14StructuredMesh16set_stencil_typeE15DMDAStencilType"></span><span id="godzilla::StructuredMesh::set_stencil_type__DMDAStencilType"></span><span class="target" id="classgodzilla_1_1_structured_mesh_1a37013cdb1ec6c7ce36b0eb3909c149dc"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_stencil_type</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">DMDAStencilType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">stype</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla14StructuredMesh16set_stencil_typeE15DMDAStencilType" title="Link to this definition"></a><br /></dt>
+<dd><p>Sets the type of the communication stencil. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla14StructuredMesh17set_stencil_widthE3Int">
+<span id="_CPPv3N8godzilla14StructuredMesh17set_stencil_widthE3Int"></span><span id="_CPPv2N8godzilla14StructuredMesh17set_stencil_widthE3Int"></span><span id="godzilla::StructuredMesh::set_stencil_width__Int"></span><span class="target" id="classgodzilla_1_1_structured_mesh_1a8007adb1b857798b0a47220b13ec5bf9"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_stencil_width</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">width</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla14StructuredMesh17set_stencil_widthE3Int" title="Link to this definition"></a><br /></dt>
+<dd><p>Sets the width of the communication stencil. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla14StructuredMesh9set_sizesE3Int3Int3Int">
+<span id="_CPPv3N8godzilla14StructuredMesh9set_sizesE3Int3Int3Int"></span><span id="_CPPv2N8godzilla14StructuredMesh9set_sizesE3Int3Int3Int"></span><span id="godzilla::StructuredMesh::set_sizes__Int.Int.Int"></span><span class="target" id="classgodzilla_1_1_structured_mesh_1a0039f4d8470ccb1c482d370bc71c14cd"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_sizes</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">M</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">N</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">P</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla14StructuredMesh9set_sizesE3Int3Int3Int" title="Link to this definition"></a><br /></dt>
+<dd><p>Sets the number of grid points in the three dimensional directions. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla14StructuredMesh13set_num_procsE3Int3Int3Int">
+<span id="_CPPv3N8godzilla14StructuredMesh13set_num_procsE3Int3Int3Int"></span><span id="_CPPv2N8godzilla14StructuredMesh13set_num_procsE3Int3Int3Int"></span><span id="godzilla::StructuredMesh::set_num_procs__Int.Int.Int"></span><span class="target" id="classgodzilla_1_1_structured_mesh_1a93f48c17d1fd8e77d34c1e6eb8bdadee"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_num_procs</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">m</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">p</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla14StructuredMesh13set_num_procsE3Int3Int3Int" title="Link to this definition"></a><br /></dt>
+<dd><p>Sets the number of processes in each dimension. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla14StructuredMesh7set_dofE3Int">
+<span id="_CPPv3N8godzilla14StructuredMesh7set_dofE3Int"></span><span id="_CPPv2N8godzilla14StructuredMesh7set_dofE3Int"></span><span id="godzilla::StructuredMesh::set_dof__Int"></span><span class="target" id="classgodzilla_1_1_structured_mesh_1adf5e80ff6d6a276c80692f65ed49e251"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_dof</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n_dofs</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla14StructuredMesh7set_dofE3Int" title="Link to this definition"></a><br /></dt>
+<dd><p>Sets the number of degrees of freedom per vertex. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla14StructuredMesh11set_overlapE3Int3Int3Int">
+<span id="_CPPv3N8godzilla14StructuredMesh11set_overlapE3Int3Int3Int"></span><span id="_CPPv2N8godzilla14StructuredMesh11set_overlapE3Int3Int3Int"></span><span id="godzilla::StructuredMesh::set_overlap__Int.Int.Int"></span><span class="target" id="classgodzilla_1_1_structured_mesh_1a0911b43205d07b78537fec817c55d141"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_overlap</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">y</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">z</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla14StructuredMesh11set_overlapE3Int3Int3Int" title="Link to this definition"></a><br /></dt>
+<dd><p>Sets the size of the per-processor overlap. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – Overlap in the x direction </p></li>
+<li><p><strong>y</strong> – Overlap in the y direction </p></li>
+<li><p><strong>z</strong> – Overlap in the z direction </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla14StructuredMesh9create_1dEN3mpi12CommunicatorE14DMBoundaryType3Int3Int3Int">
+<span id="_CPPv3N8godzilla14StructuredMesh9create_1dEN3mpi12CommunicatorE14DMBoundaryType3Int3Int3Int"></span><span id="_CPPv2N8godzilla14StructuredMesh9create_1dEN3mpi12CommunicatorE14DMBoundaryType3Int3Int3Int"></span><span id="godzilla::StructuredMesh::create_1d__mpi::Communicator.DMBoundaryType.Int.Int.Int"></span><span class="target" id="classgodzilla_1_1_structured_mesh_1a85520c7f69b374079be1f0dc83d5b5c7"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N8godzilla14StructuredMeshE" title="godzilla::StructuredMesh"><span class="n"><span class="pre">StructuredMesh</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create_1d</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">mpi</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Communicator</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">comm</span></span>, <span class="n"><span class="pre">DMBoundaryType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">bx</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">M</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dof</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">s</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla14StructuredMesh9create_1dEN3mpi12CommunicatorE14DMBoundaryType3Int3Int3Int" title="Link to this definition"></a><br /></dt>
+<dd><p>Creates an object that will manage the communication of one-dimensional regular array data that is distributed across one or more MPI processes. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>comm</strong> – MPI communicator </p></li>
+<li><p><strong>bx</strong> – Type of ghost cells at the boundary the array should have, if any. Use <code class="docutils literal notranslate"><span class="pre">DM_BOUNDARY_NONE</span></code>, <code class="docutils literal notranslate"><span class="pre">DM_BOUNDARY_GHOSTED</span></code>, or <code class="docutils literal notranslate"><span class="pre">DM_BOUNDARY_PERIODIC</span></code>. </p></li>
+<li><p><strong>M</strong> – Global dimension of the array (that is the number of grid points) </p></li>
+<li><p><strong>dof</strong> – Number of degrees of freedom per node </p></li>
+<li><p><strong>s</strong> – Stencil width </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="rectangle-mesh.html" class="btn btn-neutral float-left" title="RectangleMesh" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="transient-problem-interface.html" class="btn btn-neutral float-right" title="TransientProblemInterface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021-present, David Andrs.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

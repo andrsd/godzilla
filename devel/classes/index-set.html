@@ -1,0 +1,659 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IndexSet &mdash; godzilla  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Init" href="init.html" />
+    <link rel="prev" title="ImplicitFENonlinearProblem" href="implicit-fe-nonlinear-problem.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            godzilla
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started/install.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/poisson.html">Poisson Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/heat-eqn.html">Heat Equation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developers</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="allocators.html">Allocators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="app.html">App</a></li>
+<li class="toctree-l1"><a class="reference internal" href="array-1d.html">Array1D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auxiliary-field.html">AuxiliaryField</a></li>
+<li class="toctree-l1"><a class="reference internal" href="boundary-condition.html">BoundaryCondition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bounding-box.html">BoundingBox</a></li>
+<li class="toctree-l1"><a class="reference internal" href="box-mesh.html">BoxMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="call-stack.html">CallStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command-line-interface.html">CommandLineInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="constant-initial-condition.html">ConstantInitialCondition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="csv-output.html">CSVOutput</a></li>
+<li class="toctree-l1"><a class="reference internal" href="delegate.html">Delegate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dense-matrix.html">DenseMatrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dense-matrix.html#dyndensematrix">DynDenseMatrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dense-vector.html">DenseVector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dense-vector.html#dyndensevector">DynDenseVector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dg-problem-interface.html">DGProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="discrete-problem-interface.html">DiscreteProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dynamic-library.html">DynamicLibrary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="essential-bc.html">EssentialBC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exception.html">Exception</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exodusii-output.html">ExodusIIOutput</a></li>
+<li class="toctree-l1"><a class="reference internal" href="expected.html">Expected</a></li>
+<li class="toctree-l1"><a class="reference internal" href="explicit-dg-linear-problem.html">ExplicitDGLinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="explicit-fe-linear-problem.html">ExplicitFELinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="explicit-fv-linear-problem.html">ExplicitFVLinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fe-nonlinear-problem.html">FENonlinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fe-problem-interface.html">FEProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="file-mesh.html">FileMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="file-output.html">FileOutput</a></li>
+<li class="toctree-l1"><a class="reference internal" href="flags.html">Flags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fv-problem-interface.html">FVProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hdf5-file.html">HDF5File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implicit-fe-nonlinear-problem.html">ImplicitFENonlinearProblem</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">IndexSet</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#_CPPv4N8godzilla8IndexSetE"><code class="docutils literal notranslate"><span class="pre">IndexSet</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla8IndexSet6assignERK8IndexSet"><code class="docutils literal notranslate"><span class="pre">IndexSet::assign()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla8IndexSet6createE8MPI_Comm"><code class="docutils literal notranslate"><span class="pre">IndexSet::create()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla8IndexSet10complementE3Int3Int"><code class="docutils literal notranslate"><span class="pre">IndexSet::complement()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla8IndexSet7destroyEv"><code class="docutils literal notranslate"><span class="pre">IndexSet::destroy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla8IndexSet7is_nullEv"><code class="docutils literal notranslate"><span class="pre">IndexSet::is_null()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla8IndexSet9duplicateEv"><code class="docutils literal notranslate"><span class="pre">IndexSet::duplicate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla8IndexSet5equalERK8IndexSet"><code class="docutils literal notranslate"><span class="pre">IndexSet::equal()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla8IndexSet14equal_unsortedERK8IndexSet"><code class="docutils literal notranslate"><span class="pre">IndexSet::equal_unsorted()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla8IndexSet14borrow_indicesEv"><code class="docutils literal notranslate"><span class="pre">IndexSet::borrow_indices()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla8IndexSet8get_typeEv"><code class="docutils literal notranslate"><span class="pre">IndexSet::get_type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla8IndexSet15get_point_rangeER3IntR3IntRPK3Int"><code class="docutils literal notranslate"><span class="pre">IndexSet::get_point_range()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla8IndexSet19restore_point_rangeE3Int3IntPK3Int"><code class="docutils literal notranslate"><span class="pre">IndexSet::restore_point_range()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla8IndexSet18get_point_subrangeE3Int3IntPK3Int"><code class="docutils literal notranslate"><span class="pre">IndexSet::get_point_subrange()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla8IndexSet11get_min_maxEv"><code class="docutils literal notranslate"><span class="pre">IndexSet::get_min_max()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla8IndexSet8get_sizeEv"><code class="docutils literal notranslate"><span class="pre">IndexSet::get_size()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla8IndexSet14get_local_sizeEv"><code class="docutils literal notranslate"><span class="pre">IndexSet::get_local_size()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla8IndexSet6locateE3Int"><code class="docutils literal notranslate"><span class="pre">IndexSet::locate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla8IndexSet8identityEv"><code class="docutils literal notranslate"><span class="pre">IndexSet::identity()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla8IndexSet12set_identityEv"><code class="docutils literal notranslate"><span class="pre">IndexSet::set_identity()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla8IndexSet11permutationEv"><code class="docutils literal notranslate"><span class="pre">IndexSet::permutation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla8IndexSet15set_permutationEv"><code class="docutils literal notranslate"><span class="pre">IndexSet::set_permutation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla8IndexSet8set_typeE6String"><code class="docutils literal notranslate"><span class="pre">IndexSet::set_type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla8IndexSet5emptyEv"><code class="docutils literal notranslate"><span class="pre">IndexSet::empty()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla8IndexSet5shiftE3Int"><code class="docutils literal notranslate"><span class="pre">IndexSet::shift()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla8IndexSet6sortedEv"><code class="docutils literal notranslate"><span class="pre">IndexSet::sorted()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla8IndexSet4sortEv"><code class="docutils literal notranslate"><span class="pre">IndexSet::sort()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla8IndexSet16sort_remove_dupsEv"><code class="docutils literal notranslate"><span class="pre">IndexSet::sort_remove_dups()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla8IndexSet4viewE11PetscViewer"><code class="docutils literal notranslate"><span class="pre">IndexSet::view()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla8IndexSet14create_generalE8MPI_CommRKNSt6vectorI3IntEE8CopyMode"><code class="docutils literal notranslate"><span class="pre">IndexSet::create_general()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla8IndexSet9intersectERK8IndexSetRK8IndexSet"><code class="docutils literal notranslate"><span class="pre">IndexSet::intersect()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla8IndexSet4copyERK8IndexSetR8IndexSet"><code class="docutils literal notranslate"><span class="pre">IndexSet::copy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla8IndexSet11concatenateE8MPI_CommRKNSt6vectorI8IndexSetEE"><code class="docutils literal notranslate"><span class="pre">IndexSet::concatenate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla8IndexSet10differenceERK8IndexSetRK8IndexSet"><code class="docutils literal notranslate"><span class="pre">IndexSet::difference()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla8IndexSet6expandERK8IndexSetRK8IndexSet"><code class="docutils literal notranslate"><span class="pre">IndexSet::expand()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla8IndexSet3sumERK8IndexSetRK8IndexSet"><code class="docutils literal notranslate"><span class="pre">IndexSet::sum()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="init.html">Init</a></li>
+<li class="toctree-l1"><a class="reference internal" href="initial-condition.html">InitialCondition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="krylov-solver.html">KrylovSolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="label.html">Label</a></li>
+<li class="toctree-l1"><a class="reference internal" href="line-mesh.html">LineMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="linear-problem.html">LinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logger.html">Logger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix.html">Matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory-arena.html">MemoryArena</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh.html">Mesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh-factory.html">MeshFactory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natural-bc.html">NaturalBC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natural-riemann-bc.html">NaturalRiemannBC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nest-vector.html">NestVector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network-mesh.html">NetworkMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nonlinear-problem.html">NonlinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="object.html">Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optional.html">Optional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="partitioner.html">Partitioner</a></li>
+<li class="toctree-l1"><a class="reference internal" href="piecewise-constant.html">PiecewiseConstant</a></li>
+<li class="toctree-l1"><a class="reference internal" href="piecewise-linear.html">PiecewiseLinear</a></li>
+<li class="toctree-l1"><a class="reference internal" href="print-interface.html">PrintInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problem.html">Problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ptr.html">Ptr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qtr.html">Qtr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rectangle-mesh.html">RectangleMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structured-mesh.html">StructuredMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transient-problem-interface.html">TransientProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="unstructured-mesh.html">UnstructuredMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vector.html">Vector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vtk-output.html">VTKOutput</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">godzilla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">IndexSet</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="indexset">
+<h1>IndexSet<a class="headerlink" href="#indexset" title="Link to this heading"></a></h1>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla8IndexSetE">
+<span id="_CPPv3N8godzilla8IndexSetE"></span><span id="_CPPv2N8godzilla8IndexSetE"></span><span id="godzilla::IndexSet"></span><span class="target" id="classgodzilla_1_1_index_set"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IndexSet</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">PetscObjectWrapper</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">IS</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N8godzilla8IndexSetE" title="Link to this definition"></a><br /></dt>
+<dd><p><code class="docutils literal notranslate"><a class="reference internal" href="#classgodzilla_1_1_index_set"><span class="std std-ref"><span class="pre">IndexSet</span></span></a></code>s are objects used to do efficient indexing into other data structures such as <code class="docutils literal notranslate"><a class="reference internal" href="vector.html#classgodzilla_1_1_vector"><span class="std std-ref"><span class="pre">Vector</span></span></a></code> and <code class="docutils literal notranslate"><a class="reference internal" href="matrix.html#classgodzilla_1_1_matrix"><span class="std std-ref"><span class="pre">Matrix</span></span></a></code></p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla8IndexSet6assignERK8IndexSet">
+<span id="_CPPv3N8godzilla8IndexSet6assignERK8IndexSet"></span><span id="_CPPv2N8godzilla8IndexSet6assignERK8IndexSet"></span><span id="godzilla::IndexSet::assign__IndexSetCR"></span><span class="target" id="classgodzilla_1_1_index_set_1a5d1f4900378c058ae10215c618206902"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">assign</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N8godzilla8IndexSetE" title="godzilla::IndexSet"><span class="n"><span class="pre">IndexSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla8IndexSet6assignERK8IndexSet" title="Link to this definition"></a><br /></dt>
+<dd><p>Replace the content of this index set with the content of another index set. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>src</strong> – The index set to copy from </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla8IndexSet6createE8MPI_Comm">
+<span id="_CPPv3N8godzilla8IndexSet6createE8MPI_Comm"></span><span id="_CPPv2N8godzilla8IndexSet6createE8MPI_Comm"></span><span id="godzilla::IndexSet::create__MPI_Comm"></span><span class="target" id="classgodzilla_1_1_index_set_1a8afd029cd3bbd09af334caca123075c6"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">MPI_Comm</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">comm</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla8IndexSet6createE8MPI_Comm" title="Link to this definition"></a><br /></dt>
+<dd><p>Creates an index set object. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>comm</strong> – The MPI communicator </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla8IndexSet10complementE3Int3Int">
+<span id="_CPPv3NK8godzilla8IndexSet10complementE3Int3Int"></span><span id="_CPPv2NK8godzilla8IndexSet10complementE3Int3Int"></span><span id="godzilla::IndexSet::complement__Int.IntC"></span><span class="target" id="classgodzilla_1_1_index_set_1aa59b10d11289ebf5cdcb0f284fd342b4"></span><a class="reference internal" href="#_CPPv4N8godzilla8IndexSetE" title="godzilla::IndexSet"><span class="n"><span class="pre">IndexSet</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">complement</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nmin</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nmax</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla8IndexSet10complementE3Int3Int" title="Link to this definition"></a><br /></dt>
+<dd><p>Generates the complement index set. </p>
+<p>That is all indices that are NOT in the given set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nmin</strong> – The first index desired in the local part of the complement </p></li>
+<li><p><strong>nmax</strong> – The largest index desired in the local part of the complement (note that all indices in this indexs set must be greater or equal to <code class="docutils literal notranslate"><span class="pre">nmin</span></code> and less than <code class="docutils literal notranslate"><span class="pre">nmax</span></code>) </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla8IndexSet7destroyEv">
+<span id="_CPPv3N8godzilla8IndexSet7destroyEv"></span><span id="_CPPv2N8godzilla8IndexSet7destroyEv"></span><span id="godzilla::IndexSet::destroy"></span><span class="target" id="classgodzilla_1_1_index_set_1a81e35d8a2530d4b5428eff544902993c"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">destroy</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla8IndexSet7destroyEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Destroys an index set. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla8IndexSet7is_nullEv">
+<span id="_CPPv3NK8godzilla8IndexSet7is_nullEv"></span><span id="_CPPv2NK8godzilla8IndexSet7is_nullEv"></span><span id="godzilla::IndexSet::is_nullC"></span><span class="target" id="classgodzilla_1_1_index_set_1af831a5611186c14be8473e6c6b6f62bf"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_null</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla8IndexSet7is_nullEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Test if the index set is “null”. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> is the label is null, <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla8IndexSet9duplicateEv">
+<span id="_CPPv3NK8godzilla8IndexSet9duplicateEv"></span><span id="_CPPv2NK8godzilla8IndexSet9duplicateEv"></span><span id="godzilla::IndexSet::duplicateC"></span><span class="target" id="classgodzilla_1_1_index_set_1aad1e67d1b267f3b2a0822dd80d584889"></span><a class="reference internal" href="#_CPPv4N8godzilla8IndexSetE" title="godzilla::IndexSet"><span class="n"><span class="pre">IndexSet</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">duplicate</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla8IndexSet9duplicateEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Creates a duplicate copy of an index set. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The copy of the index set </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla8IndexSet5equalERK8IndexSet">
+<span id="_CPPv3NK8godzilla8IndexSet5equalERK8IndexSet"></span><span id="_CPPv2NK8godzilla8IndexSet5equalERK8IndexSet"></span><span id="godzilla::IndexSet::equal__IndexSetCRC"></span><span class="target" id="classgodzilla_1_1_index_set_1a581442416e718420ea9fd44cf8d35514"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">equal</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N8godzilla8IndexSetE" title="godzilla::IndexSet"><span class="n"><span class="pre">IndexSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">other</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla8IndexSet5equalERK8IndexSet" title="Link to this definition"></a><br /></dt>
+<dd><p>Compares if this index set has the same set of indices as the <code class="docutils literal notranslate"><span class="pre">other</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> – The index set to compare with </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if the index sets are equal, <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla8IndexSet14equal_unsortedERK8IndexSet">
+<span id="_CPPv3NK8godzilla8IndexSet14equal_unsortedERK8IndexSet"></span><span id="_CPPv2NK8godzilla8IndexSet14equal_unsortedERK8IndexSet"></span><span id="godzilla::IndexSet::equal_unsorted__IndexSetCRC"></span><span class="target" id="classgodzilla_1_1_index_set_1addf896b25904784613925c24f91f9eb9"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">equal_unsorted</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N8godzilla8IndexSetE" title="godzilla::IndexSet"><span class="n"><span class="pre">IndexSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">other</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla8IndexSet14equal_unsortedERK8IndexSet" title="Link to this definition"></a><br /></dt>
+<dd><p>Compares if this index set has the same set of indices as the <code class="docutils literal notranslate"><span class="pre">other</span></code></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This routine does NOT sort the contents of the index sets before the comparison is made, i.e., the order of indices is important. </p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> – The index set to compare with </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if the index sets are equal, <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla8IndexSet14borrow_indicesEv">
+<span id="_CPPv3N8godzilla8IndexSet14borrow_indicesEv"></span><span id="_CPPv2N8godzilla8IndexSet14borrow_indicesEv"></span><span id="godzilla::IndexSet::borrow_indices"></span><span class="target" id="classgodzilla_1_1_index_set_1aa24f2419b2a9616b7eb1b255c16b4bd8"></span><span class="n"><span class="pre">IndexSetBorrowedIndices</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">borrow_indices</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla8IndexSet14borrow_indicesEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Borrow the indices from this index set. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla8IndexSet8get_typeEv">
+<span id="_CPPv3NK8godzilla8IndexSet8get_typeEv"></span><span id="_CPPv2NK8godzilla8IndexSet8get_typeEv"></span><span id="godzilla::IndexSet::get_typeC"></span><span class="target" id="classgodzilla_1_1_index_set_1a2a85a7c2d322ffda923642769a259eee"></span><span class="n"><span class="pre">String</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_type</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla8IndexSet8get_typeEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Gets the index set type name. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The type name </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla8IndexSet15get_point_rangeER3IntR3IntRPK3Int">
+<span id="_CPPv3NK8godzilla8IndexSet15get_point_rangeER3IntR3IntRPK3Int"></span><span id="_CPPv2NK8godzilla8IndexSet15get_point_rangeER3IntR3IntRPK3Int"></span><span id="godzilla::IndexSet::get_point_range__IntR.IntR.IntCPRC"></span><span class="target" id="classgodzilla_1_1_index_set_1a82ad8877a7cf7dbea6321fd2377678d2"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_point_range</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">start</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">end</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">points</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla8IndexSet15get_point_rangeER3IntR3IntRPK3Int" title="Link to this definition"></a><br /></dt>
+<dd><p>Returns a description of the points in an <a class="reference internal" href="#classgodzilla_1_1_index_set"><span class="std std-ref">IndexSet</span></a> suitable for traversal. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start</strong> – The first index </p></li>
+<li><p><strong>end</strong> – One past the last index </p></li>
+<li><p><strong>points</strong> – The indices </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla8IndexSet19restore_point_rangeE3Int3IntPK3Int">
+<span id="_CPPv3NK8godzilla8IndexSet19restore_point_rangeE3Int3IntPK3Int"></span><span id="_CPPv2NK8godzilla8IndexSet19restore_point_rangeE3Int3IntPK3Int"></span><span id="godzilla::IndexSet::restore_point_range__Int.Int.IntCPC"></span><span class="target" id="classgodzilla_1_1_index_set_1a828e3e2aceddeae2547666986e22c86b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">restore_point_range</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">start</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">end</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">points</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla8IndexSet19restore_point_rangeE3Int3IntPK3Int" title="Link to this definition"></a><br /></dt>
+<dd><p>Destroys the traversal description created with <code class="docutils literal notranslate"><span class="pre">get_point_range</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start</strong> – The first index </p></li>
+<li><p><strong>end</strong> – One past the last index </p></li>
+<li><p><strong>points</strong> – The indices </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla8IndexSet18get_point_subrangeE3Int3IntPK3Int">
+<span id="_CPPv3NK8godzilla8IndexSet18get_point_subrangeE3Int3IntPK3Int"></span><span id="_CPPv2NK8godzilla8IndexSet18get_point_subrangeE3Int3IntPK3Int"></span><span id="godzilla::IndexSet::get_point_subrange__Int.Int.IntCPC"></span><span class="target" id="classgodzilla_1_1_index_set_1a7521775533ed1fbf0f5ba938e4fefef9"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_point_subrange</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">start</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">end</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">points</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla8IndexSet18get_point_subrangeE3Int3IntPK3Int" title="Link to this definition"></a><br /></dt>
+<dd><p>Configures the <a class="reference internal" href="#classgodzilla_1_1_index_set"><span class="std std-ref">IndexSet</span></a> to be a subrange for the traversal information given. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start</strong> – The first index of the subrange </p></li>
+<li><p><strong>end</strong> – One past the last index for the subrange </p></li>
+<li><p><strong>points</strong> – The indices for the entire range, from <code class="docutils literal notranslate"><span class="pre">get_point_range</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla8IndexSet11get_min_maxEv">
+<span id="_CPPv3NK8godzilla8IndexSet11get_min_maxEv"></span><span id="_CPPv2NK8godzilla8IndexSet11get_min_maxEv"></span><span id="godzilla::IndexSet::get_min_maxC"></span><span class="target" id="classgodzilla_1_1_index_set_1a640aecd4f4bc1612ee922d51ef8fdfb7"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Int</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">Int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_min_max</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla8IndexSet11get_min_maxEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Gets the minimum and maximum values. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A tuple containing the minimum and maximum values </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla8IndexSet8get_sizeEv">
+<span id="_CPPv3NK8godzilla8IndexSet8get_sizeEv"></span><span id="_CPPv2NK8godzilla8IndexSet8get_sizeEv"></span><span id="godzilla::IndexSet::get_sizeC"></span><span class="target" id="classgodzilla_1_1_index_set_1af3b68306fbe246be2b33e4f80d9689b9"></span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_size</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla8IndexSet8get_sizeEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Returns the global length of an index set. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The global size of the index set </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla8IndexSet14get_local_sizeEv">
+<span id="_CPPv3NK8godzilla8IndexSet14get_local_sizeEv"></span><span id="_CPPv2NK8godzilla8IndexSet14get_local_sizeEv"></span><span id="godzilla::IndexSet::get_local_sizeC"></span><span class="target" id="classgodzilla_1_1_index_set_1ab520d321a931c77bcdc18e39f8cd3248"></span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_local_size</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla8IndexSet14get_local_sizeEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Returns the local (processor) length of an index set. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The local size of the index set </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla8IndexSet6locateE3Int">
+<span id="_CPPv3NK8godzilla8IndexSet6locateE3Int"></span><span id="_CPPv2NK8godzilla8IndexSet6locateE3Int"></span><span id="godzilla::IndexSet::locate__IntC"></span><span class="target" id="classgodzilla_1_1_index_set_1aa854ce5cdb4202f1b9615418487101ca"></span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">locate</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">key</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla8IndexSet6locateE3Int" title="Link to this definition"></a><br /></dt>
+<dd><p>Determine the location of an index within the local component of an index set. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>key</strong> – The index to locate </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>if &gt;= 0, a location within the index set that is equal to the key, otherwise the key is not in the index set </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla8IndexSet8identityEv">
+<span id="_CPPv3NK8godzilla8IndexSet8identityEv"></span><span id="_CPPv2NK8godzilla8IndexSet8identityEv"></span><span id="godzilla::IndexSet::identityC"></span><span class="target" id="classgodzilla_1_1_index_set_1aa94297c4cfce1ee9e2120a43f3cd8c27"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">identity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla8IndexSet8identityEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Determines whether index set is the identity mapping. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if the index set is the identity mapping, <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla8IndexSet12set_identityEv">
+<span id="_CPPv3N8godzilla8IndexSet12set_identityEv"></span><span id="_CPPv2N8godzilla8IndexSet12set_identityEv"></span><span id="godzilla::IndexSet::set_identity"></span><span class="target" id="classgodzilla_1_1_index_set_1a4c10036a760716976bc6073f2333e612"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_identity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla8IndexSet12set_identityEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Sets the index set to be the identity mapping. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla8IndexSet11permutationEv">
+<span id="_CPPv3NK8godzilla8IndexSet11permutationEv"></span><span id="_CPPv2NK8godzilla8IndexSet11permutationEv"></span><span id="godzilla::IndexSet::permutationC"></span><span class="target" id="classgodzilla_1_1_index_set_1af8af40198a73d99b39d7d8f506eb3eeb"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">permutation</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla8IndexSet11permutationEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Determines whether index set is a permutation. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if the index set is a permutation, <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla8IndexSet15set_permutationEv">
+<span id="_CPPv3N8godzilla8IndexSet15set_permutationEv"></span><span id="_CPPv2N8godzilla8IndexSet15set_permutationEv"></span><span id="godzilla::IndexSet::set_permutation"></span><span class="target" id="classgodzilla_1_1_index_set_1aa76d9fdff5b15eb7b0dd5f0354fa2134"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_permutation</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla8IndexSet15set_permutationEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Informs the index set that it is a permutation. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla8IndexSet8set_typeE6String">
+<span id="_CPPv3N8godzilla8IndexSet8set_typeE6String"></span><span id="_CPPv2N8godzilla8IndexSet8set_typeE6String"></span><span id="godzilla::IndexSet::set_type__String"></span><span class="target" id="classgodzilla_1_1_index_set_1ad50aee93c89d763035480d38dac0c094"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_type</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">String</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">type</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla8IndexSet8set_typeE6String" title="Link to this definition"></a><br /></dt>
+<dd><p>Builds a index set, for a particular type. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>type</strong> – The type of index set to build </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla8IndexSet5emptyEv">
+<span id="_CPPv3NK8godzilla8IndexSet5emptyEv"></span><span id="_CPPv2NK8godzilla8IndexSet5emptyEv"></span><span id="godzilla::IndexSet::emptyC"></span><span class="target" id="classgodzilla_1_1_index_set_1abb5820a1efbb8d509c0ea7132b632897"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">empty</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla8IndexSet5emptyEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Checks if the <a class="reference internal" href="#classgodzilla_1_1_index_set"><span class="std std-ref">IndexSet</span></a> is empty (i.e., has no indices) </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if the index set is empty, <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla8IndexSet5shiftE3Int">
+<span id="_CPPv3N8godzilla8IndexSet5shiftE3Int"></span><span id="_CPPv2N8godzilla8IndexSet5shiftE3Int"></span><span id="godzilla::IndexSet::shift__Int"></span><span class="target" id="classgodzilla_1_1_index_set_1a23f187e6dfe57f1da3add4db2c475805"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">shift</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">offset</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla8IndexSet5shiftE3Int" title="Link to this definition"></a><br /></dt>
+<dd><p>Shift all indices by given offset. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>offset</strong> – The offset to shift the indices by </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla8IndexSet6sortedEv">
+<span id="_CPPv3NK8godzilla8IndexSet6sortedEv"></span><span id="_CPPv2NK8godzilla8IndexSet6sortedEv"></span><span id="godzilla::IndexSet::sortedC"></span><span class="target" id="classgodzilla_1_1_index_set_1ab7e6a925e33eed2b8f143896d79f867c"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sorted</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla8IndexSet6sortedEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Checks the indices to determine whether they have been sorted. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> is index set is sorted </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla8IndexSet4sortEv">
+<span id="_CPPv3NK8godzilla8IndexSet4sortEv"></span><span id="_CPPv2NK8godzilla8IndexSet4sortEv"></span><span id="godzilla::IndexSet::sortC"></span><span class="target" id="classgodzilla_1_1_index_set_1a1f5bd7f50114dc314bb8e4537d6df1ab"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sort</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla8IndexSet4sortEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Sort the indices of the index set. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla8IndexSet16sort_remove_dupsEv">
+<span id="_CPPv3NK8godzilla8IndexSet16sort_remove_dupsEv"></span><span id="_CPPv2NK8godzilla8IndexSet16sort_remove_dupsEv"></span><span id="godzilla::IndexSet::sort_remove_dupsC"></span><span class="target" id="classgodzilla_1_1_index_set_1a2194ccd47a8e3966a715f5ffeca9654e"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sort_remove_dups</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla8IndexSet16sort_remove_dupsEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Sort the indices of the index set, removing duplicates. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla8IndexSet4viewE11PetscViewer">
+<span id="_CPPv3NK8godzilla8IndexSet4viewE11PetscViewer"></span><span id="_CPPv2NK8godzilla8IndexSet4viewE11PetscViewer"></span><span id="godzilla::IndexSet::view__PetscViewerC"></span><span class="target" id="classgodzilla_1_1_index_set_1a8d6542742fb2960bbd9eed6ac75ec768"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">view</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">PetscViewer</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">viewer</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">PETSC_VIEWER_STDOUT_WORLD</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla8IndexSet4viewE11PetscViewer" title="Link to this definition"></a><br /></dt>
+<dd><p>View the index set. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>viewer</strong> – The PETSc viewer </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla8IndexSet14create_generalE8MPI_CommRKNSt6vectorI3IntEE8CopyMode">
+<span id="_CPPv3N8godzilla8IndexSet14create_generalE8MPI_CommRKNSt6vectorI3IntEE8CopyMode"></span><span id="_CPPv2N8godzilla8IndexSet14create_generalE8MPI_CommRKNSt6vectorI3IntEE8CopyMode"></span><span id="godzilla::IndexSet::create_general__MPI_Comm.std::vector:Int:CR.CopyMode"></span><span class="target" id="classgodzilla_1_1_index_set_1af377bb06ccfc3dc4908f9f4ba85207cd"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N8godzilla8IndexSetE" title="godzilla::IndexSet"><span class="n"><span class="pre">IndexSet</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create_general</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">MPI_Comm</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">comm</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">idx</span></span>, <span class="n"><span class="pre">CopyMode</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">copy_mode</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">COPY_VALUES</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla8IndexSet14create_generalE8MPI_CommRKNSt6vectorI3IntEE8CopyMode" title="Link to this definition"></a><br /></dt>
+<dd><p>Creates a data structure for an index set containing a list of integers. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>comm</strong> – The MPI communicator </p></li>
+<li><p><strong>idx</strong> – The length of the index set </p></li>
+<li><p><strong>copy_mode</strong> – The copy mode see, <code class="docutils literal notranslate"><span class="pre">CopyMode</span></code> for details </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla8IndexSet9intersectERK8IndexSetRK8IndexSet">
+<span id="_CPPv3N8godzilla8IndexSet9intersectERK8IndexSetRK8IndexSet"></span><span id="_CPPv2N8godzilla8IndexSet9intersectERK8IndexSetRK8IndexSet"></span><span id="godzilla::IndexSet::intersect__IndexSetCR.IndexSetCR"></span><span class="target" id="classgodzilla_1_1_index_set_1a5c4fbca8add34c2165d7cb6f6bdd977c"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N8godzilla8IndexSetE" title="godzilla::IndexSet"><span class="n"><span class="pre">IndexSet</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">intersect</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N8godzilla8IndexSetE" title="godzilla::IndexSet"><span class="n"><span class="pre">IndexSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">is1</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N8godzilla8IndexSetE" title="godzilla::IndexSet"><span class="n"><span class="pre">IndexSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">is2</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla8IndexSet9intersectERK8IndexSetRK8IndexSet" title="Link to this definition"></a><br /></dt>
+<dd><p>Computes the intersection of two index sets, by sorting and comparing. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is1</strong> – The first index set </p></li>
+<li><p><strong>is2</strong> – The second index set </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The sorted intersection of <code class="docutils literal notranslate"><span class="pre">is1</span></code> and <code class="docutils literal notranslate"><span class="pre">is2</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla8IndexSet4copyERK8IndexSetR8IndexSet">
+<span id="_CPPv3N8godzilla8IndexSet4copyERK8IndexSetR8IndexSet"></span><span id="_CPPv2N8godzilla8IndexSet4copyERK8IndexSetR8IndexSet"></span><span id="godzilla::IndexSet::copy__IndexSetCR.IndexSetR"></span><span class="target" id="classgodzilla_1_1_index_set_1a602d1083e242e08beff5dd7ba4d3aa2e"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">copy</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N8godzilla8IndexSetE" title="godzilla::IndexSet"><span class="n"><span class="pre">IndexSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span>, <a class="reference internal" href="#_CPPv4N8godzilla8IndexSetE" title="godzilla::IndexSet"><span class="n"><span class="pre">IndexSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">dest</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla8IndexSet4copyERK8IndexSetR8IndexSet" title="Link to this definition"></a><br /></dt>
+<dd><p>Copies an index set. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – The index set to copy from </p></li>
+<li><p><strong>dest</strong> – The index set to copy to </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla8IndexSet11concatenateE8MPI_CommRKNSt6vectorI8IndexSetEE">
+<span id="_CPPv3N8godzilla8IndexSet11concatenateE8MPI_CommRKNSt6vectorI8IndexSetEE"></span><span id="_CPPv2N8godzilla8IndexSet11concatenateE8MPI_CommRKNSt6vectorI8IndexSetEE"></span><span id="godzilla::IndexSet::concatenate__MPI_Comm.std::vector:IndexSet:CR"></span><span class="target" id="classgodzilla_1_1_index_set_1a410b2b5a5c2d12db60e0ae2017935374"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N8godzilla8IndexSetE" title="godzilla::IndexSet"><span class="n"><span class="pre">IndexSet</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">concatenate</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">MPI_Comm</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">comm</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N8godzilla8IndexSetE" title="godzilla::IndexSet"><span class="n"><span class="pre">IndexSet</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">is_list</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla8IndexSet11concatenateE8MPI_CommRKNSt6vectorI8IndexSetEE" title="Link to this definition"></a><br /></dt>
+<dd><p>Forms a new IS by locally concatenating the indices from an IS list without reordering. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>comm</strong> – The MPI communicator </p></li>
+<li><p><strong>is_list</strong> – The list of index sets to concatenate </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The concatenated index set </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla8IndexSet10differenceERK8IndexSetRK8IndexSet">
+<span id="_CPPv3N8godzilla8IndexSet10differenceERK8IndexSetRK8IndexSet"></span><span id="_CPPv2N8godzilla8IndexSet10differenceERK8IndexSetRK8IndexSet"></span><span id="godzilla::IndexSet::difference__IndexSetCR.IndexSetCR"></span><span class="target" id="classgodzilla_1_1_index_set_1aeb839493e2a5091aa0a937ff3edc17ea"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N8godzilla8IndexSetE" title="godzilla::IndexSet"><span class="n"><span class="pre">IndexSet</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">difference</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N8godzilla8IndexSetE" title="godzilla::IndexSet"><span class="n"><span class="pre">IndexSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">is1</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N8godzilla8IndexSetE" title="godzilla::IndexSet"><span class="n"><span class="pre">IndexSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">is2</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla8IndexSet10differenceERK8IndexSetRK8IndexSet" title="Link to this definition"></a><br /></dt>
+<dd><p>Computes the difference between two index sets. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is1</strong> – The first index set, to have items removed from it </p></li>
+<li><p><strong>is2</strong> – Index values to be removed </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The difference between <code class="docutils literal notranslate"><span class="pre">is1</span></code> and <code class="docutils literal notranslate"><span class="pre">is2</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla8IndexSet6expandERK8IndexSetRK8IndexSet">
+<span id="_CPPv3N8godzilla8IndexSet6expandERK8IndexSetRK8IndexSet"></span><span id="_CPPv2N8godzilla8IndexSet6expandERK8IndexSetRK8IndexSet"></span><span id="godzilla::IndexSet::expand__IndexSetCR.IndexSetCR"></span><span class="target" id="classgodzilla_1_1_index_set_1afda302f185abee1778691b3a0e5be3a7"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N8godzilla8IndexSetE" title="godzilla::IndexSet"><span class="n"><span class="pre">IndexSet</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">expand</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N8godzilla8IndexSetE" title="godzilla::IndexSet"><span class="n"><span class="pre">IndexSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">is1</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N8godzilla8IndexSetE" title="godzilla::IndexSet"><span class="n"><span class="pre">IndexSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">is2</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla8IndexSet6expandERK8IndexSetRK8IndexSet" title="Link to this definition"></a><br /></dt>
+<dd><p>Computes the union of two index sets, by concatenating 2 lists and removing duplicates. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is1</strong> – The first index set </p></li>
+<li><p><strong>is2</strong> – The second index set </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The union of <code class="docutils literal notranslate"><span class="pre">is1</span></code> and <code class="docutils literal notranslate"><span class="pre">is2</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla8IndexSet3sumERK8IndexSetRK8IndexSet">
+<span id="_CPPv3N8godzilla8IndexSet3sumERK8IndexSetRK8IndexSet"></span><span id="_CPPv2N8godzilla8IndexSet3sumERK8IndexSetRK8IndexSet"></span><span id="godzilla::IndexSet::sum__IndexSetCR.IndexSetCR"></span><span class="target" id="classgodzilla_1_1_index_set_1a4675fb651dac7fb3012effa30d74e064"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N8godzilla8IndexSetE" title="godzilla::IndexSet"><span class="n"><span class="pre">IndexSet</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sum</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N8godzilla8IndexSetE" title="godzilla::IndexSet"><span class="n"><span class="pre">IndexSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">is1</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N8godzilla8IndexSetE" title="godzilla::IndexSet"><span class="n"><span class="pre">IndexSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">is2</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla8IndexSet3sumERK8IndexSetRK8IndexSet" title="Link to this definition"></a><br /></dt>
+<dd><p>Computes the sum (union) of two index sets. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is1</strong> – The first index set </p></li>
+<li><p><strong>is2</strong> – The second index set </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The sum of <code class="docutils literal notranslate"><span class="pre">is1</span></code> and <code class="docutils literal notranslate"><span class="pre">is2</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="implicit-fe-nonlinear-problem.html" class="btn btn-neutral float-left" title="ImplicitFENonlinearProblem" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="init.html" class="btn btn-neutral float-right" title="Init" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021-present, David Andrs.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

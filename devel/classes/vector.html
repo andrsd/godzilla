@@ -1,0 +1,548 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vector &mdash; godzilla  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="VTKOutput" href="vtk-output.html" />
+    <link rel="prev" title="UnstructuredMesh" href="unstructured-mesh.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            godzilla
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started/install.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/poisson.html">Poisson Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/heat-eqn.html">Heat Equation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developers</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="allocators.html">Allocators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="app.html">App</a></li>
+<li class="toctree-l1"><a class="reference internal" href="array-1d.html">Array1D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auxiliary-field.html">AuxiliaryField</a></li>
+<li class="toctree-l1"><a class="reference internal" href="boundary-condition.html">BoundaryCondition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bounding-box.html">BoundingBox</a></li>
+<li class="toctree-l1"><a class="reference internal" href="box-mesh.html">BoxMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="call-stack.html">CallStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command-line-interface.html">CommandLineInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="constant-initial-condition.html">ConstantInitialCondition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="csv-output.html">CSVOutput</a></li>
+<li class="toctree-l1"><a class="reference internal" href="delegate.html">Delegate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dense-matrix.html">DenseMatrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dense-matrix.html#dyndensematrix">DynDenseMatrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dense-vector.html">DenseVector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dense-vector.html#dyndensevector">DynDenseVector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dg-problem-interface.html">DGProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="discrete-problem-interface.html">DiscreteProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dynamic-library.html">DynamicLibrary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="essential-bc.html">EssentialBC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exception.html">Exception</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exodusii-output.html">ExodusIIOutput</a></li>
+<li class="toctree-l1"><a class="reference internal" href="expected.html">Expected</a></li>
+<li class="toctree-l1"><a class="reference internal" href="explicit-dg-linear-problem.html">ExplicitDGLinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="explicit-fe-linear-problem.html">ExplicitFELinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="explicit-fv-linear-problem.html">ExplicitFVLinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fe-nonlinear-problem.html">FENonlinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fe-problem-interface.html">FEProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="file-mesh.html">FileMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="file-output.html">FileOutput</a></li>
+<li class="toctree-l1"><a class="reference internal" href="flags.html">Flags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fv-problem-interface.html">FVProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hdf5-file.html">HDF5File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implicit-fe-nonlinear-problem.html">ImplicitFENonlinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index-set.html">IndexSet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="init.html">Init</a></li>
+<li class="toctree-l1"><a class="reference internal" href="initial-condition.html">InitialCondition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="krylov-solver.html">KrylovSolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="label.html">Label</a></li>
+<li class="toctree-l1"><a class="reference internal" href="line-mesh.html">LineMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="linear-problem.html">LinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logger.html">Logger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix.html">Matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory-arena.html">MemoryArena</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh.html">Mesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh-factory.html">MeshFactory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natural-bc.html">NaturalBC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natural-riemann-bc.html">NaturalRiemannBC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nest-vector.html">NestVector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network-mesh.html">NetworkMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nonlinear-problem.html">NonlinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="object.html">Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optional.html">Optional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="partitioner.html">Partitioner</a></li>
+<li class="toctree-l1"><a class="reference internal" href="piecewise-constant.html">PiecewiseConstant</a></li>
+<li class="toctree-l1"><a class="reference internal" href="piecewise-linear.html">PiecewiseLinear</a></li>
+<li class="toctree-l1"><a class="reference internal" href="print-interface.html">PrintInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problem.html">Problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ptr.html">Ptr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qtr.html">Qtr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rectangle-mesh.html">RectangleMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structured-mesh.html">StructuredMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transient-problem-interface.html">TransientProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="unstructured-mesh.html">UnstructuredMesh</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Vector</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#_CPPv4N8godzilla6VectorE"><code class="docutils literal notranslate"><span class="pre">Vector</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla6Vector8assembleEv"><code class="docutils literal notranslate"><span class="pre">Vector::assemble()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla6Vector8get_typeEv"><code class="docutils literal notranslate"><span class="pre">Vector::get_type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla6Vector8get_sizeEv"><code class="docutils literal notranslate"><span class="pre">Vector::get_size()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla6Vector14get_local_sizeEv"><code class="docutils literal notranslate"><span class="pre">Vector::get_local_size()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla6Vector4copyERK8IndexSet11ScatterModeR6Vector"><code class="docutils literal notranslate"><span class="pre">Vector::copy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla6Vector6assignERK6Vector"><code class="docutils literal notranslate"><span class="pre">Vector::assign()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla6Vector4normE8NormType"><code class="docutils literal notranslate"><span class="pre">Vector::norm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla6Vector10set_valuesE3IntPK3IntPK6Scalar10InsertMode"><code class="docutils literal notranslate"><span class="pre">Vector::set_values()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla6Vector10set_valuesERKNSt6vectorI3IntEERKNSt6vectorI6ScalarEE10InsertMode"><code class="docutils literal notranslate"><span class="pre">Vector::set_values()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4I_3IntEN8godzilla6Vector10set_valuesEvRK11DenseVectorI3Int1NERK11DenseVectorI6Scalar1NE10InsertMode"><code class="docutils literal notranslate"><span class="pre">Vector::set_values()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla6Vector10set_valuesERK14DynDenseVectorI3IntERK14DynDenseVectorI6ScalarE10InsertMode"><code class="docutils literal notranslate"><span class="pre">Vector::set_values()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla6Vector16set_values_localERKNSt6vectorI3IntEERKNSt6vectorI6ScalarEE10InsertMode"><code class="docutils literal notranslate"><span class="pre">Vector::set_values_local()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4I_3IntEN8godzilla6Vector16set_values_localEvRK11DenseVectorI3Int1NERK11DenseVectorI6Scalar1NE10InsertMode"><code class="docutils literal notranslate"><span class="pre">Vector::set_values_local()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla6Vector16set_values_localERK14DynDenseVectorI3IntERK14DynDenseVectorI6ScalarE10InsertMode"><code class="docutils literal notranslate"><span class="pre">Vector::set_values_local()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla6Vector10set_optionE9VecOptionb"><code class="docutils literal notranslate"><span class="pre">Vector::set_option()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla6Vector14get_sub_vectorERK8IndexSet"><code class="docutils literal notranslate"><span class="pre">Vector::get_sub_vector()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla6Vector18restore_sub_vectorERK8IndexSetR6Vector"><code class="docutils literal notranslate"><span class="pre">Vector::restore_sub_vector()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla6Vector19get_ownership_rangeEv"><code class="docutils literal notranslate"><span class="pre">Vector::get_ownership_range()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla6Vector10create_seqE8MPI_Comm3Int3IntA_K6Scalar"><code class="docutils literal notranslate"><span class="pre">Vector::create_seq()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla6Vector10create_seqE8MPI_Comm3IntRKNSt6vectorI6ScalarEE"><code class="docutils literal notranslate"><span class="pre">Vector::create_seq()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla6Vector10create_mpiE8MPI_Comm3Int3Int"><code class="docutils literal notranslate"><span class="pre">Vector::create_mpi()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla6Vector10create_mpiE8MPI_Comm3Int3Int3IntA_K6Scalar"><code class="docutils literal notranslate"><span class="pre">Vector::create_mpi()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla6Vector10create_mpiE8MPI_Comm3IntRKNSt6vectorI6ScalarEE3Int"><code class="docutils literal notranslate"><span class="pre">Vector::create_mpi()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla6Vector11create_nestE8MPI_CommRKNSt6vectorI6VectorEE"><code class="docutils literal notranslate"><span class="pre">Vector::create_nest()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="vtk-output.html">VTKOutput</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">godzilla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Vector</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="vector">
+<h1>Vector<a class="headerlink" href="#vector" title="Link to this heading"></a></h1>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla6VectorE">
+<span id="_CPPv3N8godzilla6VectorE"></span><span id="_CPPv2N8godzilla6VectorE"></span><span id="godzilla::Vector"></span><span class="target" id="classgodzilla_1_1_vector"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Vector</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">PetscObjectWrapper</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Vec</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N8godzilla6VectorE" title="Link to this definition"></a><br /></dt>
+<dd><p>Subclassed by <a class="reference internal" href="nest-vector.html#classgodzilla_1_1_nest_vector"><span class="std std-ref">godzilla::NestVector</span></a></p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla6Vector8assembleEv">
+<span id="_CPPv3N8godzilla6Vector8assembleEv"></span><span id="_CPPv2N8godzilla6Vector8assembleEv"></span><span id="godzilla::Vector::assemble"></span><span class="target" id="classgodzilla_1_1_vector_1a63f005d05911ee8ad7ea94ca64cfe0ea"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">assemble</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla6Vector8assembleEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Convenience function that does <code class="docutils literal notranslate"><span class="pre">assembly_begin()</span></code> and <code class="docutils literal notranslate"><span class="pre">assembly_end()</span></code></p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla6Vector8get_typeEv">
+<span id="_CPPv3NK8godzilla6Vector8get_typeEv"></span><span id="_CPPv2NK8godzilla6Vector8get_typeEv"></span><span id="godzilla::Vector::get_typeC"></span><span class="target" id="classgodzilla_1_1_vector_1a22b851bb5e81bfe85d7bcf73c40dfe64"></span><span class="n"><span class="pre">String</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_type</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla6Vector8get_typeEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Get the vector type name. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The vector type </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla6Vector8get_sizeEv">
+<span id="_CPPv3NK8godzilla6Vector8get_sizeEv"></span><span id="_CPPv2NK8godzilla6Vector8get_sizeEv"></span><span id="godzilla::Vector::get_sizeC"></span><span class="target" id="classgodzilla_1_1_vector_1a87ad55dcc6171f1ffd84b0a13e51b24c"></span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_size</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla6Vector8get_sizeEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Returns the global number of elements of the vector. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla6Vector14get_local_sizeEv">
+<span id="_CPPv3NK8godzilla6Vector14get_local_sizeEv"></span><span id="_CPPv2NK8godzilla6Vector14get_local_sizeEv"></span><span id="godzilla::Vector::get_local_sizeC"></span><span class="target" id="classgodzilla_1_1_vector_1aed683efaf47c74a4bda7d48a7547fafc"></span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_local_size</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla6Vector14get_local_sizeEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Returns the local number of elements of the vector. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla6Vector4copyERK8IndexSet11ScatterModeR6Vector">
+<span id="_CPPv3N8godzilla6Vector4copyERK8IndexSet11ScatterModeR6Vector"></span><span id="_CPPv2N8godzilla6Vector4copyERK8IndexSet11ScatterModeR6Vector"></span><span id="godzilla::Vector::copy__IndexSetCR.ScatterMode.VectorR"></span><span class="target" id="classgodzilla_1_1_vector_1a7561e0701084f91d0c2844eb9eccf50d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">copy</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="index-set.html#_CPPv4N8godzilla8IndexSetE" title="godzilla::IndexSet"><span class="n"><span class="pre">IndexSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">is</span></span>, <span class="n"><span class="pre">ScatterMode</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mode</span></span>, <a class="reference internal" href="#_CPPv4N8godzilla6VectorE" title="godzilla::Vector"><span class="n"><span class="pre">Vector</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">reduced</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla6Vector4copyERK8IndexSet11ScatterModeR6Vector" title="Link to this definition"></a><br /></dt>
+<dd><p>Copies between a reduced vector and the appropriate elements of a full-space vector. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is</strong> – Index set for the reduced space </p></li>
+<li><p><strong>mode</strong> – Direction of copying (SCATTER_FORWARD or SCATTER_REVERSE) </p></li>
+<li><p><strong>reduced</strong> – Reduced-space vector </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla6Vector6assignERK6Vector">
+<span id="_CPPv3N8godzilla6Vector6assignERK6Vector"></span><span id="_CPPv2N8godzilla6Vector6assignERK6Vector"></span><span id="godzilla::Vector::assign__VectorCR"></span><span class="target" id="classgodzilla_1_1_vector_1a76730659497e2b463ddb99167c629461"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">assign</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N8godzilla6VectorE" title="godzilla::Vector"><span class="n"><span class="pre">Vector</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">y</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla6Vector6assignERK6Vector" title="Link to this definition"></a><br /></dt>
+<dd><p>Assign values of y into this vector. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>y</strong> – <a class="reference internal" href="#classgodzilla_1_1_vector"><span class="std std-ref">Vector</span></a> with values to be assined into this vector </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla6Vector4normE8NormType">
+<span id="_CPPv3NK8godzilla6Vector4normE8NormType"></span><span id="_CPPv2NK8godzilla6Vector4normE8NormType"></span><span id="godzilla::Vector::norm__NormTypeC"></span><span class="target" id="classgodzilla_1_1_vector_1aa1a8bd2b0e29e6f2fe865a83d55042cc"></span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">norm</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">NormType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">type</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla6Vector4normE8NormType" title="Link to this definition"></a><br /></dt>
+<dd><p>Computes the vector norm. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>type</strong> – The type of the norm requested </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The norm </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla6Vector10set_valuesE3IntPK3IntPK6Scalar10InsertMode">
+<span id="_CPPv3N8godzilla6Vector10set_valuesE3IntPK3IntPK6Scalar10InsertMode"></span><span id="_CPPv2N8godzilla6Vector10set_valuesE3IntPK3IntPK6Scalar10InsertMode"></span><span id="godzilla::Vector::set_values__Int.IntCP.ScalarCP.InsertMode"></span><span class="target" id="classgodzilla_1_1_vector_1a068067c70cef75202f1e468383c7862c"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_values</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">ix</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Scalar</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">y</span></span>, <span class="n"><span class="pre">InsertMode</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mode</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">INSERT_VALUES</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla6Vector10set_valuesE3IntPK3IntPK6Scalar10InsertMode" title="Link to this definition"></a><br /></dt>
+<dd><p>Inserts or adds values into certain locations of a vector. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> – Number of elements to insert </p></li>
+<li><p><strong>ix</strong> – Indices where to add/insert </p></li>
+<li><p><strong>y</strong> – Values </p></li>
+<li><p><strong>mode</strong> – Insertion mode </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla6Vector10set_valuesERKNSt6vectorI3IntEERKNSt6vectorI6ScalarEE10InsertMode">
+<span id="_CPPv3N8godzilla6Vector10set_valuesERKNSt6vectorI3IntEERKNSt6vectorI6ScalarEE10InsertMode"></span><span id="_CPPv2N8godzilla6Vector10set_valuesERKNSt6vectorI3IntEERKNSt6vectorI6ScalarEE10InsertMode"></span><span id="godzilla::Vector::set_values__std::vector:Int:CR.std::vector:Scalar:CR.InsertMode"></span><span class="target" id="classgodzilla_1_1_vector_1ae62e3631a8f6add50c2a84f21bbae93c"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_values</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ix</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Scalar</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">y</span></span>, <span class="n"><span class="pre">InsertMode</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mode</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">INSERT_VALUES</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla6Vector10set_valuesERKNSt6vectorI3IntEERKNSt6vectorI6ScalarEE10InsertMode" title="Link to this definition"></a><br /></dt>
+<dd><p>Inserts or adds values into certain locations of a vector. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ix</strong> – Indices where to add/insert </p></li>
+<li><p><strong>y</strong> – Values </p></li>
+<li><p><strong>mode</strong> – Insertion mode </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I_3IntEN8godzilla6Vector10set_valuesEvRK11DenseVectorI3Int1NERK11DenseVectorI6Scalar1NE10InsertMode">
+<span id="_CPPv3I_3IntEN8godzilla6Vector10set_valuesERK11DenseVectorI3Int1NERK11DenseVectorI6Scalar1NE10InsertMode"></span><span id="_CPPv2I_3IntEN8godzilla6Vector10set_valuesERK11DenseVectorI3Int1NERK11DenseVectorI6Scalar1NE10InsertMode"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">N</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classgodzilla_1_1_vector_1acb860ba2207263a7e2b1557c206c5dac"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_values</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="dense-vector.html#_CPPv4I0_3IntEN8godzilla11DenseVectorE" title="godzilla::DenseVector"><span class="n"><span class="pre">DenseVector</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Int</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_3IntEN8godzilla6Vector10set_valuesEvRK11DenseVectorI3Int1NERK11DenseVectorI6Scalar1NE10InsertMode" title="godzilla::Vector::set_values::N"><span class="n"><span class="pre">N</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ix</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="dense-vector.html#_CPPv4I0_3IntEN8godzilla11DenseVectorE" title="godzilla::DenseVector"><span class="n"><span class="pre">DenseVector</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Scalar</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_3IntEN8godzilla6Vector10set_valuesEvRK11DenseVectorI3Int1NERK11DenseVectorI6Scalar1NE10InsertMode" title="godzilla::Vector::set_values::N"><span class="n"><span class="pre">N</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">y</span></span>, <span class="n"><span class="pre">InsertMode</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mode</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">INSERT_VALUES</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_3IntEN8godzilla6Vector10set_valuesEvRK11DenseVectorI3Int1NERK11DenseVectorI6Scalar1NE10InsertMode" title="Link to this definition"></a><br /></dt>
+<dd><p>Inserts or adds values into certain locations of a vector. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ix</strong> – Indices where to add/insert </p></li>
+<li><p><strong>y</strong> – Values </p></li>
+<li><p><strong>mode</strong> – Insertion mode </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla6Vector10set_valuesERK14DynDenseVectorI3IntERK14DynDenseVectorI6ScalarE10InsertMode">
+<span id="_CPPv3N8godzilla6Vector10set_valuesERK14DynDenseVectorI3IntERK14DynDenseVectorI6ScalarE10InsertMode"></span><span id="_CPPv2N8godzilla6Vector10set_valuesERK14DynDenseVectorI3IntERK14DynDenseVectorI6ScalarE10InsertMode"></span><span id="godzilla::Vector::set_values__DynDenseVector:Int:CR.DynDenseVector:Scalar:CR.InsertMode"></span><span class="target" id="classgodzilla_1_1_vector_1a182690c8d1e470512fb223006120fb71"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_values</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">DynDenseVector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ix</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">DynDenseVector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Scalar</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">y</span></span>, <span class="n"><span class="pre">InsertMode</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mode</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">INSERT_VALUES</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla6Vector10set_valuesERK14DynDenseVectorI3IntERK14DynDenseVectorI6ScalarE10InsertMode" title="Link to this definition"></a><br /></dt>
+<dd><p>Inserts or adds values into certain locations of a vector. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ix</strong> – Indices where to add/insert </p></li>
+<li><p><strong>y</strong> – Values </p></li>
+<li><p><strong>mode</strong> – Insertion mode </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla6Vector16set_values_localERKNSt6vectorI3IntEERKNSt6vectorI6ScalarEE10InsertMode">
+<span id="_CPPv3N8godzilla6Vector16set_values_localERKNSt6vectorI3IntEERKNSt6vectorI6ScalarEE10InsertMode"></span><span id="_CPPv2N8godzilla6Vector16set_values_localERKNSt6vectorI3IntEERKNSt6vectorI6ScalarEE10InsertMode"></span><span id="godzilla::Vector::set_values_local__std::vector:Int:CR.std::vector:Scalar:CR.InsertMode"></span><span class="target" id="classgodzilla_1_1_vector_1ab67a1d879cade824397621bf7cd9a490"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_values_local</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ix</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Scalar</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">y</span></span>, <span class="n"><span class="pre">InsertMode</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mode</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">INSERT_VALUES</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla6Vector16set_values_localERKNSt6vectorI3IntEERKNSt6vectorI6ScalarEE10InsertMode" title="Link to this definition"></a><br /></dt>
+<dd><p>Inserts or adds values into certain locations of a vector, using a local ordering of the nodes. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ix</strong> – Indices where to add/insert </p></li>
+<li><p><strong>y</strong> – Values </p></li>
+<li><p><strong>mode</strong> – Insertion mode </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I_3IntEN8godzilla6Vector16set_values_localEvRK11DenseVectorI3Int1NERK11DenseVectorI6Scalar1NE10InsertMode">
+<span id="_CPPv3I_3IntEN8godzilla6Vector16set_values_localERK11DenseVectorI3Int1NERK11DenseVectorI6Scalar1NE10InsertMode"></span><span id="_CPPv2I_3IntEN8godzilla6Vector16set_values_localERK11DenseVectorI3Int1NERK11DenseVectorI6Scalar1NE10InsertMode"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">N</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classgodzilla_1_1_vector_1a79f25091a14a966e83ad22fb7d410426"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_values_local</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="dense-vector.html#_CPPv4I0_3IntEN8godzilla11DenseVectorE" title="godzilla::DenseVector"><span class="n"><span class="pre">DenseVector</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Int</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_3IntEN8godzilla6Vector16set_values_localEvRK11DenseVectorI3Int1NERK11DenseVectorI6Scalar1NE10InsertMode" title="godzilla::Vector::set_values_local::N"><span class="n"><span class="pre">N</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ix</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="dense-vector.html#_CPPv4I0_3IntEN8godzilla11DenseVectorE" title="godzilla::DenseVector"><span class="n"><span class="pre">DenseVector</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Scalar</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_3IntEN8godzilla6Vector16set_values_localEvRK11DenseVectorI3Int1NERK11DenseVectorI6Scalar1NE10InsertMode" title="godzilla::Vector::set_values_local::N"><span class="n"><span class="pre">N</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">y</span></span>, <span class="n"><span class="pre">InsertMode</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mode</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">INSERT_VALUES</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_3IntEN8godzilla6Vector16set_values_localEvRK11DenseVectorI3Int1NERK11DenseVectorI6Scalar1NE10InsertMode" title="Link to this definition"></a><br /></dt>
+<dd><p>Inserts or adds values into certain locations of a vector, using a local ordering of the nodes. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>N</strong> – Number of elements in the vectors </p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ix</strong> – Indices where to add/insert </p></li>
+<li><p><strong>y</strong> – Values </p></li>
+<li><p><strong>mode</strong> – Insertion mode </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla6Vector16set_values_localERK14DynDenseVectorI3IntERK14DynDenseVectorI6ScalarE10InsertMode">
+<span id="_CPPv3N8godzilla6Vector16set_values_localERK14DynDenseVectorI3IntERK14DynDenseVectorI6ScalarE10InsertMode"></span><span id="_CPPv2N8godzilla6Vector16set_values_localERK14DynDenseVectorI3IntERK14DynDenseVectorI6ScalarE10InsertMode"></span><span id="godzilla::Vector::set_values_local__DynDenseVector:Int:CR.DynDenseVector:Scalar:CR.InsertMode"></span><span class="target" id="classgodzilla_1_1_vector_1a0ae8da69c872896289ba3a21579de7d9"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_values_local</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">DynDenseVector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ix</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">DynDenseVector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Scalar</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">y</span></span>, <span class="n"><span class="pre">InsertMode</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mode</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">INSERT_VALUES</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla6Vector16set_values_localERK14DynDenseVectorI3IntERK14DynDenseVectorI6ScalarE10InsertMode" title="Link to this definition"></a><br /></dt>
+<dd><p>Inserts or adds values into certain locations of a vector, using a local ordering of the nodes. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ix</strong> – Indices where to add/insert </p></li>
+<li><p><strong>y</strong> – Values </p></li>
+<li><p><strong>mode</strong> – Insertion mode </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla6Vector10set_optionE9VecOptionb">
+<span id="_CPPv3N8godzilla6Vector10set_optionE9VecOptionb"></span><span id="_CPPv2N8godzilla6Vector10set_optionE9VecOptionb"></span><span id="godzilla::Vector::set_option__VecOption.b"></span><span class="target" id="classgodzilla_1_1_vector_1a0c67a942b9a3388f3c3e970adeeaba55"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_option</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">VecOption</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">op</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">flag</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla6Vector10set_optionE9VecOptionb" title="Link to this definition"></a><br /></dt>
+<dd><p>Sets an option for controlling a vector’s behavior. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>op</strong> – The option </p></li>
+<li><p><strong>flag</strong> – Turn the option on or off </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla6Vector14get_sub_vectorERK8IndexSet">
+<span id="_CPPv3NK8godzilla6Vector14get_sub_vectorERK8IndexSet"></span><span id="_CPPv2NK8godzilla6Vector14get_sub_vectorERK8IndexSet"></span><span id="godzilla::Vector::get_sub_vector__IndexSetCRC"></span><span class="target" id="classgodzilla_1_1_vector_1a172e8be97970b5f3d477ff6da89e2318"></span><a class="reference internal" href="#_CPPv4N8godzilla6VectorE" title="godzilla::Vector"><span class="n"><span class="pre">Vector</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_sub_vector</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="index-set.html#_CPPv4N8godzilla8IndexSetE" title="godzilla::IndexSet"><span class="n"><span class="pre">IndexSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">is</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla6Vector14get_sub_vectorERK8IndexSet" title="Link to this definition"></a><br /></dt>
+<dd><p>Gets a vector representing part of this vector. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>is</strong> – Index set representing portion of X to extract </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla6Vector18restore_sub_vectorERK8IndexSetR6Vector">
+<span id="_CPPv3NK8godzilla6Vector18restore_sub_vectorERK8IndexSetR6Vector"></span><span id="_CPPv2NK8godzilla6Vector18restore_sub_vectorERK8IndexSetR6Vector"></span><span id="godzilla::Vector::restore_sub_vector__IndexSetCR.VectorRC"></span><span class="target" id="classgodzilla_1_1_vector_1a86a63d90bd36979d0c231439109b238f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">restore_sub_vector</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="index-set.html#_CPPv4N8godzilla8IndexSetE" title="godzilla::IndexSet"><span class="n"><span class="pre">IndexSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">is</span></span>, <a class="reference internal" href="#_CPPv4N8godzilla6VectorE" title="godzilla::Vector"><span class="n"><span class="pre">Vector</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">y</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla6Vector18restore_sub_vectorERK8IndexSetR6Vector" title="Link to this definition"></a><br /></dt>
+<dd><p>Restores a subvector extracted by <code class="docutils literal notranslate"><span class="pre">get_sub_vector</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is</strong> – Index set representing the subset of X </p></li>
+<li><p><strong>y</strong> – Subvector being restored </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla6Vector19get_ownership_rangeEv">
+<span id="_CPPv3NK8godzilla6Vector19get_ownership_rangeEv"></span><span id="_CPPv2NK8godzilla6Vector19get_ownership_rangeEv"></span><span id="godzilla::Vector::get_ownership_rangeC"></span><span class="target" id="classgodzilla_1_1_vector_1ac858f3255be9d4506099460fb3a44260"></span><span class="n"><span class="pre">Range</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_ownership_range</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla6Vector19get_ownership_rangeEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Returns the range of indices owned by this process. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Range of elements owner by this process </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla6Vector10create_seqE8MPI_Comm3Int3IntA_K6Scalar">
+<span id="_CPPv3N8godzilla6Vector10create_seqE8MPI_Comm3Int3IntA_K6Scalar"></span><span id="_CPPv2N8godzilla6Vector10create_seqE8MPI_Comm3Int3IntA_K6Scalar"></span><span id="godzilla::Vector::create_seq__MPI_Comm.Int.Int.ScalarCA"></span><span class="target" id="classgodzilla_1_1_vector_1afb0495d3de3c92cd0d788be0de9dcf07"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N8godzilla6VectorE" title="godzilla::Vector"><span class="n"><span class="pre">Vector</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create_seq</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">MPI_Comm</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">comm</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">bs</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Scalar</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">array</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla6Vector10create_seqE8MPI_Comm3Int3IntA_K6Scalar" title="Link to this definition"></a><br /></dt>
+<dd><p>Creates a standard, sequential array-style vector, where the user provides the array space to store the vector values. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>comm</strong> – MPI communicator </p></li>
+<li><p><strong>bs</strong> – Block size </p></li>
+<li><p><strong>n</strong> – <a class="reference internal" href="#classgodzilla_1_1_vector"><span class="std std-ref">Vector</span></a> length </p></li>
+<li><p><strong>array</strong> – Memory where the vector elements are to be stored. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla6Vector10create_seqE8MPI_Comm3IntRKNSt6vectorI6ScalarEE">
+<span id="_CPPv3N8godzilla6Vector10create_seqE8MPI_Comm3IntRKNSt6vectorI6ScalarEE"></span><span id="_CPPv2N8godzilla6Vector10create_seqE8MPI_Comm3IntRKNSt6vectorI6ScalarEE"></span><span id="godzilla::Vector::create_seq__MPI_Comm.Int.std::vector:Scalar:CR"></span><span class="target" id="classgodzilla_1_1_vector_1afa04326e63bc8ed63a75c51775709d04"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N8godzilla6VectorE" title="godzilla::Vector"><span class="n"><span class="pre">Vector</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create_seq</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">MPI_Comm</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">comm</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">bs</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Scalar</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla6Vector10create_seqE8MPI_Comm3IntRKNSt6vectorI6ScalarEE" title="Link to this definition"></a><br /></dt>
+<dd><p>Creates a standard, sequential array-style vector, where the user provides the array space to store the vector values. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>comm</strong> – MPI communicator </p></li>
+<li><p><strong>bs</strong> – Block size </p></li>
+<li><p><strong>array</strong> – Memory where the vector elements are to be stored. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla6Vector10create_mpiE8MPI_Comm3Int3Int">
+<span id="_CPPv3N8godzilla6Vector10create_mpiE8MPI_Comm3Int3Int"></span><span id="_CPPv2N8godzilla6Vector10create_mpiE8MPI_Comm3Int3Int"></span><span id="godzilla::Vector::create_mpi__MPI_Comm.Int.Int"></span><span class="target" id="classgodzilla_1_1_vector_1af135d662f7b93ba60097f3937f09c743"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N8godzilla6VectorE" title="godzilla::Vector"><span class="n"><span class="pre">Vector</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create_mpi</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">MPI_Comm</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">comm</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">N</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla6Vector10create_mpiE8MPI_Comm3Int3Int" title="Link to this definition"></a><br /></dt>
+<dd><p>Creates a parallel vector. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>comm</strong> – the MPI communicator to use </p></li>
+<li><p><strong>n</strong> – Local vector length (or PETSC_DECIDE to have calculated if N is given) </p></li>
+<li><p><strong>N</strong> – global vector length (or PETSC_DETERMINE to have calculated if n is given) </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla6Vector10create_mpiE8MPI_Comm3Int3Int3IntA_K6Scalar">
+<span id="_CPPv3N8godzilla6Vector10create_mpiE8MPI_Comm3Int3Int3IntA_K6Scalar"></span><span id="_CPPv2N8godzilla6Vector10create_mpiE8MPI_Comm3Int3Int3IntA_K6Scalar"></span><span id="godzilla::Vector::create_mpi__MPI_Comm.Int.Int.Int.ScalarCA"></span><span class="target" id="classgodzilla_1_1_vector_1a227c2a0b22395652b3f78a2f25a9ce90"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N8godzilla6VectorE" title="godzilla::Vector"><span class="n"><span class="pre">Vector</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create_mpi</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">MPI_Comm</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">comm</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">bs</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">N</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Scalar</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">array</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla6Vector10create_mpiE8MPI_Comm3Int3Int3IntA_K6Scalar" title="Link to this definition"></a><br /></dt>
+<dd><p>Creates a parallel, array-style vector, where the user provides the array space to store the vector values. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>comm</strong> – the MPI communicator to use </p></li>
+<li><p><strong>bs</strong> – Block size </p></li>
+<li><p><strong>n</strong> – Local vector length, cannot be PETSC_DECIDE </p></li>
+<li><p><strong>N</strong> – Global vector length (or PETSC_DETERMINE to have it calculated) </p></li>
+<li><p><strong>array</strong> – The user-provided array to store the vector values </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla6Vector10create_mpiE8MPI_Comm3IntRKNSt6vectorI6ScalarEE3Int">
+<span id="_CPPv3N8godzilla6Vector10create_mpiE8MPI_Comm3IntRKNSt6vectorI6ScalarEE3Int"></span><span id="_CPPv2N8godzilla6Vector10create_mpiE8MPI_Comm3IntRKNSt6vectorI6ScalarEE3Int"></span><span id="godzilla::Vector::create_mpi__MPI_Comm.Int.std::vector:Scalar:CR.Int"></span><span class="target" id="classgodzilla_1_1_vector_1a76023bf41cdf643f21fa013f2e51c893"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N8godzilla6VectorE" title="godzilla::Vector"><span class="n"><span class="pre">Vector</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create_mpi</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">MPI_Comm</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">comm</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">bs</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Scalar</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">data</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">N</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">PETSC_DETERMINE</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla6Vector10create_mpiE8MPI_Comm3IntRKNSt6vectorI6ScalarEE3Int" title="Link to this definition"></a><br /></dt>
+<dd><p>Creates a parallel, array-style vector, where the user provides the array space to store the vector values. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>comm</strong> – the MPI communicator to use </p></li>
+<li><p><strong>bs</strong> – Block size </p></li>
+<li><p><strong>data</strong> – The user-provided array to store the vector values </p></li>
+<li><p><strong>N</strong> – Global vector length (or PETSC_DETERMINE to have it calculated) </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla6Vector11create_nestE8MPI_CommRKNSt6vectorI6VectorEE">
+<span id="_CPPv3N8godzilla6Vector11create_nestE8MPI_CommRKNSt6vectorI6VectorEE"></span><span id="_CPPv2N8godzilla6Vector11create_nestE8MPI_CommRKNSt6vectorI6VectorEE"></span><span id="godzilla::Vector::create_nest__MPI_Comm.std::vector:Vector:CR"></span><span class="target" id="classgodzilla_1_1_vector_1a963376d2b1e013c4d1b17b84a20877c8"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="nest-vector.html#_CPPv4N8godzilla10NestVectorE" title="godzilla::NestVector"><span class="n"><span class="pre">NestVector</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create_nest</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">MPI_Comm</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">comm</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N8godzilla6VectorE" title="godzilla::Vector"><span class="n"><span class="pre">Vector</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">vecs</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla6Vector11create_nestE8MPI_CommRKNSt6vectorI6VectorEE" title="Link to this definition"></a><br /></dt>
+<dd><p>Creates a new vector containing several nested subvectors, each stored separately. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>comm</strong> – The MPI communicator to use </p></li>
+<li><p><strong>vecs</strong> – The subvectors to be nested </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="unstructured-mesh.html" class="btn btn-neutral float-left" title="UnstructuredMesh" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="vtk-output.html" class="btn btn-neutral float-right" title="VTKOutput" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021-present, David Andrs.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

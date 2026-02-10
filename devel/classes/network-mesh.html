@@ -1,0 +1,438 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NetworkMesh &mdash; godzilla  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="NonlinearProblem" href="nonlinear-problem.html" />
+    <link rel="prev" title="NestVector" href="nest-vector.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            godzilla
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started/install.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/poisson.html">Poisson Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/heat-eqn.html">Heat Equation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developers</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="allocators.html">Allocators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="app.html">App</a></li>
+<li class="toctree-l1"><a class="reference internal" href="array-1d.html">Array1D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auxiliary-field.html">AuxiliaryField</a></li>
+<li class="toctree-l1"><a class="reference internal" href="boundary-condition.html">BoundaryCondition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bounding-box.html">BoundingBox</a></li>
+<li class="toctree-l1"><a class="reference internal" href="box-mesh.html">BoxMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="call-stack.html">CallStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command-line-interface.html">CommandLineInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="constant-initial-condition.html">ConstantInitialCondition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="csv-output.html">CSVOutput</a></li>
+<li class="toctree-l1"><a class="reference internal" href="delegate.html">Delegate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dense-matrix.html">DenseMatrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dense-matrix.html#dyndensematrix">DynDenseMatrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dense-vector.html">DenseVector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dense-vector.html#dyndensevector">DynDenseVector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dg-problem-interface.html">DGProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="discrete-problem-interface.html">DiscreteProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dynamic-library.html">DynamicLibrary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="essential-bc.html">EssentialBC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exception.html">Exception</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exodusii-output.html">ExodusIIOutput</a></li>
+<li class="toctree-l1"><a class="reference internal" href="expected.html">Expected</a></li>
+<li class="toctree-l1"><a class="reference internal" href="explicit-dg-linear-problem.html">ExplicitDGLinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="explicit-fe-linear-problem.html">ExplicitFELinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="explicit-fv-linear-problem.html">ExplicitFVLinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fe-nonlinear-problem.html">FENonlinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fe-problem-interface.html">FEProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="file-mesh.html">FileMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="file-output.html">FileOutput</a></li>
+<li class="toctree-l1"><a class="reference internal" href="flags.html">Flags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fv-problem-interface.html">FVProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hdf5-file.html">HDF5File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implicit-fe-nonlinear-problem.html">ImplicitFENonlinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index-set.html">IndexSet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="init.html">Init</a></li>
+<li class="toctree-l1"><a class="reference internal" href="initial-condition.html">InitialCondition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="krylov-solver.html">KrylovSolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="label.html">Label</a></li>
+<li class="toctree-l1"><a class="reference internal" href="line-mesh.html">LineMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="linear-problem.html">LinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logger.html">Logger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix.html">Matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory-arena.html">MemoryArena</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh.html">Mesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh-factory.html">MeshFactory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natural-bc.html">NaturalBC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natural-riemann-bc.html">NaturalRiemannBC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nest-vector.html">NestVector</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">NetworkMesh</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#_CPPv4N8godzilla11NetworkMeshE"><code class="docutils literal notranslate"><span class="pre">NetworkMesh</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla11NetworkMesh16num_sub_networksEv"><code class="docutils literal notranslate"><span class="pre">NetworkMesh::num_sub_networks()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla11NetworkMesh20set_num_sub_networksE3Int3Int"><code class="docutils literal notranslate"><span class="pre">NetworkMesh::set_num_sub_networks()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla11NetworkMesh15add_sub_networkE6StringRNSt6vectorI3IntEE"><code class="docutils literal notranslate"><span class="pre">NetworkMesh::add_sub_network()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla11NetworkMesh14num_componentsE3Int"><code class="docutils literal notranslate"><span class="pre">NetworkMesh::num_components()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla11NetworkMesh12num_verticesEv"><code class="docutils literal notranslate"><span class="pre">NetworkMesh::num_vertices()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla11NetworkMesh12vertex_rangeEv"><code class="docutils literal notranslate"><span class="pre">NetworkMesh::vertex_range()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla11NetworkMesh16supporting_edgesE3Int"><code class="docutils literal notranslate"><span class="pre">NetworkMesh::supporting_edges()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla11NetworkMesh15is_ghost_vertexE3Int"><code class="docutils literal notranslate"><span class="pre">NetworkMesh::is_ghost_vertex()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla11NetworkMesh9num_edgesEv"><code class="docutils literal notranslate"><span class="pre">NetworkMesh::num_edges()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla11NetworkMesh10edge_rangeEv"><code class="docutils literal notranslate"><span class="pre">NetworkMesh::edge_range()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla11NetworkMesh18connected_verticesE3Int"><code class="docutils literal notranslate"><span class="pre">NetworkMesh::connected_vertices()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla11NetworkMesh13layout_set_upEv"><code class="docutils literal notranslate"><span class="pre">NetworkMesh::layout_set_up()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla11NetworkMesh10distributeE3Int"><code class="docutils literal notranslate"><span class="pre">NetworkMesh::distribute()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla11NetworkMesh11edge_offsetE3Int"><code class="docutils literal notranslate"><span class="pre">NetworkMesh::edge_offset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla11NetworkMesh17global_edge_indexE3Int"><code class="docutils literal notranslate"><span class="pre">NetworkMesh::global_edge_index()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla11NetworkMesh17global_vec_offsetE3Int3Int"><code class="docutils literal notranslate"><span class="pre">NetworkMesh::global_vec_offset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla11NetworkMesh19global_vertex_indexE3Int"><code class="docutils literal notranslate"><span class="pre">NetworkMesh::global_vertex_index()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla11NetworkMesh16local_vec_offsetE3Int3Int"><code class="docutils literal notranslate"><span class="pre">NetworkMesh::local_vec_offset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla11NetworkMesh13vertex_offsetE3Int"><code class="docutils literal notranslate"><span class="pre">NetworkMesh::vertex_offset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla11NetworkMesh15edge_set_matrixE3IntRKNSt5arrayI6MatrixXL3EEEE"><code class="docutils literal notranslate"><span class="pre">NetworkMesh::edge_set_matrix()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla11NetworkMesh17vertex_set_matrixE3IntRKNSt6vectorI6MatrixEE"><code class="docutils literal notranslate"><span class="pre">NetworkMesh::vertex_set_matrix()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nonlinear-problem.html">NonlinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="object.html">Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optional.html">Optional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="partitioner.html">Partitioner</a></li>
+<li class="toctree-l1"><a class="reference internal" href="piecewise-constant.html">PiecewiseConstant</a></li>
+<li class="toctree-l1"><a class="reference internal" href="piecewise-linear.html">PiecewiseLinear</a></li>
+<li class="toctree-l1"><a class="reference internal" href="print-interface.html">PrintInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problem.html">Problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ptr.html">Ptr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qtr.html">Qtr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rectangle-mesh.html">RectangleMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structured-mesh.html">StructuredMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transient-problem-interface.html">TransientProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="unstructured-mesh.html">UnstructuredMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vector.html">Vector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vtk-output.html">VTKOutput</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">godzilla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">NetworkMesh</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="networkmesh">
+<h1>NetworkMesh<a class="headerlink" href="#networkmesh" title="Link to this heading"></a></h1>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla11NetworkMeshE">
+<span id="_CPPv3N8godzilla11NetworkMeshE"></span><span id="_CPPv2N8godzilla11NetworkMeshE"></span><span id="godzilla::NetworkMesh"></span><span class="target" id="classgodzilla_1_1_network_mesh"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NetworkMesh</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="mesh.html#_CPPv4N8godzilla4MeshE" title="godzilla::Mesh"><span class="n"><span class="pre">Mesh</span></span></a><a class="headerlink" href="#_CPPv4N8godzilla11NetworkMeshE" title="Link to this definition"></a><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla11NetworkMesh16num_sub_networksEv">
+<span id="_CPPv3NK8godzilla11NetworkMesh16num_sub_networksEv"></span><span id="_CPPv2NK8godzilla11NetworkMesh16num_sub_networksEv"></span><span id="godzilla::NetworkMesh::num_sub_networksC"></span><span class="target" id="classgodzilla_1_1_network_mesh_1a8013d3c9962ed0c501d3abb40b5238fd"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Int</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">Int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">num_sub_networks</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla11NetworkMesh16num_sub_networksEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Gets the number of subnetworks. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>local and global number of subnetworks </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla11NetworkMesh20set_num_sub_networksE3Int3Int">
+<span id="_CPPv3N8godzilla11NetworkMesh20set_num_sub_networksE3Int3Int"></span><span id="_CPPv2N8godzilla11NetworkMesh20set_num_sub_networksE3Int3Int"></span><span id="godzilla::NetworkMesh::set_num_sub_networks__Int.Int"></span><span class="target" id="classgodzilla_1_1_network_mesh_1a68034b38349e32ea0ff64439209d6f1e"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_num_sub_networks</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">N</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla11NetworkMesh20set_num_sub_networksE3Int3Int" title="Link to this definition"></a><br /></dt>
+<dd><p>Sets the number of subnetworks. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> – local number of subnetworks </p></li>
+<li><p><strong>N</strong> – global number of subnetworks </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla11NetworkMesh15add_sub_networkE6StringRNSt6vectorI3IntEE">
+<span id="_CPPv3N8godzilla11NetworkMesh15add_sub_networkE6StringRNSt6vectorI3IntEE"></span><span id="_CPPv2N8godzilla11NetworkMesh15add_sub_networkE6StringRNSt6vectorI3IntEE"></span><span id="godzilla::NetworkMesh::add_sub_network__String.std::vector:Int:R"></span><span class="target" id="classgodzilla_1_1_network_mesh_1aa01b51ffa9cdd7e50e1ad1412a29cb5d"></span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_sub_network</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">String</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">name</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">edge_list</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla11NetworkMesh15add_sub_networkE6StringRNSt6vectorI3IntEE" title="Link to this definition"></a><br /></dt>
+<dd><p>Add a subnetwork. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – Name of the subnetwork </p></li>
+<li><p><strong>edge_list</strong> – list of edges for this subnetwork, this is a one dimensional array with pairs of entries being the two vertices (in global numbering of the vertices) of each edge, <code class="docutils literal notranslate"><span class="pre">e0v0</span> <span class="pre">e0v1</span> <span class="pre">e1v0</span> <span class="pre">e1v1</span> <span class="pre">...</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla11NetworkMesh14num_componentsE3Int">
+<span id="_CPPv3NK8godzilla11NetworkMesh14num_componentsE3Int"></span><span id="_CPPv2NK8godzilla11NetworkMesh14num_componentsE3Int"></span><span id="godzilla::NetworkMesh::num_components__IntC"></span><span class="target" id="classgodzilla_1_1_network_mesh_1ad4fde683f936b1938cf84a5f36e7ca66"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">num_components</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">p</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla11NetworkMesh14num_componentsE3Int" title="Link to this definition"></a><br /></dt>
+<dd><p>Get the number of components at a vertex/edge. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla11NetworkMesh12num_verticesEv">
+<span id="_CPPv3NK8godzilla11NetworkMesh12num_verticesEv"></span><span id="_CPPv2NK8godzilla11NetworkMesh12num_verticesEv"></span><span id="godzilla::NetworkMesh::num_verticesC"></span><span class="target" id="classgodzilla_1_1_network_mesh_1a957225d7ce5605e52e014ec45410dc31"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Int</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">Int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">num_vertices</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla11NetworkMesh12num_verticesEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Get the local and global number of vertices for the entire network. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla11NetworkMesh12vertex_rangeEv">
+<span id="_CPPv3NK8godzilla11NetworkMesh12vertex_rangeEv"></span><span id="_CPPv2NK8godzilla11NetworkMesh12vertex_rangeEv"></span><span id="godzilla::NetworkMesh::vertex_rangeC"></span><span class="target" id="classgodzilla_1_1_network_mesh_1a14c303cbda52900de1a9c4464f0fe1ff"></span><span class="n"><span class="pre">Range</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vertex_range</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla11NetworkMesh12vertex_rangeEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Get the bounds [start, end) for the local vertices. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla11NetworkMesh16supporting_edgesE3Int">
+<span id="_CPPv3N8godzilla11NetworkMesh16supporting_edgesE3Int"></span><span id="_CPPv2N8godzilla11NetworkMesh16supporting_edgesE3Int"></span><span id="godzilla::NetworkMesh::supporting_edges__Int"></span><span class="target" id="classgodzilla_1_1_network_mesh_1a3ccdc08bb3d23838212e4941957af61b"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">supporting_edges</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">vertex</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla11NetworkMesh16supporting_edgesE3Int" title="Link to this definition"></a><br /></dt>
+<dd><p>Return the supporting edges for this vertex point. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla11NetworkMesh15is_ghost_vertexE3Int">
+<span id="_CPPv3NK8godzilla11NetworkMesh15is_ghost_vertexE3Int"></span><span id="_CPPv2NK8godzilla11NetworkMesh15is_ghost_vertexE3Int"></span><span id="godzilla::NetworkMesh::is_ghost_vertex__IntC"></span><span class="target" id="classgodzilla_1_1_network_mesh_1a5ae834764261acf206ce1b13da57c3ea"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_ghost_vertex</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">p</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla11NetworkMesh15is_ghost_vertexE3Int" title="Link to this definition"></a><br /></dt>
+<dd><p>Returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if the vertex is a ghost vertex. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla11NetworkMesh9num_edgesEv">
+<span id="_CPPv3NK8godzilla11NetworkMesh9num_edgesEv"></span><span id="_CPPv2NK8godzilla11NetworkMesh9num_edgesEv"></span><span id="godzilla::NetworkMesh::num_edgesC"></span><span class="target" id="classgodzilla_1_1_network_mesh_1a9023f5eaa34faf6fdc718376d5b0e78b"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Int</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">Int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">num_edges</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla11NetworkMesh9num_edgesEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Get the local and global number of edges for the entire network. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla11NetworkMesh10edge_rangeEv">
+<span id="_CPPv3NK8godzilla11NetworkMesh10edge_rangeEv"></span><span id="_CPPv2NK8godzilla11NetworkMesh10edge_rangeEv"></span><span id="godzilla::NetworkMesh::edge_rangeC"></span><span class="target" id="classgodzilla_1_1_network_mesh_1a4f5046a6287cebced8d5d38047ad0507"></span><span class="n"><span class="pre">Range</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">edge_range</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla11NetworkMesh10edge_rangeEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Get the bounds [start, end) for the local edges. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla11NetworkMesh18connected_verticesE3Int">
+<span id="_CPPv3N8godzilla11NetworkMesh18connected_verticesE3Int"></span><span id="_CPPv2N8godzilla11NetworkMesh18connected_verticesE3Int"></span><span id="godzilla::NetworkMesh::connected_vertices__Int"></span><span class="target" id="classgodzilla_1_1_network_mesh_1af250c6457513dcf55e85f21a2ef4eb0b"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Int</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">2</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">connected_vertices</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">edge</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla11NetworkMesh18connected_verticesE3Int" title="Link to this definition"></a><br /></dt>
+<dd><p>Return the connected vertices for this edge point. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla11NetworkMesh13layout_set_upEv">
+<span id="_CPPv3N8godzilla11NetworkMesh13layout_set_upEv"></span><span id="_CPPv2N8godzilla11NetworkMesh13layout_set_upEv"></span><span id="godzilla::NetworkMesh::layout_set_up"></span><span class="target" id="classgodzilla_1_1_network_mesh_1afbbf58974c6cffd51977c5559b15bf00"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">layout_set_up</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla11NetworkMesh13layout_set_upEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Sets up the bare layout (graph) for the network. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla11NetworkMesh10distributeE3Int">
+<span id="_CPPv3N8godzilla11NetworkMesh10distributeE3Int"></span><span id="_CPPv2N8godzilla11NetworkMesh10distributeE3Int"></span><span id="godzilla::NetworkMesh::distribute__Int"></span><span class="target" id="classgodzilla_1_1_network_mesh_1a1b586aa2254c0fb77501d752c993f281"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">distribute</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">overlap</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla11NetworkMesh10distributeE3Int" title="Link to this definition"></a><br /></dt>
+<dd><p>Distributes the network and moves associated component data. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla11NetworkMesh11edge_offsetE3Int">
+<span id="_CPPv3NK8godzilla11NetworkMesh11edge_offsetE3Int"></span><span id="_CPPv2NK8godzilla11NetworkMesh11edge_offsetE3Int"></span><span id="godzilla::NetworkMesh::edge_offset__IntC"></span><span class="target" id="classgodzilla_1_1_network_mesh_1a83fca454b796cfbbc0e4cb0dea5b753d"></span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">edge_offset</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">p</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla11NetworkMesh11edge_offsetE3Int" title="Link to this definition"></a><br /></dt>
+<dd><p>Get the offset for accessing the variables associated with the given edge from the local subvector. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla11NetworkMesh17global_edge_indexE3Int">
+<span id="_CPPv3NK8godzilla11NetworkMesh17global_edge_indexE3Int"></span><span id="_CPPv2NK8godzilla11NetworkMesh17global_edge_indexE3Int"></span><span id="godzilla::NetworkMesh::global_edge_index__IntC"></span><span class="target" id="classgodzilla_1_1_network_mesh_1ae02c526c7176e6df6ad1d8460004dd05"></span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">global_edge_index</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">p</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla11NetworkMesh17global_edge_indexE3Int" title="Link to this definition"></a><br /></dt>
+<dd><p>Get the global numbering for the edge on the network. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>p</strong> – Edge point </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the global numbering for the edge </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla11NetworkMesh17global_vec_offsetE3Int3Int">
+<span id="_CPPv3NK8godzilla11NetworkMesh17global_vec_offsetE3Int3Int"></span><span id="_CPPv2NK8godzilla11NetworkMesh17global_vec_offsetE3Int3Int"></span><span id="godzilla::NetworkMesh::global_vec_offset__Int.IntC"></span><span class="target" id="classgodzilla_1_1_network_mesh_1a98eb3cdb59a1fbcbe43763bcd071d330"></span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">global_vec_offset</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">p</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">comp_num</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla11NetworkMesh17global_vec_offsetE3Int3Int" title="Link to this definition"></a><br /></dt>
+<dd><p>Get the global offset for accessing the variables associated with a component for the given vertex/edge from the global vector. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> – The edge or vertex point </p></li>
+<li><p><strong>comp_num</strong> – component number; use ALL_COMPONENTS if no specific component is requested </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The global offset </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla11NetworkMesh19global_vertex_indexE3Int">
+<span id="_CPPv3NK8godzilla11NetworkMesh19global_vertex_indexE3Int"></span><span id="_CPPv2NK8godzilla11NetworkMesh19global_vertex_indexE3Int"></span><span id="godzilla::NetworkMesh::global_vertex_index__IntC"></span><span class="target" id="classgodzilla_1_1_network_mesh_1af5530cbf63e1416806fa89e6ad55b0d4"></span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">global_vertex_index</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">p</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla11NetworkMesh19global_vertex_indexE3Int" title="Link to this definition"></a><br /></dt>
+<dd><p>Get the global numbering for the vertex on the network. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>p</strong> – Vertex point </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The global numbering for the vertex </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla11NetworkMesh16local_vec_offsetE3Int3Int">
+<span id="_CPPv3NK8godzilla11NetworkMesh16local_vec_offsetE3Int3Int"></span><span id="_CPPv2NK8godzilla11NetworkMesh16local_vec_offsetE3Int3Int"></span><span id="godzilla::NetworkMesh::local_vec_offset__Int.IntC"></span><span class="target" id="classgodzilla_1_1_network_mesh_1a444b24353f02f2077354863b80f881b7"></span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">local_vec_offset</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">p</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">comp_num</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla11NetworkMesh16local_vec_offsetE3Int3Int" title="Link to this definition"></a><br /></dt>
+<dd><p>Get the offset for accessing the variables associated with a component at the given vertex/edge from the local vector. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> – The edge or vertex point </p></li>
+<li><p><strong>comp_num</strong> – Component number; use ALL_COMPONENTS if no specific component is requested </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The local offset </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla11NetworkMesh13vertex_offsetE3Int">
+<span id="_CPPv3NK8godzilla11NetworkMesh13vertex_offsetE3Int"></span><span id="_CPPv2NK8godzilla11NetworkMesh13vertex_offsetE3Int"></span><span id="godzilla::NetworkMesh::vertex_offset__IntC"></span><span class="target" id="classgodzilla_1_1_network_mesh_1a49e530f32df5ff79ab286a3a6fa4a55f"></span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vertex_offset</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">p</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla11NetworkMesh13vertex_offsetE3Int" title="Link to this definition"></a><br /></dt>
+<dd><p>Get the offset for accessing the variables associated with the given vertex from the local subvector. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>p</strong> – The vertex point </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The offset </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla11NetworkMesh15edge_set_matrixE3IntRKNSt5arrayI6MatrixXL3EEEE">
+<span id="_CPPv3N8godzilla11NetworkMesh15edge_set_matrixE3IntRKNSt5arrayI6MatrixXL3EEEE"></span><span id="_CPPv2N8godzilla11NetworkMesh15edge_set_matrixE3IntRKNSt5arrayI6MatrixX3EEE"></span><span id="godzilla::NetworkMesh::edge_set_matrix__Int.std::array:Matrix.3:CR"></span><span class="target" id="classgodzilla_1_1_network_mesh_1a4960c17358fc43441691f4c1e2234200"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">edge_set_matrix</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">p</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="matrix.html#_CPPv4N8godzilla6MatrixE" title="godzilla::Matrix"><span class="n"><span class="pre">Matrix</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">J</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla11NetworkMesh15edge_set_matrixE3IntRKNSt5arrayI6MatrixXL3EEEE" title="Link to this definition"></a><br /></dt>
+<dd><p>Sets user-provided Jacobian matrices for this edge to the network. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> – The edge point </p></li>
+<li><p><strong>J</strong> – Array of Jacobian submatrices for this edge point:<ul>
+<li><p>J[0] this edge</p></li>
+<li><p>J[1] and J[2]: connected vertices </p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla11NetworkMesh17vertex_set_matrixE3IntRKNSt6vectorI6MatrixEE">
+<span id="_CPPv3N8godzilla11NetworkMesh17vertex_set_matrixE3IntRKNSt6vectorI6MatrixEE"></span><span id="_CPPv2N8godzilla11NetworkMesh17vertex_set_matrixE3IntRKNSt6vectorI6MatrixEE"></span><span id="godzilla::NetworkMesh::vertex_set_matrix__Int.std::vector:Matrix:CR"></span><span class="target" id="classgodzilla_1_1_network_mesh_1ac5ee233c99fc45047dd04859521b769f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vertex_set_matrix</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">p</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="matrix.html#_CPPv4N8godzilla6MatrixE" title="godzilla::Matrix"><span class="n"><span class="pre">Matrix</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">J</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla11NetworkMesh17vertex_set_matrixE3IntRKNSt6vectorI6MatrixEE" title="Link to this definition"></a><br /></dt>
+<dd><p>Sets user-provided Jacobian matrix for this vertex to the network. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> – The vertex point </p></li>
+<li><p><strong>J</strong> – array of Jacobian (size = 2*(num of supporting edges) + 1) submatrices for this vertex point:<ul>
+<li><p>J[0]: this vertex</p></li>
+<li><p>J[1+2i]: i-th supporting edge</p></li>
+<li><p>J[1+2i+1]: i-th connected vertex </p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="nest-vector.html" class="btn btn-neutral float-left" title="NestVector" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="nonlinear-problem.html" class="btn btn-neutral float-right" title="NonlinearProblem" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021-present, David Andrs.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

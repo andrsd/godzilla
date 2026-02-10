@@ -1,0 +1,303 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flags &mdash; godzilla  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="FVProblemInterface" href="fv-problem-interface.html" />
+    <link rel="prev" title="FileOutput" href="file-output.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            godzilla
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started/install.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/poisson.html">Poisson Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/heat-eqn.html">Heat Equation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developers</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="allocators.html">Allocators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="app.html">App</a></li>
+<li class="toctree-l1"><a class="reference internal" href="array-1d.html">Array1D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auxiliary-field.html">AuxiliaryField</a></li>
+<li class="toctree-l1"><a class="reference internal" href="boundary-condition.html">BoundaryCondition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bounding-box.html">BoundingBox</a></li>
+<li class="toctree-l1"><a class="reference internal" href="box-mesh.html">BoxMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="call-stack.html">CallStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command-line-interface.html">CommandLineInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="constant-initial-condition.html">ConstantInitialCondition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="csv-output.html">CSVOutput</a></li>
+<li class="toctree-l1"><a class="reference internal" href="delegate.html">Delegate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dense-matrix.html">DenseMatrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dense-matrix.html#dyndensematrix">DynDenseMatrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dense-vector.html">DenseVector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dense-vector.html#dyndensevector">DynDenseVector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dg-problem-interface.html">DGProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="discrete-problem-interface.html">DiscreteProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dynamic-library.html">DynamicLibrary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="essential-bc.html">EssentialBC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exception.html">Exception</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exodusii-output.html">ExodusIIOutput</a></li>
+<li class="toctree-l1"><a class="reference internal" href="expected.html">Expected</a></li>
+<li class="toctree-l1"><a class="reference internal" href="explicit-dg-linear-problem.html">ExplicitDGLinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="explicit-fe-linear-problem.html">ExplicitFELinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="explicit-fv-linear-problem.html">ExplicitFVLinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fe-nonlinear-problem.html">FENonlinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fe-problem-interface.html">FEProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="file-mesh.html">FileMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="file-output.html">FileOutput</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Flags</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#_CPPv4I_6IsEnumEN8godzilla5FlagsE"><code class="docutils literal notranslate"><span class="pre">Flags</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla5Flags9has_flagsEv"><code class="docutils literal notranslate"><span class="pre">Flags::has_flags()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla5FlagsoRE4ENUM"><code class="docutils literal notranslate"><span class="pre">Flags::operator|=()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla5FlagsoRE5Flags"><code class="docutils literal notranslate"><span class="pre">Flags::operator|=()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla5FlagsorE4ENUM"><code class="docutils literal notranslate"><span class="pre">Flags::operator|()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla5FlagsorE5Flags"><code class="docutils literal notranslate"><span class="pre">Flags::operator|()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla5FlagsanE4ENUM"><code class="docutils literal notranslate"><span class="pre">Flags::operator&amp;()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fv-problem-interface.html">FVProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hdf5-file.html">HDF5File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implicit-fe-nonlinear-problem.html">ImplicitFENonlinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index-set.html">IndexSet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="init.html">Init</a></li>
+<li class="toctree-l1"><a class="reference internal" href="initial-condition.html">InitialCondition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="krylov-solver.html">KrylovSolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="label.html">Label</a></li>
+<li class="toctree-l1"><a class="reference internal" href="line-mesh.html">LineMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="linear-problem.html">LinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logger.html">Logger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix.html">Matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory-arena.html">MemoryArena</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh.html">Mesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh-factory.html">MeshFactory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natural-bc.html">NaturalBC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natural-riemann-bc.html">NaturalRiemannBC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nest-vector.html">NestVector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network-mesh.html">NetworkMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nonlinear-problem.html">NonlinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="object.html">Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optional.html">Optional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="partitioner.html">Partitioner</a></li>
+<li class="toctree-l1"><a class="reference internal" href="piecewise-constant.html">PiecewiseConstant</a></li>
+<li class="toctree-l1"><a class="reference internal" href="piecewise-linear.html">PiecewiseLinear</a></li>
+<li class="toctree-l1"><a class="reference internal" href="print-interface.html">PrintInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problem.html">Problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ptr.html">Ptr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qtr.html">Qtr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rectangle-mesh.html">RectangleMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structured-mesh.html">StructuredMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transient-problem-interface.html">TransientProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="unstructured-mesh.html">UnstructuredMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vector.html">Vector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vtk-output.html">VTKOutput</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">godzilla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Flags</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="flags">
+<h1>Flags<a class="headerlink" href="#flags" title="Link to this heading"></a></h1>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4I_6IsEnumEN8godzilla5FlagsE">
+<span id="_CPPv3I_6IsEnumEN8godzilla5FlagsE"></span><span id="_CPPv2I_6IsEnumEN8godzilla5FlagsE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">IsEnum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ENUM</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classgodzilla_1_1_flags"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Flags</span></span></span><a class="headerlink" href="#_CPPv4I_6IsEnumEN8godzilla5FlagsE" title="Link to this definition"></a><br /></dt>
+<dd><p>Template for creating a type that can do a bit-wise OR on values defined as enum. </p>
+<p>Example: <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">enum</span> <span class="n">MyFlag</span> <span class="p">:</span> <span class="n">unsigned</span> <span class="nb">int</span> <span class="p">{</span> <span class="n">FLAG1</span> <span class="o">=</span> <span class="mh">0x1</span><span class="p">,</span> <span class="n">FLAG2</span> <span class="o">=</span> <span class="mh">0x2</span><span class="p">,</span> <span class="n">FLAG3</span> <span class="o">=</span> <span class="mh">0x4</span> <span class="p">};</span>
+
+<span class="n">using</span> <span class="n">MyFlags</span> <span class="o">=</span> <span class="n">Flags</span><span class="o">&lt;</span><span class="n">MyFlag</span><span class="o">&gt;</span><span class="p">;</span>
+
+<span class="n">MyFlags</span> <span class="n">flags</span> <span class="o">=</span> <span class="n">FLAG1</span> <span class="o">|</span> <span class="n">FLAG3</span><span class="p">;</span>
+
+<span class="k">assert</span><span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">FLAG1</span><span class="p">);</span>
+<span class="k">assert</span><span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">FLAG3</span><span class="p">);</span>
+</pre></div>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ENUM</strong> – enum defining the flags </p>
+</dd>
+</dl>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla5Flags9has_flagsEv">
+<span id="_CPPv3NK8godzilla5Flags9has_flagsEv"></span><span id="_CPPv2NK8godzilla5Flags9has_flagsEv"></span><span id="godzilla::Flags::has_flagsCCE"></span><span class="target" id="classgodzilla_1_1_flags_1aa874f75dcf3b68e9aa16df78ddbcdbc3"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_flags</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4NK8godzilla5Flags9has_flagsEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Test if there are set flags. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if there are any flags set, <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla5FlagsoRE4ENUM">
+<span id="_CPPv3N8godzilla5FlagsoRE4ENUM"></span><span id="_CPPv2N8godzilla5FlagsoRE4ENUM"></span><span id="godzilla::Flags::or-assign-operator__ENUMCE"></span><span class="target" id="classgodzilla_1_1_flags_1a862710a5a5e46510043e6ffae86a83b3"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_6IsEnumEN8godzilla5FlagsE" title="godzilla::Flags"><span class="n"><span class="pre">Flags</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">|=</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I_6IsEnumEN8godzilla5FlagsE" title="godzilla::Flags::ENUM"><span class="n"><span class="pre">ENUM</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">rhs</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4N8godzilla5FlagsoRE4ENUM" title="Link to this definition"></a><br /></dt>
+<dd><p>Set a flag. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>rhs</strong> – Flag to set </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>New flags </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla5FlagsoRE5Flags">
+<span id="_CPPv3N8godzilla5FlagsoRE5Flags"></span><span id="_CPPv2N8godzilla5FlagsoRE5Flags"></span><span id="godzilla::Flags::or-assign-operator__FlagsCE"></span><span class="target" id="classgodzilla_1_1_flags_1ab06d2b5592fef72ebedc8afa31b5dd82"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_6IsEnumEN8godzilla5FlagsE" title="godzilla::Flags"><span class="n"><span class="pre">Flags</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">|=</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I_6IsEnumEN8godzilla5FlagsE" title="godzilla::Flags"><span class="n"><span class="pre">Flags</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">rhs</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla5FlagsoRE5Flags" title="Link to this definition"></a><br /></dt>
+<dd><p>Set flags. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>rhs</strong> – <a class="reference internal" href="#classgodzilla_1_1_flags"><span class="std std-ref">Flags</span></a> to set </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>New flags </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla5FlagsorE4ENUM">
+<span id="_CPPv3NK8godzilla5FlagsorE4ENUM"></span><span id="_CPPv2NK8godzilla5FlagsorE4ENUM"></span><span id="godzilla::Flags::or-operator__ENUMCCE"></span><span class="target" id="classgodzilla_1_1_flags_1a172c64cf5c58042472e800e53af10133"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_6IsEnumEN8godzilla5FlagsE" title="godzilla::Flags"><span class="n"><span class="pre">Flags</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">|</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I_6IsEnumEN8godzilla5FlagsE" title="godzilla::Flags::ENUM"><span class="n"><span class="pre">ENUM</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">rhs</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4NK8godzilla5FlagsorE4ENUM" title="Link to this definition"></a><br /></dt>
+<dd><p>Add a new flag and return the result. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>rhs</strong> – Flag to add </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>New flags </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla5FlagsorE5Flags">
+<span id="_CPPv3NK8godzilla5FlagsorE5Flags"></span><span id="_CPPv2NK8godzilla5FlagsorE5Flags"></span><span id="godzilla::Flags::or-operator__FlagsCCE"></span><span class="target" id="classgodzilla_1_1_flags_1a5e2506ec583d45a7b2158166495396da"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_6IsEnumEN8godzilla5FlagsE" title="godzilla::Flags"><span class="n"><span class="pre">Flags</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">|</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I_6IsEnumEN8godzilla5FlagsE" title="godzilla::Flags"><span class="n"><span class="pre">Flags</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">rhs</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla5FlagsorE5Flags" title="Link to this definition"></a><br /></dt>
+<dd><p>Add flags. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>rhs</strong> – <a class="reference internal" href="#classgodzilla_1_1_flags"><span class="std std-ref">Flags</span></a> to set </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>New flags </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla5FlagsanE4ENUM">
+<span id="_CPPv3NK8godzilla5FlagsanE4ENUM"></span><span id="_CPPv2NK8godzilla5FlagsanE4ENUM"></span><span id="godzilla::Flags::and-operator__ENUMCCE"></span><span class="target" id="classgodzilla_1_1_flags_1ad5fe9db23fce1de0ce9d3563c38386ad"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&amp;</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I_6IsEnumEN8godzilla5FlagsE" title="godzilla::Flags::ENUM"><span class="n"><span class="pre">ENUM</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">flag</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4NK8godzilla5FlagsanE4ENUM" title="Link to this definition"></a><br /></dt>
+<dd><p>Test if a flag is set. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>flag</strong> – Flag to test </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if the flag <code class="docutils literal notranslate"><span class="pre">flag</span></code> is set, <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="file-output.html" class="btn btn-neutral float-left" title="FileOutput" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="fv-problem-interface.html" class="btn btn-neutral float-right" title="FVProblemInterface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021-present, David Andrs.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
