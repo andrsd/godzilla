@@ -161,70 +161,70 @@ public:
 
     template <typename T, typename Op>
     void
-    reduce_begin(const T * root, T * leaf, Op) const
+    reduce_begin(const T * leaf, T * root, Op) const
     {
         CALL_STACK_MSG();
         auto dtype = mpicpp_lite::mpi_datatype<T>();
         auto mpi_op = mpi::op::provider<T, Op, mpi::op::Operation<Op, T>::is_native::value>::op();
-        PETSC_CHECK(PetscSFReduceBegin(this->obj, dtype, root, leaf, mpi_op));
+        PETSC_CHECK(PetscSFReduceBegin(this->obj, dtype, leaf, root, mpi_op));
     }
 
     template <typename T, typename Op>
     void
-    reduce_begin(const T & root, T & leaf, Op op) const
+    reduce_begin(const T & leaf, T & root, Op op) const
     {
         CALL_STACK_MSG();
-        reduce_begin(&root, &leaf, op);
+        reduce_begin(&leaf, &root, op);
     }
 
     template <typename T, typename Op>
     void
-    reduce_begin(const std::vector<T> & root, std::vector<T> & leaf, Op op) const
+    reduce_begin(const std::vector<T> & leaf, std::vector<T> & root, Op op) const
     {
         CALL_STACK_MSG();
-        reduce_begin(root.data(), leaf.data(), op);
+        reduce_begin(leaf.data(), root.data(), op);
     }
 
     template <typename T, typename Op>
     void
-    reduce_begin(const Array1D<T> & root, Array1D<T> & leaf, Op op) const
+    reduce_begin(const Array1D<T> & leaf, Array1D<T> & root, Op op) const
     {
         CALL_STACK_MSG();
-        reduce_begin(root.get_data(), leaf.get_data(), op);
+        reduce_begin(leaf.get_data(), root.get_data(), op);
     }
 
     template <typename T, typename Op>
     void
-    reduce_end(const T * root, T * leaf, Op) const
+    reduce_end(const T * leaf, T * root, Op) const
     {
         CALL_STACK_MSG();
         auto dtype = mpicpp_lite::mpi_datatype<T>();
         auto mpi_op = mpi::op::provider<T, Op, mpi::op::Operation<Op, T>::is_native::value>::op();
-        PETSC_CHECK(PetscSFReduceEnd(this->obj, dtype, root, leaf, mpi_op));
+        PETSC_CHECK(PetscSFReduceEnd(this->obj, dtype, leaf, root, mpi_op));
     }
 
     template <typename T, typename Op>
     void
-    reduce_end(const T & root, T & leaf, Op op) const
+    reduce_end(const T & leaf, T & root, Op op) const
     {
         CALL_STACK_MSG();
-        reduce_end(&root, &leaf, op);
+        reduce_end(&leaf, &root, op);
     }
 
     template <typename T, typename Op>
     void
-    reduce_end(const std::vector<T> & root, std::vector<T> & leaf, Op op) const
+    reduce_end(const std::vector<T> & leaf, std::vector<T> & root, Op op) const
     {
         CALL_STACK_MSG();
-        reduce_end(root.data(), leaf.data(), op);
+        reduce_end(leaf.data(), root.data(), op);
     }
 
     template <typename T, typename Op>
     void
-    reduce_end(const Array1D<T> & root, Array1D<T> & leaf, Op op) const
+    reduce_end(const Array1D<T> & leaf, Array1D<T> & root, Op op) const
     {
         CALL_STACK_MSG();
-        reduce_end(root.get_data(), leaf.get_data(), op);
+        reduce_end(leaf.get_data(), root.get_data(), op);
     }
 
     /// Begin pointwise gather of all leaves into multi-roots, to be completed with `gather_end`
