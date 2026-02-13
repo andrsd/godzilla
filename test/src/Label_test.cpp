@@ -119,6 +119,20 @@ TEST(Label, get_stratum_bounds)
     EXPECT_EQ(last, 8);
 }
 
+TEST(Label, get_stratum_range)
+{
+    TestApp app;
+    Label l;
+    l.create(app.get_comm(), "name");
+    l.set_value(1, 101);
+    l.set_value(3, 101);
+    l.set_value(4, 101);
+    l.set_value(7, 101);
+    auto rng = l.get_stratum_range(101);
+    EXPECT_EQ(rng.first(), 1);
+    EXPECT_EQ(rng.last(), 8);
+}
+
 TEST(Label, view)
 {
     testing::internal::CaptureStdout();
