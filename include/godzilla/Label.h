@@ -7,6 +7,7 @@
 #include "godzilla/Types.h"
 #include "godzilla/IndexSet.h"
 #include "godzilla/String.h"
+#include "godzilla/Range.h"
 #include "petscdmlabel.h"
 
 namespace godzilla {
@@ -75,6 +76,12 @@ public:
     /// @param value The stratum value
     /// @return Tuple with the smallest and largest point of the stratum
     std::tuple<Int, Int> get_stratum_bounds(Int value) const;
+
+    /// Get the largest and smallest point of a stratum as a `Range`
+    ///
+    /// @param value The stratum value
+    /// @return Range with the smallest and largest point of the stratum
+    Range get_stratum_range(Int value) const;
 
     /// Get an IndexSet with the stratum points
     ///
