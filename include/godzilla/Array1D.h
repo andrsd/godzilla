@@ -9,6 +9,7 @@
 #include "godzilla/Assert.h"
 #include "godzilla/Math.h"
 #include <petscvec.h>
+#include <cstring>
 
 namespace godzilla {
 
@@ -357,6 +358,15 @@ operator<<(std::ostream & os, const Array1D<T> & obj)
     }
     os << ")";
     return os;
+}
+
+template <typename T>
+void
+copy(const Array1D<T> & src, Array1D<T> & dest)
+{
+    GODZILLA_ASSERT_TRUE(src.size() == dest.size(),
+                         "Size of `src` argument does not match the size of the `dest`");
+    std::memcpy(dest.get_data(), src.get_data(), sizeof(T) * src.size());
 }
 
 /// Get values from an array at specified locations
