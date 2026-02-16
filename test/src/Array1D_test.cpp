@@ -139,7 +139,7 @@ TEST(Array1DTest, range_ops)
     EXPECT_THAT(vals, ElementsAre(2, 3, 1, -2, 0, 6, 10, 8));
 }
 
-TEST(Array1DTest, copy)
+TEST(Array1DTest, assign_op)
 {
     Array1D<Real> arr(8);
     arr.set(123.);
@@ -228,4 +228,18 @@ TEST(Array1DTest, pointwise_divide)
     EXPECT_NEAR(w[2], -3., 1e-15);
     EXPECT_NEAR(w[3], 1., 1e-15);
     EXPECT_NEAR(w[4], 0.25, 1e-15);
+}
+
+TEST(Array1DTest, copy)
+{
+    Array1D<Real> x(5);
+    assign(x, { 1., -2., 6., -4., 5. });
+    Array1D<Real> y(5);
+    copy(x, y);
+
+    EXPECT_NEAR(y[0], 1., 1e-15);
+    EXPECT_NEAR(y[1], -2., 1e-15);
+    EXPECT_NEAR(y[2], 6., 1e-15);
+    EXPECT_NEAR(y[3], -4., 1e-15);
+    EXPECT_NEAR(y[4], 5., 1e-15);
 }
