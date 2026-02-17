@@ -461,7 +461,7 @@ DGProblemInterface::set_up_section_constraint_dofs(Section & section)
         auto n_ced_dofs = (Int) bnd->get_components().size();
         auto fid = bnd->get_field_id();
 
-        auto & bnd_names = bnd->get_boundary();
+        auto bnd_names = bnd->get_boundary();
         for (auto & name : bnd_names) {
             auto label = unstr_mesh->get_face_set_label(name);
             auto ids = label.get_values();
@@ -499,7 +499,7 @@ DGProblemInterface::set_up_section_constraint_indicies(Section & section)
         auto components = bnd->get_components();
         auto fid = bnd->get_field_id();
 
-        auto & bnd_names = bnd->get_boundary();
+        auto bnd_names = bnd->get_boundary();
         for (auto & name : bnd_names) {
             auto label = unstr_mesh->get_face_set_label(name);
             auto ids = label.get_values();

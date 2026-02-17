@@ -48,7 +48,7 @@ TEST(NaturalBCTest, api)
     prob->create();
     bc.create();
 
-    std::vector<Int> comps = bc.get_components();
+    auto comps = bc.get_components();
     EXPECT_THAT(comps, testing::ElementsAre(3, 5));
     EXPECT_EQ(bc.get_field_id(), FieldID(0));
 }

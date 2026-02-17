@@ -199,9 +199,7 @@ PCFieldSplit::set_diag_use_amat(bool flg)
 }
 
 void
-PCFieldSplit::set_fields(String split_name,
-                         const std::vector<Int> & fields,
-                         const std::vector<Int> & fields_col)
+PCFieldSplit::set_fields(String split_name, Span<Int> fields, Span<Int> fields_col)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(PCFieldSplitSetFields(this->obj,

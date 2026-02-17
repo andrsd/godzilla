@@ -7,8 +7,10 @@
 #include "godzilla/Enums.h"
 #include "godzilla/Types.h"
 #include "godzilla/String.h"
+#include "godzilla/Span.h"
 #include "petscis.h"
 #include "petscviewer.h"
+#include <initializer_list>
 #include <vector>
 
 namespace godzilla {
@@ -174,7 +176,9 @@ public:
     /// @param idx The length of the index set
     /// @param copy_mode The copy mode see, `CopyMode` for details
     static IndexSet
-    create_general(MPI_Comm comm, const std::vector<Int> & idx, CopyMode copy_mode = COPY_VALUES);
+    create_general(MPI_Comm comm, Span<const Int> idx, CopyMode copy_mode = COPY_VALUES);
+    static IndexSet
+    create_general(MPI_Comm comm, std::initializer_list<Int> idx, CopyMode copy_mode = COPY_VALUES);
 
     static IndexSet intersect_caching(const IndexSet & is1, const IndexSet & is2);
 

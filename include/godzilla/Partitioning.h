@@ -8,6 +8,7 @@
 #include "godzilla/IndexSet.h"
 #include "godzilla/String.h"
 #include "petscmat.h"
+#include <initializer_list>
 
 namespace godzilla {
 
@@ -76,8 +77,7 @@ public:
     /// @param weights The weights, on each process this array must have the same size as the number
     ///                of local rows times the value passed with `set_number_vertex_weights` or 1 if
     ///                that is not provided
-    void set_vertex_weights(const std::vector<Int> & weights);
-    void set_vertex_weights(const Int weights[]);
+    void set_vertex_weights(Span<Int> weights);
 
     /// Sets the weights for each partition
     ///
@@ -86,8 +86,7 @@ public:
     ///        all of the sub-domains are to be of the same size, then each of the nparts elements
     ///        should be set to a value of `1/nparts`. Note that the sum of all of the weights
     ///        should be one.
-    void set_partition_weights(const std::vector<Real> & weights);
-    void set_partition_weights(const Real weights[]);
+    void set_partition_weights(Span<Real> weights);
 
     /// Prints the partitioning data structure.
     void view(PetscViewer viewer = PETSC_VIEWER_STDOUT_WORLD) const;

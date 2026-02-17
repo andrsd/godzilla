@@ -183,16 +183,13 @@ Mesh::view(PetscViewer viewer)
     PETSC_CHECK(DMView(this->obj, viewer));
 }
 
-std::vector<int>
+Span<const int>
 Mesh::get_neighbors() const
 {
     Int n;
     const PetscMPIInt * ranks;
     PETSC_CHECK(DMGetNeighbors(this->obj, &n, &ranks));
-    std::vector<int> res(n);
-    for (Int i = 0; i < n; ++i)
-        res[i] = ranks[i];
-    return res;
+    return Span(ranks, n);
 }
 
 StarForest

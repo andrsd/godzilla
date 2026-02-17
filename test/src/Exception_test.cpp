@@ -35,7 +35,7 @@ TEST(Exception, call_stack)
         FAIL();
     }
     catch (Exception & e) {
-        auto & cs = e.get_call_stack();
+        auto cs = e.get_call_stack();
         EXPECT_EQ(cs.size(), 2);
         EXPECT_THAT(cs.at(0), testing::HasSubstr("fn2"));
         EXPECT_THAT(cs.at(1), testing::HasSubstr("fn1"));

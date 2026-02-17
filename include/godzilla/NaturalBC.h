@@ -29,7 +29,7 @@ public:
     /// Get the component numbers this boundary condition is constraining
     ///
     /// @return Vector of component numbers
-    const std::vector<Int> & get_components() const;
+    Span<const Int> get_components() const;
 
     /// Set up the weak form for the boundary integral of this boundary condition
     virtual void set_up_weak_form() = 0;

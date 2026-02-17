@@ -24,7 +24,7 @@ Exception::what() const noexcept
     return this->msg.c_str();
 }
 
-const std::vector<String> &
+Span<const String>
 Exception::get_call_stack() const
 {
     return this->call_stack;

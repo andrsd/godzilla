@@ -4,6 +4,7 @@
 #pragma once
 
 #include "godzilla/String.h"
+#include "godzilla/Span.h"
 #include <array>
 #include <vector>
 
@@ -99,5 +100,6 @@ CallStack & get_callstack();
 
 /// Print call stack
 void print_call_stack(const std::vector<String> & call_stack);
+void print_call_stack(Span<const String> call_stack);
 
 } // namespace godzilla

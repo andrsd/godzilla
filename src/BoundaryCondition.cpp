@@ -41,7 +41,7 @@ BoundaryCondition::get_dimension() const
     return get_problem()->get_dimension();
 }
 
-const std::vector<String> &
+Span<const String>
 BoundaryCondition::get_boundary() const
 {
     CALL_STACK_MSG();

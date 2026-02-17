@@ -5,9 +5,11 @@
 
 #include "godzilla/PetscObjectWrapper.h"
 #include "godzilla/Types.h"
+#include "godzilla/Span.h"
 #include "petscsection.h"
 #include "petscdm.h"
 #include "petscviewer.h"
+#include <initializer_list>
 #include <vector>
 
 namespace godzilla {
@@ -258,7 +260,8 @@ public:
     ///
     /// @param point The point
     /// @param indices The constrained dofs
-    void set_constraint_indices(Int point, const std::vector<Int> & indices);
+    void set_constraint_indices(Int point, Span<Int> indices);
+    void set_constraint_indices(Int point, std::initializer_list<Int> indices);
 
     /// Get the point dof numbers, in [0, dof), which are constrained for a given point
     ///
@@ -271,7 +274,8 @@ public:
     /// @param point The point
     /// @param field The field number
     /// @param indices The constrained dofs
-    void set_field_constraint_indices(Int point, Int field, const std::vector<Int> & indices);
+    void set_field_constraint_indices(Int point, Int field, Span<Int> indices);
+    void set_field_constraint_indices(Int point, Int field, std::initializer_list<Int> indices);
 
     /// Get the field dof numbers, in [0, fdof), which are constrained
     ///

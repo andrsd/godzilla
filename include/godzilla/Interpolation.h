@@ -7,6 +7,7 @@
 #include "godzilla/Types.h"
 #include "godzilla/Vector.h"
 #include "petscdm.h"
+#include <initializer_list>
 
 namespace godzilla {
 
@@ -27,7 +28,9 @@ public:
     /// @param points The coordinates of the points, an array of size `n * dim`
     void add_points(Int n, const Real points[]);
 
-    void add_points(const std::vector<Real> & points);
+    void add_points(std::initializer_list<Real> points);
+
+    void add_points(Span<Real> points);
 
     /// Gets a Vec with the coordinates of each interpolation point
     ///

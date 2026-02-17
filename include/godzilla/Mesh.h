@@ -128,7 +128,7 @@ public:
     /// Gets an array containing the MPI ranks of all the process' neighbors
     ///
     /// @return Array of all neighboring ranks
-    std::vector<int> get_neighbors() const;
+    Span<const int> get_neighbors() const;
 
     template <Dimension D>
     BoundingBox<D>

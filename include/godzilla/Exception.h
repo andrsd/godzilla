@@ -4,6 +4,7 @@
 #pragma once
 
 #include "godzilla/String.h"
+#include "godzilla/Span.h"
 #include "fmt/format.h"
 #include <exception>
 #include <vector>
@@ -25,7 +26,7 @@ public:
     const char * what() const noexcept override;
 
     /// Get the call stack from the time the exception occured
-    const std::vector<String> & get_call_stack() const;
+    Span<const String> get_call_stack() const;
 
 private:
     /// Store call stack

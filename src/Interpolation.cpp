@@ -28,10 +28,16 @@ Interpolation::add_points(Int n, const Real points[])
 }
 
 void
-Interpolation::add_points(const std::vector<Real> & points)
+Interpolation::add_points(std::initializer_list<Real> points)
 {
-    auto * data = const_cast<Real *>(points.data());
-    PETSC_CHECK(DMInterpolationAddPoints(this->info, points.size(), data));
+    PETSC_CHECK(
+        DMInterpolationAddPoints(this->info, points.size(), const_cast<Real *>(std::data(points))));
+}
+
+void
+Interpolation::add_points(Span<Real> points)
+{
+    PETSC_CHECK(DMInterpolationAddPoints(this->info, points.size(), points.data()));
 }
 
 Vector
