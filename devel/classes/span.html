@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Exception &mdash; godzilla  documentation</title>
+  <title>Span &mdash; godzilla  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
@@ -21,8 +21,8 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="ExodusIIOutput" href="exodusii-output.html" />
-    <link rel="prev" title="EssentialBC" href="essential-bc.html" /> 
+    <link rel="next" title="StructuredMesh" href="structured-mesh.html" />
+    <link rel="prev" title="RectangleMesh" href="rectangle-mesh.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -75,14 +75,7 @@
 <li class="toctree-l1"><a class="reference internal" href="discrete-problem-interface.html">DiscreteProblemInterface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dynamic-library.html">DynamicLibrary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="essential-bc.html">EssentialBC</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Exception</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#_CPPv4N8godzilla9ExceptionE"><code class="docutils literal notranslate"><span class="pre">Exception</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla9Exception4whatEv"><code class="docutils literal notranslate"><span class="pre">Exception::what()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla9Exception14get_call_stackEv"><code class="docutils literal notranslate"><span class="pre">Exception::get_call_stack()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="exception.html">Exception</a></li>
 <li class="toctree-l1"><a class="reference internal" href="exodusii-output.html">ExodusIIOutput</a></li>
 <li class="toctree-l1"><a class="reference internal" href="expected.html">Expected</a></li>
 <li class="toctree-l1"><a class="reference internal" href="explicit-dg-linear-problem.html">ExplicitDGLinearProblem</a></li>
@@ -125,7 +118,10 @@
 <li class="toctree-l1"><a class="reference internal" href="ptr.html">Ptr</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qtr.html">Qtr</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rectangle-mesh.html">RectangleMesh</a></li>
-<li class="toctree-l1"><a class="reference internal" href="span.html">Span</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Span</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#_CPPv4I0EN8godzilla4SpanE"><code class="docutils literal notranslate"><span class="pre">Span</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="structured-mesh.html">StructuredMesh</a></li>
 <li class="toctree-l1"><a class="reference internal" href="transient-problem-interface.html">TransientProblemInterface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="unstructured-mesh.html">UnstructuredMesh</a></li>
@@ -147,7 +143,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Exception</li>
+      <li class="breadcrumb-item active">Span</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -156,29 +152,12 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="exception">
-<h1>Exception<a class="headerlink" href="#exception" title="Link to this heading"></a></h1>
+  <section id="span">
+<h1>Span<a class="headerlink" href="#span" title="Link to this heading"></a></h1>
 <dl class="cpp class">
-<dt class="sig sig-object cpp" id="_CPPv4N8godzilla9ExceptionE">
-<span id="_CPPv3N8godzilla9ExceptionE"></span><span id="_CPPv2N8godzilla9ExceptionE"></span><span id="godzilla::Exception"></span><span class="target" id="classgodzilla_1_1_exception"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Exception</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">exception</span></span><a class="headerlink" href="#_CPPv4N8godzilla9ExceptionE" title="Link to this definition"></a><br /></dt>
-<dd><p><a class="reference internal" href="#classgodzilla_1_1_exception"><span class="std std-ref">Exception</span></a> thrown from our code, so that application code can determine where problems originated from. </p>
-<p>Subclassed by godzilla::InternalError, godzilla::NotImplementedException</p>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla9Exception4whatEv">
-<span id="_CPPv3NK8godzilla9Exception4whatEv"></span><span id="_CPPv2NK8godzilla9Exception4whatEv"></span><span id="godzilla::Exception::whatC"></span><span class="target" id="classgodzilla_1_1_exception_1a690f8ae25d141e92f557afaaf39022df"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">what</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8godzilla9Exception4whatEv" title="Link to this definition"></a><br /></dt>
-<dd><p>Get the exception message. </p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla9Exception14get_call_stackEv">
-<span id="_CPPv3NK8godzilla9Exception14get_call_stackEv"></span><span id="_CPPv2NK8godzilla9Exception14get_call_stackEv"></span><span id="godzilla::Exception::get_call_stackC"></span><span class="target" id="classgodzilla_1_1_exception_1a4eb3724349dca1df4ee51806e608eb6a"></span><a class="reference internal" href="span.html#_CPPv4I0EN8godzilla4SpanE" title="godzilla::Span"><span class="n"><span class="pre">Span</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">String</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_call_stack</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla9Exception14get_call_stackEv" title="Link to this definition"></a><br /></dt>
-<dd><p>Get the call stack from the time the exception occured. </p>
-</dd></dl>
-
-</div>
-</dd></dl>
+<dt class="sig sig-object cpp" id="_CPPv4I0EN8godzilla4SpanE">
+<span id="_CPPv3I0EN8godzilla4SpanE"></span><span id="_CPPv2I0EN8godzilla4SpanE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classgodzilla_1_1_span"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Span</span></span></span><a class="headerlink" href="#_CPPv4I0EN8godzilla4SpanE" title="Link to this definition"></a><br /></dt>
+<dd></dd></dl>
 
 </section>
 
@@ -186,8 +165,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="essential-bc.html" class="btn btn-neutral float-left" title="EssentialBC" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="exodusii-output.html" class="btn btn-neutral float-right" title="ExodusIIOutput" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="rectangle-mesh.html" class="btn btn-neutral float-left" title="RectangleMesh" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="structured-mesh.html" class="btn btn-neutral float-right" title="StructuredMesh" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
