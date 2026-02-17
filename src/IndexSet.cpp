@@ -88,11 +88,20 @@ IndexSet::duplicate() const
 }
 
 IndexSet
-IndexSet::create_general(MPI_Comm comm, const std::vector<Int> & idx, CopyMode copy_mode)
+IndexSet::create_general(MPI_Comm comm, Span<const Int> idx, CopyMode copy_mode)
 {
     CALL_STACK_MSG();
     IndexSet is;
     PETSC_CHECK(ISCreateGeneral(comm, idx.size(), idx.data(), (PetscCopyMode) copy_mode, is));
+    return is;
+}
+
+IndexSet
+IndexSet::create_general(MPI_Comm comm, std::initializer_list<Int> idx, CopyMode copy_mode)
+{
+    CALL_STACK_MSG();
+    IndexSet is;
+    PETSC_CHECK(ISCreateGeneral(comm, idx.size(), std::data(idx), (PetscCopyMode) copy_mode, is));
     return is;
 }
 

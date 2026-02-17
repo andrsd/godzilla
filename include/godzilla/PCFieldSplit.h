@@ -170,9 +170,7 @@ public:
     /// @param fields_col Generally the same as `fields`, if it does not match `fields` then the
     /// matrix block that is solved for this set of fields comes from an off-diagonal block of the
     /// matrix and `fields_col` provides the column indices for that block
-    void set_fields(String split_name,
-                    const std::vector<Int> & fields,
-                    const std::vector<Int> & fields_col);
+    void set_fields(String split_name, Span<Int> fields, Span<Int> fields_col);
 
     /// Sets the delay in the lower bound error estimate in the generalized Golub-Kahan
     /// bidiagonalization [Ari13] in PCFIELDSPLIT preconditioner.

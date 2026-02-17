@@ -332,10 +332,17 @@ Section::get_constraint_dof(Int point) const
 }
 
 void
-Section::set_constraint_indices(Int point, const std::vector<Int> & indices)
+Section::set_constraint_indices(Int point, Span<Int> indices)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(PetscSectionSetConstraintIndices(this->obj, point, indices.data()));
+}
+
+void
+Section::set_constraint_indices(Int point, std::initializer_list<Int> indices)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(PetscSectionSetConstraintIndices(this->obj, point, std::data(indices)));
 }
 
 const Int *
@@ -348,10 +355,17 @@ Section::get_constraint_indices(Int point) const
 }
 
 void
-Section::set_field_constraint_indices(Int point, Int field, const std::vector<Int> & indices)
+Section::set_field_constraint_indices(Int point, Int field, Span<Int> indices)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(PetscSectionSetFieldConstraintIndices(this->obj, point, field, indices.data()));
+}
+
+void
+Section::set_field_constraint_indices(Int point, Int field, std::initializer_list<Int> indices)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(PetscSectionSetFieldConstraintIndices(this->obj, point, field, std::data(indices)));
 }
 
 const Int *

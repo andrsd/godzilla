@@ -3,6 +3,7 @@
 
 #include "godzilla/Partitioning.h"
 #include "godzilla/CallStack.h"
+#include <cstring>
 #include <petscmat.h>
 
 namespace godzilla {
@@ -100,41 +101,25 @@ Partitioning::set_number_vertex_weights(Int n)
 }
 
 void
-Partitioning::set_vertex_weights(const std::vector<Int> & weights)
+Partitioning::set_vertex_weights(Span<Int> weights)
 {
     CALL_STACK_MSG();
-    // @note This is not a mistake, see doco
-    PetscInt * wts;
-    PetscMalloc(sizeof(PetscInt) * weights.size(), &wts);
-    for (std::size_t i = 0; i < weights.size(); ++i)
-        wts[i] = weights[i];
+    // @note This is not a mistake, see doco for `MatPartitioningSetVertexWeights`
+    Int * wts;
+    PetscMalloc(sizeof(Int) * weights.size(), &wts);
+    std::memcpy(wts, std::data(weights), weights.size() * sizeof(Int));
     PETSC_CHECK(MatPartitioningSetVertexWeights(this->obj, wts));
 }
 
 void
-Partitioning::set_vertex_weights(const Int weights[])
-{
-    CALL_STACK_MSG();
-    PETSC_CHECK(MatPartitioningSetVertexWeights(this->obj, weights));
-}
-
-void
-Partitioning::set_partition_weights(const std::vector<Real> & weights)
+Partitioning::set_partition_weights(Span<Real> weights)
 {
     CALL_STACK_MSG();
     // @note This is not a mistake, see doco
-    PetscReal * wts;
-    PetscMalloc(sizeof(PetscReal) * weights.size(), &wts);
-    for (std::size_t i = 0; i < weights.size(); ++i)
-        wts[i] = weights[i];
+    Real * wts;
+    PetscMalloc(sizeof(Real) * weights.size(), &wts);
+    std::memcpy(wts, std::data(weights), weights.size() * sizeof(Real));
     PETSC_CHECK(MatPartitioningSetPartitionWeights(this->obj, wts));
-}
-
-void
-Partitioning::set_partition_weights(const Real weights[])
-{
-    CALL_STACK_MSG();
-    PETSC_CHECK(MatPartitioningSetPartitionWeights(this->obj, weights));
 }
 
 void

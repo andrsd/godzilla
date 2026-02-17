@@ -388,7 +388,7 @@ Problem::clear_auxiliary_vec()
 }
 
 IndexSet
-Problem::create_section_subis(const std::vector<Int> & fields) const
+Problem::create_section_subis(Span<Int> fields) const
 {
     CALL_STACK_MSG();
 #if PETSC_VERSION_GE(3, 21, 0)
@@ -403,9 +403,23 @@ Problem::create_section_subis(const std::vector<Int> & fields) const
 }
 
 IndexSet
-Problem::create_section_subis(const std::vector<Int> & fields,
-                              const std::vector<Int> & n_comps,
-                              const std::vector<Int> & comps) const
+Problem::create_section_subis(std::initializer_list<Int> fields) const
+{
+    CALL_STACK_MSG();
+#if PETSC_VERSION_GE(3, 21, 0)
+    IndexSet is;
+    PETSC_CHECK(
+        DMCreateSectionSubDM(get_dm(), fields.size(), std::data(fields), NULL, NULL, is, NULL));
+    return is;
+#else
+    IndexSet is;
+    PETSC_CHECK(DMCreateSectionSubDM(get_dm(), fields.size(), std::data(fields), is, NULL));
+    return is;
+#endif
+}
+
+IndexSet
+Problem::create_section_subis(Span<Int> fields, Span<Int> n_comps, Span<Int> comps) const
 {
     CALL_STACK_MSG();
 #if PETSC_VERSION_GE(3, 21, 0)

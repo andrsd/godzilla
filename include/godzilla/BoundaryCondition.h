@@ -7,6 +7,7 @@
 #include "godzilla/Object.h"
 #include "godzilla/String.h"
 #include "godzilla/PrintInterface.h"
+#include "godzilla/Span.h"
 
 namespace godzilla {
 
@@ -28,7 +29,7 @@ public:
     /// Get the boundary name this BC is active on
     ///
     /// @return The boundary name
-    const std::vector<String> & get_boundary() const;
+    Span<const String> get_boundary() const;
 
     /// Get DiscreteProblemInterface
     ///

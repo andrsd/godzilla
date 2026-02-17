@@ -247,7 +247,7 @@ UnstructuredMesh::get_connectivity(Int point) const
     return elem_connect;
 }
 
-std::vector<Int>
+Span<const Int>
 UnstructuredMesh::get_support(Int point) const
 {
     CALL_STACK_MSG();
@@ -255,11 +255,7 @@ UnstructuredMesh::get_support(Int point) const
     PETSC_CHECK(DMPlexGetSupportSize(get_dm(), point, &n_support));
     const Int * support;
     PETSC_CHECK(DMPlexGetSupport(get_dm(), point, &support));
-    std::vector<Int> v;
-    v.resize(n_support);
-    for (Int i = 0; i < n_support; ++i)
-        v[i] = support[i];
-    return v;
+    return Span(support, n_support);
 }
 
 Int
@@ -271,18 +267,14 @@ UnstructuredMesh::get_support_size(Int point) const
     return n;
 }
 
-std::vector<Int>
+Span<const Int>
 UnstructuredMesh::get_cone(Int point) const
 {
     CALL_STACK_MSG();
     Int n = get_cone_size(point);
     const Int * cone;
     PETSC_CHECK(DMPlexGetCone(get_dm(), point, &cone));
-    std::vector<Int> v;
-    v.resize(n);
-    for (Int i = 0; i < n; ++i)
-        v[i] = cone[i];
-    return v;
+    return Span(cone, n);
 }
 
 Int
@@ -311,7 +303,7 @@ UnstructuredMesh::set_cone_size(Int point, Int size)
 }
 
 void
-UnstructuredMesh::set_cone(Int point, const std::vector<Int> & cone)
+UnstructuredMesh::set_cone(Int point, Span<Int> cone)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(DMPlexSetCone(get_dm(), point, cone.data()));
@@ -756,7 +748,7 @@ UnstructuredMesh::get_polytope_dim(PolytopeType type)
 }
 
 void
-UnstructuredMesh::invert_cell(PolytopeType type, std::vector<Int> & cone)
+UnstructuredMesh::invert_cell(PolytopeType type, Span<Int> cone)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(DMPlexInvertCell((DMPolytopeType) type, cone.data()));

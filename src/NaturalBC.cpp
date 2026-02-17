@@ -57,7 +57,7 @@ NaturalBC::get_field_id() const
     return this->fid;
 }
 
-const std::vector<Int> &
+Span<const Int>
 NaturalBC::get_components() const
 {
     CALL_STACK_MSG();

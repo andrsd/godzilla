@@ -125,7 +125,7 @@ public:
     ///
     /// @param point Point with must lie in the chart
     /// @return Points which are on the out-edges for point `p`
-    std::vector<Int> get_support(Int point) const;
+    Span<const Int> get_support(Int point) const;
 
     /// Return the number of out-edges for this point in the DAG
     ///
@@ -137,7 +137,7 @@ public:
     ///
     /// @param point Point with must lie in the chart
     /// @return Points which are on the out-edges for point `p`
-    std::vector<Int> get_cone(Int point) const;
+    Span<const Int> get_cone(Int point) const;
 
     /// Return the number of in-edges for this point in the DAG
     ///
@@ -163,7 +163,7 @@ public:
     ///
     /// @param point The point, which must lie in the chart set with `set_chart`
     /// @param cone An array of points which are on the in-edges for point `p`
-    void set_cone(Int point, const std::vector<Int> & cone);
+    void set_cone(Int point, Span<Int> cone);
 
     /// Get the depth of a given point
     ///
@@ -433,7 +433,7 @@ public:
     ///
     /// @param type Cell type
     /// @param cone Cone to invert
-    static void invert_cell(PolytopeType type, std::vector<Int> & cone);
+    static void invert_cell(PolytopeType type, Span<Int> cone);
 };
 
 /// Get index set with points for a given label

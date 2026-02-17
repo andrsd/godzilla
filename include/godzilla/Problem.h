@@ -19,6 +19,7 @@
 #include "godzilla/FileOutput.h"
 #include "godzilla/Postprocessor.h"
 #include "godzilla/Ref.h"
+#include <initializer_list>
 
 namespace godzilla {
 
@@ -223,7 +224,8 @@ public:
     ///
     /// @param fields The field numbers of the selected fields
     /// @return The global indices for the subproblem
-    IndexSet create_section_subis(const std::vector<Int> & fields) const;
+    IndexSet create_section_subis(Span<Int> fields) const;
+    IndexSet create_section_subis(std::initializer_list<Int> fields) const;
 
     /// Returns an IndexSet containing a Section that encapsulates a subproblem defined by
     /// a subset of the fields and components in a Section in the problem.
@@ -232,9 +234,7 @@ public:
     /// @param n_comps The number of components from each field to incorporate into the subproblem
     /// @param comps The component numbers of the selected fields
     /// @return The global indices for the subproblem
-    IndexSet create_section_subis(const std::vector<Int> & fields,
-                                  const std::vector<Int> & n_comps,
-                                  const std::vector<Int> & comps) const;
+    IndexSet create_section_subis(Span<Int> fields, Span<Int> n_comps, Span<Int> comps) const;
 
     /// Set output monitor
     ///

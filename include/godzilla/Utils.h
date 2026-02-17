@@ -5,6 +5,7 @@
 
 #include "godzilla/Types.h"
 #include "godzilla/String.h"
+#include "godzilla/Span.h"
 #include "godzilla/Expected.h"
 #include "godzilla/Error.h"
 #include <vector>
@@ -95,6 +96,16 @@ std::size_t
 index_of(const std::vector<T> & array, T value)
 {
     for (std::size_t i = 0; i < array.size(); ++i)
+        if (array[i] == value)
+            return i;
+    throw std::runtime_error(fmt::format("Did not find {} in array", value));
+}
+
+template <typename T>
+Int
+index_of(Span<const T> array, T value)
+{
+    for (decltype(array.size()) i = 0; i < array.size(); ++i)
         if (array[i] == value)
             return i;
     throw std::runtime_error(fmt::format("Did not find {} in array", value));

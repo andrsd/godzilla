@@ -112,7 +112,8 @@ TEST(Partitioning, vertex_weights)
     auto adj = create_adj_mat_1d(comm, 5);
     mpart.set_adjacency(adj);
     mpart.set_number_vertex_weights(1);
-    mpart.set_vertex_weights({ 10, 1, 1, 1, 1 });
+    std::vector<Int> weights = { 10, 1, 1, 1, 1 };
+    mpart.set_vertex_weights(weights);
     auto p = mpart.apply();
 
     {
@@ -137,7 +138,8 @@ TEST(Partitioning, partition_weights)
     mpart.create(comm);
     mpart.set_type(Partitioning::PARMETIS);
     mpart.set_n_parts(2);
-    mpart.set_partition_weights({ 0.8, 0.2 });
+    std::vector<Real> weights = { 0.8, 0.2 };
+    mpart.set_partition_weights(weights);
     auto adj = create_adj_mat_1d(comm, 10);
     adj.assemble();
     mpart.set_adjacency(adj);

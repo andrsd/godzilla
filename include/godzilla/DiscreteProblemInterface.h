@@ -17,6 +17,7 @@
 #include "godzilla/DenseMatrix.h"
 #include "godzilla/DenseMatrixSymm.h"
 #include "godzilla/BoundaryCondition.h"
+#include "godzilla/NaturalBC.h"
 #include "godzilla/EssentialBC.h"
 #include "godzilla/AuxiliaryField.h"
 #include "petscds.h"
@@ -254,9 +255,9 @@ public:
     void add_boundary(DMBoundaryConditionType type,
                       String name,
                       const Label & label,
-                      const std::vector<Int> & ids,
+                      Span<Int> ids,
                       FieldID field,
-                      const std::vector<Int> & components,
+                      Span<Int> components,
                       void (*bc_fn)(),
                       void (*bc_fn_t)(),
                       void * context);

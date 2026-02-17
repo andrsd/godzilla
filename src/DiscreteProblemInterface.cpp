@@ -521,9 +521,9 @@ void
 DiscreteProblemInterface::add_boundary(DMBoundaryConditionType type,
                                        String name,
                                        const Label & label,
-                                       const std::vector<Int> & ids,
+                                       Span<Int> ids,
                                        FieldID field,
-                                       const std::vector<Int> & components,
+                                       Span<Int> components,
                                        void (*bc_fn)(),
                                        void (*bc_fn_t)(),
                                        void * context)
