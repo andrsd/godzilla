@@ -42,6 +42,11 @@ public:
     /// @return Range of vertex indices
     Range get_vertex_range() const;
 
+    /// Get a global vertex numbering for all vertices on this process
+    ///
+    /// @return Index set with global vertex numbers for all vertices on this process
+    IndexSet get_vertex_numbering() const;
+
     /// Return the number of mesh faces
     Int get_num_faces() const;
 
