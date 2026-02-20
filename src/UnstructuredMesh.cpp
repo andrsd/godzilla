@@ -76,6 +76,16 @@ UnstructuredMesh::get_vertex_range() const
     return { first, last };
 }
 
+IndexSet
+UnstructuredMesh::get_vertex_numbering() const
+{
+    CALL_STACK_MSG();
+    IndexSet is;
+    PETSC_CHECK(DMPlexGetVertexNumbering(get_dm(), is));
+    is.inc_reference();
+    return is;
+}
+
 Int
 UnstructuredMesh::get_num_faces() const
 {
