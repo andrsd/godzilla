@@ -2,9 +2,11 @@
 // SPDX-License-Identifier: MIT
 
 #include "godzilla/Matrix.h"
+#include "godzilla/Assert.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/Error.h"
 #include "godzilla/ShellMatrix.h"
+#include <petscmat.h>
 
 namespace godzilla {
 
@@ -293,6 +295,30 @@ Matrix::create_seq_aij(MPI_Comm comm, Int m, Int n, const std::vector<Int> & nnz
     CALL_STACK_MSG();
     Mat mat;
     PETSC_CHECK(MatCreateSeqAIJ(comm, m, n, 0, nnz.data(), &mat));
+    return Matrix(mat);
+}
+
+Matrix
+Matrix::create_aij(MPI_Comm comm, Int m, Int n, Int M, Int N, Int d_nz, Int o_nz)
+{
+    CALL_STACK_MSG();
+    Mat mat;
+    PETSC_CHECK(MatCreateAIJ(comm, m, n, M, N, d_nz, NULL, o_nz, NULL, &mat));
+    return Matrix(mat);
+}
+
+Matrix
+Matrix::create_aij(MPI_Comm comm, Int m, Int n, Int M, Int N, Span<Int> d_nnz, Span<Int> o_nnz)
+{
+    CALL_STACK_MSG();
+    GODZILLA_ASSERT_TRUE(
+        m == d_nnz.size(),
+        fmt::format("The size of d_nnz ({}) must match 'm' ({})", d_nnz.size(), m));
+    GODZILLA_ASSERT_TRUE(
+        m == o_nnz.size(),
+        fmt::format("The size of o_nnz ({}) must match 'm' ({})", o_nnz.size(), m));
+    Mat mat;
+    PETSC_CHECK(MatCreateAIJ(comm, m, n, M, N, 0, d_nnz.data(), 0, o_nnz.data(), &mat));
     return Matrix(mat);
 }
 

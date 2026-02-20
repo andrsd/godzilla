@@ -191,6 +191,9 @@ public:
 
     static Matrix create_seq_aij(MPI_Comm comm, Int m, Int n, Int nz);
     static Matrix create_seq_aij(MPI_Comm comm, Int m, Int n, const std::vector<Int> & nnz);
+    static Matrix create_aij(MPI_Comm comm, Int m, Int n, Int M, Int N, Int d_nz, Int o_nz);
+    static Matrix
+    create_aij(MPI_Comm comm, Int m, Int n, Int M, Int N, Span<Int> d_nnz, Span<Int> o_nnz);
     static ShellMatrix create_shell(MPI_Comm comm, Int m, Int n, Int M, Int N);
 
 private:
