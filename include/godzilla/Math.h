@@ -23,6 +23,42 @@ constexpr Real SQRT3 = std::numbers::sqrt3_v<Real>;
 /// Euler's number
 constexpr Real E = std::numbers::e_v<Real>;
 
+/// Type for specifying tolerance
+struct Tolerance {
+    /// Absolute tolerance
+    double atol;
+    /// Relative tolerance
+    double rtol;
+};
+
+/// Create `Tolerance` with absolute tolerance only
+constexpr Tolerance
+absolute(double atol) noexcept
+{
+    return { atol, 0.0 };
+}
+
+/// Create `Tolerance` with relative tolerance only
+constexpr Tolerance
+relative(double rtol) noexcept
+{
+    return { 0.0, rtol };
+}
+
+/// Create `Tolerance` with absolute and relative tolerances
+constexpr Tolerance
+tolerance(double atol, double rtol) noexcept
+{
+    return { atol, rtol };
+}
+
+/// Default values
+constexpr Tolerance
+default_tolerance() noexcept
+{
+    return { 1e-12, 1e-8 };
+}
+
 /// Sign of the argument
 ///
 /// @tparam T Type
@@ -278,6 +314,21 @@ T
 log(T base, T arg)
 {
     return std::log(arg) / std::log(base);
+}
+
+/// Check if 2 objects are close with a tolerance
+///
+/// @param a First object to check
+/// @param b Second object to check
+/// @return `true` is close withing specified tolerance, `false` otherwise
+template <std::floating_point T>
+constexpr bool
+is_close(T a, T b, Tolerance tol = default_tolerance())
+{
+    using std::abs;
+    const T diff = abs(a - b);
+    const T scale = std::max(abs(a), abs(b));
+    return diff <= tol.atol + tol.rtol * scale;
 }
 
 } // namespace math
