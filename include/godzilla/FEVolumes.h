@@ -136,7 +136,7 @@ calc_volumes(const UnstructuredMesh & mesh)
 {
     CALL_STACK_MSG();
     Int n_elems = mesh.get_num_cells();
-    Array1D<Real> vols(n_elems);
+    Array1D<Real> vols(mesh.get_comm(), n_elems);
     auto dm = mesh.get_coordinate_dm();
     auto vec = mesh.get_coordinates_local();
     auto section = mesh.get_coordinate_section();

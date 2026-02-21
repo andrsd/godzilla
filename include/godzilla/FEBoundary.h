@@ -223,8 +223,8 @@ protected:
         if (this->facets) {
             this->facet_idxs = this->facets.borrow_indices();
             Int n = this->facets.get_local_size();
-            this->lengths = Array1D<Real>(n);
-            this->normals = Array1D<DenseVector<Real, DIM>>(n);
+            this->lengths = Array1D<Real>(mesh->get_comm(), n);
+            this->normals = Array1D<DenseVector<Real, DIM>>(mesh->get_comm(), n);
 
             calc_facet_lengths();
             calc_facet_normals();

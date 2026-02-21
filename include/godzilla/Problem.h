@@ -4,6 +4,7 @@
 #pragma once
 
 #include "godzilla/CallStack.h"
+#include "godzilla/Error.h"
 #include "godzilla/Formatters.h"
 #include "godzilla/Parameters.h"
 #include "godzilla/Types.h"
@@ -449,7 +450,7 @@ create_local_array1d(DM dm)
     CALL_STACK_MSG();
     auto section = get_local_section(dm);
     auto size = section.get_storage_size();
-    return Array1D<T>(size);
+    return Array1D<T>(section.get_comm(), size);
 }
 
 /// Equivalent of `create_global_vector` but for `Array1D`
@@ -462,7 +463,7 @@ create_global_array1d(DM dm)
     CALL_STACK_MSG();
     auto section = get_global_section(dm);
     auto size = section.get_constrained_storage_size();
-    return Array1D<T>(size);
+    return Array1D<T>(section.get_comm(), size);
 }
 
 ///

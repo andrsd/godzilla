@@ -27,7 +27,7 @@ public:
     {
         CALL_STACK_MSG();
         EssentialBoundaryInfo::create();
-        this->vals = Array1D<Int>(this->num_vertices());
+        this->vals = Array1D<Int>(get_mesh()->get_comm(), this->num_vertices());
     }
 
     void
@@ -60,7 +60,7 @@ public:
     {
         CALL_STACK_MSG();
         NaturalBoundaryInfo::create();
-        this->vals = Array1D<Int>(this->num_facets());
+        this->vals = Array1D<Int>(get_mesh()->get_comm(), this->num_facets());
     }
 
     void

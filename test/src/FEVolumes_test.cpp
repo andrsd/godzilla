@@ -1,6 +1,6 @@
 #include "gmock/gmock.h"
-#include "godzilla/FEVolumes.h"
 #include "ExceptionTestMacros.h"
+#include "godzilla/FEVolumes.h"
 #include "godzilla/Types.h"
 
 using namespace godzilla;
@@ -42,11 +42,13 @@ TEST(FEVolumesTest, volume_tet4)
 
 TEST(FEVolumesTest, calc_volumes)
 {
+    mpi::Communicator comm(MPI_COMM_WORLD);
+
     const Int N_NODES = 5;
     const Int N_ELEMS = 4;
-    Array1D<DenseVector<Real, 2>> coords(N_NODES);
-    Array1D<DenseVector<Int, 3>> connect(N_ELEMS);
-    Array1D<godzilla::Real> fe_volume(N_ELEMS);
+    Array1D<DenseVector<Real, 2>> coords(comm, N_NODES);
+    Array1D<DenseVector<Int, 3>> connect(comm, N_ELEMS);
+    Array1D<godzilla::Real> fe_volume(comm, N_ELEMS);
 
     coords[0] = DenseVector<Real, 2>({ 0, 0 });
     coords[1] = DenseVector<Real, 2>({ 1, 0 });

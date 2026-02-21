@@ -8,8 +8,11 @@
 #include "godzilla/Exception.h"
 #include "godzilla/Assert.h"
 #include "godzilla/Math.h"
+#include "mpicpp-lite/mpicpp-lite.h"
 #include <petscvec.h>
 #include <cstring>
+
+namespace mpi = mpicpp_lite;
 
 namespace godzilla {
 
@@ -135,12 +138,36 @@ public:
     /// Create an array with specified number of entries
     ///
     /// @param size Number of entries in the array
-    explicit Array1D(Int size) : ctrl(new ControlBlock { 1, size }), first(0), data(new T[size]) {}
+    [[deprecated("Supply the communicator")]] explicit Array1D(Int size) :
+        ctrl(new ControlBlock { 1, size }),
+        first(0),
+        data(new T[size])
+    {
+    }
 
     /// Create an array from a Range
     ///
     /// @param rng Indexing range
-    explicit Array1D(const Range & rng) :
+    [[deprecated("Supply the communicator")]] explicit Array1D(const Range & rng) :
+        ctrl(new ControlBlock { 1, rng.size() }),
+        first(rng.first()),
+        data(new T[rng.size()])
+    {
+    }
+
+    /// Create an empty array
+    explicit Array1D(mpi::Communicator comm) : comm(comm), ctrl(nullptr), first(0), data(nullptr) {}
+
+    explicit Array1D(mpi::Communicator comm, Int size) :
+        comm(comm),
+        ctrl(new ControlBlock { 1, size }),
+        first(0),
+        data(new T[size])
+    {
+    }
+
+    explicit Array1D(mpi::Communicator comm, const Range & rng) :
+        comm(comm),
         ctrl(new ControlBlock { 1, rng.size() }),
         first(rng.first()),
         data(new T[rng.size()])
@@ -196,6 +223,12 @@ public:
     operator bool() const
     {
         return this->data != nullptr;
+    }
+
+    mpi::Communicator
+    get_comm() const
+    {
+        return this->comm;
     }
 
     /// Get number of entries in the array
@@ -318,6 +351,7 @@ private:
         }
     }
 
+    mpi::Communicator comm;
     /// Control block
     ControlBlock * ctrl;
     /// First index
@@ -325,6 +359,8 @@ private:
     /// Array containing the values
     T * data;
 
+    template <FloatingPoint U>
+    friend U norm(Array1D<U> & vector, NormType type);
     template <typename U>
     friend void pointwise_min(Array1D<U> & w, const Array1D<U> & x, const Array1D<U> & y);
     template <typename U>
@@ -481,16 +517,19 @@ norm(Array1D<T> & vector, NormType type)
     case NORM_1:
         for (const auto & val : vector)
             norm += std::abs(val);
+        vector.comm.all_reduce(norm, mpi::op::sum<T>());
         return norm;
 
     case NORM_2:
         for (const auto & val : vector)
             norm += val * val;
+        vector.comm.all_reduce(norm, mpi::op::sum<T>());
         return std::sqrt(norm);
 
     case NORM_INFINITY:
         for (const auto & val : vector)
             norm = std::max(norm, std::abs(val));
+        vector.comm.all_reduce(norm, mpi::op::max<T>());
         return norm;
 
     default:
