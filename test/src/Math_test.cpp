@@ -104,3 +104,12 @@ TEST(MathTest, log)
 {
     EXPECT_NEAR(math::log(5., 625.), 4., 1e-15);
 }
+
+TEST(MathTest, is_close)
+{
+    EXPECT_TRUE(math::is_close(1., 1. + 1e-6, math::absolute(1e-5)));
+    EXPECT_TRUE(math::is_close(1., 1. + 1e-6, math::relative(1e-6)));
+
+    EXPECT_FALSE(math::is_close(1., 2., math::absolute(1e-1)));
+    EXPECT_FALSE(math::is_close(1., 1.5, math::relative(1e-1)));
+}
