@@ -131,7 +131,9 @@ TEST(UtilsTest, join_std_set_int)
 
 TEST(UtilsTest, join_array_1d)
 {
-    Array1D<Int> vals(3);
+    mpi::Communicator comm(MPI_COMM_WORLD);
+
+    Array1D<Int> vals(comm, 3);
     vals[0] = 3;
     vals[1] = 7;
     vals[2] = 9;

@@ -1,10 +1,10 @@
 #include "gmock/gmock.h"
+#include "ExceptionTestMacros.h"
 #include "godzilla/DenseMatrix.h"
 #include "godzilla/Enums.h"
 #include "godzilla/FEGeometry.h"
 #include "godzilla/FEShapeFns.h"
 #include "godzilla/FEVolumes.h"
-#include "ExceptionTestMacros.h"
 #include "godzilla/Types.h"
 #include "mpicpp-lite/mpicpp-lite.h"
 
@@ -167,7 +167,9 @@ TEST(FEGeometryTest, calc_element_length)
 
 TEST(FEGeometryTest, calc_nodal_radius_xyz_edge2)
 {
-    Array1D<DenseVector<Real, 1>> coords(2);
+    mpi::Communicator comm(MPI_COMM_WORLD);
+
+    Array1D<DenseVector<Real, 1>> coords(comm, 2);
     coords[0] = DenseVector<Real, 1>({ 0. });
     coords[1] = DenseVector<Real, 1>({ 2. });
     auto rad = fe::calc_nodal_radius<CARTESIAN, 1>(coords);
@@ -177,7 +179,9 @@ TEST(FEGeometryTest, calc_nodal_radius_xyz_edge2)
 
 TEST(FEGeometryTest, calc_nodal_radius_xyz_tri3)
 {
-    Array1D<DenseVector<Real, 2>> coords(3);
+    mpi::Communicator comm(MPI_COMM_WORLD);
+
+    Array1D<DenseVector<Real, 2>> coords(comm, 3);
     coords[0] = DenseVector<Real, 2>({ 0., 0. });
     coords[1] = DenseVector<Real, 2>({ 1., 0. });
     coords[2] = DenseVector<Real, 2>({ 0., 1. });
@@ -189,7 +193,9 @@ TEST(FEGeometryTest, calc_nodal_radius_xyz_tri3)
 
 TEST(FEGeometryTest, calc_nodal_radius_xyz_tet4)
 {
-    Array1D<DenseVector<Real, 3>> coords(4);
+    mpi::Communicator comm(MPI_COMM_WORLD);
+
+    Array1D<DenseVector<Real, 3>> coords(comm, 4);
     coords[0] = DenseVector<Real, 3>({ 0., 0., 0. });
     coords[1] = DenseVector<Real, 3>({ 1., 0., 0. });
     coords[2] = DenseVector<Real, 3>({ 0., 1., 0. });
@@ -203,7 +209,9 @@ TEST(FEGeometryTest, calc_nodal_radius_xyz_tet4)
 
 TEST(FEGeometryTest, calc_nodal_radius_rz_tri3)
 {
-    Array1D<DenseVector<Real, 2>> coords(3);
+    mpi::Communicator comm(MPI_COMM_WORLD);
+
+    Array1D<DenseVector<Real, 2>> coords(comm, 3);
     coords[0] = DenseVector<Real, 2>({ 0., 0. });
     coords[1] = DenseVector<Real, 2>({ 1., 0. });
     coords[2] = DenseVector<Real, 2>({ 0., 1. });

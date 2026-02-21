@@ -9,19 +9,25 @@ using namespace testing;
 
 TEST(Array1DTest, create)
 {
-    Array1D<Real> arr(10);
+    mpi::Communicator comm(MPI_COMM_WORLD);
+
+    Array1D<Real> arr(comm, 10);
     EXPECT_EQ(arr.size(), 10);
 }
 
 TEST(Array1DTest, create_rng)
 {
-    Array1D<Real> arr(godzilla::Range(5, 15));
+    mpi::Communicator comm(MPI_COMM_WORLD);
+
+    Array1D<Real> arr(comm, godzilla::Range(5, 15));
     EXPECT_EQ(arr.size(), 10);
 }
 
 TEST(Array1DTest, const_op)
 {
-    Array1D<Real> arr(10);
+    mpi::Communicator comm(MPI_COMM_WORLD);
+
+    Array1D<Real> arr(comm, 10);
     for (Int i = 0; i < 10; ++i)
         arr[i] = i;
 
@@ -32,7 +38,9 @@ TEST(Array1DTest, const_op)
 
 TEST(Array1DTest, zero)
 {
-    Array1D<Real> arr(10);
+    mpi::Communicator comm(MPI_COMM_WORLD);
+
+    Array1D<Real> arr(comm, 10);
     for (Int i = 0; i < 10; ++i)
         arr[i] = i;
     arr.zero();
@@ -42,7 +50,9 @@ TEST(Array1DTest, zero)
 
 TEST(Array1DTest, set_values)
 {
-    Array1D<Real> arr(10);
+    mpi::Communicator comm(MPI_COMM_WORLD);
+
+    Array1D<Real> arr(comm, 10);
     arr.set(1234);
     for (Int i = 0; i < 10; ++i)
         EXPECT_EQ(arr[i], 1234.);
@@ -50,7 +60,9 @@ TEST(Array1DTest, set_values)
 
 TEST(Array1DTest, set_values_idxs)
 {
-    Array1D<Real> arr(5);
+    mpi::Communicator comm(MPI_COMM_WORLD);
+
+    Array1D<Real> arr(comm, 5);
     arr.zero();
     DenseVector<Int, 3> idxs({ 1, 4, 2 });
     DenseVector<Real, 3> vals({ 8, 7, 6 });
@@ -62,7 +74,9 @@ TEST(Array1DTest, set_values_idxs)
 
 TEST(Array1DTest, get_data)
 {
-    Array1D<Real> y(5);
+    mpi::Communicator comm(MPI_COMM_WORLD);
+
+    Array1D<Real> y(comm, 5);
     assign(y, { 2., 3., 1., -2., 0. });
     Real * raw = y.get_data();
     EXPECT_EQ(raw[0], 2.);
@@ -74,9 +88,11 @@ TEST(Array1DTest, get_data)
 
 TEST(Array1DTest, op_to_stream)
 {
+    mpi::Communicator comm(MPI_COMM_WORLD);
+
     testing::internal::CaptureStdout();
 
-    Array1D<Real> x(5);
+    Array1D<Real> x(comm, 5);
     assign(x, { 1., -1., 3., 0., 2. });
     std::cout << x;
 
@@ -85,7 +101,9 @@ TEST(Array1DTest, op_to_stream)
 
 TEST(Array1DTest, get_values)
 {
-    Array1D<Real> x(8);
+    mpi::Communicator comm(MPI_COMM_WORLD);
+
+    Array1D<Real> x(comm, 8);
     assign(x, { 2, 3, 1, -2, 0, 6, 10, 8 });
 
     DenseVector<Int, 3> idx({ 1, 6, 3 });
@@ -98,7 +116,9 @@ TEST(Array1DTest, get_values)
 
 TEST(Array1DTest, get_values_std_vec)
 {
-    Array1D<Real> x(8);
+    mpi::Communicator comm(MPI_COMM_WORLD);
+
+    Array1D<Real> x(comm, 8);
     assign(x, { 2, 3, 1, -2, 0, 6, 10, 8 });
 
     std::vector<Int> idx({ 1, 6, 3 });
@@ -111,7 +131,9 @@ TEST(Array1DTest, get_values_std_vec)
 
 TEST(Array1DTest, add)
 {
-    Array1D<Real> x(8);
+    mpi::Communicator comm(MPI_COMM_WORLD);
+
+    Array1D<Real> x(comm, 8);
     assign(x, { 2, 3, 1, -2, 0, 6, 10, 8 });
 
     DenseVector<Int, 3> idx({ 1, 6, 3 });
@@ -130,7 +152,9 @@ TEST(Array1DTest, add)
 
 TEST(Array1DTest, range_ops)
 {
-    Array1D<Real> arr(8);
+    mpi::Communicator comm(MPI_COMM_WORLD);
+
+    Array1D<Real> arr(comm, 8);
     assign(arr, { 2, 3, 1, -2, 0, 6, 10, 8 });
 
     std::vector<Real> vals;
@@ -141,7 +165,9 @@ TEST(Array1DTest, range_ops)
 
 TEST(Array1DTest, assign_op)
 {
-    Array1D<Real> arr(8);
+    mpi::Communicator comm(MPI_COMM_WORLD);
+
+    Array1D<Real> arr(comm, 8);
     arr.set(123.);
     auto copy = arr;
 
@@ -151,7 +177,9 @@ TEST(Array1DTest, assign_op)
 
 TEST(Array1DTest, norm)
 {
-    Array1D<Real> vals(5);
+    mpi::Communicator comm(MPI_COMM_WORLD);
+
+    Array1D<Real> vals(comm, 5);
     assign(vals, { 1, -2, 3, -4, 5 });
 
     EXPECT_NEAR(norm(vals, NORM_1), 15, 1e-10);
@@ -164,12 +192,14 @@ TEST(Array1DTest, norm)
 
 TEST(Array1DTest, pointwise_min)
 {
-    Array1D<Real> x(5);
+    mpi::Communicator comm(MPI_COMM_WORLD);
+
+    Array1D<Real> x(comm, 5);
     assign(x, { 1, -2, 3, -4, 5 });
-    Array1D<Real> y(5);
+    Array1D<Real> y(comm, 5);
     assign(y, { 2, 1, -5, -4, 9 });
 
-    Array1D<Real> w(5);
+    Array1D<Real> w(comm, 5);
     pointwise_min(w, x, y);
 
     EXPECT_NEAR(w[0], 1., 1e-10);
@@ -181,12 +211,14 @@ TEST(Array1DTest, pointwise_min)
 
 TEST(Array1DTest, pointwise_max)
 {
-    Array1D<Real> x(5);
+    mpi::Communicator comm(MPI_COMM_WORLD);
+
+    Array1D<Real> x(comm, 5);
     assign(x, { 1, -2, 3, -4, 5 });
-    Array1D<Real> y(5);
+    Array1D<Real> y(comm, 5);
     assign(y, { 2, 1, -5, -4, 9 });
 
-    Array1D<Real> w(5);
+    Array1D<Real> w(comm, 5);
     pointwise_max(w, x, y);
 
     EXPECT_NEAR(w[0], 2., 1e-15);
@@ -198,12 +230,14 @@ TEST(Array1DTest, pointwise_max)
 
 TEST(Array1DTest, pointwise_mult)
 {
-    Array1D<Real> x(5);
+    mpi::Communicator comm(MPI_COMM_WORLD);
+
+    Array1D<Real> x(comm, 5);
     assign(x, { 1, -2, 3, -4, 5 });
-    Array1D<Real> y(5);
+    Array1D<Real> y(comm, 5);
     assign(y, { 2, 1, -5, -4, 9 });
 
-    Array1D<Real> w(5);
+    Array1D<Real> w(comm, 5);
     pointwise_mult(w, x, y);
 
     EXPECT_NEAR(w[0], 2., 1e-15);
@@ -215,12 +249,14 @@ TEST(Array1DTest, pointwise_mult)
 
 TEST(Array1DTest, pointwise_divide)
 {
-    Array1D<Real> x(5);
+    mpi::Communicator comm(MPI_COMM_WORLD);
+
+    Array1D<Real> x(comm, 5);
     assign(x, { 1, -2, 6, -4, 5 });
-    Array1D<Real> y(5);
+    Array1D<Real> y(comm, 5);
     assign(y, { 2, 1, -2, -4, 20 });
 
-    Array1D<Real> w(5);
+    Array1D<Real> w(comm, 5);
     pointwise_divide(w, x, y);
 
     EXPECT_NEAR(w[0], 0.5, 1e-15);
@@ -232,9 +268,11 @@ TEST(Array1DTest, pointwise_divide)
 
 TEST(Array1DTest, copy)
 {
-    Array1D<Real> x(5);
+    mpi::Communicator comm(MPI_COMM_WORLD);
+
+    Array1D<Real> x(comm, 5);
     assign(x, { 1., -2., 6., -4., 5. });
-    Array1D<Real> y(5);
+    Array1D<Real> y(comm, 5);
     copy(x, y);
 
     EXPECT_NEAR(y[0], 1., 1e-15);

@@ -57,19 +57,21 @@ TEST(FEShapeFns, grad_shape_tet4)
 
 TEST(FEShapeFns, calc_grad_shape_2d)
 {
+    mpi::Communicator comm(MPI_COMM_WORLD);
+
     const ElementType ELEM_TYPE = TRI3;
     const int DIM = 2;
     const int n_elems = 2;
     const int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE);
-    Array1D<DenseVector<Real, DIM>> coords(4);
+    Array1D<DenseVector<Real, DIM>> coords(comm, 4);
     coords[0] = DenseVector<Real, DIM>({ 0, 0. });
     coords[1] = DenseVector<Real, DIM>({ 1, 0. });
     coords[2] = DenseVector<Real, DIM>({ 0, 1. });
     coords[3] = DenseVector<Real, DIM>({ 1, 1. });
-    Array1D<DenseVector<Int, N_ELEM_NODES>> connect(n_elems);
+    Array1D<DenseVector<Int, N_ELEM_NODES>> connect(comm, n_elems);
     connect[0] = DenseVector<Int, N_ELEM_NODES>({ 0, 1, 2 });
     connect[1] = DenseVector<Int, N_ELEM_NODES>({ 1, 3, 2 });
-    Array1D<Real> volumes(n_elems);
+    Array1D<Real> volumes(comm, n_elems);
     fe::calc_volumes<ELEM_TYPE, DIM>(coords, connect, volumes);
     auto grad_sh = fe::calc_grad_shape<ELEM_TYPE, DIM>(coords, connect, volumes);
 

@@ -31,7 +31,7 @@ Array1D<DenseVector<Real, DIM>>
 coordinates(const UnstructuredMesh & mesh)
 {
     auto vtx_range = mesh.get_vertex_range();
-    Array1D<DenseVector<Real, DIM>> coords(vtx_range);
+    Array1D<DenseVector<Real, DIM>> coords(mesh.get_comm(), vtx_range);
     Vector vc = mesh.get_coordinates_local();
     auto coord_vals = vc.borrow_array();
     Int j = 0;
@@ -50,7 +50,7 @@ connectivity(const UnstructuredMesh & mesh)
 {
     CALL_STACK_MSG();
     auto n_cells = mesh.get_num_cells();
-    Array1D<DenseVector<Int, N_ELEM_NODES>> connect(n_cells);
+    Array1D<DenseVector<Int, N_ELEM_NODES>> connect(mesh.get_comm(), n_cells);
     for (auto elem_id : mesh.get_cell_range()) {
         auto cell_conn = mesh.get_connectivity(elem_id);
         for (Int i = 0; i < N_ELEM_NODES; ++i)
@@ -72,7 +72,7 @@ common_elements_by_node(const UnstructuredMesh & mesh)
     CALL_STACK_MSG();
     auto n_all_cells = mesh.get_num_all_cells();
     auto n_nodes = mesh.get_num_vertices();
-    Array1D<std::vector<Int>> nelcom(n_nodes);
+    Array1D<std::vector<Int>> nelcom(mesh.get_comm(), n_nodes);
     for (auto & cell : mesh.get_cell_range()) {
         const auto & node_ids = mesh.get_connectivity(cell);
         for (Int j = 0; j < N_ELEM_NODES; ++j)
@@ -156,7 +156,7 @@ Array1D<Real>
 calc_element_length(const Array1D<DenseMatrix<Real, DIM, N_ELEM_NODES>> & grad_phi)
 {
     CALL_STACK_MSG();
-    Array1D<Real> elem_lengths(grad_phi.size());
+    Array1D<Real> elem_lengths(grad_phi.get_comm(), grad_phi.size());
     for (Int ie = 0; ie < grad_phi.size(); ++ie)
         elem_lengths[ie] = element_length<ELEM_TYPE, DIM>(grad_phi[ie]);
     return elem_lengths;
@@ -177,7 +177,7 @@ calc_nodal_radius<CARTESIAN, 1>(const Array1D<DenseVector<Real, 1>> & coords)
 {
     CALL_STACK_MSG();
     auto n = coords.size();
-    Array1D<Real> rad(n);
+    Array1D<Real> rad(coords.get_comm(), n);
     for (Int in = 0; in < n; ++in)
         rad[in] = 1.;
     return rad;
@@ -189,7 +189,7 @@ calc_nodal_radius<CARTESIAN, 2>(const Array1D<DenseVector<Real, 2>> & coords)
 {
     CALL_STACK_MSG();
     auto n = coords.size();
-    Array1D<Real> rad(n);
+    Array1D<Real> rad(coords.get_comm(), n);
     for (Int in = 0; in < n; ++in)
         rad[in] = 1.;
     return rad;
@@ -201,7 +201,7 @@ calc_nodal_radius<CARTESIAN, 3>(const Array1D<DenseVector<Real, 3>> & coords)
 {
     CALL_STACK_MSG();
     auto n = coords.size();
-    Array1D<Real> rad(n);
+    Array1D<Real> rad(coords.get_comm(), n);
     for (Int in = 0; in < n; ++in)
         rad[in] = 1.;
     return rad;
@@ -214,7 +214,7 @@ calc_nodal_radius<AXISYMMETRIC, 2>(const Array1D<DenseVector<Real, 2>> & coords)
     // symmetric around x-axis
     CALL_STACK_MSG();
     auto n = coords.size();
-    Array1D<Real> rad(n);
+    Array1D<Real> rad(coords.get_comm(), n);
     for (Int in = 0; in < n; ++in)
         rad[in] = coords[in](1);
     return rad;
