@@ -62,7 +62,7 @@ jobs:
             petsc==${{ matrix.petsc }} \
             fmt=11.* \
             yaml-cpp=0.8.0 \
-            exodusIIcpp=3.* \
+            exodusIIcpp=3.1 \
             teciocpp \
             gtest \
             lcov
