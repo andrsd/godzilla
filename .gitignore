@@ -3,4 +3,5 @@
 .idea
 .zed
 .vscode
+.claude
 __pycache__
