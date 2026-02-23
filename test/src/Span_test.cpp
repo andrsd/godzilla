@@ -7,7 +7,7 @@ TEST(SpanTest, ctor_empty)
 {
     Span<Int> sp;
     EXPECT_EQ(sp.size(), 0);
-    EXPECT_TRUE(sp.empty());
+    EXPECT_TRUE(sp.is_empty());
 }
 
 TEST(SpanTest, ctor_vector)
@@ -19,7 +19,7 @@ TEST(SpanTest, ctor_vector)
     EXPECT_EQ(sp[1], 5);
     EXPECT_EQ(sp[2], 7);
     EXPECT_EQ(sp[3], 9);
-    EXPECT_FALSE(sp.empty());
+    EXPECT_FALSE(sp.is_empty());
 }
 
 TEST(SpanTest, ctor_array)

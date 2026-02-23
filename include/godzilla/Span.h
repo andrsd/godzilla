@@ -161,7 +161,7 @@ public:
     }
 
     constexpr bool
-    empty() const noexcept
+    is_empty() const noexcept
     {
         return this->size_ == 0;
     }
