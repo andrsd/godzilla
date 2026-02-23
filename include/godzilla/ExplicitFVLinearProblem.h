@@ -47,6 +47,7 @@ protected:
 private:
     SNESolver create_sne_solver() override;
     void compute_rhs_local(Real time, const Vector & x, Vector & F) override;
+    void output_with(FileOutput & out) override;
 
 public:
     static Parameters parameters();

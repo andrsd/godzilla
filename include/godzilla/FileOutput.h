@@ -12,9 +12,6 @@ namespace fs = std::filesystem;
 
 namespace godzilla {
 
-class DiscreteProblemInterface;
-class UnstructuredMesh;
-
 /// Base class for file output
 ///
 class FileOutput : public Output {

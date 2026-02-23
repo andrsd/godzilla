@@ -576,48 +576,6 @@ DiscreteProblemOutputInterface::get_mesh() const
     return this->dpi->get_mesh();
 }
 
-void
-DiscreteProblemOutputInterface::add_var_names(FieldID fid, std::vector<std::string> & var_names)
-{
-    CALL_STACK_MSG();
-    auto name = this->dpi->get_field_name(fid).value();
-    Int nc = this->dpi->get_field_num_components(fid).value();
-    if (nc == 1)
-        var_names.push_back(name);
-    else {
-        for (Int c = 0; c < nc; ++c) {
-            auto comp_name = this->dpi->get_field_component_name(fid, c).value();
-            String s;
-            if (comp_name.length() == 0)
-                s = fmt::format("{}_{}", name, c);
-            else
-                s = fmt::format("{}", comp_name);
-            var_names.push_back(s);
-        }
-    }
-}
-
-void
-DiscreteProblemOutputInterface::add_aux_var_names(FieldID fid, std::vector<std::string> & var_names)
-{
-    CALL_STACK_MSG();
-    auto name = this->dpi->get_aux_field_name(fid).value();
-    auto nc = this->dpi->get_aux_field_num_components(fid).value();
-    if (nc == 1)
-        var_names.push_back(name);
-    else {
-        for (Int c = 0; c < nc; ++c) {
-            auto comp_name = this->dpi->get_aux_field_component_name(fid, c).value();
-            String s;
-            if (comp_name.length() == 0)
-                s = fmt::format("{}_{}", name, c);
-            else
-                s = fmt::format("{}", comp_name);
-            var_names.push_back(s);
-        }
-    }
-}
-
 Ref<const DiscreteProblemInterface>
 DiscreteProblemOutputInterface::get_discrete_problem_interface() const
 {

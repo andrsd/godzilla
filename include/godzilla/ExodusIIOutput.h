@@ -39,44 +39,19 @@ public:
 protected:
     void open_file();
     void write_info();
-    void write_mesh();
-    void write_mesh_continuous();
-    void write_mesh_discontinuous();
-    void write_coords_continuous(int n_dim);
-    void write_coords_discontinuous(int n_dim);
-    void write_elements();
-    void write_node_sets();
-    void write_face_sets();
     void write_all_variable_names();
-    void write_variables();
-    void write_field_variables();
-    void write_nodal_variables_continuous();
-    void write_nodal_variables_discontinuous();
     void write_elem_variables();
-    void
-    write_block_elem_variables(int blk_id, Int n_elems_in_block = 0, const Int * cells = nullptr);
     void write_global_variables();
-    void write_block_connectivity_continuous(int blk_id,
-                                             PolytopeType polytope_type,
-                                             Int n_elems_in_block,
-                                             const Int * cells);
-    void write_block_connectivity_discontinuous(int blk_id,
-                                                PolytopeType polytope_type,
-                                                Int n_elems_in_block,
-                                                const Int * /*cells*/);
-    int get_num_nodes_per_element();
 
 private:
     String get_file_ext() const override;
+    void output_step(const DiscreteProblemInterface & dpi);
+    void output_step(const DGProblemInterface & dpi);
 
     /// Unstructured mesh
     Ref<UnstructuredMesh> mesh;
-    bool cont;
-    bool discont;
     /// Variable names to be stored
     std::vector<String> variable_names;
-    /// DG problem interface
-    Optional<Ref<DGProblemInterface>> dgpi;
     /// ExodusII file
     Qtr<exodusIIcpp::File> exo;
     /// Step number
@@ -90,23 +65,16 @@ private:
     /// List of global variable names to output
     std::vector<std::string> global_var_names;
     /// List of nodal variable field IDs
-    std::vector<FieldID> nodal_var_fids;
+    std::vector<std::pair<FieldID, int>> nodal_var_fids;
     /// List of nodal auxiliary variable field IDs
-    std::vector<FieldID> nodal_aux_var_fids;
+    std::vector<std::pair<FieldID, int>> nodal_aux_var_fids;
     /// List of elemental variable field IDs
-    std::vector<FieldID> elem_var_fids;
+    std::vector<std::pair<FieldID, int>> elem_var_fids;
     /// List of elemental auxiliary variable field IDs
-    std::vector<FieldID> elem_aux_var_fids;
-
-    /// Block ID used in ExodusII file when there are not cell sets
-    static const int SINGLE_BLK_ID;
+    std::vector<std::pair<FieldID, int>> elem_aux_var_fids;
 
 public:
     static Parameters parameters();
-
-    static const char * get_elem_type(PolytopeType elem_type);
-    static const Int * get_elem_node_ordering(PolytopeType elem_type);
-    static const Int * get_elem_side_ordering(PolytopeType elem_type);
 };
 
 } // namespace godzilla

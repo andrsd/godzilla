@@ -9,6 +9,7 @@
 #include "godzilla/Utils.h"
 #include "godzilla/Exception.h"
 #include "godzilla/Assert.h"
+#include "godzilla/IO.h"
 #include <set>
 #include <fmt/chrono.h>
 
@@ -205,6 +206,7 @@ TecplotOutput::open_file()
     CALL_STACK_MSG();
 #ifdef GODZILLA_WITH_TECIOCPP
     try {
+        auto dpi = get_discrete_problem_interface();
         this->file = new teciocpp::File(get_comm());
 
         const std::vector<String> coord_names = { "x", "y", "z" };
@@ -213,10 +215,14 @@ TecplotOutput::open_file()
         std::vector<std::string> var_names;
         for (Int i = 0; i < dim; ++i)
             var_names.push_back(coord_names[i]);
-        for (auto & fid : this->nodal_var_fids)
-            add_var_names(fid, var_names);
-        for (auto & fid : this->nodal_aux_var_fids)
-            add_aux_var_names(fid, var_names);
+        for (auto & fid : this->nodal_var_fids) {
+            auto names = io::get_var_names(*dpi, fid);
+            var_names.insert(var_names.end(), names.begin(), names.end());
+        }
+        for (auto & fid : this->nodal_aux_var_fids) {
+            auto names = io::get_aux_var_names(*dpi, fid);
+            var_names.insert(var_names.end(), names.begin(), names.end());
+        }
         this->file->create(get_file_name(), "", var_names);
     }
     catch (teciocpp::Exception & e) {

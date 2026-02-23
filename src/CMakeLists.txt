@@ -52,10 +52,10 @@ target_link_libraries(
         fmt::fmt
         spdlog::spdlog
         mpicpp-lite::mpicpp-lite
+        exodusIIcpp::exodusIIcpp
         HDF5::HDF5
         PETSc::petsc
     PRIVATE
-        exodusIIcpp::exodusIIcpp
         yaml-cpp::yaml-cpp
 )
 if (GODZILLA_WITH_MPI)

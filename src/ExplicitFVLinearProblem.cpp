@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 #include "godzilla/CallStack.h"
+#include "godzilla/DiscreteProblemInterface.h"
 #include "godzilla/ExplicitFVLinearProblem.h"
 
 namespace godzilla {
@@ -141,6 +142,14 @@ ExplicitFVLinearProblem::post_step()
     update_aux_vector();
     compute_postprocessors(ExecuteOn::TIMESTEP);
     output(ExecuteOn::TIMESTEP);
+}
+
+void
+ExplicitFVLinearProblem::output_with(FileOutput & out)
+{
+    CALL_STACK_MSG();
+    compute_solution_vector_local();
+    out.output_step();
 }
 
 } // namespace godzilla

@@ -172,11 +172,11 @@ void
 Problem::output(ExecuteOn flag)
 {
     CALL_STACK_MSG();
-    for (auto & o : this->file_outputs)
-        if (o->should_output(flag)) {
+    for (auto & out : this->file_outputs)
+        if (out->should_output(flag)) {
             if (this->output_monitor_delegate)
-                this->output_monitor_delegate(o->get_file_name().string());
-            o->output_step();
+                this->output_monitor_delegate(out->get_file_name().string());
+            output_with(*out);
         }
 }
 
@@ -444,6 +444,13 @@ void
 Problem::output_monitor(String file_name) const
 {
     lprintln(9, "Output to file: {}", file_name);
+}
+
+void
+Problem::output_with(FileOutput & out)
+{
+    CALL_STACK_MSG();
+    out.output_step();
 }
 
 void

@@ -569,9 +569,6 @@ public:
 protected:
     Ref<UnstructuredMesh> get_mesh() const;
 
-    void add_var_names(FieldID fid, std::vector<std::string> & var_names);
-    void add_aux_var_names(FieldID fid, std::vector<std::string> & var_names);
-
     Ref<const DiscreteProblemInterface> get_discrete_problem_interface() const;
     Ref<DiscreteProblemInterface> get_discrete_problem_interface();
 
