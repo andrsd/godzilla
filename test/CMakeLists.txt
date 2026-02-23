@@ -42,8 +42,6 @@ target_link_libraries(
     PRIVATE
         yaml-cpp::yaml-cpp
         godzilla
-        PETSc::petsc
-        mpicpp-lite::mpicpp-lite
         ${CMAKE_DL_LIBS}
         GTest::gmock_main
 )
