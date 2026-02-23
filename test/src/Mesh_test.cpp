@@ -182,7 +182,7 @@ TEST(MeshTest, get_neighbors)
 
     if (app.get_comm().size() == 1) {
         auto neighbors = mesh->get_neighbors();
-        EXPECT_TRUE(neighbors.empty());
+        EXPECT_TRUE(neighbors.is_empty());
     }
 }
 
