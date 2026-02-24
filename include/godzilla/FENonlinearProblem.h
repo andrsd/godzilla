@@ -118,6 +118,7 @@ private:
     void compute_residual_local(const Vector & x, Vector & f);
     void compute_jacobian_local(const Vector & x, Matrix & J, Matrix & Jp);
     void compute_boundary_local(Vector & x);
+    void output_with(FileOutput & out) override;
 
     enum State { INITIAL, FINAL } state;
     /// Delegate for compute_boundary

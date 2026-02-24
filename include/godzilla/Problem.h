@@ -315,6 +315,8 @@ private:
     /// @param file_name Name of the output file
     void output_monitor(String file_name) const;
 
+    virtual void output_with(FileOutput & out);
+
     /// Mesh
     Optional<Ref<Mesh>> mesh;
 

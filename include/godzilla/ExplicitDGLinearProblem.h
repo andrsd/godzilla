@@ -46,6 +46,7 @@ protected:
 
 private:
     SNESolver create_sne_solver() override;
+    void output_with(FileOutput & out) override;
 
 public:
     static Parameters parameters();

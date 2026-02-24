@@ -2,7 +2,9 @@
 // SPDX-License-Identifier: MIT
 
 #include "godzilla/FEProblemInterface.h"
+#include "godzilla/DiscreteProblemInterface.h"
 #include "godzilla/Error.h"
+#include "godzilla/FENonlinearProblem.h"
 #include "godzilla/Types.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Problem.h"
@@ -1780,6 +1782,13 @@ FEProblemInterface::evaluate_field_jets(PetscDS ds,
         f_offset += n_cf;
         d_offset += n_bf;
     }
+}
+
+void
+FENonlinearProblem::output_with(FileOutput & out)
+{
+    compute_solution_vector_local();
+    out.output_step();
 }
 
 } // namespace godzilla
