@@ -288,6 +288,16 @@ TEST(IndexSetTest, oper_bool)
     EXPECT_TRUE(cis1);
 }
 
+TEST(IndexSetTest, is_empty)
+{
+    TestApp app;
+    if (app.get_comm().size() != 1)
+        return;
+
+    auto is = IndexSet::create_general(app.get_comm(), {});
+    EXPECT_TRUE(is.is_empty());
+}
+
 TEST(IndexSetTest, range)
 {
     TestApp app;
