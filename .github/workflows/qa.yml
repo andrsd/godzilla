@@ -30,7 +30,7 @@ jobs:
             rhash=1.4.3 \
             make \
             mpich-mpicxx \
-            mpicpp-lite=2.2.* \
+            mpicpp-lite=2.4.* \
             spdlog=1.* \
             fmt=11.* \
             petsc==3.23.* \
