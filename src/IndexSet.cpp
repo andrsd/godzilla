@@ -147,6 +147,14 @@ IndexSet::empty() const
     return get_size() == 0;
 }
 
+bool
+IndexSet::is_empty() const
+{
+    CALL_STACK_MSG();
+    GODZILLA_ASSERT_TRUE(this->obj != nullptr, "IndexSet is null");
+    return get_size() == 0;
+}
+
 void
 IndexSet::shift(Int offset)
 {
