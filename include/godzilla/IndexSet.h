@@ -146,7 +146,8 @@ public:
     /// Checks if the IndexSet is empty (i.e., has no indices)
     ///
     /// @return `true` if the index set is empty, `false` otherwise
-    bool empty() const;
+    [[deprecated]] bool empty() const;
+    bool is_empty() const;
 
     /// Shift all indices by given offset
     ///
