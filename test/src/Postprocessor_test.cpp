@@ -39,6 +39,7 @@ TEST_F(PostprocessorTest, exec_masks_1)
     auto pars = Postprocessor::parameters();
     pars.set<Ref<App>>("app", ref(*this->app));
     pars.set<Ref<Problem>>("_problem", prob);
+    pars.set<String>("name", "pps");
     pars.set<ExecuteOnFlags>("on", ExecuteOn::NONE);
     auto pp = prob->add_postprocessor<MockPostprocessor>(pars);
 
@@ -54,6 +55,7 @@ TEST_F(PostprocessorTest, exec_masks_2)
     auto pars = Postprocessor::parameters();
     pars.set<Ref<App>>("app", ref(*this->app));
     pars.set<Ref<Problem>>("_problem", prob);
+    pars.set<String>("name", "pps");
     pars.set<ExecuteOnFlags>("on", ExecuteOn::FINAL);
     auto pp = prob->add_postprocessor<MockPostprocessor>(pars);
 
@@ -70,6 +72,7 @@ TEST_F(PostprocessorTest, exec_masks_3)
     auto pars = Postprocessor::parameters();
     pars.set<Ref<App>>("app", ref(*this->app));
     pars.set<Ref<Problem>>("_problem", prob);
+    pars.set<String>("name", "pps");
     pars.set<ExecuteOnFlags>("on", ExecuteOn::FINAL | ExecuteOn::INITIAL | ExecuteOn::TIMESTEP);
     auto pp = prob->add_postprocessor<MockPostprocessor>(pars);
 
@@ -93,6 +96,7 @@ TEST_F(PostprocessorTest, empty_on)
     auto pars = Postprocessor::parameters();
     pars.set<Ref<App>>("app", ref(*app));
     pars.set<Ref<Problem>>("_problem", prob);
+    pars.set<String>("name", "pps");
     pars.set<ExecuteOnFlags>("on", 0);
 
     EXPECT_DEATH(MockPostprocessor pp(pars),
@@ -107,6 +111,7 @@ TEST_F(PostprocessorTest, none_plus_mask)
     auto pars = Postprocessor::parameters();
     pars.set<Ref<App>>("app", ref(*this->app));
     pars.set<Ref<Problem>>("_problem", prob);
+    pars.set<String>("name", "pps");
     pars.set<ExecuteOnFlags>("on", ExecuteOn::NONE | ExecuteOn::FINAL | ExecuteOn::TIMESTEP);
 
     EXPECT_DEATH(MockPostprocessor pp(pars),
@@ -120,6 +125,7 @@ TEST_F(PostprocessorTest, default_execute_on_mask)
     auto pars = Postprocessor::parameters();
     pars.set<Ref<App>>("app", ref(*this->app));
     pars.set<Ref<Problem>>("_problem", prob);
+    pars.set<String>("name", "pps");
     auto pp = prob->add_postprocessor<MockPostprocessor>(pars);
 
     EXPECT_FALSE(pp->execute_on() & ExecuteOn::FINAL);

@@ -58,6 +58,7 @@ TEST(L2DiffTest, compute)
 
     auto ps_params = L2Error::parameters();
     ps_params.set<Ref<App>>("app", ref(app));
+    ps_params.set<String>("name", "l2err");
     auto ps = prob->add_postprocessor<L2Error>(ps_params);
 
     prob->create();
