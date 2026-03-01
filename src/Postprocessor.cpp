@@ -25,6 +25,8 @@ Postprocessor::Postprocessor(const Parameters & pars) :
     last_execute_time(std::nan(""))
 {
     CALL_STACK_MSG();
+    expect_true(get_name().length() > 0, "Postprocessor must set the 'name' parameter");
+
     if (this->on_mask.has_flags()) {
         if (none_with_flags(this->on_mask))
             error("The 'none' execution flag can be used only by itself.");
