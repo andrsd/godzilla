@@ -378,6 +378,7 @@ Problem::add_postprocessor(Parameters & pars)
     auto obj = Qtr<T>::alloc(pars);
     auto pp = obj.get();
     auto name = pp->get_name();
+    expect_true(this->pps.count(name) == 0, "Postprocessors with name '{}' already exists.", name);
     this->pps_names.push_back(name);
     this->pps[name] = std::move(obj);
     return Ref<T>(*pp);
