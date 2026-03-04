@@ -190,6 +190,8 @@ public:
             return default_value;
         auto par = it->second.get();
         auto tpar = dynamic_cast<Parameter<T> *>(par);
+        if (tpar == nullptr)
+            throw Exception("Parameter '{}' has unexpected type ({})", name, par->type());
         if (tpar->valid)
             return tpar->get();
         else
