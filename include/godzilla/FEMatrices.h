@@ -270,6 +270,17 @@ mass_surface<TRI3, 2>()
     return m;
 }
 
+template <>
+inline DenseMatrix<Real, 3>
+mass_surface<TET4, 3>()
+{
+    DenseMatrix<Real, 3> m;
+    m.set_row(0, { 2., 1., 1. });
+    m.set_row(1, { 1., 2., 1. });
+    m.set_row(2, { 1., 1., 2. });
+    return m;
+}
+
 //
 
 template <ElementType ELEM_TYPE, Int N_BND_NODES>
