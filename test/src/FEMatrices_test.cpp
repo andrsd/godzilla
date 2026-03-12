@@ -225,6 +225,20 @@ TEST(FEMatricesTest, mass_surface_tri3)
     EXPECT_EQ(m(1, 1), 2.);
 }
 
+TEST(FEMatricesTest, mass_surface_tet4)
+{
+    auto m = fe::matrix::mass_surface<godzilla::TET4, 3>();
+    EXPECT_EQ(m(0, 0), 2.);
+    EXPECT_EQ(m(0, 1), 1.);
+    EXPECT_EQ(m(0, 2), 1.);
+    EXPECT_EQ(m(1, 0), 1.);
+    EXPECT_EQ(m(1, 1), 2.);
+    EXPECT_EQ(m(1, 2), 1.);
+    EXPECT_EQ(m(2, 0), 1.);
+    EXPECT_EQ(m(2, 1), 1.);
+    EXPECT_EQ(m(2, 2), 2.);
+}
+
 TEST(FEMatricesTest, mass_surface_rz_edge2)
 {
     DenseVector<Real, 1> rad_n({ 10. });
