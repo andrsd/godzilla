@@ -10,12 +10,6 @@ TEST(MathTest, sign)
     EXPECT_EQ(math::sign(10.), 1.);
 }
 
-TEST(MathTest, sqr)
-{
-    EXPECT_DOUBLE_EQ(math::sqr(4.), 16.);
-    EXPECT_EQ(math::sqr(4), 16);
-}
-
 TEST(MathTest, max)
 {
     EXPECT_DOUBLE_EQ(math::max(4., 8.), 8.);

@@ -77,7 +77,7 @@ sign(T val)
 /// @param val Value to be squared
 /// @return Square of the value, i.e. `val * val`
 template <typename T>
-T
+[[deprecated("Use math::pow<2>() instead")]] T
 sqr(T val)
 {
     return val * val;
