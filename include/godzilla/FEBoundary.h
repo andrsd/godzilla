@@ -57,7 +57,8 @@ public:
     create() override
     {
         CALL_STACK_MSG();
-        this->vtx_idxs = this->vertices.borrow_indices();
+        if (this->vertices)
+            this->vtx_idxs = this->vertices.borrow_indices();
     }
 
     void
@@ -83,7 +84,10 @@ public:
     num_vertices() const
     {
         CALL_STACK_MSG();
-        return this->vertices.get_local_size();
+        if (!this->vertices.is_null())
+            return this->vertices.get_local_size();
+        else
+            return 0;
     }
 
     /// Iterate over all boundary vertices
