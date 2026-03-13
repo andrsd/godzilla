@@ -120,14 +120,16 @@ public:
     {
         CALL_STACK_MSG();
         expect_true(mesh->get_dimension() == DIM, "Mesh dimension mismatch");
-        this->facets.sort();
+        if (!this->facets.is_null())
+            this->facets.sort();
     }
 
     NaturalBoundaryInfo(Ref<UnstructuredMesh> mesh, IndexSet facets) : mesh(mesh), facets(facets)
     {
         CALL_STACK_MSG();
         expect_true(mesh->get_dimension() == DIM, "Mesh dimension mismatch");
-        this->facets.sort();
+        if (!this->facets.is_null())
+            this->facets.sort();
     }
 
     void
@@ -157,7 +159,10 @@ public:
     num_facets() const
     {
         CALL_STACK_MSG();
-        return this->facets.get_local_size();
+        if (!this->facets.is_null())
+            return this->facets.get_local_size();
+        else
+            return 0;
     }
 
     /// Get facet index for a given local boundary facet index
