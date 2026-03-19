@@ -99,6 +99,11 @@ TEST(MathTest, log)
     EXPECT_NEAR(math::log(5., 625.), 4., 1e-15);
 }
 
+TEST(MathTest, exp)
+{
+    EXPECT_NEAR(math::exp(2.), 7.3890560989, 1e-9);
+}
+
 TEST(MathTest, is_close)
 {
     EXPECT_TRUE(math::is_close(1., 1. + 1e-6, math::absolute(1e-5)));

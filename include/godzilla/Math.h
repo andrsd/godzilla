@@ -316,6 +316,17 @@ log(T base, T arg)
     return std::log(arg) / std::log(base);
 }
 
+/// Computes e (Euler's number) raised to the power of `x`
+///
+/// @param x Exponent
+template <typename T>
+    requires std::is_floating_point_v<T>
+T
+exp(T x)
+{
+    return std::exp(x);
+}
+
 /// Check if 2 objects are close with a tolerance
 ///
 /// @param a First object to check
