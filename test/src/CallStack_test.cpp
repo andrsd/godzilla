@@ -1,9 +1,6 @@
 #include "godzilla/CallStack.h"
 #include "gmock/gmock.h"
 
-using namespace godzilla;
-using namespace testing;
-
 void
 segfault()
 {
@@ -14,13 +11,15 @@ segfault()
 TEST(CallStackTest, abort)
 {
     CALL_STACK_MSG();
-    EXPECT_EXIT(segfault(), ::ExitedWithCode(254), "Caught signal 11 \\(Segmentation violation\\)");
+    EXPECT_EXIT(segfault(),
+                testing::ExitedWithCode(254),
+                "Caught signal 11 \\(Segmentation violation\\)");
 }
 
 TEST(CallStackTest, new_callstack_is_empty)
 {
     CALL_STACK_MSG();
-    godzilla::internal::CallStack callstack;
+    godzilla::CallStack callstack;
     EXPECT_EQ(callstack.get_size(), 0);
 }
 
@@ -30,7 +29,7 @@ void
 fn3()
 {
     CALL_STACK_MSG();
-    godzilla::internal::get_callstack().dump();
+    godzilla::get_callstack().dump();
 }
 
 void
@@ -41,7 +40,7 @@ fn2()
 }
 
 void
-fn1(int i, String s)
+fn1(int i, godzilla::String s)
 {
     CALL_STACK_MSG();
     fn2();
@@ -56,20 +55,9 @@ TEST(CallStackTest, dump)
     unit_test::fn1(1, "string");
 
     auto err = testing::internal::GetCapturedStderr();
-    EXPECT_THAT(err, StartsWith("Call stack:"));
-    EXPECT_THAT(err, HasSubstr("  #0: void unit_test::fn3()"));
-    EXPECT_THAT(err, HasSubstr("  #1: void unit_test::fn2()"));
-    EXPECT_THAT(err, HasSubstr("  #2: void unit_test::fn1("));
+    EXPECT_THAT(err, testing::StartsWith("Call stack:"));
+    EXPECT_THAT(err, testing::HasSubstr("  #0: void unit_test::fn3()"));
+    EXPECT_THAT(err, testing::HasSubstr("  #1: void unit_test::fn2()"));
+    EXPECT_THAT(err, testing::HasSubstr("  #2: void unit_test::fn1("));
 #endif
-}
-
-TEST(CallStackTest, stack)
-{
-    godzilla::internal::CallStack::Msg msg1(__FILE__, __LINE__, "fn1");
-    godzilla::internal::CallStack::Msg msg2(__FILE__, __LINE__, "fn2");
-
-    auto & cs = godzilla::internal::get_callstack();
-    ASSERT_EQ(cs.get_size(), 2);
-    EXPECT_EQ(cs.at(0)->msg, "fn1");
-    EXPECT_EQ(cs.at(1)->msg, "fn2");
 }

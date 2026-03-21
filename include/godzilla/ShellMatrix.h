@@ -50,7 +50,7 @@ public:
                                              (void (*)()) ShellMatrix::invoke_matmult_op_delegate));
         }
         else {
-            throw Exception("Unsupported operation: {}", static_cast<int>(op));
+            throw Exception(fmt::format("Unsupported operation: {}", static_cast<int>(op)));
         }
     }
 

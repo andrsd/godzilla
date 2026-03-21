@@ -129,7 +129,7 @@ public:
         auto par = it->second.get();
         auto tpar = dynamic_cast<Parameter<V> *>(par);
         if (tpar == nullptr)
-            throw Exception("Parameter '{}' has unexpected type ({})", name, par->type());
+            throw Exception(fmt::format("Parameter '{}' has unexpected type ({})", name, par->type()));
         if (tpar->valid)
             return tpar->get();
         else
@@ -146,17 +146,17 @@ public:
         CALL_STACK_MSG();
         auto it = this->params.find(name);
         if (it == this->params.end())
-            throw Exception("No parameter '{}' found.", name);
+            throw Exception(fmt::format("No parameter '{}' found.", name));
 
         auto par = it->second.get();
         auto tpar = dynamic_cast<Parameter<LateRef<U>> *>(par);
         if (tpar == nullptr)
-            throw Exception("Parameter '{}' has unexpected type ({})", name, par->type());
+            throw Exception(fmt::format("Parameter '{}' has unexpected type ({})", name, par->type()));
         if (tpar->valid)
             return tpar->get().get();
         if (tpar->required)
-            throw Exception("Required parameter '{}' is not set", name);
-        throw Exception("Parameter '{}' is uninitialized", name);
+            throw Exception(fmt::format("Required parameter '{}' is not set", name));
+        throw Exception(fmt::format("Parameter '{}' is uninitialized", name));
     }
 
     /// Get parameter value for `T`
@@ -167,17 +167,17 @@ public:
         CALL_STACK_MSG();
         auto it = this->params.find(name);
         if (it == this->params.end())
-            throw Exception("No parameter '{}' found.", name);
+            throw Exception(fmt::format("No parameter '{}' found.", name));
 
         auto par = it->second.get();
         auto tpar = dynamic_cast<Parameter<T> *>(par);
         if (tpar == nullptr)
-            throw Exception("Parameter '{}' has unexpected type ({})", name, par->type());
+            throw Exception(fmt::format("Parameter '{}' has unexpected type ({})", name, par->type()));
         if (tpar->valid)
             return tpar->get();
         if (tpar->required)
-            throw Exception("Required parameter '{}' is not set", name);
-        throw Exception("Parameter '{}' is uninitialized", name);
+            throw Exception(fmt::format("Required parameter '{}' is not set", name));
+        throw Exception(fmt::format("Parameter '{}' is uninitialized", name));
     }
 
     template <typename T>
@@ -191,7 +191,7 @@ public:
         auto par = it->second.get();
         auto tpar = dynamic_cast<Parameter<T> *>(par);
         if (tpar == nullptr)
-            throw Exception("Parameter '{}' has unexpected type ({})", name, par->type());
+            throw Exception(fmt::format("Parameter '{}' has unexpected type ({})", name, par->type()));
         if (tpar->valid)
             return tpar->get();
         else
@@ -343,7 +343,7 @@ public:
         CALL_STACK_MSG();
         auto it = this->params.find(name);
         if (it == this->params.end())
-            throw Exception("No parameter '{}' found.", name);
+            throw Exception(fmt::format("No parameter '{}' found.", name));
         auto par = it->second.get();
         par->required = true;
     }

@@ -566,7 +566,7 @@ public:
         if ((i >= 0) && (i < size()))
             return DynDenseMatrix<T>::get(i, 0);
         else
-            throw Exception("Index ({}) is out of vector dimension ({})", i, size());
+            throw Exception(fmt::format("Index ({}) is out of vector dimension ({})", i, size()));
     }
 
     /// Get entry at specified location for writing
@@ -579,7 +579,7 @@ public:
         if ((i >= 0) && (i < size()))
             return DynDenseMatrix<T>::set(i, 0);
         else
-            throw Exception("Index ({}) is out of vector dimension ({})", i, size());
+            throw Exception(fmt::format("Index ({}) is out of vector dimension ({})", i, size()));
     }
 
     /// Resize the vector
@@ -611,9 +611,9 @@ public:
                 set(i) += a(i);
         }
         else
-            throw Exception("Size of the operand ({}) must match the vector size ({})",
-                            a.size(),
-                            size());
+            throw Exception(fmt::format("Size of the operand ({}) must match the vector size ({})",
+                                        a.size(),
+                                        size()));
     }
 
     /// Add `a` to each element of this vector, i.e. vec[i] += a
@@ -637,9 +637,9 @@ public:
                 set(i) -= a(i);
         }
         else
-            throw Exception("Size of the operand ({}) must match the vector size ({})",
-                            a.size(),
-                            size());
+            throw Exception(fmt::format("Size of the operand ({}) must match the vector size ({})",
+                                        a.size(),
+                                        size()));
     }
 
     /// Normalize this vector
@@ -795,9 +795,9 @@ public:
             return res;
         }
         else
-            throw Exception("Size of the operand ({}) must match the vector size ({})",
-                            a.size(),
-                            size());
+            throw Exception(fmt::format("Size of the operand ({}) must match the vector size ({})",
+                                        a.size(),
+                                        size()));
     }
 
     DynDenseVector<T>
@@ -819,9 +819,9 @@ public:
             return res;
         }
         else
-            throw Exception("Size of the operand ({}) must match the vector size ({})",
-                            a.size(),
-                            size());
+            throw Exception(fmt::format("Size of the operand ({}) must match the vector size ({})",
+                                        a.size(),
+                                        size()));
     }
 
     DynDenseVector<T>
@@ -841,9 +841,8 @@ public:
                 set(i) += a(i);
             return *this;
         }
-        throw Exception("Size of the operand ({}) must match the vector size ({})",
-                        a.size(),
-                        size());
+        throw Exception(
+            format("Size of the operand ({}) must match the vector size ({})", a.size(), size()));
     }
 
     DynDenseVector<T> &
@@ -862,9 +861,8 @@ public:
                 set(i) -= a(i);
             return *this;
         }
-        throw Exception("Size of the operand ({}) must match the vector size ({})",
-                        a.size(),
-                        size());
+        throw Exception(
+            format("Size of the operand ({}) must match the vector size ({})", a.size(), size()));
     }
 };
 
@@ -885,9 +883,8 @@ dot(const DynDenseVector<T> & a, const DynDenseVector<T> & b)
         return dot;
     }
     else
-        throw Exception("Size of vector a ({}) must match size of vector b ({})",
-                        a.size(),
-                        b.size());
+        throw Exception(
+            format("Size of vector a ({}) must match size of vector b ({})", a.size(), b.size()));
 }
 
 /// Pointwise multiplication of 2 column-vectors
@@ -907,9 +904,8 @@ pointwise_mult(const DynDenseVector<T> & a, const DynDenseVector<T> & b)
         return res;
     }
     else
-        throw Exception("Size of vector a ({}) must match size of vector b ({})",
-                        a.size(),
-                        b.size());
+        throw Exception(
+            format("Size of vector a ({}) must match size of vector b ({})", a.size(), b.size()));
 }
 
 /// Pointwise division of 2 column-vectors
@@ -929,9 +925,8 @@ pointwise_div(const DynDenseVector<T> & a, const DynDenseVector<T> & b)
         return res;
     }
     else
-        throw Exception("Size of vector a ({}) must match size of vector b ({})",
-                        a.size(),
-                        b.size());
+        throw Exception(
+            format("Size of vector a ({}) must match size of vector b ({})", a.size(), b.size()));
 }
 
 template <typename T>

@@ -226,7 +226,7 @@ TecplotOutput::open_file()
         this->file->create(get_file_name(), "", var_names);
     }
     catch (teciocpp::Exception & e) {
-        throw Exception("Could not open file '{}' for writing.", get_file_name());
+        throw Exception(fmt::format("Could not open file '{}' for writing.", get_file_name()));
     }
 #endif
 }

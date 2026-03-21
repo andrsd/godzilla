@@ -52,7 +52,7 @@ register_event(const char * name)
         return event_id;
     }
     else
-        throw Exception("PerfLog event '{}' is already registered.", name);
+        throw Exception(fmt::format("PerfLog event '{}' is already registered.", name));
 }
 
 EventID
@@ -69,7 +69,7 @@ get_event_id(const char * name)
     if (event_id != INVALID_EVENT_ID)
         return event_id;
     else
-        throw Exception("Event '{}' was not registered.", name);
+        throw Exception(fmt::format("Event '{}' was not registered.", name));
 }
 
 EventID
@@ -88,7 +88,7 @@ register_stage(const char * name)
         return stage_id;
     }
     else
-        throw Exception("PerfLog stage '{}' is already registered.", name);
+        throw Exception(fmt::format("PerfLog stage '{}' is already registered.", name));
 }
 
 StageID
@@ -105,7 +105,7 @@ get_stage_id(const char * name)
     if (stage_id != INVALID_STAGE_ID)
         return stage_id;
     else
-        throw Exception("Stage '{}' was not registered.", name);
+        throw Exception(fmt::format("Stage '{}' was not registered.", name));
 }
 
 StageID

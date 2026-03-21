@@ -18,7 +18,7 @@ Registry::get(String class_name) const
 {
     auto it = this->classes.find(class_name);
     if (it == this->classes.end())
-        throw Exception("Class '{}' is not registered.", class_name);
+        throw Exception(fmt::format("Class '{}' is not registered.", class_name));
     return it->second;
 }
 

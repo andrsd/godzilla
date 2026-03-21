@@ -3,9 +3,7 @@
 
 #pragma once
 
-#include "godzilla/String.h"
-#include "godzilla/Span.h"
-#include "fmt/format.h"
+#include "godzilla/CallStack.h"
 #include <exception>
 #include <vector>
 
@@ -15,35 +13,44 @@ namespace godzilla {
 /// from
 class Exception : public std::exception {
 public:
-    template <typename... T>
-    Exception(fmt::format_string<T...> format, T... args)
-    {
-        this->msg = fmt::format(format, std::forward<T>(args)...);
-        store_call_stack();
-    }
+    Exception(const std::string & msg,
+              const std::source_location location = std::source_location::current());
+
+    Exception(int rank,
+              const std::string & msg,
+              const std::source_location location = std::source_location::current());
 
     /// Get the exception message
     const char * what() const noexcept override;
 
-    /// Get the call stack from the time the exception occured
-    Span<const String> get_call_stack() const;
+    /// Get location where the exception occured
+    const std::source_location location() const;
+
+    /// Print the call stack from the time the exception occured
+    void print_stack() const;
+
+    int rank() const;
 
 private:
     /// Store call stack
     void store_call_stack();
 
+    /// Rank of the process that threw the exception
+    int mpi_rank = -1;
     /// Error message
-    String msg;
+    std::string msg;
+    /// Location where the exception occured
+    std::source_location loc;
     /// Call stack at the time exception occured
-    std::vector<String> call_stack;
+    std::vector<CallStack::Frame> call_stack;
 };
 
 /// Exception for internal errors
 class InternalError : public Exception {
 public:
-    template <typename... T>
-    InternalError(fmt::format_string<T...> fmt, T... args) :
-        Exception("Internal error: {}", fmt::format(fmt, std::forward<T>(args)...))
+    InternalError(const std::string & msg,
+                  const std::source_location location = std::source_location::current()) :
+        Exception(msg, location)
     {
     }
 };
@@ -51,15 +58,21 @@ public:
 /// Exception for "not implemented"
 class NotImplementedException : public Exception {
 public:
-    template <typename... T>
-    NotImplementedException() : Exception("Not implemented")
+    NotImplementedException(const std::source_location location = std::source_location::current()) :
+        Exception("", location)
     {
     }
 
-    template <typename... T>
-    NotImplementedException(fmt::format_string<T...> fmt, T... args) : Exception(fmt, args...)
+    NotImplementedException(const std::string & msg,
+                            const std::source_location location = std::source_location::current()) :
+        Exception(msg, location)
     {
     }
 };
+
+/// Print an exception to the console
+void print(Exception & e);
+void print(InternalError & e);
+void print(NotImplementedException & e);
 
 } // namespace godzilla

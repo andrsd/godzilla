@@ -355,6 +355,13 @@ operator>>(std::istream & is, String & obj)
     return is;
 }
 
+template <typename... T>
+String
+format(fmt::format_string<T...> fmt, T... args)
+{
+    return fmt::format(fmt, std::forward<T>(args)...);
+}
+
 } // namespace godzilla
 
 template <>

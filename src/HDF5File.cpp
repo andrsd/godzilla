@@ -38,8 +38,8 @@ HDF5File::HDF5File(mpi::Communicator comm, fs::path file_name, FileAccess facces
         throw Exception("Unsupported file access");
 
     if (this->id == H5I_INVALID_HID)
-        throw Exception("Unable to open {} or it is not a valid HDF5 file.",
-                        this->file_name.string());
+        throw Exception(fmt::format("Unable to open {} or it is not a valid HDF5 file.",
+                                    this->file_name.string()));
 }
 
 HDF5File::HDF5File(fs::path file_name, FileAccess faccess) : file_name(std::move(file_name))
@@ -56,8 +56,8 @@ HDF5File::HDF5File(fs::path file_name, FileAccess faccess) : file_name(std::move
         throw Exception("Unsupported file access");
 
     if (this->id == H5I_INVALID_HID)
-        throw Exception("Unable to open {} or it is not a valid HDF5 file.",
-                        this->file_name.string());
+        throw Exception(fmt::format("Unable to open {} or it is not a valid HDF5 file.",
+                                    this->file_name.string()));
 }
 
 HDF5File::~HDF5File()

@@ -148,8 +148,7 @@ main(int argc, char * argv[])
         return 0;
     }
     catch (Exception & e) {
-        fmt::println("{}", e.what());
-        print_call_stack(e.get_call_stack());
+        print(e);
         return -1;
     }
     catch (...) {
