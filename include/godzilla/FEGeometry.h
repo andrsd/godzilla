@@ -89,9 +89,9 @@ normal(Real volume, Real face_volume, const DenseVector<Real, DIM> & grad)
 {
     CALL_STACK_MSG();
     throw NotImplementedException(
-        "Computation of a normal for element '{}' in {} dimensions is not implemented",
-        conv::to_str(ELEM_TYPE),
-        DIM);
+        format("Computation of a normal for element '{}' in {} dimensions is not implemented",
+               conv::to_str(ELEM_TYPE),
+               DIM));
 }
 
 template <>
@@ -125,9 +125,9 @@ element_length(const DenseMatrix<Real, DIM, N_ELEM_NODES> & grad_phi)
 {
     CALL_STACK_MSG();
     throw NotImplementedException(
-        "Computation of a element length for '{}' in {} dimensions is not implemented",
-        conv::to_str(ELEM_TYPE),
-        DIM);
+        format("Computation of a element length for '{}' in {} dimensions is not implemented",
+               conv::to_str(ELEM_TYPE),
+               DIM));
 }
 
 template <>
@@ -168,7 +168,8 @@ template <CoordinateType COORD_TYPE, Int DIM>
 inline Array1D<Real>
 calc_nodal_radius(const Array1D<DenseVector<Real, DIM>> & coords)
 {
-    throw NotImplementedException("Radius computation is not implemented in {} dimensions", DIM);
+    throw NotImplementedException(
+        format("Radius computation is not implemented in {} dimensions", DIM));
 }
 
 template <>
@@ -248,9 +249,9 @@ inline Int
 get_grad_fn_index(Int facet_idx)
 {
     throw NotImplementedException(
-        "get_grad_fn_index is not implemented for {} element in {} dimensions",
-        conv::to_str(ELEM_TYPE),
-        DIM);
+        format("get_grad_fn_index is not implemented for {} element in {} dimensions",
+               conv::to_str(ELEM_TYPE),
+               DIM));
 }
 
 template <>
@@ -295,9 +296,9 @@ orient(const DenseMatrix<Real, N_ELEM_NODES, DIM> & pt)
 {
     CALL_STACK_MSG();
     throw NotImplementedException(
-        "Computation of a element orintation for '{}' in {} dimensions is not implemented",
-        conv::to_str(ELEM_TYPE),
-        DIM);
+        format("Computation of a element orintation for '{}' in {} dimensions is not implemented",
+               conv::to_str(ELEM_TYPE),
+               DIM));
 }
 
 template <>

@@ -657,7 +657,8 @@ template <typename T, Int N>
 inline T
 determinant(const DenseMatrix<T, N, N> & mat)
 {
-    throw NotImplementedException("Determinant is not implemented for {}x{} matrices, yet", N, N);
+    throw NotImplementedException(
+        format("Determinant is not implemented for {}x{} matrices, yet", N, N));
 }
 
 template <typename T>
@@ -841,11 +842,11 @@ public:
         if (((i >= 0) && (i < this->rows)) && ((j >= 0) && (j < this->cols)))
             return this->values[idx(i, j)];
         else
-            throw Exception("Index ({}, {}) is out of matrix dimensions ({}, {})",
-                            i,
-                            j,
-                            this->rows,
-                            this->cols);
+            throw Exception(fmt::format("Index ({}, {}) is out of matrix dimensions ({}, {})",
+                                        i,
+                                        j,
+                                        this->rows,
+                                        this->cols));
     }
 
     /// Obtain a column from the matrix
@@ -909,11 +910,11 @@ public:
         if (((i >= 0) && (i < this->rows)) && ((j >= 0) && (j < this->cols)))
             return this->values[idx(i, j)];
         else
-            throw Exception("Index ({}, {}) is out of matrix dimensions ({}, {})",
-                            i,
-                            j,
-                            this->rows,
-                            this->cols);
+            throw Exception(fmt::format("Index ({}, {}) is out of matrix dimensions ({}, {})",
+                                        i,
+                                        j,
+                                        this->rows,
+                                        this->cols));
     }
 
     /// Set value at a specified location
@@ -927,11 +928,11 @@ public:
         if (((i >= 0) && (i < this->rows)) && ((j >= 0) && (j < this->cols)))
             this->values[idx(i, j)] = val;
         else
-            throw Exception("Index ({}, {}) is out of matrix dimensions ({}, {})",
-                            i,
-                            j,
-                            this->rows,
-                            this->cols);
+            throw Exception(fmt::format("Index ({}, {}) is out of matrix dimensions ({}, {})",
+                                        i,
+                                        j,
+                                        this->rows,
+                                        this->cols));
     }
 
     /// Set a matrix row at once
@@ -952,9 +953,10 @@ public:
 #endif
         }
         else
-            throw Exception("Number of values ({}) must match the number of columns ({})",
+            throw Exception(
+                fmt::format("Number of values ({}) must match the number of columns ({})",
                             vals.size(),
-                            this->cols);
+                            this->cols));
     }
 
     /// Set a matrix row at once
@@ -975,9 +977,9 @@ public:
 #endif
         }
         else
-            throw Exception("Number of values ({}) must match the number of rows ({})",
-                            vals.size(),
-                            this->rows);
+            throw Exception(fmt::format("Number of values ({}) must match the number of rows ({})",
+                                        vals.size(),
+                                        this->rows));
     }
 
     void
@@ -994,12 +996,13 @@ public:
 #endif
             }
             else
-                throw Exception("Number of values ({}) must match the number of columns ({})",
-                                vals.get_num_cols(),
-                                this->cols);
+                throw Exception(
+                    format("Number of values ({}) must match the number of columns ({})",
+                           vals.get_num_cols(),
+                           this->cols));
         }
         else
-            throw Exception("Row matrix must have just one row");
+            throw Exception(fmt::format("Row matrix must have just one row"));
     }
 
     void
@@ -1015,9 +1018,9 @@ public:
 #endif
         }
         else
-            throw Exception("Number of values ({}) must match the number of rows ({})",
-                            vals.size(),
-                            this->rows);
+            throw Exception(fmt::format("Number of values ({}) must match the number of rows ({})",
+                                        vals.size(),
+                                        this->rows));
     }
 
     void
@@ -1033,9 +1036,9 @@ public:
 #endif
         }
         else
-            throw Exception("Number of values ({}) must match the number of rows ({})",
-                            vals.size(),
-                            this->rows);
+            throw Exception(fmt::format("Number of values ({}) must match the number of rows ({})",
+                                        vals.size(),
+                                        this->rows));
     }
 
     void
@@ -1051,9 +1054,9 @@ public:
 #endif
         }
         else
-            throw Exception("Number of values ({}) must match the number of rows ({})",
-                            vals.size(),
-                            this->rows);
+            throw Exception(fmt::format("Number of values ({}) must match the number of rows ({})",
+                                        vals.size(),
+                                        this->rows));
     }
 
     /// Set all matrix entries to zero, i.e. mat[i,j] = 0.
@@ -1108,11 +1111,12 @@ public:
 #endif
         }
         else
-            throw Exception("Matrix dimensions ({}, {}) must match the operand dimensions({}, {})",
-                            this->rows,
-                            this->cols,
-                            x.rows,
-                            x.cols);
+            throw Exception(
+                format("Matrix dimensions ({}, {}) must match the operand dimensions({}, {})",
+                       this->rows,
+                       this->cols,
+                       x.rows,
+                       x.cols));
     }
 
     /// Subtract matrix `x` from this matrix
@@ -1133,11 +1137,12 @@ public:
 #endif
         }
         else
-            throw Exception("Matrix dimensions ({}, {}) must match the operand dimensions({}, {})",
-                            this->rows,
-                            this->cols,
-                            x.rows,
-                            x.cols);
+            throw Exception(
+                format("Matrix dimensions ({}, {}) must match the operand dimensions({}, {})",
+                       this->rows,
+                       this->cols,
+                       x.rows,
+                       x.cols));
     }
 
     /// Multiply the matrix by a vector
@@ -1167,9 +1172,8 @@ public:
 #endif
             return res;
         }
-        throw Exception("Number of columns ({}) must match the vector size ({})",
-                        this->cols,
-                        x.size());
+        throw Exception(
+            format("Number of columns ({}) must match the vector size ({})", this->cols, x.size()));
     }
 
     DynDenseMatrix<T>
@@ -1199,9 +1203,9 @@ public:
             return res;
         }
         else
-            throw Exception("Number of columns ({}) must match number of rows ({})",
-                            this->cols,
-                            x.rows);
+            throw Exception(fmt::format("Number of columns ({}) must match number of rows ({})",
+                                        this->cols,
+                                        x.rows));
     }
 
     /// Get diagonal of the matrix as a DynDenseVector
@@ -1304,11 +1308,12 @@ public:
             return res;
         }
         else
-            throw Exception("Number of rows and columns must match (rows: {} != {}, cols {} != {})",
-                            this->rows,
-                            a.rows,
-                            this->cols,
-                            a.cols);
+            throw Exception(
+                format("Number of rows and columns must match (rows: {} != {}, cols {} != {})",
+                       this->rows,
+                       a.rows,
+                       this->cols,
+                       a.cols));
     }
 
     /// Add matrix to this matrix
@@ -1331,11 +1336,12 @@ public:
             return *this;
         }
         else
-            throw Exception("Number of rows and columns must match (rows: {} != {}, cols {} != {})",
-                            this->rows,
-                            a.rows,
-                            this->cols,
-                            a.cols);
+            throw Exception(
+                format("Number of rows and columns must match (rows: {} != {}, cols {} != {})",
+                       this->rows,
+                       a.rows,
+                       this->cols,
+                       a.cols));
     }
 
     /// Subtract matrix `a` from this matrix and return the result
@@ -1359,11 +1365,12 @@ public:
             return res;
         }
         else
-            throw Exception("Number of rows and columns must match (rows: {} != {}, cols {} != {})",
-                            this->rows,
-                            a.rows,
-                            this->cols,
-                            a.cols);
+            throw Exception(
+                format("Number of rows and columns must match (rows: {} != {}, cols {} != {})",
+                       this->rows,
+                       a.rows,
+                       this->cols,
+                       a.cols));
     }
 
     /// Multiply this matrix with a scalar value

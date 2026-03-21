@@ -23,9 +23,10 @@ Real
 volume(const DenseMatrix<Real, N_ELEM_NODES, DIM> & coords)
 {
     CALL_STACK_MSG();
-    throw NotImplementedException("Volume calculation for {} in {} dimensions is not implemented",
-                                  conv::to_str(ELEM_TYPE),
-                                  DIM);
+    throw NotImplementedException(
+        format("Volume calculation for {} in {} dimensions is not implemented",
+               conv::to_str(ELEM_TYPE),
+               DIM));
 }
 
 /// Compute volume of a EDGE2 in 1D
@@ -158,9 +159,9 @@ face_area(const DenseMatrix<Real, N_FACE_NODES, DIM> & coords)
 {
     CALL_STACK_MSG();
     throw NotImplementedException(
-        "Face area calculation for {} in {} dimensions is not implemented",
-        conv::to_str(ELEM_TYPE),
-        DIM);
+        format("Face area calculation for {} in {} dimensions is not implemented",
+               conv::to_str(ELEM_TYPE),
+               DIM));
 }
 
 template <>

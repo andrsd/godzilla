@@ -188,7 +188,7 @@ FVProblemInterface::set_field_component_name(FieldID fid, Int component, String 
             throw Exception("Unable to set component name for single-component field");
     }
     else
-        throw Exception("Field with ID = '{}' does not exist.", fid);
+        throw Exception(fmt::format("Field with ID = '{}' does not exist.", fid));
 }
 
 Int
@@ -305,7 +305,7 @@ FVProblemInterface::set_aux_field_component_name(FieldID fid, Int component, Str
             throw Exception("Unable to set component name for single-component field");
     }
     else
-        throw Exception("Auxiliary field with ID = '{}' does not exist.", fid);
+        throw Exception(fmt::format("Auxiliary field with ID = '{}' does not exist.", fid));
 }
 
 void
@@ -324,7 +324,8 @@ FVProblemInterface::add_field(FieldID id, String name, Int nc, const Label & blo
         this->fields_by_name.emplace(name, id);
     }
     else
-        throw Exception("Cannot add field '{}' with ID = {}. ID already exists.", name, id);
+        throw Exception(
+            fmt::format("Cannot add field '{}' with ID = {}. ID already exists.", name, id));
 }
 
 FieldID
@@ -354,9 +355,10 @@ FVProblemInterface::set_aux_field(FieldID id, String name, Int nc, Order k, cons
         this->aux_fe[id] = nullptr;
     }
     else
-        throw Exception("Cannot add auxiliary field '{}' with ID = {}. ID is already taken.",
+        throw Exception(
+            fmt::format("Cannot add auxiliary field '{}' with ID = {}. ID is already taken.",
                         name,
-                        id);
+                        id));
 }
 
 void

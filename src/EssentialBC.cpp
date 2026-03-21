@@ -95,7 +95,7 @@ EssentialBC::set_up()
         else if (mesh->has_vertex_set(boundary))
             label = mesh->get_vertex_set_label(boundary);
         else
-            throw Exception("Boundary '{}' does not exist.", boundary);
+            throw Exception(fmt::format("Boundary '{}' does not exist.", boundary));
         auto ids = label.get_values();
         dpi->add_boundary(DM_BC_ESSENTIAL,
                           get_name(),

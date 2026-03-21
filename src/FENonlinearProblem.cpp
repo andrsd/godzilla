@@ -317,7 +317,7 @@ FENonlinearProblem::compute_residual_internal(DM dm,
                 PETSC_CHECK(PetscFEGeomRestoreChunk(geom, offset, n_chunk_cells, &chunk_geom));
             }
             else
-                throw Exception("Unknown discretization type for field {}", f);
+                throw Exception(fmt::format("Unknown discretization type for field {}", f));
         }
         /* Loop over domain */
         /* Add elemVec to locX */

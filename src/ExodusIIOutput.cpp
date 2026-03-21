@@ -186,7 +186,7 @@ ExodusIIOutput::open_file()
     this->exo =
         Qtr<exodusIIcpp::File>::alloc(get_file_name().c_str(), exodusIIcpp::FileAccess::WRITE);
     if (!this->exo->is_opened())
-        throw Exception("Could not open file '{}' for writing.", get_file_name());
+        throw Exception(fmt::format("Could not open file '{}' for writing.", get_file_name()));
 }
 
 void
