@@ -78,7 +78,8 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Exception</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#_CPPv4N8godzilla9ExceptionE"><code class="docutils literal notranslate"><span class="pre">Exception</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla9Exception4whatEv"><code class="docutils literal notranslate"><span class="pre">Exception::what()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla9Exception14get_call_stackEv"><code class="docutils literal notranslate"><span class="pre">Exception::get_call_stack()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla9Exception8locationEv"><code class="docutils literal notranslate"><span class="pre">Exception::location()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla9Exception11print_stackEv"><code class="docutils literal notranslate"><span class="pre">Exception::print_stack()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -172,9 +173,15 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla9Exception14get_call_stackEv">
-<span id="_CPPv3NK8godzilla9Exception14get_call_stackEv"></span><span id="_CPPv2NK8godzilla9Exception14get_call_stackEv"></span><span id="godzilla::Exception::get_call_stackC"></span><span class="target" id="classgodzilla_1_1_exception_1a4eb3724349dca1df4ee51806e608eb6a"></span><a class="reference internal" href="span.html#_CPPv4I0EN8godzilla4SpanE" title="godzilla::Span"><span class="n"><span class="pre">Span</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">String</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_call_stack</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla9Exception14get_call_stackEv" title="Link to this definition"></a><br /></dt>
-<dd><p>Get the call stack from the time the exception occured. </p>
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla9Exception8locationEv">
+<span id="_CPPv3NK8godzilla9Exception8locationEv"></span><span id="_CPPv2NK8godzilla9Exception8locationEv"></span><span id="godzilla::Exception::locationC"></span><span class="target" id="classgodzilla_1_1_exception_1a66c6608df8f5765f37b6c9e5bbc5ab90"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">source_location</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">location</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla9Exception8locationEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Get location where the exception occured. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla9Exception11print_stackEv">
+<span id="_CPPv3NK8godzilla9Exception11print_stackEv"></span><span id="_CPPv2NK8godzilla9Exception11print_stackEv"></span><span id="godzilla::Exception::print_stackC"></span><span class="target" id="classgodzilla_1_1_exception_1a4956b087182999d42a7d858ed443596f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">print_stack</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla9Exception11print_stackEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Print the call stack from the time the exception occured. </p>
 </dd></dl>
 
 </div>
