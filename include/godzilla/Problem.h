@@ -492,7 +492,7 @@ local_to_global(DM dm, const Array1D<T> & l, InsertMode mode, Array1D<T> & g)
         sf.reduce_end(l, g, mpi::op::min<T>());
         break;
     default:
-        throw Exception("`local_to_global` called with unsupported mode '{}'", mode);
+        throw Exception(fmt::format("`local_to_global` called with unsupported mode '{}'", mode));
     }
 }
 
@@ -509,7 +509,7 @@ local_to_global(DM dm, const Array1D<T> & l, InsertMode mode, Array1D<T> & g)
         sf.reduce_end(l, g, mpi::op::sum<T>());
         break;
     default:
-        throw Exception("`local_to_global` called with unsupported mode '{}'", mode);
+        throw Exception(fmt::format("`local_to_global` called with unsupported mode '{}'", mode));
     }
 }
 
@@ -519,7 +519,7 @@ global_to_local(DM dm, const Array1D<T> & g, InsertMode mode, Array1D<T> & l)
 {
     CALL_STACK_MSG();
     if (mode == ADD_VALUES)
-        throw Exception("`global_to_local` called with unsupported mode '{}'", mode);
+        throw Exception(fmt::format("`global_to_local` called with unsupported mode '{}'", mode));
 
     auto sf = get_section_star_forest(dm);
     sf.broadcast_begin(g, l, mpi::op::replace<T>());

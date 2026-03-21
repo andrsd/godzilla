@@ -27,7 +27,8 @@ template <ElementType ETYPE, Int N_ELEM_NODES = get_num_element_nodes(ETYPE)>
 inline DenseMatrix<Real, N_ELEM_NODES>
 mass()
 {
-    throw NotImplementedException("Mass matrix is not implemented for {}", conv::to_str(ETYPE));
+    throw NotImplementedException(
+        format("Mass matrix is not implemented for {}", conv::to_str(ETYPE)));
 }
 
 /// Local mass matrix for EDGE2 in 1D
@@ -72,8 +73,8 @@ template <ElementType ETYPE, Int N_ELEM_NODES = get_num_element_nodes(ETYPE)>
 inline DenseMatrix<Real, N_ELEM_NODES>
 mass_rz(Real rad_e, const DenseVector<Real, N_ELEM_NODES> & rad_n)
 {
-    throw NotImplementedException("Mass matrix (RZ) is not implemented for {}",
-                                  conv::to_str(ETYPE));
+    throw NotImplementedException(
+        format("Mass matrix (RZ) is not implemented for {}", conv::to_str(ETYPE)));
 }
 
 /// Local mass matrix (RZ) for EDGE2 in 1D
@@ -115,8 +116,8 @@ template <ElementType ETYPE, Int N_ELEM_NODES = get_num_element_nodes(ETYPE)>
 inline DenseMatrix<Real, N_ELEM_NODES>
 mass_lumped()
 {
-    throw NotImplementedException("Lumped mass matrix is not implemented for {}",
-                                  conv::to_str(ETYPE));
+    throw NotImplementedException(
+        format("Lumped mass matrix is not implemented for {}", conv::to_str(ETYPE)));
 }
 
 /// Local lumped mass matrix for EDGE2 in 1D
@@ -164,8 +165,8 @@ template <ElementType ETYPE, Int N_ELEM_NODES = get_num_element_nodes(ETYPE)>
 inline DenseMatrix<Real, N_ELEM_NODES>
 mass_lumped_rz(const DenseVector<Real, N_ELEM_NODES> & rad_n)
 {
-    throw NotImplementedException("Mass matrix (RZ) is not implemented for {}",
-                                  conv::to_str(ETYPE));
+    throw NotImplementedException(
+        format("Mass matrix (RZ) is not implemented for {}", conv::to_str(ETYPE)));
 }
 
 template <>
@@ -202,8 +203,8 @@ template <ElementType ETYPE, Int N_ELEM_NODES = get_num_element_nodes(ETYPE)>
 inline DenseMatrix<Real, N_ELEM_NODES>
 stiffness()
 {
-    throw NotImplementedException("Stiffness matrix is not implemented for {}",
-                                  conv::to_str(ETYPE));
+    throw NotImplementedException(
+        format("Stiffness matrix is not implemented for {}", conv::to_str(ETYPE)));
 }
 
 /// Local mass matrix for EDGE2 in 1D

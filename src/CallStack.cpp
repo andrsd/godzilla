@@ -13,19 +13,21 @@ namespace internal {
 // global instance of the call stack object
 static CallStack callstack;
 
+} // namespace internal
+
 // Call Stack Object
 
-CallStack::Msg::Msg(const char * loc, int line_no, const char * func) :
-    msg(func),
-    location(loc),
-    line_no(line_no)
+CallStack::Frame::Frame(const std::source_location location) :
+    file(location.file_name()),
+    line(location.line()),
+    function(location.function_name())
 {
-    callstack.add(this);
+    internal::callstack.add(this);
 }
 
-CallStack::Msg::~Msg()
+CallStack::Frame::~Frame()
 {
-    callstack.remove(this);
+    internal::callstack.remove(this);
 }
 
 // Signals
@@ -45,7 +47,7 @@ sighandler(int signo)
                  "Caught signal %d (%s)\n\n",
                  signo,
                  sig_name[signo]);
-    callstack.dump();
+    internal::callstack.dump();
     exit(-2);
 }
 
@@ -54,7 +56,7 @@ sighandler(int signo)
 CallStack &
 get_callstack()
 {
-    return callstack;
+    return internal::callstack;
 }
 
 CallStack::CallStack() : size(0) {}
@@ -66,14 +68,14 @@ CallStack::dump()
     if (this->size > 0) {
         PetscFPrintf(PETSC_COMM_WORLD, PETSC_STDERR, "Call stack:\n");
         for (int n = 0, i = this->size - 1; i >= 0; --i, ++n) {
-            Msg * m = this->stack[i];
+            auto * m = this->stack[i];
             PetscFPrintf(PETSC_COMM_WORLD,
                          PETSC_STDERR,
                          "  #%d: %s (%s:%d)\n",
                          n,
-                         m->msg,
-                         m->location,
-                         m->line_no);
+                         m->function.c_str(),
+                         m->file.c_str(),
+                         m->line);
         }
     }
     else
@@ -82,17 +84,17 @@ CallStack::dump()
 }
 
 void
-CallStack::add(Msg * msg)
+CallStack::add(Frame * frame)
 {
     // add this object to the call stack
     if (this->size < CallStack::MAX_SIZE) {
-        this->stack[this->size] = msg;
+        this->stack[this->size] = frame;
         ++this->size;
     }
 }
 
 void
-CallStack::remove(Msg * msg)
+CallStack::remove(Frame * msg)
 {
     // remove the object only if it is on the top of the call stack
     if (this->size > 0 && this->stack[this->size - 1] == msg) {
@@ -107,8 +109,8 @@ CallStack::get_size() const
     return this->size;
 }
 
-CallStack::Msg *
-CallStack::at(std::size_t idx) const
+CallStack::Frame *
+CallStack::operator[](std::size_t idx) const
 {
     return this->stack[idx];
 }
@@ -123,23 +125,12 @@ CallStack::initialize()
     signal(SIGILL, sighandler);
 }
 
-} // namespace internal
-
 void
-print_call_stack(const std::vector<String> & call_stack)
+print_call_stack(Span<const CallStack::Frame> call_stack)
 {
     fmt::println("Call stack:");
-    for (auto [idx, str] : enumerate(call_stack)) {
-        fmt::println("  #{}: {}", idx, str);
-    }
-}
-
-void
-print_call_stack(Span<const String> call_stack)
-{
-    fmt::println("Call stack:");
-    for (auto [idx, str] : enumerate(call_stack)) {
-        fmt::println("  #{}: {}", idx, str);
+    for (auto [idx, frame] : enumerate(call_stack)) {
+        fmt::println("  #{}: {} ({}:{})", idx, frame.function, frame.file, frame.line);
     }
 }
 

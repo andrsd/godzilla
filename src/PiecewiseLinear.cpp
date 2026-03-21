@@ -23,7 +23,8 @@ PiecewiseLinear::PiecewiseLinear(const std::vector<Real> & x, const std::vector<
     // check monotonicity
     for (std::size_t i = 0; i < this->x.size() - 1; ++i) {
         if (this->x[i] >= this->x[i + 1])
-            throw Exception("Values in 'x' must be increasing. Failed at index '{}'", i + 1);
+            throw Exception(
+                fmt::format("Values in 'x' must be increasing. Failed at index '{}'", i + 1));
     }
 }
 

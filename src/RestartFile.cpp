@@ -60,10 +60,10 @@ RestartFile::write<Vector>(String path, String name, const Vector & data)
         group.write_dataset(name, len, vals.data());
     }
     catch (std::exception & e) {
-        throw Exception("Error writing '{}' to {}: {}",
-                        norm_path,
-                        this->file_name().string(),
-                        e.what());
+        throw Exception(fmt::format("Error writing '{}' to {}: {}",
+                                    norm_path,
+                                    this->file_name().string(),
+                                    e.what()));
     }
 }
 
@@ -82,10 +82,10 @@ RestartFile::write_global_vector(String path, String name, const Vector & data)
         group.write_global_vector(name, data);
     }
     catch (std::exception & e) {
-        throw Exception("Error writing '{}' to {}: {}",
-                        norm_path,
-                        this->file_name().string(),
-                        e.what());
+        throw Exception(fmt::format("Error writing '{}' to {}: {}",
+                                    norm_path,
+                                    this->file_name().string(),
+                                    e.what()));
     }
 }
 
@@ -101,10 +101,10 @@ RestartFile::read<Vector>(String path, String name, Vector & data) const
         group.read_dataset(name, len, vals.data());
     }
     catch (std::exception & e) {
-        throw Exception("Error writing '{}' to {}: {}",
-                        norm_path,
-                        this->file_name().string(),
-                        e.what());
+        throw Exception(fmt::format("Error writing '{}' to {}: {}",
+                                    norm_path,
+                                    this->file_name().string(),
+                                    e.what()));
     }
 }
 
@@ -117,11 +117,11 @@ RestartFile::read_global_vector(String path, String name, Vector & data) const
         group.read_global_vector(name, data);
     }
     catch (std::exception & e) {
-        throw Exception("Error reading '{}/{}' from {}: {}",
-                        norm_path,
-                        name,
-                        this->file_name().string(),
-                        e.what());
+        throw Exception(fmt::format("Error reading '{}/{}' from {}: {}",
+                                    norm_path,
+                                    name,
+                                    this->file_name().string(),
+                                    e.what()));
     }
 }
 

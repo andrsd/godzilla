@@ -35,7 +35,8 @@ add_functionals(DependencyGraph<const Functional *> & g,
             if (jt != suppliers.end())
                 g.add_edge(f, jt->second);
             else
-                throw Exception("Did not find any functional which would supply '{}'.", dep);
+                throw Exception(
+                    fmt::format("Did not find any functional which would supply '{}'.", dep));
         }
     }
 }
@@ -256,7 +257,7 @@ FEProblemInterface::set_field_component_name(FieldID fid, Int component, String 
             throw Exception("Unable to set component name for single-component field");
     }
     else
-        throw Exception("Field with ID = '{}' does not exist.", fid);
+        throw Exception(fmt::format("Field with ID = '{}' does not exist.", fid));
 }
 
 Int
@@ -373,7 +374,7 @@ FEProblemInterface::set_aux_field_component_name(FieldID fid, Int component, Str
             throw Exception("Unable to set component name for single-component field");
     }
     else
-        throw Exception("Auxiliary field with ID = '{}' does not exist.", fid);
+        throw Exception(fmt::format("Auxiliary field with ID = '{}' does not exist.", fid));
 }
 
 FieldID
@@ -403,7 +404,8 @@ FEProblemInterface::set_field(FieldID id, String name, Int nc, Order k, const La
         this->fields_by_name.emplace(name, id);
     }
     else
-        throw Exception("Cannot add field '{}' with ID = {}. ID already exists.", name, id);
+        throw Exception(
+            fmt::format("Cannot add field '{}' with ID = {}. ID already exists.", name, id));
 }
 
 FieldID
@@ -433,9 +435,10 @@ FEProblemInterface::set_aux_field(FieldID id, String name, Int nc, Order k, cons
         this->aux_fields_by_name.emplace(name, id);
     }
     else
-        throw Exception("Cannot add auxiliary field '{}' with ID = {}. ID is already taken.",
+        throw Exception(
+            fmt::format("Cannot add auxiliary field '{}' with ID = {}. ID is already taken.",
                         name,
-                        id);
+                        id));
 }
 
 void
@@ -551,7 +554,7 @@ FEProblemInterface::get_field_value(String field_name) const
         return this->aux_fields.at(fid.value()).values;
     }
     else
-        throw Exception("Field '{}' does not exist. Typo?", field_name);
+        throw Exception(fmt::format("Field '{}' does not exist. Typo?", field_name));
 }
 
 const FieldGradient &
@@ -565,7 +568,7 @@ FEProblemInterface::get_field_gradient(String field_name) const
         return this->aux_fields.at(fid.value()).derivs;
     }
     else
-        throw Exception("Field '{}' does not exist. Typo?", field_name);
+        throw Exception(fmt::format("Field '{}' does not exist. Typo?", field_name));
 }
 
 const FieldValue &
@@ -579,7 +582,7 @@ FEProblemInterface::get_field_dot(String field_name) const
         return this->aux_fields.at(fid.value()).dots;
     }
     else
-        throw Exception("Field '{}' does not exist. Typo?", field_name);
+        throw Exception(fmt::format("Field '{}' does not exist. Typo?", field_name));
 }
 
 const Real &

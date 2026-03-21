@@ -29,8 +29,8 @@ inline DenseMatrix<Real, D, N>
 grad_shape(const DenseMatrix<Real, N, D> & coords, Real volume)
 {
     throw NotImplementedException(
-        "Calculation of shape function gradients is not implemented for element '{}' yet",
-        conv::to_str(ELEM_TYPE));
+        format("Calculation of shape function gradients is not implemented for element '{}' yet",
+               conv::to_str(ELEM_TYPE)));
 }
 
 /// Compute gradients of shape functions of EDGE2 in 1-D

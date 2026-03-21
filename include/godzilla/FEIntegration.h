@@ -23,8 +23,8 @@ template <ElementType ELEM_TYPE, Int N1>
 inline Real
 integration_coeff()
 {
-    throw NotImplementedException("Integration coefficient for '{}' is not implemented",
-                                  conv::to_str(ELEM_TYPE));
+    throw NotImplementedException(
+        format("Integration coefficient for '{}' is not implemented", conv::to_str(ELEM_TYPE)));
 }
 
 template <>
@@ -74,8 +74,8 @@ template <ElementType ELEM_TYPE, Int N1, Int N2>
 inline Real
 integration_coeff()
 {
-    throw NotImplementedException("Integration coefficient for '{}' is not implemented",
-                                  conv::to_str(ELEM_TYPE));
+    throw NotImplementedException(
+        format("Integration coefficient for '{}' is not implemented", conv::to_str(ELEM_TYPE)));
 }
 
 template <>
@@ -174,8 +174,9 @@ template <ElementType ELEM_TYPE, Int N1, Int N2>
 inline Real
 surface_integration_coeff()
 {
-    throw NotImplementedException("Surface integration coefficient for '{}' is not implemented",
-                                  conv::to_str(ELEM_TYPE));
+    throw NotImplementedException(
+        format("Surface integration coefficient for '{}' is not implemented",
+               conv::to_str(ELEM_TYPE)));
 }
 
 template <>

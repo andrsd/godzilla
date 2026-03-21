@@ -71,7 +71,8 @@ NetworkMesh::add_sub_network(String name, std::vector<Int> & edge_list)
         return num;
     }
     else
-        throw Exception("Edge list size ({}) must be divisible by 2", edge_list.size());
+        throw Exception(
+            fmt::format("Edge list size ({}) must be divisible by 2", edge_list.size()));
 }
 
 void

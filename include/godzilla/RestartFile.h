@@ -91,10 +91,10 @@ RestartFile::write(String path, String name, const T & data)
         group.template write_dataset<T>(name, data);
     }
     catch (std::exception & e) {
-        throw Exception("Error writing '{}' to {}: {}",
+        throw Exception(fmt::format("Error writing '{}' to {}: {}",
                         norm_path,
                         this->file_name().string(),
-                        e.what());
+                        e.what()));
     }
 }
 
@@ -115,10 +115,10 @@ RestartFile::read(String path, String name, T & data) const
         group.template read_dataset<T>(name, data);
     }
     catch (std::exception & e) {
-        throw Exception("Error reading '{}' from {}: {}",
+        throw Exception(fmt::format("Error reading '{}' from {}: {}",
                         norm_path,
                         this->file_name().string(),
-                        e.what());
+                        e.what()));
     }
 }
 

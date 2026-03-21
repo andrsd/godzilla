@@ -14,9 +14,7 @@ main(int argc, char * argv[])
         return app.run();
     }
     catch (godzilla::Exception & e) {
-        fmt::println("{}", e.what());
-        fmt::println("");
-        godzilla::print_call_stack(e.get_call_stack());
+        print(e);
         return -1;
     }
     catch (...) {

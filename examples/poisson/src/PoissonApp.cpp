@@ -115,7 +115,7 @@ PoissonApp::create_mesh(Int dim)
         return MeshFactory::create<BoxMesh>(mesh_pars);
     }
     else
-        throw Exception("Unsupported dimension {}", dim);
+        throw Exception(fmt::format("Unsupported dimension {}", dim));
 }
 
 void
@@ -130,7 +130,7 @@ PoissonApp::create_auxs(godzilla::DiscreteProblemInterface & prob, godzilla::Int
     else if (dim == 3)
         value = -6;
     else
-        throw Exception("Unsupported dimension {}", dim);
+        throw Exception(fmt::format("Unsupported dimension {}", dim));
 
     auto aux_pars = make_parameters<ConstantAuxiliaryField>();
     aux_pars.set<String>("name", "forcing_fn");
@@ -150,7 +150,7 @@ PoissonApp::create_bcs(DiscreteProblemInterface & prob, Int dim)
     else if (dim == 3)
         boundaries = { "left", "right", "top", "bottom", "front", "back" };
     else
-        throw Exception("Unsupported dimension {}", dim);
+        throw Exception(fmt::format("Unsupported dimension {}", dim));
 
     auto bc_pars = make_parameters<DirichletBC>();
     bc_pars.set<String>("name", "all")

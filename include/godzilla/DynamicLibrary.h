@@ -97,10 +97,10 @@ public:
         *(void **) (&smbl) = dlsym(this->handle, symbol_name);
         auto error = dlerror();
         if (error != nullptr || smbl == nullptr)
-            throw Exception("Unable to locate '{}' in {}: {}",
-                            symbol_name,
-                            this->file_name.string(),
-                            error);
+            throw Exception(fmt::format("Unable to locate '{}' in {}: {}",
+                                        symbol_name,
+                                        this->file_name.string(),
+                                        error));
 
         Delegate<SIGNATURE> d;
         d.template bind<SIGNATURE>(smbl);

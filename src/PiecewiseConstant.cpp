@@ -29,7 +29,8 @@ PiecewiseConstant::PiecewiseConstant(Continuity cont,
     // check monotonicity
     for (std::size_t i = 0; i < this->x.size() - 1; ++i) {
         if (this->x[i] >= this->x[i + 1])
-            throw Exception("Values in 'x' must be increasing - failed at index '{}'", i + 1);
+            throw Exception(
+                fmt::format("Values in 'x' must be increasing - failed at index '{}'", i + 1));
     }
 }
 

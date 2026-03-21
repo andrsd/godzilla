@@ -22,7 +22,7 @@ Init::Init()
     PetscPopErrorHandler();
     //
     PetscOptionsSetValue(NULL, "-options_left", "no");
-    internal::CallStack::initialize();
+    CallStack::initialize();
 }
 
 Init::Init(int argc, char * argv[])
@@ -34,7 +34,7 @@ Init::Init(int argc, char * argv[])
     PetscPopErrorHandler();
     //
     PetscOptionsSetValue(NULL, "-options_left", "no");
-    internal::CallStack::initialize();
+    CallStack::initialize();
 }
 
 Init::~Init()

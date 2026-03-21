@@ -11,6 +11,7 @@
 #include "godzilla/Vector.h"
 #include "godzilla/Exception.h"
 #include "mpicpp-lite/mpicpp-lite.h"
+#include <fmt/core.h>
 #include <filesystem>
 #include <string>
 #include <numeric>
@@ -231,7 +232,7 @@ class HDF5File {
         {
             auto id = H5Gopen2(parent_id, name.c_str(), H5P_DEFAULT);
             if (id < 0)
-                throw Exception("Failed to open group '{}'", name);
+                throw Exception(fmt::format("Failed to open group '{}'", name));
             return Group(id);
         }
 
@@ -251,7 +252,7 @@ class HDF5File {
                     throw Exception("Failed to create property");
                 auto id = H5Gcreate(parent_id, name.c_str(), lcpl_id, H5P_DEFAULT, H5P_DEFAULT);
                 if (id < 0)
-                    throw Exception("Failed to create group '{}'", name);
+                    throw Exception(fmt::format("Failed to create group '{}'", name));
                 H5Pclose(lcpl_id);
                 return Group(id);
             }
@@ -410,7 +411,7 @@ class HDF5File {
         {
             auto id = H5Dopen2(parent_id, name.c_str(), H5P_DEFAULT);
             if (id == H5I_INVALID_HID)
-                throw Exception("Unable to open dataset '{}'", name);
+                throw Exception(fmt::format("Unable to open dataset '{}'", name));
             return Dataset(id);
         }
     };
@@ -434,7 +435,7 @@ class HDF5File {
                                  H5P_DEFAULT,
                                  H5P_DEFAULT);
             if (id == H5I_INVALID_HID)
-                throw Exception("Failed to create attribute '{}'", name);
+                throw Exception(fmt::format("Failed to create attribute '{}'", name));
             return Attribute(id);
         }
 
@@ -443,11 +444,11 @@ class HDF5File {
         open(hid_t parent_id, String name)
         {
             if (!H5Aexists(parent_id, name.c_str()))
-                throw Exception("Attribute {} does not exist", name);
+                throw Exception(fmt::format("Attribute {} does not exist", name));
 
             auto id = H5Aopen(parent_id, name.c_str(), H5P_DEFAULT);
             if (id == H5I_INVALID_HID)
-                throw Exception("Unable to open attribute '{}'", name);
+                throw Exception(fmt::format("Unable to open attribute '{}'", name));
 
             return Attribute(id);
         }
@@ -738,7 +739,7 @@ HDF5File::Dataset::read(DynDenseVector<T> & data) const
             throw Exception("Error reading dataset");
     }
     else
-        throw Exception("Dataset has {} dimensions. Expected 1.", dims.size());
+        throw Exception(fmt::format("Dataset has {} dimensions. Expected 1.", dims.size()));
 }
 
 template <typename T, Int N>
@@ -755,7 +756,7 @@ HDF5File::Dataset::read(DynDenseMatrix<T> & data) const
             throw Exception("Error reading dataset");
     }
     else
-        throw Exception("Dataset has {} dimensions. Expected 2.", dims.size());
+        throw Exception(fmt::format("Dataset has {} dimensions. Expected 2.", dims.size()));
 }
 
 template <typename T>

@@ -308,7 +308,7 @@ App::write_perf_log(const fs::path & file_name, std::chrono::duration<double> ru
         YAML::Emitter yaml;
         yaml << yroot;
         if (!yaml.good())
-            throw Exception("YAML Emitter error: {}", yaml.GetLastError());
+            throw Exception(fmt::format("YAML Emitter error: {}", yaml.GetLastError()));
 
         std::ofstream fout(file_name.c_str());
         fout << yaml.c_str();

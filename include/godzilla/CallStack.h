@@ -7,9 +7,9 @@
 #include "godzilla/Span.h"
 #include <array>
 #include <vector>
+#include <source_location>
 
 namespace godzilla {
-namespace internal {
 
 #define _CALL_STK_MSG_CONCAT(a, b) a##b
 #define _CALL_STK_MSG_NAME(a, b) _CALL_STK_MSG_CONCAT(a, b)
@@ -26,7 +26,7 @@ namespace internal {
 #ifndef NDEBUG
 // clang-format off
     #define CALL_STACK_MSG() \
-        godzilla::internal::CallStack::Msg _CALL_STK_MSG_NAME(__call_stack_msg, __COUNTER__)(__FILE__, __LINE__, __PRETTY_FUNCTION__)
+        godzilla::CallStack::Frame _CALL_STK_MSG_NAME(__call_stack_msg, __COUNTER__)
 // clang-format on
 #else
     #define CALL_STACK_MSG()
@@ -41,22 +41,19 @@ public:
     static const std::size_t MAX_SIZE = 256;
 
     /// Holds data for one call stack object
-    struct Msg {
+    struct Frame {
         /// Construct call stack object
         ///
         /// @param location File name
         /// @param line_no Line number
         /// @param func Function name
-        Msg(const char * location, int line_no, const char * func);
+        Frame(const std::source_location location = std::source_location::current());
 
-        ~Msg();
+        ~Frame();
 
-        /// Message
-        const char * msg;
-        /// Location
-        const char * location;
-        /// Line number
-        int line_no;
+        const std::string file;
+        int line;
+        const std::string function;
     };
 
 public:
@@ -67,20 +64,20 @@ public:
     void dump();
 
     /// Add a message to a stack
-    void add(Msg * msg);
+    void add(Frame * msg);
 
     /// Remove a message from a stack
-    void remove(Msg * msg);
+    void remove(Frame * msg);
 
     /// Get size of the call stack
     std::size_t get_size() const;
 
     /// Get item at position `idx`
-    Msg * at(std::size_t idx) const;
+    Frame * operator[](std::size_t idx) const;
 
 private:
     /// The object storing call stack objects
-    std::array<Msg *, MAX_SIZE> stack;
+    std::array<Frame *, MAX_SIZE> stack;
     /// Actual size of the stack
     std::size_t size;
 
@@ -96,10 +93,7 @@ public:
 /// @return Call stack object
 CallStack & get_callstack();
 
-} // namespace internal
-
 /// Print call stack
-void print_call_stack(const std::vector<String> & call_stack);
-void print_call_stack(Span<const String> call_stack);
+void print_call_stack(Span<const CallStack::Frame> call_stack);
 
 } // namespace godzilla

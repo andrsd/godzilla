@@ -30,7 +30,7 @@ get_cell_type_ex2(String elem_type)
     else if (elem_type == "HEX" || elem_type == "HEX8" || elem_type == "HEXAHEDRON")
         return PolytopeType::HEXAHEDRON;
     else
-        throw Exception("Unrecognized element type {}", elem_type);
+        throw Exception(fmt::format("Unrecognized element type {}", elem_type));
 }
 
 } // namespace
@@ -275,7 +275,7 @@ FileMesh::create_from_exodus()
             m->set_face_set_name(id, name);
     }
     catch (exodusIIcpp::Exception & e) {
-        throw Exception("exodusIIcpp: {}", e.what());
+        throw Exception(fmt::format("exodusIIcpp: {}", e.what()));
     }
 
     return m;
