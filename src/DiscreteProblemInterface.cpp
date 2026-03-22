@@ -201,9 +201,7 @@ DiscreteProblemInterface::check_initial_conditions(const std::vector<Ref<Initial
 
     auto n_fields = field_comps.size();
     expect_true(n_ics == n_fields,
-                "Provided {} field(s), but {} initial condition(s).",
-                n_fields,
-                n_ics);
+                fmt::format("Provided {} field(s), but {} initial condition(s).", n_fields, n_ics));
     // std::map<FieldID, Ref<InitialCondition>> ics_by_fields;
     std::map<FieldID, bool> ics_by_fields;
     for (auto & ic : ics) {
@@ -305,7 +303,8 @@ DiscreteProblemInterface::set_up_auxiliary_dm(DM dm)
         try {
             auto fld_name = aux->get_field();
             auto fid = get_aux_field_id(fld_name);
-            expect_true(fid.has_value(), "Auxiliary field '{}' does not exist", fld_name);
+            expect_true(fid.has_value(),
+                        fmt::format("Auxiliary field '{}' does not exist", fld_name));
             auto aux_nc = aux->get_num_components();
             auto field_nc = get_aux_field_num_components(fid.value()).value();
             if (aux_nc == field_nc) {

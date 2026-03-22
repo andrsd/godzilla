@@ -30,8 +30,9 @@ FileMesh::FileMesh(const Parameters & pars) :
 
     expect_true(
         fs::exists(this->file_name),
-        "Unable to open '{}' for reading. Make sure it exists and you have read permissions.",
-        this->file_name);
+        fmt::format(
+            "Unable to open '{}' for reading. Make sure it exists and you have read permissions.",
+            this->file_name));
     detect_file_format();
 }
 

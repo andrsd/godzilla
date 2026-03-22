@@ -57,11 +57,14 @@ EssentialBC::create()
         this->fid = dpi->get_field_id(field_names[0]).value();
     }
     else if (field_names.size() > 1) {
-        expect_true(this->field_name.has_value(),
-                    "Use the 'field' parameter to assign this boundary condition to an existing "
-                    "field.");
+        expect_true(
+            this->field_name.has_value(),
+            fmt::format(
+                "Use the 'field' parameter to assign this boundary condition to an existing "
+                "field."));
         auto fld = dpi->get_field_id(this->field_name.value());
-        expect_true(fld.has_value(), "Field '{}' does not exist. Typo?", this->field_name.value());
+        expect_true(fld.has_value(),
+                    fmt::format("Field '{}' does not exist. Typo?", this->field_name.value()));
         this->fid = fld.value();
     }
 
@@ -115,7 +118,7 @@ EssentialBC::create_components()
     CALL_STACK_MSG();
     auto dpi = get_discrete_problem_interface();
     auto n_comps = dpi->get_field_num_components(this->fid);
-    expect_true(n_comps.has_value(), "Field {} not found", this->fid);
+    expect_true(n_comps.has_value(), fmt::format("Field {} not found", this->fid));
     std::vector<Int> comps(n_comps.value());
     std::iota(comps.begin(), comps.end(), 0);
     return comps;

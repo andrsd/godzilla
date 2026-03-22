@@ -70,7 +70,7 @@ NaturalRiemannBC::create_components()
     CALL_STACK_MSG();
     auto dpi = get_discrete_problem_interface();
     auto n_comps = dpi->get_field_num_components(this->fid);
-    expect_true(n_comps.has_value(), "Field {} not found", this->fid);
+    expect_true(n_comps.has_value(), fmt::format("Field {} not found", this->fid));
     std::vector<Int> comps(n_comps.value());
     std::iota(comps.begin(), comps.end(), 0);
     return comps;

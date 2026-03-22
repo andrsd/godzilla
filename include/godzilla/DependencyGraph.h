@@ -8,6 +8,7 @@
 #include <map>
 #include <stack>
 #include <queue>
+#include <stdexcept>
 
 namespace godzilla {
 

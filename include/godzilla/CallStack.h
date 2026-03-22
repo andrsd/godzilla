@@ -3,10 +3,8 @@
 
 #pragma once
 
-#include "godzilla/String.h"
-#include "godzilla/Span.h"
+#include <string>
 #include <array>
-#include <vector>
 #include <source_location>
 
 namespace godzilla {
@@ -94,6 +92,6 @@ public:
 CallStack & get_callstack();
 
 /// Print call stack
-void print_call_stack(Span<const CallStack::Frame> call_stack);
+void print_call_stack(const std::source_location loc = std::source_location::current());
 
 } // namespace godzilla

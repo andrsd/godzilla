@@ -11,7 +11,7 @@ namespace godzilla {
 namespace internal {
 
 // global instance of the call stack object
-static CallStack callstack;
+static CallStack call_stack;
 
 } // namespace internal
 
@@ -22,12 +22,12 @@ CallStack::Frame::Frame(const std::source_location location) :
     line(location.line()),
     function(location.function_name())
 {
-    internal::callstack.add(this);
+    internal::call_stack.add(this);
 }
 
 CallStack::Frame::~Frame()
 {
-    internal::callstack.remove(this);
+    internal::call_stack.remove(this);
 }
 
 // Signals
@@ -47,7 +47,7 @@ sighandler(int signo)
                  "Caught signal %d (%s)\n\n",
                  signo,
                  sig_name[signo]);
-    internal::callstack.dump();
+    internal::call_stack.dump();
     exit(-2);
 }
 
@@ -56,7 +56,7 @@ sighandler(int signo)
 CallStack &
 get_callstack()
 {
-    return internal::callstack;
+    return internal::call_stack;
 }
 
 CallStack::CallStack() : size(0) {}
@@ -126,11 +126,12 @@ CallStack::initialize()
 }
 
 void
-print_call_stack(Span<const CallStack::Frame> call_stack)
+print_call_stack(const std::source_location loc)
 {
-    fmt::println("Call stack:");
-    for (auto [idx, frame] : enumerate(call_stack)) {
-        fmt::println("  #{}: {} ({}:{})", idx, frame.function, frame.file, frame.line);
+    for (int i = internal::call_stack.get_size() - 1; i >= 0; i--) {
+        const auto & frame = internal::call_stack[i];
+        if (loc.function_name() != frame->function)
+            fmt::println(stderr, "  at {} ({}:{})", frame->function, frame->file, frame->line);
     }
 }
 

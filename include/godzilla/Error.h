@@ -6,6 +6,8 @@
 #include "godzilla/Terminal.h"
 #include "fmt/core.h"
 #include <mutex>
+#include <source_location>
+#include <ranges>
 
 namespace godzilla {
 
@@ -67,19 +69,6 @@ enum class ErrorCode {
     NotSet,
     OutOfRange
 };
-
-/// Error checking function with a condition
-///
-/// @param cond Condition expected to be true
-template <typename... T>
-inline void
-expect_true(bool cond, fmt::format_string<T...> format, T... args)
-{
-    if (!cond) {
-        print_msg(godzilla::Terminal::red, "ERROR", format, std::forward<T>(args)...);
-        godzilla::abort();
-    }
-}
 
 /// Calls `warning` but only once
 ///
