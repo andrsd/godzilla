@@ -534,8 +534,7 @@ DiscreteProblemInterface::add_initial_condition(Parameters & pars)
     auto name = obj->get_name();
     auto it = this->ics_by_name.find(name);
     expect_true(it == this->ics_by_name.end(),
-                "Cannot add initial condition object '{}'. Name already taken.",
-                name);
+                fmt::format("Cannot add initial condition object '{}'. Name already taken.", name));
     auto ic = obj.get();
     this->ics_by_name.emplace(name, Ref<InitialCondition>(*ic));
     this->all_ics.push_back(std::move(obj));
@@ -552,8 +551,7 @@ DiscreteProblemInterface::add_auxiliary_field(Parameters & pars)
     auto name = obj->get_name();
     auto it = this->auxs_by_name.find(name);
     expect_true(it == this->auxs_by_name.end(),
-                "Cannot add auxiliary object '{}'. Name already taken.",
-                name);
+                fmt::format("Cannot add auxiliary object '{}'. Name already taken.", name));
     auto aux = obj.get();
     this->auxs_by_name.emplace(name, Ref<AuxiliaryField>(*aux));
     this->auxs.push_back(std::move(obj));

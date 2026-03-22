@@ -6,6 +6,8 @@
 #include "godzilla/Terminal.h"
 #include "fmt/core.h"
 #include <mutex>
+#include <source_location>
+#include <ranges>
 
 namespace godzilla {
 
@@ -18,6 +20,16 @@ void mem_check(int line, const char * func, const char * file, void * var);
 
 void check_petsc_error(int ierr, const char * file, int line);
 
+template <typename... T>
+void
+print_msg(Terminal::Color color, const char * type, fmt::format_string<T...> format, T &&... args)
+{
+    fmt::print(stderr, "{}", color);
+    fmt::print(stderr, "[{}] ", type);
+    fmt::print(stderr, format, std::forward<T>(args)...);
+    fmt::println(stderr, "{}", godzilla::Terminal::normal);
+}
+
 /// Report an error and terminate
 ///
 /// @param format Formatting string
@@ -26,10 +38,7 @@ template <typename... T>
 [[noreturn]] void
 error(fmt::format_string<T...> format, T &&... args)
 {
-    fmt::print(stderr, "{}", godzilla::Terminal::red);
-    fmt::print(stderr, "[ERROR] ");
-    fmt::print(stderr, format, std::forward<T>(args)...);
-    fmt::println(stderr, "{}", godzilla::Terminal::normal);
+    print_msg(godzilla::Terminal::red, "ERROR", format, std::forward<T>(args)...);
     godzilla::abort();
 }
 
@@ -41,10 +50,7 @@ template <typename... T>
 void
 warning(fmt::format_string<T...> format, T &&... args)
 {
-    fmt::print(stdout, "{}", godzilla::Terminal::yellow);
-    fmt::print(stdout, "[WARNING] ");
-    fmt::print(stdout, format, std::forward<T>(args)...);
-    fmt::println(stdout, "{}", godzilla::Terminal::normal);
+    print_msg(godzilla::Terminal::yellow, "WARNING", format, std::forward<T>(args)...);
 }
 
 } // namespace internal
@@ -63,22 +69,6 @@ enum class ErrorCode {
     NotSet,
     OutOfRange
 };
-
-/// Error checking function with a condition
-///
-/// @param cond Condition expected to be true
-template <typename... T>
-inline void
-expect_true(bool cond, fmt::format_string<T...> format, T... args)
-{
-    if (!cond) {
-        fmt::print(stderr, "{}", Terminal::red);
-        fmt::print(stderr, "[ERROR] ");
-        fmt::print(stderr, format, std::forward<T>(args)...);
-        fmt::println(stderr, "{}", Terminal::normal);
-        godzilla::abort();
-    }
-}
 
 /// Calls `warning` but only once
 ///

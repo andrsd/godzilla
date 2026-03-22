@@ -26,7 +26,8 @@ DependencyEvaluator::get_functional(String name) const
 {
     CALL_STACK_MSG();
     const auto & it = this->functionals.find(name);
-    expect_true(it != this->functionals.end(), "No functional with name '{}' found. Typo?", name);
+    expect_true(it != this->functionals.end(),
+                fmt::format("No functional with name '{}' found. Typo?", name));
     return *it->second;
 }
 
@@ -39,8 +40,7 @@ DependencyEvaluator::get_suppliers() const
         auto provides = fnl->get_provided_values();
         for (auto & s : provides) {
             expect_true(suppliers.find(s) == suppliers.end(),
-                        "Value '{}' is being supplied multiple times.",
-                        s);
+                        fmt::format("Value '{}' is being supplied multiple times.", s));
             suppliers[s] = fnl;
         }
     }
@@ -58,8 +58,7 @@ DependencyEvaluator::build_dependecy_graph(
         for (auto & dep : depends_on) {
             auto jt = suppliers.find(dep);
             expect_true(jt != suppliers.end(),
-                        "Did not find any functional which would supply '{}'.",
-                        dep);
+                        fmt::format("Did not find any functional which would supply '{}'.", dep));
             graph.add_edge(fnl, jt->second);
         }
     }

@@ -1,12 +1,13 @@
 #include "gmock/gmock.h"
 #include "godzilla/Exception.h"
 #include "godzilla/CallStack.h"
+#include "fmt/core.h"
 
 using namespace godzilla;
 
 TEST(Exception, ctor)
 {
-    Exception e(format("number={}, str={}", 1, "str"));
+    Exception e(fmt::format("number={}, str={}", 1, "str"));
     EXPECT_EQ(e.rank(), -1);
     EXPECT_STREQ(e.what(), "number=1, str=str");
 }
