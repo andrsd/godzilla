@@ -111,7 +111,7 @@ TEST_F(OutputTest, none_plus_mask)
 
 TEST_F(OutputTest, interval_with_no_timestep_output)
 {
-    testing::internal::CaptureStdout();
+    testing::internal::CaptureStderr();
 
     auto prob = this->app->get_problem<GTestImplicitFENonlinearProblem>();
 
@@ -123,7 +123,7 @@ TEST_F(OutputTest, interval_with_no_timestep_output)
     MockOutput out(pars);
 
     EXPECT_THAT(
-        testing::internal::GetCapturedStdout(),
+        testing::internal::GetCapturedStderr(),
         testing::HasSubstr("Parameter 'interval' was specified, but 'on' is missing 'timestep'."));
 }
 

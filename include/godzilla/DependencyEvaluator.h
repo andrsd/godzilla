@@ -129,8 +129,7 @@ DependencyEvaluator::declare_value(String val_name)
     }
     else {
         expect_true(!it->second->is_declared(),
-                    "Trying to declare an already existing value '{}'.",
-                    val_name);
+                    fmt::format("Trying to declare an already existing value '{}'.", val_name));
         auto val = dynamic_cast<Value<T> *>(const_cast<ValueBase *>(it->second));
         return val->set();
     }
@@ -159,7 +158,8 @@ DependencyEvaluator::create_functional(String name, const Parameters & pars)
 {
     CALL_STACK_MSG();
     const auto & it = this->functionals.find(name);
-    expect_true(it == this->functionals.end(), "Functional with name '{}' already exists.", name);
+    expect_true(it == this->functionals.end(),
+                fmt::format("Functional with name '{}' already exists.", name));
     auto * fnl = new Fn(pars);
     this->functionals[name] = fnl;
 }

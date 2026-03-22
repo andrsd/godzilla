@@ -129,7 +129,8 @@ public:
         auto par = it->second.get();
         auto tpar = dynamic_cast<Parameter<V> *>(par);
         if (tpar == nullptr)
-            throw Exception(fmt::format("Parameter '{}' has unexpected type ({})", name, par->type()));
+            throw Exception(
+                fmt::format("Parameter '{}' has unexpected type ({})", name, par->type()));
         if (tpar->valid)
             return tpar->get();
         else
@@ -151,7 +152,8 @@ public:
         auto par = it->second.get();
         auto tpar = dynamic_cast<Parameter<LateRef<U>> *>(par);
         if (tpar == nullptr)
-            throw Exception(fmt::format("Parameter '{}' has unexpected type ({})", name, par->type()));
+            throw Exception(
+                fmt::format("Parameter '{}' has unexpected type ({})", name, par->type()));
         if (tpar->valid)
             return tpar->get().get();
         if (tpar->required)
@@ -172,7 +174,8 @@ public:
         auto par = it->second.get();
         auto tpar = dynamic_cast<Parameter<T> *>(par);
         if (tpar == nullptr)
-            throw Exception(fmt::format("Parameter '{}' has unexpected type ({})", name, par->type()));
+            throw Exception(
+                fmt::format("Parameter '{}' has unexpected type ({})", name, par->type()));
         if (tpar->valid)
             return tpar->get();
         if (tpar->required)
@@ -191,7 +194,8 @@ public:
         auto par = it->second.get();
         auto tpar = dynamic_cast<Parameter<T> *>(par);
         if (tpar == nullptr)
-            throw Exception(fmt::format("Parameter '{}' has unexpected type ({})", name, par->type()));
+            throw Exception(
+                fmt::format("Parameter '{}' has unexpected type ({})", name, par->type()));
         if (tpar->valid)
             return tpar->get();
         else
@@ -224,8 +228,7 @@ public:
         using U = typename R::element_type;
 
         expect_true(this->has<LateRef<U>>(name),
-                    "Parameter '{}' does not exist or is not LateRef",
-                    name);
+                    fmt::format("Parameter '{}' does not exist or is not LateRef", name));
 
         auto & par = this->params[name];
         par->valid = true;
@@ -243,8 +246,7 @@ public:
     {
         CALL_STACK_MSG();
         expect_true(this->params.find(name) == this->params.end(),
-                    "Parameter '{}' already exists",
-                    name);
+                    fmt::format("Parameter '{}' already exists", name));
         auto param = Qtr<Parameter<T>>::alloc();
         param->required = true;
         param->is_private = false;
@@ -265,8 +267,7 @@ public:
     {
         CALL_STACK_MSG();
         expect_true(this->params.find(name) == this->params.end(),
-                    "Parameter '{}' already exists",
-                    name);
+                    fmt::format("Parameter '{}' already exists", name));
         auto param = Qtr<Parameter<T>>::alloc();
         param->required = false;
         param->value = value;
@@ -283,8 +284,7 @@ public:
     {
         CALL_STACK_MSG();
         expect_true(this->params.find(name) == this->params.end(),
-                    "Parameter '{}' already exists",
-                    name);
+                    fmt::format("Parameter '{}' already exists", name));
         auto param = Qtr<Parameter<T>>::alloc();
         param->required = false;
         param->is_private = false;
@@ -308,8 +308,7 @@ public:
     {
         CALL_STACK_MSG();
         expect_true(this->params.find(name) == this->params.end(),
-                    "Parameter '{}' already exists",
-                    name);
+                    fmt::format("Parameter '{}' already exists", name));
         auto param = Qtr<Parameter<T>>::alloc();
         param->value = value;
         param->required = false;
@@ -324,7 +323,8 @@ public:
     add_private_param(String name)
     {
         CALL_STACK_MSG();
-        expect_true(!this->has<T>(name), "Private parameter '{}' already exists", name);
+        expect_true(!this->has<T>(name),
+                    fmt::format("Private parameter '{}' already exists", name));
 
         auto param = Qtr<Parameter<T>>::alloc();
         param->value = {};

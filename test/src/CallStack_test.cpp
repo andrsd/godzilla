@@ -1,4 +1,5 @@
 #include "godzilla/CallStack.h"
+#include "godzilla/String.h"
 #include "gmock/gmock.h"
 
 void

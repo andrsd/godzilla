@@ -1,4 +1,5 @@
 #include "godzilla/Error.h"
+#include "godzilla/Assert.h"
 #include "godzilla/CallStack.h"
 #include "gmock/gmock.h"
 
@@ -13,6 +14,28 @@ warn_fn()
     warning_once("Warning");
 }
 #endif
+
+void
+fn1_fail()
+{
+    CALL_STACK_MSG();
+    expect_true(false, "error");
+}
+
+void
+fn2(bool fail, const char * test, int number)
+{
+    CALL_STACK_MSG();
+    if (fail)
+        fn1_fail();
+}
+
+void
+fn3(bool fail)
+{
+    CALL_STACK_MSG();
+    fn2(fail, "asdf", 1234);
+}
 
 } // namespace
 
@@ -30,7 +53,7 @@ TEST(ErrorTest, petsc_check_macro)
 
 TEST(ErrorTest, expect_true)
 {
-    EXPECT_DEATH(expect_true(false, "error"), "\\[ERROR\\] error");
+    EXPECT_DEATH(fn3(true), "\\[ERROR\\] error");
 
     EXPECT_NO_FATAL_FAILURE(expect_true(true, "error"));
 }
@@ -42,9 +65,9 @@ TEST(ErrorTest, error)
 
 TEST(ErrorTest, warning)
 {
-    testing::internal::CaptureStdout();
+    testing::internal::CaptureStderr();
     internal::warning("warning");
-    auto out = testing::internal::GetCapturedStdout();
+    auto out = testing::internal::GetCapturedStderr();
     EXPECT_THAT(out, testing::HasSubstr("[WARNING] warning"));
 }
 

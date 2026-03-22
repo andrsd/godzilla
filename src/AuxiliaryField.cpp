@@ -63,14 +63,14 @@ AuxiliaryField::create()
     CALL_STACK_MSG();
     if (this->region.length() > 0) {
         expect_true(this->mesh->has_label(this->region),
-                    "Region '{}' does not exists. Typo?",
-                    this->region);
+                    fmt::format("Region '{}' does not exists. Typo?", this->region));
         this->label = this->mesh->get_label(this->region);
         this->block_id = this->mesh->get_cell_set_id(this->region).value();
     }
 
     auto id = this->dpi->get_aux_field_id(this->field);
-    expect_true(id.has_value(), "Auxiliary field '{}' does not exist. Typo?", this->field);
+    expect_true(id.has_value(),
+                fmt::format("Auxiliary field '{}' does not exist. Typo?", this->field));
     this->fid = id.value();
 }
 

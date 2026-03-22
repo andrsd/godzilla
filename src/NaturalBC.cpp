@@ -44,7 +44,8 @@ NaturalBC::create()
                     "Use the 'field' parameter to assign this boundary condition to an existing "
                     "field.");
         auto id = dpi->get_field_id(this->field_name.value());
-        expect_true(id.has_value(), "Field '{}' does not exist. Typo?", field_name.value());
+        expect_true(id.has_value(),
+                    fmt::format("Field '{}' does not exist. Typo?", field_name.value()));
         this->fid = id.value();
     }
     this->components = create_components();
@@ -93,7 +94,7 @@ NaturalBC::create_components()
     CALL_STACK_MSG();
     auto dpi = get_discrete_problem_interface();
     auto n_comps = dpi->get_field_num_components(this->fid);
-    expect_true(n_comps.has_value(), "Field {} not found", this->fid);
+    expect_true(n_comps.has_value(), fmt::format("Field {} not found", this->fid));
     std::vector<Int> comps(n_comps.value());
     std::iota(comps.begin(), comps.end(), 0);
     return comps;
