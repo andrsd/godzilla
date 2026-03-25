@@ -480,7 +480,6 @@ BorrowedLocalVector::BorrowedLocalVector(DM dm) : dm(dm)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(DMGetLocalVector(dm, &this->obj));
-    inc_reference();
 }
 
 BorrowedLocalVector::~BorrowedLocalVector()
@@ -495,7 +494,6 @@ BorrowedGlobalVector::BorrowedGlobalVector(DM dm) : dm(dm)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(DMGetGlobalVector(dm, &this->obj));
-    inc_reference();
 }
 
 BorrowedGlobalVector::~BorrowedGlobalVector()
