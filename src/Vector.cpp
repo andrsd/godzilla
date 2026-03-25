@@ -7,6 +7,7 @@
 #include "godzilla/CallStack.h"
 #include "godzilla/NestVector.h"
 #include <petscvec.h>
+#include <petscdm.h>
 
 namespace godzilla {
 
@@ -472,6 +473,38 @@ Vector::copy(const IndexSet & is, ScatterMode mode, Vector & reduced)
     CALL_STACK_MSG();
     PETSC_CHECK(VecISCopy(this->obj, is, mode, reduced));
 }
+
+//
+
+BorrowedLocalVector::BorrowedLocalVector(DM dm) : dm(dm)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMGetLocalVector(dm, &this->obj));
+    inc_reference();
+}
+
+BorrowedLocalVector::~BorrowedLocalVector()
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMRestoreLocalVector(this->dm, &this->obj));
+}
+
+//
+
+BorrowedGlobalVector::BorrowedGlobalVector(DM dm) : dm(dm)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMGetGlobalVector(dm, &this->obj));
+    inc_reference();
+}
+
+BorrowedGlobalVector::~BorrowedGlobalVector()
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMRestoreGlobalVector(this->dm, &this->obj));
+}
+
+//
 
 Scalar
 dot(const Vector & x, const Vector & y)

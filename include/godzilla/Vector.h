@@ -421,6 +421,24 @@ private:
     Int size_ = 0;
 };
 
+class BorrowedLocalVector : public Vector {
+public:
+    explicit BorrowedLocalVector(DM dm);
+    ~BorrowedLocalVector() override;
+
+private:
+    DM dm;
+};
+
+class BorrowedGlobalVector : public Vector {
+public:
+    explicit BorrowedGlobalVector(DM dm);
+    ~BorrowedGlobalVector() override;
+
+private:
+    DM dm;
+};
+
 //
 
 /// Copy vector `x` into `y`
