@@ -101,6 +101,11 @@ public:
                     const DynDenseMatrix<Scalar> & vals,
                     InsertMode mode = INSERT_VALUES);
 
+    void set_values(Span<Int> row_idxs,
+                    Span<Int> col_idxs,
+                    const DynDenseMatrix<Scalar> & vals,
+                    InsertMode mode = INSERT_VALUES);
+
     /// Inserts or adds values into certain locations of a matrix, using a local numbering of the
     /// rows and columns.
     ///
@@ -151,6 +156,18 @@ public:
     /// @param mode The insertion mode
     void set_values_local(const DynDenseVector<Int> & row_idxs,
                           const DynDenseVector<Int> & col_idxs,
+                          const DynDenseMatrix<Scalar> & vals,
+                          InsertMode mode = INSERT_VALUES);
+
+    /// Inserts or adds values into certain locations of a matrix, using a local numbering of the
+    /// rows and columns.
+    ///
+    /// @param row_idxs The row local indices
+    /// @param col_idxs The column local indices
+    /// @param vals The values to insert
+    /// @param mode The insertion mode
+    void set_values_local(Span<Int> row_idxs,
+                          Span<Int> col_idxs,
                           const DynDenseMatrix<Scalar> & vals,
                           InsertMode mode = INSERT_VALUES);
 
