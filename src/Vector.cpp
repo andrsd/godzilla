@@ -3,6 +3,7 @@
 
 #include "godzilla/Vector.h"
 #include "godzilla/Error.h"
+#include "godzilla/Assert.h"
 #include "godzilla/Exception.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/NestVector.h"
@@ -259,6 +260,17 @@ Vector::set_values(const DynDenseVector<Int> & ix,
 }
 
 void
+Vector::set_values(Span<const Int> ix, const DynDenseVector<Scalar> & y, InsertMode mode)
+{
+    CALL_STACK_MSG();
+    GODZILLA_ASSERT_TRUE(ix.size() == y.size(),
+                         fmt::format("Number of indices ({}) must match the number of values ({})",
+                                     ix.size(),
+                                     y.size()));
+    PETSC_CHECK(VecSetValues(this->obj, ix.size(), ix.data(), y.data(), mode));
+}
+
+void
 Vector::set_values_local(const std::vector<Int> & ix,
                          const std::vector<Scalar> & y,
                          InsertMode mode)
@@ -280,6 +292,17 @@ Vector::set_values_local(const DynDenseVector<Int> & ix,
         PETSC_CHECK(VecSetValuesLocal(this->obj, ix.size(), ix.data(), y.data(), mode));
     else
         throw Exception("Number of indices does not match the number of values");
+}
+
+void
+Vector::set_values_local(Span<const Int> ix, const DynDenseVector<Scalar> & y, InsertMode mode)
+{
+    CALL_STACK_MSG();
+    GODZILLA_ASSERT_TRUE(ix.size() == y.size(),
+                         fmt::format("Number of indices ({}) must match the number of values ({})",
+                                     ix.size(),
+                                     y.size()));
+    PETSC_CHECK(VecSetValuesLocal(this->obj, ix.size(), ix.data(), y.data(), mode));
 }
 
 Scalar
