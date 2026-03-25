@@ -133,8 +133,10 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem15get_vector_typeEv"><code class="docutils literal notranslate"><span class="pre">Problem::get_vector_type()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla7Problem15set_vector_typeE6String"><code class="docutils literal notranslate"><span class="pre">Problem::set_vector_type()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem19create_local_vectorEv"><code class="docutils literal notranslate"><span class="pre">Problem::create_local_vector()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem19borrow_local_vectorEv"><code class="docutils literal notranslate"><span class="pre">Problem::borrow_local_vector()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem16get_local_vectorEv"><code class="docutils literal notranslate"><span class="pre">Problem::get_local_vector()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem20create_global_vectorEv"><code class="docutils literal notranslate"><span class="pre">Problem::create_global_vector()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem20borrow_global_vectorEv"><code class="docutils literal notranslate"><span class="pre">Problem::borrow_global_vector()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem17get_global_vectorEv"><code class="docutils literal notranslate"><span class="pre">Problem::get_global_vector()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem15get_matrix_typeEv"><code class="docutils literal notranslate"><span class="pre">Problem::get_matrix_type()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla7Problem15set_matrix_typeE6String"><code class="docutils literal notranslate"><span class="pre">Problem::set_matrix_type()</span></code></a></li>
@@ -373,6 +375,17 @@
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla7Problem19borrow_local_vectorEv">
+<span id="_CPPv3NK8godzilla7Problem19borrow_local_vectorEv"></span><span id="_CPPv2NK8godzilla7Problem19borrow_local_vectorEv"></span><span id="godzilla::Problem::borrow_local_vectorC"></span><span class="target" id="classgodzilla_1_1_problem_1ad87d20a0d19542ce11a88a5438ddaa28"></span><span class="n"><span class="pre">BorrowedLocalVector</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">borrow_local_vector</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla7Problem19borrow_local_vectorEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Borrow a local vector from a DM object. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Local vector </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8godzilla7Problem16get_local_vectorEv">
 <span id="_CPPv3NK8godzilla7Problem16get_local_vectorEv"></span><span id="_CPPv2NK8godzilla7Problem16get_local_vectorEv"></span><span id="godzilla::Problem::get_local_vectorC"></span><span class="target" id="classgodzilla_1_1_problem_1ae5c9bed8b4af6af534562b37e21c8c9e"></span><a class="reference internal" href="vector.html#_CPPv4N8godzilla6VectorE" title="godzilla::Vector"><span class="n"><span class="pre">Vector</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_local_vector</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla7Problem16get_local_vectorEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Get a vector that may be used with the DM local routines. </p>
@@ -392,6 +405,17 @@
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>New global vector </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla7Problem20borrow_global_vectorEv">
+<span id="_CPPv3NK8godzilla7Problem20borrow_global_vectorEv"></span><span id="_CPPv2NK8godzilla7Problem20borrow_global_vectorEv"></span><span id="godzilla::Problem::borrow_global_vectorC"></span><span class="target" id="classgodzilla_1_1_problem_1a4638b1ac6cb532b338cbfb09d04aff11"></span><span class="n"><span class="pre">BorrowedGlobalVector</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">borrow_global_vector</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla7Problem20borrow_global_vectorEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Borrow a global vector from a DM object. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Global vector </p>
 </dd>
 </dl>
 </dd></dl>
