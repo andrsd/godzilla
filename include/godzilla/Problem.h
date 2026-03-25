@@ -127,6 +127,11 @@ public:
     /// @return New local vector
     Vector create_local_vector() const;
 
+    /// Borrow a local vector from a DM object
+    ///
+    /// @return Local vector
+    BorrowedLocalVector borrow_local_vector() const;
+
     /// Get a vector that may be used with the DM local routines. This vector has spaces for the
     /// ghost values.
     ///
@@ -140,6 +145,11 @@ public:
     ///
     /// @return New global vector
     Vector create_global_vector() const;
+
+    /// Borrow a global vector from a DM object
+    ///
+    /// @return Global vector
+    BorrowedGlobalVector borrow_global_vector() const;
 
     /// Get a vector that may be used with the DM global routines
     ///
@@ -401,6 +411,11 @@ void local_to_global(DM dm, const Vector & l, InsertMode mode, Vector & g);
 /// @param l Local vector
 void global_to_local(DM dm, const Vector & g, InsertMode mode, Vector & l);
 
+/// Borrow a local vector from a DM object
+///
+/// @return New local vector
+BorrowedLocalVector borrow_local_vector(DM dm);
+
 /// Get a vector that may be used with the DM local routines. This vector has spaces for the
 /// ghost values.
 ///
@@ -408,6 +423,11 @@ void global_to_local(DM dm, const Vector & g, InsertMode mode, Vector & l);
 Vector get_local_vector(DM dm);
 
 void restore_local_vector(DM dm, const Vector & g);
+
+/// Borrow a local vector from a DM object
+///
+/// @return New local vector
+BorrowedGlobalVector borrow_global_vector(DM dm);
 
 /// Get global vector
 Vector get_global_vector(DM dm);
