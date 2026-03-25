@@ -172,6 +172,32 @@ Matrix::set_values(const DynDenseVector<Int> & row_idxs,
 }
 
 void
+Matrix::set_values(Span<Int> row_idxs,
+                   Span<Int> col_idxs,
+                   const DynDenseMatrix<Scalar> & vals,
+                   InsertMode mode)
+{
+    CALL_STACK_MSG();
+    GODZILLA_ASSERT_TRUE(row_idxs.size() == vals.get_num_rows(),
+                         fmt::format("The number of row indices ({}) must match the number of "
+                                     "rows in the value matrix ({})",
+                                     row_idxs.size(),
+                                     vals.get_num_rows()));
+    GODZILLA_ASSERT_TRUE(col_idxs.size() == vals.get_num_cols(),
+                         fmt::format("The number of column indices ({}) must match the number of "
+                                     "columns in the value matrix ({})",
+                                     col_idxs.size(),
+                                     vals.get_num_cols()));
+    PETSC_CHECK(MatSetValues(this->obj,
+                             row_idxs.size(),
+                             row_idxs.data(),
+                             col_idxs.size(),
+                             col_idxs.data(),
+                             vals.data(),
+                             mode));
+}
+
+void
 Matrix::set_values_local(Int n,
                          const Int * row_idxs,
                          Int m,
@@ -210,6 +236,32 @@ Matrix::set_values_local(const DynDenseVector<Int> & row_idxs,
                                   (Int) row_idxs.size(),
                                   row_idxs.data(),
                                   (Int) col_idxs.size(),
+                                  col_idxs.data(),
+                                  vals.data(),
+                                  mode));
+}
+
+void
+Matrix::set_values_local(Span<Int> row_idxs,
+                         Span<Int> col_idxs,
+                         const DynDenseMatrix<Scalar> & vals,
+                         InsertMode mode)
+{
+    CALL_STACK_MSG();
+    GODZILLA_ASSERT_TRUE(row_idxs.size() == vals.get_num_rows(),
+                         fmt::format("The number of row indices ({}) must match the number of "
+                                     "rows in the value matrix ({})",
+                                     row_idxs.size(),
+                                     vals.get_num_rows()));
+    GODZILLA_ASSERT_TRUE(col_idxs.size() == vals.get_num_cols(),
+                         fmt::format("The number of column indices ({}) must match the number of "
+                                     "columns in the value matrix ({})",
+                                     col_idxs.size(),
+                                     vals.get_num_cols()));
+    PETSC_CHECK(MatSetValuesLocal(this->obj,
+                                  row_idxs.size(),
+                                  row_idxs.data(),
+                                  col_idxs.size(),
                                   col_idxs.data(),
                                   vals.data(),
                                   mode));

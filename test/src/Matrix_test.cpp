@@ -135,6 +135,23 @@ TEST(MatrixTest, set_values_dyn_dense)
     EXPECT_DOUBLE_EQ(m(1, 2), 4.);
 }
 
+TEST(MatrixTest, set_values_span)
+{
+    auto m = Matrix::create_seq_aij(MPI_COMM_WORLD, 2, 3, 2);
+    std::vector<Int> row_data = { 1 };
+    Span<Int> rows(row_data);
+
+    std::vector<Int> col_data = { 0, 2 };
+    Span<Int> cols(col_data);
+
+    DynDenseMatrix<Scalar> vals(1, 2);
+    vals.set_row(0, { 2, 5 });
+    m.set_values(rows, cols, vals);
+    m.assemble();
+    EXPECT_DOUBLE_EQ(m(1, 0), 2.);
+    EXPECT_DOUBLE_EQ(m(1, 2), 5.);
+}
+
 TEST(MatrixTest, set_values_local_c)
 {
     Matrix m = Matrix::create_seq_aij(MPI_COMM_WORLD, 2, 2, 2);
@@ -195,6 +212,23 @@ TEST(MatrixTest, set_values_local_dyn_dense)
     EXPECT_DOUBLE_EQ(m(0, 2), 2.);
     EXPECT_DOUBLE_EQ(m(1, 0), 3.);
     EXPECT_DOUBLE_EQ(m(1, 2), 4.);
+}
+
+TEST(MatrixTest, set_values_local_span)
+{
+    auto m = Matrix::create_seq_aij(MPI_COMM_WORLD, 2, 3, 2);
+    std::vector<Int> row_data = { 1 };
+    Span<Int> rows(row_data);
+
+    std::vector<Int> col_data = { 0, 2 };
+    Span<Int> cols(col_data);
+
+    DynDenseMatrix<Scalar> vals(1, 2);
+    vals.set_row(0, { 3, 6 });
+    m.set_values_local(rows, cols, vals);
+    m.assemble();
+    EXPECT_DOUBLE_EQ(m(1, 0), 3.);
+    EXPECT_DOUBLE_EQ(m(1, 2), 6.);
 }
 
 TEST(MatrixTest, mult)
