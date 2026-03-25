@@ -137,6 +137,21 @@ TEST(VectorTest, set_values_dyn_dense)
     EXPECT_DOUBLE_EQ(v(2), 9.);
 }
 
+TEST(VectorTest, set_values_span)
+{
+    auto v = Vector::create_seq(MPI_COMM_WORLD, 3);
+    Int ix_data[3] = { 0, 1, 2 };
+    Span ix(ix_data, 3);
+
+    DynDenseVector<Scalar> vals(3);
+    vals.set_values({ 3, 5, 9 });
+
+    v.set_values(ix, vals);
+    EXPECT_DOUBLE_EQ(v(0), 3.);
+    EXPECT_DOUBLE_EQ(v(1), 5.);
+    EXPECT_DOUBLE_EQ(v(2), 9.);
+}
+
 TEST(VectorTest, set_values_local)
 {
     // TODO: this should be tested with MPI n_proc > 1
@@ -170,6 +185,21 @@ TEST(VectorTest, set_values_local_dyn_dense)
     vals.set_values({ 3, 5, 9 });
 
     v.set_values_local(idx, vals);
+    EXPECT_DOUBLE_EQ(v(0), 3.);
+    EXPECT_DOUBLE_EQ(v(1), 5.);
+    EXPECT_DOUBLE_EQ(v(2), 9.);
+}
+
+TEST(VectorTest, set_values_local_span)
+{
+    auto v = Vector::create_seq(MPI_COMM_WORLD, 3);
+    Int ix_data[3] = { 0, 1, 2 };
+    Span ix(ix_data, 3);
+
+    DynDenseVector<Scalar> vals(3);
+    vals.set_values({ 3, 5, 9 });
+
+    v.set_values_local(ix, vals);
     EXPECT_DOUBLE_EQ(v(0), 3.);
     EXPECT_DOUBLE_EQ(v(1), 5.);
     EXPECT_DOUBLE_EQ(v(2), 9.);
@@ -634,7 +664,7 @@ TEST(VectorTest, create_mpi_w_array_c_array)
         comm.barrier();
     }
 
-    delete [] data;
+    delete[] data;
 }
 
 TEST(VectorTest, create_mpi_w_array_std_vector)

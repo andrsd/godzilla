@@ -144,6 +144,15 @@ public:
                     const DynDenseVector<Scalar> & y,
                     InsertMode mode = INSERT_VALUES);
 
+    /// Inserts or adds values into certain locations of a vector
+    ///
+    /// @param ix Indices where to add/insert
+    /// @param y Values
+    /// @param mode Insertion mode
+    void set_values(Span<const Int> ix,
+                    const DynDenseVector<Scalar> & y,
+                    InsertMode mode = INSERT_VALUES);
+
     /// Inserts or adds values into certain locations of a vector, using a local ordering of the
     /// nodes.
     ///
@@ -173,6 +182,16 @@ public:
     /// @param y Values
     /// @param mode Insertion mode
     void set_values_local(const DynDenseVector<Int> & ix,
+                          const DynDenseVector<Scalar> & y,
+                          InsertMode mode = INSERT_VALUES);
+
+    /// Inserts or adds values into certain locations of a vector, using a local ordering of the
+    /// nodes.
+    ///
+    /// @param ix Indices where to add/insert
+    /// @param y Values
+    /// @param mode Insertion mode
+    void set_values_local(Span<const Int> ix,
                           const DynDenseVector<Scalar> & y,
                           InsertMode mode = INSERT_VALUES);
 
