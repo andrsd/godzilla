@@ -74,6 +74,11 @@ public:
     /// @return [m, n]: m = the number of global rows, n = the number of global columns
     std::tuple<Int, Int> get_size() const;
 
+    /// Returns the numbers of local rows and local columns in a matrix.
+    ///
+    /// @return [m, n]: m = the number of local rows, n = the number of local columns
+    std::tuple<Int, Int> get_local_size() const;
+
     Int get_n_rows() const;
     Int get_n_cols() const;
 
