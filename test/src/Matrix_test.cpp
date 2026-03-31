@@ -51,6 +51,16 @@ TEST(MatrixTest, get_size)
     }
 }
 
+TEST(MatrixTest, get_local_size)
+{
+    Matrix m = Matrix::create_seq_aij(MPI_COMM_WORLD, 3, 6, 1);
+    {
+        auto [rows, cols] = m.get_local_size();
+        EXPECT_EQ(rows, 3);
+        EXPECT_EQ(cols, 6);
+    }
+}
+
 TEST(MatrixTest, set_value)
 {
     Matrix m = Matrix::create_seq_aij(MPI_COMM_WORLD, 2, 2, 2);

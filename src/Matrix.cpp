@@ -88,6 +88,15 @@ Matrix::get_size() const
     return { m, n };
 }
 
+std::tuple<Int, Int>
+Matrix::get_local_size() const
+{
+    CALL_STACK_MSG();
+    Int m, n;
+    PETSC_CHECK(MatGetLocalSize(this->obj, &m, &n));
+    return { m, n };
+}
+
 Int
 Matrix::get_n_rows() const
 {
