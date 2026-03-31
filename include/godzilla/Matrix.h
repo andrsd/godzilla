@@ -68,6 +68,12 @@ public:
     void assemble(MatAssemblyType type = MAT_FINAL_ASSEMBLY);
 
     void get_size(Int & m, Int & n) const;
+
+    /// Returns the numbers of rows and columns in a matrix.
+    ///
+    /// @return [m, n]: m = the number of global rows, n = the number of global columns
+    std::tuple<Int, Int> get_size() const;
+
     Int get_n_rows() const;
     Int get_n_cols() const;
 
