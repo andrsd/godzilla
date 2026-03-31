@@ -38,10 +38,17 @@ TEST(MatrixTest, get_size)
     Matrix m = Matrix::create_seq_aij(MPI_COMM_WORLD, 3, 6, 1);
     EXPECT_EQ(m.get_n_rows(), 3);
     EXPECT_EQ(m.get_n_cols(), 6);
-    Int rows, cols;
-    m.get_size(rows, cols);
-    EXPECT_EQ(rows, 3);
-    EXPECT_EQ(cols, 6);
+    {
+        Int rows, cols;
+        m.get_size(rows, cols);
+        EXPECT_EQ(rows, 3);
+        EXPECT_EQ(cols, 6);
+    }
+    {
+        auto [rows, cols] = m.get_size();
+        EXPECT_EQ(rows, 3);
+        EXPECT_EQ(cols, 6);
+    }
 }
 
 TEST(MatrixTest, set_value)
