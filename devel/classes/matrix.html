@@ -100,6 +100,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Matrix</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#_CPPv4N8godzilla6MatrixE"><code class="docutils literal notranslate"><span class="pre">Matrix</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla6Matrix8set_typeEPKc"><code class="docutils literal notranslate"><span class="pre">Matrix::set_type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla6Matrix8get_sizeEv"><code class="docutils literal notranslate"><span class="pre">Matrix::get_size()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla6Matrix16set_values_localE3IntPK3Int3IntPK3IntPK6Scalar10InsertMode"><code class="docutils literal notranslate"><span class="pre">Matrix::set_values_local()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla6Matrix16set_values_localERKNSt6vectorI3IntEERKNSt6vectorI3IntEERKNSt6vectorI6ScalarEE10InsertMode"><code class="docutils literal notranslate"><span class="pre">Matrix::set_values_local()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4I_3IntEN8godzilla6Matrix16set_values_localEvRK11DenseVectorI3Int1NERK11DenseVectorI3Int1NERK11DenseMatrixI6Scalar1N1NE10InsertMode"><code class="docutils literal notranslate"><span class="pre">Matrix::set_values_local()</span></code></a></li>
@@ -181,6 +182,17 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>type</strong> – The matrix type </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla6Matrix8get_sizeEv">
+<span id="_CPPv3NK8godzilla6Matrix8get_sizeEv"></span><span id="_CPPv2NK8godzilla6Matrix8get_sizeEv"></span><span id="godzilla::Matrix::get_sizeC"></span><span class="target" id="classgodzilla_1_1_matrix_1ae40299de3c865c8732cfa6fc1618ca68"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Int</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">Int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_size</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla6Matrix8get_sizeEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Returns the numbers of rows and columns in a matrix. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>[m, n]: m = the number of global rows, n = the number of global columns </p>
 </dd>
 </dl>
 </dd></dl>
