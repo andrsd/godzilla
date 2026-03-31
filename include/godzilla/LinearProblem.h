@@ -45,6 +45,8 @@ protected:
     /// Get underlying linear solver
     const KrylovSolver & get_ksp() const;
 
+    KrylovSolver & get_ksp();
+
     /// Initialize the problem
     virtual void init();
 
