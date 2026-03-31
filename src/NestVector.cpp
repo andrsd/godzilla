@@ -77,4 +77,17 @@ NestVector::duplicate() const
     return dup;
 }
 
+NestVector
+NestVector::create(MPI_Comm comm, const std::vector<Vector> & vecs)
+{
+    CALL_STACK_MSG();
+    std::vector<Vec> vvs;
+    vvs.reserve(vecs.size());
+    for (const auto & v : vecs)
+        vvs.push_back(v);
+    NestVector y;
+    PETSC_CHECK(VecCreateNest(comm, vecs.size(), nullptr, vvs.data(), y));
+    return y;
+}
+
 } // namespace godzilla

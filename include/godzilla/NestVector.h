@@ -41,6 +41,21 @@ public:
 
     /// Duplicate the vector
     NestVector duplicate() const;
+
+    static NestVector create(MPI_Comm comm, const std::vector<Vector> & vecs);
+
+    template <Int N>
+    static NestVector
+    create(MPI_Comm comm, const DenseVector<Vector, N> & vecs)
+    {
+        CALL_STACK_MSG();
+        DenseVector<Vec, N> vvs;
+        for (Int i = 0; i < N; i++)
+            vvs(i) = vecs(i);
+        NestVector y;
+        PETSC_CHECK(VecCreateNest(comm, N, nullptr, vvs.data(), &y.obj));
+        return y;
+    }
 };
 
 } // namespace godzilla
