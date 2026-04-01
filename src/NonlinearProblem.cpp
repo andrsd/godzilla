@@ -52,10 +52,17 @@ NonlinearProblem::NonlinearProblem(const Parameters & pars) :
 {
     CALL_STACK_MSG();
     this->line_search_type = this->line_search_type.to_lower();
+#if PETSC_VERSION_GE(3, 24, 0)
+    expect_true(validation::in(this->line_search_type,
+                               { "bt", "basic", "secant", "cp", "nleqerr", "shell" }),
+                "The 'line_search' parameter can be either 'bt', 'basic', 'secant', 'cp', "
+                "'nleqerr' or 'shell'.");
+#else
     expect_true(
         validation::in(this->line_search_type, { "bt", "basic", "l2", "cp", "nleqerr", "shell" }),
         "The 'line_search' parameter can be either 'bt', 'basic', 'l2', 'cp', 'nleqerr' or "
         "'shell'.");
+#endif
 }
 
 const Matrix &
@@ -193,6 +200,10 @@ NonlinearProblem::set_up_line_search()
         ls.set_type(SNESolver::LineSearchType::NLEQERR);
     else if (this->line_search_type == "shell")
         ls.set_type(SNESolver::LineSearchType::SHELL);
+#if PETSC_VERSION_GE(3, 24, 0)
+    else if (this->line_search_type == "secant")
+        ls.set_type(SNESolver::LineSearchType::SECANT);
+#endif
     else
         ls.set_type(SNESolver::LineSearchType::BT);
     this->snes.set_line_search(ls);

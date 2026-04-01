@@ -19,8 +19,18 @@ SNESolver::LineSearch::set_type(LineSearchType type)
         PETSC_CHECK(SNESLineSearchSetType(this->ls, SNESLINESEARCHBASIC));
         return;
 
+#if PETSC_VERSION_GE(3, 24, 0)
+    case LineSearchType::SECANT:
+        PETSC_CHECK(SNESLineSearchSetType(this->ls, SNESLINESEARCHSECANT));
+        return;
+#endif
+
     case LineSearchType::L2:
+#if PETSC_VERSION_GE(3, 24, 0)
+        PETSC_CHECK(SNESLineSearchSetType(this->ls, SNESLINESEARCHSECANT));
+#else
         PETSC_CHECK(SNESLineSearchSetType(this->ls, SNESLINESEARCHL2));
+#endif
         return;
 
     case LineSearchType::CP:

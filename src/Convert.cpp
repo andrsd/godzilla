@@ -175,6 +175,10 @@ to_str(SNESolver::LineSearchType type)
         return "shell";
     else if (type == SNESolver::LineSearchType::BT)
         return "bt";
+#if PETSC_VERSION_GE(3, 24, 0)
+    else if (type == SNESolver::LineSearchType::SECANT)
+        return "secant";
+#endif
     else
         return "unknown";
 }
