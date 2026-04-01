@@ -95,7 +95,7 @@ jobs:
 
       - name: Upload test results to codecov.io
         if: ${{ !cancelled() }}
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           report_type: test_results
@@ -124,6 +124,6 @@ jobs:
         uses: actions/download-artifact@v8
 
       - name: Upload to Codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
