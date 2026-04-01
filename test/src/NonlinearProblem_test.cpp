@@ -212,7 +212,11 @@ TEST(NonlinearProblemTest, line_search_type)
     mesh_pars.set<Int>("nx", 1);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
+#if PETSC_VERSION_GE(3, 24, 0)
+    std::vector<String> ls_type = { "basic", "secant", "cp", "nleqerr", "shell" };
+#else
     std::vector<String> ls_type = { "basic", "l2", "cp", "nleqerr", "shell" };
+#endif
     for (auto & lst : ls_type) {
         auto prob_pars = NonlinearProblem::parameters();
         prob_pars.set<Ref<App>>("app", ref(app));
@@ -249,9 +253,7 @@ TEST(NonlinearProblemTest, invalid_line_search_type)
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     prob_pars.set<String>("line_search", "asdf");
 
-    EXPECT_DEATH(MockNonlinearProblem prob(prob_pars),
-                 "The 'line_search' parameter can be either 'bt', 'basic', 'l2', 'cp', 'nleqerr' "
-                 "or 'shell'.");
+    EXPECT_DEATH(MockNonlinearProblem prob(prob_pars), "The 'line_search' parameter can be either");
 }
 
 TEST(NonlinearProblemTest, restart_file)

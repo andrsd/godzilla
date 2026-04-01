@@ -38,7 +38,17 @@ public:
         DIVERGED_TR_DELTA = SNES_DIVERGED_TR_DELTA,
     };
 
-    enum class LineSearchType { BASIC, L2, CP, NLEQERR, SHELL, BT };
+    enum class LineSearchType {
+        BASIC,
+        L2,
+        CP,
+        NLEQERR,
+        SHELL,
+        BT,
+#if PETSC_VERSION_GE(3, 24, 0)
+        SECANT,
+#endif
+    };
 
     /// Wrapper around SNESLineSearch
     class LineSearch {

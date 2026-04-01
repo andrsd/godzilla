@@ -12,6 +12,122 @@
 #include "petsc/private/dmpleximpl.h"
 
 namespace godzilla {
+namespace internal {
+
+// These functions are now (PETSC 3.24+) internal in PETSc, so we are not able to call them
+
+// clang-format off
+static
+PetscErrorCode DMPlexBasisTransformFieldTensor_Internal(DM dm, DM tdm, Vec tv, PetscInt pf, PetscInt f, PetscInt pg, PetscInt g, PetscBool l2g, PetscInt lda, PetscScalar *a)
+{
+  PetscSection       s, ts;
+  const PetscScalar *ta, *tvaf, *tvag;
+  PetscInt           fdof, gdof, fpdof, gpdof;
+
+  PetscFunctionBeginHot;
+  PetscCall(DMGetLocalSection(dm, &s));
+  PetscCall(DMGetLocalSection(tdm, &ts));
+  PetscCall(PetscSectionGetFieldDof(s, pf, f, &fpdof));
+  PetscCall(PetscSectionGetFieldDof(s, pg, g, &gpdof));
+  PetscCall(PetscSectionGetFieldDof(ts, pf, f, &fdof));
+  PetscCall(PetscSectionGetFieldDof(ts, pg, g, &gdof));
+  PetscCall(VecGetArrayRead(tv, &ta));
+  PetscCall(DMPlexPointLocalFieldRead(tdm, pf, f, ta, &tvaf));
+  PetscCall(DMPlexPointLocalFieldRead(tdm, pg, g, ta, &tvag));
+  if (l2g) {
+    switch (fdof) {
+    case 4:
+      DMPlex_MatMult2D_Internal(tvaf, gpdof, lda, a, a);
+      break;
+    case 9:
+      DMPlex_MatMult3D_Internal(tvaf, gpdof, lda, a, a);
+      break;
+    }
+    switch (gdof) {
+    case 4:
+      DMPlex_MatMultTransposeLeft2D_Internal(tvag, fpdof, lda, a, a);
+      break;
+    case 9:
+      DMPlex_MatMultTransposeLeft3D_Internal(tvag, fpdof, lda, a, a);
+      break;
+    }
+  } else {
+    switch (fdof) {
+    case 4:
+      DMPlex_MatMultTranspose2D_Internal(tvaf, gpdof, lda, a, a);
+      break;
+    case 9:
+      DMPlex_MatMultTranspose3D_Internal(tvaf, gpdof, lda, a, a);
+      break;
+    }
+    switch (gdof) {
+    case 4:
+      DMPlex_MatMultLeft2D_Internal(tvag, fpdof, lda, a, a);
+      break;
+    case 9:
+      DMPlex_MatMultLeft3D_Internal(tvag, fpdof, lda, a, a);
+      break;
+    }
+  }
+  PetscCall(VecRestoreArrayRead(tv, &ta));
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+static PetscErrorCode
+DMGetBasisTransformDM_Internal(DM dm, DM * tdm)
+{
+    PetscFunctionBegin;
+    PetscValidHeaderSpecific(dm, DM_CLASSID, 1);
+    PetscAssertPointer(tdm, 2);
+    *tdm = dm->transformDM;
+    PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+static PetscErrorCode
+DMGetBasisTransformVec_Internal(DM dm, Vec * tv)
+{
+    PetscFunctionBegin;
+    PetscValidHeaderSpecific(dm, DM_CLASSID, 1);
+    PetscAssertPointer(tv, 2);
+    *tv = dm->transform;
+    PetscFunctionReturn(PETSC_SUCCESS);
+}
+
+static
+PetscErrorCode DMPlexBasisTransformPointTensor_Internal(DM dm, DM tdm, Vec tv, PetscInt p, PetscBool l2g, PetscInt lda, PetscScalar *a)
+{
+  PetscSection    s;
+  PetscSection    clSection;
+  IS              clPoints;
+  const PetscInt *clp;
+  PetscInt       *points = NULL;
+  PetscInt        Nf, f, g, Np, cpf, cpg, fdof, gdof, r, c = 0;
+
+  PetscFunctionBegin;
+  PetscCall(DMGetLocalSection(dm, &s));
+  PetscCall(PetscSectionGetNumFields(s, &Nf));
+  PetscCall(DMPlexGetCompressedClosure(dm, s, p, 0, &Np, &points, &clSection, &clPoints, &clp));
+  for (f = 0, r = 0; f < Nf; ++f) {
+    for (cpf = 0; cpf < Np * 2; cpf += 2) {
+      PetscCall(PetscSectionGetFieldDof(s, points[cpf], f, &fdof));
+      for (g = 0, c = 0; g < Nf; ++g) {
+        for (cpg = 0; cpg < Np * 2; cpg += 2) {
+          PetscCall(PetscSectionGetFieldDof(s, points[cpg], g, &gdof));
+          PetscCall(DMPlexBasisTransformFieldTensor_Internal(dm, tdm, tv, points[cpf], f, points[cpg], g, l2g, lda, &a[r * lda + c]));
+          c += gdof;
+        }
+      }
+      PetscCheck(c == lda, PETSC_COMM_SELF, PETSC_ERR_PLIB, "Invalid number of columns %" PetscInt_FMT " should be %" PetscInt_FMT, c, lda);
+      r += fdof;
+    }
+  }
+  PetscCheck(r == lda, PETSC_COMM_SELF, PETSC_ERR_PLIB, "Invalid number of rows %" PetscInt_FMT " should be %" PetscInt_FMT, c, lda);
+  PetscCall(DMPlexRestoreCompressedClosure(dm, s, p, &Np, &points, &clSection, &clPoints, &clp));
+  PetscFunctionReturn(PETSC_SUCCESS);
+}
+// clang-format on
+
+} // namespace internal
 
 PetscErrorCode
 FENonlinearProblem::invoke_compute_boundary_delegate(DM, Vec x, void * context)
@@ -638,9 +754,9 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
     PetscBool transform;
     PETSC_CHECK(DMHasBasisTransform(dm, &transform));
     DM tdm;
-    PETSC_CHECK(DMGetBasisTransformDM_Internal(dm, &tdm));
+    PETSC_CHECK(internal::DMGetBasisTransformDM_Internal(dm, &tdm));
     Vec tv;
-    PETSC_CHECK(DMGetBasisTransformVec_Internal(dm, &tv));
+    PETSC_CHECK(internal::DMGetBasisTransformVec_Internal(dm, &tv));
     PetscSection section;
     PETSC_CHECK(DMGetLocalSection(dm, &section));
     PetscSection global_section;
@@ -830,14 +946,14 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
 
         // Transform to global basis before insertion in Jacobian
         if (transform)
-            PETSC_CHECK(
-                DMPlexBasisTransformPointTensor_Internal(dm,
-                                                         tdm,
-                                                         tv,
-                                                         cell,
-                                                         PETSC_TRUE,
-                                                         tot_dim,
-                                                         &elem_mat[cind * tot_dim * tot_dim]));
+            PETSC_CHECK(internal::DMPlexBasisTransformPointTensor_Internal(
+                dm,
+                tdm,
+                tv,
+                cell,
+                PETSC_TRUE,
+                tot_dim,
+                &elem_mat[cind * tot_dim * tot_dim]));
         if (has_prec) {
             if (has_jac)
                 PETSC_CHECK(DMPlexMatSetClosure(dm,
@@ -876,7 +992,11 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
     compute_bnd_jacobian_internal(dm, X, X_t, t, x_t_shift, J, Jp);
     // Assemble matrix
     PetscBool ass_op = has_jac && has_prec ? PETSC_TRUE : PETSC_FALSE, gass_op;
+#if PETSC_VERSION_GE(3, 24, 0)
+    MPI_Allreduce(&ass_op, &gass_op, 1, MPI_C_BOOL, MPI_LOR, PetscObjectComm((PetscObject) dm));
+#else
     MPI_Allreduce(&ass_op, &gass_op, 1, MPIU_BOOL, MPI_LOR, PetscObjectComm((PetscObject) dm));
+#endif
 
     if (has_jac & has_prec)
         J.assemble();
@@ -966,9 +1086,9 @@ FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
     PetscBool transform;
     PETSC_CHECK(DMHasBasisTransform(dm, &transform));
     DM tdm;
-    PETSC_CHECK(DMGetBasisTransformDM_Internal(dm, &tdm));
+    PETSC_CHECK(internal::DMGetBasisTransformDM_Internal(dm, &tdm));
     Vec tv;
-    PETSC_CHECK(DMGetBasisTransformVec_Internal(dm, &tv));
+    PETSC_CHECK(internal::DMGetBasisTransformVec_Internal(dm, &tv));
     PetscSection section;
     PETSC_CHECK(DMGetLocalSection(dm, &section));
     PetscDS prob;
@@ -1117,14 +1237,14 @@ FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
             const Int * support;
             PETSC_CHECK(DMPlexGetSupport(plex, point_idxs[face], &support));
             if (transform)
-                PETSC_CHECK(
-                    DMPlexBasisTransformPointTensor_Internal(dm,
-                                                             tdm,
-                                                             tv,
-                                                             support[0],
-                                                             PETSC_TRUE,
-                                                             tot_dim,
-                                                             &elem_mat[face * tot_dim * tot_dim]));
+                PETSC_CHECK(internal::DMPlexBasisTransformPointTensor_Internal(
+                    dm,
+                    tdm,
+                    tv,
+                    support[0],
+                    PETSC_TRUE,
+                    tot_dim,
+                    &elem_mat[face * tot_dim * tot_dim]));
             PETSC_CHECK(DMPlexMatSetClosure(plex,
                                             section,
                                             global_section,
