@@ -208,14 +208,17 @@ public:
     inline Parameters &
     set(String name, T value, std::source_location loc = std::source_location::current())
     {
-        CALL_STACK_MSG();
-        if (!this->has<T>(name))
-            this->params[name] = Qtr<Parameter<T>>::alloc();
+        auto it = this->params.find(name);
+        expect_true(it != this->params.end(), fmt::format("Parameter '{}' not found.", name), loc);
 
-        auto & par = this->params[name];
+        auto & par = it->second;
         par->valid = true;
         par->src_loc = loc;
-        dynamic_cast<Parameter<T> *>(this->params[name].get())->set(value);
+        auto tpar = dynamic_cast<Parameter<T> *>(par.get());
+        expect_true(tpar != nullptr,
+                    fmt::format("Parameter '{}' has unexpected type ({})", name, par->type()),
+                    loc);
+        tpar->set(value);
         return *this;
     }
 
@@ -224,16 +227,19 @@ public:
     inline Parameters &
     set(String name, R value, std::source_location loc = std::source_location::current())
     {
-        CALL_STACK_MSG();
+        auto it = this->params.find(name);
+        expect_true(it != this->params.end(), fmt::format("Parameter '{}' not found.", name), loc);
+
         using U = typename R::element_type;
 
-        expect_true(this->has<LateRef<U>>(name),
-                    fmt::format("Parameter '{}' does not exist or is not LateRef", name));
-
-        auto & par = this->params[name];
+        auto & par = it->second;
         par->valid = true;
         par->src_loc = loc;
-        dynamic_cast<Parameter<LateRef<U>> *>(par.get())->set(LateRef<U>::from_ref(value));
+        auto tpar = dynamic_cast<Parameter<LateRef<U>> *>(par.get());
+        expect_true(tpar != nullptr,
+                    fmt::format("Parameter '{}' has unexpected type ({})", name, par->type()),
+                    loc);
+        tpar->set(LateRef<U>::from_ref(value));
         return *this;
     }
 

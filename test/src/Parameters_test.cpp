@@ -103,9 +103,7 @@ TEST(ParametersTest, empty_doc_str)
 TEST(ParametersTest, set_non_existing_param)
 {
     auto params = Object::parameters();
-    params.set<double>("d", 1.23);
-
-    EXPECT_DOUBLE_EQ(params.get<double>("d"), 1.23);
+    EXPECT_DEATH(params.set<double>("d", 1.23), "Parameter 'd' not found.");
 }
 
 TEST(ParametersTest, get_non_existing_param_with_default)
@@ -138,6 +136,10 @@ TEST(ParametersTest, get_valid_param_with_default)
 TEST(ParametersTest, chained_set)
 {
     Parameters params;
+    params.add_required_param<Int>("num", "")
+        .add_required_param<double>("float", "")
+        .add_required_param<String>("text", "");
+
     params.set<Int>("num", 1234).set<double>("float", 12.34).set<String>("text", "some long text");
 
     EXPECT_EQ(params.get<Int>("num"), 1234);
@@ -148,6 +150,8 @@ TEST(ParametersTest, chained_set)
 TEST(ParametersTest, move_oper)
 {
     Parameters params1;
+    params1.add_required_param<Int>("i", "");
+
     params1.set<Int>("i", 1);
 
     Parameters params2 = std::move(params1);
@@ -159,6 +163,8 @@ TEST(ParametersTest, move_oper)
 TEST(ParametersTest, get_optional_param)
 {
     Parameters params;
+    params.add_param<Int>("i", "");
+
     params.set<Int>("i", 1);
 
     auto par = params.get<Optional<Int>>("i");
@@ -177,6 +183,7 @@ TEST(ParametersTest, get_optional_param_that_was_not_set)
 TEST(ParametersTest, get_optional_param_using_incorrect_type)
 {
     Parameters params;
+    params.add_param<int>("int", "");
     params.set<int>("int", 1);
 
     EXPECT_THROW_MSG(params.get<Optional<double>>("int"),
@@ -213,12 +220,14 @@ TEST(ParametersTest, required_private_param)
 TEST(ParametersTest, std_array)
 {
     Parameters params;
+    params.add_required_param<std::array<double, 2>>("number", "");
     params.set<std::array<double, 2>>("number", { 1, 2 });
 }
 
 TEST(ParametersTest, dense_vector)
 {
     Parameters params;
+    params.add_required_param<DenseVector<double, 2>>("number", "");
     params.set<DenseVector<double, 2>>("number", { 1, 2 });
 }
 

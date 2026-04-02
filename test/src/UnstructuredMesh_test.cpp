@@ -121,6 +121,17 @@ public:
     Int nx;
     Int ny;
     Int nz;
+
+public:
+    static Parameters
+    parameters()
+    {
+        auto pars = Object::parameters();
+        pars.add_required_param<Int>("nx", "");
+        pars.add_required_param<Int>("ny", "");
+        pars.add_required_param<Int>("nz", "");
+        return pars;
+    }
 };
 
 } // namespace

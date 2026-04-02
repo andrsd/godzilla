@@ -55,9 +55,10 @@ TEST(PiecewiseConstantTest, err_not_monotonic)
 
 TEST(PiecewiseConstantTest, pass_into_parameters)
 {
-    PiecewiseConstant fn(PiecewiseConstant::RIGHT, { 0.5 }, { -2, 3 });
-
     Parameters params;
+    params.add_param<PiecewiseConstant>("fn", "");
+
+    PiecewiseConstant fn(PiecewiseConstant::RIGHT, { 0.5 }, { -2, 3 });
     params.set<PiecewiseConstant>("fn", fn);
 
     auto par_fn = params.get<PiecewiseConstant>("fn");
