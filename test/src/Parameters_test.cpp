@@ -23,7 +23,7 @@ validParams1()
 TEST(ParametersTest, get_nonexisting_param)
 {
     auto params = Object::parameters();
-    EXPECT_THROW_MSG(params.get<int>("i"), "No parameter 'i' found.");
+    EXPECT_DEATH(params.get<int>("i"), "Parameter 'i' not found.");
 }
 
 TEST(ParametersTest, get_uninitialized_param)
@@ -31,7 +31,7 @@ TEST(ParametersTest, get_uninitialized_param)
     auto params = Object::parameters();
     params.add_param<Real>("param", "doco");
 
-    EXPECT_THROW_MSG(params.get<Real>("param"), "Parameter 'param' is uninitialized");
+    EXPECT_DEATH(params.get<Real>("param"), "Parameter 'param' is not initialized");
 }
 
 TEST(ParametersTest, get_param_with_incorrect_type)
@@ -39,7 +39,7 @@ TEST(ParametersTest, get_param_with_incorrect_type)
     auto params = Object::parameters();
     params.add_param<double>("param", "doco");
 
-    EXPECT_THROW_MSG(params.get<int>("param"), "Parameter 'param' has unexpected type (double)");
+    EXPECT_DEATH(params.get<int>("param"), "Parameter 'param' has unexpected type \\(double\\)");
 }
 
 TEST(ParametersTest, param_value)
@@ -110,8 +110,7 @@ TEST(ParametersTest, get_non_existing_param_with_default)
 {
     auto params = Object::parameters();
 
-    auto val = params.get<double>("d", 1.23);
-    EXPECT_DOUBLE_EQ(val, 1.23);
+    EXPECT_DEATH(params.get<double>("d", 1.23), "Parameter 'd' not found");
 }
 
 TEST(ParametersTest, get_invalid_param_with_default)
@@ -175,6 +174,7 @@ TEST(ParametersTest, get_optional_param)
 TEST(ParametersTest, get_optional_param_that_was_not_set)
 {
     Parameters params;
+    params.add_param<Real>("f", "");
 
     auto par = params.get<Optional<Real>>("f");
     EXPECT_FALSE(par.has_value());
@@ -186,8 +186,8 @@ TEST(ParametersTest, get_optional_param_using_incorrect_type)
     params.add_param<int>("int", "");
     params.set<int>("int", 1);
 
-    EXPECT_THROW_MSG(params.get<Optional<double>>("int"),
-                     "Parameter 'int' has unexpected type (int)");
+    EXPECT_DEATH(params.get<Optional<double>>("int"),
+                 "Parameter 'int' has unexpected type \\(int\\)");
 }
 
 TEST(ParametersTest, make_param_required)

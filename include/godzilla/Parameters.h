@@ -118,19 +118,17 @@ public:
     /// Get parameter value for `Optional<T>`
     template <IsOptional T>
     inline T
-    get(String name) const
+    get(String name, std::source_location loc = std::source_location::current()) const
     {
-        CALL_STACK_MSG();
         using V = typename T::value_type;
         auto it = this->params.find(name);
-        if (it == this->params.end())
-            return {};
+        expect_true(it != this->params.end(), fmt::format("Parameter '{}' not found.", name), loc);
 
         auto par = it->second.get();
         auto tpar = dynamic_cast<Parameter<V> *>(par);
-        if (tpar == nullptr)
-            throw Exception(
-                fmt::format("Parameter '{}' has unexpected type ({})", name, par->type()));
+        expect_true(tpar != nullptr,
+                    fmt::format("Parameter '{}' has unexpected type ({})", name, par->type()),
+                    loc);
         if (tpar->valid)
             return tpar->get();
         else
@@ -140,62 +138,53 @@ public:
     /// Get parameter value for `Ref<T>`
     template <RefType R>
     inline R
-    get(String name) const
+    get(String name, std::source_location loc = std::source_location::current()) const
     {
         using U = typename R::element_type;
 
-        CALL_STACK_MSG();
         auto it = this->params.find(name);
-        if (it == this->params.end())
-            throw Exception(fmt::format("No parameter '{}' found.", name));
+        expect_true(it != this->params.end(), fmt::format("Parameter '{}' not found.", name), loc);
 
         auto par = it->second.get();
         auto tpar = dynamic_cast<Parameter<LateRef<U>> *>(par);
-        if (tpar == nullptr)
-            throw Exception(
-                fmt::format("Parameter '{}' has unexpected type ({})", name, par->type()));
-        if (tpar->valid)
-            return tpar->get().get();
-        if (tpar->required)
-            throw Exception(fmt::format("Required parameter '{}' is not set", name));
-        throw Exception(fmt::format("Parameter '{}' is uninitialized", name));
+        expect_true(tpar != nullptr,
+                    fmt::format("Parameter '{}' has unexpected type ({})", name, par->type()),
+                    loc);
+        expect_true(tpar->valid, fmt::format("Parameter '{}' is not initialized", name), loc);
+        return tpar->get().get();
     }
 
     /// Get parameter value for `T`
     template <typename T>
     inline T
-    get(String name) const
+    get(String name, std::source_location loc = std::source_location::current()) const
     {
-        CALL_STACK_MSG();
         auto it = this->params.find(name);
-        if (it == this->params.end())
-            throw Exception(fmt::format("No parameter '{}' found.", name));
+        expect_true(it != this->params.end(), fmt::format("Parameter '{}' not found.", name), loc);
 
         auto par = it->second.get();
         auto tpar = dynamic_cast<Parameter<T> *>(par);
-        if (tpar == nullptr)
-            throw Exception(
-                fmt::format("Parameter '{}' has unexpected type ({})", name, par->type()));
-        if (tpar->valid)
-            return tpar->get();
-        if (tpar->required)
-            throw Exception(fmt::format("Required parameter '{}' is not set", name));
-        throw Exception(fmt::format("Parameter '{}' is uninitialized", name));
+        expect_true(tpar != nullptr,
+                    fmt::format("Parameter '{}' has unexpected type ({})", name, par->type()),
+                    loc);
+        expect_true(tpar->valid, fmt::format("Parameter '{}' is not initialized", name), loc);
+        return tpar->get();
     }
 
     template <typename T>
     inline T
-    get(String name, T default_value) const
+    get(String name,
+        T default_value,
+        std::source_location loc = std::source_location::current()) const
     {
-        CALL_STACK_MSG();
         auto it = this->params.find(name);
-        if (it == this->params.end())
-            return default_value;
+        expect_true(it != this->params.end(), fmt::format("Parameter '{}' not found.", name), loc);
+
         auto par = it->second.get();
         auto tpar = dynamic_cast<Parameter<T> *>(par);
-        if (tpar == nullptr)
-            throw Exception(
-                fmt::format("Parameter '{}' has unexpected type ({})", name, par->type()));
+        expect_true(tpar != nullptr,
+                    fmt::format("Parameter '{}' has unexpected type ({})", name, par->type()),
+                    loc);
         if (tpar->valid)
             return tpar->get();
         else
