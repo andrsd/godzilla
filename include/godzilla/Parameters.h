@@ -339,12 +339,10 @@ public:
     ///@}
 
     inline void
-    make_param_required(String name)
+    make_param_required(String name, std::source_location loc = std::source_location::current())
     {
-        CALL_STACK_MSG();
         auto it = this->params.find(name);
-        if (it == this->params.end())
-            throw Exception(fmt::format("No parameter '{}' found.", name));
+        expect_true(it != this->params.end(), fmt::format("Parameter '{}' not found.", name), loc);
         auto par = it->second.get();
         par->required = true;
     }
