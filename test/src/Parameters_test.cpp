@@ -264,3 +264,10 @@ TEST(ParametersTest, src_loc_of_non_existing_param)
     ASSERT_FALSE(rp.has_value());
     EXPECT_EQ(rp.error(), ErrorCode::NotFound);
 }
+
+TEST(ParametersTest, adding_exiting_param_causes_error)
+{
+    Parameters params;
+    params.add_param<Real>("p", "");
+    EXPECT_DEATH(params.add_param<Real>("p", ""), "Parameter 'p' already exists");
+}
