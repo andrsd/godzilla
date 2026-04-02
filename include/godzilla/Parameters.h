@@ -248,11 +248,13 @@ public:
     /// missing in the input file, and error will be thrown
     template <typename T>
     Parameters &
-    add_required_param(String name, String doc_string)
+    add_required_param(String name,
+                       String doc_string,
+                       std::source_location loc = std::source_location::current())
     {
-        CALL_STACK_MSG();
         expect_true(this->params.find(name) == this->params.end(),
-                    fmt::format("Parameter '{}' already exists", name));
+                    fmt::format("Parameter '{}' already exists", name),
+                    loc);
         auto param = Qtr<Parameter<T>>::alloc();
         param->required = true;
         param->is_private = false;
@@ -269,11 +271,14 @@ public:
     /// uninitialized but can be checked with "is_param_valid" before use.
     template <typename T, typename S>
     Parameters &
-    add_param(String name, const S & value, String doc_string)
+    add_param(String name,
+              const S & value,
+              String doc_string,
+              std::source_location loc = std::source_location::current())
     {
-        CALL_STACK_MSG();
         expect_true(this->params.find(name) == this->params.end(),
-                    fmt::format("Parameter '{}' already exists", name));
+                    fmt::format("Parameter '{}' already exists", name),
+                    loc);
         auto param = Qtr<Parameter<T>>::alloc();
         param->required = false;
         param->value = value;
@@ -286,11 +291,13 @@ public:
 
     template <typename T>
     Parameters &
-    add_param(String name, String doc_string)
+    add_param(String name,
+              String doc_string,
+              std::source_location loc = std::source_location::current())
     {
-        CALL_STACK_MSG();
         expect_true(this->params.find(name) == this->params.end(),
-                    fmt::format("Parameter '{}' already exists", name));
+                    fmt::format("Parameter '{}' already exists", name),
+                    loc);
         auto param = Qtr<Parameter<T>>::alloc();
         param->required = false;
         param->is_private = false;
@@ -312,9 +319,9 @@ public:
                       const T & value,
                       std::source_location loc = std::source_location::current())
     {
-        CALL_STACK_MSG();
         expect_true(this->params.find(name) == this->params.end(),
-                    fmt::format("Parameter '{}' already exists", name));
+                    fmt::format("Parameter '{}' already exists", name),
+                    loc);
         auto param = Qtr<Parameter<T>>::alloc();
         param->value = value;
         param->required = false;
@@ -326,12 +333,11 @@ public:
 
     template <typename T>
     Parameters &
-    add_private_param(String name)
+    add_private_param(String name, std::source_location loc = std::source_location::current())
     {
-        CALL_STACK_MSG();
-        expect_true(!this->has<T>(name),
-                    fmt::format("Private parameter '{}' already exists", name));
-
+        expect_true(this->params.find(name) == this->params.end(),
+                    fmt::format("Parameter '{}' already exists", name),
+                    loc);
         auto param = Qtr<Parameter<T>>::alloc();
         param->value = {};
         param->required = true;
