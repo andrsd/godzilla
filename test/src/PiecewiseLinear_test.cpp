@@ -71,9 +71,10 @@ TEST(PiecewiseLinearTest, non_increasing)
 
 TEST(PiecewiseLinearTest, pass_into_parameters)
 {
-    PiecewiseLinear fn({ 1, 2 }, { -1, 3 });
-
     Parameters params;
+    params.add_param<PiecewiseLinear>("fn", "");
+
+    PiecewiseLinear fn({ 1, 2 }, { -1, 3 });
     params.set<PiecewiseLinear>("fn", fn);
 
     auto par_fn = params.get<PiecewiseLinear>("fn");
