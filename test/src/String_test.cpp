@@ -173,3 +173,10 @@ TEST(StringTest, replace_1b_with_longer_str)
     str.replace(10, 9, "green chameleon");
     EXPECT_EQ(str, "The quick green chameleon jumps");
 }
+
+TEST(StringTest, oper_brace)
+{
+    String str("The quick brown fox jumps");
+    EXPECT_EQ(str[0], 'T');
+    EXPECT_EQ(str[4], 'q');
+}
