@@ -311,6 +311,13 @@ public:
         return std::strcmp(this->rep->data, other.rep->data) < 0;
     }
 
+    char
+    operator[](uint32_t idx) const
+    {
+        assert(idx <= this->rep->size);
+        return this->rep->data[idx];
+    }
+
     operator std::string() const { return std::string(this->rep->data); }
 
     const char *
