@@ -122,7 +122,9 @@ public:
     {
         using V = typename T::value_type;
         auto it = this->params.find(name);
-        expect_true(it != this->params.end(), fmt::format("Parameter '{}' not found.", name), loc);
+        expect_true(it != this->params.end(),
+                    fmt::format("Parameter '{}' not found.{}", name, suggestion(name)),
+                    loc);
 
         auto par = it->second.get();
         auto tpar = dynamic_cast<Parameter<V> *>(par);
@@ -143,7 +145,9 @@ public:
         using U = typename R::element_type;
 
         auto it = this->params.find(name);
-        expect_true(it != this->params.end(), fmt::format("Parameter '{}' not found.", name), loc);
+        expect_true(it != this->params.end(),
+                    fmt::format("Parameter '{}' not found.{}", name, suggestion(name)),
+                    loc);
 
         auto par = it->second.get();
         auto tpar = dynamic_cast<Parameter<LateRef<U>> *>(par);
@@ -160,7 +164,9 @@ public:
     get(String name, std::source_location loc = std::source_location::current()) const
     {
         auto it = this->params.find(name);
-        expect_true(it != this->params.end(), fmt::format("Parameter '{}' not found.", name), loc);
+        expect_true(it != this->params.end(),
+                    fmt::format("Parameter '{}' not found.{}", name, suggestion(name)),
+                    loc);
 
         auto par = it->second.get();
         auto tpar = dynamic_cast<Parameter<T> *>(par);
@@ -178,7 +184,9 @@ public:
         std::source_location loc = std::source_location::current()) const
     {
         auto it = this->params.find(name);
-        expect_true(it != this->params.end(), fmt::format("Parameter '{}' not found.", name), loc);
+        expect_true(it != this->params.end(),
+                    fmt::format("Parameter '{}' not found.{}", name, suggestion(name)),
+                    loc);
 
         auto par = it->second.get();
         auto tpar = dynamic_cast<Parameter<T> *>(par);
@@ -198,7 +206,9 @@ public:
     set(String name, T value, std::source_location loc = std::source_location::current())
     {
         auto it = this->params.find(name);
-        expect_true(it != this->params.end(), fmt::format("Parameter '{}' not found.", name), loc);
+        expect_true(it != this->params.end(),
+                    fmt::format("Parameter '{}' not found.{}", name, suggestion(name)),
+                    loc);
 
         auto & par = it->second;
         par->valid = true;
@@ -217,7 +227,9 @@ public:
     set(String name, R value, std::source_location loc = std::source_location::current())
     {
         auto it = this->params.find(name);
-        expect_true(it != this->params.end(), fmt::format("Parameter '{}' not found.", name), loc);
+        expect_true(it != this->params.end(),
+                    fmt::format("Parameter '{}' not found.{}", name, suggestion(name)),
+                    loc);
 
         using U = typename R::element_type;
 
@@ -342,7 +354,9 @@ public:
     make_param_required(String name, std::source_location loc = std::source_location::current())
     {
         auto it = this->params.find(name);
-        expect_true(it != this->params.end(), fmt::format("Parameter '{}' not found.", name), loc);
+        expect_true(it != this->params.end(),
+                    fmt::format("Parameter '{}' not found.{}", name, suggestion(name)),
+                    loc);
         auto par = it->second.get();
         par->required = true;
     }
@@ -390,6 +404,8 @@ public:
     void clear();
 
 private:
+    std::string suggestion(String name) const;
+
     /// The actual parameter data. Each Metadata object contains attributes for the corresponding
     /// parameter.
     std::map<String, Qtr<Value>> params;
