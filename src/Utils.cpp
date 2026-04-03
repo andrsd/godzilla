@@ -158,4 +158,35 @@ none_with_flags(ExecuteOnFlags flags)
     return (flags & none_flag) && ((mask & ~static_cast<unsigned int>(none_flag)) != 0);
 }
 
+uint32_t
+levenshtein_distance(String s1, String s2)
+{
+    const auto m = s1.length();
+    const auto n = s2.length();
+
+    if (m > n)
+        return levenshtein_distance(s2, s1);
+
+    std::vector<uint32_t> prev_row(m + 1);
+    std::vector<uint32_t> curr_row(m + 1);
+
+    for (uint32_t i = 0; i <= m; ++i)
+        prev_row[i] = i;
+
+    for (uint32_t j = 1; j <= n; ++j) {
+        curr_row[0] = j;
+        for (uint32_t i = 1; i <= m; ++i) {
+            auto substitution_cost = (s1[i - 1] == s2[j - 1]) ? 0 : 1;
+            curr_row[i] = std::min({ // Insertion
+                                     curr_row[i - 1] + 1,
+                                     // Deletion
+                                     prev_row[i] + 1,
+                                     // Substitution
+                                     prev_row[i - 1] + substitution_cost });
+        }
+        std::swap(prev_row, curr_row);
+    }
+    return prev_row[m];
+}
+
 } // namespace godzilla

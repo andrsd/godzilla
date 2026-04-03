@@ -140,4 +140,29 @@ Parameters::clear()
     this->params.clear();
 }
 
+std::string
+Parameters::suggestion(String name) const
+{
+    auto best_dist = std::numeric_limits<uint32_t>::max();
+    Optional<String> best;
+
+    for (const auto & [key, _] : this->params) {
+        auto d = levenshtein_distance(name.to_lower(), key.to_lower());
+        // small bonus if we are matching a prefix of 2 letters
+        if ((name.length() >= 2) && key.starts_with(name.substr(0, 2)))
+            d -= 1;
+
+        if (d < best_dist) {
+            best_dist = d;
+            best = key;
+        }
+    }
+
+    // Heuristic: only accept "close enough"
+    if (best && best_dist <= 2)
+        return fmt::format(" Did you mean '{}'?", best.value());
+
+    return "";
+}
+
 } // namespace godzilla

@@ -276,4 +276,11 @@ std::vector<String> split(const char * delim, String line);
 /// @return `true` if flags were specified with NONE, otherwise `false`
 bool none_with_flags(ExecuteOnFlags flags);
 
+/// Compute Levenshtein distance between 2 strings
+///
+/// @param s1 First string
+/// @param s2 Second string
+/// @return Computed Levenshtein distance between `s1` and `s2`
+uint32_t levenshtein_distance(String s1, String s2);
+
 } // namespace godzilla

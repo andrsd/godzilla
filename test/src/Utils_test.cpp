@@ -162,3 +162,10 @@ TEST(UtilsTest, split_multi)
     EXPECT_EQ(parts[1], "orange");
     EXPECT_EQ(parts[2], "strawberry");
 }
+
+TEST(UtilsTest, levenshtein_distance)
+{
+    EXPECT_EQ(levenshtein_distance("pull", "push"), 2);
+    EXPECT_EQ(levenshtein_distance("apple", "orange"), 5);
+    EXPECT_EQ(levenshtein_distance("run", "sprint"), 4);
+}
