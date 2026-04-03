@@ -147,7 +147,7 @@ Parameters::suggestion(String name) const
     Optional<String> best;
 
     for (const auto & [key, _] : this->params) {
-        auto d = levenshtein_distance(name.to_lower(), key.to_lower());
+        auto d = levenshtein_distance(name, key);
         // small bonus if we are matching a prefix of 2 letters
         if ((name.length() >= 2) && key.starts_with(name.substr(0, 2)))
             d -= 1;
