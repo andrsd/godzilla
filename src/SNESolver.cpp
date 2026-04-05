@@ -229,6 +229,15 @@ SNESolver::get_converged_reason() const
     return static_cast<ConvergedReason>(reason);
 }
 
+Int
+SNESolver::get_iteration_number() const
+{
+    CALL_STACK_MSG();
+    Int iter;
+    PETSC_CHECK(SNESGetIterationNumber(this->obj, &iter));
+    return iter;
+}
+
 Matrix
 SNESolver::mat_create_mf() const
 {
