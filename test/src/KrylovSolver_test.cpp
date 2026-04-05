@@ -97,6 +97,8 @@ TEST(KrylovSolver, solve_b)
 
     EXPECT_DOUBLE_EQ(b(0), 3);
     EXPECT_DOUBLE_EQ(b(1), 4);
+
+    EXPECT_EQ(ks.get_total_iterations(), 1);
 }
 
 TEST(KrylovSolver, get_pc)

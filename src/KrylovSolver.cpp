@@ -187,6 +187,15 @@ KrylovSolver::get_iteration_number() const
     return iter;
 }
 
+Int
+KrylovSolver::get_total_iterations() const
+{
+    CALL_STACK_MSG();
+    Int its;
+    PETSC_CHECK(KSPGetTotalIterations(this->obj, &its));
+    return its;
+}
+
 PC
 KrylovSolver::get_pc() const
 {

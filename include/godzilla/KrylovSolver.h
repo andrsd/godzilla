@@ -217,6 +217,10 @@ public:
     /// iterations used.
     Int get_iteration_number() const;
 
+    /// Gets the total number of iterations this solver has performed since it was created, counted
+    /// over all linear solves.
+    Int get_total_iterations() const;
+
     PC get_pc() const;
 
     /// Set preconditioner type
