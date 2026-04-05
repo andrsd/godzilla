@@ -57,6 +57,14 @@ KrylovSolver::invoke_convergence_test_delegate(KSP,
     return 0;
 }
 
+PetscErrorCode
+KrylovSolver::invoke_converged_reason_view_delegate(KSP, void * ctx)
+{
+    auto * method = static_cast<Delegate<void()> *>(ctx);
+    method->invoke();
+    return 0;
+}
+
 KrylovSolver::KrylovSolver() : PetscObjectWrapper(nullptr) {}
 
 KrylovSolver::KrylovSolver(KSP ksp) : PetscObjectWrapper(ksp) {}
