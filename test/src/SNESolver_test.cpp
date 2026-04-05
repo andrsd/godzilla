@@ -52,6 +52,9 @@ TEST(SNESolverTest, solver_cls)
 
     EXPECT_DOUBLE_EQ(vals[0], 2.);
     EXPECT_DOUBLE_EQ(vals[1], 3.);
+
+    EXPECT_EQ(snes.get_iteration_number(), 1);
+    EXPECT_EQ(snes.get_linear_solve_iterations(), 1);
 }
 
 TEST(SNESolverTest, mat_create_mf)
