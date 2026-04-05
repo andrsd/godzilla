@@ -4,6 +4,7 @@
 #include "godzilla/NonlinearProblem.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/Utils.h"
+#include "godzilla/Convert.h"
 #include "godzilla/RestartFile.h"
 #include "godzilla/Validation.h"
 
@@ -221,7 +222,9 @@ NonlinearProblem::set_up_monitors()
 {
     CALL_STACK_MSG();
     this->snes.monitor_set(ref(*this), &NonlinearProblem::snes_monitor);
+    this->snes.converged_reason_view_set(ref(*this), &NonlinearProblem::snes_converged_reason_view);
     this->ksp.monitor_set(ref(*this), &NonlinearProblem::ksp_monitor);
+    this->ksp.converged_reason_view_set(ref(*this), &NonlinearProblem::ksp_converged_reason_view);
 }
 
 void
@@ -251,7 +254,7 @@ void
 NonlinearProblem::snes_monitor(Int it, Real norm)
 {
     CALL_STACK_MSG();
-    lprintln(7, "{} Non-linear residual: {:e}", it, norm);
+    lprintln(6, "{} Non-linear residual: {:e}", it, norm);
 }
 
 void
@@ -259,6 +262,40 @@ NonlinearProblem::ksp_monitor(Int it, Real rnorm)
 {
     CALL_STACK_MSG();
     lprintln(8, "    {} Linear residual: {:e}", it, rnorm);
+}
+
+void
+NonlinearProblem::snes_converged_reason_view()
+{
+    CALL_STACK_MSG();
+    auto & snes = get_snes();
+    auto reason = snes.get_converged_reason();
+    auto n_iters = snes.get_iteration_number();
+    if (reason > 0)
+        lprintln(5,
+                 Terminal::green,
+                 "Non-linear solver converged: {} ({} iterations)",
+                 conv::to_str(reason),
+                 utils::human_number(n_iters));
+    else
+        lprintln(5, Terminal::red, "Non-linear solver diverged: {}", conv::to_str(reason));
+}
+
+void
+NonlinearProblem::ksp_converged_reason_view()
+{
+    CALL_STACK_MSG();
+    auto & ksp = get_ksp();
+    auto reason = ksp.get_converged_reason();
+    auto n_iters = ksp.get_iteration_number();
+    if (reason > 0)
+        lprintln(7,
+                 Terminal::green,
+                 "    Linear solver converged: {} ({} iterations)",
+                 conv::to_str(reason),
+                 utils::human_number(n_iters));
+    else
+        lprintln(7, Terminal::red, "    Linear solver diverged: {}", conv::to_str(reason));
 }
 
 void

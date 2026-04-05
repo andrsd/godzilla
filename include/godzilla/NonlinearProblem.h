@@ -91,6 +91,12 @@ protected:
     /// KSP monitor
     void ksp_monitor(Int it, Real rnorm);
 
+    /// Nonlinear solver connverged reason view
+    void snes_converged_reason_view();
+
+    /// Linear solver converged reason view
+    void ksp_converged_reason_view();
+
     /// Set residual evaluation function
     ///
     /// @tparam T C++ class type
