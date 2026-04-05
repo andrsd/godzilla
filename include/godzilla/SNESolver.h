@@ -194,6 +194,9 @@ public:
     /// @return
     ConvergedReason get_converged_reason() const;
 
+    /// Get the number of nonlinear iterations completed in the current or most recent
+    Int get_iteration_number() const;
+
     /// Creates a finite differencing based matrix-free matrix context for use with a SNES solver.
     ///
     /// @return The matrix-free matrix which is of type `MATMFFD`
