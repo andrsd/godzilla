@@ -214,6 +214,10 @@ public:
     /// Get the number of nonlinear iterations completed in the current or most recent
     Int get_iteration_number() const;
 
+    /// Get the total number of linear iterations used by the nonlinear solver in the most recent
+    /// `solve`
+    Int get_linear_solve_iterations() const;
+
     /// Creates a finite differencing based matrix-free matrix context for use with a SNES solver.
     ///
     /// @return The matrix-free matrix which is of type `MATMFFD`

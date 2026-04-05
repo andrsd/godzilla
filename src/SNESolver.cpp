@@ -238,6 +238,15 @@ SNESolver::get_iteration_number() const
     return iter;
 }
 
+Int
+SNESolver::get_linear_solve_iterations() const
+{
+    CALL_STACK_MSG();
+    Int iter;
+    PETSC_CHECK(SNESGetLinearSolveIterations(this->obj, &iter));
+    return iter;
+}
+
 Matrix
 SNESolver::mat_create_mf() const
 {
