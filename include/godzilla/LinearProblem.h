@@ -71,6 +71,9 @@ protected:
     /// Monitor callback
     void monitor(Int it, Real rnorm);
 
+    /// Linear solver converged reason view
+    void converged_reason_view();
+
     /// Set KSP matrix evaluation function
     ///
     /// @tparam T C++ class type

@@ -6,6 +6,7 @@
 #include "godzilla/KrylovSolver.h"
 #include "godzilla/RestartFile.h"
 #include "godzilla/RestartInterface.h"
+#include "godzilla/Convert.h"
 
 namespace godzilla {
 
@@ -136,6 +137,7 @@ LinearProblem::set_up_monitors()
 {
     CALL_STACK_MSG();
     this->ks.monitor_set(ref(*this), &LinearProblem::monitor);
+    this->ks.converged_reason_view_set(ref(*this), &LinearProblem::converged_reason_view);
 }
 
 void
@@ -152,7 +154,7 @@ void
 LinearProblem::monitor(Int it, Real rnorm)
 {
     CALL_STACK_MSG();
-    lprintln(8, "{} Linear residual: {:e}", it, rnorm);
+    lprintln(6, "{} Linear residual: {:e}", it, rnorm);
 }
 
 void
@@ -220,6 +222,23 @@ LinearProblem::read_restart_file(const RestartFile & file)
     CALL_STACK_MSG();
     auto & sln = get_solution_vector();
     file.read_global_vector(get_name(), "/", "sln", sln);
+}
+
+void
+LinearProblem::converged_reason_view()
+{
+    CALL_STACK_MSG();
+    auto & ksp = get_ksp();
+    auto reason = ksp.get_converged_reason();
+    auto n_iters = ksp.get_iteration_number();
+    if (reason > 0)
+        lprintln(5,
+                 Terminal::green,
+                 "Linear solver converged: {} ({} iterations)",
+                 conv::to_str(reason),
+                 utils::human_number(n_iters));
+    else
+        lprintln(5, Terminal::red, "Linear solver diverged: {}", conv::to_str(reason));
 }
 
 } // namespace godzilla
