@@ -178,6 +178,23 @@ public:
             SNESMonitorSet(this->obj, invoke_monitor_delegate, &this->monitor_method, nullptr));
     }
 
+    /// Sets an ADDITIONAL function that is to be used at the end of the nonlinear solver to display
+    /// the convergence reason of the nonlinear solver.
+    ///
+    /// @tparam T C++ class type
+    /// @param instance Instance of class T
+    /// @param method Member function in class T
+    template <class T>
+    void
+    converged_reason_view_set(Ref<T> instance, void (T::*method)())
+    {
+        this->converged_reason_view_method.bind(instance, method);
+        PETSC_CHECK(SNESConvergedReasonViewSet(this->obj,
+                                               invoke_converged_view_delegate,
+                                               &this->converged_reason_view_method,
+                                               nullptr));
+    }
+
     /// Solves a nonlinear system F(x) = b.
     ///
     /// @param b The constant part of the equation F(x) = b
@@ -206,11 +223,14 @@ private:
     Delegate<void(const Vector & x, Vector & f)> compute_residual_method;
     /// Method for computing Jacobian
     Delegate<void(const Vector & x, Matrix & J, Matrix & Jp)> compute_jacobian_method;
+    /// Method for converged reason view
+    Delegate<void()> converged_reason_view_method;
 
 public:
     static PetscErrorCode invoke_compute_residual_delegate(SNES, Vec, Vec, void *);
     static PetscErrorCode invoke_compute_jacobian_delegate(SNES, Vec, Mat, Mat, void *);
     static PetscErrorCode invoke_monitor_delegate(SNES, Int, Real, void *);
+    static PetscErrorCode invoke_converged_view_delegate(SNES, void *);
 };
 
 void print_converged_reason(PrintInterface & pi, SNESolver::ConvergedReason reason);
