@@ -236,9 +236,9 @@ print_converged_reason(PrintInterface & pi, KrylovSolver::ConvergedReason reason
 {
     CALL_STACK_MSG();
     if (reason > 0)
-        pi.lprintln(8, Terminal::green, "Converged: {}", conv::to_str(reason));
+        pi.lprintln(5, Terminal::green, "Converged: {}", conv::to_str(reason));
     else
-        pi.lprintln(8, Terminal::red, "Not converged: {}", conv::to_str(reason));
+        pi.lprintln(5, Terminal::red, "Not converged: {}", conv::to_str(reason));
 }
 
 } // namespace godzilla
