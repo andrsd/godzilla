@@ -186,6 +186,17 @@ public:
                                           nullptr));
     }
 
+    template <class T>
+    void
+    converged_reason_view_set(Ref<T> instance, void (T::*method)())
+    {
+        this->convergence_reason_view_method.bind(instance, method);
+        PETSC_CHECK(KSPConvergedReasonViewSet(this->obj,
+                                              invoke_converged_reason_view_delegate,
+                                              &this->convergence_reason_view_method,
+                                              nullptr));
+    }
+
     /// Solve a linear system
     ///
     /// @param b The right-hand-side vector
@@ -260,6 +271,8 @@ private:
     Delegate<void(Matrix & A, Matrix & B)> compute_operators_method;
     /// Method for determining covergence
     Delegate<ConvergedReason(Int it, Real rnorm)> convergence_test_method;
+    /// Method for printing coverged reason
+    Delegate<void(void)> convergence_reason_view_method;
 
 public:
     static PetscErrorCode invoke_compute_operators_delegate(KSP, Mat A, Mat B, void * ctx);
@@ -270,6 +283,7 @@ public:
                                                            Real rnorm,
                                                            KSPConvergedReason * reason,
                                                            void * ctx);
+    static PetscErrorCode invoke_converged_reason_view_delegate(KSP, void *);
 };
 
 void print_converged_reason(PrintInterface & pi, KrylovSolver::ConvergedReason reason);
