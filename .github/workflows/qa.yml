@@ -35,7 +35,7 @@ jobs:
             mpicpp-lite=2.5 \
             spdlog=1.* \
             fmt=11.* \
-            petsc==3.23.* \
+            petsc==3.24 \
             yaml-cpp==0.8.0 \
             exodusIIcpp=3.1 \
             teciocpp \

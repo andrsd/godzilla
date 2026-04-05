@@ -26,19 +26,19 @@ jobs:
         include:
           - os: ubuntu-22.04
             python-version: "3.11"
-            petsc: 3.23.7
+            petsc: 3.24.6
             build: Debug
             teciocpp: ON
             code-coverage: ON
           - os: ubuntu-22.04
             python-version: "3.11"
-            petsc: 3.23.7
+            petsc: 3.24.6
             build: Release
             teciocpp: ON
             code-coverage: OFF
           - os: ubuntu-22.04
             python-version: "3.11"
-            petsc: 3.23.7
+            petsc: 3.24.6
             build: Release
             teciocpp: OFF
             code-coverage: OFF
