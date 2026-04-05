@@ -202,6 +202,10 @@ public:
     /// @return
     ConvergedReason get_converged_reason() const;
 
+    /// Get the current iteration number; if the `solve()` is complete, returns the number of
+    /// iterations used.
+    Int get_iteration_number() const;
+
     PC get_pc() const;
 
     /// Set preconditioner type

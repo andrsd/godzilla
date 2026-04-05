@@ -170,6 +170,15 @@ KrylovSolver::get_converged_reason() const
     return static_cast<ConvergedReason>(reason);
 }
 
+Int
+KrylovSolver::get_iteration_number() const
+{
+    CALL_STACK_MSG();
+    Int iter;
+    PETSC_CHECK(KSPGetIterationNumber(this->obj, &iter));
+    return iter;
+}
+
 PC
 KrylovSolver::get_pc() const
 {
