@@ -103,6 +103,15 @@ SNESolver::invoke_monitor_delegate(SNES, Int it, Real rnorm, void * ctx)
     return 0;
 }
 
+PetscErrorCode
+SNESolver::invoke_converged_view_delegate(SNES, void * ctx)
+{
+    CALL_STACK_MSG();
+    auto * method = static_cast<Delegate<void(void)> *>(ctx);
+    method->invoke();
+    return 0;
+}
+
 SNESolver::SNESolver() : PetscObjectWrapper(nullptr) {}
 
 SNESolver::SNESolver(SNES snes) : PetscObjectWrapper(snes) {}
