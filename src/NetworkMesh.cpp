@@ -82,7 +82,7 @@ NetworkMesh::create()
     PETSC_CHECK(DMNetworkCreate(get_comm(), &this->netw_));
 }
 
-int
+Int
 NetworkMesh::num_components(Int p) const
 {
     CALL_STACK_MSG();
