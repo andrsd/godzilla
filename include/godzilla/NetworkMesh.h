@@ -15,9 +15,9 @@ public:
     NetworkMesh(mpi::Communicator comm);
     explicit NetworkMesh(DM dm);
 
-    Int register_component(String name, std::size_t size);
+    ClassID register_component(String name, std::size_t size);
 
-    void add_component(Int p, Int key, void * comp, Int n_vars);
+    void add_component(Int p, ClassID key, void * comp, Int n_vars);
 
     void * component(Int p);
 

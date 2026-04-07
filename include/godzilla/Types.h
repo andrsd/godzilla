@@ -210,6 +210,54 @@ private:
 
 inline constexpr FieldID FieldID::INVALID { -1 };
 
+/// Class ID used by components
+///
+/// Every component must be registered befiore it can be used. This type
+/// stores the number that PETSc assigned to a component when it is registered.
+class ClassID {
+public:
+    constexpr ClassID() : num_(-1) {}
+    explicit constexpr ClassID(Int order) : num_(order) {}
+
+    constexpr Int
+    value() const
+    {
+        return this->num_;
+    }
+
+    constexpr bool
+    is_valid() const
+    {
+        return this->num_ != -1;
+    }
+
+    constexpr bool
+    operator<(ClassID other) const
+    {
+        return this->num_ < other.num_;
+    }
+
+    constexpr bool
+    operator==(Int other) const
+    {
+        return this->num_ == other;
+    }
+
+    constexpr bool
+    operator!=(Int other) const
+    {
+        return this->num_ != other;
+    }
+
+private:
+    Int num_;
+
+public:
+    static const ClassID INVALID;
+};
+
+inline constexpr ClassID ClassID::INVALID { -1 };
+
 namespace fe {
 
 /// Primary template for a simplex element type selector

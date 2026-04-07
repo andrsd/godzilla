@@ -19,20 +19,23 @@ NetworkMesh::NetworkMesh(DM dm) : godzilla::Mesh(dm)
     CALL_STACK_MSG();
 }
 
-Int
+ClassID
 NetworkMesh::register_component(String name, std::size_t size)
 {
     CALL_STACK_MSG();
     Int key;
     PETSC_CHECK(DMNetworkRegisterComponent(this->netw_, name.c_str(), size, &key));
-    return key;
+    return ClassID(key);
 }
 
 void
-NetworkMesh::add_component(Int p, Int key, void * comp, Int n_vars)
+NetworkMesh::add_component(Int p, ClassID key, void * comp, Int n_vars)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(DMNetworkAddComponent(this->netw_, p, key, comp, n_vars));
+    expect_true(
+        key.is_valid(),
+        "Invalid key used when adding a component. Need to call `register_component` first.");
+    PETSC_CHECK(DMNetworkAddComponent(this->netw_, p, key.value(), comp, n_vars));
 }
 
 void *
