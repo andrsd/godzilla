@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "godzilla/Types.h"
+#include "godzilla/Optional.h"
 #include "mpicpp-lite/mpicpp-lite.h"
 #include <cstdint>
 #include <cstring>

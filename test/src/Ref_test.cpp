@@ -77,3 +77,38 @@ TEST(RefTest, late_ref)
     EXPECT_TRUE(lref);
     EXPECT_FALSE(lref.is_null());
 }
+
+TEST(RefTest, access)
+{
+    class Base {
+    public:
+        int i;
+
+        int
+        get_i() const
+        {
+            return i;
+        }
+    };
+
+    LateRef<Base> lref;
+    Base i = { 10 };
+    Ref<Base> ref(i);
+    lref.set(ref);
+
+    EXPECT_EQ(lref->i, 10);
+
+    const LateRef<Base> cref = lref;
+    EXPECT_EQ(cref->get_i(), 10);
+}
+
+TEST(RefTest, access_null_stops)
+{
+    class Base {
+    public:
+        int i;
+    };
+
+    LateRef<Base> lref;
+    EXPECT_DEATH(lref->i = 10, "Accessing null reference");
+}

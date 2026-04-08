@@ -3,10 +3,12 @@
 
 #pragma once
 
+#include "godzilla/Assert.h"
 #include "godzilla/Optional.h"
 #include <concepts>
 #include <type_traits>
 #include <exception>
+#include <cassert>
 
 namespace godzilla {
 
@@ -78,6 +80,8 @@ private:
 
     template <typename>
     friend class Ref;
+    template <typename>
+    friend class LateRef;
 };
 
 template <typename T>
@@ -154,6 +158,21 @@ public:
     get() const
     {
         return *this->ref_;
+    }
+
+    // Pointer-like access
+    T *
+    operator->() noexcept
+    {
+        expect_true(this->ref_.has_value(), "Accessing null reference");
+        return this->ref_.value().ptr_;
+    }
+
+    const T *
+    operator->() const noexcept
+    {
+        expect_true(this->ref_.has_value(), "Accessing null reference");
+        return this->ref_.value().ptr_;
     }
 
     /// Check if the reference is null
