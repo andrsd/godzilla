@@ -64,3 +64,16 @@ TEST(RefTest, compare)
     auto b = Ref<Base>(*ptr);
     EXPECT_TRUE(b == d);
 }
+
+TEST(RefTest, late_ref)
+{
+    LateRef<int> lref;
+    EXPECT_TRUE(lref.is_null());
+    EXPECT_FALSE(lref);
+
+    int i;
+    Ref<int> ref(i);
+    lref.set(ref);
+    EXPECT_TRUE(lref);
+    EXPECT_FALSE(lref.is_null());
+}
