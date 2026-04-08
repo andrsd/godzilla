@@ -19,7 +19,7 @@ public:
 
     void add_component(Int p, ClassID key, void * comp, Int n_vars);
 
-    void * component(Int p);
+    void * get_component(Int p) const;
 
     /// Gets the number of subnetworks
     ///

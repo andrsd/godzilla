@@ -39,7 +39,7 @@ NetworkMesh::add_component(Int p, ClassID key, void * comp, Int n_vars)
 }
 
 void *
-NetworkMesh::component(Int p)
+NetworkMesh::get_component(Int p) const
 {
     CALL_STACK_MSG();
     void * ptr;
