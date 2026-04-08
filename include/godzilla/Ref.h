@@ -147,11 +147,28 @@ public:
         this->ref_ = r;
     }
 
+    /// Get reference to the object this points to.
+    ///
+    /// @note Does not check validity
     Ref<T>
     get() const
     {
         return *this->ref_;
     }
+
+    /// Check if the reference is null
+    ///
+    /// @return `true` if the reference is null (i.e. doe not point to anythin), `false` otherwise
+    bool
+    is_null() const noexcept
+    {
+        return !this->ref_.has_value();
+    }
+
+    /// Check if the reference is valid on
+    ///
+    /// @return `true` if the reference points to something, `false` otherwise
+    operator bool() const { return this->ref_.has_value(); }
 
 private:
     Optional<Ref<T>> ref_;
