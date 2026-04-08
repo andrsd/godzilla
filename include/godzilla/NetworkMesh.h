@@ -53,7 +53,7 @@ public:
     Range vertex_range() const;
 
     /// Return the supporting edges for this vertex point
-    std::vector<Int> supporting_edges(Int vertex);
+    std::vector<Int> supporting_edges(Int vertex) const;
 
     /// Returns `true` if the vertex is a ghost vertex
     bool is_ghost_vertex(Int p) const;
@@ -65,7 +65,7 @@ public:
     Range edge_range() const;
 
     /// Return the connected vertices for this edge point
-    std::array<Int, 2> connected_vertices(Int edge);
+    std::array<Int, 2> connected_vertices(Int edge) const;
 
     /// Sets up the bare layout (graph) for the network
     void layout_set_up();

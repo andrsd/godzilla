@@ -113,7 +113,7 @@ NetworkMesh::vertex_range() const
 }
 
 std::vector<Int>
-NetworkMesh::supporting_edges(Int vertex)
+NetworkMesh::supporting_edges(Int vertex) const
 {
     CALL_STACK_MSG();
     Int n_edges;
@@ -150,7 +150,7 @@ NetworkMesh::edge_range() const
 }
 
 std::array<Int, 2>
-NetworkMesh::connected_vertices(Int edge)
+NetworkMesh::connected_vertices(Int edge) const
 {
     CALL_STACK_MSG();
     const Int * verts;
