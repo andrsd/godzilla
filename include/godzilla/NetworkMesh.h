@@ -44,7 +44,7 @@ public:
     void create();
 
     /// Get the number of components at a vertex/edge
-    int num_components(Int p) const;
+    Int num_components(Int p) const;
 
     /// Get the local and global number of vertices for the entire network.
     std::tuple<Int, Int> num_vertices() const;
