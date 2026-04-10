@@ -8,6 +8,15 @@
 
 namespace godzilla {
 
+/// Description for corners
+template <Dimension D>
+struct Corners {
+    /// The corner index per dimension
+    std::array<Int, D> index;
+    /// The width per dimension
+    std::array<Int, D> width;
+};
+
 class StructuredMesh : public Mesh {
 public:
     explicit StructuredMesh(mpi::Communicator comm);
@@ -44,6 +53,11 @@ public:
     /// @param y Overlap in the y direction
     /// @param z Overlap in the z direction
     void set_overlap(Int x, Int y = 0, Int z = 0);
+
+    /// Returns the global indices of the lower left corner and size of the local region, excluding
+    /// ghost points.
+    template <Dimension D>
+    Corners<D> get_corners() const;
 
 public:
     /// Creates an object that will manage the communication of one-dimensional regular array data
