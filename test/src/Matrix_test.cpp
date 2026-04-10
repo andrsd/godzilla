@@ -1,4 +1,5 @@
 #include "gmock/gmock.h"
+#include "TestApp.h"
 #include "godzilla/Matrix.h"
 
 using namespace godzilla;
@@ -350,4 +351,41 @@ TEST(MatrixTest, is_symmetric)
     not_symm.set_value_local(1, 1, 4.);
     not_symm.assemble();
     EXPECT_FALSE(not_symm.is_symmetric(0.));
+}
+
+TEST(MatrixTest, seq_aij_set_preallocation_nz)
+{
+    TestApp app;
+
+    Matrix A;
+    A.create(app.get_comm());
+    A.set_sizes(3, 3);
+    A.set_type(MATSEQAIJ);
+    Matrix::seq_aij_set_preallocation(A, 1);
+    A.set_up();
+    A.set_value(0, 2, 1);
+    A.set_value(1, 0, 2);
+    A.set_value(2, 1, 3);
+    A.assemble();
+}
+
+TEST(MatrixTest, seq_aij_set_preallocation_nnz)
+{
+    TestApp app;
+
+    Matrix A;
+    A.create(app.get_comm());
+    A.set_sizes(3, 3);
+    A.set_type(MATSEQAIJ);
+    Matrix::seq_aij_set_preallocation(A, { 3, 1, 2 });
+    A.set_up();
+    A.set_value(0, 0, 1);
+    A.set_value(0, 1, -1);
+    A.set_value(0, 2, 1);
+
+    A.set_value(1, 0, 2);
+
+    A.set_value(2, 1, 3);
+    A.set_value(2, 2, -3);
+    A.assemble();
 }
