@@ -400,4 +400,18 @@ Matrix::create_shell(MPI_Comm comm, Int m, Int n, Int M, Int N)
     return ShellMatrix(mat);
 }
 
+void
+Matrix::seq_aij_set_preallocation(Matrix & B, Int nz)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(MatSeqAIJSetPreallocation(B, nz, NULL));
+}
+
+void
+Matrix::seq_aij_set_preallocation(Matrix & B, const std::vector<Int> & nnz)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(MatSeqAIJSetPreallocation(B, 0, nnz.data()));
+}
+
 } // namespace godzilla

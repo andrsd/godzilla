@@ -224,6 +224,19 @@ public:
     create_aij(MPI_Comm comm, Int m, Int n, Int M, Int N, Span<Int> d_nnz, Span<Int> o_nnz);
     static ShellMatrix create_shell(MPI_Comm comm, Int m, Int n, Int M, Int N);
 
+    /// Preallocate SeqAIJ matrix storage
+    ///
+    /// @param B The matrix
+    /// @param nz Number of nonzeros per row (same for all rows)
+    static void seq_aij_set_preallocation(Matrix & B, Int nz);
+
+    /// Preallocate SeqAIJ matrix storage
+    ///
+    /// @param B The matrix
+    /// @param nnz Array containing the number of nonzeros in the various rows (possibly different
+    ///            for each row)
+    static void seq_aij_set_preallocation(Matrix & B, const std::vector<Int> & nnz);
+
 private:
     friend class ShellMatrix;
 };
