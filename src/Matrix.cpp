@@ -72,13 +72,6 @@ Matrix::assemble(MatAssemblyType type)
     assembly_end(type);
 }
 
-void
-Matrix::get_size(Int & m, Int & n) const
-{
-    CALL_STACK_MSG();
-    PETSC_CHECK(MatGetSize(this->obj, &m, &n));
-}
-
 std::tuple<Int, Int>
 Matrix::get_size() const
 {
