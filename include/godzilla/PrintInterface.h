@@ -8,6 +8,7 @@
 #include "mpicpp-lite/mpicpp-lite.h"
 #include "godzilla/PerfLog.h"
 #include "godzilla/Terminal.h"
+#include "godzilla/Ref.h"
 #include <thread>
 #include <atomic>
 
