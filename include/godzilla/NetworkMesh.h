@@ -138,4 +138,7 @@ private:
     DM netw_;
 };
 
+/// This can be used in the `Network::get_local_vec_offset` calls, etc.
+constexpr Int ALL_COMPONENTS = -1;
+
 } // namespace godzilla
