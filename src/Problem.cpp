@@ -490,6 +490,13 @@ Problem::global_to_local(const Vector & g, InsertMode mode, Vector & l) const
 }
 
 void
+Problem::set_matrix_structure_only(bool only)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMSetMatrixStructureOnly(get_dm(), only ? PETSC_TRUE : PETSC_FALSE));
+}
+
+void
 local_to_global(DM dm, const Vector & l, InsertMode mode, Vector & g)
 {
     CALL_STACK_MSG();
