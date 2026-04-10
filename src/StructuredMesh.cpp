@@ -106,4 +106,41 @@ StructuredMesh::create_2d(const mpi::Communicator comm,
     return StructuredMesh(dm);
 }
 
+template <>
+Corners<1_D>
+StructuredMesh::get_corners<1_D>() const
+{
+    CALL_STACK_MSG();
+    Corners<1_D> c;
+    PETSC_CHECK(DMDAGetCorners(this->obj, &c.index[0], NULL, NULL, &c.width[0], NULL, NULL));
+    return c;
+}
+
+template <>
+Corners<2_D>
+StructuredMesh::get_corners<2_D>() const
+{
+    CALL_STACK_MSG();
+    Corners<2_D> c;
+    PETSC_CHECK(
+        DMDAGetCorners(this->obj, &c.index[0], &c.index[1], NULL, &c.width[0], &c.width[1], NULL));
+    return c;
+}
+
+template <>
+Corners<3_D>
+StructuredMesh::get_corners<3_D>() const
+{
+    CALL_STACK_MSG();
+    Corners<3_D> c;
+    PETSC_CHECK(DMDAGetCorners(this->obj,
+                               &c.index[0],
+                               &c.index[1],
+                               &c.index[2],
+                               &c.width[0],
+                               &c.width[1],
+                               &c.width[2]));
+    return c;
+}
+
 } // namespace godzilla
