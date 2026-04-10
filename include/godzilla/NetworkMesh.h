@@ -24,7 +24,7 @@ public:
     /// Gets the number of subnetworks
     ///
     /// @return local and global number of subnetworks
-    std::tuple<Int, Int> num_sub_networks() const;
+    std::tuple<Int, Int> get_num_sub_networks() const;
 
     /// Sets the number of subnetworks
     ///
@@ -44,28 +44,28 @@ public:
     void create();
 
     /// Get the number of components at a vertex/edge
-    Int num_components(Int p) const;
+    Int get_num_components(Int p) const;
 
     /// Get the local and global number of vertices for the entire network.
-    std::tuple<Int, Int> num_vertices() const;
+    std::tuple<Int, Int> get_num_vertices() const;
 
     /// Get the bounds [start, end) for the local vertices
-    Range vertex_range() const;
+    Range get_vertex_range() const;
 
     /// Return the supporting edges for this vertex point
-    std::vector<Int> supporting_edges(Int vertex) const;
+    std::vector<Int> get_supporting_edges(Int vertex) const;
 
     /// Returns `true` if the vertex is a ghost vertex
     bool is_ghost_vertex(Int p) const;
 
     /// Get the local and global number of edges for the entire network.
-    std::tuple<Int, Int> num_edges() const;
+    std::tuple<Int, Int> get_num_edges() const;
 
     /// Get the bounds [start, end) for the local edges
-    Range edge_range() const;
+    Range get_edge_range() const;
 
     /// Return the connected vertices for this edge point
-    std::array<Int, 2> connected_vertices(Int edge) const;
+    std::array<Int, 2> get_connected_vertices(Int edge) const;
 
     /// Sets up the bare layout (graph) for the network
     void layout_set_up();
@@ -77,13 +77,13 @@ public:
 
     /// Get the offset for accessing the variables associated with the given edge from the local
     /// subvector
-    Int edge_offset(Int p) const;
+    Int get_edge_offset(Int p) const;
 
     /// Get the global numbering for the edge on the network
     ///
     /// @param p Edge point
     /// @return the global numbering for the edge
-    Int global_edge_index(Int p) const;
+    Int get_global_edge_index(Int p) const;
 
     /// Get the global offset for accessing the variables associated with a component for the given
     /// vertex/edge from the global vector
@@ -91,13 +91,13 @@ public:
     /// @param p The edge or vertex point
     /// @param comp_num component number; use ALL_COMPONENTS if no specific component is requested
     /// @return The global offset
-    Int global_vec_offset(Int p, Int comp_num) const;
+    Int get_global_vec_offset(Int p, Int comp_num) const;
 
     /// Get the global numbering for the vertex on the network
     ///
     /// @param p Vertex point
     /// @return The global numbering for the vertex
-    Int global_vertex_index(Int p) const;
+    Int get_global_vertex_index(Int p) const;
 
     /// Get the offset for accessing the variables associated with a component at the given
     /// vertex/edge from the local vector
@@ -105,14 +105,14 @@ public:
     /// @param p The edge or vertex point
     /// @param comp_num Component number; use ALL_COMPONENTS if no specific component is requested
     /// @return The local offset
-    Int local_vec_offset(Int p, Int comp_num) const;
+    Int get_local_vec_offset(Int p, Int comp_num) const;
 
     /// Get the offset for accessing the variables associated with the given vertex from the local
     /// subvector
     ///
     /// @param p The vertex point
     /// @return The offset
-    Int vertex_offset(Int p) const;
+    Int get_vertex_offset(Int p) const;
 
     /// Sets user-provided Jacobian matrices for this edge to the network
     ///
