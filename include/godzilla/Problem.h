@@ -280,6 +280,12 @@ public:
     /// @param l Local vector
     void global_to_local(const Vector & g, InsertMode mode, Vector & l) const;
 
+    /// When `create_matrix` is called, the matrix structure will be created but the array for
+    /// numerical values will not be allocated.
+    ///
+    /// @param only `true` if you only want matrix structure
+    void set_matrix_structure_only(bool only);
+
 protected:
     /// Set vector/matrix types
     virtual void set_up_types();
