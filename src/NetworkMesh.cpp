@@ -48,7 +48,7 @@ NetworkMesh::get_component(Int p) const
 }
 
 std::tuple<Int, Int>
-NetworkMesh::num_sub_networks() const
+NetworkMesh::get_num_sub_networks() const
 {
     CALL_STACK_MSG();
     Int l, g;
@@ -86,7 +86,7 @@ NetworkMesh::create()
 }
 
 Int
-NetworkMesh::num_components(Int p) const
+NetworkMesh::get_num_components(Int p) const
 {
     CALL_STACK_MSG();
     Int n;
@@ -95,7 +95,7 @@ NetworkMesh::num_components(Int p) const
 }
 
 std::tuple<Int, Int>
-NetworkMesh::num_vertices() const
+NetworkMesh::get_num_vertices() const
 {
     CALL_STACK_MSG();
     Int loc, glob;
@@ -104,7 +104,7 @@ NetworkMesh::num_vertices() const
 }
 
 Range
-NetworkMesh::vertex_range() const
+NetworkMesh::get_vertex_range() const
 {
     CALL_STACK_MSG();
     Int start, end;
@@ -113,7 +113,7 @@ NetworkMesh::vertex_range() const
 }
 
 std::vector<Int>
-NetworkMesh::supporting_edges(Int vertex) const
+NetworkMesh::get_supporting_edges(Int vertex) const
 {
     CALL_STACK_MSG();
     Int n_edges;
@@ -132,7 +132,7 @@ NetworkMesh::is_ghost_vertex(Int p) const
 }
 
 std::tuple<Int, Int>
-NetworkMesh::num_edges() const
+NetworkMesh::get_num_edges() const
 {
     CALL_STACK_MSG();
     Int loc, glob;
@@ -141,7 +141,7 @@ NetworkMesh::num_edges() const
 }
 
 Range
-NetworkMesh::edge_range() const
+NetworkMesh::get_edge_range() const
 {
     CALL_STACK_MSG();
     Int start, end;
@@ -150,7 +150,7 @@ NetworkMesh::edge_range() const
 }
 
 std::array<Int, 2>
-NetworkMesh::connected_vertices(Int edge) const
+NetworkMesh::get_connected_vertices(Int edge) const
 {
     CALL_STACK_MSG();
     const Int * verts;
@@ -180,7 +180,7 @@ NetworkMesh::finalize_components()
 }
 
 Int
-NetworkMesh::edge_offset(Int p) const
+NetworkMesh::get_edge_offset(Int p) const
 {
     CALL_STACK_MSG();
     Int offset;
@@ -189,7 +189,7 @@ NetworkMesh::edge_offset(Int p) const
 }
 
 Int
-NetworkMesh::global_edge_index(Int p) const
+NetworkMesh::get_global_edge_index(Int p) const
 {
     CALL_STACK_MSG();
     Int idx;
@@ -198,7 +198,7 @@ NetworkMesh::global_edge_index(Int p) const
 }
 
 Int
-NetworkMesh::global_vec_offset(Int p, Int comp_num) const
+NetworkMesh::get_global_vec_offset(Int p, Int comp_num) const
 {
     CALL_STACK_MSG();
     Int offset;
@@ -207,7 +207,7 @@ NetworkMesh::global_vec_offset(Int p, Int comp_num) const
 }
 
 Int
-NetworkMesh::global_vertex_index(Int p) const
+NetworkMesh::get_global_vertex_index(Int p) const
 {
     CALL_STACK_MSG();
     Int idx;
@@ -216,7 +216,7 @@ NetworkMesh::global_vertex_index(Int p) const
 }
 
 Int
-NetworkMesh::local_vec_offset(Int p, Int comp_num) const
+NetworkMesh::get_local_vec_offset(Int p, Int comp_num) const
 {
     CALL_STACK_MSG();
     Int offset;
@@ -225,7 +225,7 @@ NetworkMesh::local_vec_offset(Int p, Int comp_num) const
 }
 
 Int
-NetworkMesh::vertex_offset(Int p) const
+NetworkMesh::get_vertex_offset(Int p) const
 {
     CALL_STACK_MSG();
     Int offset;
