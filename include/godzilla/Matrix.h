@@ -67,8 +67,6 @@ public:
     void assembly_end(MatAssemblyType type = MAT_FINAL_ASSEMBLY);
     void assemble(MatAssemblyType type = MAT_FINAL_ASSEMBLY);
 
-    void get_size(Int & m, Int & n) const;
-
     /// Returns the numbers of rows and columns in a matrix.
     ///
     /// @return [m, n]: m = the number of global rows, n = the number of global columns
