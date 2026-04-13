@@ -160,6 +160,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla7Problem13set_adjacencyE3Intbb"><code class="docutils literal notranslate"><span class="pre">Problem::set_adjacency()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem15local_to_globalERK6Vector10InsertModeR6Vector"><code class="docutils literal notranslate"><span class="pre">Problem::local_to_global()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem15global_to_localERK6Vector10InsertModeR6Vector"><code class="docutils literal notranslate"><span class="pre">Problem::global_to_local()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla7Problem25set_matrix_structure_onlyEb"><code class="docutils literal notranslate"><span class="pre">Problem::set_matrix_structure_only()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla7Problem18FieldDecompositionE"><code class="docutils literal notranslate"><span class="pre">Problem::FieldDecomposition</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv4N8godzilla7Problem18FieldDecomposition10field_nameE"><code class="docutils literal notranslate"><span class="pre">Problem::FieldDecomposition::field_name</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv4N8godzilla7Problem18FieldDecomposition2isE"><code class="docutils literal notranslate"><span class="pre">Problem::FieldDecomposition::is</span></code></a></li>
@@ -674,6 +675,17 @@
 <li><p><strong>mode</strong> – Insert mode </p></li>
 <li><p><strong>l</strong> – Local vector </p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla7Problem25set_matrix_structure_onlyEb">
+<span id="_CPPv3N8godzilla7Problem25set_matrix_structure_onlyEb"></span><span id="_CPPv2N8godzilla7Problem25set_matrix_structure_onlyEb"></span><span id="godzilla::Problem::set_matrix_structure_only__b"></span><span class="target" id="classgodzilla_1_1_problem_1a8dfebde07e4907e358572828f3d40cca"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_matrix_structure_only</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">only</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla7Problem25set_matrix_structure_onlyEb" title="Link to this definition"></a><br /></dt>
+<dd><p>When <code class="docutils literal notranslate"><span class="pre">create_matrix</span></code> is called, the matrix structure will be created but the array for numerical values will not be allocated. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>only</strong> – <code class="docutils literal notranslate"><span class="pre">true</span></code> if you only want matrix structure </p>
 </dd>
 </dl>
 </dd></dl>
