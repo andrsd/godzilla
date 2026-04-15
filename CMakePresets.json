@@ -49,6 +49,34 @@
                 "GODZILLA_WITH_MPI": "YES",
                 "GODZILLA_WITH_TECIOCPP": "YES"
             }
+        },
+        {
+            "name": "ci-debug",
+            "displayName": "CI/Debug",
+            "generator": "Unix Makefiles",
+            "binaryDir": "build",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_CXX_FLAGS_DEBUG": "-g -O1 -Wall -Werror",
+                "CMAKE_C_FLAGS_DEBUG": "-g -O1 -Wall -Werror",
+                "GODZILLA_BUILD_EXAMPLES": "YES",
+                "GODZILLA_BUILD_TESTS": "YES",
+                "GODZILLA_WITH_MPI": "YES"
+            }
+        },
+        {
+            "name": "ci-release",
+            "displayName": "CI/Release",
+            "generator": "Unix Makefiles",
+            "binaryDir": "build",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_CXX_FLAGS_RELEASE": "-O3 -Wall -Werror -DNDEBUG",
+                "CMAKE_C_FLAGS_RELEASE": "-O3 -Wall -Werror -DNDEBUG",
+                "GODZILLA_BUILD_EXAMPLES": "YES",
+                "GODZILLA_BUILD_TESTS": "YES",
+                "GODZILLA_WITH_MPI": "YES"
+            }
         }
     ],
     "buildPresets": [
@@ -69,6 +97,18 @@
             "displayName": "Native Build",
             "configurePreset": "native",
             "configuration": "Native"
+        },
+        {
+            "name": "ci-debug",
+            "displayName": "Debug Build for CI",
+            "configurePreset": "ci-debug",
+            "configuration": "Debug"
+        },
+        {
+            "name": "ci-release",
+            "displayName": "Release Build for CI",
+            "configurePreset": "ci-release",
+            "configuration": "Release"
         }
     ]
 }

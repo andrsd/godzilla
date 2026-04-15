@@ -33,7 +33,7 @@ ConstantInitialCondition::create_components()
 }
 
 void
-ConstantInitialCondition::evaluate(Real time, const Real x[], Scalar u[])
+ConstantInitialCondition::evaluate(Real, const Real[], Scalar u[])
 {
     CALL_STACK_MSG();
     for (std::size_t i = 0; i < this->values.size(); ++i)

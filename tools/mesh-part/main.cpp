@@ -110,7 +110,7 @@ MeshPartApp::partition_mesh_file(const std::string & mesh_file_name)
 }
 
 void
-MeshPartApp::save_partition(UnstructuredMesh * mesh, const std::string & file_name)
+MeshPartApp::save_partition(UnstructuredMesh *, const std::string & file_name)
 {
     auto pars = ExodusIIOutput::parameters();
     pars.set<Ref<App>>("app", ref(*this));

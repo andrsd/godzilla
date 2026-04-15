@@ -12,7 +12,12 @@
 namespace godzilla {
 
 PetscErrorCode
-EssentialBC::invoke_delegate(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx)
+EssentialBC::invoke_delegate(Int /* dim */,
+                             Real time,
+                             const Real x[],
+                             Int /* nc */,
+                             Scalar u[],
+                             void * ctx)
 {
     CALL_STACK_MSG();
     auto * bc = static_cast<EssentialBC *>(ctx);
@@ -21,7 +26,12 @@ EssentialBC::invoke_delegate(Int dim, Real time, const Real x[], Int nc, Scalar 
 }
 
 PetscErrorCode
-EssentialBC::invoke_delegate_t(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx)
+EssentialBC::invoke_delegate_t(Int /* dim */,
+                               Real time,
+                               const Real x[],
+                               Int /* nc */,
+                               Scalar u[],
+                               void * ctx)
 {
     CALL_STACK_MSG();
     auto * bc = static_cast<EssentialBC *>(ctx);
@@ -125,7 +135,7 @@ EssentialBC::create_components()
 }
 
 void
-EssentialBC::evaluate_t(Real time, const Real x[], Scalar u[])
+EssentialBC::evaluate_t(Real /* time */, const Real[] /* x */, Scalar[] /* u */)
 {
 }
 

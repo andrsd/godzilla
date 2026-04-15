@@ -43,7 +43,7 @@ fn3()
 }
 
 void
-fn4(int i)
+fn4(int)
 {
     CALL_STACK_MSG();
     fn3();

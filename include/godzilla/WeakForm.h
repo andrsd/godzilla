@@ -26,7 +26,7 @@ public:
         Int part;
 
         Region() : label(nullptr), value(0), part(0) {}
-        Region(Label label, Int value, Int part) : label(label), value(value), part(0) {}
+        Region(Label label, Int value, Int part) : label(label), value(value), part(part) {}
 
         bool
         operator<(const Region & other) const

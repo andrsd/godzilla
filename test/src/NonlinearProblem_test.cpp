@@ -77,7 +77,7 @@ G1DTestNonlinearProblem::compute_residual(const Vector & x, Vector & f)
 }
 
 void
-G1DTestNonlinearProblem::compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
+G1DTestNonlinearProblem::compute_jacobian(const Vector &, Matrix & J, Matrix &)
 {
     J.set_value(0, 0, 1.);
     J.set_value(1, 1, 1.);
@@ -149,14 +149,14 @@ TEST(NonlinearProblemTest, run)
         MOCK_METHOD(void, on_initial, ());
 
         void
-        compute_residual(const Vector & x, Vector & f)
+        compute_residual(const Vector &, Vector & f)
         {
             f.zero();
             this->compute_residual_called = true;
         }
 
         void
-        compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
+        compute_jacobian(const Vector &, Matrix &, Matrix &)
         {
             this->compute_jacobian_called = true;
         }

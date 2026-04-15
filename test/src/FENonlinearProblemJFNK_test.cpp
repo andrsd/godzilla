@@ -124,7 +124,7 @@ public:
     explicit DirichletBC(const Parameters & pars) : EssentialBC(pars) {}
 
     void
-    evaluate(Real time, const Real x[], Scalar u[]) override
+    evaluate(Real, const Real x[], Scalar u[]) override
     {
         u[0] = x[0] * x[0];
     }

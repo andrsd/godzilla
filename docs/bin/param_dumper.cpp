@@ -30,7 +30,7 @@ public:
 };
 
 int
-main(int argc, char * argv[])
+main(int, char *[])
 {
     try {
         mpi::Communicator comm(MPI_COMM_WORLD);

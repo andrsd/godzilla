@@ -28,7 +28,7 @@ TEST_F(AuxiliaryFieldTest, api)
             return 1;
         }
         void
-        evaluate(Real time, const Real x[], Scalar u[]) override
+        evaluate(Real, const Real[], Scalar[]) override
         {
         }
 
@@ -78,7 +78,7 @@ TEST_F(AuxiliaryFieldTest, non_existent_field)
             return 2;
         }
         void
-        evaluate(Real time, const Real x[], Scalar u[]) override
+        evaluate(Real, const Real[], Scalar[]) override
         {
         }
     };
@@ -106,7 +106,7 @@ TEST_F(AuxiliaryFieldTest, inconsistent_comp_number)
             return 2;
         }
         void
-        evaluate(Real time, const Real x[], Scalar u[]) override
+        evaluate(Real, const Real[], Scalar[]) override
         {
         }
     };
@@ -136,7 +136,7 @@ TEST_F(AuxiliaryFieldTest, non_existent_region)
             return 1;
         }
         void
-        evaluate(Real time, const Real x[], Scalar u[]) override
+        evaluate(Real, const Real[], Scalar[]) override
         {
         }
     };
@@ -159,7 +159,9 @@ TEST_F(AuxiliaryFieldTest, name_already_taken)
     prob->set_aux_field(FieldID(0), "fld", 1, Order(1));
 
     auto params = ConstantAuxiliaryField::parameters();
-    params.set<Ref<App>>("app", ref(*app)).set<String>("name", "aux").set<std::vector<Real>>("value", { 1 });
+    params.set<Ref<App>>("app", ref(*app))
+        .set<String>("name", "aux")
+        .set<std::vector<Real>>("value", { 1 });
     prob->add_auxiliary_field<ConstantAuxiliaryField>(params);
 
     EXPECT_DEATH(prob->add_auxiliary_field<ConstantAuxiliaryField>(params),

@@ -42,7 +42,7 @@ public:
     }
 
     void
-    evaluate_t(Real t, const Real coord[], Scalar u[]) override
+    evaluate_t(Real, const Real[], Scalar u[]) override
     {
         u[0] = 1;
     }

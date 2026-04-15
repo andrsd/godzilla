@@ -51,7 +51,7 @@ public:
     }
 
     void
-    deallocate(T * ptr, std::size_t n)
+    deallocate(T * /* ptr */, std::size_t /* n */)
     {
         // no-op, arena frees everything at once
     }

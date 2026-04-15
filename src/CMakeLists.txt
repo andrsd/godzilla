@@ -6,12 +6,6 @@ target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
 
 target_code_coverage(${PROJECT_NAME})
 target_sanitization(${PROJECT_NAME})
-target_compile_options(${PROJECT_NAME}
-    PRIVATE
-        -Wall
-        -ffile-prefix-map=${CMAKE_SOURCE_DIR}/include=include
-        -ffile-prefix-map=${CMAKE_SOURCE_DIR}/src=godzilla/src
-)
 
 set_target_properties(
     ${PROJECT_NAME}

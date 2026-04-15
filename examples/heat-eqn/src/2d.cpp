@@ -20,7 +20,7 @@ public:
     DirichletBC(const Parameters & pars) : EssentialBC(pars) {}
 
     void
-    evaluate(Real t, const Real coord[], Scalar u[]) override
+    evaluate(Real, const Real[], Scalar u[]) override
     {
         u[0] = 300;
     }

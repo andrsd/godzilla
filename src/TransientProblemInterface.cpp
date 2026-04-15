@@ -362,7 +362,7 @@ TransientProblemInterface::post_step()
 }
 
 void
-TransientProblemInterface::monitor(Int stepi, Real time, const Vector & x)
+TransientProblemInterface::monitor(Int stepi, Real time, const Vector & /* x */)
 {
     CALL_STACK_MSG();
     Real dt = get_time_step();
@@ -408,14 +408,14 @@ TransientProblemInterface::set_problem_type(ProblemType type)
 }
 
 void
-TransientProblemInterface::pre_stage(Real stage_time)
+TransientProblemInterface::pre_stage(Real /* stage_time */)
 {
 }
 
 void
-TransientProblemInterface::post_stage(Real stage_time,
-                                      Int stage_index,
-                                      const std::vector<Vector> & Y)
+TransientProblemInterface::post_stage(Real /* stage_time */,
+                                      Int /* stage_index */,
+                                      const std::vector<Vector> & /* Y */)
 {
 }
 

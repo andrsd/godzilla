@@ -16,14 +16,14 @@
 namespace godzilla {
 
 void
-FVProblemInterface::compute_flux(Int dim,
-                                 Int nf,
+FVProblemInterface::compute_flux(Int /* dim */,
+                                 Int /* nf */,
                                  const Real x[],
                                  const Real n[],
                                  const Scalar u_l[],
                                  const Scalar u_r[],
-                                 Int n_consts,
-                                 const Scalar constants[],
+                                 Int /* n_consts */,
+                                 const Scalar[] /* constants */,
                                  Scalar flux[],
                                  void * ctx)
 {
@@ -125,7 +125,7 @@ FVProblemInterface::get_field_num_components(FieldID fid) const
 }
 
 Expected<FieldID, ErrorCode>
-FVProblemInterface::get_field_id(String name) const
+FVProblemInterface::get_field_id(String /* name */) const
 {
     CALL_STACK_MSG();
     return FieldID(0);

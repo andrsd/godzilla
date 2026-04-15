@@ -23,7 +23,7 @@ public:
     }
 
     void
-    evaluate_t(Real time, const Real x[], Scalar u[]) override
+    evaluate_t(Real, const Real[], Scalar u[]) override
     {
         u[0] = 1.;
     }

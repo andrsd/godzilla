@@ -41,7 +41,7 @@ fn2()
 }
 
 void
-fn1(int i, godzilla::String s)
+fn1(int, godzilla::String)
 {
     CALL_STACK_MSG();
     fn2();

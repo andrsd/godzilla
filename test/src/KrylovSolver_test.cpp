@@ -126,7 +126,7 @@ TEST(KrylovSolver, set_monitor)
     class TestSolver {
     public:
         void
-        monitor(Int it, Real rnorm)
+        monitor(Int, Real rnorm)
         {
             this->norms.push_back(rnorm);
         }
@@ -172,7 +172,7 @@ TEST(KrylovSolver, set_opers_rhs)
         }
 
         void
-        compute_operators(Matrix & A, Matrix & B)
+        compute_operators(Matrix & A, Matrix &)
         {
             A.set_value(0, 0, 2);
             A.set_value(1, 1, 3);

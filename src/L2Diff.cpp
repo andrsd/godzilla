@@ -11,7 +11,12 @@
 namespace godzilla {
 
 static PetscErrorCode
-L2Diff__invoke_delegate(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx)
+L2Diff__invoke_delegate(Int /* dim */,
+                        Real time,
+                        const Real x[],
+                        Int /* nc */,
+                        Scalar u[],
+                        void * ctx)
 {
     CALL_STACK_MSG();
     auto * bc = static_cast<L2Diff *>(ctx);

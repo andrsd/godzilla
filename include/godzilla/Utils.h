@@ -235,7 +235,7 @@ String
 join(const char * con, const Array1D<T> & array)
 {
     std::ostringstream oss;
-    for (size_t i = 0; i < array.size(); ++i) {
+    for (Int i = 0; i < array.size(); ++i) {
         if (i > 0)
             oss << con;
         oss << array[i];

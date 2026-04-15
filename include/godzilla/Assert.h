@@ -38,9 +38,7 @@ assert_true(bool cond,
 #else
 
 [[deprecated]] inline void
-assert_true(bool cond,
-            fmt::string_view format,
-            std::source_location loc = std::source_location::current())
+assert_true(bool, fmt::string_view, std::source_location = std::source_location::current())
 {
 }
 

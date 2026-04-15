@@ -85,7 +85,7 @@ common_elements_by_node(const UnstructuredMesh & mesh)
 
 template <ElementType ELEM_TYPE, Int DIM>
 inline DenseVector<Real, DIM>
-normal(Real volume, Real face_volume, const DenseVector<Real, DIM> & grad)
+normal(Real /* volume */, Real /* face_volume */, const DenseVector<Real, DIM> & /* grad */)
 {
     CALL_STACK_MSG();
     throw NotImplementedException(
@@ -96,7 +96,7 @@ normal(Real volume, Real face_volume, const DenseVector<Real, DIM> & grad)
 
 template <>
 inline DenseVector<Real, 1>
-normal<EDGE2, 1>(Real volume, Real face_volume, const DenseVector<Real, 1> & grad)
+normal<EDGE2, 1>(Real volume, Real /* face_volume */, const DenseVector<Real, 1> & grad)
 {
     return -volume * grad;
 }
@@ -121,7 +121,7 @@ normal<TET4, 3>(Real volume, Real face_volume, const DenseVector<Real, 3> & grad
 
 template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
 inline Real
-element_length(const DenseMatrix<Real, DIM, N_ELEM_NODES> & grad_phi)
+element_length(const DenseMatrix<Real, DIM, N_ELEM_NODES> & /* grad_phi */)
 {
     CALL_STACK_MSG();
     throw NotImplementedException(
@@ -166,7 +166,7 @@ calc_element_length(const Array1D<DenseMatrix<Real, DIM, N_ELEM_NODES>> & grad_p
 
 template <CoordinateType COORD_TYPE, Int DIM>
 inline Array1D<Real>
-calc_nodal_radius(const Array1D<DenseVector<Real, DIM>> & coords)
+calc_nodal_radius(const Array1D<DenseVector<Real, DIM>> & /* coords */)
 {
     throw NotImplementedException(
         format("Radius computation is not implemented in {} dimensions", DIM));
@@ -246,7 +246,7 @@ get_local_face_index(const std::vector<Int> & elem_conn, const std::vector<Int> 
 
 template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
 inline Int
-get_grad_fn_index(Int facet_idx)
+get_grad_fn_index(Int /* facet_idx */)
 {
     throw NotImplementedException(
         format("get_grad_fn_index is not implemented for {} element in {} dimensions",
@@ -292,7 +292,7 @@ get_grad_fn_index<TET4, 3, 4>(Int facet_idx)
 ///   - `= 0` degenerate
 template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
 inline Real
-orient(const DenseMatrix<Real, N_ELEM_NODES, DIM> & pt)
+orient(const DenseMatrix<Real, N_ELEM_NODES, DIM> & /* pt */)
 {
     CALL_STACK_MSG();
     throw NotImplementedException(

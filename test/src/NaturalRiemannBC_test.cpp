@@ -54,11 +54,11 @@ protected:
     }
 
     void
-    compute_flux(const PetscReal x[],
-                 const PetscReal n[],
-                 const PetscScalar u_l[],
-                 const PetscScalar u_r[],
-                 PetscScalar flux[])
+    compute_flux(const PetscReal[],
+                 const PetscReal[],
+                 const PetscScalar[],
+                 const PetscScalar[],
+                 PetscScalar[])
     {
     }
 };

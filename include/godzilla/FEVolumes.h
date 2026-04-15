@@ -20,7 +20,7 @@ namespace fe {
 
 template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
 Real
-volume(const DenseMatrix<Real, N_ELEM_NODES, DIM> & coords)
+volume(const DenseMatrix<Real, N_ELEM_NODES, DIM> & /* coords */)
 {
     CALL_STACK_MSG();
     throw NotImplementedException(
@@ -155,7 +155,7 @@ calc_volumes(const UnstructuredMesh & mesh)
 
 template <ElementType ELEM_TYPE, Int DIM, Int N_FACE_NODES>
 Real
-face_area(const DenseMatrix<Real, N_FACE_NODES, DIM> & coords)
+face_area(const DenseMatrix<Real, N_FACE_NODES, DIM> & /* coords */)
 {
     CALL_STACK_MSG();
     throw NotImplementedException(
@@ -166,7 +166,7 @@ face_area(const DenseMatrix<Real, N_FACE_NODES, DIM> & coords)
 
 template <>
 inline Real
-face_area<EDGE2, 1>(const DenseMatrix<Real, 1, 1> & coords)
+face_area<EDGE2, 1>(const DenseMatrix<Real, 1, 1> & /* coords */)
 {
     return 1.;
 }
