@@ -97,7 +97,7 @@ public:
     constexpr Flags
     operator|(Flags rhs) const
     {
-        return Flags(this->mask | this->mask);
+        return Flags(this->mask | rhs.mask);
     }
 
     /// Test if a flag is set
