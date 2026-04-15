@@ -19,6 +19,15 @@ NetworkMesh::NetworkMesh(DM dm) : godzilla::Mesh(dm)
     CALL_STACK_MSG();
 }
 
+NetworkMesh
+NetworkMesh::clone() const
+{
+    CALL_STACK_MSG();
+    DM dm;
+    PETSC_CHECK(DMClone(get_dm(), &dm));
+    return NetworkMesh(dm);
+}
+
 ClassID
 NetworkMesh::register_component(String name, std::size_t size)
 {

@@ -15,6 +15,11 @@ public:
     NetworkMesh(mpi::Communicator comm);
     explicit NetworkMesh(DM dm);
 
+    /// Clone this network mesh object
+    ///
+    /// @return Clone of this object
+    NetworkMesh clone() const;
+
     ClassID register_component(String name, std::size_t size);
 
     void add_component(Int p, ClassID key, void * comp, Int n_vars);
