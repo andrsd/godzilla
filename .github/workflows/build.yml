@@ -29,18 +29,21 @@ jobs:
           - os: ubuntu-22.04
             python-version: "3.11"
             petsc: 3.23.7
+            preset: ci-debug
             build: Debug
             teciocpp: ON
             code-coverage: ON
           - os: ubuntu-22.04
             python-version: "3.11"
             petsc: 3.23.7
+            preset: ci-release
             build: Release
             teciocpp: ON
             code-coverage: OFF
           - os: ubuntu-22.04
             python-version: "3.11"
             petsc: 3.23.7
+            preset: ci-release
             build: Release
             teciocpp: OFF
             code-coverage: OFF
@@ -75,16 +78,16 @@ jobs:
 
       - name: Configure
         run: |
-          cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build \
-            -DCMAKE_BUILD_TYPE=${{ matrix.build }} \
+          cd ${{ github.workspace }}
+          cmake --preset ${{ matrix.preset }} \
             -DGCOV_PATH=`which x86_64-conda-linux-gnu-gcov` \
             -DGODZILLA_WITH_TECIOCPP=${{ matrix.teciocpp }} \
-            -DGODZILLA_BUILD_EXAMPLES=YES \
-            -DGODZILLA_BUILD_TESTS=YES \
             -DGODZILLA_CODE_COVERAGE=${{ matrix.code-coverage }}
 
       - name: Build
-        run: make -C ${{ github.workspace }}/build
+        run: |
+          cd ${{ github.workspace }}
+          cmake --build --preset ${{ matrix.preset }} --parallel 4
 
       - name: Run tests
         run: |
