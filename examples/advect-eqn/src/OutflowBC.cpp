@@ -14,7 +14,7 @@ OutflowBC::OutflowBC(const Parameters & pars) : NaturalRiemannBC(pars)
 }
 
 void
-OutflowBC::evaluate(Real time, const Real * c, const Real * n, const Scalar * xI, Scalar * xG)
+OutflowBC::evaluate(Real, const Real *, const Real *, const Scalar * xI, Scalar * xG)
 {
     CALL_STACK_MSG();
     xG[0] = xI[0];

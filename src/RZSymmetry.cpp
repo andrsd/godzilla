@@ -41,7 +41,7 @@ RZSymmetry::create()
 }
 
 Real
-RZSymmetry::get_value(Real time, const DenseVector<Real, 2> & x)
+RZSymmetry::get_value(Real /* time */, const DenseVector<Real, 2> & x)
 {
     CALL_STACK_MSG();
 

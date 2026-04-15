@@ -73,7 +73,7 @@ NetworkMesh::set_num_sub_networks(Int n, Int N)
 }
 
 Int
-NetworkMesh::add_sub_network(String name, std::vector<Int> & edge_list)
+NetworkMesh::add_sub_network(String /* name */, std::vector<Int> & edge_list)
 {
     CALL_STACK_MSG();
     if (edge_list.size() % 2 == 0) {

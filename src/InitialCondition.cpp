@@ -12,10 +12,10 @@
 namespace godzilla {
 
 PetscErrorCode
-InitialCondition::invoke_delegate(Int dim,
+InitialCondition::invoke_delegate(Int /* dim */,
                                   Real time,
                                   const Real x[],
-                                  Int nc,
+                                  Int /* nc */,
                                   Scalar u[],
                                   void * ctx)
 {

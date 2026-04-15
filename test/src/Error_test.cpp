@@ -23,7 +23,7 @@ fn1_fail()
 }
 
 void
-fn2(bool fail, const char * test, int number)
+fn2(bool fail, const char *, int)
 {
     CALL_STACK_MSG();
     if (fail)

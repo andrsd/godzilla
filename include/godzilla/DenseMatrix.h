@@ -655,7 +655,7 @@ public:
 
 template <typename T, Int N>
 inline T
-determinant(const DenseMatrix<T, N, N> & mat)
+determinant(const DenseMatrix<T, N, N> & /* mat */)
 {
     throw NotImplementedException(
         format("Determinant is not implemented for {}x{} matrices, yet", N, N));
@@ -943,7 +943,7 @@ public:
     void
     set_row(Int row, std::initializer_list<T> vals)
     {
-        if (vals.size() == this->cols) {
+        if (static_cast<Int>(vals.size()) == this->cols) {
 #ifdef NDEBUG
             for (Int idx = row * this->cols, i = 0; i < this->cols; ++i, ++idx)
                 data(idx) = std::data(vals)[i];
@@ -1008,7 +1008,7 @@ public:
     void
     set_col(Int col, std::initializer_list<T> vals)
     {
-        if (vals.size() == this->rows) {
+        if (static_cast<Int>(vals.size()) == this->rows) {
 #ifdef NDEBUG
             for (Int idx = col, i = 0; i < this->rows; ++i, idx += this->cols)
                 data(idx) = std::data(vals)[i];
@@ -1026,7 +1026,7 @@ public:
     void
     set_col(Int col, const std::vector<T> & vals)
     {
-        if (vals.size() == this->rows) {
+        if (static_cast<Int>(vals.size()) == this->rows) {
 #ifdef NDEBUG
             for (Int idx = col, i = 0; i < this->rows; ++i, idx += this->cols)
                 data(idx) = vals[i];
@@ -1427,10 +1427,10 @@ public:
         DynDenseMatrix<T> res(vals.size(), vals.size());
         res.zero();
 #ifdef NDEBUG
-        for (Int idx = 0, i = 0; i < vals.size(); ++i, idx += res.cols + 1)
+        for (Int idx = 0, i = 0; i < static_cast<Int>(vals.size()); ++i, idx += res.cols + 1)
             res.data(idx) = vals[i];
 #else
-        for (Int i = 0; i < vals.size(); ++i)
+        for (Int i = 0; i < static_cast<Int>(vals.size()); ++i)
             res(i, i) = vals[i];
 #endif
         return res;

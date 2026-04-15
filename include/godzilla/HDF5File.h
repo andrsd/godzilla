@@ -761,7 +761,7 @@ HDF5File::Dataset::read(DynDenseMatrix<T> & data) const
 
 template <typename T>
 inline void
-HDF5File::Dataset::read(Int n, T data[])
+HDF5File::Dataset::read(Int /* n */, T data[])
 {
     auto res = H5Dread(this->id, hdf5::get_datatype<T>(), H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
     if (res < 0)
@@ -835,7 +835,7 @@ HDF5File::Dataset::write(const std::vector<T, A> & data)
 
 template <typename T>
 inline void
-HDF5File::Dataset::write(Int n, const T data[])
+HDF5File::Dataset::write(Int /* n */, const T data[])
 {
     auto res = H5Dwrite(this->id, hdf5::get_datatype<T>(), H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
     if (res < 0)

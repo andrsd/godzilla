@@ -29,7 +29,7 @@ public:
     }
 
     void
-    compute_operators(Matrix & A, Matrix & B)
+    compute_operators(Matrix & A, Matrix &)
     {
         A.set_value(0, 0, 2.);
         A.set_value(1, 1, 3.);

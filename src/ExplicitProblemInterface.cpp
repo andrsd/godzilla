@@ -116,7 +116,9 @@ ExplicitProblemInterface::compute_rhs_function(Real time, const Vector & x, Vect
 }
 
 void
-ExplicitProblemInterface::compute_rhs_local(Real time, const Vector & x, Vector & F)
+ExplicitProblemInterface::compute_rhs_local(Real /* time */,
+                                            const Vector & /* x */,
+                                            Vector & /* F */)
 {
 }
 

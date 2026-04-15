@@ -1020,7 +1020,8 @@ struct prod<godzilla::DenseVector<T, D>> :
     public UserOp<prod<godzilla::DenseVector<T, D>>, godzilla::DenseVector<T, D>> {
 public:
     godzilla::DenseVector<T, D>
-    operator()(const godzilla::DenseVector<T, D> & x, const godzilla::DenseVector<T, D> & y) const
+    operator()(const godzilla::DenseVector<T, D> & /* x */,
+               const godzilla::DenseVector<T, D> & /* y */) const
     {
         throw godzilla::Exception("Unable to use DenseVector with mpi::op::prod");
     }
@@ -1031,7 +1032,8 @@ struct max<godzilla::DenseVector<T, D>> :
     public UserOp<max<godzilla::DenseVector<T, D>>, godzilla::DenseVector<T, D>> {
 public:
     godzilla::DenseVector<T, D>
-    operator()(const godzilla::DenseVector<T, D> & x, const godzilla::DenseVector<T, D> & y) const
+    operator()(const godzilla::DenseVector<T, D> & /* x */,
+               const godzilla::DenseVector<T, D> & /* y */) const
     {
         throw godzilla::Exception("Unable to use DenseVector with mpi::op::max");
     }
@@ -1042,7 +1044,8 @@ struct min<godzilla::DenseVector<T, D>> :
     public UserOp<min<godzilla::DenseVector<T, D>>, godzilla::DenseVector<T, D>> {
 public:
     godzilla::DenseVector<T, D>
-    operator()(const godzilla::DenseVector<T, D> & x, const godzilla::DenseVector<T, D> & y) const
+    operator()(const godzilla::DenseVector<T, D> & /* x */,
+               const godzilla::DenseVector<T, D> & /* y */) const
     {
         throw godzilla::Exception("Unable to use DenseVector with mpi::op::min");
     }

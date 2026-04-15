@@ -26,7 +26,7 @@ namespace fe {
 /// @return Vector of gradients of shape functions associated with element nodes
 template <ElementType ELEM_TYPE, int D, Int N = get_num_element_nodes(ELEM_TYPE)>
 inline DenseMatrix<Real, D, N>
-grad_shape(const DenseMatrix<Real, N, D> & coords, Real volume)
+grad_shape(const DenseMatrix<Real, N, D> & /* coords */, Real /* volume */)
 {
     throw NotImplementedException(
         format("Calculation of shape function gradients is not implemented for element '{}' yet",
@@ -36,7 +36,7 @@ grad_shape(const DenseMatrix<Real, N, D> & coords, Real volume)
 /// Compute gradients of shape functions of EDGE2 in 1-D
 template <>
 inline DenseMatrix<Real, 1, 2>
-grad_shape<EDGE2, 1>(const DenseMatrix<Real, 2, 1> & coords, Real volume)
+grad_shape<EDGE2, 1>(const DenseMatrix<Real, 2, 1> & /* coords */, Real volume)
 {
     CALL_STACK_MSG();
     Real c = 1 / volume;

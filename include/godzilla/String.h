@@ -386,7 +386,7 @@ struct fmt::formatter<godzilla::String> : fmt::formatter<fmt::string_view> {
 template <>
 struct YAML::convert<godzilla::String> {
     static Node
-    encode(const godzilla::String & rhs)
+    encode(const godzilla::String & /* rhs */)
     {
         // do nothing, becuase we only read YML
         Node node;
@@ -394,7 +394,7 @@ struct YAML::convert<godzilla::String> {
     }
 
     static bool
-    decode(const Node & node, godzilla::String & rhs)
+    decode(const Node & /* node */, godzilla::String & /* rhs */)
     {
         // rhs = node.as<std::string>();
         return true;

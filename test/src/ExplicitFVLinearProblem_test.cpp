@@ -23,7 +23,7 @@ public:
     }
 
     void
-    evaluate(Real time, const Real * c, const Real * n, const Scalar * xI, Scalar * xG) override
+    evaluate(Real, const Real *, const Real *, const Scalar * xI, Scalar * xG) override
     {
         if (this->inlet)
             xG[0] = 1.;
@@ -67,7 +67,7 @@ public:
     }
 
     void
-    compute_flux(const Real x[],
+    compute_flux(const Real[],
                  const Real n[],
                  const Scalar u_l[],
                  const Scalar u_r[],

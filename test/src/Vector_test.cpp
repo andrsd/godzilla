@@ -48,8 +48,9 @@ TEST(VectorTest, get_type)
 {
     mpi::Communicator comm(MPI_COMM_WORLD);
     Vector v = Vector::create_seq(comm, 10);
-    if (comm.size() == 1)
+    if (comm.size() == 1) {
         EXPECT_EQ(v.get_type(), "seq");
+    }
 }
 
 TEST(VectorTest, get_size)

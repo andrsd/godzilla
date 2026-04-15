@@ -65,7 +65,7 @@ struct ContinousPolicy {
 struct DiscontinousPolicy {
     static auto
     write_block(exodusIIcpp::File & f,
-                const UnstructuredMesh & mesh,
+                const UnstructuredMesh & /* mesh */,
                 int blk_id,
                 PolytopeType polytope_type,
                 Int n_elems_in_block,
@@ -593,7 +593,7 @@ void
 write_nodal_field_values(exodusIIcpp::File & f,
                          const DiscreteProblemInterface & dpi,
                          int step_num,
-                         Real time,
+                         Real /* time */,
                          FieldID fid,
                          int exo_var_id)
 {
@@ -642,7 +642,7 @@ void
 write_nodal_field_values(exodusIIcpp::File & f,
                          const DGProblemInterface & dgpi,
                          int step_num,
-                         Real time,
+                         Real /* time */,
                          FieldID fid,
                          int exo_var_id)
 {
@@ -698,7 +698,7 @@ void
 write_elem_field_values(exodusIIcpp::File & f,
                         DiscreteProblemInterface & dpi,
                         int step_num,
-                        Real time,
+                        Real /* time */,
                         FieldID fid,
                         int exo_var_id,
                         int blk_id)
@@ -727,7 +727,7 @@ void
 write_elem_field_values(exodusIIcpp::File & f,
                         DiscreteProblemInterface & dpi,
                         int step_num,
-                        Real time,
+                        Real /* time */,
                         FieldID fid,
                         int exo_var_id,
                         int blk_id,

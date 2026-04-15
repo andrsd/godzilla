@@ -442,7 +442,7 @@ FEProblemInterface::set_aux_field(FieldID id, String name, Int nc, Order k, cons
 }
 
 void
-FEProblemInterface::set_up_field_null_space(DM dm)
+FEProblemInterface::set_up_field_null_space(DM)
 {
     CALL_STACK_MSG();
 }

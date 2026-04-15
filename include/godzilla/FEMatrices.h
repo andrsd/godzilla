@@ -71,7 +71,7 @@ mass<TET4>()
 
 template <ElementType ETYPE, Int N_ELEM_NODES = get_num_element_nodes(ETYPE)>
 inline DenseMatrix<Real, N_ELEM_NODES>
-mass_rz(Real rad_e, const DenseVector<Real, N_ELEM_NODES> & rad_n)
+mass_rz(Real /* rad_e */, const DenseVector<Real, N_ELEM_NODES> & /* rad_n */)
 {
     throw NotImplementedException(
         format("Mass matrix (RZ) is not implemented for {}", conv::to_str(ETYPE)));
@@ -163,7 +163,7 @@ mass_lumped<TET4>()
 
 template <ElementType ETYPE, Int N_ELEM_NODES = get_num_element_nodes(ETYPE)>
 inline DenseMatrix<Real, N_ELEM_NODES>
-mass_lumped_rz(const DenseVector<Real, N_ELEM_NODES> & rad_n)
+mass_lumped_rz(const DenseVector<Real, N_ELEM_NODES> & /* rad_n */)
 {
     throw NotImplementedException(
         format("Mass matrix (RZ) is not implemented for {}", conv::to_str(ETYPE)));
@@ -286,7 +286,7 @@ mass_surface<TET4, 3>()
 
 template <ElementType ELEM_TYPE, Int N_BND_NODES>
 inline DenseMatrix<Real, N_BND_NODES>
-mass_surface_rz(const DenseVector<Real, N_BND_NODES> & radius)
+mass_surface_rz(const DenseVector<Real, N_BND_NODES> & /* radius */)
 {
     throw NotImplementedException();
 }

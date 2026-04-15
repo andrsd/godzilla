@@ -16,7 +16,7 @@ public:
     }
 
     void
-    evaluate(Real time, const Real x[], Scalar u[]) override
+    evaluate(Real, const Real[], Scalar u[]) override
     {
         u[0] = this->value;
     }

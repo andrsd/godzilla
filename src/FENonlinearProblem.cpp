@@ -1075,7 +1075,7 @@ FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
                                                          Vec X_loc,
                                                          Vec X_t_loc,
                                                          Real x_t_shift,
-                                                         Mat J,
+                                                         Mat /* J */,
                                                          Mat Jp,
                                                          DMField coord_field,
                                                          const IndexSet & facets)

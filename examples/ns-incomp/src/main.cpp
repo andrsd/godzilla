@@ -34,7 +34,7 @@ public:
     PressureIC(const Parameters & pars) : InitialCondition(pars) {}
 
     void
-    evaluate(Real t, const Real coord[], Scalar u[]) override
+    evaluate(Real, const Real coord[], Scalar u[]) override
     {
         auto x = coord[0];
         auto y = coord[1];
@@ -82,7 +82,7 @@ public:
     }
 
     void
-    evaluate_t(Real t, const Real coord[], Scalar u[]) override
+    evaluate_t(Real, const Real[], Scalar u[]) override
     {
         u[0] = 1;
         u[1] = 1;

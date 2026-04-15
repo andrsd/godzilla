@@ -24,7 +24,7 @@ public:
     explicit DirichletBC(const Parameters & pars) : EssentialBC(pars), dim(pars.get<Int>("dim")) {}
 
     void
-    evaluate(Real time, const Real x[], Scalar u[]) override
+    evaluate(Real, const Real x[], Scalar u[]) override
     {
         if (this->dim == 1)
             u[0] = x[0] * x[0];

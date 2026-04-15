@@ -102,7 +102,7 @@ public:
     }
 
     void
-    compute_rhs(Real time, const Vector & vec_x, Vector & vec_F)
+    compute_rhs(Real, const Vector &, Vector &)
     {
         compute_rhs_called = true;
     }

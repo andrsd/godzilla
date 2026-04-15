@@ -340,7 +340,7 @@ NSIncompressibleProblem::set_up_matrix_properties()
 }
 
 void
-NSIncompressibleProblem::set_up_field_null_space(DM dm)
+NSIncompressibleProblem::set_up_field_null_space(DM)
 {
     CALL_STACK_MSG();
     // PetscObject pressure;

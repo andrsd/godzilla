@@ -17,7 +17,7 @@ InflowBC::InflowBC(const Parameters & pars) :
 }
 
 void
-InflowBC::evaluate(Real time, const Real * c, const Real * n, const Scalar * xI, Scalar * xG)
+InflowBC::evaluate(Real, const Real *, const Real *, const Scalar *, Scalar * xG)
 {
     CALL_STACK_MSG();
     xG[0] = this->inlet_vel;
