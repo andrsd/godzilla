@@ -18,7 +18,7 @@ class UnstructuredMesh;
 ///
 /// This saves the solution into an Tecplot (.szplt) file.
 /// This output works only with finite element problems
-class TecplotOutput : public FileOutput, public DiscreteProblemOutputInterface {
+class TecplotOutput : public FileOutput {
 public:
     explicit TecplotOutput(const Parameters & pars);
     ~TecplotOutput() override;
@@ -39,6 +39,7 @@ private:
     String get_file_ext() const override;
 
 #ifdef GODZILLA_WITH_TECIOCPP
+    Ref<DiscreteProblemInterface> dpi;
     /// Unstructured mesh
     Ref<UnstructuredMesh> mesh;
     /// File to write into

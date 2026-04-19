@@ -83,9 +83,9 @@ TecplotOutput::parameters()
 
 TecplotOutput::TecplotOutput(const Parameters & pars) :
     FileOutput(pars),
-    DiscreteProblemOutputInterface(pars),
 #ifdef GODZILLA_WITH_TECIOCPP
-    mesh(get_mesh()),
+    dpi(dynamic_ref_cast<DiscreteProblemInterface>(pars.get<Ref<Problem>>("_problem"))),
+    mesh(dpi->get_mesh()),
     file(nullptr),
     n_zones(0),
 #endif
@@ -125,11 +125,9 @@ TecplotOutput::create()
 #ifdef GODZILLA_WITH_TECIOCPP
     FileOutput::create();
 
-    auto dpi = get_discrete_problem_interface();
-
     // Get names of all variables that will be stored
-    auto flds = dpi->get_field_names();
-    auto aux_flds = dpi->get_aux_field_names();
+    auto flds = this->dpi->get_field_names();
+    auto aux_flds = this->dpi->get_aux_field_names();
     if (this->variable_names.empty()) {
         this->field_var_names = flds;
         this->aux_field_var_names = aux_flds;
@@ -153,14 +151,14 @@ TecplotOutput::create()
     this->nodal_var_fids.clear();
     this->nodal_aux_var_fids.clear();
     for (auto & name : this->field_var_names) {
-        auto fid = dpi->get_field_id(name);
-        auto order = dpi->get_field_order(fid.value()).value();
+        auto fid = this->dpi->get_field_id(name);
+        auto order = this->dpi->get_field_order(fid.value()).value();
         expect_true(order.value() > 0, "Elemental fields are not supported yet");
         this->nodal_var_fids.push_back(fid.value());
     }
     for (auto & name : this->aux_field_var_names) {
-        auto fid = dpi->get_aux_field_id(name);
-        auto order = dpi->get_aux_field_order(fid.value()).value();
+        auto fid = this->dpi->get_aux_field_id(name);
+        auto order = this->dpi->get_aux_field_order(fid.value()).value();
         expect_true(order.value() > 0, "Auxiliary elemental fields are not supported yet");
         this->nodal_aux_var_fids.push_back(fid.value());
     }
@@ -172,14 +170,14 @@ TecplotOutput::create()
         this->shared_vars.push_back(true);
     int32_t var_idx = dim;
     for (auto & fid : this->nodal_var_fids) {
-        auto nc = dpi->get_field_num_components(fid).value();
+        auto nc = this->dpi->get_field_num_components(fid).value();
         for (Int i = 0; i < nc; ++i) {
             this->nodal_var_idxs.push_back(++var_idx);
             this->shared_vars.push_back(false);
         }
     }
     for (auto & fid : this->nodal_aux_var_fids) {
-        auto nc = dpi->get_aux_field_num_components(fid).value();
+        auto nc = this->dpi->get_aux_field_num_components(fid).value();
         for (Int i = 0; i < nc; ++i) {
             this->nodal_aux_var_idxs.push_back(++var_idx);
             this->shared_vars.push_back(false);
@@ -207,7 +205,6 @@ TecplotOutput::open_file()
     CALL_STACK_MSG();
 #ifdef GODZILLA_WITH_TECIOCPP
     try {
-        auto dpi = get_discrete_problem_interface();
         this->file = new teciocpp::File(get_comm());
 
         const std::vector<String> coord_names = { "x", "y", "z" };
@@ -345,34 +342,33 @@ TecplotOutput::write_nodal_field_variable_values(int32_t zone)
     CALL_STACK_MSG();
 #ifdef GODZILLA_WITH_TECIOCPP
     auto rank = get_comm().rank();
-    auto dpi = get_discrete_problem_interface();
 
     auto n_nodes = this->mesh->get_num_vertices();
     auto n_elems = this->mesh->get_num_cells();
     std::vector<double> vals(n_nodes);
 
-    dpi->compute_solution_vector_local();
-    auto sln = dpi->get_solution_vector_local();
+    this->dpi->compute_solution_vector_local();
+    auto sln = this->dpi->get_solution_vector_local();
     auto sln_vals = sln.borrow_array_read();
     for (auto [j, fid] : enumerate(this->nodal_var_fids)) {
-        auto nc = dpi->get_field_num_components(fid).value();
+        auto nc = this->dpi->get_field_num_components(fid).value();
         for (Int c = 0; c < nc; ++c, ++j) {
             for (auto n : this->mesh->get_vertex_range()) {
-                auto offset = dpi->get_field_dof(n, fid);
+                auto offset = this->dpi->get_field_dof(n, fid);
                 vals[n - n_elems] = sln_vals[offset + c];
             }
             this->file->zone_var_write(zone, this->nodal_var_idxs[j], rank, vals);
         }
     }
 
-    auto aux_sln = dpi->get_aux_solution_vector_local();
+    auto aux_sln = this->dpi->get_aux_solution_vector_local();
     const Scalar * aux_sln_vals = (Vec) aux_sln != nullptr ? aux_sln.get_array_read() : nullptr;
     if (aux_sln_vals) {
         for (auto [j, fid] : enumerate(this->nodal_aux_var_fids)) {
-            auto nc = dpi->get_aux_field_num_components(fid).value();
+            auto nc = this->dpi->get_aux_field_num_components(fid).value();
             for (Int c = 0; c < nc; ++c, ++j) {
                 for (auto n : this->mesh->get_vertex_range()) {
-                    auto offset = dpi->get_aux_field_dof(n, fid);
+                    auto offset = this->dpi->get_aux_field_dof(n, fid);
                     vals[n - n_elems] = sln_vals[offset + c];
                 }
                 this->file->zone_var_write(zone, this->nodal_aux_var_idxs[j], rank, vals);
