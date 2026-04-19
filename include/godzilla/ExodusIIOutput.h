@@ -27,7 +27,7 @@ class DGProblemInterface;
 /// ```
 ///
 /// This output works only with finite element problems
-class ExodusIIOutput : public FileOutput, public DiscreteProblemOutputInterface {
+class ExodusIIOutput : public FileOutput {
 public:
     explicit ExodusIIOutput(const Parameters & pars);
     ~ExodusIIOutput() override;
@@ -48,6 +48,7 @@ private:
     void output_step(const DiscreteProblemInterface & dpi);
     void output_step(const DGProblemInterface & dpi);
 
+    Ref<DiscreteProblemInterface> dpi;
     /// Unstructured mesh
     Ref<UnstructuredMesh> mesh;
     /// Variable names to be stored

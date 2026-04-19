@@ -562,31 +562,4 @@ DiscreteProblemInterface::get_next_id(const std::vector<FieldID> & ids) const
     return FieldID::INVALID;
 }
 
-//
-
-DiscreteProblemOutputInterface::DiscreteProblemOutputInterface(const Parameters & pars) :
-    dpi(dynamic_ref_cast<DiscreteProblemInterface>(pars.get<Ref<Problem>>("_problem")))
-{
-}
-
-Ref<UnstructuredMesh>
-DiscreteProblemOutputInterface::get_mesh() const
-{
-    return this->dpi->get_mesh();
-}
-
-Ref<const DiscreteProblemInterface>
-DiscreteProblemOutputInterface::get_discrete_problem_interface() const
-{
-    CALL_STACK_MSG();
-    return cref(*this->dpi);
-}
-
-Ref<DiscreteProblemInterface>
-DiscreteProblemOutputInterface::get_discrete_problem_interface()
-{
-    CALL_STACK_MSG();
-    return this->dpi;
-}
-
 } // namespace godzilla

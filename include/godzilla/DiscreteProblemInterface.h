@@ -558,21 +558,4 @@ DiscreteProblemInterface::add_auxiliary_field(Parameters & pars)
     return Ref<T> { *aux };
 }
 
-//
-
-class DiscreteProblemOutputInterface {
-public:
-    DiscreteProblemOutputInterface(const Parameters & pars);
-
-protected:
-    Ref<UnstructuredMesh> get_mesh() const;
-
-    Ref<const DiscreteProblemInterface> get_discrete_problem_interface() const;
-    Ref<DiscreteProblemInterface> get_discrete_problem_interface();
-
-private:
-    /// Convenience pointer
-    Ref<DiscreteProblemInterface> dpi;
-};
-
 } // namespace godzilla

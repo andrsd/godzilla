@@ -30,8 +30,8 @@ ExodusIIOutput::parameters()
 
 ExodusIIOutput::ExodusIIOutput(const Parameters & pars) :
     FileOutput(pars),
-    DiscreteProblemOutputInterface(pars),
-    mesh(get_mesh()),
+    dpi(dynamic_ref_cast<DiscreteProblemInterface>(pars.get<Ref<Problem>>("_problem"))),
+    mesh(dpi->get_mesh()),
     variable_names(pars.get<std::vector<String>>("variables"), {}),
     step_num(1),
     mesh_stored(false)
@@ -59,9 +59,8 @@ ExodusIIOutput::create()
     CALL_STACK_MSG();
     FileOutput::create();
 
-    auto dpi = get_discrete_problem_interface();
-    auto flds = dpi->get_field_names();
-    auto aux_flds = dpi->get_aux_field_names();
+    auto flds = this->dpi->get_field_names();
+    auto aux_flds = this->dpi->get_aux_field_names();
     auto & pps = get_problem()->get_postprocessor_names();
 
     if (this->variable_names.empty()) {
@@ -111,12 +110,12 @@ ExodusIIOutput::output_step()
         output_step(*dgpi.value());
     }
     else {
-        output_step(*get_discrete_problem_interface());
+        output_step(*this->dpi);
     }
 }
 
 void
-ExodusIIOutput::output_step(const DiscreteProblemInterface & dpi)
+ExodusIIOutput::output_step(const DiscreteProblemInterface & iface)
 {
     CALL_STACK_MSG();
     if (this->exo == nullptr)
@@ -133,10 +132,10 @@ ExodusIIOutput::output_step(const DiscreteProblemInterface & dpi)
     this->exo->write_time(this->step_num, time);
 
     for (auto [fid, exo_var_id] : this->nodal_var_fids) {
-        io::write_field_values(*this->exo, dpi, this->step_num, time, fid, exo_var_id);
+        io::write_field_values(*this->exo, iface, this->step_num, time, fid, exo_var_id);
     }
     for (auto [fid, exo_var_id] : this->nodal_aux_var_fids) {
-        io::write_aux_field_values(*this->exo, dpi, this->step_num, time, fid, exo_var_id);
+        io::write_aux_field_values(*this->exo, iface, this->step_num, time, fid, exo_var_id);
     }
 
     write_elem_variables();
@@ -194,7 +193,6 @@ ExodusIIOutput::write_all_variable_names()
 {
     CALL_STACK_MSG();
 
-    auto dpi = get_discrete_problem_interface();
     this->nodal_var_fids.clear();
     this->nodal_aux_var_fids.clear();
     this->elem_var_fids.clear();
@@ -202,30 +200,30 @@ ExodusIIOutput::write_all_variable_names()
     std::vector<std::string> nodal_var_names;
     std::vector<std::string> elem_var_names;
     for (auto & name : this->field_var_names) {
-        auto fid = dpi->get_field_id(name).value();
-        auto order = dpi->get_field_order(fid).value();
+        auto fid = this->dpi->get_field_id(name).value();
+        auto order = this->dpi->get_field_order(fid).value();
         if (order == 0) {
             this->elem_var_fids.push_back({ fid, elem_var_names.size() + 1 });
-            auto names = io::get_var_names(*dpi, fid);
+            auto names = io::get_var_names(*this->dpi, fid);
             elem_var_names.insert(elem_var_names.end(), names.begin(), names.end());
         }
         else {
             this->nodal_var_fids.push_back({ fid, nodal_var_names.size() + 1 });
-            auto names = io::get_var_names(*dpi, fid);
+            auto names = io::get_var_names(*this->dpi, fid);
             nodal_var_names.insert(nodal_var_names.end(), names.begin(), names.end());
         }
     }
     for (auto & name : this->aux_field_var_names) {
-        auto fid = dpi->get_aux_field_id(name).value();
-        auto order = dpi->get_aux_field_order(fid).value();
+        auto fid = this->dpi->get_aux_field_id(name).value();
+        auto order = this->dpi->get_aux_field_order(fid).value();
         if (order == 0) {
             this->elem_aux_var_fids.push_back({ fid, elem_var_names.size() + 1 });
-            auto names = io::get_aux_var_names(*dpi, fid);
+            auto names = io::get_aux_var_names(*this->dpi, fid);
             elem_var_names.insert(elem_var_names.end(), names.begin(), names.end());
         }
         else {
             this->nodal_aux_var_fids.push_back({ fid, nodal_var_names.size() + 1 });
-            auto names = io::get_aux_var_names(*dpi, fid);
+            auto names = io::get_aux_var_names(*this->dpi, fid);
             nodal_var_names.insert(nodal_var_names.end(), names.begin(), names.end());
         }
     }
@@ -238,17 +236,21 @@ void
 ExodusIIOutput::write_elem_variables()
 {
     CALL_STACK_MSG();
-    auto dpi = get_discrete_problem_interface();
 
     Real time = get_problem()->get_time();
     this->exo->write_time(this->step_num, time);
 
     for (auto [fid, exo_var_id] : this->elem_var_fids) {
-        io::write_elemental_field_values(*this->exo, *dpi, this->step_num, time, fid, exo_var_id);
+        io::write_elemental_field_values(*this->exo,
+                                         *this->dpi,
+                                         this->step_num,
+                                         time,
+                                         fid,
+                                         exo_var_id);
     }
     for (auto [fid, exo_var_id] : this->elem_aux_var_fids) {
         io::write_aux_elemental_field_values(*this->exo,
-                                             *dpi,
+                                             *this->dpi,
                                              this->step_num,
                                              time,
                                              fid,
