@@ -226,15 +226,13 @@ cref(Ref<T> t) noexcept
 
 template <typename To, typename From>
 Ref<To>
-dynamic_ref_cast(Ref<From> from)
+dynamic_ref_cast(Ref<From> from, std::source_location loc = std::source_location::current())
 {
     static_assert(std::is_polymorphic_v<From>, "dynamic_ref_cast requires polymorphic base");
 
-    if (auto p = dynamic_cast<To *>(from.operator->())) {
-        return Ref<To>(*p);
-    }
-
-    throw std::bad_cast {};
+    auto p = dynamic_cast<To *>(from.operator->());
+    expect_true(p != nullptr, "Bad cast", loc);
+    return Ref<To>(*p);
 }
 
 template <typename To, typename From>
