@@ -7,14 +7,6 @@ add_executable(
         src/main.cpp
 )
 
-target_compile_options(
-    poisson
-    PRIVATE
-        -ffile-prefix-map=${CMAKE_SOURCE_DIR}/include=include
-        -ffile-prefix-map=${CMAKE_SOURCE_DIR}/src=godzilla/src
-        -ffile-prefix-map=${PROJECT_SOURCE_DIR}=${PROJECT_NAME}
-)
-
 target_include_directories(
     poisson
     PUBLIC

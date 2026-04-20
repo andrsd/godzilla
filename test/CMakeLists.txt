@@ -15,13 +15,6 @@ add_executable(${PROJECT_NAME}
 target_code_coverage(${PROJECT_NAME})
 target_sanitization(${PROJECT_NAME})
 
-target_compile_options(${PROJECT_NAME}
-    PRIVATE
-        -ffile-prefix-map=${CMAKE_SOURCE_DIR}/include=include
-        -ffile-prefix-map=${CMAKE_SOURCE_DIR}/src=godzilla/src
-        -ffile-prefix-map=${CMAKE_SOURCE_DIR}/test=godzilla/test
-)
-
 target_compile_definitions(${PROJECT_NAME}
     PRIVATE
         -DGODZILLA_UNIT_TESTS_ROOT="${GODZILLA_UNIT_TESTS_ROOT}"
