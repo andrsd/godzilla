@@ -332,6 +332,8 @@ NonlinearProblem::run()
     pre_solve();
     solve();
     post_solve();
+    if (converged())
+        on_final();
 }
 
 void
@@ -359,8 +361,6 @@ void
 NonlinearProblem::post_solve()
 {
     CALL_STACK_MSG();
-    if (converged())
-        on_final();
 }
 
 void
