@@ -127,6 +127,19 @@ TEST(MatrixTest, set_values_dense)
     EXPECT_DOUBLE_EQ(m(1, 1), 4.);
 }
 
+TEST(MatrixTest, set_values_dense_rect)
+{
+    Matrix m = Matrix::create_seq_aij(MPI_COMM_WORLD, 2, 4, 2);
+    DenseVector<Int, 1> rows({ 1 });
+    DenseVector<Int, 2> cols({ 0, 3 });
+    DenseMatrix<Scalar, 1, 2> vals;
+    vals.set_row(0, { 10, 12 });
+    m.set_values(rows, cols, vals);
+    m.assemble();
+    EXPECT_DOUBLE_EQ(m(1, 0), 10.);
+    EXPECT_DOUBLE_EQ(m(1, 3), 12.);
+}
+
 TEST(MatrixTest, set_values_dyn_dense)
 {
     Matrix m = Matrix::create_seq_aij(MPI_COMM_WORLD, 2, 3, 2);
