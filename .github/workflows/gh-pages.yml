@@ -30,20 +30,19 @@ jobs:
       - name: Install dependencies
         run: |
           conda install \
-            cmake=3.31.2 \
-            rhash=1.4.3 \
+            cmake \
             make \
             mpich-mpicxx \
             mpicpp-lite=2.5 \
-            spdlog=1.* \
+            spdlog=1.16 \
             doxygen \
             sphinx \
             sphinx_rtd_theme \
             breathe==4.35.0 \
             sphinx-design \
             fmt=11.* \
-            petsc==3.24 \
-            yaml-cpp==0.8.0 \
+            petsc=3.24 \
+            yaml-cpp=0.8 \
             exodusIIcpp=3.1 \
             teciocpp \
             pyyaml
