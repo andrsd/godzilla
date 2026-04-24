@@ -73,8 +73,7 @@ main(int argc, char * argv[])
 
         auto ic_pars = app.make_parameters<TempIC>();
         ic_pars.set<String>("name", "all")
-            .set<String>("field", "temp")
-            .set<std::vector<Real>>("value", { 300 });
+            .set<String>("field", "temp");
         prob->add_initial_condition<TempIC>(ic_pars);
 
         auto bc_all_pars = app.make_parameters<DirichletBC>();
