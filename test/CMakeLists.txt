@@ -38,9 +38,6 @@ target_link_libraries(
         ${CMAKE_DL_LIBS}
         GTest::gmock_main
 )
-if (GODZILLA_WITH_MPI)
-    target_link_libraries(${PROJECT_NAME} PRIVATE MPI::MPI_C)
-endif()
 
 add_test(
     NAME godzilla-test

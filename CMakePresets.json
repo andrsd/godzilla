@@ -13,8 +13,7 @@
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "YES",
                 "GODZILLA_BUILD_EXAMPLES": "YES",
                 "GODZILLA_BUILD_TESTS": "YES",
-                "GODZILLA_CODE_COVERAGE": "YES",
-                "GODZILLA_WITH_MPI": "YES"
+                "GODZILLA_CODE_COVERAGE": "YES"
             }
         },
         {
@@ -29,8 +28,7 @@
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "NO",
                 "GODZILLA_BUILD_EXAMPLES": "NO",
                 "GODZILLA_BUILD_TESTS": "NO",
-                "GODZILLA_CODE_COVERAGE": "NO",
-                "GODZILLA_WITH_MPI": "YES"
+                "GODZILLA_CODE_COVERAGE": "NO"
             }
         },
         {
@@ -46,7 +44,6 @@
                 "GODZILLA_BUILD_EXAMPLES": "NO",
                 "GODZILLA_BUILD_TESTS": "NO",
                 "GODZILLA_CODE_COVERAGE": "NO",
-                "GODZILLA_WITH_MPI": "YES",
                 "GODZILLA_WITH_TECIOCPP": "YES"
             }
         },
@@ -60,8 +57,7 @@
                 "CMAKE_CXX_FLAGS_DEBUG": "-g -O1 -Wall -Werror",
                 "CMAKE_C_FLAGS_DEBUG": "-g -O1 -Wall -Werror",
                 "GODZILLA_BUILD_EXAMPLES": "YES",
-                "GODZILLA_BUILD_TESTS": "YES",
-                "GODZILLA_WITH_MPI": "YES"
+                "GODZILLA_BUILD_TESTS": "YES"
             }
         },
         {
@@ -74,8 +70,7 @@
                 "CMAKE_CXX_FLAGS_RELEASE": "-O3 -Wall -Werror -DNDEBUG",
                 "CMAKE_C_FLAGS_RELEASE": "-O3 -Wall -Werror -DNDEBUG",
                 "GODZILLA_BUILD_EXAMPLES": "YES",
-                "GODZILLA_BUILD_TESTS": "YES",
-                "GODZILLA_WITH_MPI": "YES"
+                "GODZILLA_BUILD_TESTS": "YES"
             }
         }
     ],
