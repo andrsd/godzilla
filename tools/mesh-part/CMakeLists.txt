@@ -21,9 +21,7 @@ target_link_libraries(
         godzilla
         PETSc::petsc
         fmt::fmt
+        MPI::MPI_C
 )
-if(GODZILLA_WITH_MPI)
-    target_link_libraries(${PROJECT_NAME} PRIVATE MPI::MPI_C)
-endif()
 
 install(TARGETS mesh-part DESTINATION bin)
