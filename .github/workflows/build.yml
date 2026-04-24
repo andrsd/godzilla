@@ -57,15 +57,14 @@ jobs:
       - name: Install dependencies
         run: |
           conda install \
-            cmake=3.31.2 \
-            rhash=1.4.3 \
+            cmake \
             make \
             mpich-mpicxx \
             mpicpp-lite=2.5 \
-            spdlog=1.* \
+            spdlog=1.16 \
             petsc==${{ matrix.petsc }} \
-            fmt=11.* \
-            yaml-cpp=0.8.0 \
+            fmt=11 \
+            yaml-cpp=0.8 \
             exodusIIcpp=3.1 \
             teciocpp \
             gtest \
