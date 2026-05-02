@@ -70,12 +70,16 @@ String
 human_number(T number)
 {
     auto num_str = std::to_string(number);
-    int insert_position = num_str.length() - 3;
-    while (insert_position > 0) {
-        num_str.insert(insert_position, ",");
-        insert_position -= 3;
+    if (num_str.length() <= 3)
+        return num_str;
+    else {
+        int insert_position = num_str.length() - 3;
+        while (insert_position > 0) {
+            num_str.insert(insert_position, ",");
+            insert_position -= 3;
+        }
+        return num_str;
     }
-    return num_str;
 }
 
 /// Convert C++ names into human readable names
