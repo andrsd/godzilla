@@ -81,14 +81,16 @@ public:
     /// @param pars Parameters used to construct the Output object
     /// @return Built Output object
     template <OutputDerived T>
-    Ref<T> add_output(Parameters & pars);
+    Ref<T> add_output(Parameters & pars,
+                      std::source_location loc = std::source_location::current());
 
     /// Add a postprocessor object
     ///
     /// @param pars Postprocessor object parameters
     /// @return Newly created postprocessor
     template <PostprocessorDerived T>
-    Ref<T> add_postprocessor(Parameters & pars);
+    Ref<T> add_postprocessor(Parameters & pars,
+                             std::source_location loc = std::source_location::current());
 
     /// Get postprocessor by name
     ///
@@ -364,9 +366,14 @@ public:
 
 template <OutputDerived T>
 Ref<T>
-Problem::add_output(Parameters & pars)
+Problem::add_output(Parameters & pars, std::source_location loc)
 {
-    CALL_STACK_MSG();
+    expect_true(
+        pars.get<String>("_type") == utils::type_name<T>(),
+        fmt::format("Mismatch in the type of object ({}) and parameters used for construction ({})",
+                    utils::demangle(utils::type_name<T>()),
+                    utils::demangle(pars.get<String>("_type"))),
+        loc);
     pars.set<Ref<Problem>>("_problem", ref(*this));
     if (!pars.is_param_valid("on")) {
         pars.set<ExecuteOnFlags>("on", default_execute_on<T>());
@@ -383,9 +390,14 @@ Problem::add_output(Parameters & pars)
 
 template <PostprocessorDerived T>
 Ref<T>
-Problem::add_postprocessor(Parameters & pars)
+Problem::add_postprocessor(Parameters & pars, std::source_location loc)
 {
-    CALL_STACK_MSG();
+    expect_true(
+        pars.get<String>("_type") == utils::type_name<T>(),
+        fmt::format("Mismatch in the type of object ({}) and parameters used for construction ({})",
+                    utils::demangle(utils::type_name<T>()),
+                    utils::demangle(pars.get<String>("_type"))),
+        loc);
     pars.set<Ref<Problem>>("_problem", ref(*this));
     if (!pars.is_param_valid("on")) {
         pars.set<ExecuteOnFlags>("on", default_execute_on<T>());
@@ -395,7 +407,8 @@ Problem::add_postprocessor(Parameters & pars)
     auto pp = obj.get();
     auto name = pp->get_name();
     expect_true(this->pps.count(name) == 0,
-                fmt::format("Postprocessors with name '{}' already exists.", name));
+                fmt::format("Postprocessors with name '{}' already exists.", name),
+                loc);
     this->pps_names.push_back(name);
     this->pps[name] = std::move(obj);
     return Ref<T>(*pp);

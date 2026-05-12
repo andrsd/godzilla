@@ -50,7 +50,7 @@ TEST(TecplotOutputTest, output)
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_pars);
 
-    auto params = TecplotOutput::parameters();
+    auto params = app.make_parameters<TecplotOutput>();
     params.set<Ref<App>>("app", ref(app));
     params.set<fs::path>("file", "out");
     auto out = prob.add_output<TecplotOutput>(params);
@@ -76,8 +76,7 @@ TEST(TecplotOutputTest, test)
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_pars);
 
-    auto params = TecplotOutput::parameters();
-    params.set<Ref<App>>("app", ref(app));
+    auto params = app.make_parameters<TecplotOutput>();
     params.set<fs::path>("file", "out");
 
     EXPECT_DEATH(prob.add_output<TecplotOutput>(params),

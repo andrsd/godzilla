@@ -47,8 +47,7 @@ TEST(ExodusIIOutputTest, create)
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_pars);
 
-    auto params = ExodusIIOutput::parameters();
-    params.set<Ref<App>>("app", ref(app));
+    auto params = app.make_parameters<ExodusIIOutput>();
     params.set<fs::path>("file", "out");
     auto out = prob.add_output<ExodusIIOutput>(params);
 
@@ -69,8 +68,7 @@ TEST(ExodusIIOutputTest, non_existent_var)
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_pars);
 
-    auto params = ExodusIIOutput::parameters();
-    params.set<Ref<App>>("app", ref(app));
+    auto params = app.make_parameters<ExodusIIOutput>();
     params.set<fs::path>("file", "out");
     params.set<std::vector<String>>("variables", { "asdf" });
     prob.add_output<ExodusIIOutput>(params);
@@ -93,8 +91,7 @@ TEST(ExodusIIOutputTest, output)
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_pars);
 
-    auto params = ExodusIIOutput::parameters();
-    params.set<Ref<App>>("app", ref(app));
+    auto params = app.make_parameters<ExodusIIOutput>();
     params.set<fs::path>("file", "out");
     auto out = prob.add_output<ExodusIIOutput>(params);
 
@@ -117,8 +114,8 @@ TEST(ExodusIIOutputTest, set_file_name)
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_pars);
 
-    auto params = ExodusIIOutput::parameters();
-    params.set<Ref<App>>("app", ref(app)).set<fs::path>("file", "out");
+    auto params = app.make_parameters<ExodusIIOutput>();
+    params.set<fs::path>("file", "out");
     auto out = prob.add_output<ExodusIIOutput>(params);
 
     out->create();
@@ -140,8 +137,8 @@ TEST(ExodusIIOutputTest, set_seq_file_name)
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_pars);
 
-    auto params = ExodusIIOutput::parameters();
-    params.set<Ref<App>>("app", ref(app)).set<fs::path>("file", "out");
+    auto params = app.make_parameters<ExodusIIOutput>();
+    params.set<fs::path>("file", "out");
     auto out = prob.add_output<ExodusIIOutput>(params);
 
     out->create();

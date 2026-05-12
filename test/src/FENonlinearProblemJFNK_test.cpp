@@ -146,15 +146,12 @@ TEST(FENonlinearProblemJFNKTest, solve)
     prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     auto prob = app.make_problem<GTestFENonlinearProblemJFNK>(prob_params);
 
-    auto ic_params = ConstantInitialCondition::parameters();
-    ic_params.set<Ref<godzilla::App>>("app", ref(app));
+    auto ic_params = app.make_parameters<ConstantInitialCondition>();
     ic_params.set<std::vector<Real>>("value", { 0.1 });
     prob->add_initial_condition<ConstantInitialCondition>(ic_params);
 
-    auto bc_params = DirichletBC::parameters();
-    bc_params.set<Ref<godzilla::App>>("app", ref(app))
-        .set<Ref<App>>("app", ref(app))
-        .set<std::vector<String>>("boundary", { "left", "right" });
+    auto bc_params = app.make_parameters<DirichletBC>();
+    bc_params.set<std::vector<String>>("boundary", { "left", "right" });
     prob->add_boundary_condition<DirichletBC>(bc_params);
 
     prob->create();

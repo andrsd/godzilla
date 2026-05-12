@@ -23,9 +23,8 @@ TEST(ConstantAuxiliaryFieldTest, create)
     GTestFENonlinearProblem prob(prob_params);
 
     prob.set_aux_field(FieldID(0), "aux1", 1, Order(1));
-    auto aux_params = ConstantAuxiliaryField::parameters();
-    aux_params.set<Ref<App>>("app", ref(app))
-        .set<String>("name", "aux1")
+    auto aux_params = app.make_parameters<ConstantAuxiliaryField>();
+    aux_params.set<String>("name", "aux1")
         .set<Ref<DiscreteProblemInterface>>("_dpi", ref(prob))
         .set<std::vector<Real>>("value", { 1234 });
     auto aux = prob.add_auxiliary_field<ConstantAuxiliaryField>(aux_params);

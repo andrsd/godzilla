@@ -99,8 +99,7 @@ TEST(LinearProblemTest, restart_file)
     prob_pars.set<String>("ksp_type", KSPCG);
     CustomLinearProblem prob(prob_pars);
 
-    auto ro_pars = RestartOutput::parameters();
-    ro_pars.set<Ref<App>>("app", ref(app));
+    auto ro_pars = app.make_parameters<RestartOutput>();
     ro_pars.set<fs::path>("file", "lp");
     prob.add_output<RestartOutput>(ro_pars);
 

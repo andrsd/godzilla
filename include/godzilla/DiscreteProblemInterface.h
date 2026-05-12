@@ -183,7 +183,8 @@ public:
     /// @param pars Parameters used to construct InitialCondition object
     /// @return Built InitialCondition object
     template <InitialConditionDerived OBJECT>
-    Ref<OBJECT> add_initial_condition(Parameters & pars);
+    Ref<OBJECT> add_initial_condition(Parameters & pars,
+                                      std::source_location loc = std::source_location::current());
 
     /// Check if we have an initial condition object with a specified name
     ///
@@ -202,14 +203,16 @@ public:
     /// @param pars Paremeters used to construct BoundaryCondition object
     /// @return Built BoundaryCondition object
     template <BoundaryConditionDerived OBJECT>
-    Ref<OBJECT> add_boundary_condition(Parameters & pars);
+    Ref<OBJECT> add_boundary_condition(Parameters & pars,
+                                       std::source_location loc = std::source_location::current());
 
     /// Add auxiliary field
     ///
     /// @param pars Parameters used to construct the AuxiliaryField object
     /// @return Built AuxiliaryField object
     template <AuxiliaryFieldDerived OBJECT>
-    Ref<OBJECT> add_auxiliary_field(Parameters & pars);
+    Ref<OBJECT> add_auxiliary_field(Parameters & pars,
+                                    std::source_location loc = std::source_location::current());
 
     /// Get auxiliary object with a specified name
     ///
@@ -510,9 +513,14 @@ DiscreteProblemInterface::get_point_local_field_ref(Int point, FieldID field, Sc
 
 template <BoundaryConditionDerived T>
 Ref<T>
-DiscreteProblemInterface::add_boundary_condition(Parameters & pars)
+DiscreteProblemInterface::add_boundary_condition(Parameters & pars, std::source_location loc)
 {
-    CALL_STACK_MSG();
+    expect_true(
+        pars.get<String>("_type") == utils::type_name<T>(),
+        fmt::format("Mismatch in the type of object ({}) and parameters used for construction ({})",
+                    utils::demangle(utils::type_name<T>()),
+                    utils::demangle(pars.get<String>("_type"))),
+        loc);
     pars.set<Ref<DiscreteProblemInterface>>("_dpi", ref(*this));
     auto obj = Qtr<T>::alloc(pars);
     auto ptr = obj.get();
@@ -526,15 +534,21 @@ DiscreteProblemInterface::add_boundary_condition(Parameters & pars)
 
 template <InitialConditionDerived T>
 Ref<T>
-DiscreteProblemInterface::add_initial_condition(Parameters & pars)
+DiscreteProblemInterface::add_initial_condition(Parameters & pars, std::source_location loc)
 {
-    CALL_STACK_MSG();
+    expect_true(
+        pars.get<String>("_type") == utils::type_name<T>(),
+        fmt::format("Mismatch in the type of object ({}) and parameters used for construction ({})",
+                    utils::demangle(utils::type_name<T>()),
+                    utils::demangle(pars.get<String>("_type"))),
+        loc);
     pars.set<Ref<DiscreteProblemInterface>>("_dpi", ref(*this));
     auto obj = Qtr<T>::alloc(pars);
     auto name = obj->get_name();
     auto it = this->ics_by_name.find(name);
     expect_true(it == this->ics_by_name.end(),
-                fmt::format("Cannot add initial condition object '{}'. Name already taken.", name));
+                fmt::format("Cannot add initial condition object '{}'. Name already taken.", name),
+                loc);
     auto ic = obj.get();
     this->ics_by_name.emplace(name, Ref<InitialCondition>(*ic));
     this->all_ics.push_back(std::move(obj));
@@ -543,15 +557,21 @@ DiscreteProblemInterface::add_initial_condition(Parameters & pars)
 
 template <AuxiliaryFieldDerived T>
 Ref<T>
-DiscreteProblemInterface::add_auxiliary_field(Parameters & pars)
+DiscreteProblemInterface::add_auxiliary_field(Parameters & pars, std::source_location loc)
 {
-    CALL_STACK_MSG();
+    expect_true(
+        pars.get<String>("_type") == utils::type_name<T>(),
+        fmt::format("Mismatch in the type of object ({}) and parameters used for construction ({})",
+                    utils::demangle(utils::type_name<T>()),
+                    utils::demangle(pars.get<String>("_type"))),
+        loc);
     pars.set<Ref<DiscreteProblemInterface>>("_dpi", ref(*this));
     auto obj = Qtr<T>::alloc(pars);
     auto name = obj->get_name();
     auto it = this->auxs_by_name.find(name);
     expect_true(it == this->auxs_by_name.end(),
-                fmt::format("Cannot add auxiliary object '{}'. Name already taken.", name));
+                fmt::format("Cannot add auxiliary object '{}'. Name already taken.", name),
+                loc);
     auto aux = obj.get();
     this->auxs_by_name.emplace(name, Ref<AuxiliaryField>(*aux));
     this->auxs.push_back(std::move(obj));

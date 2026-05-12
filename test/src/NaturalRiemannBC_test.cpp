@@ -81,8 +81,7 @@ TEST(NaturalRiemannBCTest, api)
     prob_pars.set<Real>("dt", 1e-3);
     auto prob = app.make_problem<TestExplicitFVLinearProblem>(prob_pars);
 
-    auto bc_pars = TestBC::parameters();
-    bc_pars.set<Ref<App>>("app", ref(app));
+    auto bc_pars = app.make_parameters<TestBC>();
     bc_pars.set<std::vector<String>>("boundary", { "left" });
     prob->add_boundary_condition<TestBC>(bc_pars);
 

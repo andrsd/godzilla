@@ -42,7 +42,7 @@ TEST_F(CSVOutputTest, create)
 {
     auto prob = this->app->get_problem<GTestFENonlinearProblem>();
 
-    auto params = this->app->make_parameters<CSVOutput>();
+    auto params = this->app->make_parameters<TestCSVOutput>();
     params.set<fs::path>("file", "asdf");
     auto out = prob->add_output<TestCSVOutput>(params);
 
@@ -73,7 +73,7 @@ TEST_F(CSVOutputTest, output)
     pp_params.set<String>("name", "pp");
     prob->add_postprocessor<TestPostprocessor>(pp_params);
 
-    auto params = this->app->make_parameters<CSVOutput>();
+    auto params = this->app->make_parameters<TestCSVOutput>();
     params.set<fs::path>("file", "out");
     auto out = prob->add_output<TestCSVOutput>(params);
 

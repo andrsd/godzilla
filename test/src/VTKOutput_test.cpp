@@ -48,8 +48,7 @@ TEST(VTKOutputTest, test)
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     TestProblem prob(prob_pars);
 
-    auto pars = VTKOutput::parameters();
-    pars.set<Ref<App>>("app", ref(app));
+    auto pars = app.make_parameters<VTKOutput>();
     pars.set<fs::path>("file", "file");
     auto out = prob.add_output<VTKOutput>(pars);
 
