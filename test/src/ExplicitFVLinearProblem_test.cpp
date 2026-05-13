@@ -111,14 +111,12 @@ TEST(ExplicitFVLinearProblemTest, api)
 
 #if PETSC_VERSION_GE(3, 21, 0)
     // PETSc 3.21.0+ has a bug in forming the mass matrix in 1D, se we use 2D mesh in this test
-    auto mesh_pars = RectangleMesh::parameters();
-    mesh_pars.set<Ref<App>>("app", ref(app));
+    auto mesh_pars = app.make_parameters<RectangleMesh>();
     mesh_pars.set<Int>("nx", 2);
     mesh_pars.set<Int>("ny", 1);
     auto mesh = MeshFactory::create<RectangleMesh>(mesh_pars);
 #else
-    auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<Ref<App>>("app", ref(app));
+    auto mesh_pars = app.make_parameters<LineMesh>();
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 #endif
@@ -207,14 +205,12 @@ TEST(ExplicitFVLinearProblemTest, fields)
 
 #if PETSC_VERSION_GE(3, 21, 0)
     // PETSc 3.21.0+ has a bug in forming the mass matrix in 1D, se we use 2D mesh in this test
-    auto mesh_pars = RectangleMesh::parameters();
-    mesh_pars.set<Ref<App>>("app", ref(app));
+    auto mesh_pars = app.make_parameters<RectangleMesh>();
     mesh_pars.set<Int>("nx", 2);
     mesh_pars.set<Int>("ny", 1);
     auto mesh = MeshFactory::create<RectangleMesh>(mesh_pars);
 #else
-    auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<Ref<App>>("app", ref(app));
+    auto mesh_pars = app.make_parameters<LineMesh>();
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 #endif
@@ -255,15 +251,13 @@ TEST(ExplicitFVLinearProblemTest, test_mass_matrix)
 
 #if PETSC_VERSION_GE(3, 21, 0)
     // PETSc 3.21.0+ has a bug in forming the mass matrix in 1D, se we use 2D mesh in this test
-    auto mesh_pars = RectangleMesh::parameters();
-    mesh_pars.set<Ref<App>>("app", ref(app));
+    auto mesh_pars = app.make_parameters<RectangleMesh>();
     mesh_pars.set<Int>("nx", 3);
     mesh_pars.set<Int>("ny", 1);
     mesh_pars.set<Real>("ymax", 3.);
     auto mesh = MeshFactory::create<RectangleMesh>(mesh_pars);
 #else
-    auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<Ref<App>>("app", ref(app));
+    auto mesh_pars = app.make_parameters<LineMesh>();
     mesh_pars.set<Int>("nx", 3);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 #endif
@@ -294,8 +288,7 @@ TEST(ExplicitFVLinearProblemTest, solve)
 #if PETSC_VERSION_GE(3, 21, 0)
     // PETSc 3.21.0+ has a bug in forming the mass matrix in 1D, se we use 2D mesh in this test
 #else
-    auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<Ref<App>>("app", ref(app));
+    auto mesh_pars = app.make_parameters<LineMesh>();
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
@@ -349,14 +342,12 @@ TEST(ExplicitFVLinearProblemTest, set_schemes)
 
 #if PETSC_VERSION_GE(3, 21, 0)
     // PETSc 3.21.0+ has a bug in forming the mass matrix in 1D, so we use 2D mesh in this test
-    auto mesh_pars = RectangleMesh::parameters();
-    mesh_pars.set<Ref<App>>("app", ref(app));
+    auto mesh_pars = app.make_parameters<RectangleMesh>();
     mesh_pars.set<Int>("nx", 2);
     mesh_pars.set<Int>("ny", 1);
     auto mesh = MeshFactory::create<RectangleMesh>(mesh_pars);
 #else
-    auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<Ref<App>>("app", ref(app));
+    auto mesh_pars = app.make_parameters<LineMesh>();
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 #endif

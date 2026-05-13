@@ -12,8 +12,7 @@ TEST(ExodusIIOutputTest, get_file_ext)
 {
     TestApp app;
 
-    auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<Ref<App>>("app", ref(app));
+    auto mesh_pars = app.make_parameters<LineMesh>();
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
@@ -37,8 +36,7 @@ TEST(ExodusIIOutputTest, create)
 {
     TestApp app;
 
-    auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<Ref<App>>("app", ref(app));
+    auto mesh_pars = app.make_parameters<LineMesh>();
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
@@ -58,8 +56,7 @@ TEST(ExodusIIOutputTest, non_existent_var)
 {
     TestApp app;
 
-    auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<Ref<App>>("app", ref(app));
+    auto mesh_pars = app.make_parameters<LineMesh>();
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
@@ -81,8 +78,7 @@ TEST(ExodusIIOutputTest, output)
 {
     TestApp app;
 
-    auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<Ref<App>>("app", ref(app));
+    auto mesh_pars = app.make_parameters<LineMesh>();
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
@@ -104,8 +100,7 @@ TEST(ExodusIIOutputTest, set_file_name)
 {
     TestApp app;
 
-    auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<Ref<App>>("app", ref(app));
+    auto mesh_pars = app.make_parameters<LineMesh>();
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
@@ -127,8 +122,7 @@ TEST(ExodusIIOutputTest, set_seq_file_name)
 {
     TestApp app;
 
-    auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<Ref<App>>("app", ref(app));
+    auto mesh_pars = app.make_parameters<LineMesh>();
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 

@@ -38,8 +38,7 @@ TEST(MeshPartitioningOutputTest, get_file_ext)
 {
     TestApp app;
 
-    auto mesh_params = LineMesh::parameters();
-    mesh_params.set<Ref<App>>("app", ref(app));
+    auto mesh_params = app.make_parameters<LineMesh>();
     mesh_params.set<Real>("xmin", 0);
     mesh_params.set<Real>("xmax", 1);
     mesh_params.set<Int>("nx", 4);
@@ -65,8 +64,7 @@ TEST(MeshPartitioningOutputTest, output)
 {
     TestApp app;
 
-    auto mesh_params = LineMesh::parameters();
-    mesh_params.set<Ref<App>>("app", ref(app));
+    auto mesh_params = app.make_parameters<LineMesh>();
     mesh_params.set<Real>("xmin", 0);
     mesh_params.set<Real>("xmax", 1);
     mesh_params.set<Int>("nx", 4);

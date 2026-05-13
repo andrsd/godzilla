@@ -52,7 +52,7 @@ public:
 
     template <typename PRODUCER, typename Ret = CreateMeshReturnType<PRODUCER>>
     static Ret
-    create(const Parameters & pars)
+    create(const Parameters & pars, std::source_location loc = std::source_location::current())
     {
         static_assert(IsConstructibleFromParams<PRODUCER>::value,
                       "PRODUCER must be constructible from `const Parameters &`");
@@ -61,6 +61,7 @@ public:
         static_assert(std::is_base_of_v<Mesh, ProducedRawType<Ret>>,
                       "PRODUCER::create_mesh() must return something convertible to a Mesh (e.g. "
                       "Qtr<Mesh>, ...)");
+        expect_matching_type(pars.get<String>("_type"), utils::type_name<PRODUCER>(), loc);
 
         PRODUCER producer { pars };
         auto mesh = producer.create_mesh();

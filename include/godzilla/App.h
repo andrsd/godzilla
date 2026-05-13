@@ -152,11 +152,11 @@ public:
             { T::parameters() } -> std::same_as<Parameters>;
         }
     Ref<T>
-    make_problem(Parameters & pars)
+    make_problem(Parameters & pars, std::source_location loc = std::source_location::current())
     {
-        CALL_STACK_MSG();
         static_assert(IsConstructibleFromParams<T>::value,
                       "T must be constructible from `const Parameters &`");
+        expect_matching_type(pars.get<String>("_type"), utils::type_name<T>(), loc);
 
         auto obj = Qtr<T>::alloc(pars);
         auto problem = obj.get();

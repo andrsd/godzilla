@@ -15,19 +15,13 @@ public:
             "GTestImplicitFENonlinearProblem");
 
         {
-            auto pars = LineMesh::parameters();
-            // clang-format off
-            pars.set<Ref<godzilla::App>>("app", ref(*this->app))
-                .set<Int>("nx", 2);
-            // clang-format on
+            auto pars = this->app->make_parameters<LineMesh>();
+            pars.set<Int>("nx", 2);
             this->mesh = MeshFactory::create<LineMesh>(pars);
         }
         {
-            auto pars = GTestImplicitFENonlinearProblem::parameters();
-            pars.set<Ref<godzilla::App>>("app", ref(*this->app))
-                // FIXME: after app creates params and not pointers
-                .set<String>("_type", "GTestImplicitFENonlinearProblem")
-                .set<Ref<Mesh>>("mesh", ref(*mesh))
+            auto pars = this->app->make_parameters<GTestImplicitFENonlinearProblem>();
+            pars.set<Ref<Mesh>>("mesh", ref(*mesh))
                 .set<Real>("start_time", 0.)
                 .set<Real>("end_time", 20)
                 .set<Real>("dt", 5);

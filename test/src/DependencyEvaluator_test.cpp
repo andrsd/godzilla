@@ -75,8 +75,7 @@ TEST(DependencyEvaluator, DISABLED_create_functional)
 {
     TestApp app;
 
-    auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<Ref<App>>("app", ref(app));
+    auto mesh_pars = app.make_parameters<LineMesh>();
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
@@ -99,8 +98,7 @@ TEST(DependencyEvaluator, DISABLED_create_existing_functional)
 {
     TestApp app;
 
-    auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<Ref<App>>("app", ref(app));
+    auto mesh_pars = app.make_parameters<LineMesh>();
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
@@ -123,8 +121,7 @@ TEST(DependencyEvaluator, DISABLED_get_non_existent_functional)
 {
     TestApp app;
 
-    auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<Ref<App>>("app", ref(app));
+    auto mesh_pars = app.make_parameters<LineMesh>();
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
@@ -142,8 +139,7 @@ TEST(DependencyEvaluator, DISABLED_eval)
 {
     TestApp app;
 
-    auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<Ref<App>>("app", ref(app));
+    auto mesh_pars = app.make_parameters<LineMesh>();
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
@@ -185,8 +181,7 @@ TEST(DependencyEvaluator, DISABLED_redeclare_a_value)
 {
     TestApp app;
 
-    auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<Ref<App>>("app", ref(app));
+    auto mesh_pars = app.make_parameters<LineMesh>();
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
@@ -208,8 +203,7 @@ TEST(DependencyEvaluator, DISABLED_get_suppliers)
 {
     TestApp app;
 
-    auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<Ref<App>>("app", ref(app));
+    auto mesh_pars = app.make_parameters<LineMesh>();
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
@@ -242,8 +236,7 @@ TEST(DependencyEvaluator, DISABLED_build_dep_graph)
 {
     TestApp app;
 
-    auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<Ref<App>>("app", ref(app));
+    auto mesh_pars = app.make_parameters<LineMesh>();
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 

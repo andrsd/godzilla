@@ -11,9 +11,8 @@ TEST(RectangleMeshTest, api)
 {
     TestApp app;
 
-    auto params = RectangleMesh::parameters();
-    params.set<Ref<App>>("app", ref(app))
-        .set<String>("name", "rect_mesh")
+    auto params = app.make_parameters<RectangleMesh>();
+    params.set<String>("name", "rect_mesh")
         .set<Real>("xmin", 1)
         .set<Real>("xmax", 3)
         .set<Int>("nx", 9)
@@ -44,9 +43,8 @@ TEST(RectangleMeshTest, incorrect_dims)
 {
     TestApp app;
 
-    auto params = RectangleMesh::parameters();
-    params.set<Ref<App>>("app", ref(app))
-        .set<String>("name", "obj")
+    auto params = app.make_parameters<RectangleMesh>();
+    params.set<String>("name", "obj")
         .set<Real>("xmin", 2)
         .set<Real>("xmax", 1)
         .set<Int>("nx", 9)

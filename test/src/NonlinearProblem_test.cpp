@@ -90,8 +90,7 @@ TEST(NonlinearProblemTest, initial_guess)
 {
     TestApp app;
 
-    auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<Ref<App>>("app", ref(app));
+    auto mesh_pars = app.make_parameters<LineMesh>();
     mesh_pars.set<Int>("nx", 1);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
@@ -112,8 +111,7 @@ TEST(NonlinearProblemTest, solve)
 {
     TestApp app;
 
-    auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<Ref<App>>("app", ref(app));
+    auto mesh_pars = app.make_parameters<LineMesh>();
     mesh_pars.set<Int>("nx", 1);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
@@ -174,8 +172,7 @@ TEST(NonlinearProblemTest, run)
 
     TestApp app;
 
-    auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<Ref<App>>("app", ref(app));
+    auto mesh_pars = app.make_parameters<LineMesh>();
     mesh_pars.set<Int>("nx", 1);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
@@ -207,8 +204,7 @@ TEST(NonlinearProblemTest, line_search_type)
 
     TestApp app;
 
-    auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<Ref<App>>("app", ref(app));
+    auto mesh_pars = app.make_parameters<LineMesh>();
     mesh_pars.set<Int>("nx", 1);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
@@ -243,8 +239,7 @@ TEST(NonlinearProblemTest, invalid_line_search_type)
 
     TestApp app;
 
-    auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<Ref<App>>("app", ref(app));
+    auto mesh_pars = app.make_parameters<LineMesh>();
     mesh_pars.set<Int>("nx", 1);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
@@ -260,8 +255,7 @@ TEST(NonlinearProblemTest, restart_file)
 {
     TestApp app;
 
-    auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<Ref<App>>("app", ref(app));
+    auto mesh_pars = app.make_parameters<LineMesh>();
     mesh_pars.set<Int>("nx", 1);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 

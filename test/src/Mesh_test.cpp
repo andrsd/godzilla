@@ -55,8 +55,7 @@ TEST(MeshTest, get_coordinates)
 {
     TestApp app;
 
-    auto params = TestMesh::parameters();
-    params.set<Ref<App>>("app", ref(app));
+    auto params = app.make_parameters<TestMesh>();
     params.set<String>("name", "obj");
     auto mesh_qtr = MeshFactory::create<TestMesh>(params);
     auto mesh = mesh_qtr.get();
@@ -75,8 +74,7 @@ TEST(MeshTest, get_coordinates_local)
 {
     TestApp app;
 
-    auto params = TestMesh::parameters();
-    params.set<Ref<App>>("app", ref(app));
+    auto params = app.make_parameters<TestMesh>();
     params.set<String>("name", "obj");
     auto mesh_qtr = MeshFactory::create<TestMesh>(params);
     auto mesh = mesh_qtr.get();
@@ -91,8 +89,7 @@ TEST(MeshTest, get_coordinates_section)
 {
     TestApp app;
 
-    auto params = TestMesh::parameters();
-    params.set<Ref<App>>("app", ref(app));
+    auto params = app.make_parameters<TestMesh>();
     params.set<String>("name", "obj");
     auto mesh_qtr = MeshFactory::create<TestMesh>(params);
     auto mesh = mesh_qtr.get();
@@ -107,8 +104,7 @@ TEST(MeshTest, remove_label)
 {
     TestApp app;
 
-    auto params = TestMesh::parameters();
-    params.set<Ref<App>>("app", ref(app));
+    auto params = app.make_parameters<TestMesh>();
     params.set<String>("name", "obj");
     auto mesh_qtr = MeshFactory::create<TestMesh>(params);
     auto mesh = mesh_qtr.get();
@@ -121,8 +117,7 @@ TEST(MeshTest, set_label_value)
 {
     TestApp app;
 
-    auto params = TestMesh::parameters();
-    params.set<Ref<App>>("app", ref(app));
+    auto params = app.make_parameters<TestMesh>();
     params.set<String>("name", "obj");
     auto mesh_qtr = MeshFactory::create<TestMesh>(params);
     auto mesh = mesh_qtr.get();
@@ -138,8 +133,7 @@ TEST(MeshTest, clear_label_value)
 {
     TestApp app;
 
-    auto params = TestMesh::parameters();
-    params.set<Ref<App>>("app", ref(app));
+    auto params = app.make_parameters<TestMesh>();
     params.set<String>("name", "obj");
     auto mesh_qtr = MeshFactory::create<TestMesh>(params);
     auto mesh = mesh_qtr.get();
@@ -157,8 +151,7 @@ TEST(MeshTest, view)
 
     TestApp app;
 
-    Parameters params = TestMesh::parameters();
-    params.set<Ref<App>>("app", ref(app));
+    auto params = app.make_parameters<TestMesh>();
     params.set<String>("name", "obj");
     auto mesh_qtr = MeshFactory::create<TestMesh>(params);
     auto mesh = mesh_qtr.get();
@@ -174,8 +167,7 @@ TEST(MeshTest, get_neighbors)
 {
     TestApp app;
 
-    auto params = TestMesh::parameters();
-    params.set<Ref<App>>("app", ref(app));
+    auto params = app.make_parameters<TestMesh>();
     params.set<String>("name", "obj");
     auto mesh_qtr = MeshFactory::create<TestMesh>(params);
     auto mesh = mesh_qtr.get();
@@ -193,7 +185,6 @@ TEST(MeshTest, locate_points)
     auto comm = app.get_comm();
 
     auto params = app.make_parameters<TestMesh>();
-    params.set<Ref<App>>("app", ref(app));
     auto mesh = MeshFactory::create<TestMesh>(params);
 
     auto coords = Vector::create_seq(comm, 3);
