@@ -24,10 +24,8 @@ public:
             this->mesh = godzilla::MeshFactory::create<godzilla::LineMesh>(pars);
         }
         {
-            auto pars = GTestFENonlinearProblem::parameters();
-            pars.set<godzilla::Ref<godzilla::App>>("app", ref(*this->app))
-                .set<godzilla::String>("_type", "GTestFENonlinearProblem")
-                .set<godzilla::Ref<godzilla::Mesh>>("mesh", ref(*this->mesh));
+            auto pars = this->app->make_parameters<GTestFENonlinearProblem>();
+            pars.set<godzilla::Ref<godzilla::Mesh>>("mesh", ref(*this->mesh));
             this->app->make_problem<GTestFENonlinearProblem>(pars);
         }
     }
@@ -57,10 +55,8 @@ public:
             this->mesh = godzilla::MeshFactory::create<godzilla::LineMesh>(pars);
         }
         {
-            auto pars = GTest2FieldsFENonlinearProblem::parameters();
-            pars.set<godzilla::Ref<godzilla::App>>("app", ref(*this->app))
-                .set<godzilla::String>("_type", "GTest2FieldsFENonlinearProblem")
-                .set<godzilla::Ref<godzilla::Mesh>>("mesh", ref(*this->mesh));
+            auto pars = this->app->make_parameters<GTest2FieldsFENonlinearProblem>();
+            pars.set<godzilla::Ref<godzilla::Mesh>>("mesh", ref(*this->mesh));
             this->app->make_problem<GTest2FieldsFENonlinearProblem>(pars);
         }
     }
