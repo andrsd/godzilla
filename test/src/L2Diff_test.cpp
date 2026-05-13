@@ -46,18 +46,15 @@ TEST(L2DiffTest, compute)
     prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     auto prob = app.make_problem<GTestFENonlinearProblem>(prob_params);
 
-    auto bc_left_params = DirichletBC::parameters();
-    bc_left_params.set<Ref<App>>("app", ref(app));
+    auto bc_left_params = app.make_parameters<DirichletBC>();
     bc_left_params.set<std::vector<String>>("boundary", { "left" });
     prob->add_boundary_condition<DirichletBC>(bc_left_params);
 
-    auto bc_right_params = DirichletBC::parameters();
-    bc_right_params.set<Ref<App>>("app", ref(app));
+    auto bc_right_params = app.make_parameters<DirichletBC>();
     bc_right_params.set<std::vector<String>>("boundary", { "right" });
     prob->add_boundary_condition<DirichletBC>(bc_right_params);
 
-    auto ps_params = L2Error::parameters();
-    ps_params.set<Ref<App>>("app", ref(app));
+    auto ps_params = app.make_parameters<L2Error>();
     ps_params.set<String>("name", "l2err");
     auto ps = prob->add_postprocessor<L2Error>(ps_params);
 

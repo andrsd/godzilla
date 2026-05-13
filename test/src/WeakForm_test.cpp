@@ -91,8 +91,7 @@ TEST(WeakFormTest, test)
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_pars);
 
-    auto bc_pars = TestBC::parameters();
-    bc_pars.set<Ref<App>>("app", ref(app));
+    auto bc_pars = app.make_parameters<TestBC>();
     bc_pars.set<std::vector<String>>("boundary", { "left" });
     auto bc = prob.add_boundary_condition<TestBC>(bc_pars);
 

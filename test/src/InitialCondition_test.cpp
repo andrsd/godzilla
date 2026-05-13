@@ -81,14 +81,12 @@ TEST_F(InitialConditionTest, test)
 
     prob->add_aux_field("a", 1, Order(1));
 
-    auto params = InitialCondition::parameters();
-    params.set<Ref<App>>("app", ref(*this->app));
+    auto params = this->app->make_parameters<MockInitialCondition>();
     params.set<String>("name", "obj");
     params.set<String>("field", "u");
     auto ic = prob->add_initial_condition<MockInitialCondition>(params);
 
-    auto aux_ic_pars = InitialCondition::parameters();
-    aux_ic_pars.set<Ref<App>>("app", ref(*this->app));
+    auto aux_ic_pars = this->app->make_parameters<MockInitialCondition>();
     aux_ic_pars.set<String>("name", "a_ic");
     aux_ic_pars.set<String>("field", "a");
     auto aux_ic = prob->add_initial_condition<MockInitialCondition>(aux_ic_pars);
@@ -149,8 +147,7 @@ TEST_F(InitialConditionTest, duplicate_ic_name)
 {
     auto prob = this->app->get_problem<GTestFENonlinearProblem>();
 
-    auto params = TestInitialCondition::parameters();
-    params.set<Ref<App>>("app", ref(*this->app));
+    auto params = this->app->make_parameters<TestInitialCondition>();
     params.set<String>("name", "obj");
 
     prob->add_initial_condition<TestInitialCondition>(params);
@@ -163,8 +160,7 @@ TEST_F(InitialConditionTest, constant_ic)
 {
     auto prob = this->app->get_problem<GTestFENonlinearProblem>();
 
-    auto params = ConstantInitialCondition::parameters();
-    params.set<Ref<App>>("app", ref(*this->app));
+    auto params = this->app->make_parameters<ConstantInitialCondition>();
     params.set<std::vector<Real>>("value", { 5 });
     auto ic = prob->add_initial_condition<ConstantInitialCondition>(params);
     prob->create();
@@ -183,8 +179,7 @@ TEST_F(InitialCondition2FieldTest, no_field_param)
 {
     auto prob = this->app->get_problem<GTestFENonlinearProblem>();
 
-    auto params = InitialCondition::parameters();
-    params.set<Ref<App>>("app", ref(*this->app));
+    auto params = this->app->make_parameters<MockInitialCondition>();
     params.set<String>("name", "obj");
     prob->add_initial_condition<MockInitialCondition>(params);
 
@@ -195,8 +190,7 @@ TEST_F(InitialCondition2FieldTest, non_existing_field)
 {
     auto prob = this->app->get_problem<GTestFENonlinearProblem>();
 
-    auto params = InitialCondition::parameters();
-    params.set<Ref<App>>("app", ref(*this->app));
+    auto params = this->app->make_parameters<MockInitialCondition>();
     params.set<String>("name", "obj");
     params.set<String>("field", "asdf");
     prob->add_initial_condition<MockInitialCondition>(params);

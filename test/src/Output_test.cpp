@@ -131,8 +131,7 @@ TEST_F(OutputTest, default_execute_on_mask)
 {
     auto prob = this->app->get_problem<GTestImplicitFENonlinearProblem>();
 
-    auto pars = Output::parameters();
-    pars.set<Ref<App>>("app", ref(*this->app));
+    auto pars = this->app->make_parameters<MockOutput>();
     pars.set<Ref<Problem>>("_problem", prob);
     auto out = prob->add_output<MockOutput>(pars);
 

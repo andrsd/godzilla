@@ -270,8 +270,7 @@ TEST(NonlinearProblemTest, restart_file)
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     G1DTestNonlinearProblem prob(prob_pars);
 
-    auto ro_pars = RestartOutput::parameters();
-    ro_pars.set<Ref<App>>("app", ref(app));
+    auto ro_pars = app.make_parameters<RestartOutput>();
     ro_pars.set<fs::path>("file", "nl");
     prob.add_output<RestartOutput>(ro_pars);
 

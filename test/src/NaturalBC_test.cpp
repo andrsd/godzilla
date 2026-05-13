@@ -113,8 +113,7 @@ TEST(NaturalBCTest, fe)
     prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     auto prob = app.make_problem<GTest2FieldsFENonlinearProblem>(prob_params);
 
-    auto bc_params = TestNaturalBC::parameters();
-    bc_params.set<Ref<App>>("app", ref(app));
+    auto bc_params = app.make_parameters<TestNaturalBC>();
     bc_params.set<String>("name", "bc1");
     bc_params.set<std::vector<String>>("boundary", { "left" });
     bc_params.set<String>("field", "u");
@@ -156,8 +155,7 @@ TEST(NaturalBCTest, non_existing_field)
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     auto problem = app.make_problem<GTest2FieldsFENonlinearProblem>(prob_pars);
 
-    auto params = TestNaturalBC::parameters();
-    params.set<Ref<App>>("app", ref(app));
+    auto params = app.make_parameters<TestNaturalBC>();
     params.set<std::vector<String>>("boundary", { "left" });
     params.set<String>("field", "asdf");
     problem->add_boundary_condition<TestNaturalBC>(params);

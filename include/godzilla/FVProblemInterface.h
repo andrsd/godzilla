@@ -77,7 +77,8 @@ public:
     ///
     /// @param bc Boundary condition object parameters to add/create
     template <NaturalRiemannBCDerived OBJECT>
-    Ref<OBJECT> add_boundary_condition(Parameters & pars);
+    Ref<OBJECT> add_boundary_condition(Parameters & pars,
+                                       std::source_location loc = std::source_location::current());
 
 protected:
     void init() override;
@@ -178,9 +179,14 @@ private:
 
 template <NaturalRiemannBCDerived T>
 Ref<T>
-FVProblemInterface::add_boundary_condition(Parameters & pars)
+FVProblemInterface::add_boundary_condition(Parameters & pars, std::source_location loc)
 {
-    CALL_STACK_MSG();
+    expect_true(
+        pars.get<String>("_type") == utils::type_name<T>(),
+        fmt::format("Mismatch in the type of object ({}) and parameters used for construction ({})",
+                    utils::demangle(utils::type_name<T>()),
+                    utils::demangle(pars.get<String>("_type"))),
+        loc);
     pars.set<Ref<DiscreteProblemInterface>>("_dpi", ref(*this));
     auto obj = Qtr<T>::alloc(pars);
     auto ptr = obj.get();

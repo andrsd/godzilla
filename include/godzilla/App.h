@@ -138,6 +138,7 @@ public:
                       "T must be constructible from `const Parameters &`");
 
         auto pars = T::parameters();
+        pars.template set<String>("_type", utils::type_name<T>());
         pars.template set<Ref<App>>("app", ref(*this));
         return pars;
     }

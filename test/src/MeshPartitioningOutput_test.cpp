@@ -77,8 +77,7 @@ TEST(MeshPartitioningOutputTest, output)
     prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     TestProblem prob(prob_params);
 
-    auto params = MeshPartitioningOutput::parameters();
-    params.set<Ref<App>>("app", ref(app));
+    auto params = app.make_parameters<MeshPartitioningOutput>();
     params.set<fs::path>("file", "part");
     auto out = prob.add_output<MeshPartitioningOutput>(params);
 

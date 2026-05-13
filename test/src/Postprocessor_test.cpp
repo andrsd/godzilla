@@ -36,8 +36,7 @@ TEST_F(PostprocessorTest, exec_masks_1)
 {
     auto prob = this->app->get_problem<GTestImplicitFENonlinearProblem>();
 
-    auto pars = Postprocessor::parameters();
-    pars.set<Ref<App>>("app", ref(*this->app));
+    auto pars = this->app->make_parameters<MockPostprocessor>();
     pars.set<Ref<Problem>>("_problem", prob);
     pars.set<String>("name", "pps");
     pars.set<ExecuteOnFlags>("on", ExecuteOn::NONE);
@@ -52,8 +51,7 @@ TEST_F(PostprocessorTest, exec_masks_2)
 {
     auto prob = this->app->get_problem<GTestImplicitFENonlinearProblem>();
 
-    auto pars = Postprocessor::parameters();
-    pars.set<Ref<App>>("app", ref(*this->app));
+    auto pars = this->app->make_parameters<MockPostprocessor>();
     pars.set<Ref<Problem>>("_problem", prob);
     pars.set<String>("name", "pps");
     pars.set<ExecuteOnFlags>("on", ExecuteOn::FINAL);
@@ -69,8 +67,7 @@ TEST_F(PostprocessorTest, exec_masks_3)
 {
     auto prob = this->app->get_problem<GTestImplicitFENonlinearProblem>();
 
-    auto pars = Postprocessor::parameters();
-    pars.set<Ref<App>>("app", ref(*this->app));
+    auto pars = this->app->make_parameters<MockPostprocessor>();
     pars.set<Ref<Problem>>("_problem", prob);
     pars.set<String>("name", "pps");
     pars.set<ExecuteOnFlags>("on", ExecuteOn::FINAL | ExecuteOn::INITIAL | ExecuteOn::TIMESTEP);
@@ -93,8 +90,7 @@ TEST_F(PostprocessorTest, empty_on)
 {
     auto prob = this->app->get_problem<GTestImplicitFENonlinearProblem>();
 
-    auto pars = Postprocessor::parameters();
-    pars.set<Ref<App>>("app", ref(*app));
+    auto pars = this->app->make_parameters<MockPostprocessor>();
     pars.set<Ref<Problem>>("_problem", prob);
     pars.set<String>("name", "pps");
     pars.set<ExecuteOnFlags>("on", 0);
@@ -108,8 +104,7 @@ TEST_F(PostprocessorTest, none_plus_mask)
 {
     auto prob = this->app->get_problem<GTestImplicitFENonlinearProblem>();
 
-    auto pars = Postprocessor::parameters();
-    pars.set<Ref<App>>("app", ref(*this->app));
+    auto pars = this->app->make_parameters<MockPostprocessor>();
     pars.set<Ref<Problem>>("_problem", prob);
     pars.set<String>("name", "pps");
     pars.set<ExecuteOnFlags>("on", ExecuteOn::NONE | ExecuteOn::FINAL | ExecuteOn::TIMESTEP);
@@ -122,8 +117,7 @@ TEST_F(PostprocessorTest, default_execute_on_mask)
 {
     auto prob = this->app->get_problem<GTestImplicitFENonlinearProblem>();
 
-    auto pars = Postprocessor::parameters();
-    pars.set<Ref<App>>("app", ref(*this->app));
+    auto pars = this->app->make_parameters<MockPostprocessor>();
     pars.set<Ref<Problem>>("_problem", prob);
     pars.set<String>("name", "pps");
     auto pp = prob->add_postprocessor<MockPostprocessor>(pars);

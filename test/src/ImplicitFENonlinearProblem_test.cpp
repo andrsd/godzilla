@@ -28,14 +28,12 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
 {
     auto prob = this->app->get_problem<GTestImplicitFENonlinearProblem>();
 
-    auto ic_params = ConstantInitialCondition::parameters();
-    ic_params.set<Ref<godzilla::App>>("app", ref(*this->app));
+    auto ic_params = this->app->make_parameters<ConstantInitialCondition>();
     ic_params.set<String>("name", "ic");
     ic_params.set<std::vector<Real>>("value", { 0 });
     prob->add_initial_condition<ConstantInitialCondition>(ic_params);
 
-    auto bc_params = DirichletBC::parameters();
-    bc_params.set<Ref<godzilla::App>>("app", ref(*this->app));
+    auto bc_params = this->app->make_parameters<DirichletBC>();
     bc_params.set<std::vector<String>>("boundary", { "left", "right" });
     prob->add_boundary_condition<DirichletBC>(bc_params);
 
@@ -115,14 +113,12 @@ TEST_F(ImplicitFENonlinearProblemTest, set_schemes)
 {
     auto prob = this->app->get_problem<GTestImplicitFENonlinearProblem>();
 
-    auto ic_params = ConstantInitialCondition::parameters();
-    ic_params.set<Ref<godzilla::App>>("app", ref(*this->app));
+    auto ic_params = this->app->make_parameters<ConstantInitialCondition>();
     ic_params.set<String>("name", "ic");
     ic_params.set<std::vector<Real>>("value", { 0 });
     prob->add_initial_condition<ConstantInitialCondition>(ic_params);
 
-    auto bc_params = DirichletBC::parameters();
-    bc_params.set<Ref<godzilla::App>>("app", ref(*this->app));
+    auto bc_params = this->app->make_parameters<DirichletBC>();
     bc_params.set<std::vector<String>>("boundary", { "left", "right" });
     prob->add_boundary_condition<DirichletBC>(bc_params);
 
@@ -143,14 +139,12 @@ TEST_F(ImplicitFENonlinearProblemTest, converged_reason)
 {
     auto prob = this->app->get_problem<GTestImplicitFENonlinearProblem>();
 
-    auto ic_params = ConstantInitialCondition::parameters();
-    ic_params.set<Ref<godzilla::App>>("app", ref(*this->app));
+    auto ic_params = this->app->make_parameters<ConstantInitialCondition>();
     ic_params.set<String>("name", "ic");
     ic_params.set<std::vector<Real>>("value", { 0 });
     prob->add_initial_condition<ConstantInitialCondition>(ic_params);
 
-    auto bc_params = DirichletBC::parameters();
-    bc_params.set<Ref<godzilla::App>>("app", ref(*this->app));
+    auto bc_params = this->app->make_parameters<DirichletBC>();
     bc_params.set<std::vector<String>>("boundary", { "left", "right" });
     prob->add_boundary_condition<DirichletBC>(bc_params);
 
