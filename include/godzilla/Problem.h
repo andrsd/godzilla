@@ -368,12 +368,7 @@ template <OutputDerived T>
 Ref<T>
 Problem::add_output(Parameters & pars, std::source_location loc)
 {
-    expect_true(
-        pars.get<String>("_type") == utils::type_name<T>(),
-        fmt::format("Mismatch in the type of object ({}) and parameters used for construction ({})",
-                    utils::demangle(utils::type_name<T>()),
-                    utils::demangle(pars.get<String>("_type"))),
-        loc);
+    expect_matching_type(pars.get<String>("_type"), utils::type_name<T>(), loc);
     pars.set<Ref<Problem>>("_problem", ref(*this));
     if (!pars.is_param_valid("on")) {
         pars.set<ExecuteOnFlags>("on", default_execute_on<T>());
@@ -392,12 +387,7 @@ template <PostprocessorDerived T>
 Ref<T>
 Problem::add_postprocessor(Parameters & pars, std::source_location loc)
 {
-    expect_true(
-        pars.get<String>("_type") == utils::type_name<T>(),
-        fmt::format("Mismatch in the type of object ({}) and parameters used for construction ({})",
-                    utils::demangle(utils::type_name<T>()),
-                    utils::demangle(pars.get<String>("_type"))),
-        loc);
+    expect_matching_type(pars.get<String>("_type"), utils::type_name<T>(), loc);
     pars.set<Ref<Problem>>("_problem", ref(*this));
     if (!pars.is_param_valid("on")) {
         pars.set<ExecuteOnFlags>("on", default_execute_on<T>());

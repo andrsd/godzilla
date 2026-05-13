@@ -515,12 +515,7 @@ template <BoundaryConditionDerived T>
 Ref<T>
 DiscreteProblemInterface::add_boundary_condition(Parameters & pars, std::source_location loc)
 {
-    expect_true(
-        pars.get<String>("_type") == utils::type_name<T>(),
-        fmt::format("Mismatch in the type of object ({}) and parameters used for construction ({})",
-                    utils::demangle(utils::type_name<T>()),
-                    utils::demangle(pars.get<String>("_type"))),
-        loc);
+    expect_matching_type(pars.get<String>("_type"), utils::type_name<T>(), loc);
     pars.set<Ref<DiscreteProblemInterface>>("_dpi", ref(*this));
     auto obj = Qtr<T>::alloc(pars);
     auto ptr = obj.get();
@@ -536,12 +531,7 @@ template <InitialConditionDerived T>
 Ref<T>
 DiscreteProblemInterface::add_initial_condition(Parameters & pars, std::source_location loc)
 {
-    expect_true(
-        pars.get<String>("_type") == utils::type_name<T>(),
-        fmt::format("Mismatch in the type of object ({}) and parameters used for construction ({})",
-                    utils::demangle(utils::type_name<T>()),
-                    utils::demangle(pars.get<String>("_type"))),
-        loc);
+    expect_matching_type(pars.get<String>("_type"), utils::type_name<T>(), loc);
     pars.set<Ref<DiscreteProblemInterface>>("_dpi", ref(*this));
     auto obj = Qtr<T>::alloc(pars);
     auto name = obj->get_name();
@@ -559,12 +549,7 @@ template <AuxiliaryFieldDerived T>
 Ref<T>
 DiscreteProblemInterface::add_auxiliary_field(Parameters & pars, std::source_location loc)
 {
-    expect_true(
-        pars.get<String>("_type") == utils::type_name<T>(),
-        fmt::format("Mismatch in the type of object ({}) and parameters used for construction ({})",
-                    utils::demangle(utils::type_name<T>()),
-                    utils::demangle(pars.get<String>("_type"))),
-        loc);
+    expect_matching_type(pars.get<String>("_type"), utils::type_name<T>(), loc);
     pars.set<Ref<DiscreteProblemInterface>>("_dpi", ref(*this));
     auto obj = Qtr<T>::alloc(pars);
     auto name = obj->get_name();

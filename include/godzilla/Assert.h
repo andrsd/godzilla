@@ -10,6 +10,11 @@
 #include <source_location>
 
 namespace godzilla {
+namespace utils {
+String demangle(String mangled_name);
+}
+
+class Parameters;
 
 #ifndef NDEBUG
 inline void
@@ -63,6 +68,24 @@ expect_true(bool cond,
         fmt::println(stderr, "{}", godzilla::Terminal::normal);
         std::exit(-1);
     }
+}
+
+/// Check that parameters were constructed with the expected type
+///
+/// @param pars_type Type from the Parameters object to check
+/// @param type Type to check against
+/// @param loc Source location
+inline void
+expect_matching_type(String pars_type,
+                     String type,
+                     std::source_location loc = std::source_location::current())
+{
+    expect_true(
+        pars_type == type,
+        fmt::format("Mismatch in the type of object ({}) and parameters used for construction ({})",
+                    utils::demangle(type),
+                    utils::demangle(pars_type)),
+        loc);
 }
 
 } // namespace godzilla
