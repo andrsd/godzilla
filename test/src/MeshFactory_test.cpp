@@ -11,10 +11,9 @@ TEST(MeshFactoryTest, create)
 {
     TestApp app;
 
-    auto pars = LineMesh::parameters();
+    auto pars = app.make_parameters<LineMesh>();
     // clang-format off
-    pars.set<Ref<godzilla::App>>("app", ref(app))
-        .set<Int>("nx", 10)
+    pars.set<Int>("nx", 10)
         .set<Real>("xmin", 0.5)
         .set<Real>("xmax", 4);
     // clang-format on

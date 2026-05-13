@@ -12,8 +12,7 @@ TEST(ConstantAuxiliaryFieldTest, create)
 {
     TestApp app;
 
-    auto mesh_params = LineMesh::parameters();
-    mesh_params.set<Ref<App>>("app", ref(app));
+    auto mesh_params = app.make_parameters<LineMesh>();
     mesh_params.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 

@@ -183,8 +183,7 @@ TEST(KrylovSolver, set_opers_rhs)
     TestApp app;
     auto comm = app.get_comm();
 
-    auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<Ref<godzilla::App>>("app", ref(app));
+    auto mesh_pars = app.make_parameters<LineMesh>();
     mesh_pars.set<Real>("xmin", 0);
     mesh_pars.set<Real>("xmax", 1);
     mesh_pars.set<Int>("nx", 1);

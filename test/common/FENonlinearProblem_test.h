@@ -16,11 +16,8 @@ public:
         GodzillaAppTest::SetUp();
 
         {
-            auto pars = godzilla::LineMesh::parameters();
-            // clang-format off
-            pars.set<godzilla::Ref<godzilla::App>>("app", ref(*this->app))
-                .set<godzilla::Int>("nx", 2);
-            // clang-format on
+            auto pars = this->app->make_parameters<godzilla::LineMesh>();
+            pars.set<godzilla::Int>("nx", 2);
             this->mesh = godzilla::MeshFactory::create<godzilla::LineMesh>(pars);
         }
         {
@@ -47,11 +44,8 @@ public:
         GodzillaAppTest::SetUp();
 
         {
-            auto pars = godzilla::LineMesh::parameters();
-            // clang-format off
-            pars.set<godzilla::Ref<godzilla::App>>("app", ref(*this->app))
-                .set<godzilla::Int>("nx", 2);
-            // clang-format on
+            auto pars = this->app->make_parameters<godzilla::LineMesh>();
+            pars.set<godzilla::Int>("nx", 2);
             this->mesh = godzilla::MeshFactory::create<godzilla::LineMesh>(pars);
         }
         {

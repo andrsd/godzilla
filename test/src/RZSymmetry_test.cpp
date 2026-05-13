@@ -12,11 +12,8 @@ TEST(RZSymmetryTest, check_dim)
 {
     TestApp app;
 
-    auto mesh_pars = LineMesh::parameters();
-    // clang-format off
-    mesh_pars.set<Ref<App>>("app", ref(app))
-        .set<Int>("nx", 2);
-    // clang-format on
+    auto mesh_pars = app.make_parameters<LineMesh>();
+    mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
@@ -38,10 +35,9 @@ TEST(RZSymmetryTest, check_compatible)
 {
     TestApp app;
 
-    auto mesh_pars = RectangleMesh::parameters();
+    auto mesh_pars = app.make_parameters<RectangleMesh>();
     // clang-format off
-    mesh_pars.set<Ref<App>>("app", ref(app))
-        .set<Int>("nx", 2)
+    mesh_pars.set<Int>("nx", 2)
         .set<Int>("ny", 2);
     // clang-format on
     auto mesh = MeshFactory::create<RectangleMesh>(mesh_pars);
@@ -65,10 +61,9 @@ TEST(RZSymmetryTest, evaluate)
 {
     TestApp app;
 
-    auto mesh_pars = RectangleMesh::parameters();
+    auto mesh_pars = app.make_parameters<RectangleMesh>();
     // clang-format off
-    mesh_pars.set<Ref<App>>("app", ref(app))
-        .set<Int>("nx", 2)
+    mesh_pars.set<Int>("nx", 2)
         .set<Int>("ny", 2);
     // clang-format on
     auto mesh = MeshFactory::create<RectangleMesh>(mesh_pars);
