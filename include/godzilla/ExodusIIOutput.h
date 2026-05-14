@@ -51,6 +51,8 @@ private:
     Ref<DiscreteProblemInterface> dpi;
     /// Unstructured mesh
     Ref<UnstructuredMesh> mesh;
+    /// `true` is appending into the ExodusII file
+    bool append;
     /// Variable names to be stored
     std::vector<String> variable_names;
     /// ExodusII file

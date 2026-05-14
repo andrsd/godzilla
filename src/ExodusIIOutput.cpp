@@ -21,6 +21,7 @@ Parameters
 ExodusIIOutput::parameters()
 {
     auto params = FileOutput::parameters();
+    params.add_param<bool>("append", false, "Append into an existing exodusII file");
     params.add_param<std::vector<String>>(
         "variables",
         std::vector<String> {},
@@ -32,6 +33,7 @@ ExodusIIOutput::ExodusIIOutput(const Parameters & pars) :
     FileOutput(pars),
     dpi(dynamic_ref_cast<DiscreteProblemInterface>(pars.get<Ref<Problem>>("_problem"))),
     mesh(dpi->get_mesh()),
+    append(pars.get<bool>("append")),
     variable_names(pars.get<std::vector<String>>("variables"), {}),
     step_num(1),
     mesh_stored(false)
@@ -84,6 +86,35 @@ ExodusIIOutput::create()
             else
                 error("Variable '{}' specified in 'variables' parameter does not exist. Typo?",
                       name);
+        }
+    }
+
+    int n_nodal_var_names = 1;
+    int n_elem_var_names = 1;
+    for (auto & name : this->field_var_names) {
+        auto fid = this->dpi->get_field_id(name).value();
+        auto order = this->dpi->get_field_order(fid).value();
+        auto names = io::get_var_names(*this->dpi, fid);
+        if (order == 0) {
+            this->elem_var_fids.push_back({ fid, n_elem_var_names });
+            n_elem_var_names += names.size();
+        }
+        else {
+            this->nodal_var_fids.push_back({ fid, n_nodal_var_names });
+            n_nodal_var_names += names.size();
+        }
+    }
+    for (auto & name : this->aux_field_var_names) {
+        auto fid = this->dpi->get_aux_field_id(name).value();
+        auto order = this->dpi->get_aux_field_order(fid).value();
+        auto names = io::get_var_names(*this->dpi, fid);
+        if (order == 0) {
+            this->elem_aux_var_fids.push_back({ fid, n_elem_var_names });
+            n_elem_var_names += names.size();
+        }
+        else {
+            this->nodal_aux_var_fids.push_back({ fid, n_nodal_var_names });
+            n_nodal_var_names += names.size();
         }
     }
 }
@@ -182,10 +213,25 @@ void
 ExodusIIOutput::open_file()
 {
     CALL_STACK_MSG();
-    this->exo =
-        Qtr<exodusIIcpp::File>::alloc(get_file_name().c_str(), exodusIIcpp::FileAccess::WRITE);
+    // clang-format off
+    auto file_access = this->append ?
+        exodusIIcpp::FileAccess::APPEND :
+        exodusIIcpp::FileAccess::WRITE;
+    // clang-format on
+
+    auto file_name = get_file_name();
+    if (not fs::exists(file_name))
+        file_access = exodusIIcpp::FileAccess::WRITE;
+
+    this->exo = Qtr<exodusIIcpp::File>::alloc(file_name, file_access);
     if (!this->exo->is_opened())
-        throw Exception(fmt::format("Could not open file '{}' for writing.", get_file_name()));
+        throw Exception(fmt::format("Could not open file '{}' for writing.", file_name));
+
+    if (file_access == exodusIIcpp::FileAccess::APPEND) {
+        this->exo->read_times();
+        this->step_num = this->exo->get_num_times() + 1;
+        this->mesh_stored = true;
+    }
 }
 
 void
@@ -193,22 +239,16 @@ ExodusIIOutput::write_all_variable_names()
 {
     CALL_STACK_MSG();
 
-    this->nodal_var_fids.clear();
-    this->nodal_aux_var_fids.clear();
-    this->elem_var_fids.clear();
-    this->elem_aux_var_fids.clear();
     std::vector<std::string> nodal_var_names;
     std::vector<std::string> elem_var_names;
     for (auto & name : this->field_var_names) {
         auto fid = this->dpi->get_field_id(name).value();
         auto order = this->dpi->get_field_order(fid).value();
         if (order == 0) {
-            this->elem_var_fids.push_back({ fid, elem_var_names.size() + 1 });
             auto names = io::get_var_names(*this->dpi, fid);
             elem_var_names.insert(elem_var_names.end(), names.begin(), names.end());
         }
         else {
-            this->nodal_var_fids.push_back({ fid, nodal_var_names.size() + 1 });
             auto names = io::get_var_names(*this->dpi, fid);
             nodal_var_names.insert(nodal_var_names.end(), names.begin(), names.end());
         }
@@ -217,12 +257,10 @@ ExodusIIOutput::write_all_variable_names()
         auto fid = this->dpi->get_aux_field_id(name).value();
         auto order = this->dpi->get_aux_field_order(fid).value();
         if (order == 0) {
-            this->elem_aux_var_fids.push_back({ fid, elem_var_names.size() + 1 });
             auto names = io::get_aux_var_names(*this->dpi, fid);
             elem_var_names.insert(elem_var_names.end(), names.begin(), names.end());
         }
         else {
-            this->nodal_aux_var_fids.push_back({ fid, nodal_var_names.size() + 1 });
             auto names = io::get_aux_var_names(*this->dpi, fid);
             nodal_var_names.insert(nodal_var_names.end(), names.begin(), names.end());
         }
