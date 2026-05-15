@@ -94,27 +94,27 @@ ExodusIIOutput::create()
     for (auto & name : this->field_var_names) {
         auto fid = this->dpi->get_field_id(name).value();
         auto order = this->dpi->get_field_order(fid).value();
-        auto names = io::get_var_names(*this->dpi, fid);
+        auto nc = this->dpi->get_field_num_components(fid).value();
         if (order == 0) {
             this->elem_var_fids.push_back({ fid, n_elem_var_names });
-            n_elem_var_names += names.size();
+            n_elem_var_names += nc;
         }
         else {
             this->nodal_var_fids.push_back({ fid, n_nodal_var_names });
-            n_nodal_var_names += names.size();
+            n_nodal_var_names += nc;
         }
     }
     for (auto & name : this->aux_field_var_names) {
         auto fid = this->dpi->get_aux_field_id(name).value();
         auto order = this->dpi->get_aux_field_order(fid).value();
-        auto names = io::get_var_names(*this->dpi, fid);
+        auto nc = this->dpi->get_aux_field_num_components(fid).value();
         if (order == 0) {
             this->elem_aux_var_fids.push_back({ fid, n_elem_var_names });
-            n_elem_var_names += names.size();
+            n_elem_var_names += nc;
         }
         else {
             this->nodal_aux_var_fids.push_back({ fid, n_nodal_var_names });
-            n_nodal_var_names += names.size();
+            n_nodal_var_names += nc;
         }
     }
 }
