@@ -42,11 +42,6 @@ assert_true(bool cond,
 
 #else
 
-[[deprecated]] inline void
-assert_true(bool, fmt::string_view, std::source_location = std::source_location::current())
-{
-}
-
     #define GODZILLA_ASSERT_TRUE(cond, msg)
 
 #endif
