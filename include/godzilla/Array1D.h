@@ -135,26 +135,6 @@ public:
     /// Create an empty array
     Array1D() : ctrl(nullptr), first(0), data(nullptr) {}
 
-    /// Create an array with specified number of entries
-    ///
-    /// @param size Number of entries in the array
-    [[deprecated("Supply the communicator")]] explicit Array1D(Int size) :
-        ctrl(new ControlBlock { 1, size }),
-        first(0),
-        data(new T[size])
-    {
-    }
-
-    /// Create an array from a Range
-    ///
-    /// @param rng Indexing range
-    [[deprecated("Supply the communicator")]] explicit Array1D(const Range & rng) :
-        ctrl(new ControlBlock { 1, rng.size() }),
-        first(rng.first()),
-        data(new T[rng.size()])
-    {
-    }
-
     /// Create an empty array
     explicit Array1D(mpi::Communicator comm) : comm(comm), ctrl(nullptr), first(0), data(nullptr) {}
 
@@ -261,18 +241,6 @@ public:
     }
 
     // operators
-
-    [[deprecated("Use [] instead")]] const T &
-    operator()(Int i) const
-    {
-        return (*this)[i];
-    }
-
-    [[deprecated("Use [] instead")]] T &
-    operator()(Int i)
-    {
-        return (*this)[i];
-    }
 
     /// Get the entry at a specified location for reading
     ///
