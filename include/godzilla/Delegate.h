@@ -30,24 +30,6 @@ public:
     }
 
     template <typename T>
-    [[deprecated("")]] void
-    bind(T * t, R (T::*method)(ARGS...))
-    {
-        this->fn = [=](ARGS... args) {
-            return (t->*method)(args...);
-        };
-    }
-
-    template <typename T>
-    [[deprecated("")]] void
-    bind(T * t, R (T::*method)(ARGS...) const)
-    {
-        this->fn = [=](ARGS... args) {
-            return (t->*method)(args...);
-        };
-    }
-
-    template <typename T>
     void
     bind(Ref<T> t, R (T::*method)(ARGS...))
     {
