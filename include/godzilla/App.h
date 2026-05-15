@@ -113,16 +113,6 @@ public:
     /// @return MPI communicator
     mpi::Communicator get_comm() const;
 
-    /// Build object
-    ///
-    /// This is convenience API for building object with having the `app` parameter set to this
-    /// application object.
-    ///
-    /// @param parameters Input parameters
-    /// @return The constructed object
-    template <typename T>
-    [[deprecated("This will be removed")]] Ref<T> build_object(Parameters & parameters);
-
     /// Create parameters for type T
     ///
     /// @tparam C++ object that provides `parameters()`
@@ -221,13 +211,5 @@ private:
 public:
     static void register_objects(Registry & registry);
 };
-
-template <typename T>
-Ref<T>
-App::build_object(Parameters & parameters)
-{
-    parameters.set<Ref<App>>("app", ref(*this));
-    return new T(parameters);
-}
 
 } // namespace godzilla
