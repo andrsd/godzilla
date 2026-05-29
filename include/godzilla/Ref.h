@@ -245,6 +245,13 @@ try_dynamic_ref_cast(Ref<From> from)
     return std::nullopt;
 }
 
+template <typename T, typename U>
+inline bool
+operator<(const Ref<T> & lhs, const Ref<U> & rhs)
+{
+    return lhs.operator->() < rhs.operator->();
+}
+
 template <typename>
 struct is_ref : std::false_type {};
 
