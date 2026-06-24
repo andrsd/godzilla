@@ -65,7 +65,7 @@ App::App(mpi::Communicator comm, Registry & registry, String name) :
     name(name),
     mpi_comm(comm),
     registry(registry),
-    logger(Qtr<Logger>::alloc()),
+    logger(Qtr<Logger>::alloc(name)),
     verbosity_level(1),
     cout_buf_(nullptr),
     cerr_buf_(nullptr),
