@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "godzilla/String.h"
 #include "spdlog/spdlog.h"
 #include "spdlog/details/periodic_worker.h"
 #include <filesystem>
@@ -15,6 +16,7 @@ namespace godzilla {
 class Logger {
 public:
     Logger();
+    Logger(String name);
     ~Logger();
 
     /// Set log file name
@@ -52,6 +54,7 @@ public:
     }
 
 private:
+    std::string logger_name;
     std::shared_ptr<spdlog::logger> spdlgr;
     std::mutex flusher_mutex;
     std::unique_ptr<spdlog::details::periodic_worker> periodic_flusher;
