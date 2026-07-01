@@ -22,7 +22,7 @@ jobs:
           auto-update-conda: false
           channels: andrsd,defaults
 
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Install dependencies
         run: |
@@ -66,6 +66,6 @@ jobs:
         shell: bash -el {0}
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: kt3k/license_checker@v1.0.6
