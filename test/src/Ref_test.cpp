@@ -112,3 +112,27 @@ TEST(RefTest, access_null_stops)
     LateRef<Base> lref;
     EXPECT_DEATH(lref->i = 10, "Accessing null reference");
 }
+
+TEST(RefTest, op_less)
+{
+    // NOTE: operator< is tested via `std::map` which is ordered (cpt. Obvious)
+
+    struct A {
+        int i;
+        double d;
+    };
+
+    A a1 { 10, 123. };
+    A a2 { 11, 201. };
+
+    std::vector<Ref<const A>> as;
+    as.emplace_back(ref(a1));
+    as.emplace_back(ref(a2));
+
+    std::map<Ref<const A>, int> m;
+    m.emplace(as[0], 1001);
+    m.emplace(as[1], 2001);
+
+    auto v0 = m.at(as[0]);
+    EXPECT_EQ(v0, 1001);
+}
