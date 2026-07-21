@@ -245,6 +245,13 @@ try_dynamic_ref_cast(Ref<From> from)
     return std::nullopt;
 }
 
+template <typename T>
+LateRef<T>
+late_ref(Ref<T> t) noexcept
+{
+    return LateRef<T>::from_ref(t);
+}
+
 template <typename>
 struct is_ref : std::false_type {};
 
