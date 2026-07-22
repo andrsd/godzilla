@@ -24,21 +24,21 @@ jobs:
         include:
           - os: ubuntu-22.04
             python-version: "3.11"
-            petsc: 3.23.7
+            petsc: "3.24"
             preset: ci-debug
             build: Debug
             teciocpp: ON
             code-coverage: ON
           - os: ubuntu-22.04
             python-version: "3.11"
-            petsc: 3.23.7
+            petsc: "3.24"
             preset: ci-release
             build: Release
             teciocpp: ON
             code-coverage: OFF
           - os: ubuntu-22.04
             python-version: "3.11"
-            petsc: 3.23.7
+            petsc: "3.24"
             preset: ci-release
             build: Release
             teciocpp: OFF
@@ -63,7 +63,7 @@ jobs:
             mpich-mpicxx \
             mpicpp-lite=2.8 \
             spdlog=1.16 \
-            petsc==${{ matrix.petsc }} \
+            petsc=${{ matrix.petsc }} \
             fmt=11 \
             yaml-cpp=0.8 \
             exodusIIcpp=3.1 \
