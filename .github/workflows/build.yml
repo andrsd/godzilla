@@ -61,7 +61,7 @@ jobs:
             cmake \
             make \
             mpich-mpicxx \
-            mpicpp-lite=2.5 \
+            mpicpp-lite=3 \
             spdlog=1.16 \
             petsc=${{ matrix.petsc }} \
             fmt=11 \

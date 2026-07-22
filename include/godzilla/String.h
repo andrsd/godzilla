@@ -405,7 +405,7 @@ namespace mpicpp_lite {
 
 template <>
 inline void
-Communicator::send(int dest, int tag, const godzilla::String & value) const
+Communicator::send(int dest, Tag tag, const godzilla::String & value) const
 {
     if (size() < 2)
         return;
@@ -414,7 +414,7 @@ Communicator::send(int dest, int tag, const godzilla::String & value) const
 
 template <>
 inline Status
-Communicator::recv(int source, int tag, godzilla::String & value) const
+Communicator::recv(int source, Tag tag, godzilla::String & value) const
 {
     std::vector<char> str;
     auto status = recv(source, tag, str);
