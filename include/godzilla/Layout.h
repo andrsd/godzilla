@@ -16,6 +16,7 @@ class Layout {
 public:
     Layout();
     Layout(PetscLayout lo);
+    ~Layout();
 
     /// Create a layout object
     void create(mpi::Communicator comm);
