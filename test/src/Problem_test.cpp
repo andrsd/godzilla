@@ -125,7 +125,6 @@ TEST(ProblemTest, local_vec)
 
     Vector vec = problem.create_local_vector();
     EXPECT_EQ(vec.get_size(), 3);
-    vec.destroy();
 }
 
 TEST(ProblemTest, global_vec)
@@ -148,7 +147,6 @@ TEST(ProblemTest, global_vec)
 
     Vector vec = problem.create_global_vector();
     EXPECT_EQ(vec.get_size(), 3);
-    vec.destroy();
 }
 
 TEST(ProblemTest, create_matrix)
@@ -169,8 +167,6 @@ TEST(ProblemTest, create_matrix)
     Matrix mat = problem.create_matrix();
     EXPECT_EQ(mat.get_n_rows(), 3);
     EXPECT_EQ(mat.get_n_cols(), 3);
-
-    mat.destroy();
 }
 
 TEST(ProblemTest, get_local_section)

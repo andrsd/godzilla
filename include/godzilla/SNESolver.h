@@ -75,9 +75,6 @@ public:
     /// Create a solver
     void create(mpi::Communicator comm);
 
-    /// Destroy the solver
-    void destroy();
-
     KrylovSolver get_ksp() const;
 
     LineSearch get_line_search() const;

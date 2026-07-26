@@ -371,7 +371,6 @@ NSIncompressibleProblem::create_preconditioner(PC pc)
     // TODO: fdecomp.is[1].attach_null_space("nullspace");
     for (Int i = 0; i < fdecomp.get_num_fields(); ++i)
         fsplit.set_is(fdecomp.field_name[i], fdecomp.is[i]);
-    fdecomp.destroy();
 
     auto J = get_jacobian();
     this->fsplit.set_operators(J, J);

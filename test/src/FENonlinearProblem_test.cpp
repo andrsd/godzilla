@@ -344,11 +344,6 @@ TEST(TwoFieldFENonlinearProblemTest, field_decomposition)
         auto idx1 = to_std_vector(f1_idxs);
         EXPECT_THAT(idx1, testing::ElementsAre(1, 3, 5));
     }
-
-    fdecomp.destroy();
-    EXPECT_EQ(fdecomp.get_num_fields(), 0);
-    EXPECT_EQ(fdecomp.field_name.size(), 0);
-    EXPECT_EQ(fdecomp.is.size(), 0);
 }
 
 TEST_F(FENonlinearProblemTest, steady_state_output)

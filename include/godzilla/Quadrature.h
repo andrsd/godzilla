@@ -23,9 +23,6 @@ public:
     /// Create quadrature object
     void create(mpi::Communicator comm);
 
-    /// Destroy quadrature object
-    void destroy();
-
     /// Duplicate the object into `r`
     ///
     /// @param r New quadrature object with the duplicate

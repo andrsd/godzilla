@@ -62,9 +62,6 @@ public:
     /// Create a solver
     void create(mpi::Communicator comm);
 
-    /// Destroy the solver
-    void destroy();
-
     /// Sets the DM that may be used by some preconditioners and that may be used to construct the
     /// linear system
     ///

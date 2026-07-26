@@ -544,8 +544,6 @@ TEST(UnstructuredMesh, point_star_forrest)
 
     m->set_point_star_forest(sf);
     EXPECT_EQ(static_cast<PetscSF>(m->get_point_star_forest()), static_cast<PetscSF>(sf));
-
-    sf.destroy();
 }
 
 TEST(UnstructuredMesh, face_sets)

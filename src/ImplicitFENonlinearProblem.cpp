@@ -170,7 +170,6 @@ ImplicitFENonlinearProblem::compute_ifunction_fem(Real time,
         else {
             auto points = region.label.get_stratum(region.value);
             cells = IndexSet::intersect_caching(all_cells, points);
-            points.destroy();
         }
         compute_residual_internal(get_dm(), region, cells, time, x, x_t, time, F);
     }

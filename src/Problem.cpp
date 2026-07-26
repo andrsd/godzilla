@@ -22,13 +22,6 @@ Problem::FieldDecomposition::get_num_fields() const
     return static_cast<Int>(this->field_name.size());
 }
 
-void
-Problem::FieldDecomposition::destroy()
-{
-    this->field_name.clear();
-    this->is.clear();
-}
-
 Parameters
 Problem::parameters()
 {

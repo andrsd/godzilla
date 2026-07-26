@@ -21,9 +21,6 @@ public:
     /// @param comm MPI communicator
     void create(mpi::Communicator comm);
 
-    /// Destroys the preconditioner
-    void destroy();
-
     /// Builds PC for a particular preconditioner type
     ///
     /// @param type a known method, see PCType for possible values

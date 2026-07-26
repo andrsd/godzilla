@@ -16,7 +16,6 @@ public:
     Random();
 
     void create(mpi::Communicator comm);
-    void destroy();
 
     void get_interval(Scalar & low, Scalar & high) const;
     unsigned long get_seed() const;

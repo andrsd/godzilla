@@ -18,7 +18,6 @@ TEST(PCHypre, ctor_pc)
     PCHypre hypre(pc);
     hypre.inc_reference();
     EXPECT_EQ(pc.get_type(), PCHYPRE);
-    pc.destroy();
 }
 
 TEST(PCHypre, boomeramg)
@@ -31,7 +30,6 @@ TEST(PCHypre, boomeramg)
     pc.set_type(PCHypre::BOOMERAMG);
     EXPECT_EQ(pc.get_type(), PCHypre::BOOMERAMG);
     pc.view();
-    pc.destroy();
 
     auto o = testing::internal::GetCapturedStdout();
     EXPECT_THAT(o, HasSubstr("type: hypre"));
@@ -51,7 +49,6 @@ TEST(PCHypre, set_type)
         pc.create(app.get_comm());
         pc.set_type(t);
         EXPECT_EQ(pc.get_type(), t);
-        pc.destroy();
     }
 }
 
@@ -69,7 +66,6 @@ TEST(PCHypre, ams_set_interior_nodes)
     interior.set_values({ 0, 1, 2 }, { 1, 0, 1 });
     pc.ams_set_interior_nodes(interior);
     pc.view();
-    pc.destroy();
 
     auto o = testing::internal::GetCapturedStdout();
     EXPECT_THAT(o, HasSubstr("compatible subspace projection frequency 0"));
@@ -91,7 +87,6 @@ TEST(PCHypre, set_alpha_poisson_matrix)
     A.assemble();
     pc.set_alpha_poisson_matrix(A);
     pc.view();
-    pc.destroy();
 
     auto o = testing::internal::GetCapturedStdout();
     EXPECT_THAT(o, HasSubstr("vector Poisson solver (passed in by user)"));
@@ -112,7 +107,6 @@ TEST(PCHypre, set_beta_poisson_matrix)
     A.assemble();
     pc.set_beta_poisson_matrix(A);
     pc.view();
-    pc.destroy();
 
     auto o = testing::internal::GetCapturedStdout();
     EXPECT_THAT(o, HasSubstr("scalar Poisson solver (passed in by user)"));
@@ -130,7 +124,6 @@ TEST(PCHypre, set_discrete_curl)
     C.set_value(1, 1, 1.);
     C.assemble();
     pc.set_discrete_curl(C);
-    pc.destroy();
 }
 
 TEST(PCHypre, set_discrete_gradient)
@@ -145,7 +138,6 @@ TEST(PCHypre, set_discrete_gradient)
     G.set_value(1, 1, 1.);
     G.assemble();
     pc.set_discrete_gradient(G);
-    pc.destroy();
 }
 
 TEST(PCHypre, set_edge_constant_vectors_2d)
@@ -160,7 +152,6 @@ TEST(PCHypre, set_edge_constant_vectors_2d)
     auto v1 = Vector::create_seq(comm, 2);
     v1.set_values(std::vector<Int>({ 0, 1 }), { 0, 1 });
     pc.set_edge_constant_vectors(v0, v1);
-    pc.destroy();
 }
 
 TEST(PCHypre, set_edge_constant_vectors_3d)
@@ -177,7 +168,6 @@ TEST(PCHypre, set_edge_constant_vectors_3d)
     auto v2 = Vector::create_seq(comm, 3);
     v2.set_values({ 0, 1, 2 }, { 0, 0, 1 });
     pc.set_edge_constant_vectors(v0, v1, v2);
-    pc.destroy();
 }
 
 #else

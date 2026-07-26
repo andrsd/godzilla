@@ -128,12 +128,6 @@ SNESolver::create(mpi::Communicator comm)
     PETSC_CHECK(SNESCreate(comm, &this->obj));
 }
 
-void
-SNESolver::destroy()
-{
-    CALL_STACK_MSG();
-}
-
 KrylovSolver
 SNESolver::get_ksp() const
 {

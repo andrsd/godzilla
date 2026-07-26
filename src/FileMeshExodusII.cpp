@@ -195,33 +195,34 @@ FileMesh::create_from_exodus()
         coord_section.set_up();
         auto coord_size = coord_section.get_storage_size();
 
-        Vector coordinates(comm);
-        coordinates.set_name("coordinates");
-        coordinates.set_sizes(coord_size, PETSC_DETERMINE);
-        coordinates.set_block_size(dim_embed);
-        coordinates.set_type(VECSTANDARD);
-        Scalar * coords = coordinates.get_array();
-        if (rank == 0) {
-            f.read_coords();
-            if (dim_embed > 0) {
-                auto & x = f.get_x_coords();
-                for (Int i = 0; i < n_vertices; ++i)
-                    coords[i * dim_embed + 0] = x[i];
+        {
+            Vector coordinates(comm);
+            coordinates.set_name("coordinates");
+            coordinates.set_sizes(coord_size, PETSC_DETERMINE);
+            coordinates.set_block_size(dim_embed);
+            coordinates.set_type(VECSTANDARD);
+            Scalar * coords = coordinates.get_array();
+            if (rank == 0) {
+                f.read_coords();
+                if (dim_embed > 0) {
+                    auto & x = f.get_x_coords();
+                    for (Int i = 0; i < n_vertices; ++i)
+                        coords[i * dim_embed + 0] = x[i];
+                }
+                if (dim_embed > 1) {
+                    auto & y = f.get_y_coords();
+                    for (Int i = 0; i < n_vertices; ++i)
+                        coords[i * dim_embed + 1] = y[i];
+                }
+                if (dim_embed > 2) {
+                    auto & z = f.get_z_coords();
+                    for (Int i = 0; i < n_vertices; ++i)
+                        coords[i * dim_embed + 2] = z[i];
+                }
             }
-            if (dim_embed > 1) {
-                auto & y = f.get_y_coords();
-                for (Int i = 0; i < n_vertices; ++i)
-                    coords[i * dim_embed + 1] = y[i];
-            }
-            if (dim_embed > 2) {
-                auto & z = f.get_z_coords();
-                for (Int i = 0; i < n_vertices; ++i)
-                    coords[i * dim_embed + 2] = z[i];
-            }
+            coordinates.restore_array(coords);
+            m->set_coordinates_local(coordinates);
         }
-        coordinates.restore_array(coords);
-        m->set_coordinates_local(coordinates);
-        coordinates.destroy();
 
         // Create side set labels
         std::map<Int, String> side_set_names;

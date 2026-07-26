@@ -33,12 +33,6 @@ Vector::create(mpi::Communicator comm)
 }
 
 void
-Vector::destroy()
-{
-    CALL_STACK_MSG();
-}
-
-void
 Vector::set_up()
 {
     CALL_STACK_MSG();

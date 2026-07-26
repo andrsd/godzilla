@@ -21,12 +21,6 @@ IndexSet::create(mpi::Communicator comm)
     PETSC_CHECK(ISCreate(comm, &this->obj));
 }
 
-void
-IndexSet::destroy()
-{
-    CALL_STACK_MSG();
-}
-
 bool
 IndexSet::is_null() const
 {

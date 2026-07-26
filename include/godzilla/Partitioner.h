@@ -19,7 +19,6 @@ public:
     explicit Partitioner(PetscPartitioner p);
 
     void create(mpi::Communicator comm);
-    void destroy();
 
     void set_type(String type);
     String get_type() const;

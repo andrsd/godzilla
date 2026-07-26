@@ -23,9 +23,6 @@ public:
     /// @param name The label name
     void create(mpi::Communicator comm, String name);
 
-    /// Destroy the label
-    void destroy();
-
     /// Destroys internal data structures in the underlying DMLabel
     void reset();
 
