@@ -43,7 +43,7 @@ private:
     /// Unstructured mesh
     Ref<UnstructuredMesh> mesh;
     /// File to write into
-    teciocpp::File * file;
+    Qtr<teciocpp::File> file;
     /// Variable value locations
     std::vector<teciocpp::ValueLocation> value_locations;
     /// Shared variables

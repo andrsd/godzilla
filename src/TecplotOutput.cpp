@@ -205,7 +205,7 @@ TecplotOutput::open_file()
     CALL_STACK_MSG();
 #ifdef GODZILLA_WITH_TECIOCPP
     try {
-        this->file = new teciocpp::File(get_comm());
+        this->file = Qtr<teciocpp::File>::alloc(get_comm());
 
         const std::vector<String> coord_names = { "x", "y", "z" };
         auto dim = this->mesh->get_dimension();
