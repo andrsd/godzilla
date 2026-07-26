@@ -151,4 +151,30 @@ StarForest::view(PetscViewer viewer) const
     PETSC_CHECK(PetscSFView(this->obj, viewer));
 }
 
+StarForest
+StarForest::create_from_coordinates(MPI_Comm comm,
+                                    Dimension dim,
+                                    Span<const Real> root_coords,
+                                    Span<const Real> leaf_coords,
+                                    Real tol)
+{
+    CALL_STACK_MSG();
+    expect_true((root_coords.size() % dim) == 0,
+                fmt::format("'root_coords' must be divisible by dimension ({})", (Int) dim));
+    expect_true((leaf_coords.size() % dim) == 0,
+                fmt::format("'leaf_coords' must be divisible by dimension ({})", (Int) dim));
+    StarForest sf;
+    sf.create(comm);
+    Int n_roots = root_coords.size() / dim;
+    Int n_leaves = leaf_coords.size() / dim;
+    PETSC_CHECK(PetscSFSetGraphFromCoordinates(sf,
+                                               n_roots,
+                                               n_leaves,
+                                               dim,
+                                               tol,
+                                               root_coords.data(),
+                                               leaf_coords.data()));
+    return sf;
+}
+
 } // namespace godzilla

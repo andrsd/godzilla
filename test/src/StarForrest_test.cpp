@@ -1,5 +1,6 @@
 #include "gmock/gmock.h"
 #include "godzilla/StarForest.h"
+#include "godzilla/Array1D.h"
 #include "TestApp.h"
 
 using namespace godzilla;
@@ -134,4 +135,30 @@ TEST(StarForestTest, oper_bool)
     sf.create(app.get_comm());
     EXPECT_TRUE(sf);
     EXPECT_TRUE(csf);
+}
+
+TEST(StarForestTest, create_from_coordinates)
+{
+    TestApp app;
+    auto comm = app.get_comm();
+
+    std::vector<Real> root = { 0.1, 0.2, 0.3, 0.4 };
+    std::vector<Real> leaf = { 0.4, 0.1, 0.3 };
+    auto sf = StarForest::create_from_coordinates(comm, 1_D, root, leaf, PETSC_SMALL);
+
+    Array1D<Int> src(comm, 4);
+    src[0] = 101;
+    src[1] = 102;
+    src[2] = 103;
+    src[3] = 104;
+
+    Array1D<Int> dest(comm, 3);
+    dest.set(0);
+
+    sf.broadcast_begin(src, dest, mpi::op::replace<Int>());
+    sf.broadcast_end(src, dest, mpi::op::replace<Int>());
+
+    EXPECT_EQ(dest[0], 104);
+    EXPECT_EQ(dest[1], 101);
+    EXPECT_EQ(dest[2], 103);
 }
