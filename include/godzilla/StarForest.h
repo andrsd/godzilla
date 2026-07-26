@@ -7,6 +7,7 @@
 #include "godzilla/PetscObjectWrapper.h"
 #include "godzilla/Types.h"
 #include "godzilla/Error.h"
+#include "godzilla/Span.h"
 #include "mpicpp-lite/mpicpp-lite.h"
 #include "petscsf.h"
 #include <vector>
@@ -314,6 +315,19 @@ public:
 
     /// View a star forrest
     void view(PetscViewer viewer = PETSC_VIEWER_STDOUT_WORLD) const;
+
+public:
+    /// Create SF by fuzzy matching leaf coordinates to root coordinates
+    ///
+    /// @param dim Spatial dimension of coordinates
+    /// @param root_coords Array of root coordinates in which root `i` component `d` is `[i*dim+d]`
+    /// @param leafcoords Array of root coordinates in which leaf `i` component `d` is `[i*dim+d]`
+    /// @param tol Positive tolerance for matching
+    static StarForest create_from_coordinates(MPI_Comm comm,
+                                              Dimension dim,
+                                              Span<const Real> root_coords,
+                                              Span<const Real> leaf_coords,
+                                              Real tol);
 };
 
 } // namespace godzilla
