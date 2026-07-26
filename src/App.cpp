@@ -12,7 +12,6 @@
 #include "godzilla/Assert.h"
 #include "yaml-cpp/yaml.h"
 #include "fmt/chrono.h"
-#include <source_location>
 
 namespace YAML {
 
@@ -45,27 +44,11 @@ operator<<(Emitter & out, const godzilla::Registry::ObjectDescription & obj)
 
 namespace godzilla {
 
-namespace {
-
-String
-check_app_name(String name, std::source_location loc)
-{
-    static std::unordered_set<std::string> unique_app_names;
-
-    expect_true(not unique_app_names.contains(name),
-                fmt::format("Application name '{}' is already in use.", name),
-                loc);
-    unique_app_names.insert(name);
-    return name;
-}
-
-} // namespace
-
 Registry registry;
 
 App::App(mpi::Communicator comm, String name) :
     PrintInterface(comm, cref(*this), this->verbosity_level, name),
-    name(check_app_name(name, std::source_location::current())),
+    name(name),
     mpi_comm(comm),
     registry(godzilla::registry),
     logger(Qtr<Logger>::alloc()),
@@ -79,7 +62,7 @@ App::App(mpi::Communicator comm, String name) :
 
 App::App(mpi::Communicator comm, Registry & registry, String name) :
     PrintInterface(comm, cref(*this), this->verbosity_level, name),
-    name(check_app_name(name, std::source_location::current())),
+    name(name),
     mpi_comm(comm),
     registry(registry),
     logger(Qtr<Logger>::alloc(name)),
