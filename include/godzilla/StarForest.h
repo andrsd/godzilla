@@ -8,6 +8,7 @@
 #include "godzilla/Types.h"
 #include "godzilla/Error.h"
 #include "godzilla/Span.h"
+#include "godzilla/Layout.h"
 #include "mpicpp-lite/mpicpp-lite.h"
 #include "petscsf.h"
 #include <vector>
@@ -325,6 +326,18 @@ public:
                                               Span<const Real> root_coords,
                                               Span<const Real> leaf_coords,
                                               Real tol);
+
+    /// Create StarForest by matching root and leaf indices
+    ///
+    /// @param layout Layout defining the global index space and the MPI rank that brokers each
+    ///               index
+    /// @param root_indices Array of global indices of which this process requests ownership
+    /// @param leaf_indices Array of global indices with which this process requires data associated
+    /// @return Star forest representing the communication pattern from the root space to the leaf
+    ///         space
+    static StarForest create_by_matching_indices(const Layout & layout,
+                                                 Span<const Int> root_indices,
+                                                 Span<const Int> leaf_indices);
 };
 
 } // namespace godzilla

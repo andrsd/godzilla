@@ -162,3 +162,35 @@ TEST(StarForestTest, create_from_coordinates)
     EXPECT_EQ(dest[1], 101);
     EXPECT_EQ(dest[2], 103);
 }
+
+TEST(StarForestTest, create_by_matching_indices)
+{
+    TestApp app;
+    auto comm = app.get_comm();
+    if (comm.size() != 3)
+        return;
+
+    Int n = 0;
+    std::vector<Int> root_idxs;
+    std::vector<Int> leaf_idxs;
+    if (comm.rank() == 0) {
+        n = 2;
+        root_idxs = { 1, 0, 2 };
+        leaf_idxs = { 0 };
+    }
+    else if (comm.rank() == 1) {
+        n = 1;
+        root_idxs = { 3 };
+        leaf_idxs = { 2 };
+    }
+    else if (comm.rank() == 2) {
+        n = 1;
+        root_idxs = { 3 };
+        leaf_idxs = { 0, 3 };
+    }
+    auto layout = Layout::create_from_sizes(comm, n, PETSC_DECIDE);
+    auto sf = StarForest::create_by_matching_indices(layout, root_idxs, leaf_idxs);
+    sf.view();
+
+    comm.barrier();
+}

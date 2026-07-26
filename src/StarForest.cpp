@@ -171,4 +171,24 @@ StarForest::create_from_coordinates(mpi::Communicator comm,
     return sf;
 }
 
+StarForest
+StarForest::create_by_matching_indices(const Layout & layout,
+                                       Span<const Int> root_indices,
+                                       Span<const Int> leaf_indices)
+{
+    PetscSF sf;
+    PETSC_CHECK(PetscSFCreateByMatchingIndices(layout.get(),
+                                               root_indices.size(),
+                                               root_indices.data(),
+                                               NULL,
+                                               0,
+                                               leaf_indices.size(),
+                                               leaf_indices.data(),
+                                               NULL,
+                                               0,
+                                               NULL,
+                                               &sf));
+    return StarForest(sf);
+}
+
 } // namespace godzilla
