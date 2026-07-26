@@ -7,13 +7,27 @@ namespace godzilla {
 
 Layout::Layout() : obj(nullptr) {}
 
-Layout::Layout(PetscLayout lo) : obj(lo) {}
+Layout::Layout(PetscLayout lo) : obj(lo)
+{
+    this->obj->refcnt++;
+}
+
+Layout::~Layout()
+{
+    if (this->obj != nullptr) {
+        this->obj->refcnt--;
+        if (this->obj->refcnt == 0) {
+            PETSC_CHECK(PetscLayoutDestroy(&this->obj));
+        }
+    }
+}
 
 void
 Layout::create(mpi::Communicator comm)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(PetscLayoutCreate(comm, &this->obj));
+    this->obj->refcnt++;
 }
 
 Layout

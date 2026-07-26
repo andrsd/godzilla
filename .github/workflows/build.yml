@@ -29,6 +29,7 @@ jobs:
             build: Debug
             teciocpp: ON
             code-coverage: ON
+            valgrind: true
           - os: ubuntu-22.04
             python-version: "3.11"
             petsc: "3.24"
@@ -36,6 +37,7 @@ jobs:
             build: Release
             teciocpp: ON
             code-coverage: OFF
+            valgrind: false
           - os: ubuntu-22.04
             python-version: "3.11"
             petsc: "3.24"
@@ -43,6 +45,7 @@ jobs:
             build: Release
             teciocpp: OFF
             code-coverage: OFF
+            valgrind: false
     runs-on: ${{ matrix.os }}
     steps:
       - name: Set up miniconda
@@ -69,7 +72,9 @@ jobs:
             exodusIIcpp=3.1 \
             teciocpp \
             gtest \
+            valgrind \
             lcov
+          sudo apt install libc6-dbg
 
       - name: Configure
         run: |
@@ -85,9 +90,22 @@ jobs:
           cmake --build --preset ${{ matrix.preset }} --parallel 4
 
       - name: Run tests
+        if: matrix.valgrind == false
         run: |
           ${{ github.workspace }}/build/test/godzilla-test \
             --gtest_output=xml:${{ github.workspace }}/build/gtest-results.xml
+
+      - name: Run tests
+        if: matrix.valgrind == true
+        run: |
+          valgrind \
+            --leak-check=full \
+            --show-leak-kinds=all \
+            --track-origins=yes \
+            --error-exitcode=1 \
+            --suppressions=${{ github.workspace }}/test/assets/valgrind/unit_tests.supp \
+            ${{ github.workspace }}/build/test/godzilla-test \
+              --gtest_output=xml:${{ github.workspace }}/build/gtest-results.xml
 
       - name: Test summary
         uses: test-summary/action@v2
