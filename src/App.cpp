@@ -47,11 +47,11 @@ namespace godzilla {
 
 namespace {
 
+static std::unordered_set<std::string> unique_app_names;
+
 String
 check_app_name(String name, std::source_location loc)
 {
-    static std::unordered_set<std::string> unique_app_names;
-
     expect_true(not unique_app_names.contains(name),
                 fmt::format("Application name '{}' is already in use.", name),
                 loc);
@@ -94,6 +94,7 @@ App::App(mpi::Communicator comm, Registry & registry, String name) :
 App::~App()
 {
     CALL_STACK_MSG();
+    unique_app_names.erase(this->name);
 
     if (this->cout_buf_ != nullptr) {
         std::cout.rdbuf(this->cout_buf_);
