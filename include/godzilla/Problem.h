@@ -44,8 +44,6 @@ public:
         FieldDecomposition(Int n = 0);
 
         Int get_num_fields() const;
-
-        void destroy();
     };
 
     explicit Problem(const Parameters & pars);

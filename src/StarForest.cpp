@@ -98,12 +98,6 @@ StarForest::create(mpi::Communicator comm)
 }
 
 void
-StarForest::destroy()
-{
-    CALL_STACK_MSG();
-}
-
-void
 StarForest::reset()
 {
     CALL_STACK_MSG();

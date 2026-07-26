@@ -458,7 +458,6 @@ FENonlinearProblem::compute_residual_internal(DM dm,
         PETSC_CHECK(DMPlexRestoreCellFields(dm, chunk_is, loc_x, loc_x_t, loc_a, &u, &u_t, &a));
         PETSC_CHECK(DMRestoreWorkArray(dm, n_chunk_cells * tot_dim, MPIU_SCALAR, &elem_vec));
     }
-    chunk_is.destroy();
     cell_is.restore_point_range(c_start, c_end, cells);
 
     compute_bnd_residual_internal(dm, loc_x, loc_x_t, t, loc_f);
@@ -594,7 +593,6 @@ FENonlinearProblem::compute_bnd_residual_single_internal(DM dm,
         /* TODO: Special cases of ISIntersect where it is quick to check a priori if one is a
          * superset of the other */
         IndexSet isect = IndexSet::intersect_caching(facets, points);
-        points.destroy();
         points = isect;
 
         Int n_faces = points.get_local_size();
@@ -700,7 +698,6 @@ FENonlinearProblem::compute_bnd_residual_single_internal(DM dm,
         }
         PETSC_CHECK(DMSNESRestoreFEGeom(coord_field, points, q_geom, PETSC_TRUE, &fgeom));
         PETSC_CHECK(PetscQuadratureDestroy(&q_geom));
-        points.destroy();
         PETSC_CHECK(PetscFree4(u, u_t, elem_vec, a));
     }
 
@@ -1125,7 +1122,6 @@ FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
         // TODO: Special cases of ISIntersect where it is quick to check a prior if one is a
         // superset of the other
         auto isect = IndexSet::intersect_caching(facets, points);
-        points.destroy();
         points = isect;
 
         Int n_faces = points.get_local_size();
@@ -1255,7 +1251,6 @@ FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
         }
         PETSC_CHECK(DMSNESRestoreFEGeom(coord_field, points, q_geom, PETSC_TRUE, &fgeom));
         PETSC_CHECK(PetscQuadratureDestroy(&q_geom));
-        points.destroy();
         PETSC_CHECK(PetscFree4(u, u_t, elem_mat, a));
     }
     if (plex)

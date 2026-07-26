@@ -28,7 +28,6 @@ public:
     Vector(Vec vec);
 
     void create(mpi::Communicator comm);
-    void destroy();
 
     void set_up();
 

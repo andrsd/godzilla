@@ -77,12 +77,6 @@ KrylovSolver::create(mpi::Communicator comm)
 }
 
 void
-KrylovSolver::destroy()
-{
-    CALL_STACK_MSG();
-}
-
-void
 KrylovSolver::set_dm(DM dm)
 {
     CALL_STACK_MSG();

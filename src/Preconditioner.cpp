@@ -25,12 +25,6 @@ Preconditioner::create(mpi::Communicator comm)
 }
 
 void
-Preconditioner::destroy()
-{
-    CALL_STACK_MSG();
-}
-
-void
 Preconditioner::set_type(String type)
 {
     CALL_STACK_MSG();

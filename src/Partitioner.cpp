@@ -32,12 +32,6 @@ Partitioner::create(mpi::Communicator comm)
 }
 
 void
-Partitioner::destroy()
-{
-    CALL_STACK_MSG();
-}
-
-void
 Partitioner::set_type(String type)
 {
     CALL_STACK_MSG();

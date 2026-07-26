@@ -67,9 +67,6 @@ public:
     /// Create a star forest communication context
     void create(mpi::Communicator comm);
 
-    /// Destroy the star forest
-    void destroy();
-
     /// Reset a star forest so that different sizes or neighbors can be used
     void reset();
 

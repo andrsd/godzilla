@@ -21,14 +21,6 @@ Section::create(mpi::Communicator comm)
 }
 
 void
-Section::destroy()
-{
-    CALL_STACK_MSG();
-    // PETSC_CHECK(PetscSectionDestroy(&this->obj));
-    // this->obj = nullptr;
-}
-
-void
 Section::reset()
 {
     CALL_STACK_MSG();

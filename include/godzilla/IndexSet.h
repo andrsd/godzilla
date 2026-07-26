@@ -43,9 +43,6 @@ public:
     ///             `nmax`)
     IndexSet complement(Int nmin, Int nmax) const;
 
-    /// Destroys an index set
-    void destroy();
-
     /// Test if the index set is "null"
     ///
     /// @return `true` is the label is null, `false` otherwise

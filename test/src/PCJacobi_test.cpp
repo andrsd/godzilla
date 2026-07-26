@@ -13,7 +13,6 @@ TEST(PCJacobi, ctor_pc)
     PCJacobi jacobi(pc);
     jacobi.inc_reference();
     EXPECT_EQ(pc.get_type(), PCJACOBI);
-    pc.destroy();
 }
 
 TEST(PCJacobi, type)
@@ -32,7 +31,6 @@ TEST(PCJacobi, type)
         pc.set_type(t);
         EXPECT_EQ(pc.get_type(), t);
         pc.view();
-        pc.destroy();
     }
 
     auto o = testing::internal::GetCapturedStdout();
@@ -52,6 +50,4 @@ TEST(PCJacobi, api)
 
     pc.set_use_abs(true);
     EXPECT_EQ(pc.get_use_abs(), true);
-
-    pc.destroy();
 }

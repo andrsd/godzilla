@@ -25,12 +25,6 @@ Partitioning::create(mpi::Communicator comm)
     PETSC_CHECK(MatPartitioningCreate(comm, &this->obj));
 }
 
-void
-Partitioning::destroy()
-{
-    CALL_STACK_MSG();
-}
-
 String
 Partitioning::get_type() const
 {

@@ -17,12 +17,6 @@ Random::create(mpi::Communicator comm)
 }
 
 void
-Random::destroy()
-{
-    CALL_STACK_MSG();
-}
-
-void
 Random::get_interval(Scalar & low, Scalar & high) const
 {
     CALL_STACK_MSG();

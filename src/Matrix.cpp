@@ -38,12 +38,6 @@ Matrix::create(mpi::Communicator comm)
 }
 
 void
-Matrix::destroy()
-{
-    CALL_STACK_MSG();
-}
-
-void
 Matrix::set_up()
 {
     CALL_STACK_MSG();

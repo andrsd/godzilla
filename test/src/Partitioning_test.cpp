@@ -53,9 +53,6 @@ TEST(Partitioning, partition)
         EXPECT_EQ(vals[5], 0);
         EXPECT_EQ(vals[6], 0);
     }
-
-    p.destroy();
-    mpart.destroy();
 }
 
 TEST(Partitioning, edge_weights)
@@ -95,9 +92,6 @@ TEST(Partitioning, edge_weights)
     }
 
     EXPECT_TRUE(mpart.get_use_edge_weights());
-
-    p.destroy();
-    mpart.destroy();
 }
 
 TEST(Partitioning, vertex_weights)
@@ -124,9 +118,6 @@ TEST(Partitioning, vertex_weights)
         EXPECT_EQ(vals[3], 1);
         EXPECT_EQ(vals[4], 1);
     }
-
-    p.destroy();
-    mpart.destroy();
 }
 
 TEST(Partitioning, partition_weights)
@@ -158,7 +149,4 @@ TEST(Partitioning, partition_weights)
         EXPECT_EQ(vals[8], 1);
         EXPECT_EQ(vals[9], 1);
     }
-
-    p.destroy();
-    mpart.destroy();
 }

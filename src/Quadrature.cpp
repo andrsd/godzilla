@@ -19,12 +19,6 @@ Quadrature::create(mpi::Communicator comm)
 }
 
 void
-Quadrature::destroy()
-{
-    CALL_STACK_MSG();
-}
-
-void
 Quadrature::duplicate(Quadrature & r)
 {
     CALL_STACK_MSG();

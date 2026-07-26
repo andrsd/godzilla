@@ -35,8 +35,6 @@ DGProblemInterface::~DGProblemInterface()
     for (auto & [_, fe] : this->aux_fe) {
         PetscFEDestroy(&fe);
     }
-    this->section.destroy();
-    this->section_aux.destroy();
 }
 
 void
@@ -334,7 +332,8 @@ DGProblemInterface::set_field(FieldID id, String name, Int nc, Order k, const La
         this->fields_by_name.emplace(name, id);
     }
     else
-        throw Exception(fmt::format("Cannot add field '{}' with ID = {}. ID already exists.", name, id));
+        throw Exception(
+            fmt::format("Cannot add field '{}' with ID = {}. ID already exists.", name, id));
 }
 
 FieldID
@@ -363,7 +362,8 @@ DGProblemInterface::set_aux_field(FieldID id, String name, Int nc, Order k, cons
         this->aux_fields_by_name.emplace(name, id);
     }
     else
-        throw Exception(fmt::format("Cannot add auxiliary field '{}' with ID = {}. ID is already taken.",
+        throw Exception(
+            fmt::format("Cannot add auxiliary field '{}' with ID = {}. ID is already taken.",
                         name,
                         id));
 }
@@ -479,7 +479,6 @@ DGProblemInterface::set_up_section_constraint_dofs(Section & section)
                     section.add_constraint_dof(cell_id, n_ced_dofs);
                     section.set_field_constraint_dof(cell_id, fid.value(), n_ced_dofs);
                 }
-                points.destroy();
             }
         }
     }
@@ -530,7 +529,6 @@ DGProblemInterface::set_up_section_constraint_indicies(Section & section)
                     // section.set_constraint_indices(cell_id, indices);
                     section.set_field_constraint_indices(cell_id, fid.value(), indices);
                 }
-                points.destroy();
             }
         }
     }

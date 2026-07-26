@@ -35,10 +35,6 @@ TEST(NestVector, test)
     auto sxs = nv.get_sub_vectors();
     EXPECT_EQ(sxs[0].get_size(), 3);
     EXPECT_EQ(sxs[1].get_size(), 4);
-
-    v1.destroy();
-    v2.destroy();
-    nv.destroy();
 }
 
 TEST(NestVector, update)
@@ -64,10 +60,6 @@ TEST(NestVector, update)
     std::vector<Real> vals2(4);
     sxs[1].get_values({ 0, 1, 2, 3 }, vals2);
     EXPECT_THAT(vals2, ElementsAre(2, 4, 6, 8));
-
-    v1.destroy();
-    v2.destroy();
-    nv.destroy();
 }
 
 TEST(NestVector, duplicate)

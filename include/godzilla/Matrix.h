@@ -59,7 +59,6 @@ public:
     void set_type(const char * type);
 
     void create(mpi::Communicator comm);
-    void destroy();
 
     void set_up();
 

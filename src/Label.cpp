@@ -25,12 +25,6 @@ Label::create(mpi::Communicator comm, String name)
 }
 
 void
-Label::destroy()
-{
-    CALL_STACK_MSG();
-}
-
-void
 Label::reset()
 {
     CALL_STACK_MSG();

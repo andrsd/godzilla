@@ -26,9 +26,6 @@ public:
     /// @param comm  the MPI communicator
     void create(mpi::Communicator comm);
 
-    /// Frees the Section
-    void destroy();
-
     /// Frees all Section data, the Section is then as if `create` had just been called.
     void reset();
 
