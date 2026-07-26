@@ -9,7 +9,7 @@ namespace godzilla {
 Interpolation::Interpolation() : info(nullptr) {}
 
 void
-Interpolation::create(MPI_Comm comm)
+Interpolation::create(mpi::Communicator comm)
 {
     PETSC_CHECK(DMInterpolationCreate(comm, &this->info));
 }

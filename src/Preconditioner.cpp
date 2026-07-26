@@ -18,7 +18,7 @@ Preconditioner::Preconditioner(PC pc) : PetscObjectWrapper(pc)
 }
 
 void
-Preconditioner::create(MPI_Comm comm)
+Preconditioner::create(mpi::Communicator comm)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(PCCreate(comm, &this->obj));

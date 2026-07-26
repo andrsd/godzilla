@@ -21,7 +21,7 @@ public:
     Quadrature(PetscQuadrature quad);
 
     /// Create quadrature object
-    void create(MPI_Comm comm);
+    void create(mpi::Communicator comm);
 
     /// Destroy quadrature object
     void destroy();

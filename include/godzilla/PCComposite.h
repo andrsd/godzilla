@@ -25,7 +25,7 @@ public:
     /// Creates a preconditioner
     ///
     /// @param comm MPI communicator
-    void create(MPI_Comm comm);
+    void create(mpi::Communicator comm);
 
     /// Sets the type of composite preconditioner
     ///

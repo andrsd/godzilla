@@ -36,7 +36,7 @@ ShellMatrix::ShellMatrix(Mat m) : Matrix(m)
 }
 
 void
-ShellMatrix::create(MPI_Comm comm, Int m, Int n, Int M, Int N)
+ShellMatrix::create(mpi::Communicator comm, Int m, Int n, Int M, Int N)
 {
     CALL_STACK_MSG();
     Mat mat;

@@ -122,7 +122,7 @@ SNESolver::~SNESolver()
 }
 
 void
-SNESolver::create(MPI_Comm comm)
+SNESolver::create(mpi::Communicator comm)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(SNESCreate(comm, &this->obj));

@@ -17,7 +17,7 @@ public:
     Partitioning();
     Partitioning(MatPartitioning mp);
 
-    void create(MPI_Comm comm);
+    void create(mpi::Communicator comm);
     void destroy();
 
     /// Gets the partitioning method name

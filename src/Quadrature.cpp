@@ -12,7 +12,7 @@ Quadrature::Quadrature() : PetscObjectWrapper(nullptr) {}
 Quadrature::Quadrature(PetscQuadrature q) : PetscObjectWrapper(q) {}
 
 void
-Quadrature::create(MPI_Comm comm)
+Quadrature::create(mpi::Communicator comm)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(PetscQuadratureCreate(comm, &this->obj));

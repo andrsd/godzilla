@@ -14,7 +14,7 @@ Section::Section() : PetscObjectWrapper(nullptr) {}
 Section::Section(PetscSection s) : PetscObjectWrapper(s) {}
 
 void
-Section::create(MPI_Comm comm)
+Section::create(mpi::Communicator comm)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(PetscSectionCreate(comm, &this->obj));

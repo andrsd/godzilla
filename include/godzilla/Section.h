@@ -24,7 +24,7 @@ public:
     /// Allocates a Section and sets the map contents to the default.
     ///
     /// @param comm  the MPI communicator
-    void create(MPI_Comm comm);
+    void create(mpi::Communicator comm);
 
     /// Frees the Section
     void destroy();

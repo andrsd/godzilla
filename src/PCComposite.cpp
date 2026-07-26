@@ -19,7 +19,7 @@ PCComposite::PCComposite(PC pc) : Preconditioner(pc)
 }
 
 void
-PCComposite::create(MPI_Comm comm)
+PCComposite::create(mpi::Communicator comm)
 {
     CALL_STACK_MSG();
     Preconditioner::create(comm);

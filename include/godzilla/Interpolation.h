@@ -17,7 +17,7 @@ public:
     Interpolation();
 
     /// Creates an interpolation object
-    void create(MPI_Comm comm);
+    void create(mpi::Communicator comm);
 
     /// Destroys the interpolation object
     void destroy();

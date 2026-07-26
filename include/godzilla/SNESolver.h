@@ -73,7 +73,7 @@ public:
     explicit SNESolver(SNES snes);
 
     /// Create a solver
-    void create(MPI_Comm comm);
+    void create(mpi::Communicator comm);
 
     /// Destroy the solver
     void destroy();

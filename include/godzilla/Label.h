@@ -21,7 +21,7 @@ public:
     ///
     /// @param comm The communicator
     /// @param name The label name
-    void create(MPI_Comm comm, String name);
+    void create(mpi::Communicator comm, String name);
 
     /// Destroy the label
     void destroy();

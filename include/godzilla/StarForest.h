@@ -65,7 +65,7 @@ public:
     StarForest(PetscSF sf);
 
     /// Create a star forest communication context
-    void create(MPI_Comm comm);
+    void create(mpi::Communicator comm);
 
     /// Destroy the star forest
     void destroy();
@@ -323,7 +323,7 @@ public:
     /// @param root_coords Array of root coordinates in which root `i` component `d` is `[i*dim+d]`
     /// @param leafcoords Array of root coordinates in which leaf `i` component `d` is `[i*dim+d]`
     /// @param tol Positive tolerance for matching
-    static StarForest create_from_coordinates(MPI_Comm comm,
+    static StarForest create_from_coordinates(mpi::Communicator comm,
                                               Dimension dim,
                                               Span<const Real> root_coords,
                                               Span<const Real> leaf_coords,

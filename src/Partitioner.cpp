@@ -13,7 +13,7 @@ Partitioner::Partitioner() : PetscObjectWrapper(nullptr)
     CALL_STACK_MSG();
 }
 
-Partitioner::Partitioner(MPI_Comm comm) : PetscObjectWrapper(nullptr)
+Partitioner::Partitioner(mpi::Communicator comm) : PetscObjectWrapper(nullptr)
 {
     CALL_STACK_MSG();
     create(comm);
@@ -25,7 +25,7 @@ Partitioner::Partitioner(PetscPartitioner p) : PetscObjectWrapper(p)
 }
 
 void
-Partitioner::create(MPI_Comm comm)
+Partitioner::create(mpi::Communicator comm)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(PetscPartitionerCreate(comm, &this->obj));

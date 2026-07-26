@@ -19,7 +19,7 @@ Partitioning::Partitioning() : PetscObjectWrapper(nullptr) {}
 Partitioning::Partitioning(MatPartitioning mp) : PetscObjectWrapper(mp) {}
 
 void
-Partitioning::create(MPI_Comm comm)
+Partitioning::create(mpi::Communicator comm)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(MatPartitioningCreate(comm, &this->obj));

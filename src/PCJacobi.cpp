@@ -19,7 +19,7 @@ PCJacobi::PCJacobi(PC pc) : Preconditioner(pc)
 }
 
 void
-PCJacobi::create(MPI_Comm comm)
+PCJacobi::create(mpi::Communicator comm)
 {
     CALL_STACK_MSG();
     Preconditioner::create(comm);

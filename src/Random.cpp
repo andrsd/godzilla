@@ -10,7 +10,7 @@ namespace godzilla {
 Random::Random() : PetscObjectWrapper(nullptr) {}
 
 void
-Random::create(MPI_Comm comm)
+Random::create(mpi::Communicator comm)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(PetscRandomCreate(comm, &this->obj));

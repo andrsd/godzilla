@@ -26,7 +26,7 @@ public:
     /// @param M Number of global rows (may be PETSC_DETERMINE to have calculated if m is given)
     /// @param N Number of global columns (may be PETSC_DETERMINE to have calculated if n is
     /// given)
-    void create(MPI_Comm comm, Int m, Int n, Int M, Int N);
+    void create(mpi::Communicator comm, Int m, Int n, Int M, Int N);
 
     /// Set a matrix operation
     ///

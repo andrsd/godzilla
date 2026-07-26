@@ -14,7 +14,7 @@ namespace godzilla {
 
 Vector::Vector() : PetscObjectWrapper(nullptr) {}
 
-Vector::Vector(MPI_Comm comm) : PetscObjectWrapper(nullptr)
+Vector::Vector(mpi::Communicator comm) : PetscObjectWrapper(nullptr)
 {
     CALL_STACK_MSG();
     create(comm);
@@ -26,7 +26,7 @@ Vector::Vector(Vec vec) : PetscObjectWrapper(vec)
 }
 
 void
-Vector::create(MPI_Comm comm)
+Vector::create(mpi::Communicator comm)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(VecCreate(comm, &this->obj));
@@ -384,7 +384,7 @@ Vector::view(PetscViewer viewer) const
 }
 
 Vector
-Vector::create_seq(MPI_Comm comm, Int n)
+Vector::create_seq(mpi::Communicator comm, Int n)
 {
     CALL_STACK_MSG();
     Vector v;
@@ -393,7 +393,7 @@ Vector::create_seq(MPI_Comm comm, Int n)
 }
 
 Vector
-Vector::create_seq(MPI_Comm comm, Int bs, Int n, const Scalar array[])
+Vector::create_seq(mpi::Communicator comm, Int bs, Int n, const Scalar array[])
 {
     CALL_STACK_MSG();
     Vector v;
@@ -402,7 +402,7 @@ Vector::create_seq(MPI_Comm comm, Int bs, Int n, const Scalar array[])
 }
 
 Vector
-Vector::create_seq(MPI_Comm comm, Int bs, const std::vector<Scalar> & data)
+Vector::create_seq(mpi::Communicator comm, Int bs, const std::vector<Scalar> & data)
 {
     CALL_STACK_MSG();
     Vector v;
@@ -411,7 +411,7 @@ Vector::create_seq(MPI_Comm comm, Int bs, const std::vector<Scalar> & data)
 }
 
 Vector
-Vector::create_mpi(MPI_Comm comm, Int n, Int N)
+Vector::create_mpi(mpi::Communicator comm, Int n, Int N)
 {
     CALL_STACK_MSG();
     Vector v;
@@ -420,7 +420,7 @@ Vector::create_mpi(MPI_Comm comm, Int n, Int N)
 }
 
 Vector
-Vector::create_mpi(MPI_Comm comm, Int bs, Int n, Int N, const Scalar array[])
+Vector::create_mpi(mpi::Communicator comm, Int bs, Int n, Int N, const Scalar array[])
 {
     CALL_STACK_MSG();
     Vector v;
@@ -429,7 +429,7 @@ Vector::create_mpi(MPI_Comm comm, Int bs, Int n, Int N, const Scalar array[])
 }
 
 Vector
-Vector::create_mpi(MPI_Comm comm, Int bs, const std::vector<Scalar> & data, Int N)
+Vector::create_mpi(mpi::Communicator comm, Int bs, const std::vector<Scalar> & data, Int N)
 {
     CALL_STACK_MSG();
     Vector v;
@@ -438,7 +438,7 @@ Vector::create_mpi(MPI_Comm comm, Int bs, const std::vector<Scalar> & data, Int 
 }
 
 NestVector
-Vector::create_nest(MPI_Comm comm, const std::vector<Vector> & vecs)
+Vector::create_nest(mpi::Communicator comm, const std::vector<Vector> & vecs)
 {
     CALL_STACK_MSG();
     std::vector<Vec> vvs;
