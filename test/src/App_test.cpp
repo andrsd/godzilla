@@ -173,3 +173,11 @@ TEST(AppTest, make_parameters)
     auto pars = app.make_parameters<godzilla::Object>();
     EXPECT_EQ(pars.get<Ref<godzilla::App>>("app"), ref(app));
 }
+
+TEST(AppTest, duplicate_app_name_throws)
+{
+    mpi::Communicator comm(MPI_COMM_WORLD);
+
+    App app1(comm, "app");
+    EXPECT_DEATH({ App app2(comm, "app"); }, "Application name 'app' is already in use.");
+}
