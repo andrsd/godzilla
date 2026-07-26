@@ -15,10 +15,10 @@ namespace godzilla {
 class Partitioner : public PetscObjectWrapper<PetscPartitioner> {
 public:
     Partitioner();
-    explicit Partitioner(MPI_Comm comm);
+    explicit Partitioner(mpi::Communicator comm);
     explicit Partitioner(PetscPartitioner p);
 
-    void create(MPI_Comm comm);
+    void create(mpi::Communicator comm);
     void destroy();
 
     void set_type(String type);

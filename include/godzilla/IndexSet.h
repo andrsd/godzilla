@@ -33,7 +33,7 @@ public:
     /// Creates an index set object
     ///
     /// @param comm The MPI communicator
-    void create(MPI_Comm comm);
+    void create(mpi::Communicator comm);
 
     /// Generates the complement index set. That is all indices that are NOT in the given set.
     ///
@@ -176,9 +176,10 @@ public:
     /// @param idx The length of the index set
     /// @param copy_mode The copy mode see, `CopyMode` for details
     static IndexSet
-    create_general(MPI_Comm comm, Span<const Int> idx, CopyMode copy_mode = COPY_VALUES);
-    static IndexSet
-    create_general(MPI_Comm comm, std::initializer_list<Int> idx, CopyMode copy_mode = COPY_VALUES);
+    create_general(mpi::Communicator comm, Span<const Int> idx, CopyMode copy_mode = COPY_VALUES);
+    static IndexSet create_general(mpi::Communicator comm,
+                                   std::initializer_list<Int> idx,
+                                   CopyMode copy_mode = COPY_VALUES);
 
     static IndexSet intersect_caching(const IndexSet & is1, const IndexSet & is2);
 
@@ -200,7 +201,7 @@ public:
     /// @param comm The MPI communicator
     /// @param is_list The list of index sets to concatenate
     /// @return The concatenated index set
-    static IndexSet concatenate(MPI_Comm comm, const std::vector<IndexSet> & is_list);
+    static IndexSet concatenate(mpi::Communicator comm, const std::vector<IndexSet> & is_list);
 
     /// Computes the difference between two index sets.
     ///

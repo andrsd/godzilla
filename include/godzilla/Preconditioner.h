@@ -19,7 +19,7 @@ public:
     /// Creates a preconditioner
     ///
     /// @param comm MPI communicator
-    void create(MPI_Comm comm);
+    void create(mpi::Communicator comm);
 
     /// Destroys the preconditioner
     void destroy();

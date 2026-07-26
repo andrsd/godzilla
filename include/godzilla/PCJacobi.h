@@ -21,7 +21,7 @@ public:
     /// Creates a preconditioner
     ///
     /// @param comm MPI communicator
-    void create(MPI_Comm comm);
+    void create(mpi::Communicator comm);
 
     /// Causes the preconditioner to use either the diagonal, the maximum entry in each row, or the
     /// sum of rows entries for the diagonal preconditioner

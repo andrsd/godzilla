@@ -91,7 +91,7 @@ StarForest::StarForest() : PetscObjectWrapper(nullptr) {}
 StarForest::StarForest(PetscSF sf) : PetscObjectWrapper(sf) {}
 
 void
-StarForest::create(MPI_Comm comm)
+StarForest::create(mpi::Communicator comm)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(PetscSFCreate(comm, &this->obj));
@@ -152,7 +152,7 @@ StarForest::view(PetscViewer viewer) const
 }
 
 StarForest
-StarForest::create_from_coordinates(MPI_Comm comm,
+StarForest::create_from_coordinates(mpi::Communicator comm,
                                     Dimension dim,
                                     Span<const Real> root_coords,
                                     Span<const Real> leaf_coords,

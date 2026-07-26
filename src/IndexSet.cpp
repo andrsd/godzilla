@@ -15,7 +15,7 @@ IndexSet::IndexSet() : PetscObjectWrapper(nullptr) {}
 IndexSet::IndexSet(IS is) : PetscObjectWrapper(is) {}
 
 void
-IndexSet::create(MPI_Comm comm)
+IndexSet::create(mpi::Communicator comm)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(ISCreate(comm, &this->obj));
@@ -88,7 +88,7 @@ IndexSet::duplicate() const
 }
 
 IndexSet
-IndexSet::create_general(MPI_Comm comm, Span<const Int> idx, CopyMode copy_mode)
+IndexSet::create_general(mpi::Communicator comm, Span<const Int> idx, CopyMode copy_mode)
 {
     CALL_STACK_MSG();
     IndexSet is;
@@ -97,7 +97,7 @@ IndexSet::create_general(MPI_Comm comm, Span<const Int> idx, CopyMode copy_mode)
 }
 
 IndexSet
-IndexSet::create_general(MPI_Comm comm, std::initializer_list<Int> idx, CopyMode copy_mode)
+IndexSet::create_general(mpi::Communicator comm, std::initializer_list<Int> idx, CopyMode copy_mode)
 {
     CALL_STACK_MSG();
     IndexSet is;
@@ -211,7 +211,7 @@ IndexSet::complement(Int nmin, Int nmax) const
 }
 
 IndexSet
-IndexSet::concatenate(MPI_Comm comm, const std::vector<IndexSet> & is_list)
+IndexSet::concatenate(mpi::Communicator comm, const std::vector<IndexSet> & is_list)
 {
     CALL_STACK_MSG();
     IndexSet out;

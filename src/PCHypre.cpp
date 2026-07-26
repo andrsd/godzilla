@@ -26,7 +26,7 @@ PCHypre::PCHypre(PC pc) : Preconditioner(pc)
 }
 
 void
-PCHypre::create(MPI_Comm comm)
+PCHypre::create(mpi::Communicator comm)
 {
     CALL_STACK_MSG();
 #ifdef PETSC_HAVE_HYPRE

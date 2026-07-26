@@ -9,7 +9,7 @@ namespace {
 
 // Create the adjacency matrix for a 1D mesh with `n` elements
 Matrix
-create_adj_mat_1d(MPI_Comm comm, Int n)
+create_adj_mat_1d(mpi::Communicator comm, Int n)
 {
     auto adj = Matrix::create_seq_aij(comm, n, n, 2);
     for (Int i = 0; i < n; ++i) {

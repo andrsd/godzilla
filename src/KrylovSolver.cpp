@@ -70,7 +70,7 @@ KrylovSolver::KrylovSolver() : PetscObjectWrapper(nullptr) {}
 KrylovSolver::KrylovSolver(KSP ksp) : PetscObjectWrapper(ksp) {}
 
 void
-KrylovSolver::create(MPI_Comm comm)
+KrylovSolver::create(mpi::Communicator comm)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(KSPCreate(comm, &this->obj));

@@ -19,7 +19,7 @@ PCFieldSplit::PCFieldSplit(PC pc) : Preconditioner(pc)
 }
 
 void
-PCFieldSplit::create(MPI_Comm comm)
+PCFieldSplit::create(mpi::Communicator comm)
 {
     CALL_STACK_MSG();
     Preconditioner::create(comm);

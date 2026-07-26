@@ -58,7 +58,7 @@ public:
     /// @param type The matrix type
     void set_type(const char * type);
 
-    void create(MPI_Comm comm);
+    void create(mpi::Communicator comm);
     void destroy();
 
     void set_up();
@@ -215,12 +215,19 @@ public:
 
     void view(PetscViewer viewer = PETSC_VIEWER_STDOUT_WORLD) const;
 
-    static Matrix create_seq_aij(MPI_Comm comm, Int m, Int n, Int nz);
-    static Matrix create_seq_aij(MPI_Comm comm, Int m, Int n, const std::vector<Int> & nnz);
-    static Matrix create_aij(MPI_Comm comm, Int m, Int n, Int M, Int N, Int d_nz, Int o_nz);
+    static Matrix create_seq_aij(mpi::Communicator comm, Int m, Int n, Int nz);
     static Matrix
-    create_aij(MPI_Comm comm, Int m, Int n, Int M, Int N, Span<Int> d_nnz, Span<Int> o_nnz);
-    static ShellMatrix create_shell(MPI_Comm comm, Int m, Int n, Int M, Int N);
+    create_seq_aij(mpi::Communicator comm, Int m, Int n, const std::vector<Int> & nnz);
+    static Matrix
+    create_aij(mpi::Communicator comm, Int m, Int n, Int M, Int N, Int d_nz, Int o_nz);
+    static Matrix create_aij(mpi::Communicator comm,
+                             Int m,
+                             Int n,
+                             Int M,
+                             Int N,
+                             Span<Int> d_nnz,
+                             Span<Int> o_nnz);
+    static ShellMatrix create_shell(mpi::Communicator comm, Int m, Int n, Int M, Int N);
 
     /// Preallocate SeqAIJ matrix storage
     ///

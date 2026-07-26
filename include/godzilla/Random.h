@@ -15,7 +15,7 @@ class Random : public PetscObjectWrapper<PetscRandom> {
 public:
     Random();
 
-    void create(MPI_Comm comm);
+    void create(mpi::Communicator comm);
     void destroy();
 
     void get_interval(Scalar & low, Scalar & high) const;

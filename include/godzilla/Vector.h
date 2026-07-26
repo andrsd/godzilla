@@ -24,10 +24,10 @@ class VectorBorrowedArrayRead;
 class Vector : public PetscObjectWrapper<Vec> {
 public:
     Vector();
-    Vector(MPI_Comm comm);
+    Vector(mpi::Communicator comm);
     Vector(Vec vec);
 
-    void create(MPI_Comm comm);
+    void create(mpi::Communicator comm);
     void destroy();
 
     void set_up();
@@ -227,7 +227,7 @@ public:
 
     // operator Vec() const;
 
-    static Vector create_seq(MPI_Comm comm, Int n);
+    static Vector create_seq(mpi::Communicator comm, Int n);
 
     /// Creates a standard, sequential array-style vector, where the user provides the array space
     /// to store the vector values.
@@ -236,7 +236,7 @@ public:
     /// @param bs Block size
     /// @param n Vector length
     /// @param array Memory where the vector elements are to be stored.
-    static Vector create_seq(MPI_Comm comm, Int bs, Int n, const Scalar array[]);
+    static Vector create_seq(mpi::Communicator comm, Int bs, Int n, const Scalar array[]);
 
     /// Creates a standard, sequential array-style vector, where the user provides the array space
     /// to store the vector values.
@@ -244,14 +244,14 @@ public:
     /// @param comm MPI communicator
     /// @param bs Block size
     /// @param array Memory where the vector elements are to be stored.
-    static Vector create_seq(MPI_Comm comm, Int bs, const std::vector<Scalar> & data);
+    static Vector create_seq(mpi::Communicator comm, Int bs, const std::vector<Scalar> & data);
 
     /// Creates a parallel vector.
     ///
     /// @param comm the MPI communicator to use
     /// @param n Local vector length (or PETSC_DECIDE to have calculated if N is given)
     /// @param N global vector length (or PETSC_DETERMINE to have calculated if n is given)
-    static Vector create_mpi(MPI_Comm comm, Int n, Int N);
+    static Vector create_mpi(mpi::Communicator comm, Int n, Int N);
 
     /// Creates a parallel, array-style vector, where the user provides the array space to store the
     /// vector values.
@@ -261,7 +261,7 @@ public:
     /// @param n Local vector length, cannot be PETSC_DECIDE
     /// @param N Global vector length (or PETSC_DETERMINE to have it calculated)
     /// @param array The user-provided array to store the vector values
-    static Vector create_mpi(MPI_Comm comm, Int bs, Int n, Int N, const Scalar array[]);
+    static Vector create_mpi(mpi::Communicator comm, Int bs, Int n, Int N, const Scalar array[]);
 
     /// Creates a parallel, array-style vector, where the user provides the array space to store the
     /// vector values.
@@ -270,14 +270,16 @@ public:
     /// @param bs Block size
     /// @param data The user-provided array to store the vector values
     /// @param N Global vector length (or PETSC_DETERMINE to have it calculated)
-    static Vector
-    create_mpi(MPI_Comm comm, Int bs, const std::vector<Scalar> & data, Int N = PETSC_DETERMINE);
+    static Vector create_mpi(mpi::Communicator comm,
+                             Int bs,
+                             const std::vector<Scalar> & data,
+                             Int N = PETSC_DETERMINE);
 
     /// Creates a new vector containing several nested subvectors, each stored separately
     ///
     /// @param comm The MPI communicator to use
     /// @param vecs The subvectors to be nested
-    static NestVector create_nest(MPI_Comm comm, const std::vector<Vector> & vecs);
+    static NestVector create_nest(mpi::Communicator comm, const std::vector<Vector> & vecs);
 };
 
 template <Int N>

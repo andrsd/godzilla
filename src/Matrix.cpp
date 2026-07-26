@@ -31,7 +31,7 @@ Matrix::set_type(const char * type)
 }
 
 void
-Matrix::create(MPI_Comm comm)
+Matrix::create(mpi::Communicator comm)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(MatCreate(comm, &this->obj));
@@ -344,7 +344,7 @@ Matrix::view(PetscViewer viewer) const
 }
 
 Matrix
-Matrix::create_seq_aij(MPI_Comm comm, Int m, Int n, Int nz)
+Matrix::create_seq_aij(mpi::Communicator comm, Int m, Int n, Int nz)
 {
     CALL_STACK_MSG();
     Mat mat;
@@ -353,7 +353,7 @@ Matrix::create_seq_aij(MPI_Comm comm, Int m, Int n, Int nz)
 }
 
 Matrix
-Matrix::create_seq_aij(MPI_Comm comm, Int m, Int n, const std::vector<Int> & nnz)
+Matrix::create_seq_aij(mpi::Communicator comm, Int m, Int n, const std::vector<Int> & nnz)
 {
     CALL_STACK_MSG();
     Mat mat;
@@ -362,7 +362,7 @@ Matrix::create_seq_aij(MPI_Comm comm, Int m, Int n, const std::vector<Int> & nnz
 }
 
 Matrix
-Matrix::create_aij(MPI_Comm comm, Int m, Int n, Int M, Int N, Int d_nz, Int o_nz)
+Matrix::create_aij(mpi::Communicator comm, Int m, Int n, Int M, Int N, Int d_nz, Int o_nz)
 {
     CALL_STACK_MSG();
     Mat mat;
@@ -371,7 +371,13 @@ Matrix::create_aij(MPI_Comm comm, Int m, Int n, Int M, Int N, Int d_nz, Int o_nz
 }
 
 Matrix
-Matrix::create_aij(MPI_Comm comm, Int m, Int n, Int M, Int N, Span<Int> d_nnz, Span<Int> o_nnz)
+Matrix::create_aij(mpi::Communicator comm,
+                   Int m,
+                   Int n,
+                   Int M,
+                   Int N,
+                   Span<Int> d_nnz,
+                   Span<Int> o_nnz)
 {
     CALL_STACK_MSG();
     GODZILLA_ASSERT_TRUE(
@@ -386,7 +392,7 @@ Matrix::create_aij(MPI_Comm comm, Int m, Int n, Int M, Int N, Span<Int> d_nnz, S
 }
 
 ShellMatrix
-Matrix::create_shell(MPI_Comm comm, Int m, Int n, Int M, Int N)
+Matrix::create_shell(mpi::Communicator comm, Int m, Int n, Int M, Int N)
 {
     Mat mat;
     PETSC_CHECK(MatCreateShell(comm, m, n, M, N, nullptr, &mat));
