@@ -388,6 +388,15 @@ public:
     /// @return `true` if the cell is owned by this process, `false` otherwise
     bool is_my_cell(Int cell) const;
 
+    /// Extract a hypersurface from the mesh using vertices defined by a label
+    ///
+    /// @param vertex_label Label marking points contained in the surface
+    /// @param value The label value to use
+    /// @param marked_faces `true` if surface faces are marked in addition to vertices, `false` if
+    ///        only vertices are marked
+    /// @return The surface mesh
+    UnstructuredMesh create_submesh(Label vertex_label, Int value, bool marked_faces) const;
+
 private:
     /// Cell set names
     std::map<Int, String> cell_set_names;
