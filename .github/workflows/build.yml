@@ -74,7 +74,8 @@ jobs:
             gtest \
             valgrind \
             lcov
-          sudo apt install libc6-dbg
+          sudo apt-get update
+          sudo apt-get install -y libc6-dbg
 
       - name: Configure
         run: |
