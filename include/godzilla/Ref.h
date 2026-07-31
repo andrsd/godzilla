@@ -94,9 +94,9 @@ private:
 template <typename T>
 class Ref<const T> {
 public:
-    explicit Ref(const T & ref) noexcept : ptr_(&ref) {}
+    Ref(const T & ref) noexcept : ptr_(&ref) {}
 
-    explicit Ref(Ref<T> ref) noexcept : ptr_(ref.ptr_) {}
+    Ref(Ref<T> ref) noexcept : ptr_(ref.ptr_) {}
 
     template <typename U>
         requires std::is_convertible_v<U *, T *>
