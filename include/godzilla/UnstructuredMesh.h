@@ -462,11 +462,17 @@ points_from_label(const Label & label)
 /// @param facets Boundary facets
 /// @return Boundary vertices
 inline IndexSet
-boundary_vertices(const UnstructuredMesh * mesh, const IndexSet & facets)
+boundary_vertices(const UnstructuredMesh & mesh, const IndexSet & facets)
 {
-    auto vertices = mesh->get_cone_recursive_vertices(facets);
+    auto vertices = mesh.get_cone_recursive_vertices(facets);
     vertices.sort_remove_dups();
     return vertices;
+}
+
+inline IndexSet
+boundary_vertices(Ref<const UnstructuredMesh> mesh, const IndexSet & facets)
+{
+    return boundary_vertices(*mesh, facets);
 }
 
 /// Compute a map of cells common to a vertex

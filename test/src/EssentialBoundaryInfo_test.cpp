@@ -72,7 +72,7 @@ TEST(EssentialBoundaryTest, test_2d)
 
     {
         auto bnd_facets = points_from_label(mesh->get_label("left"));
-        auto vtxs = boundary_vertices(mesh.get(), bnd_facets);
+        auto vtxs = boundary_vertices(*mesh, bnd_facets);
         TestBoundary2D bnd(ref(*mesh), vtxs);
         bnd.create();
         EXPECT_DOUBLE_EQ(bnd.num_vertices(), 2);
@@ -83,7 +83,7 @@ TEST(EssentialBoundaryTest, test_2d)
 
     {
         auto bnd_facets = points_from_label(mesh->get_label("bottom"));
-        auto vtxs = boundary_vertices(mesh.get(), bnd_facets);
+        auto vtxs = boundary_vertices(*mesh, bnd_facets);
         TestBoundary2D bnd(ref(*mesh), vtxs);
         bnd.create();
         EXPECT_DOUBLE_EQ(bnd.num_vertices(), 2);
@@ -103,7 +103,7 @@ TEST(EssentialBoundaryTest, test_3d)
     {
         auto label = mesh->get_label("left");
         auto bnd_facets = points_from_label(label);
-        auto vtxs = boundary_vertices(mesh.get(), bnd_facets);
+        auto vtxs = boundary_vertices(*mesh, bnd_facets);
         TestBoundary3D bnd(ref(*mesh), vtxs);
         bnd.create();
         EXPECT_DOUBLE_EQ(bnd.num_vertices(), 3);
