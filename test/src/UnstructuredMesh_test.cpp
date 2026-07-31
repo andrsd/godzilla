@@ -7,6 +7,7 @@
 #include "godzilla/MeshFactory.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Parameters.h"
+#include "godzilla/Formatters.h"
 #include "ExceptionTestMacros.h"
 #include "godzilla/Utils.h"
 #include "petscdmplex.h"
@@ -716,4 +717,39 @@ TEST(UnstructuredMeshTest, get_block_id_from_region_via_name)
     auto res = get_block_id_from_region(*m, "block");
     EXPECT_TRUE(res.has_value());
     EXPECT_EQ(res.value(), 1);
+}
+
+TEST(UnstructuredMeshTest, create_submesh)
+{
+    TestApp app;
+    auto comm = app.get_comm();
+
+    auto file = fs::path(GODZILLA_UNIT_TESTS_ROOT) / "assets" / "mesh" / "square.e";
+
+    auto params = app.make_parameters<FileMesh>();
+    params.set<fs::path>("file", file);
+    auto mesh_qtr = MeshFactory::create<FileMesh>(params);
+    auto m = mesh_qtr.get();
+
+    auto left = m->get_label("left");
+    auto ids = left.get_values();
+    auto left_is = left.get_stratum(ids[0]);
+    auto left_verts = m->get_cone_recursive_vertices(left_is);
+    left_verts.sort_remove_dups();
+
+    constexpr Int id = 100;
+    Label lbl;
+    lbl.create(comm, "asdf");
+    lbl.set_stratum(id, left_verts);
+
+    auto submesh = m->create_submesh(lbl, id, false);
+
+    std::vector<Int> facet_ids;
+    std::vector<PolytopeType> facet_types;
+    for (auto c : submesh.get_face_range()) {
+        facet_ids.push_back(c);
+        facet_types.push_back(submesh.get_cell_type(c));
+    }
+    EXPECT_THAT(facet_ids, testing::ElementsAre(5, 6));
+    EXPECT_THAT(facet_types, testing::ElementsAre(PolytopeType::SEGMENT, PolytopeType::SEGMENT));
 }

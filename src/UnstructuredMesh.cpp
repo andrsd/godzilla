@@ -829,4 +829,17 @@ UnstructuredMesh::is_my_cell(Int cell) const
     return my_cells.get_value(cell) == 1;
 }
 
+UnstructuredMesh
+UnstructuredMesh::create_submesh(Label vertex_label, Int value, bool marked_faces) const
+{
+    CALL_STACK_MSG();
+    DM subdm;
+    PETSC_CHECK(DMPlexCreateSubmesh(this->obj,
+                                    vertex_label,
+                                    value,
+                                    marked_faces ? PETSC_TRUE : PETSC_FALSE,
+                                    &subdm));
+    return UnstructuredMesh(subdm);
+}
+
 } // namespace godzilla
