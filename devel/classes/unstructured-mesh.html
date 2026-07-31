@@ -190,6 +190,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh21create_my_cells_labelEv"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::create_my_cells_label()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh22create_my_facets_labelEv"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::create_my_facets_label()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh10is_my_cellE3Int"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::is_my_cell()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh14create_submeshE5Label3Intb"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::create_submesh()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh20build_from_cell_listEN3mpi12CommunicatorE9Dimension3IntRKNSt6vectorI3IntEE9DimensionRKNSt6vectorI4RealEEb"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::build_from_cell_list()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh16get_polytope_dimE12PolytopeType"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_polytope_dim()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh11invert_cellE12PolytopeType4SpanI3IntE"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::invert_cell()</span></code></a></li>
@@ -1010,6 +1011,24 @@
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if the cell is owned by this process, <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla16UnstructuredMesh14create_submeshE5Label3Intb">
+<span id="_CPPv3NK8godzilla16UnstructuredMesh14create_submeshE5Label3Intb"></span><span id="_CPPv2NK8godzilla16UnstructuredMesh14create_submeshE5Label3Intb"></span><span id="godzilla::UnstructuredMesh::create_submesh__Label.Int.bC"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1a42105981a0afb4495ead230fe98f4c1a"></span><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMeshE" title="godzilla::UnstructuredMesh"><span class="n"><span class="pre">UnstructuredMesh</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create_submesh</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="label.html#_CPPv4N8godzilla5LabelE" title="godzilla::Label"><span class="n"><span class="pre">Label</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">vertex_label</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">marked_faces</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla16UnstructuredMesh14create_submeshE5Label3Intb" title="Link to this definition"></a><br /></dt>
+<dd><p>Extract a hypersurface from the mesh using vertices defined by a label. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vertex_label</strong> – <a class="reference internal" href="label.html#classgodzilla_1_1_label"><span class="std std-ref">Label</span></a> marking points contained in the surface </p></li>
+<li><p><strong>value</strong> – The label value to use </p></li>
+<li><p><strong>marked_faces</strong> – <code class="docutils literal notranslate"><span class="pre">true</span></code> if surface faces are marked in addition to vertices, <code class="docutils literal notranslate"><span class="pre">false</span></code> if only vertices are marked </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The surface mesh </p>
 </dd>
 </dl>
 </dd></dl>
