@@ -194,3 +194,29 @@ TEST(StarForestTest, create_by_matching_indices)
 
     comm.barrier();
 }
+
+TEST(StarForestTest, create_inverse)
+{
+    TestApp app;
+    auto comm = app.get_comm();
+
+    std::vector<Real> root = { 0.1, 0.3, 0.2 };
+    std::vector<Real> leaf = { 0.3, 0.2, 0.1 };
+    auto sf = StarForest::create_from_coordinates(comm, 1_D, root, leaf, PETSC_SMALL);
+    auto isf = sf.create_inverse();
+
+    Array1D<Int> src(comm, 3);
+    src[0] = 101;
+    src[1] = 102;
+    src[2] = 103;
+
+    Array1D<Int> dest(comm, 3);
+    dest.set(0);
+
+    isf.broadcast_begin(src, dest, mpi::op::replace<Int>());
+    isf.broadcast_end(src, dest, mpi::op::replace<Int>());
+
+    EXPECT_EQ(dest[0], 103);
+    EXPECT_EQ(dest[1], 101);
+    EXPECT_EQ(dest[2], 102);
+}
