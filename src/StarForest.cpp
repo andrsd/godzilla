@@ -138,6 +138,15 @@ StarForest::set_graph(Int n_roots,
                                 PETSC_COPY_VALUES));
 }
 
+StarForest
+StarForest::create_inverse() const
+{
+    CALL_STACK_MSG();
+    PetscSF isf;
+    PETSC_CHECK(PetscSFCreateInverseSF(this->obj, &isf));
+    return isf;
+}
+
 void
 StarForest::view(PetscViewer viewer) const
 {

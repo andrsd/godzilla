@@ -311,6 +311,11 @@ public:
         scatter_end(root.get_data(), leaf.get_data());
     }
 
+    /// Creates the inverse map (all roots have must have degree 1 - exactly one leaf)
+    ///
+    /// @return Inverse of the star forest
+    StarForest create_inverse() const;
+
     /// View a star forrest
     void view(PetscViewer viewer = PETSC_VIEWER_STDOUT_WORLD) const;
 
