@@ -1278,6 +1278,18 @@ FENonlinearProblem::on_final()
     NonlinearProblem::on_final();
 }
 
+void
+FENonlinearProblem::run()
+{
+    CALL_STACK_MSG();
+    set_initial_guess();
+    on_initial();
+
+    solve();
+    if (converged())
+        on_final();
+}
+
 Real
 FENonlinearProblem::get_time() const
 {

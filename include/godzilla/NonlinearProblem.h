@@ -21,6 +21,7 @@ public:
 
     void create() override;
     void run() override;
+
     void write_restart_file(RestartFile & file) const override;
     void read_restart_file(const RestartFile & file) override;
 
@@ -51,14 +52,8 @@ public:
     /// @param mf use matrix-free for both the A and P matrices
     void set_use_matrix_free(bool mf_operator, bool mf);
 
-    /// Called before the solve
-    virtual void pre_solve();
-
     /// Solve the problem
     void solve();
-
-    /// Called after the solve
-    virtual void post_solve();
 
 protected:
     /// Set residual vector

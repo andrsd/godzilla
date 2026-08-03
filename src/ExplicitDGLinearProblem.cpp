@@ -69,17 +69,6 @@ ExplicitDGLinearProblem::solve()
     TransientProblemInterface::solve(get_solution_vector());
 }
 
-void
-ExplicitDGLinearProblem::run()
-{
-    CALL_STACK_MSG();
-    pre_solve();
-    solve();
-    post_solve();
-    if (converged())
-        on_final();
-}
-
 bool
 ExplicitDGLinearProblem::converged()
 {

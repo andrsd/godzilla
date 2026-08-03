@@ -69,17 +69,6 @@ ExplicitFVLinearProblem::solve()
     TransientProblemInterface::solve(get_solution_vector());
 }
 
-void
-ExplicitFVLinearProblem::run()
-{
-    CALL_STACK_MSG();
-    pre_solve();
-    solve();
-    post_solve();
-    if (converged())
-        on_final();
-}
-
 bool
 ExplicitFVLinearProblem::converged()
 {

@@ -176,9 +176,7 @@ void
 LinearProblem::run()
 {
     CALL_STACK_MSG();
-    pre_solve();
     solve();
-    post_solve();
     if (converged())
         on_final();
 }
@@ -194,18 +192,6 @@ LinearProblem::create_preconditioner(PC pc)
 {
     CALL_STACK_MSG();
     return Preconditioner(pc);
-}
-
-void
-LinearProblem::pre_solve()
-{
-    CALL_STACK_MSG();
-}
-
-void
-LinearProblem::post_solve()
-{
-    CALL_STACK_MSG();
 }
 
 void

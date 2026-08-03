@@ -20,21 +20,17 @@ public:
     explicit LinearProblem(const Parameters & pars);
 
     void create() override;
-    void run() override;
+
     void write_restart_file(RestartFile & file) const override;
     void read_restart_file(const RestartFile & file) override;
-
-    /// Call before `solve()`
-    virtual void pre_solve();
 
     /// Solve the linear problem
     void solve();
 
-    /// Call after `solve()`
-    virtual void post_solve();
-
     /// true if solve converged, otherwise false
     bool converged();
+
+    void run() override;
 
 protected:
     /// Get KSP type

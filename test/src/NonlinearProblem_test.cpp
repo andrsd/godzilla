@@ -142,7 +142,6 @@ TEST(NonlinearProblemTest, run)
         explicit MockNonlinearProblem(const Parameters & pars) : NonlinearProblem(pars) {}
 
         MOCK_METHOD(void, set_up_initial_guess, ());
-        MOCK_METHOD(void, on_initial, ());
 
         void
         compute_residual(const Vector &, Vector & f)
@@ -180,7 +179,6 @@ TEST(NonlinearProblemTest, run)
     prob.create();
 
     EXPECT_CALL(prob, set_up_initial_guess).Times(1);
-    EXPECT_CALL(prob, on_initial).Times(1);
     prob.run();
     EXPECT_TRUE(prob.compute_residual_called);
     EXPECT_FALSE(prob.compute_jacobian_called);
