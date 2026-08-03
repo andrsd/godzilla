@@ -20,6 +20,10 @@ public:
     explicit NonlinearProblem(const Parameters & pars);
 
     void create() override;
+
+    /// Set initial guess
+    void set_initial_guess();
+
     void run() override;
 
     void write_restart_file(RestartFile & file) const override;
@@ -64,9 +68,6 @@ protected:
 
     /// Initialize the problem
     virtual void init();
-
-    /// Set up initial guess
-    virtual void set_up_initial_guess();
 
     /// Allocate Jacobian/residual objects
     void allocate_objects() override;

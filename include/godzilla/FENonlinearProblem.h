@@ -20,6 +20,7 @@ public:
     explicit FENonlinearProblem(const Parameters & pars);
 
     void create() override;
+    void set_initial_guess();
     Real get_time() const override;
     void compute_solution_vector_local() override;
     void on_initial();
@@ -30,7 +31,6 @@ public:
 protected:
     void init() override;
     void set_up_callbacks() override;
-    void set_up_initial_guess() override;
     void allocate_objects() override;
 
     /// Set a function to insert, for example, essential boundary conditions into a ghosted solution

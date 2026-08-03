@@ -101,11 +101,11 @@ ExplicitFVLinearProblem::set_up_callbacks()
 }
 
 void
-ExplicitFVLinearProblem::set_up_initial_guess()
+ExplicitFVLinearProblem::set_initial_guess()
 {
     CALL_STACK_MSG();
     TIMED_EVENT(9, "InitialGuess", "Setting initial guess");
-    DiscreteProblemInterface::set_up_initial_guess();
+    DiscreteProblemInterface::set_initial_guess();
 }
 
 void

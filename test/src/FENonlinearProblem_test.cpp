@@ -162,7 +162,7 @@ TEST_F(FENonlinearProblemTest, add_duplicate_aux_field_id)
                      "Cannot add auxiliary field 'second' with ID = 0. ID is already taken.");
 }
 
-TEST_F(FENonlinearProblemTest, set_up_initial_guess)
+TEST_F(FENonlinearProblemTest, set_initial_guess)
 {
     auto prob = this->app->get_problem<GTestFENonlinearProblem>();
 
@@ -172,7 +172,7 @@ TEST_F(FENonlinearProblemTest, set_up_initial_guess)
 
     prob->create();
 
-    prob->set_up_initial_guess();
+    prob->set_initial_guess();
 
     auto x = prob->get_solution_vector();
     Real l2_norm = 0;
@@ -185,7 +185,7 @@ TEST_F(FENonlinearProblemTest, zero_initial_guess)
     auto prob = this->app->get_problem<GTestFENonlinearProblem>();
 
     prob->create();
-    prob->set_up_initial_guess();
+    prob->set_initial_guess();
 
     auto x = prob->get_solution_vector();
     Real l2_norm = 0;

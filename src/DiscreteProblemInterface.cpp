@@ -474,7 +474,7 @@ DiscreteProblemInterface::set_initial_guess_from_ics()
 }
 
 void
-DiscreteProblemInterface::set_up_initial_guess()
+DiscreteProblemInterface::set_initial_guess()
 {
     CALL_STACK_MSG();
     if (!this->ics_.empty())

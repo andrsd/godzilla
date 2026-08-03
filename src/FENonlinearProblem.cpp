@@ -212,11 +212,11 @@ FENonlinearProblem::set_up_callbacks()
 }
 
 void
-FENonlinearProblem::set_up_initial_guess()
+FENonlinearProblem::set_initial_guess()
 {
     CALL_STACK_MSG();
     TIMED_EVENT(9, "InitialGuess", "Setting initial guess");
-    FEProblemInterface::set_up_initial_guess();
+    FEProblemInterface::set_initial_guess();
 }
 
 void

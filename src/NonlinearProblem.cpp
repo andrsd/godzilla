@@ -170,7 +170,7 @@ NonlinearProblem::set_use_matrix_free(bool mf_operator, bool mf)
 }
 
 void
-NonlinearProblem::set_up_initial_guess()
+NonlinearProblem::set_initial_guess()
 {
     CALL_STACK_MSG();
     TIMED_EVENT(9, "InitialGuess", "Setting initial guess");
@@ -330,7 +330,7 @@ void
 NonlinearProblem::run()
 {
     CALL_STACK_MSG();
-    set_up_initial_guess();
+    set_initial_guess();
     on_initial();
 
     solve();

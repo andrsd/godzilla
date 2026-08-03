@@ -198,6 +198,8 @@ public:
     /// @return Pointer to the initial condition object
     Optional<Ref<InitialCondition>> get_initial_condition(String name) const;
 
+    void set_initial_guess();
+
     /// Add boundary condition
     ///
     /// @param pars Paremeters used to construct BoundaryCondition object
@@ -325,8 +327,6 @@ protected:
                                   const std::map<FieldID, Int> & field_comps);
 
     void set_initial_guess_from_ics();
-
-    virtual void set_up_initial_guess();
 
     /// Set up initial conditions
     virtual void set_up_initial_conditions();
