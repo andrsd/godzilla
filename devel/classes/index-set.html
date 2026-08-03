@@ -119,6 +119,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla8IndexSet16sort_remove_dupsEv"><code class="docutils literal notranslate"><span class="pre">IndexSet::sort_remove_dups()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla8IndexSet4viewE11PetscViewer"><code class="docutils literal notranslate"><span class="pre">IndexSet::view()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla8IndexSet14create_generalEN3mpi12CommunicatorE4SpanIK3IntE8CopyMode"><code class="docutils literal notranslate"><span class="pre">IndexSet::create_general()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla8IndexSet13create_strideEN3mpi12CommunicatorE3Int3Int3Int"><code class="docutils literal notranslate"><span class="pre">IndexSet::create_stride()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla8IndexSet9intersectERK8IndexSetRK8IndexSet"><code class="docutils literal notranslate"><span class="pre">IndexSet::intersect()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla8IndexSet4copyERK8IndexSetR8IndexSet"><code class="docutils literal notranslate"><span class="pre">IndexSet::copy()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla8IndexSet11concatenateEN3mpi12CommunicatorERKNSt6vectorI8IndexSetEE"><code class="docutils literal notranslate"><span class="pre">IndexSet::concatenate()</span></code></a></li>
@@ -511,6 +512,25 @@
 <li><p><strong>idx</strong> – The length of the index set </p></li>
 <li><p><strong>copy_mode</strong> – The copy mode see, <code class="docutils literal notranslate"><span class="pre">CopyMode</span></code> for details </p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla8IndexSet13create_strideEN3mpi12CommunicatorE3Int3Int3Int">
+<span id="_CPPv3N8godzilla8IndexSet13create_strideEN3mpi12CommunicatorE3Int3Int3Int"></span><span id="_CPPv2N8godzilla8IndexSet13create_strideEN3mpi12CommunicatorE3Int3Int3Int"></span><span id="godzilla::IndexSet::create_stride__mpi::Communicator.Int.Int.Int"></span><span class="target" id="classgodzilla_1_1_index_set_1a136316c3e0be3bc51b386c0af27779f5"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N8godzilla8IndexSetE" title="godzilla::IndexSet"><span class="n"><span class="pre">IndexSet</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create_stride</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">mpi</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Communicator</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">comm</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">first</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">step</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla8IndexSet13create_strideEN3mpi12CommunicatorE3Int3Int3Int" title="Link to this definition"></a><br /></dt>
+<dd><p>Creates a data structure for an index set containing a list of evenly spaced integers. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>comm</strong> – MPI communicator </p></li>
+<li><p><strong>n</strong> – The length of the locally owned portion of the index set </p></li>
+<li><p><strong>first</strong> – The first element of the locally owned portion of the index set </p></li>
+<li><p><strong>step</strong> – The change to the next index </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The new index set </p>
 </dd>
 </dl>
 </dd></dl>
