@@ -178,6 +178,15 @@ public:
                                    std::initializer_list<Int> idx,
                                    CopyMode copy_mode = COPY_VALUES);
 
+    /// Creates a data structure for an index set containing a list of evenly spaced integers
+    ///
+    /// @param comm MPI communicator
+    /// @param n The length of the locally owned portion of the index set
+    /// @param first The first element of the locally owned portion of the index set
+    /// @param step The change to the next index
+    /// @return The new index set
+    static IndexSet create_stride(mpi::Communicator comm, Int n, Int first, Int step);
+
     static IndexSet intersect_caching(const IndexSet & is1, const IndexSet & is2);
 
     /// Computes the intersection of two index sets, by sorting and comparing.
