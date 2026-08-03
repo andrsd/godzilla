@@ -99,6 +99,15 @@ IndexSet::create_general(mpi::Communicator comm, std::initializer_list<Int> idx,
     return is;
 }
 
+IndexSet
+IndexSet::create_stride(mpi::Communicator comm, Int n, Int first, Int step)
+{
+    CALL_STACK_MSG();
+    IndexSet is;
+    PETSC_CHECK(ISCreateStride(comm, n, first, step, is));
+    return is;
+}
+
 bool
 IndexSet::sorted() const
 {

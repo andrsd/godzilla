@@ -37,6 +37,17 @@ TEST(IndexSetTest, create_general)
     EXPECT_THAT(idx, UnorderedElementsAre(1, 3, 5, 8));
 }
 
+TEST(IndexSetTest, create_stride)
+{
+    TestApp app;
+    auto is = IndexSet::create_stride(app.get_comm(), 4, 3, 2);
+    auto data = is.borrow_indices();
+    EXPECT_THAT(data[0], 3);
+    EXPECT_THAT(data[1], 5);
+    EXPECT_THAT(data[2], 7);
+    EXPECT_THAT(data[3], 9);
+}
+
 TEST(IndexSetTest, get_id)
 {
     TestApp app;
