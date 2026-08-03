@@ -22,30 +22,22 @@ public:
     /// @param vs The PETSc VecScatter object
     explicit VectorScatter(VecScatter vs);
 
-    /// Communication mode for vector scatter operations
-    enum class Mode {
-        FORWARD = SCATTER_FORWARD,
-        REVERSE = SCATTER_REVERSE,
-        FORWARD_LOCAL = SCATTER_FORWARD_LOCAL,
-        REVERSE_LOCAL = SCATTER_REVERSE_LOCAL
-    };
-
     /// Begins the scattering operation.
     ///
     /// @param x The source vector
     /// @param y The destination vector
-    /// @param addv Either INSERT_VALUES or ADD_VALUES
-    /// @param mode Communication mode (e.g. Mode::FORWARD or Mode::REVERSE)
+    /// @param addv Either `INSERT_VALUES` or `ADD_VALUES`
+    /// @param mode Communication mode (e.g. `SCATTER_FORWARD` or `SCATTER_REVERSE`)
 
-    void begin(const Vector & x, Vector & y, InsertMode addv, Mode mode) const;
+    void begin(const Vector & x, Vector & y, InsertMode addv, ScatterMode mode) const;
 
     /// Ends the scattering operation.
     ///
     /// @param x The source vector
     /// @param y The destination vector
-    /// @param addv Either INSERT_VALUES or ADD_VALUES
-    /// @param mode Communication mode (e.g. Mode::FORWARD or Mode::REVERSE)
-    void end(const Vector & x, Vector & y, InsertMode addv, Mode mode) const;
+    /// @param addv Either `INSERT_VALUES` or `ADD_VALUES`
+    /// @param mode Communication mode (e.g. `SCATTER_FORWARD` or `SCATTER_REVERSE`)
+    void end(const Vector & x, Vector & y, InsertMode addv, ScatterMode mode) const;
 
     /// Creates a copy of the scatter context.
     ///

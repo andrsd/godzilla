@@ -13,17 +13,17 @@ VectorScatter::VectorScatter() : PetscObjectWrapper(nullptr) {}
 VectorScatter::VectorScatter(VecScatter vs) : PetscObjectWrapper(vs) {}
 
 void
-VectorScatter::begin(const Vector & x, Vector & y, InsertMode addv, Mode mode) const
+VectorScatter::begin(const Vector & x, Vector & y, InsertMode addv, ScatterMode mode) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecScatterBegin(this->obj, x, y, addv, static_cast<ScatterMode>(mode)));
+    PETSC_CHECK(VecScatterBegin(this->obj, x, y, addv, mode));
 }
 
 void
-VectorScatter::end(const Vector & x, Vector & y, InsertMode addv, Mode mode) const
+VectorScatter::end(const Vector & x, Vector & y, InsertMode addv, ScatterMode mode) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecScatterEnd(this->obj, x, y, addv, static_cast<ScatterMode>(mode)));
+    PETSC_CHECK(VecScatterEnd(this->obj, x, y, addv, mode));
 }
 
 VecScatter

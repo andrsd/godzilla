@@ -29,8 +29,8 @@ TEST(VectorScatterTest, create)
     EXPECT_TRUE(scatter);
     EXPECT_FALSE(scatter.is_null());
 
-    scatter.begin(x, y, INSERT_VALUES, VectorScatter::Mode::FORWARD);
-    scatter.end(x, y, INSERT_VALUES, VectorScatter::Mode::FORWARD);
+    scatter.begin(x, y, INSERT_VALUES, SCATTER_FORWARD);
+    scatter.end(x, y, INSERT_VALUES, SCATTER_FORWARD);
 
     EXPECT_DOUBLE_EQ(y(0), 10.);
     EXPECT_DOUBLE_EQ(y(1), 30.);
@@ -94,8 +94,8 @@ TEST(VectorScatterTest, create_to_all)
     EXPECT_TRUE(y);
     EXPECT_EQ(y.get_size(), 3);
 
-    scatter.begin(x, y, INSERT_VALUES, VectorScatter::Mode::FORWARD);
-    scatter.end(x, y, INSERT_VALUES, VectorScatter::Mode::FORWARD);
+    scatter.begin(x, y, INSERT_VALUES, SCATTER_FORWARD);
+    scatter.end(x, y, INSERT_VALUES, SCATTER_FORWARD);
 
     EXPECT_DOUBLE_EQ(y(0), 100.);
     EXPECT_DOUBLE_EQ(y(1), 200.);
@@ -114,8 +114,8 @@ TEST(VectorScatterTest, create_to_zero)
     EXPECT_TRUE(scatter);
     EXPECT_TRUE(y);
 
-    scatter.begin(x, y, INSERT_VALUES, VectorScatter::Mode::FORWARD);
-    scatter.end(x, y, INSERT_VALUES, VectorScatter::Mode::FORWARD);
+    scatter.begin(x, y, INSERT_VALUES, SCATTER_FORWARD);
+    scatter.end(x, y, INSERT_VALUES, SCATTER_FORWARD);
 
     if (app.get_comm().rank() == 0) {
         EXPECT_EQ(y.get_size(), 3);
