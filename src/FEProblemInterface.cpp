@@ -1793,11 +1793,4 @@ FEProblemInterface::evaluate_field_jets(PetscDS ds,
     }
 }
 
-void
-FENonlinearProblem::output_with(FileOutput & out)
-{
-    compute_solution_vector_local();
-    out.output_step();
-}
-
 } // namespace godzilla

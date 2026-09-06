@@ -1264,6 +1264,7 @@ FENonlinearProblem::on_initial()
 {
     CALL_STACK_MSG();
     this->state = INITIAL;
+    compute_solution_vector_local();
     NonlinearProblem::on_initial();
     compute_aux_fields();
 }
@@ -1272,6 +1273,7 @@ void
 FENonlinearProblem::on_final()
 {
     CALL_STACK_MSG();
+    compute_solution_vector_local();
     this->state = FINAL;
     NonlinearProblem::on_final();
 }

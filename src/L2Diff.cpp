@@ -50,7 +50,6 @@ L2Diff::compute()
     std::vector<PetscFunc *> funcs(1, L2Diff__invoke_delegate);
     std::vector<void *> ctxs(1, this);
     auto dpi = dpio.value();
-    dpi->compute_solution_vector_local();
     PETSC_CHECK(DMPlexComputeL2DiffLocal(problem->get_dm(),
                                          problem->get_time(),
                                          funcs.data(),

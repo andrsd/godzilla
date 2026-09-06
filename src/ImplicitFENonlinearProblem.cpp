@@ -216,6 +216,7 @@ ImplicitFENonlinearProblem::post_step()
 {
     CALL_STACK_MSG();
     TransientProblemInterface::post_step();
+    compute_solution_vector_local();
     update_aux_vector();
     compute_postprocessors(ExecuteOn::TIMESTEP);
     output(ExecuteOn::TIMESTEP);
