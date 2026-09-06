@@ -132,17 +132,10 @@ ExplicitDGLinearProblem::post_step()
 {
     CALL_STACK_MSG();
     TransientProblemInterface::post_step();
+    compute_solution_vector_local();
     update_aux_vector();
     compute_postprocessors(ExecuteOn::TIMESTEP);
     output(ExecuteOn::TIMESTEP);
-}
-
-void
-ExplicitDGLinearProblem::output_with(FileOutput & out)
-{
-    CALL_STACK_MSG();
-    compute_solution_vector_local();
-    out.output_step();
 }
 
 } // namespace godzilla
