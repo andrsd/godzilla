@@ -148,6 +148,33 @@ StarForest::create_inverse() const
 }
 
 void
+StarForest::compute_degree_begin(const Int *& degree) const
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(PetscSFComputeDegreeBegin(this->obj, &degree));
+}
+
+void
+StarForest::compute_degree_end(const Int *& degree) const
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(PetscSFComputeDegreeEnd(this->obj, &degree));
+}
+
+Span<const Int>
+StarForest::compute_degree() const
+{
+    CALL_STACK_MSG();
+    Int n_roots;
+    PETSC_CHECK(PetscSFGetGraph(this->obj, &n_roots, NULL, NULL, NULL));
+
+    const Int * degree;
+    compute_degree_begin(degree);
+    compute_degree_end(degree);
+    return { degree, n_roots };
+}
+
+void
 StarForest::view(PetscViewer viewer) const
 {
     CALL_STACK_MSG();
