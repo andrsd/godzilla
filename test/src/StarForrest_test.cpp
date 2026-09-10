@@ -220,3 +220,28 @@ TEST(StarForestTest, create_inverse)
     EXPECT_EQ(dest[1], 101);
     EXPECT_EQ(dest[2], 102);
 }
+
+TEST(StarForestTest, compute_degree)
+{
+    TestApp app;
+
+    StarForest sf;
+    sf.create(app.get_comm());
+
+    Int n_leaves = 1;
+    Int n_roots = 1;
+    std::vector<Int> ilocal(n_leaves);
+    for (Int i = 0; i < n_leaves; ++i)
+        ilocal[i] = i;
+
+    std::vector<StarForest::Node> iremote(n_leaves);
+    iremote[0].rank = 0;
+    iremote[0].index = 0;
+
+    sf.set_graph(n_roots, n_leaves, ilocal, iremote);
+    sf.set_up();
+
+    auto degrees = sf.compute_degree();
+    EXPECT_EQ(degrees.size(), 1);
+    EXPECT_EQ(degrees[0], 1);
+}

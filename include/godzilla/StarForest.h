@@ -385,6 +385,27 @@ public:
     /// @return Inverse of the star forest
     StarForest create_inverse() const;
 
+    /// Begin computation of the degree of each root vertex, to be completed with
+    /// `compute_degree_end`
+    ///
+    /// @param degree Degree (the number of leaves) of each root vertex
+    ///
+    /// @note The returned array is owned by `StarForest` and automatically freed by `destroy`
+    void compute_degree_begin(const Int *& degree) const;
+
+    /// Complete computation of degree for each root vertex, started with `compute_degree_begin`
+    ///
+    /// @param degree Degree (the number of leaves) of each root vertex
+    ///
+    /// @note The returned array is owned by `StarForest` and automatically freed by `destroy`
+    void compute_degree_end(const Int *& degree) const;
+
+    /// Compute degrees of each root vertex. Convenience API that calls `compute_degree_begin`
+    /// and `compute_degree_end`.
+    ///
+    /// @return Degree (the number of leaves) of each root vertex
+    Span<const Int> compute_degree() const;
+
     /// View a star forrest
     void view(PetscViewer viewer = PETSC_VIEWER_STDOUT_WORLD) const;
 
