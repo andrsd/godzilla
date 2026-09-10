@@ -9,6 +9,7 @@
 #include "godzilla/Error.h"
 #include "godzilla/Span.h"
 #include "godzilla/Layout.h"
+#include "godzilla/Vector.h"
 #include "mpicpp-lite/mpicpp-lite.h"
 #include "petscsf.h"
 #include <vector>
@@ -121,6 +122,15 @@ public:
         broadcast_begin(root.get_data(), leaf.get_data(), op);
     }
 
+    template <typename Op>
+    void
+    broadcast_begin(const Vector & root, Vector & leaf, Op op) const
+    {
+        auto root_vals = root.borrow_array_read();
+        auto leaf_vals = leaf.borrow_array();
+        broadcast_begin(root_vals.data(), leaf_vals.data(), op);
+    }
+
     /// End a broadcast and reduce operation started with `broadcast_begin`
     ///
     /// @tparam T Type of the value to broadcast
@@ -158,6 +168,15 @@ public:
         broadcast_end(root.get_data(), leaf.get_data(), op);
     }
 
+    template <typename Op>
+    void
+    broadcast_end(const Vector & root, Vector & leaf, Op op) const
+    {
+        auto root_vals = root.borrow_array_read();
+        auto leaf_vals = leaf.borrow_array();
+        broadcast_end(root_vals.data(), leaf_vals.data(), op);
+    }
+
     template <typename T, typename Op>
     void
     reduce_begin(const T * leaf, T * root, Op) const
@@ -190,6 +209,15 @@ public:
     {
         CALL_STACK_MSG();
         reduce_begin(leaf.get_data(), root.get_data(), op);
+    }
+
+    template <typename Op>
+    void
+    reduce_begin(const Vector & root, Vector & leaf, Op op) const
+    {
+        auto root_vals = root.borrow_array_read();
+        auto leaf_vals = leaf.borrow_array();
+        reduce_begin(root_vals.data(), leaf_vals.data(), op);
     }
 
     template <typename T, typename Op>
@@ -226,6 +254,15 @@ public:
         reduce_end(leaf.get_data(), root.get_data(), op);
     }
 
+    template <typename Op>
+    void
+    reduce_end(const Vector & root, Vector & leaf, Op op) const
+    {
+        auto root_vals = root.borrow_array_read();
+        auto leaf_vals = leaf.borrow_array();
+        reduce_end(root_vals.data(), leaf_vals.data(), op);
+    }
+
     /// Begin pointwise gather of all leaves into multi-roots, to be completed with `gather_end`
     ///
     /// @param leaf Leaf data to gather to roots
@@ -247,6 +284,14 @@ public:
         gather_begin(leaf.get_data(), root.get_data());
     }
 
+    inline void
+    gather_begin(const Vector & root, Vector & leaf) const
+    {
+        auto root_vals = root.borrow_array_read();
+        auto leaf_vals = leaf.borrow_array();
+        gather_begin(root_vals.data(), leaf_vals.data());
+    }
+
     /// End pointwise gather operation that was started with `gather_begin
     ///
     /// @param leaf Leaf data to gather to roots
@@ -266,6 +311,14 @@ public:
     {
         CALL_STACK_MSG();
         gather_end(leaf.get_data(), root.get_data());
+    }
+
+    void
+    gather_end(const Vector & root, Vector & leaf) const
+    {
+        auto root_vals = root.borrow_array_read();
+        auto leaf_vals = leaf.borrow_array();
+        gather_end(root_vals.data(), leaf_vals.data());
     }
 
     /// Begin pointwise scatter operation from multi-roots to leaves, to be completed with
@@ -290,6 +343,14 @@ public:
         scatter_begin(root.get_data(), leaf.get_data());
     }
 
+    void
+    scatter_begin(const Vector & root, Vector & leaf) const
+    {
+        auto root_vals = root.borrow_array_read();
+        auto leaf_vals = leaf.borrow_array();
+        scatter_begin(root_vals.data(), leaf_vals.data());
+    }
+
     /// Ends pointwise scatter operation that was started with `scatter_begin`
     ///
     /// @param root Root buffer to send to each leaf, one unit of data per leaf
@@ -309,6 +370,14 @@ public:
     {
         CALL_STACK_MSG();
         scatter_end(root.get_data(), leaf.get_data());
+    }
+
+    void
+    scatter_end(const Vector & root, Vector & leaf) const
+    {
+        auto root_vals = root.borrow_array_read();
+        auto leaf_vals = leaf.borrow_array();
+        scatter_end(root_vals.data(), leaf_vals.data());
     }
 
     /// Creates the inverse map (all roots have must have degree 1 - exactly one leaf)
