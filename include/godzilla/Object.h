@@ -44,10 +44,10 @@ public:
 private:
     /// The application owning this object
     Ref<App> app;
-
+    ///
+    mpi::Communicator comm;
     /// The type of this object
     const String type;
-
     /// The name of this object
     const String name;
 

@@ -58,7 +58,7 @@ TEST(RegistryTest, get_object_description)
     auto & o0 = objs[0];
     EXPECT_EQ(o0.name, "ASDF");
     auto & p0 = o0.parameters;
-    EXPECT_EQ(p0.size(), 6);
+    EXPECT_EQ(p0.size(), 7);
     std::vector<String> names;
     for (auto & par : p0)
         names.push_back(par.name);
@@ -68,14 +68,15 @@ TEST(RegistryTest, get_object_description)
                                               "required_value",
                                               "value_with_default",
                                               "on",
+                                              "comm",
                                               "str"));
 
     auto & o1 = objs[1];
     EXPECT_EQ(o1.name, "LineMesh");
     auto & p1 = o1.parameters;
-    EXPECT_EQ(p1.size(), 5);
+    EXPECT_EQ(p1.size(), 6);
     names.clear();
     for (auto & par : p1)
         names.push_back(par.name);
-    EXPECT_THAT(names, testing::UnorderedElementsAre("app", "name", "nx", "xmax", "xmin"));
+    EXPECT_THAT(names, testing::UnorderedElementsAre("app", "name", "nx", "xmax", "xmin", "comm"));
 }
