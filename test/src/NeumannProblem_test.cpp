@@ -163,7 +163,6 @@ TEST(NeumannProblemTest, solve)
     TestApp app;
 
     auto mesh_params = app.make_parameters<RectangleMesh>();
-    mesh_params.set<Ref<App>>("app", ref(app));
     mesh_params.set<Int>("nx", 2);
     mesh_params.set<Int>("ny", 1);
     auto mesh = MeshFactory::create<RectangleMesh>(mesh_params);

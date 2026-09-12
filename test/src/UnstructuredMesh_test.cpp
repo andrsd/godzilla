@@ -677,7 +677,6 @@ TEST(UnstructuredMeshTest, clone)
     TestApp app;
 
     auto params = app.make_parameters<TestUnstructuredMesh>();
-    params.set<Ref<App>>("app", ref(app));
     params.set<String>("name", "obj");
     auto mesh_qtr = MeshFactory::create<TestUnstructuredMesh>(params);
     auto m = mesh_qtr.get();

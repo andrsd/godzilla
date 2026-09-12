@@ -16,13 +16,11 @@ TEST(RZSymmetryTest, check_dim)
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
-    auto prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<Ref<App>>("app", ref(app));
+    auto prob_pars = app.make_parameters<GTestFENonlinearProblem>();
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_pars);
 
-    auto params = RZSymmetry::parameters();
-    params.set<Ref<App>>("app", ref(app));
+    auto params = app.make_parameters<RZSymmetry>();
     params.set<Ref<DiscreteProblemInterface>>("_dpi", ref(prob));
     params.set<std::vector<Real>>("point", { 0. });
     params.set<std::vector<Real>>("axis", { 1. });
@@ -42,13 +40,11 @@ TEST(RZSymmetryTest, check_compatible)
     // clang-format on
     auto mesh = MeshFactory::create<RectangleMesh>(mesh_pars);
 
-    auto prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<Ref<App>>("app", ref(app));
+    auto prob_pars = app.make_parameters<GTestFENonlinearProblem>();
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_pars);
 
-    auto params = RZSymmetry::parameters();
-    params.set<Ref<App>>("app", ref(app));
+    auto params = app.make_parameters<RZSymmetry>();
     params.set<Ref<DiscreteProblemInterface>>("_dpi", ref(prob));
     params.set<std::vector<Real>>("point", { 0. });
     params.set<std::vector<Real>>("axis", { 1. });
@@ -68,13 +64,11 @@ TEST(RZSymmetryTest, evaluate)
     // clang-format on
     auto mesh = MeshFactory::create<RectangleMesh>(mesh_pars);
 
-    auto prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<Ref<App>>("app", ref(app));
+    auto prob_pars = app.make_parameters<GTestFENonlinearProblem>();
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_pars);
 
-    auto params = RZSymmetry::parameters();
-    params.set<Ref<App>>("app", ref(app));
+    auto params = app.make_parameters<RZSymmetry>();
     params.set<Ref<DiscreteProblemInterface>>("_dpi", ref(prob));
     params.set<std::vector<Real>>("point", { 1., 1. });
     params.set<std::vector<Real>>("axis", { 1., 0. });

@@ -171,7 +171,7 @@ TEST(AppTest, make_parameters)
     TestApp app;
 
     auto pars = app.make_parameters<godzilla::Object>();
-    EXPECT_EQ(pars.get<Ref<godzilla::App>>("app"), ref(app));
+    EXPECT_EQ(pars.get<Ref<godzilla::CoreApp>>("app"), ref(app));
 }
 
 TEST(AppTest, duplicate_app_name_throws)

@@ -30,8 +30,7 @@ TEST_F(OutputTest, exec_masks_1)
 {
     auto prob = this->app->get_problem<GTestImplicitFENonlinearProblem>();
 
-    auto pars = Output::parameters();
-    pars.set<Ref<App>>("app", ref(*this->app));
+    auto pars = this->app->make_parameters<MockOutput>();
     pars.set<Ref<Problem>>("_problem", prob);
     pars.set<ExecuteOnFlags>("on", ExecuteOn::NONE);
     MockOutput out(pars);
@@ -46,8 +45,7 @@ TEST_F(OutputTest, exec_masks_2)
 {
     auto prob = this->app->get_problem<GTestImplicitFENonlinearProblem>();
 
-    auto pars = Output::parameters();
-    pars.set<Ref<App>>("app", ref(*this->app));
+    auto pars = this->app->make_parameters<MockOutput>();
     pars.set<Ref<Problem>>("_problem", prob);
     pars.set<ExecuteOnFlags>("on", ExecuteOn::FINAL);
     MockOutput out(pars);
@@ -63,8 +61,7 @@ TEST_F(OutputTest, exec_masks_3)
 {
     auto prob = this->app->get_problem<GTestImplicitFENonlinearProblem>();
 
-    auto pars = Output::parameters();
-    pars.set<Ref<App>>("app", ref(*this->app));
+    auto pars = this->app->make_parameters<MockOutput>();
     pars.set<Ref<Problem>>("_problem", prob);
     pars.set<ExecuteOnFlags>("on", ExecuteOn::FINAL | ExecuteOn::INITIAL | ExecuteOn::TIMESTEP);
     MockOutput out(pars);
@@ -87,8 +84,7 @@ TEST_F(OutputTest, empty_on)
 {
     auto prob = this->app->get_problem<GTestImplicitFENonlinearProblem>();
 
-    auto pars = Output::parameters();
-    pars.set<Ref<App>>("app", ref(*app));
+    auto pars = this->app->make_parameters<MockOutput>();
     pars.set<Ref<Problem>>("_problem", prob);
     pars.set<ExecuteOnFlags>("on", 0);
 
@@ -101,8 +97,7 @@ TEST_F(OutputTest, none_plus_mask)
 {
     auto prob = this->app->get_problem<GTestImplicitFENonlinearProblem>();
 
-    auto pars = Output::parameters();
-    pars.set<Ref<App>>("app", ref(*this->app));
+    auto pars = this->app->make_parameters<MockOutput>();
     pars.set<Ref<Problem>>("_problem", prob);
     pars.set<ExecuteOnFlags>("on", ExecuteOn::NONE | ExecuteOn::FINAL | ExecuteOn::TIMESTEP);
 
@@ -115,8 +110,7 @@ TEST_F(OutputTest, interval_with_no_timestep_output)
 
     auto prob = this->app->get_problem<GTestImplicitFENonlinearProblem>();
 
-    auto pars = Output::parameters();
-    pars.set<Ref<App>>("app", ref(*app));
+    auto pars = this->app->make_parameters<MockOutput>();
     pars.set<Ref<Problem>>("_problem", prob);
     pars.set<ExecuteOnFlags>("on", ExecuteOn::INITIAL | ExecuteOn::FINAL);
     pars.set<Int>("interval", 10);

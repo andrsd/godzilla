@@ -257,8 +257,7 @@ TEST(TwoFieldFENonlinearProblemTest, err_duplicate_ics)
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
-    auto prob_params = GTest2FieldsFENonlinearProblem::parameters();
-    prob_params.set<Ref<App>>("app", ref(app));
+    auto prob_params = app.make_parameters<GTest2FieldsFENonlinearProblem>();
     prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTest2FieldsFENonlinearProblem prob(prob_params);
 

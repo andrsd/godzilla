@@ -141,7 +141,6 @@ TEST(FENonlinearProblemJFNKTest, solve)
     auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
     auto prob_params = app.make_parameters<GTestFENonlinearProblemJFNK>();
-    prob_params.set<Ref<godzilla::App>>("app", ref(app));
     prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     auto prob = app.make_problem<GTestFENonlinearProblemJFNK>(prob_params);
 

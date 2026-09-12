@@ -64,8 +64,7 @@ TEST(LinearProblemTest, run)
     mesh_pars.set<Int>("nx", 1);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
-    auto prob_pars = LinearProblem::parameters();
-    prob_pars.set<Ref<App>>("app", ref(app));
+    auto prob_pars = app.make_parameters<LinearProblem>();
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     prob_pars.set<String>("ksp_type", KSPCG);
     CustomLinearProblem prob(prob_pars);
@@ -91,8 +90,7 @@ TEST(LinearProblemTest, restart_file)
     mesh_pars.set<Int>("nx", 1);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
-    auto prob_pars = LinearProblem::parameters();
-    prob_pars.set<Ref<App>>("app", ref(app));
+    auto prob_pars = app.make_parameters<LinearProblem>();
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     prob_pars.set<String>("ksp_type", KSPCG);
     CustomLinearProblem prob(prob_pars);

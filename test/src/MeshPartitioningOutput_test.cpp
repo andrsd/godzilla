@@ -44,13 +44,11 @@ TEST(MeshPartitioningOutputTest, get_file_ext)
     mesh_params.set<Int>("nx", 4);
     auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
-    auto prob_params = TestProblem::parameters();
-    prob_params.set<Ref<App>>("app", ref(app));
+    auto prob_params = app.make_parameters<TestProblem>();
     prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     TestProblem prob(prob_params);
 
-    auto params = MeshPartitioningOutput::parameters();
-    params.set<Ref<App>>("app", ref(app));
+    auto params = app.make_parameters<MeshPartitioningOutput>();
     params.set<Ref<Problem>>("_problem", ref(prob));
     params.set<fs::path>("file", "part");
     params.set<ExecuteOnFlags>("on", ExecuteOn::NONE);
@@ -70,8 +68,7 @@ TEST(MeshPartitioningOutputTest, output)
     mesh_params.set<Int>("nx", 4);
     auto mesh = MeshFactory::create<LineMesh>(mesh_params);
 
-    auto prob_params = TestProblem::parameters();
-    prob_params.set<Ref<App>>("app", ref(app));
+    auto prob_params = app.make_parameters<TestProblem>();
     prob_params.set<Ref<Mesh>>("mesh", ref(*mesh));
     TestProblem prob(prob_params);
 

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 #include "godzilla/Object.h"
-#include "godzilla/App.h"
+#include "godzilla/CoreApp.h"
 #include "godzilla/CallStack.h"
 
 namespace godzilla {
@@ -11,7 +11,7 @@ Parameters
 Object::parameters()
 {
     Parameters params;
-    params.add_required_param<LateRef<App>>("app", "Application we are part of")
+    params.add_required_param<LateRef<CoreApp>>("app", "Application we are part of")
         .add_private_param<String>("_type", "")
         .add_param<mpi::Communicator>("comm", "MPI communicator")
         .add_param<String>("name", "Name of the object");
@@ -19,8 +19,8 @@ Object::parameters()
 }
 
 Object::Object(const Parameters & pars) :
-    LoggingInterface(pars.get<Ref<App>>("app")->get_logger()),
-    app(pars.get<Ref<App>>("app")),
+    LoggingInterface(pars.get<Ref<CoreApp>>("app")->get_logger()),
+    app(pars.get<Ref<CoreApp>>("app")),
     comm(pars.get<mpi::Communicator>("comm", this->app->get_comm())),
     type(pars.get<String>("_type")),
     name(pars.get<String>("name", ""))
@@ -42,7 +42,7 @@ Object::get_name() const
     return this->name;
 }
 
-Ref<App>
+Ref<CoreApp>
 Object::get_app() const
 {
     CALL_STACK_MSG();

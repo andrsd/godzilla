@@ -17,7 +17,7 @@ namespace godzilla {
 namespace mpi = mpicpp_lite;
 
 class Object;
-class App;
+class CoreApp;
 
 /// Interface for printing on terminal
 ///
@@ -55,9 +55,9 @@ public:
 
 public:
     explicit PrintInterface(const Object * obj);
-    explicit PrintInterface(Ref<const App> app);
+    explicit PrintInterface(Ref<const CoreApp> app);
     PrintInterface(mpi::Communicator comm,
-                   Ref<const App> app,
+                   Ref<const CoreApp> app,
                    const unsigned int & verbosity_level,
                    String prefix);
 
@@ -122,7 +122,7 @@ private:
     }
 
     /// Application
-    Ref<const App> pi_app;
+    Ref<const CoreApp> pi_app;
     /// Processor ID
     int proc_id;
     /// Verbosity level

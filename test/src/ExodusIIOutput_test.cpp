@@ -17,13 +17,11 @@ TEST(ExodusIIOutputTest, get_file_ext)
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
-    auto prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<Ref<App>>("app", ref(app));
+    auto prob_pars = app.make_parameters<GTestFENonlinearProblem>();
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_pars);
 
-    auto params = ExodusIIOutput::parameters();
-    params.set<Ref<App>>("app", ref(app));
+    auto params = app.make_parameters<ExodusIIOutput>();
     params.set<Ref<Problem>>("_problem", ref(prob));
     params.set<fs::path>("file", "out");
     params.set<ExecuteOnFlags>("on", ExecuteOn::NONE);
@@ -41,8 +39,7 @@ TEST(ExodusIIOutputTest, create)
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
-    auto prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<Ref<App>>("app", ref(app));
+    auto prob_pars = app.make_parameters<GTestFENonlinearProblem>();
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_pars);
 
@@ -61,8 +58,7 @@ TEST(ExodusIIOutputTest, non_existent_var)
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
-    auto prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<Ref<App>>("app", ref(app));
+    auto prob_pars = app.make_parameters<GTestFENonlinearProblem>();
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_pars);
 
@@ -83,8 +79,7 @@ TEST(ExodusIIOutputTest, output)
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
-    auto prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<Ref<App>>("app", ref(app));
+    auto prob_pars = app.make_parameters<GTestFENonlinearProblem>();
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_pars);
 
@@ -105,8 +100,7 @@ TEST(ExodusIIOutputTest, set_file_name)
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
-    auto prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<Ref<App>>("app", ref(app));
+    auto prob_pars = app.make_parameters<GTestFENonlinearProblem>();
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_pars);
 
@@ -127,8 +121,7 @@ TEST(ExodusIIOutputTest, set_seq_file_name)
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
-    auto prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<Ref<App>>("app", ref(app));
+    auto prob_pars = app.make_parameters<GTestFENonlinearProblem>();
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_pars);
 
