@@ -4,7 +4,7 @@
 #include "godzilla/PrintInterface.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/Object.h"
-#include "godzilla/App.h"
+#include "godzilla/CoreApp.h"
 #include "godzilla/PerfLog.h"
 #include "godzilla/Terminal.h"
 #include "godzilla/Utils.h"
@@ -77,7 +77,7 @@ PrintInterface::PrintInterface(const Object * obj) :
     CALL_STACK_MSG();
 }
 
-PrintInterface::PrintInterface(Ref<const App> app) :
+PrintInterface::PrintInterface(Ref<const CoreApp> app) :
     pi_app(app),
     proc_id(app->get_comm().rank()),
     verbosity_level(app->get_verbosity_level())
@@ -86,7 +86,7 @@ PrintInterface::PrintInterface(Ref<const App> app) :
 }
 
 PrintInterface::PrintInterface(mpi::Communicator comm,
-                               Ref<const App> app,
+                               Ref<const CoreApp> app,
                                const unsigned int & verbosity_level,
                                String /* prefix */) :
     pi_app(app),

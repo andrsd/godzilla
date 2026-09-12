@@ -33,9 +33,8 @@ TEST_F(BoundaryConditionTest, api)
 
     prob->create();
 
-    auto params = BoundaryCondition::parameters();
-    params.set<Ref<App>>("app", ref(*this->app))
-        .set<Ref<DiscreteProblemInterface>>("_dpi", prob)
+    auto params = this->app->make_parameters<MockBoundaryCondition>();
+    params.set<Ref<DiscreteProblemInterface>>("_dpi", prob)
         .set<String>("name", "obj")
         .set<std::vector<String>>("boundary", { "side1" });
     MockBoundaryCondition bc(params);

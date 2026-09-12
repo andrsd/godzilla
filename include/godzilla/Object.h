@@ -12,7 +12,7 @@ namespace godzilla {
 
 namespace mpi = mpicpp_lite;
 
-class App;
+class CoreApp;
 
 /// The base class for objects
 ///
@@ -30,7 +30,7 @@ public:
     String get_name() const;
 
     /// Get the App this object is associated with
-    Ref<App> get_app() const;
+    Ref<CoreApp> get_app() const;
 
     /// Get the MPI comm this object works on
     mpi::Communicator get_comm() const;
@@ -43,7 +43,7 @@ public:
 
 private:
     /// The application owning this object
-    Ref<App> app;
+    Ref<CoreApp> app;
     ///
     mpi::Communicator comm;
     /// The type of this object

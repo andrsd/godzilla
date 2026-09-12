@@ -66,8 +66,7 @@ TEST_F(InitialConditionTest, api)
 {
     auto prob = this->app->get_problem<GTestFENonlinearProblem>();
 
-    auto params = InitialCondition::parameters();
-    params.set<Ref<App>>("app", ref(*this->app));
+    auto params = this->app->make_parameters<MockInitialCondition>();
     params.set<Ref<DiscreteProblemInterface>>("_dpi", prob);
     params.set<String>("name", "obj");
     MockInitialCondition ic(params);
@@ -125,8 +124,7 @@ TEST_F(InitialConditionTest, get_value)
 {
     auto prob = this->app->get_problem<GTestFENonlinearProblem>();
 
-    auto params = TestInitialCondition::parameters();
-    params.set<Ref<App>>("app", ref(*this->app));
+    auto params = this->app->make_parameters<TestInitialCondition>();
     params.set<Ref<DiscreteProblemInterface>>("_dpi", prob);
     params.set<String>("name", "obj");
     TestInitialCondition ic(params);
@@ -136,8 +134,7 @@ TEST_F(InitialConditionTest, get_vector_value)
 {
     auto prob = this->app->get_problem<GTestFENonlinearProblem>();
 
-    auto params = TestVectorInitialCondition::parameters();
-    params.set<Ref<App>>("app", ref(*this->app));
+    auto params = this->app->make_parameters<TestVectorInitialCondition>();
     params.set<Ref<DiscreteProblemInterface>>("_dpi", prob);
     params.set<String>("name", "obj");
     TestVectorInitialCondition ic(params);

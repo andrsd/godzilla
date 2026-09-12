@@ -85,8 +85,7 @@ TEST(WeakFormTest, test)
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
-    auto prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<Ref<App>>("app", ref(app));
+    auto prob_pars = app.make_parameters<GTestFENonlinearProblem>();
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_pars);
 

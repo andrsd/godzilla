@@ -79,8 +79,7 @@ TEST(DependencyEvaluator, DISABLED_create_functional)
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
-    auto prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<Ref<App>>("app", ref(app));
+    auto prob_pars = app.make_parameters<GTestFENonlinearProblem>();
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_pars);
 
@@ -102,8 +101,7 @@ TEST(DependencyEvaluator, DISABLED_create_existing_functional)
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
-    auto prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<Ref<App>>("app", ref(app));
+    auto prob_pars = app.make_parameters<GTestFENonlinearProblem>();
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_pars);
 
@@ -125,8 +123,7 @@ TEST(DependencyEvaluator, DISABLED_get_non_existent_functional)
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
-    auto prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<Ref<App>>("app", ref(app));
+    auto prob_pars = app.make_parameters<GTestFENonlinearProblem>();
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_pars);
 
@@ -143,8 +140,7 @@ TEST(DependencyEvaluator, DISABLED_eval)
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
-    auto prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<Ref<App>>("app", ref(app));
+    auto prob_pars = app.make_parameters<GTestFENonlinearProblem>();
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_pars);
 
@@ -185,8 +181,7 @@ TEST(DependencyEvaluator, DISABLED_redeclare_a_value)
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
-    auto prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<Ref<App>>("app", ref(app));
+    auto prob_pars = app.make_parameters<GTestFENonlinearProblem>();
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_pars);
 
@@ -207,8 +202,7 @@ TEST(DependencyEvaluator, DISABLED_get_suppliers)
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
-    auto prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<Ref<App>>("app", ref(app));
+    auto prob_pars = app.make_parameters<GTestFENonlinearProblem>();
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_pars);
 
@@ -240,8 +234,7 @@ TEST(DependencyEvaluator, DISABLED_build_dep_graph)
     mesh_pars.set<Int>("nx", 2);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
-    auto prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<Ref<App>>("app", ref(app));
+    auto prob_pars = app.make_parameters<GTestFENonlinearProblem>();
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     GTestFENonlinearProblem prob(prob_pars);
 

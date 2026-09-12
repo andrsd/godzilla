@@ -68,7 +68,6 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
 TEST_F(ImplicitFENonlinearProblemTest, wrong_scheme)
 {
     auto params = this->app->make_parameters<GTestImplicitFENonlinearProblem>();
-    params.set<Ref<godzilla::App>>("app", ref(*this->app));
     params.set<Ref<Mesh>>("mesh", ref(*this->mesh));
     params.set<Real>("start_time", 0.);
     params.set<Real>("end_time", 20);
@@ -82,7 +81,6 @@ TEST_F(ImplicitFENonlinearProblemTest, wrong_scheme)
 TEST_F(ImplicitFENonlinearProblemTest, wrong_time_stepping_params)
 {
     auto params = this->app->make_parameters<GTestImplicitFENonlinearProblem>();
-    params.set<Ref<godzilla::App>>("app", ref(*this->app));
     params.set<String>("name", "prob");
     params.set<Ref<Mesh>>("mesh", ref(*this->mesh));
     params.set<Real>("start_time", 0.);
@@ -98,7 +96,6 @@ TEST_F(ImplicitFENonlinearProblemTest, wrong_time_stepping_params)
 TEST_F(ImplicitFENonlinearProblemTest, no_time_stepping_params)
 {
     auto params = this->app->make_parameters<GTestImplicitFENonlinearProblem>();
-    params.set<Ref<godzilla::App>>("app", ref(*this->app));
     params.set<String>("name", "prob");
     params.set<Ref<Mesh>>("mesh", ref(*this->mesh));
     params.set<Real>("start_time", 0.);

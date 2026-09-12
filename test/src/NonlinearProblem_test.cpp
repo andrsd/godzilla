@@ -94,8 +94,7 @@ TEST(NonlinearProblemTest, initial_guess)
     mesh_pars.set<Int>("nx", 1);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
-    auto prob_pars = G1DTestNonlinearProblem::parameters();
-    prob_pars.set<Ref<App>>("app", ref(app));
+    auto prob_pars = app.make_parameters<G1DTestNonlinearProblem>();
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     G1DTestNonlinearProblem prob(prob_pars);
     prob.create();
@@ -115,8 +114,7 @@ TEST(NonlinearProblemTest, solve)
     mesh_pars.set<Int>("nx", 1);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
-    auto prob_pars = G1DTestNonlinearProblem::parameters();
-    prob_pars.set<Ref<App>>("app", ref(app));
+    auto prob_pars = app.make_parameters<G1DTestNonlinearProblem>();
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     G1DTestNonlinearProblem prob(prob_pars);
 
@@ -176,8 +174,7 @@ TEST(NonlinearProblemTest, run)
     mesh_pars.set<Int>("nx", 1);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
-    auto prob_pars = NonlinearProblem::parameters();
-    prob_pars.set<Ref<App>>("app", ref(app));
+    auto prob_pars = app.make_parameters<NonlinearProblem>();
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     MockNonlinearProblem prob(prob_pars);
     prob.create();
@@ -214,8 +211,7 @@ TEST(NonlinearProblemTest, line_search_type)
     std::vector<String> ls_type = { "basic", "l2", "cp", "nleqerr", "shell" };
 #endif
     for (auto & lst : ls_type) {
-        auto prob_pars = NonlinearProblem::parameters();
-        prob_pars.set<Ref<App>>("app", ref(app));
+        auto prob_pars = app.make_parameters<NonlinearProblem>();
         prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
         prob_pars.set<String>("line_search", lst);
         MockNonlinearProblem prob(prob_pars);
@@ -243,8 +239,7 @@ TEST(NonlinearProblemTest, invalid_line_search_type)
     mesh_pars.set<Int>("nx", 1);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
-    auto prob_pars = NonlinearProblem::parameters();
-    prob_pars.set<Ref<App>>("app", ref(app));
+    auto prob_pars = app.make_parameters<NonlinearProblem>();
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     prob_pars.set<String>("line_search", "asdf");
 
@@ -259,8 +254,7 @@ TEST(NonlinearProblemTest, restart_file)
     mesh_pars.set<Int>("nx", 1);
     auto mesh = MeshFactory::create<LineMesh>(mesh_pars);
 
-    auto prob_pars = G1DTestNonlinearProblem::parameters();
-    prob_pars.set<Ref<App>>("app", ref(app));
+    auto prob_pars = app.make_parameters<G1DTestNonlinearProblem>();
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     G1DTestNonlinearProblem prob(prob_pars);
 

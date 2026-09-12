@@ -299,16 +299,14 @@ TEST(ExplicitFVLinearProblemTest, solve)
         .set<Real>("dt", 1e-3);
     auto prob = app.make_problem<TestExplicitFVLinearProblem>(prob_pars);
 
-    auto bc_left_pars = TestBC::parameters();
-    bc_left_pars.set<Ref<App>>("app", ref(app))
-        .set<std::vector<String>>("boundary", { "left" })
-        .set<bool>("inlet", true);
+    auto bc_left_pars = app.make_parameters<TestBC>();
+    bc_left_pars.set<std::vector<String>>("boundary", { "left" });
+    bc_left_pars.set<bool>("inlet", true);
     auto bc_left = prob->add_boundary_condition<TestBC>(bc_left_pars);
 
-    auto bc_right_pars = TestBC::parameters();
-    bc_right_pars.set<Ref<App>>("app", ref(app))
-        .set<std::vector<String>>("boundary", { "right" })
-        .set<bool>("inlet", false);
+    auto bc_right_pars = app.make_parameters<TestBC>();
+    bc_right_pars.set<std::vector<String>>("boundary", { "right" });
+    bc_right_pars.set<bool>("inlet", false);
     auto bc_right = prob->add_boundary_condition<TestBC>(bc_right_pars);
 
     mesh.create();
