@@ -13,6 +13,7 @@ Object::parameters()
     Parameters params;
     params.add_required_param<LateRef<App>>("app", "Application we are part of")
         .add_private_param<String>("_type", "")
+        .add_param<mpi::Communicator>("comm", "MPI communicator")
         .add_param<String>("name", "Name of the object");
     return params;
 }
@@ -20,6 +21,7 @@ Object::parameters()
 Object::Object(const Parameters & pars) :
     LoggingInterface(pars.get<Ref<App>>("app")->get_logger()),
     app(pars.get<Ref<App>>("app")),
+    comm(pars.get<mpi::Communicator>("comm", this->app->get_comm())),
     type(pars.get<String>("_type")),
     name(pars.get<String>("name", ""))
 {
@@ -51,14 +53,14 @@ mpi::Communicator
 Object::get_comm() const
 {
     CALL_STACK_MSG();
-    return this->app->get_comm();
+    return this->comm;
 }
 
 int
 Object::get_processor_id() const
 {
     CALL_STACK_MSG();
-    return this->app->get_comm().rank();
+    return this->comm.rank();
 }
 
 void
