@@ -60,3 +60,14 @@ TEST(BoundingBoxTest, contains)
         EXPECT_FALSE(bbox.contains(Span(point.data(), 3), 1e-10));
     }
 }
+
+TEST(BoundingBoxTest, create_from_points)
+{
+    std::vector<Real> points = { 0, 0, 1, 0, 2, 0, 2, 1, 1, -1 };
+    auto bbox = BoundingBox<2_D>::create_from_points(points);
+
+    EXPECT_NEAR(bbox.min()[0], 0., 1e-15);
+    EXPECT_NEAR(bbox.min()[1], -1., 1e-15);
+    EXPECT_NEAR(bbox.max()[0], 2., 1e-15);
+    EXPECT_NEAR(bbox.max()[1], 1., 1e-15);
+}

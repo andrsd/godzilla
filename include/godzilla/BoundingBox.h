@@ -79,6 +79,31 @@ public:
 private:
     std::array<Real, D> mn;
     std::array<Real, D> mx;
+
+public:
+    static BoundingBox
+    create_from_points(Span<const Real> coords)
+    {
+        CALL_STACK_MSG();
+
+        expect_true(
+            coords.size() % D == 0,
+            fmt::format("'coords' must be divisible by {}, it has {} entries", D, coords.size()));
+
+        BoundingBox bbox;
+        for (Int d = 0; d < D; d++) {
+            bbox.mn[d] = PETSC_MAX_REAL;
+            bbox.mx[d] = PETSC_MIN_REAL;
+        }
+        auto n_points = coords.size() / D;
+        for (Int i = 0; i < n_points; i++) {
+            for (Int d = 0; d < D; d++) {
+                bbox.mn[d] = std::min(bbox.mn[d], coords[i * D + d]);
+                bbox.mx[d] = std::max(bbox.mx[d], coords[i * D + d]);
+            }
+        }
+        return bbox;
+    }
 };
 
 } // namespace godzilla
