@@ -46,3 +46,17 @@ TEST(BoundingBoxTest, ctor_span)
     EXPECT_NEAR(bbox.max()[1], 2, 1e-15);
     EXPECT_NEAR(bbox.max()[2], 3, 1e-15);
 }
+
+TEST(BoundingBoxTest, contains)
+{
+    BoundingBox<3_D> bbox({ -1, -2, -3 }, { 1, 2, 3 });
+
+    {
+        std::array<Real, 3_D> point = { 0, 0, 0 };
+        EXPECT_TRUE(bbox.contains(Span(point.data(), 3), 1e-10));
+    }
+    {
+        std::array<Real, 3_D> point = { 2, 2, 3 };
+        EXPECT_FALSE(bbox.contains(Span(point.data(), 3), 1e-10));
+    }
+}

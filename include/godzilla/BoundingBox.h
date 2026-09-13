@@ -58,6 +58,24 @@ public:
         return this->mx;
     }
 
+    bool
+    contains(Span<const Real> x, Real tol) const
+    {
+        CALL_STACK_MSG();
+
+        GODZILLA_ASSERT_TRUE(
+            x.size() == D,
+            fmt::format("Point dimension ({}) does not match bounding box dimension ({})",
+                        s.size(),
+                        D));
+
+        for (Int d = 0; d < D; d++) {
+            if (x[d] + tol < this->mn[d] || this->mx[d] + tol < x[d])
+                return false;
+        }
+        return true;
+    }
+
 private:
     std::array<Real, D> mn;
     std::array<Real, D> mx;
