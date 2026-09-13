@@ -41,14 +41,14 @@ TEST(BoxMeshTest, api)
     EXPECT_EQ(m->get_dimension(), 3_D);
 
     auto bbox = m->get_bounding_box<3_D>();
-    EXPECT_EQ(bbox.min()[0], 1);
-    EXPECT_EQ(bbox.max()[0], 4);
+    EXPECT_EQ(bbox.min[0], 1);
+    EXPECT_EQ(bbox.max[0], 4);
 
-    EXPECT_EQ(bbox.min()[1], 2);
-    EXPECT_EQ(bbox.max()[1], 5);
+    EXPECT_EQ(bbox.min[1], 2);
+    EXPECT_EQ(bbox.max[1], 5);
 
-    EXPECT_EQ(bbox.min()[2], 3);
-    EXPECT_EQ(bbox.max()[2], 6);
+    EXPECT_EQ(bbox.min[2], 3);
+    EXPECT_EQ(bbox.max[2], 6);
 
     auto dm = m->get_dm();
     Vec coords;

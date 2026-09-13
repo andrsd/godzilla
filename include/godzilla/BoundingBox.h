@@ -16,14 +16,14 @@ public:
     BoundingBox()
     {
         for (Int i = 0; i < D; ++i) {
-            this->mn[i] = std::numeric_limits<Real>::max();
-            this->mx[i] = std::numeric_limits<Real>::lowest();
+            this->min[i] = std::numeric_limits<Real>::max();
+            this->max[i] = std::numeric_limits<Real>::lowest();
         }
     }
 
     BoundingBox(const std::array<Real, D> & minimum, const std::array<Real, D> & maximum) :
-        mn(minimum),
-        mx(maximum)
+        min(minimum),
+        max(maximum)
     {
     }
 
@@ -41,39 +41,9 @@ public:
                         D));
 
         for (Int i = 0; i < D; ++i) {
-            this->mn[i] = minimum[i];
-            this->mx[i] = maximum[i];
+            this->min[i] = minimum[i];
+            this->max[i] = maximum[i];
         }
-    }
-
-    std::array<Real, D>
-    min() const
-    {
-        return this->mn;
-    }
-
-    Real
-    min(Int idx) const
-    {
-        GODZILLA_ASSERT_TRUE(
-            idx < D,
-            fmt::format("Requested index ({}) is out of bounds (0..{})", idx, D - 1));
-        return this->mn[idx];
-    }
-
-    std::array<Real, D>
-    max() const
-    {
-        return this->mx;
-    }
-
-    Real
-    max(Int idx) const
-    {
-        GODZILLA_ASSERT_TRUE(
-            idx < D,
-            fmt::format("Requested index ({}) is out of bounds (0..{})", idx, D - 1));
-        return this->mx[idx];
     }
 
     bool
@@ -88,15 +58,14 @@ public:
                         D));
 
         for (Int d = 0; d < D; d++) {
-            if (x[d] + tol < this->mn[d] || this->mx[d] + tol < x[d])
+            if (x[d] + tol < this->min[d] || this->max[d] + tol < x[d])
                 return false;
         }
         return true;
     }
 
-private:
-    std::array<Real, D> mn;
-    std::array<Real, D> mx;
+    std::array<Real, D> min;
+    std::array<Real, D> max;
 
 public:
     static BoundingBox
@@ -110,14 +79,14 @@ public:
 
         BoundingBox bbox;
         for (Int d = 0; d < D; d++) {
-            bbox.mn[d] = PETSC_MAX_REAL;
-            bbox.mx[d] = PETSC_MIN_REAL;
+            bbox.min[d] = PETSC_MAX_REAL;
+            bbox.max[d] = PETSC_MIN_REAL;
         }
         auto n_points = coords.size() / D;
         for (Int i = 0; i < n_points; i++) {
             for (Int d = 0; d < D; d++) {
-                bbox.mn[d] = std::min(bbox.mn[d], coords[i * D + d]);
-                bbox.mx[d] = std::max(bbox.mx[d], coords[i * D + d]);
+                bbox.min[d] = std::min(bbox.min[d], coords[i * D + d]);
+                bbox.max[d] = std::max(bbox.max[d], coords[i * D + d]);
             }
         }
         return bbox;
@@ -129,10 +98,28 @@ bool
 intersect(const BoundingBox<DIM> & a, const BoundingBox<DIM> & b, Real tol)
 {
     for (Int d = 0; d < DIM; d++) {
-        if (a.max()[d] + tol < b.min()[d] || b.max()[d] + tol < a.min()[d])
+        if (a.max[d] + tol < b.min[d] || b.max[d] + tol < a.min[d])
             return false;
     }
     return true;
 }
 
 } // namespace godzilla
+
+namespace mpicpp_lite {
+
+template <godzilla::Dimension D>
+struct DatatypeTraits<godzilla::BoundingBox<D>> {
+    static MPI_Datatype
+    get()
+    {
+        std::vector<MPI_Datatype> types = { mpicpp_lite::mpi_datatype<godzilla::Real>(),
+                                            mpicpp_lite::mpi_datatype<godzilla::Real>() };
+        std::vector<int> blk_lens = { D, D };
+        std::vector<MPI_Aint> offsets = { offsetof(godzilla::BoundingBox<D>, min),
+                                          offsetof(godzilla::BoundingBox<D>, max) };
+        return type_create_struct(types, blk_lens, offsets);
+    }
+};
+
+} // namespace mpicpp_lite
