@@ -106,4 +106,15 @@ public:
     }
 };
 
+template <Dimension DIM>
+bool
+intersect(const BoundingBox<DIM> & a, const BoundingBox<DIM> & b, Real tol)
+{
+    for (Int d = 0; d < DIM; d++) {
+        if (a.max()[d] + tol < b.min()[d] || b.max()[d] + tol < a.min()[d])
+            return false;
+    }
+    return true;
+}
+
 } // namespace godzilla

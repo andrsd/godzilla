@@ -71,3 +71,19 @@ TEST(BoundingBoxTest, create_from_points)
     EXPECT_NEAR(bbox.max()[0], 2., 1e-15);
     EXPECT_NEAR(bbox.max()[1], 1., 1e-15);
 }
+
+TEST(BoundingBoxTest, intersect)
+{
+    {
+        BoundingBox<3_D> a({ 0, 0, 0 }, { 1, 2, 3 });
+        BoundingBox<3_D> b({ -1, -2, -3 }, { 0.5, 1, 1.5 });
+        EXPECT_TRUE(intersect(a, b, 1e-10));
+    }
+
+    {
+        BoundingBox<3_D> a({ 1e-9, 1e-9, 1e-9 }, { 1, 2, 3 });
+        BoundingBox<3_D> b({ -1, -2, -3 }, { 0., 0., 0. });
+        EXPECT_TRUE(intersect(a, b, 1e-8));
+        EXPECT_FALSE(intersect(a, b, 1e-10));
+    }
+}
