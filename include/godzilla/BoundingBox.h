@@ -4,6 +4,8 @@
 #pragma once
 
 #include "godzilla/Types.h"
+#include "godzilla/Span.h"
+#include "godzilla/Formatters.h"
 #include <array>
 
 namespace godzilla {
@@ -14,8 +16,8 @@ public:
     BoundingBox()
     {
         for (Int i = 0; i < D; ++i) {
-            this->mn[i] = 0.;
-            this->mx[i] = 0.;
+            this->mn[i] = std::numeric_limits<Real>::max();
+            this->mx[i] = std::numeric_limits<Real>::lowest();
         }
     }
 
@@ -25,8 +27,19 @@ public:
     {
     }
 
-    BoundingBox(const Real minimum[], const Real maximum[])
+    BoundingBox(Span<const Real> minimum, Span<const Real> maximum)
     {
+        expect_true(
+            minimum.size() == D,
+            fmt::format("Dimension of minimum ({}) does not match boundning box dimension ({})",
+                        minimum.size(),
+                        D));
+        expect_true(
+            maximum.size() == D,
+            fmt::format("Dimension of maximum ({}) does not match boundning box dimension ({})",
+                        maximum.size(),
+                        D));
+
         for (Int i = 0; i < D; ++i) {
             this->mn[i] = minimum[i];
             this->mx[i] = maximum[i];
