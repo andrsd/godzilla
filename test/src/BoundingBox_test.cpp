@@ -47,6 +47,19 @@ TEST(BoundingBoxTest, ctor_span)
     EXPECT_NEAR(bbox.max()[2], 3, 1e-15);
 }
 
+TEST(BoundingBoxTest, min_max_idx)
+{
+    BoundingBox<3_D> bbox({ -1, -2, -3 }, { 1, 2, 3 });
+
+    EXPECT_NEAR(bbox.min(0), -1, 1e-15);
+    EXPECT_NEAR(bbox.min(1), -2, 1e-15);
+    EXPECT_NEAR(bbox.min(2), -3, 1e-15);
+
+    EXPECT_NEAR(bbox.max(0), 1, 1e-15);
+    EXPECT_NEAR(bbox.max(1), 2, 1e-15);
+    EXPECT_NEAR(bbox.max(2), 3, 1e-15);
+}
+
 TEST(BoundingBoxTest, contains)
 {
     BoundingBox<3_D> bbox({ -1, -2, -3 }, { 1, 2, 3 });

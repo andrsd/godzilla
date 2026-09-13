@@ -52,10 +52,28 @@ public:
         return this->mn;
     }
 
+    Real
+    min(Int idx) const
+    {
+        GODZILLA_ASSERT_TRUE(
+            idx < D,
+            fmt::format("Requested index ({}) is out of bounds (0..{})", idx, D - 1));
+        return this->mn[idx];
+    }
+
     std::array<Real, D>
     max() const
     {
         return this->mx;
+    }
+
+    Real
+    max(Int idx) const
+    {
+        GODZILLA_ASSERT_TRUE(
+            idx < D,
+            fmt::format("Requested index ({}) is out of bounds (0..{})", idx, D - 1));
+        return this->mx[idx];
     }
 
     bool
