@@ -12,7 +12,6 @@
 #include "godzilla/Vector.h"
 #include "mpicpp-lite/mpicpp-lite.h"
 #include "petscsf.h"
-#include <vector>
 
 namespace mpi = mpicpp_lite;
 
@@ -80,10 +79,7 @@ public:
     Graph get_graph() const;
 
     /// Set a parallel star forest
-    void set_graph(Int n_roots,
-                   Int n_leaves,
-                   const std::vector<Int> & ilocal,
-                   const std::vector<Node> & iremote) const;
+    void set_graph(Int n_roots, Span<Int> ilocal, Span<Node> iremote) const;
 
     /// Begin pointwise broadcast with root value being reduced to leaf value, to be concluded with
     /// call to `broadcast_end`
@@ -110,7 +106,7 @@ public:
 
     template <typename T, typename Op>
     void
-    broadcast_begin(const std::vector<T> & root, std::vector<T> & leaf, Op op) const
+    broadcast_begin(Span<const T> root, Span<T> leaf, Op op) const
     {
         broadcast_begin(root.data(), leaf.data(), op);
     }
@@ -156,7 +152,7 @@ public:
 
     template <typename T, typename Op>
     void
-    broadcast_end(const std::vector<T> & root, std::vector<T> & leaf, Op op) const
+    broadcast_end(Span<const T> root, Span<T> leaf, Op op) const
     {
         broadcast_end(root.data(), leaf.data(), op);
     }
@@ -197,7 +193,7 @@ public:
 
     template <typename T, typename Op>
     void
-    reduce_begin(const std::vector<T> & leaf, std::vector<T> & root, Op op) const
+    reduce_begin(Span<const T> leaf, Span<T> root, Op op) const
     {
         CALL_STACK_MSG();
         reduce_begin(leaf.data(), root.data(), op);
@@ -240,7 +236,7 @@ public:
 
     template <typename T, typename Op>
     void
-    reduce_end(const std::vector<T> & leaf, std::vector<T> & root, Op op) const
+    reduce_end(Span<const T> leaf, Span<T> root, Op op) const
     {
         CALL_STACK_MSG();
         reduce_end(leaf.data(), root.data(), op);

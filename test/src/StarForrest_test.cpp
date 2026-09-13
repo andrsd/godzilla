@@ -61,7 +61,7 @@ TEST(StarForestTest, test)
     iremote[0].rank = 0;
     iremote[0].index = 0;
 
-    sf.set_graph(n_roots, n_leaves, ilocal, iremote);
+    sf.set_graph(n_roots, ilocal, iremote);
     sf.set_up();
 
     auto graph = sf.get_graph();
@@ -90,7 +90,7 @@ TEST(StarForestTest, reset)
     std::vector<StarForest::Node> iremote(n_leaves);
     iremote[0].rank = 0;
     iremote[0].index = 0;
-    sf.set_graph(n_roots, n_leaves, ilocal, iremote);
+    sf.set_graph(n_roots, ilocal, iremote);
     sf.reset();
     auto empty = sf.get_graph();
     EXPECT_EQ(empty.get_num_leaves(), -1);
@@ -112,7 +112,7 @@ TEST(StarForestTest, view)
     std::vector<StarForest::Node> iremote(n_leaves);
     iremote[0].rank = 0;
     iremote[0].index = 0;
-    sf.set_graph(n_roots, n_leaves, ilocal, iremote);
+    sf.set_graph(n_roots, ilocal, iremote);
     sf.view();
 
     auto out = testing::internal::GetCapturedStdout();
@@ -238,7 +238,7 @@ TEST(StarForestTest, compute_degree)
     iremote[0].rank = 0;
     iremote[0].index = 0;
 
-    sf.set_graph(n_roots, n_leaves, ilocal, iremote);
+    sf.set_graph(n_roots, ilocal, iremote);
     sf.set_up();
 
     auto degrees = sf.compute_degree();

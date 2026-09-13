@@ -123,18 +123,20 @@ StarForest::get_graph() const
 }
 
 void
-StarForest::set_graph(Int n_roots,
-                      Int n_leaves,
-                      const std::vector<Int> & ilocal,
-                      const std::vector<Node> & iremote) const
+StarForest::set_graph(Int n_roots, Span<Int> ilocal, Span<Node> iremote) const
 {
     CALL_STACK_MSG();
+    expect_true(ilocal.size() == iremote.size(),
+                fmt::format("Size of ilocal ({}) does not match the size of iremote ({})",
+                            ilocal.size(),
+                            iremote.size()));
+    Int n_leaves = ilocal.size();
     PETSC_CHECK(PetscSFSetGraph(this->obj,
                                 n_roots,
                                 n_leaves,
-                                const_cast<Int *>(ilocal.data()),
+                                ilocal.data(),
                                 PETSC_COPY_VALUES,
-                                const_cast<Node *>(iremote.data()),
+                                iremote.data(),
                                 PETSC_COPY_VALUES));
 }
 
