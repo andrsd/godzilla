@@ -52,9 +52,9 @@ protected:
 
 private:
     /// Application we are part of
-    App & app;
+    App & app_;
     /// Command line arguments
-    std::vector<String> args;
+    std::vector<String> args_;
 
 public:
     /// Create default command line options

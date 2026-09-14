@@ -36,26 +36,26 @@ CommandLineInterface::default_command_line_options()
 }
 
 CommandLineInterface::CommandLineInterface(App & app, int argc, const char * const * argv) :
-    app(app)
+    app_(app)
 {
-    this->args.reserve(argc);
+    this->args_.reserve(argc);
     for (int i = 0; i < argc; ++i)
-        this->args.emplace_back(argv[i]);
+        this->args_.emplace_back(argv[i]);
 }
 
-CommandLineInterface::CommandLineInterface(App & app, const std::vector<String> & args) : app(app)
+CommandLineInterface::CommandLineInterface(App & app, const std::vector<String> & args) : app_(app)
 {
-    this->args.reserve(args.size() + 1);
-    this->args.emplace_back(app.get_name());
+    this->args_.reserve(args.size() + 1);
+    this->args_.emplace_back(app.get_name());
     for (auto & s : args)
-        this->args.emplace_back(s);
+        this->args_.emplace_back(s);
 }
 
 String
 CommandLineInterface::get_app_name() const
 {
     CALL_STACK_MSG();
-    return this->app.get_name();
+    return this->app_.get_name();
 }
 
 cxxopts::ParseResult
@@ -63,10 +63,10 @@ CommandLineInterface::parse(cxxopts::Options & opts)
 {
     CALL_STACK_MSG();
     try {
-        auto argc = this->args.size();
+        auto argc = this->args_.size();
         std::vector<const char *> argv;
         argv.reserve(argc);
-        for (auto & a : this->args)
+        for (auto & a : this->args_)
             argv.push_back(a.c_str());
         return opts.parse(argc, argv.data());
     }
@@ -86,25 +86,25 @@ CommandLineInterface::process_command_line(const cxxopts::ParseResult & result)
         Terminal::set_colors(false);
 
     if (result.count("verbose"))
-        this->app.set_verbosity_level(result["verbose"].as<unsigned int>());
+        this->app_.set_verbosity_level(result["verbose"].as<unsigned int>());
 
     if (result.count("restart-from"))
-        this->app.set_restart_file_name(result["restart-from"].as<std::string>());
+        this->app_.set_restart_file_name(result["restart-from"].as<std::string>());
 
     if (result.count("perf-log"))
-        this->app.set_perf_log_file_name(result["perf-log"].as<std::string>());
+        this->app_.set_perf_log_file_name(result["perf-log"].as<std::string>());
 
     if (result.count("log-file"))
-        this->app.get_logger()->set_log_file_name(result["log-file"].as<std::string>());
+        this->app_.get_logger()->set_log_file_name(result["log-file"].as<std::string>());
 
     if (result.count("redirect-stdout")) {
-        auto fname = fmt::format("output.{}.txt", this->app.get_comm().rank());
-        this->app.redirect_stdout(fname);
+        auto fname = fmt::format("output.{}.txt", this->app_.get_comm().rank());
+        this->app_.redirect_stdout(fname);
     }
 
     if (result.count("redirect-stderr")) {
-        auto fname = fmt::format("error.{}.txt", this->app.get_comm().rank());
-        this->app.redirect_stderr(fname);
+        auto fname = fmt::format("error.{}.txt", this->app_.get_comm().rank());
+        this->app_.redirect_stderr(fname);
     }
 }
 
@@ -115,10 +115,10 @@ CommandLineInterface::run(const cxxopts::Options & opts, const cxxopts::ParseRes
         fmt::print("{}", opts.help());
     }
     else if (result.count("version")) {
-        fmt::print("{}, version {}\n", this->app.get_name(), this->app.get_version());
+        fmt::print("{}, version {}\n", this->app_.get_name(), this->app_.get_version());
     }
     else if (result.count("export-parameters"))
-        this->app.export_parameters_yaml();
+        this->app_.export_parameters_yaml();
 
     return 0;
 }
