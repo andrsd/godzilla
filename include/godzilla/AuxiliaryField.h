@@ -80,19 +80,19 @@ protected:
 
 private:
     /// Discrete problem this object is part of
-    Ref<DiscreteProblemInterface> dpi;
+    Ref<DiscreteProblemInterface> dpi_;
     /// Unstructured mesh this field is defined on
-    Ref<UnstructuredMesh> mesh;
+    Ref<UnstructuredMesh> mesh_;
     /// Field name
-    String field;
+    String field_;
     /// Field ID this boundary condition is attached to
-    FieldID fid;
+    FieldID fid_;
     /// Region name this auxiliary field is defined on
-    const String region;
+    const String region_;
     /// Block here the auxiliary field lives
-    Label label;
+    Label label_;
     /// Block ID associated with the label where this field is defined
-    Int block_id;
+    Int block_id_;
 
 public:
     static Parameters parameters();
