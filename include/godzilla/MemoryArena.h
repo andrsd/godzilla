@@ -15,21 +15,21 @@ public:
 
     /// Create an arena with `capacity` elements
     explicit MemoryArena(std::size_t capacity) :
-        capacity(capacity),
-        buffer(new T[capacity]),
-        offset(0)
+        capacity_(capacity),
+        buffer_(new T[capacity]),
+        offset_(0)
     {
     }
 
-    ~MemoryArena() { delete[] this->buffer; }
+    ~MemoryArena() { delete[] this->buffer_; }
 
     /// Allocate `n` entries from arena
     T *
     allocate(std::size_t n)
     {
-        expect_true(this->offset + n <= this->capacity, "Arena out of memory");
-        T * ptr = this->buffer + this->offset;
-        this->offset += n;
+        expect_true(this->offset_ + n <= this->capacity_, "Arena out of memory");
+        T * ptr = this->buffer_ + this->offset_;
+        this->offset_ += n;
         return ptr;
     }
 
@@ -37,27 +37,27 @@ public:
     void
     reset()
     {
-        this->offset = 0;
+        this->offset_ = 0;
     }
 
     /// Get marker pointing at the begining of free space in arena
     Marker
     mark() const
     {
-        return this->offset;
+        return this->offset_;
     }
 
     /// Set internal allocation point to marker
     void
     rewind(Marker m)
     {
-        this->offset = m;
+        this->offset_ = m;
     }
 
 private:
-    std::size_t capacity;
-    T * buffer;
-    std::size_t offset;
+    std::size_t capacity_;
+    T * buffer_;
+    std::size_t offset_;
 };
 
 } // namespace godzilla
