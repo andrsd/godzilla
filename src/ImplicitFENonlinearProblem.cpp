@@ -43,10 +43,10 @@ ImplicitFENonlinearProblem::parameters()
 ImplicitFENonlinearProblem::ImplicitFENonlinearProblem(const Parameters & pars) :
     FENonlinearProblem(pars),
     TransientProblemInterface(*this, pars),
-    scheme(pars.get<String>("scheme"))
+    scheme_(pars.get<String>("scheme"))
 {
     CALL_STACK_MSG();
-    expect_true(validation::in(this->scheme, { "beuler", "cn" }),
+    expect_true(validation::in(this->scheme_, { "beuler", "cn" }),
                 "The 'scheme' parameter can be either 'beuler' or 'cn'.");
 }
 
@@ -126,7 +126,7 @@ void
 ImplicitFENonlinearProblem::set_up_time_scheme()
 {
     CALL_STACK_MSG();
-    auto name = this->scheme.to_lower();
+    auto name = this->scheme_.to_lower();
     if (name == "beuler")
         set_scheme(TSBEULER);
     else if (name == "cn")

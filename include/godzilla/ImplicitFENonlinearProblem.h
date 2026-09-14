@@ -32,10 +32,10 @@ protected:
     void
     set_time_boundary_local(Ref<T> instance, void (T::*method)(Real, Vector &, Vector &))
     {
-        this->compute_boundary_local_method.bind(instance, method);
+        this->compute_boundary_local_method_.bind(instance, method);
         PETSC_CHECK(DMTSSetBoundaryLocal(get_dm(),
                                          invoke_compute_boundary_delegate,
-                                         &this->compute_boundary_local_method));
+                                         &this->compute_boundary_local_method_));
     }
 
     ExecuteOnFlags
@@ -86,9 +86,9 @@ private:
     void compute_boundary_fem(Real time, Vector & x, Vector & x_t);
 
     /// Time stepping scheme
-    const String scheme;
+    const String scheme_;
     /// Method for essential boundary data for a local implicit function evaluation.
-    Delegate<void(Real time, Vector & x, Vector & x_t)> compute_boundary_local_method;
+    Delegate<void(Real time, Vector & x, Vector & x_t)> compute_boundary_local_method_;
 
 public:
     static Parameters parameters();
