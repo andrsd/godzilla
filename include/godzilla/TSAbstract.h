@@ -89,32 +89,32 @@ protected:
 
 private:
     /// PETSc TS object
-    TS ts;
+    TS ts_;
     /// Transient problem
-    TransientProblemInterface * tpi;
+    TransientProblemInterface * tpi_;
     /// Time stepping adaptivity
-    TimeStepAdapt adapt;
+    TimeStepAdapt adapt_;
     /// Current time increment
-    Real & time_step;
+    Real & time_step_;
     /// Time at the start of the current step (stage time is internal if it exists)
-    Real & ptime;
+    Real & ptime_;
     /// Time at the start of the previous step
-    Real & ptime_prev;
+    Real & ptime_prev_;
     /// Steps taken so far in all successive calls to TSSolve()
-    Int & steps;
+    Int & steps_;
     /// Solution vector in first and second order equations
-    Vector vec_sol;
+    Vector vec_sol_;
     ///
-    Int & reject;
+    Int & reject_;
     ///
-    Int & max_reject;
+    Int & max_reject_;
     /// Status of the step
-    TSStepStatus status;
+    TSStepStatus status_;
     /// Converged reason
-    TSConvergedReason & reason;
+    TSConvergedReason & reason_;
 
     /// States computed during the step
-    std::vector<Vector> Y;
+    std::vector<Vector> Y_;
 };
 
 namespace internal {
