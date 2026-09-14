@@ -21,21 +21,21 @@ void
 Label::create(mpi::Communicator comm, String name)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(DMLabelCreate(comm, name.c_str(), &this->obj));
+    PETSC_CHECK(DMLabelCreate(comm, name.c_str(), &this->obj_));
 }
 
 void
 Label::reset()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(DMLabelReset(this->obj));
+    PETSC_CHECK(DMLabelReset(this->obj_));
 }
 
 void
 Label::set_default_value(Int default_value) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(DMLabelSetDefaultValue(this->obj, default_value));
+    PETSC_CHECK(DMLabelSetDefaultValue(this->obj_, default_value));
 }
 
 Int
@@ -43,7 +43,7 @@ Label::get_default_value() const
 {
     CALL_STACK_MSG();
     Int value;
-    PETSC_CHECK(DMLabelGetDefaultValue(this->obj, &value));
+    PETSC_CHECK(DMLabelGetDefaultValue(this->obj_, &value));
     return value;
 }
 
@@ -52,7 +52,7 @@ Label::get_num_values() const
 {
     CALL_STACK_MSG();
     Int n;
-    PETSC_CHECK(DMLabelGetNumValues(this->obj, &n));
+    PETSC_CHECK(DMLabelGetNumValues(this->obj_, &n));
     return n;
 }
 
@@ -61,7 +61,7 @@ Label::get_value(Int point) const
 {
     CALL_STACK_MSG();
     Int value;
-    PETSC_CHECK(DMLabelGetValue(this->obj, point, &value));
+    PETSC_CHECK(DMLabelGetValue(this->obj_, point, &value));
     return value;
 }
 
@@ -70,7 +70,7 @@ Label::get_value_index_set() const
 {
     CALL_STACK_MSG();
     IndexSet is;
-    PETSC_CHECK(DMLabelGetValueIS(this->obj, is));
+    PETSC_CHECK(DMLabelGetValueIS(this->obj_, is));
     return is;
 }
 
@@ -87,7 +87,7 @@ void
 Label::set_value(Int point, Int value)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(DMLabelSetValue(this->obj, point, value));
+    PETSC_CHECK(DMLabelSetValue(this->obj_, point, value));
 }
 
 Int
@@ -95,7 +95,7 @@ Label::get_stratum_size(Int value) const
 {
     CALL_STACK_MSG();
     Int n;
-    PETSC_CHECK(DMLabelGetStratumSize(this->obj, value, &n));
+    PETSC_CHECK(DMLabelGetStratumSize(this->obj_, value, &n));
     return n;
 }
 
@@ -104,7 +104,7 @@ Label::get_stratum_bounds(Int value) const
 {
     CALL_STACK_MSG();
     Int start, end;
-    PETSC_CHECK(DMLabelGetStratumBounds(this->obj, value, &start, &end));
+    PETSC_CHECK(DMLabelGetStratumBounds(this->obj_, value, &start, &end));
     return std::make_tuple(start, end);
 }
 
@@ -113,7 +113,7 @@ Label::get_stratum_range(Int value) const
 {
     CALL_STACK_MSG();
     Int start, end;
-    PETSC_CHECK(DMLabelGetStratumBounds(this->obj, value, &start, &end));
+    PETSC_CHECK(DMLabelGetStratumBounds(this->obj_, value, &start, &end));
     return { start, end };
 }
 
@@ -122,7 +122,7 @@ Label::get_stratum(Int value) const
 {
     CALL_STACK_MSG();
     IndexSet is;
-    PETSC_CHECK(DMLabelGetStratumIS(this->obj, value, is));
+    PETSC_CHECK(DMLabelGetStratumIS(this->obj_, value, is));
     return is;
 }
 
@@ -130,14 +130,14 @@ void
 Label::set_stratum(Int value, const IndexSet & is) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(DMLabelSetStratumIS(this->obj, value, is));
+    PETSC_CHECK(DMLabelSetStratumIS(this->obj_, value, is));
 }
 
 void
 Label::view(PetscViewer viewer) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(DMLabelView(this->obj, viewer));
+    PETSC_CHECK(DMLabelView(this->obj_, viewer));
 }
 
 } // namespace godzilla

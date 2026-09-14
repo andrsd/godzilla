@@ -139,7 +139,7 @@ public:
     {
         this->compute_rhs_method_.bind(instance, method);
         PETSC_CHECK(
-            KSPSetComputeRHS(this->obj, invoke_compute_rhs_delegate, &this->compute_rhs_method_));
+            KSPSetComputeRHS(this->obj_, invoke_compute_rhs_delegate, &this->compute_rhs_method_));
     }
 
     /// Set member function to compute operators of the linear system
@@ -152,7 +152,7 @@ public:
     set_compute_operators(Ref<T> instance, void (T::*method)(Matrix &, Matrix &))
     {
         this->compute_operators_method_.bind(instance, method);
-        PETSC_CHECK(KSPSetComputeOperators(this->obj,
+        PETSC_CHECK(KSPSetComputeOperators(this->obj_,
                                            invoke_compute_operators_delegate,
                                            &this->compute_operators_method_));
     }
@@ -169,7 +169,7 @@ public:
     {
         this->monitor_method_.bind(instance, method);
         PETSC_CHECK(
-            KSPMonitorSet(this->obj, invoke_monitor_delegate, &this->monitor_method_, nullptr));
+            KSPMonitorSet(this->obj_, invoke_monitor_delegate, &this->monitor_method_, nullptr));
     }
 
     template <class T>
@@ -177,7 +177,7 @@ public:
     set_convergence_test(Ref<T> instance, ConvergedReason (T::*method)(Int, Real))
     {
         this->convergence_test_method_.bind(instance, method);
-        PETSC_CHECK(KSPSetConvergenceTest(this->obj,
+        PETSC_CHECK(KSPSetConvergenceTest(this->obj_,
                                           invoke_convergence_test_delegate,
                                           &this->convergence_test_method_,
                                           nullptr));
@@ -188,7 +188,7 @@ public:
     converged_reason_view_set(Ref<T> instance, void (T::*method)())
     {
         this->convergence_reason_view_method_.bind(instance, method);
-        PETSC_CHECK(KSPConvergedReasonViewSet(this->obj,
+        PETSC_CHECK(KSPConvergedReasonViewSet(this->obj_,
                                               invoke_converged_reason_view_delegate,
                                               &this->convergence_reason_view_method_,
                                               nullptr));

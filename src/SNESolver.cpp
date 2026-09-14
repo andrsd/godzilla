@@ -125,7 +125,7 @@ void
 SNESolver::create(mpi::Communicator comm)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(SNESCreate(comm, &this->obj));
+    PETSC_CHECK(SNESCreate(comm, &this->obj_));
 }
 
 KrylovSolver
@@ -133,7 +133,7 @@ SNESolver::get_ksp() const
 {
     CALL_STACK_MSG();
     KrylovSolver ks;
-    PETSC_CHECK(SNESGetKSP(this->obj, ks));
+    PETSC_CHECK(SNESGetKSP(this->obj_, ks));
     ks.inc_reference();
     return ks;
 }
@@ -143,7 +143,7 @@ SNESolver::get_line_search() const
 {
     CALL_STACK_MSG();
     SNESLineSearch ls;
-    PETSC_CHECK(SNESGetLineSearch(this->obj, &ls));
+    PETSC_CHECK(SNESGetLineSearch(this->obj_, &ls));
     return LineSearch(ls);
 }
 
@@ -151,21 +151,21 @@ void
 SNESolver::set_line_search(SNESolver::LineSearch ls)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(SNESSetLineSearch(this->obj, ls));
+    PETSC_CHECK(SNESSetLineSearch(this->obj_, ls));
 }
 
 void
 SNESolver::set_dm(DM dm)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(SNESSetDM(this->obj, dm));
+    PETSC_CHECK(SNESSetDM(this->obj_, dm));
 }
 
 void
 SNESolver::set_type(SNESType type)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(SNESSetType(this->obj, type));
+    PETSC_CHECK(SNESSetType(this->obj_, type));
 }
 
 String
@@ -173,7 +173,7 @@ SNESolver::get_type() const
 {
     CALL_STACK_MSG();
     SNESType type;
-    PETSC_CHECK(SNESGetType(this->obj, &type));
+    PETSC_CHECK(SNESGetType(this->obj_, &type));
     return String(type);
 }
 
@@ -181,14 +181,14 @@ void
 SNESolver::set_from_options()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(SNESSetFromOptions(this->obj));
+    PETSC_CHECK(SNESSetFromOptions(this->obj_));
 }
 
 void
 SNESolver::set_use_matrix_free(bool mf_operator, bool mf)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(SNESSetUseMatrixFree(this->obj,
+    PETSC_CHECK(SNESSetUseMatrixFree(this->obj_,
                                      mf_operator ? PETSC_TRUE : PETSC_FALSE,
                                      mf ? PETSC_TRUE : PETSC_FALSE));
 }
@@ -197,21 +197,21 @@ void
 SNESolver::set_tolerances(Real abs_tol, Real rtol, Real stol, Int max_it, Int maxf)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(SNESSetTolerances(this->obj, abs_tol, rtol, stol, max_it, maxf));
+    PETSC_CHECK(SNESSetTolerances(this->obj_, abs_tol, rtol, stol, max_it, maxf));
 }
 
 void
 SNESolver::solve(const Vector & b, Vector & x) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(SNESSolve(this->obj, b, x));
+    PETSC_CHECK(SNESSolve(this->obj_, b, x));
 }
 
 void
 SNESolver::solve(Vector & x) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(SNESSolve(this->obj, nullptr, x));
+    PETSC_CHECK(SNESSolve(this->obj_, nullptr, x));
 }
 
 SNESolver::ConvergedReason
@@ -219,7 +219,7 @@ SNESolver::get_converged_reason() const
 {
     CALL_STACK_MSG();
     SNESConvergedReason reason;
-    PETSC_CHECK(SNESGetConvergedReason(this->obj, &reason));
+    PETSC_CHECK(SNESGetConvergedReason(this->obj_, &reason));
     return static_cast<ConvergedReason>(reason);
 }
 
@@ -228,7 +228,7 @@ SNESolver::get_iteration_number() const
 {
     CALL_STACK_MSG();
     Int iter;
-    PETSC_CHECK(SNESGetIterationNumber(this->obj, &iter));
+    PETSC_CHECK(SNESGetIterationNumber(this->obj_, &iter));
     return iter;
 }
 
@@ -237,7 +237,7 @@ SNESolver::get_linear_solve_iterations() const
 {
     CALL_STACK_MSG();
     Int iter;
-    PETSC_CHECK(SNESGetLinearSolveIterations(this->obj, &iter));
+    PETSC_CHECK(SNESGetLinearSolveIterations(this->obj_, &iter));
     return iter;
 }
 
@@ -246,7 +246,7 @@ SNESolver::mat_create_mf() const
 {
     CALL_STACK_MSG();
     Matrix mat;
-    PETSC_CHECK(MatCreateSNESMF(this->obj, mat));
+    PETSC_CHECK(MatCreateSNESMF(this->obj_, mat));
     return mat;
 }
 

@@ -15,14 +15,14 @@ void
 Quadrature::create(mpi::Communicator comm)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscQuadratureCreate(comm, &this->obj));
+    PETSC_CHECK(PetscQuadratureCreate(comm, &this->obj_));
 }
 
 void
 Quadrature::duplicate(Quadrature & r)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscQuadratureDuplicate(this->obj, &r.obj));
+    PETSC_CHECK(PetscQuadratureDuplicate(this->obj_, &r.obj_));
 }
 
 Quadrature
@@ -30,7 +30,7 @@ Quadrature::duplicate() const
 {
     CALL_STACK_MSG();
     Quadrature q;
-    PETSC_CHECK(PetscQuadratureDuplicate(this->obj, q));
+    PETSC_CHECK(PetscQuadratureDuplicate(this->obj_, q));
     return q;
 }
 
@@ -39,7 +39,7 @@ Quadrature::get_dim() const
 {
     CALL_STACK_MSG();
     Int dim;
-    PETSC_CHECK(PetscQuadratureGetData(this->obj, &dim, nullptr, nullptr, nullptr, nullptr));
+    PETSC_CHECK(PetscQuadratureGetData(this->obj_, &dim, nullptr, nullptr, nullptr, nullptr));
     return Dimension::from_int(dim);
 }
 
@@ -48,7 +48,7 @@ Quadrature::get_num_components() const
 {
     CALL_STACK_MSG();
     Int nc;
-    PETSC_CHECK(PetscQuadratureGetNumComponents(this->obj, &nc));
+    PETSC_CHECK(PetscQuadratureGetNumComponents(this->obj_, &nc));
     return nc;
 }
 
@@ -57,7 +57,7 @@ Quadrature::get_num_points() const
 {
     CALL_STACK_MSG();
     Int n_points;
-    PETSC_CHECK(PetscQuadratureGetData(this->obj, nullptr, nullptr, &n_points, nullptr, nullptr));
+    PETSC_CHECK(PetscQuadratureGetData(this->obj_, nullptr, nullptr, &n_points, nullptr, nullptr));
     return n_points;
 }
 
@@ -66,7 +66,7 @@ Quadrature::get_weights() const
 {
     CALL_STACK_MSG();
     const Real * weights;
-    PETSC_CHECK(PetscQuadratureGetData(this->obj, nullptr, nullptr, nullptr, nullptr, &weights));
+    PETSC_CHECK(PetscQuadratureGetData(this->obj_, nullptr, nullptr, nullptr, nullptr, &weights));
     return weights;
 }
 
@@ -75,7 +75,7 @@ Quadrature::get_points() const
 {
     CALL_STACK_MSG();
     const Real * points;
-    PETSC_CHECK(PetscQuadratureGetData(this->obj, nullptr, nullptr, nullptr, &points, nullptr));
+    PETSC_CHECK(PetscQuadratureGetData(this->obj_, nullptr, nullptr, nullptr, &points, nullptr));
     return points;
 }
 
@@ -84,7 +84,7 @@ Quadrature::get_order() const
 {
     CALL_STACK_MSG();
     Int order;
-    PETSC_CHECK(PetscQuadratureGetOrder(this->obj, &order));
+    PETSC_CHECK(PetscQuadratureGetOrder(this->obj_, &order));
     return order;
 }
 
@@ -93,7 +93,7 @@ Quadrature::equal(const Quadrature & q) const
 {
     CALL_STACK_MSG();
     PetscBool eq;
-    PETSC_CHECK(PetscQuadratureEqual(this->obj, q.obj, &eq));
+    PETSC_CHECK(PetscQuadratureEqual(this->obj_, q.obj_, &eq));
     return eq == PETSC_TRUE;
 }
 
@@ -102,7 +102,7 @@ Quadrature::create_gauss_tensor(Dimension dim, Int n_comp, Int n_points, Real a,
 {
     CALL_STACK_MSG();
     Quadrature q;
-    PETSC_CHECK(PetscDTGaussTensorQuadrature(dim, n_comp, n_points, a, b, &q.obj));
+    PETSC_CHECK(PetscDTGaussTensorQuadrature(dim, n_comp, n_points, a, b, &q.obj_));
     return q;
 }
 
@@ -114,7 +114,7 @@ Quadrature::create_simplex(Dimension dim, Int degree, SimplexQuadratureType type
     PETSC_CHECK(PetscDTSimplexQuadrature(dim,
                                          degree,
                                          static_cast<PetscDTSimplexQuadratureType>(type),
-                                         &q.obj));
+                                         &q.obj_));
     return q;
 }
 
@@ -123,7 +123,7 @@ Quadrature::create_stroud_conical(Dimension dim, Int n_comp, Int n_points, Real 
 {
     CALL_STACK_MSG();
     Quadrature q;
-    PETSC_CHECK(PetscDTStroudConicalQuadrature(dim, n_comp, n_points, a, b, &q.obj));
+    PETSC_CHECK(PetscDTStroudConicalQuadrature(dim, n_comp, n_points, a, b, &q.obj_));
     return q;
 }
 
@@ -132,7 +132,7 @@ Quadrature::create_tensor_quadrature(Quadrature q1, Quadrature q2)
 {
     CALL_STACK_MSG();
     Quadrature q;
-    PETSC_CHECK(PetscDTTensorQuadratureCreate(q1, q2, &q.obj));
+    PETSC_CHECK(PetscDTTensorQuadratureCreate(q1, q2, &q.obj_));
     return q;
 }
 

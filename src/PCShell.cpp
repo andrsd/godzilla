@@ -93,7 +93,7 @@ PCShell::PCShell(const PCShell & other) :
     destroy_method_(other.destroy_method_)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCShellSetContext(this->obj, this));
+    PETSC_CHECK(PCShellSetContext(this->obj_, this));
 }
 
 PCShell &
@@ -106,7 +106,7 @@ PCShell::operator=(const PCShell & other)
     this->apply_transpose_method_ = other.apply_transpose_method_;
     this->set_up_method_ = other.set_up_method_;
     this->destroy_method_ = other.destroy_method_;
-    PETSC_CHECK(PCShellSetContext(this->obj, this));
+    PETSC_CHECK(PCShellSetContext(this->obj_, this));
     return *this;
 }
 
@@ -115,7 +115,7 @@ PCShell::get_name() const
 {
     CALL_STACK_MSG();
     const char * name;
-    PETSC_CHECK(PCShellGetName(this->obj, &name));
+    PETSC_CHECK(PCShellGetName(this->obj_, &name));
     return String(name);
 }
 
@@ -123,7 +123,7 @@ void
 PCShell::set_name(String name)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCShellSetName(this->obj, name.c_str()));
+    PETSC_CHECK(PCShellSetName(this->obj_, name.c_str()));
 }
 
 } // namespace godzilla

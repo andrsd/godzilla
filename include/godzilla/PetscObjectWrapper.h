@@ -20,9 +20,9 @@ class PetscObjectWrapper {
     static_assert(std::is_pointer_v<T>, "T must be a PETSc pointer type (e.g., Vec, Mat, KSP)");
 
 protected:
-    T obj = nullptr;
+    T obj_ = nullptr;
 
-    explicit PetscObjectWrapper(T obj) : obj(obj) { CALL_STACK_MSG(); }
+    explicit PetscObjectWrapper(T obj) : obj_(obj) { CALL_STACK_MSG(); }
 
 public:
     virtual ~PetscObjectWrapper()
@@ -32,7 +32,7 @@ public:
     }
 
     // Copy constructor: increment reference
-    PetscObjectWrapper(const PetscObjectWrapper & other) : obj(other.obj)
+    PetscObjectWrapper(const PetscObjectWrapper & other) : obj_(other.obj_)
     {
         CALL_STACK_MSG();
         inc_reference();
@@ -45,18 +45,18 @@ public:
         CALL_STACK_MSG();
         if (this != &other) {
             release();
-            this->obj = other.obj;
-            if (this->obj)
+            this->obj_ = other.obj_;
+            if (this->obj_)
                 inc_reference();
         }
         return *this;
     }
 
     // Move constructor
-    PetscObjectWrapper(PetscObjectWrapper && other) noexcept : obj(other.obj)
+    PetscObjectWrapper(PetscObjectWrapper && other) noexcept : obj_(other.obj_)
     {
         CALL_STACK_MSG();
-        other.obj = nullptr;
+        other.obj_ = nullptr;
     }
 
     // Move assignment
@@ -66,8 +66,8 @@ public:
         CALL_STACK_MSG();
         if (this != &other) {
             release();
-            this->obj = other.obj;
-            other.obj = nullptr;
+            this->obj_ = other.obj_;
+            other.obj_ = nullptr;
         }
         return *this;
     }
@@ -76,7 +76,7 @@ public:
     get_comm() const
     {
         MPI_Comm comm;
-        PETSC_CHECK(PetscObjectGetComm((PetscObject) this->obj, &comm));
+        PETSC_CHECK(PetscObjectGetComm((PetscObject) this->obj_, &comm));
         return { comm };
     }
 
@@ -84,7 +84,7 @@ public:
     get() const noexcept
     {
         CALL_STACK_MSG();
-        return this->obj;
+        return this->obj_;
     }
 
     explicit
@@ -110,7 +110,7 @@ public:
         CALL_STACK_MSG();
         GODZILLA_ASSERT_TRUE(this->obj != nullptr, "PETSc object is null");
         PetscObjectId id;
-        PETSC_CHECK(PetscObjectGetId((PetscObject) this->obj, &id));
+        PETSC_CHECK(PetscObjectGetId((PetscObject) this->obj_, &id));
         return id;
     }
 
@@ -121,7 +121,7 @@ public:
     set_name(String name)
     {
         CALL_STACK_MSG();
-        PETSC_CHECK(PetscObjectSetName((PetscObject) this->obj, name.c_str()));
+        PETSC_CHECK(PetscObjectSetName((PetscObject) this->obj_, name.c_str()));
     }
 
     /// Gets a string name associated with a PETSc object.
@@ -131,9 +131,9 @@ public:
     get_name()
     {
         CALL_STACK_MSG();
-        if (this->obj) {
+        if (this->obj_) {
             const char * name = nullptr;
-            PETSC_CHECK(PetscObjectGetName((PetscObject) this->obj, &name));
+            PETSC_CHECK(PetscObjectGetName((PetscObject) this->obj_, &name));
             return { name };
         }
         else
@@ -144,7 +144,7 @@ public:
     is_null() const
     {
         CALL_STACK_MSG();
-        return this->obj == nullptr;
+        return this->obj_ == nullptr;
     }
 
     /// Get reference count
@@ -155,8 +155,8 @@ public:
     {
         CALL_STACK_MSG();
         Int count = 0;
-        if (this->obj)
-            PETSC_CHECK(PetscObjectGetReference(reinterpret_cast<PetscObject>(this->obj), &count));
+        if (this->obj_)
+            PETSC_CHECK(PetscObjectGetReference(reinterpret_cast<PetscObject>(this->obj_), &count));
         return count;
     }
 
@@ -164,28 +164,28 @@ public:
     operator T() const
     {
         CALL_STACK_MSG();
-        return this->obj;
+        return this->obj_;
     }
 
     /// Convert this object to a PETSc object so it can be passed directly into PETSc API
     operator T *()
     {
         CALL_STACK_MSG();
-        return &this->obj;
+        return &this->obj_;
     }
 
     bool
     operator==(const PetscObjectWrapper & other) const noexcept
     {
         CALL_STACK_MSG();
-        return this->obj == other.obj;
+        return this->obj_ == other.obj_;
     }
 
     bool
     operator!=(const PetscObjectWrapper & other) const noexcept
     {
         CALL_STACK_MSG();
-        return this->obj != other.obj;
+        return this->obj_ != other.obj_;
     }
 
     /// Increase the reference count to this object
@@ -193,7 +193,7 @@ public:
     inc_reference()
     {
         CALL_STACK_MSG();
-        PETSC_CHECK(PetscObjectReference(reinterpret_cast<PetscObject>(this->obj)));
+        PETSC_CHECK(PetscObjectReference(reinterpret_cast<PetscObject>(this->obj_)));
     }
 
 private:
@@ -201,8 +201,8 @@ private:
     release() noexcept
     {
         CALL_STACK_MSG();
-        if (this->obj)
-            PETSC_CHECK(PetscObjectDereference(reinterpret_cast<PetscObject>(this->obj)));
+        if (this->obj_)
+            PETSC_CHECK(PetscObjectDereference(reinterpret_cast<PetscObject>(this->obj_)));
     }
 
     friend class Mesh;

@@ -16,14 +16,14 @@ void
 VectorScatter::begin(const Vector & x, Vector & y, InsertMode addv, ScatterMode mode) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecScatterBegin(this->obj, x, y, addv, mode));
+    PETSC_CHECK(VecScatterBegin(this->obj_, x, y, addv, mode));
 }
 
 void
 VectorScatter::end(const Vector & x, Vector & y, InsertMode addv, ScatterMode mode) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecScatterEnd(this->obj, x, y, addv, mode));
+    PETSC_CHECK(VecScatterEnd(this->obj_, x, y, addv, mode));
 }
 
 VecScatter
@@ -31,7 +31,7 @@ VectorScatter::copy() const
 {
     CALL_STACK_MSG();
     VecScatter out;
-    PETSC_CHECK(VecScatterCopy(this->obj, &out));
+    PETSC_CHECK(VecScatterCopy(this->obj_, &out));
     return out;
 }
 
@@ -40,7 +40,7 @@ VectorScatter::get_merged() const
 {
     CALL_STACK_MSG();
     PetscBool flg;
-    PETSC_CHECK(VecScatterGetMerged(this->obj, &flg));
+    PETSC_CHECK(VecScatterGetMerged(this->obj_, &flg));
     return flg == PETSC_TRUE;
 }
 
@@ -49,7 +49,7 @@ VectorScatter::get_type() const
 {
     CALL_STACK_MSG();
     VecScatterType type;
-    PETSC_CHECK(VecScatterGetType(this->obj, &type));
+    PETSC_CHECK(VecScatterGetType(this->obj_, &type));
     return { type };
 }
 
@@ -57,21 +57,21 @@ void
 VectorScatter::set_type(VecScatterType type)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecScatterSetType(this->obj, type));
+    PETSC_CHECK(VecScatterSetType(this->obj_, type));
 }
 
 void
 VectorScatter::set_up()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecScatterSetUp(this->obj));
+    PETSC_CHECK(VecScatterSetUp(this->obj_));
 }
 
 void
 VectorScatter::view(PetscViewer viewer) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecScatterView(this->obj, viewer));
+    PETSC_CHECK(VecScatterView(this->obj_, viewer));
 }
 
 VectorScatter

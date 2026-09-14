@@ -28,14 +28,14 @@ void
 Partitioner::create(mpi::Communicator comm)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscPartitionerCreate(comm, &this->obj));
+    PETSC_CHECK(PetscPartitionerCreate(comm, &this->obj_));
 }
 
 void
 Partitioner::set_type(String type)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscPartitionerSetType(this->obj, type.c_str()));
+    PETSC_CHECK(PetscPartitionerSetType(this->obj_, type.c_str()));
 }
 
 String
@@ -43,7 +43,7 @@ Partitioner::get_type() const
 {
     CALL_STACK_MSG();
     PetscPartitionerType name;
-    PETSC_CHECK(PetscPartitionerGetType(this->obj, &name));
+    PETSC_CHECK(PetscPartitionerGetType(this->obj_, &name));
     return { name };
 }
 
@@ -51,21 +51,21 @@ void
 Partitioner::reset()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscPartitionerReset(this->obj));
+    PETSC_CHECK(PetscPartitionerReset(this->obj_));
 }
 
 void
 Partitioner::set_up()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscPartitionerSetUp(this->obj));
+    PETSC_CHECK(PetscPartitionerSetUp(this->obj_));
 }
 
 void
 Partitioner::view(PetscViewer viewer) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscPartitionerView(this->obj, viewer));
+    PETSC_CHECK(PetscPartitionerView(this->obj_, viewer));
 }
 
 void
@@ -80,7 +80,7 @@ Partitioner::partition(Int n_parts,
 {
     CALL_STACK_MSG();
 #if PETSC_VERSION_GE(3, 21, 0)
-    PETSC_CHECK(PetscPartitionerPartition(this->obj,
+    PETSC_CHECK(PetscPartitionerPartition(this->obj_,
                                           n_parts,
                                           n_vertices,
                                           start,
@@ -116,7 +116,7 @@ Partitioner::partition(Int n_parts,
 {
     CALL_STACK_MSG();
 #if PETSC_VERSION_GE(3, 21, 0)
-    PETSC_CHECK(PetscPartitionerPartition(this->obj,
+    PETSC_CHECK(PetscPartitionerPartition(this->obj_,
                                           n_parts,
                                           n_vertices,
                                           start,

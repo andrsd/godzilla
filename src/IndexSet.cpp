@@ -18,14 +18,14 @@ void
 IndexSet::create(mpi::Communicator comm)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(ISCreate(comm, &this->obj));
+    PETSC_CHECK(ISCreate(comm, &this->obj_));
 }
 
 bool
 IndexSet::is_null() const
 {
     CALL_STACK_MSG();
-    return this->obj == nullptr;
+    return this->obj_ == nullptr;
 }
 
 void
@@ -33,7 +33,7 @@ IndexSet::get_point_range(Int & start, Int & end, const Int *& points) const
 {
     CALL_STACK_MSG();
     GODZILLA_ASSERT_TRUE(this->obj != nullptr, "IndexSet is null");
-    PETSC_CHECK(ISGetPointRange(this->obj, &start, &end, &points));
+    PETSC_CHECK(ISGetPointRange(this->obj_, &start, &end, &points));
 }
 
 void
@@ -41,7 +41,7 @@ IndexSet::restore_point_range(Int start, Int end, const Int * points) const
 {
     CALL_STACK_MSG();
     GODZILLA_ASSERT_TRUE(this->obj != nullptr, "IndexSet is null");
-    PETSC_CHECK(ISRestorePointRange(this->obj, &start, &end, &points));
+    PETSC_CHECK(ISRestorePointRange(this->obj_, &start, &end, &points));
 }
 
 void
@@ -49,7 +49,7 @@ IndexSet::get_point_subrange(Int start, Int end, const Int * points) const
 {
     CALL_STACK_MSG();
     GODZILLA_ASSERT_TRUE(this->obj != nullptr, "IndexSet is null");
-    PETSC_CHECK(ISGetPointSubrange(this->obj, start, end, points));
+    PETSC_CHECK(ISGetPointSubrange(this->obj_, start, end, points));
 }
 
 Int
@@ -58,7 +58,7 @@ IndexSet::get_size() const
     CALL_STACK_MSG();
     GODZILLA_ASSERT_TRUE(this->obj != nullptr, "IndexSet is null");
     Int n;
-    PETSC_CHECK(ISGetSize(this->obj, &n));
+    PETSC_CHECK(ISGetSize(this->obj_, &n));
     return n;
 }
 
@@ -68,7 +68,7 @@ IndexSet::get_local_size() const
     CALL_STACK_MSG();
     GODZILLA_ASSERT_TRUE(this->obj != nullptr, "IndexSet is null");
     Int n;
-    PETSC_CHECK(ISGetLocalSize(this->obj, &n));
+    PETSC_CHECK(ISGetLocalSize(this->obj_, &n));
     return n;
 }
 
@@ -77,7 +77,7 @@ IndexSet::duplicate() const
 {
     CALL_STACK_MSG();
     IndexSet new_is;
-    PETSC_CHECK(ISDuplicate(this->obj, new_is));
+    PETSC_CHECK(ISDuplicate(this->obj_, new_is));
     return new_is;
 }
 
@@ -114,7 +114,7 @@ IndexSet::sorted() const
     CALL_STACK_MSG();
     GODZILLA_ASSERT_TRUE(this->obj != nullptr, "IndexSet is null");
     PetscBool res;
-    PETSC_CHECK(ISSorted(this->obj, &res));
+    PETSC_CHECK(ISSorted(this->obj_, &res));
     return res == PETSC_TRUE;
 }
 
@@ -123,7 +123,7 @@ IndexSet::sort() const
 {
     CALL_STACK_MSG();
     GODZILLA_ASSERT_TRUE(this->obj != nullptr, "IndexSet is null");
-    PETSC_CHECK(ISSort(this->obj));
+    PETSC_CHECK(ISSort(this->obj_));
 }
 
 void
@@ -131,7 +131,7 @@ IndexSet::sort_remove_dups() const
 {
     CALL_STACK_MSG();
     GODZILLA_ASSERT_TRUE(this->obj != nullptr, "IndexSet is null");
-    PETSC_CHECK(ISSortRemoveDups(this->obj));
+    PETSC_CHECK(ISSortRemoveDups(this->obj_));
 }
 
 void
@@ -139,7 +139,7 @@ IndexSet::view(PetscViewer viewer) const
 {
     CALL_STACK_MSG();
     GODZILLA_ASSERT_TRUE(this->obj != nullptr, "IndexSet is null");
-    PETSC_CHECK(ISView(this->obj, viewer));
+    PETSC_CHECK(ISView(this->obj_, viewer));
 }
 
 bool
@@ -154,14 +154,14 @@ void
 IndexSet::shift(Int offset)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(ISShift(this->obj, offset, this->obj));
+    PETSC_CHECK(ISShift(this->obj_, offset, this->obj_));
 }
 
 void
 IndexSet::assign(const IndexSet & src)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(ISCopy(src, this->obj));
+    PETSC_CHECK(ISCopy(src, this->obj_));
 }
 
 IndexSet
@@ -209,7 +209,7 @@ IndexSet::complement(Int nmin, Int nmax) const
 {
     CALL_STACK_MSG();
     IndexSet out;
-    PETSC_CHECK(ISComplement(this->obj, nmin, nmax, out));
+    PETSC_CHECK(ISComplement(this->obj_, nmin, nmax, out));
     return out;
 }
 
@@ -239,7 +239,7 @@ IndexSet::equal(const IndexSet & other) const
 {
     CALL_STACK_MSG();
     PetscBool res;
-    PETSC_CHECK(ISEqual(this->obj, other, &res));
+    PETSC_CHECK(ISEqual(this->obj_, other, &res));
     return res == PETSC_TRUE;
 }
 
@@ -248,7 +248,7 @@ IndexSet::equal_unsorted(const IndexSet & other) const
 {
     CALL_STACK_MSG();
     PetscBool res;
-    PETSC_CHECK(ISEqualUnsorted(this->obj, other, &res));
+    PETSC_CHECK(ISEqualUnsorted(this->obj_, other, &res));
     return res == PETSC_TRUE;
 }
 
@@ -266,7 +266,7 @@ IndexSet::get_min_max() const
 {
     CALL_STACK_MSG();
     PetscInt min, max;
-    PETSC_CHECK(ISGetMinMax(this->obj, &min, &max));
+    PETSC_CHECK(ISGetMinMax(this->obj_, &min, &max));
     return std::make_tuple(min, max);
 }
 
@@ -274,7 +274,7 @@ IndexSetBorrowedIndices
 IndexSet::borrow_indices()
 {
     CALL_STACK_MSG();
-    if (this->obj)
+    if (this->obj_)
         return IndexSetBorrowedIndices(*this);
     else
         return IndexSetBorrowedIndices();
@@ -285,7 +285,7 @@ IndexSet::get_type() const
 {
     CALL_STACK_MSG();
     ISType type;
-    PETSC_CHECK(ISGetType(this->obj, &type));
+    PETSC_CHECK(ISGetType(this->obj_, &type));
     return String(type);
 }
 
@@ -293,7 +293,7 @@ void
 IndexSet::set_identity()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(ISSetIdentity(this->obj));
+    PETSC_CHECK(ISSetIdentity(this->obj_));
 }
 
 bool
@@ -301,7 +301,7 @@ IndexSet::identity() const
 {
     CALL_STACK_MSG();
     PetscBool res;
-    PETSC_CHECK(ISIdentity(this->obj, &res));
+    PETSC_CHECK(ISIdentity(this->obj_, &res));
     return res == PETSC_TRUE;
 }
 
@@ -310,7 +310,7 @@ IndexSet::locate(Int key) const
 {
     CALL_STACK_MSG();
     PetscInt idx;
-    PETSC_CHECK(ISLocate(this->obj, key, &idx));
+    PETSC_CHECK(ISLocate(this->obj_, key, &idx));
     return idx;
 }
 
@@ -318,7 +318,7 @@ void
 IndexSet::set_permutation()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(ISSetPermutation(this->obj));
+    PETSC_CHECK(ISSetPermutation(this->obj_));
 }
 
 bool
@@ -326,7 +326,7 @@ IndexSet::permutation() const
 {
     CALL_STACK_MSG();
     PetscBool res;
-    PETSC_CHECK(ISPermutation(this->obj, &res));
+    PETSC_CHECK(ISPermutation(this->obj_, &res));
     return res == PETSC_TRUE;
 }
 
@@ -334,7 +334,7 @@ void
 IndexSet::set_type(String type)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(ISSetType(this->obj, type.c_str()));
+    PETSC_CHECK(ISSetType(this->obj_, type.c_str()));
 }
 
 IndexSet

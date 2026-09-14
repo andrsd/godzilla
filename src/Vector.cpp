@@ -29,14 +29,14 @@ void
 Vector::create(mpi::Communicator comm)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecCreate(comm, &this->obj));
+    PETSC_CHECK(VecCreate(comm, &this->obj_));
 }
 
 void
 Vector::set_up()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecSetUp(this->obj));
+    PETSC_CHECK(VecSetUp(this->obj_));
 }
 
 void
@@ -51,14 +51,14 @@ void
 Vector::assembly_begin()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecAssemblyBegin(this->obj));
+    PETSC_CHECK(VecAssemblyBegin(this->obj_));
 }
 
 void
 Vector::assembly_end()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecAssemblyEnd(this->obj));
+    PETSC_CHECK(VecAssemblyEnd(this->obj_));
 }
 
 String
@@ -66,7 +66,7 @@ Vector::get_type() const
 {
     CALL_STACK_MSG();
     VecType type;
-    PETSC_CHECK(VecGetType(this->obj, &type));
+    PETSC_CHECK(VecGetType(this->obj_, &type));
     return String(type);
 }
 
@@ -75,7 +75,7 @@ Vector::get_size() const
 {
     CALL_STACK_MSG();
     Int sz;
-    PETSC_CHECK(VecGetSize(this->obj, &sz));
+    PETSC_CHECK(VecGetSize(this->obj_, &sz));
     return sz;
 }
 
@@ -84,7 +84,7 @@ Vector::get_local_size() const
 {
     CALL_STACK_MSG();
     Int sz;
-    PETSC_CHECK(VecGetLocalSize(this->obj, &sz));
+    PETSC_CHECK(VecGetLocalSize(this->obj_, &sz));
     return sz;
 }
 
@@ -92,28 +92,28 @@ void
 Vector::get_values(const std::vector<Int> & idx, std::vector<Scalar> & y) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecGetValues(this->obj, (Int) idx.size(), idx.data(), y.data()));
+    PETSC_CHECK(VecGetValues(this->obj_, (Int) idx.size(), idx.data(), y.data()));
 }
 
 void
 Vector::abs()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecAbs(this->obj));
+    PETSC_CHECK(VecAbs(this->obj_));
 }
 
 void
 Vector::scale(Scalar alpha)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecScale(this->obj, alpha));
+    PETSC_CHECK(VecScale(this->obj_, alpha));
 }
 
 Vector
 Vector::duplicate() const
 {
     Vector dup;
-    PETSC_CHECK(VecDuplicate(this->obj, dup));
+    PETSC_CHECK(VecDuplicate(this->obj_, dup));
     return dup;
 }
 
@@ -121,14 +121,14 @@ void
 Vector::assign(const Vector & y)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecCopy(y.obj, this->obj));
+    PETSC_CHECK(VecCopy(y.obj_, this->obj_));
 }
 
 void
 Vector::normalize()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecNormalize(this->obj, nullptr));
+    PETSC_CHECK(VecNormalize(this->obj_, nullptr));
 }
 
 Scalar
@@ -136,7 +136,7 @@ Vector::min() const
 {
     CALL_STACK_MSG();
     Scalar val;
-    PETSC_CHECK(VecMin(this->obj, nullptr, &val));
+    PETSC_CHECK(VecMin(this->obj_, nullptr, &val));
     return val;
 }
 
@@ -145,7 +145,7 @@ Vector::max() const
 {
     CALL_STACK_MSG();
     Scalar val;
-    PETSC_CHECK(VecMax(this->obj, nullptr, &val));
+    PETSC_CHECK(VecMax(this->obj_, nullptr, &val));
     return val;
 }
 
@@ -153,7 +153,7 @@ void
 Vector::chop(Real tol)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecFilter(this->obj, tol));
+    PETSC_CHECK(VecFilter(this->obj_, tol));
 }
 
 #if PETSC_VERSION_GE(3, 20, 0)
@@ -161,7 +161,7 @@ void
 Vector::filter(Real tol)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecFilter(this->obj, tol));
+    PETSC_CHECK(VecFilter(this->obj_, tol));
 }
 #endif
 
@@ -169,21 +169,21 @@ void
 Vector::reciprocal()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecReciprocal(this->obj));
+    PETSC_CHECK(VecReciprocal(this->obj_));
 }
 
 void
 Vector::shift(Scalar shift)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecShift(this->obj, shift));
+    PETSC_CHECK(VecShift(this->obj_, shift));
 }
 
 void
 Vector::set(Scalar alpha)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecSet(this->obj, alpha));
+    PETSC_CHECK(VecSet(this->obj_, alpha));
 }
 
 void
@@ -193,42 +193,42 @@ Vector::set_sizes(Int n, Int N)
     if (n == PETSC_DECIDE && N == PETSC_DECIDE)
         throw Exception(
             "Calling Vector::set_sizes with n = PETSC_DECIDE and N = PETSC_DECIDE is not allowed.");
-    PETSC_CHECK(VecSetSizes(this->obj, n, N));
+    PETSC_CHECK(VecSetSizes(this->obj_, n, N));
 }
 
 void
 Vector::set_block_size(Int bs)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecSetBlockSize(this->obj, bs));
+    PETSC_CHECK(VecSetBlockSize(this->obj_, bs));
 }
 
 void
 Vector::set_type(VecType method)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecSetType(this->obj, method));
+    PETSC_CHECK(VecSetType(this->obj_, method));
 }
 
 void
 Vector::set_value(Int row, Scalar value, InsertMode mode)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecSetValue(this->obj, row, value, mode));
+    PETSC_CHECK(VecSetValue(this->obj_, row, value, mode));
 }
 
 void
 Vector::set_value_local(Int row, Scalar value, InsertMode mode)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecSetValueLocal(this->obj, row, value, mode));
+    PETSC_CHECK(VecSetValueLocal(this->obj_, row, value, mode));
 }
 
 void
 Vector::set_values(Int n, const Int * ix, const Scalar * y, InsertMode mode)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecSetValues(this->obj, n, ix, y, mode));
+    PETSC_CHECK(VecSetValues(this->obj_, n, ix, y, mode));
 }
 
 void
@@ -236,7 +236,7 @@ Vector::set_values(const std::vector<Int> & ix, const std::vector<Scalar> & y, I
 {
     CALL_STACK_MSG();
     if (ix.size() == y.size())
-        PETSC_CHECK(VecSetValues(this->obj, ix.size(), ix.data(), y.data(), mode));
+        PETSC_CHECK(VecSetValues(this->obj_, ix.size(), ix.data(), y.data(), mode));
     else
         throw Exception("Number of indices does not match the number of values");
 }
@@ -248,7 +248,7 @@ Vector::set_values(const DynDenseVector<Int> & ix,
 {
     CALL_STACK_MSG();
     if (ix.size() == y.size())
-        PETSC_CHECK(VecSetValues(this->obj, ix.size(), ix.data(), y.data(), mode));
+        PETSC_CHECK(VecSetValues(this->obj_, ix.size(), ix.data(), y.data(), mode));
     else
         throw Exception("Number of indices does not match the number of values");
 }
@@ -261,7 +261,7 @@ Vector::set_values(Span<const Int> ix, const DynDenseVector<Scalar> & y, InsertM
                          fmt::format("Number of indices ({}) must match the number of values ({})",
                                      ix.size(),
                                      y.size()));
-    PETSC_CHECK(VecSetValues(this->obj, ix.size(), ix.data(), y.data(), mode));
+    PETSC_CHECK(VecSetValues(this->obj_, ix.size(), ix.data(), y.data(), mode));
 }
 
 void
@@ -271,7 +271,7 @@ Vector::set_values_local(const std::vector<Int> & ix,
 {
     CALL_STACK_MSG();
     if (ix.size() == y.size())
-        PETSC_CHECK(VecSetValuesLocal(this->obj, ix.size(), ix.data(), y.data(), mode));
+        PETSC_CHECK(VecSetValuesLocal(this->obj_, ix.size(), ix.data(), y.data(), mode));
     else
         throw Exception("Number of indices does not match the number of values");
 }
@@ -283,7 +283,7 @@ Vector::set_values_local(const DynDenseVector<Int> & ix,
 {
     CALL_STACK_MSG();
     if (ix.size() == y.size())
-        PETSC_CHECK(VecSetValuesLocal(this->obj, ix.size(), ix.data(), y.data(), mode));
+        PETSC_CHECK(VecSetValuesLocal(this->obj_, ix.size(), ix.data(), y.data(), mode));
     else
         throw Exception("Number of indices does not match the number of values");
 }
@@ -296,7 +296,7 @@ Vector::set_values_local(Span<const Int> ix, const DynDenseVector<Scalar> & y, I
                          fmt::format("Number of indices ({}) must match the number of values ({})",
                                      ix.size(),
                                      y.size()));
-    PETSC_CHECK(VecSetValuesLocal(this->obj, ix.size(), ix.data(), y.data(), mode));
+    PETSC_CHECK(VecSetValuesLocal(this->obj_, ix.size(), ix.data(), y.data(), mode));
 }
 
 Scalar
@@ -304,7 +304,7 @@ Vector::sum() const
 {
     CALL_STACK_MSG();
     Scalar sum;
-    PETSC_CHECK(VecSum(this->obj, &sum));
+    PETSC_CHECK(VecSum(this->obj_, &sum));
     return sum;
 }
 
@@ -312,7 +312,7 @@ void
 Vector::zero()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecZeroEntries(this->obj));
+    PETSC_CHECK(VecZeroEntries(this->obj_));
 }
 
 Scalar
@@ -320,7 +320,7 @@ Vector::operator()(Int idx) const
 {
     CALL_STACK_MSG();
     Scalar val;
-    PETSC_CHECK(VecGetValues(this->obj, 1, &idx, &val));
+    PETSC_CHECK(VecGetValues(this->obj_, 1, &idx, &val));
     return val;
 }
 
@@ -329,7 +329,7 @@ Vector::get_array()
 {
     CALL_STACK_MSG();
     Scalar * array;
-    PETSC_CHECK(VecGetArray(this->obj, &array));
+    PETSC_CHECK(VecGetArray(this->obj_, &array));
     return array;
 }
 
@@ -338,7 +338,7 @@ Vector::get_array_read() const
 {
     CALL_STACK_MSG();
     const Scalar * array;
-    PETSC_CHECK(VecGetArrayRead(this->obj, &array));
+    PETSC_CHECK(VecGetArrayRead(this->obj_, &array));
     return array;
 }
 
@@ -346,14 +346,14 @@ void
 Vector::restore_array(Scalar * array)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecRestoreArray(this->obj, &array));
+    PETSC_CHECK(VecRestoreArray(this->obj_, &array));
 }
 
 void
 Vector::restore_array_read(const Scalar * array) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecRestoreArrayRead(this->obj, &array));
+    PETSC_CHECK(VecRestoreArrayRead(this->obj_, &array));
 }
 
 VectorBorrowedArray
@@ -374,7 +374,7 @@ void
 Vector::view(PetscViewer viewer) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecView(this->obj, viewer));
+    PETSC_CHECK(VecView(this->obj_, viewer));
 }
 
 Vector
@@ -448,7 +448,7 @@ void
 Vector::set_option(VecOption op, bool flag)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecSetOption(this->obj, op, flag ? PETSC_TRUE : PETSC_FALSE));
+    PETSC_CHECK(VecSetOption(this->obj_, op, flag ? PETSC_TRUE : PETSC_FALSE));
 }
 
 Vector
@@ -456,7 +456,7 @@ Vector::get_sub_vector(const IndexSet & is) const
 {
     CALL_STACK_MSG();
     Vector y;
-    PETSC_CHECK(VecGetSubVector(this->obj, is, y));
+    PETSC_CHECK(VecGetSubVector(this->obj_, is, y));
     return y;
 }
 
@@ -464,14 +464,14 @@ void
 Vector::restore_sub_vector(const IndexSet & is, Vector & y) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecRestoreSubVector(this->obj, is, &y.obj));
+    PETSC_CHECK(VecRestoreSubVector(this->obj_, is, &y.obj_));
 }
 
 Range
 Vector::get_ownership_range() const
 {
     Int lo, hi;
-    PETSC_CHECK(VecGetOwnershipRange(this->obj, &lo, &hi));
+    PETSC_CHECK(VecGetOwnershipRange(this->obj_, &lo, &hi));
     return { lo, hi };
 }
 
@@ -480,7 +480,7 @@ Vector::norm(NormType type) const
 {
     CALL_STACK_MSG();
     Real val;
-    PETSC_CHECK(VecNorm(this->obj, type, &val));
+    PETSC_CHECK(VecNorm(this->obj_, type, &val));
     return val;
 }
 
@@ -488,7 +488,7 @@ void
 Vector::copy(const IndexSet & is, ScatterMode mode, Vector & reduced)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecISCopy(this->obj, is, mode, reduced));
+    PETSC_CHECK(VecISCopy(this->obj_, is, mode, reduced));
 }
 
 //
@@ -496,13 +496,13 @@ Vector::copy(const IndexSet & is, ScatterMode mode, Vector & reduced)
 BorrowedLocalVector::BorrowedLocalVector(DM dm) : dm(dm)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(DMGetLocalVector(dm, &this->obj));
+    PETSC_CHECK(DMGetLocalVector(dm, &this->obj_));
 }
 
 BorrowedLocalVector::~BorrowedLocalVector()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(DMRestoreLocalVector(this->dm, &this->obj));
+    PETSC_CHECK(DMRestoreLocalVector(this->dm, &this->obj_));
 }
 
 //
@@ -510,13 +510,13 @@ BorrowedLocalVector::~BorrowedLocalVector()
 BorrowedGlobalVector::BorrowedGlobalVector(DM dm) : dm(dm)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(DMGetGlobalVector(dm, &this->obj));
+    PETSC_CHECK(DMGetGlobalVector(dm, &this->obj_));
 }
 
 BorrowedGlobalVector::~BorrowedGlobalVector()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(DMRestoreGlobalVector(this->dm, &this->obj));
+    PETSC_CHECK(DMRestoreGlobalVector(this->dm, &this->obj_));
 }
 
 //

@@ -95,7 +95,7 @@ public:
     {
         auto dtype = mpi::mpi_datatype<T>();
         auto mpi_op = mpi::op::provider<T, Op, mpi::op::Operation<Op, T>::is_native::value>::op();
-        PETSC_CHECK(PetscSFBcastBegin(this->obj, dtype, root, leaf, mpi_op));
+        PETSC_CHECK(PetscSFBcastBegin(this->obj_, dtype, root, leaf, mpi_op));
     }
 
     template <typename T, typename Op>
@@ -141,7 +141,7 @@ public:
     {
         auto dtype = mpi::mpi_datatype<T>();
         auto mpi_op = mpi::op::provider<T, Op, mpi::op::Operation<Op, T>::is_native::value>::op();
-        PETSC_CHECK(PetscSFBcastEnd(this->obj, dtype, root, leaf, mpi_op));
+        PETSC_CHECK(PetscSFBcastEnd(this->obj_, dtype, root, leaf, mpi_op));
     }
 
     template <typename T, typename Op>
@@ -181,7 +181,7 @@ public:
         CALL_STACK_MSG();
         auto dtype = mpicpp_lite::mpi_datatype<T>();
         auto mpi_op = mpi::op::provider<T, Op, mpi::op::Operation<Op, T>::is_native::value>::op();
-        PETSC_CHECK(PetscSFReduceBegin(this->obj, dtype, leaf, root, mpi_op));
+        PETSC_CHECK(PetscSFReduceBegin(this->obj_, dtype, leaf, root, mpi_op));
     }
 
     template <typename T, typename Op>
@@ -224,7 +224,7 @@ public:
         CALL_STACK_MSG();
         auto dtype = mpicpp_lite::mpi_datatype<T>();
         auto mpi_op = mpi::op::provider<T, Op, mpi::op::Operation<Op, T>::is_native::value>::op();
-        PETSC_CHECK(PetscSFReduceEnd(this->obj, dtype, leaf, root, mpi_op));
+        PETSC_CHECK(PetscSFReduceEnd(this->obj_, dtype, leaf, root, mpi_op));
     }
 
     template <typename T, typename Op>
@@ -270,7 +270,7 @@ public:
     {
         CALL_STACK_MSG();
         auto dtype = mpicpp_lite::mpi_datatype<T>();
-        PETSC_CHECK(PetscSFGatherBegin(this->obj, dtype, leaf, root));
+        PETSC_CHECK(PetscSFGatherBegin(this->obj_, dtype, leaf, root));
     }
 
     template <typename T>
@@ -299,7 +299,7 @@ public:
     {
         CALL_STACK_MSG();
         auto dtype = mpicpp_lite::mpi_datatype<T>();
-        PETSC_CHECK(PetscSFGatherEnd(this->obj, dtype, leaf, root));
+        PETSC_CHECK(PetscSFGatherEnd(this->obj_, dtype, leaf, root));
     }
 
     template <typename T>
@@ -329,7 +329,7 @@ public:
     {
         CALL_STACK_MSG();
         auto dtype = mpicpp_lite::mpi_datatype<T>();
-        PETSC_CHECK(PetscSFScatterBegin(this->obj, dtype, root, leaf));
+        PETSC_CHECK(PetscSFScatterBegin(this->obj_, dtype, root, leaf));
     }
 
     template <typename T>
@@ -358,7 +358,7 @@ public:
     {
         CALL_STACK_MSG();
         auto dtype = mpicpp_lite::mpi_datatype<T>();
-        PETSC_CHECK(PetscSFScatterEnd(this->obj, dtype, root, leaf));
+        PETSC_CHECK(PetscSFScatterEnd(this->obj_, dtype, root, leaf));
     }
 
     template <typename T>

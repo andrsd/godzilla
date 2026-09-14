@@ -41,7 +41,7 @@ ShellMatrix::create(mpi::Communicator comm, Int m, Int n, Int M, Int N)
     CALL_STACK_MSG();
     Mat mat;
     PETSC_CHECK(MatCreateShell(comm, m, n, M, N, this, &mat));
-    this->obj = mat;
+    this->obj_ = mat;
 }
 
 void

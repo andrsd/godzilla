@@ -834,7 +834,7 @@ UnstructuredMesh::create_submesh(Label vertex_label, Int value, bool marked_face
 {
     CALL_STACK_MSG();
     DM subdm;
-    PETSC_CHECK(DMPlexCreateSubmesh(this->obj,
+    PETSC_CHECK(DMPlexCreateSubmesh(this->obj_,
                                     vertex_label,
                                     value,
                                     marked_faces ? PETSC_TRUE : PETSC_FALSE,

@@ -111,7 +111,7 @@ public:
     set_function(Vector & r, Ref<T> instance, void (T::*method)(const Vector &, Vector &))
     {
         this->compute_residual_method.bind(instance, method);
-        PETSC_CHECK(SNESSetFunction(this->obj,
+        PETSC_CHECK(SNESSetFunction(this->obj_,
                                     r,
                                     invoke_compute_residual_delegate,
                                     &this->compute_residual_method));
@@ -132,7 +132,7 @@ public:
                  void (T::*method)(const Vector &, Matrix &, Matrix &))
     {
         this->compute_jacobian_method.bind(instance, method);
-        PETSC_CHECK(SNESSetJacobian(this->obj,
+        PETSC_CHECK(SNESSetJacobian(this->obj_,
                                     J,
                                     Jp,
                                     invoke_compute_jacobian_delegate,
@@ -172,7 +172,7 @@ public:
     {
         this->monitor_method.bind(instance, method);
         PETSC_CHECK(
-            SNESMonitorSet(this->obj, invoke_monitor_delegate, &this->monitor_method, nullptr));
+            SNESMonitorSet(this->obj_, invoke_monitor_delegate, &this->monitor_method, nullptr));
     }
 
     /// Sets an ADDITIONAL function that is to be used at the end of the nonlinear solver to display
@@ -186,7 +186,7 @@ public:
     converged_reason_view_set(Ref<T> instance, void (T::*method)())
     {
         this->converged_reason_view_method.bind(instance, method);
-        PETSC_CHECK(SNESConvergedReasonViewSet(this->obj,
+        PETSC_CHECK(SNESConvergedReasonViewSet(this->obj_,
                                                invoke_converged_view_delegate,
                                                &this->converged_reason_view_method,
                                                nullptr));

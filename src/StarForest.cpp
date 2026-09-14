@@ -94,21 +94,21 @@ void
 StarForest::create(mpi::Communicator comm)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSFCreate(comm, &this->obj));
+    PETSC_CHECK(PetscSFCreate(comm, &this->obj_));
 }
 
 void
 StarForest::reset()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSFReset(this->obj));
+    PETSC_CHECK(PetscSFReset(this->obj_));
 }
 
 void
 StarForest::set_up()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSFSetUp(this->obj));
+    PETSC_CHECK(PetscSFSetUp(this->obj_));
 }
 
 StarForest::Graph
@@ -118,7 +118,7 @@ StarForest::get_graph() const
     Int n_roots, n_leaves;
     const Int * leaves;
     const PetscSFNode * remote_leaves;
-    PETSC_CHECK(PetscSFGetGraph(this->obj, &n_roots, &n_leaves, &leaves, &remote_leaves));
+    PETSC_CHECK(PetscSFGetGraph(this->obj_, &n_roots, &n_leaves, &leaves, &remote_leaves));
     return Graph(n_roots, n_leaves, leaves, remote_leaves);
 }
 
@@ -131,7 +131,7 @@ StarForest::set_graph(Int n_roots, Span<Int> ilocal, Span<Node> iremote, CopyMod
                             ilocal.size(),
                             iremote.size()));
     Int n_leaves = ilocal.size();
-    PETSC_CHECK(PetscSFSetGraph(this->obj,
+    PETSC_CHECK(PetscSFSetGraph(this->obj_,
                                 n_roots,
                                 n_leaves,
                                 ilocal.data(),
@@ -144,7 +144,7 @@ void
 StarForest::set_graph(Int n_roots, Span<Node> iremote, CopyMode copy_mode) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSFSetGraph(this->obj,
+    PETSC_CHECK(PetscSFSetGraph(this->obj_,
                                 n_roots,
                                 iremote.size(),
                                 NULL,
@@ -158,7 +158,7 @@ StarForest::create_inverse() const
 {
     CALL_STACK_MSG();
     PetscSF isf;
-    PETSC_CHECK(PetscSFCreateInverseSF(this->obj, &isf));
+    PETSC_CHECK(PetscSFCreateInverseSF(this->obj_, &isf));
     return isf;
 }
 
@@ -166,14 +166,14 @@ void
 StarForest::compute_degree_begin(const Int *& degree) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSFComputeDegreeBegin(this->obj, &degree));
+    PETSC_CHECK(PetscSFComputeDegreeBegin(this->obj_, &degree));
 }
 
 void
 StarForest::compute_degree_end(const Int *& degree) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSFComputeDegreeEnd(this->obj, &degree));
+    PETSC_CHECK(PetscSFComputeDegreeEnd(this->obj_, &degree));
 }
 
 Span<const Int>
@@ -181,7 +181,7 @@ StarForest::compute_degree() const
 {
     CALL_STACK_MSG();
     Int n_roots;
-    PETSC_CHECK(PetscSFGetGraph(this->obj, &n_roots, NULL, NULL, NULL));
+    PETSC_CHECK(PetscSFGetGraph(this->obj_, &n_roots, NULL, NULL, NULL));
 
     const Int * degree;
     compute_degree_begin(degree);
@@ -193,7 +193,7 @@ void
 StarForest::view(PetscViewer viewer) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSFView(this->obj, viewer));
+    PETSC_CHECK(PetscSFView(this->obj_, viewer));
 }
 
 StarForest
