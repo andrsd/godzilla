@@ -103,10 +103,10 @@ protected:
         Ref<T> instance,
         void (T::*method)(const Real[], const Real[], const Scalar[], const Scalar[], Scalar[]))
     {
-        this->compute_flux_methods[field].bind(instance, method);
+        this->compute_flux_methods_[field].bind(instance, method);
         auto ds = get_ds();
         PETSC_CHECK(PetscDSSetRiemannSolver(ds, field.value(), FVProblemInterface::compute_flux));
-        PETSC_CHECK(PetscDSSetContext(ds, field.value(), &this->compute_flux_methods[field]));
+        PETSC_CHECK(PetscDSSetContext(ds, field.value(), &this->compute_flux_methods_[field]));
     }
 
 private:
@@ -143,27 +143,27 @@ private:
     };
 
     /// Fields in the problem
-    std::map<FieldID, FieldInfo> fields;
+    std::map<FieldID, FieldInfo> fields_;
 
     /// Map from field name to field ID
-    std::map<String, FieldID> fields_by_name;
+    std::map<String, FieldID> fields_by_name_;
 
     /// PETSc finite volume object
-    PetscFV fvm;
+    PetscFV fvm_;
 
     /// Auxiliary fields in the problem
-    std::map<FieldID, FieldInfo> aux_fields;
+    std::map<FieldID, FieldInfo> aux_fields_;
 
     /// Map from auxiliary field name to auxiliary field ID
-    std::map<String, FieldID> aux_fields_by_name;
+    std::map<String, FieldID> aux_fields_by_name_;
 
-    std::map<FieldID, PetscFE> aux_fe;
+    std::map<FieldID, PetscFE> aux_fe_;
 
-    std::map<FieldID, ComputeFluxDelegate> compute_flux_methods;
+    std::map<FieldID, ComputeFluxDelegate> compute_flux_methods_;
 
-    std::vector<Qtr<NaturalRiemannBC>> riemann_bcs;
+    std::vector<Qtr<NaturalRiemannBC>> riemann_bcs_;
 
-    static const String empty_name;
+    static const String empty_name_;
 
     static void compute_flux(Int dim,
                              Int nf,
@@ -185,7 +185,7 @@ FVProblemInterface::add_boundary_condition(Parameters & pars, std::source_locati
     pars.set<Ref<DiscreteProblemInterface>>("_dpi", ref(*this));
     auto obj = Qtr<T>::alloc(pars);
     auto ptr = obj.get();
-    this->riemann_bcs.push_back(std::move(obj));
+    this->riemann_bcs_.push_back(std::move(obj));
     return Ref<T> { *ptr };
 }
 

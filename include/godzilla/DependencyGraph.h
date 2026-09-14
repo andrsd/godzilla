@@ -24,8 +24,8 @@ public:
     void
     add_node(const T & node)
     {
-        if (this->adj.find(node) == this->adj.end())
-            this->adj[node] = {};
+        if (this->adj_.find(node) == this->adj_.end())
+            this->adj_[node] = {};
     }
 
     /// Add an edge into the graph (`a` depends on `b`)
@@ -37,7 +37,7 @@ public:
     {
         add_node(a);
         add_node(b);
-        this->adj[a].insert(b);
+        this->adj_[a].insert(b);
     }
 
     /// Check that node exists
@@ -47,7 +47,7 @@ public:
     bool
     has_node(const T & a) const
     {
-        return this->adj.find(a) != this->adj.end();
+        return this->adj_.find(a) != this->adj_.end();
     }
 
     /// Check that edge exists
@@ -58,8 +58,8 @@ public:
     bool
     has_edge(const T & a, const T & b) const
     {
-        auto it = this->adj.find(a);
-        if (it != this->adj.end()) {
+        auto it = this->adj_.find(a);
+        if (it != this->adj_.end()) {
             const auto & set = it->second;
             return set.find(b) != set.end();
         }
@@ -71,7 +71,7 @@ public:
     void
     clear()
     {
-        this->adj.clear();
+        this->adj_.clear();
     }
 
     /// Depth-first search
@@ -94,7 +94,7 @@ public:
             stack.pop();
             if (visited.find(v) == visited.end()) {
                 visited[v] = true;
-                for (auto & w : this->adj.at(v)) {
+                for (auto & w : this->adj_.at(v)) {
                     if (rec_stack.find(w) == rec_stack.end()) {
                         stack.push(w);
                         rec_stack.insert(w);
@@ -125,7 +125,7 @@ public:
             T v = queue.front();
             sorted_vector.push_back(v);
             queue.pop();
-            for (auto & w : this->adj.at(v)) {
+            for (auto & w : this->adj_.at(v)) {
                 if (explored.find(w) == explored.end()) {
                     explored[w] = true;
                     if (rec_stack.find(w) == rec_stack.end()) {
@@ -142,7 +142,7 @@ public:
 
 private:
     /// adjacency
-    std::map<T, std::set<T>> adj;
+    std::map<T, std::set<T>> adj_;
 };
 
 } // namespace godzilla

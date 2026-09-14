@@ -253,7 +253,8 @@ Matrix::set_values(const DenseVector<Int, M> & row_idxs,
                    InsertMode mode)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(MatSetValues(this->obj, M, row_idxs.data(), N, col_idxs.data(), vals.data(), mode));
+    PETSC_CHECK(
+        MatSetValues(this->obj_, M, row_idxs.data(), N, col_idxs.data(), vals.data(), mode));
 }
 
 template <Int M, Int N>
@@ -265,7 +266,7 @@ Matrix::set_values_local(const DenseVector<Int, M> & row_idxs,
 {
     CALL_STACK_MSG();
     PETSC_CHECK(
-        MatSetValuesLocal(this->obj, M, row_idxs.data(), N, col_idxs.data(), vals.data(), mode));
+        MatSetValuesLocal(this->obj_, M, row_idxs.data(), N, col_idxs.data(), vals.data(), mode));
 }
 
 } // namespace godzilla

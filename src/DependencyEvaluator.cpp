@@ -8,9 +8,9 @@ namespace godzilla {
 
 DependencyEvaluator::~DependencyEvaluator()
 {
-    for (auto & [_, val] : this->values)
+    for (auto & [_, val] : this->values_)
         delete val;
-    for (auto & [_, fnl] : this->functionals)
+    for (auto & [_, fnl] : this->functionals_)
         delete fnl;
 }
 
@@ -18,15 +18,15 @@ const std::map<String, const ValueFunctional *> &
 DependencyEvaluator::get_functionals() const
 {
     CALL_STACK_MSG();
-    return this->functionals;
+    return this->functionals_;
 }
 
 const ValueFunctional &
 DependencyEvaluator::get_functional(String name) const
 {
     CALL_STACK_MSG();
-    const auto & it = this->functionals.find(name);
-    expect_true(it != this->functionals.end(),
+    const auto & it = this->functionals_.find(name);
+    expect_true(it != this->functionals_.end(),
                 fmt::format("No functional with name '{}' found. Typo?", name));
     return *it->second;
 }

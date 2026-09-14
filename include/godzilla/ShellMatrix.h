@@ -44,7 +44,7 @@ public:
     set_operation(MatOperation op, Ref<T> instance, void (T::*method)(ARGS...))
     {
         if (op == MATOP_MULT) {
-            this->mult_delegate.bind(instance, method);
+            this->mult_delegate_.bind(instance, method);
             PETSC_CHECK(MatShellSetOperation(*this,
                                              MATOP_MULT,
                                              (void (*)()) ShellMatrix::invoke_matmult_op_delegate));
@@ -56,7 +56,7 @@ public:
 
 private:
     /// The delegate for the matrix-vector multiplication operation
-    Delegate<void(Matrix & A, Vector & x_vec, Vector & y_vec)> mult_delegate;
+    Delegate<void(Matrix & A, Vector & x_vec, Vector & y_vec)> mult_delegate_;
 
 public:
     static PetscErrorCode invoke_matmult_op_delegate(Mat matrix, Vec vector, Vec action);

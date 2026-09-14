@@ -21,9 +21,9 @@ RZSymmetry::parameters()
 
 RZSymmetry::RZSymmetry(const Parameters & pars) :
     Object(pars),
-    dpi(pars.get<Ref<DiscreteProblemInterface>>("_dpi")),
-    axis(pars.get<std::vector<Real>>("axis")),
-    pt(pars.get<std::vector<Real>>("point"))
+    dpi_(pars.get<Ref<DiscreteProblemInterface>>("_dpi")),
+    axis_(pars.get<std::vector<Real>>("axis")),
+    pt_(pars.get<std::vector<Real>>("point"))
 {
     CALL_STACK_MSG();
 }
@@ -33,11 +33,11 @@ RZSymmetry::create()
 {
     CALL_STACK_MSG();
     Object::create();
-    auto problem = this->dpi->get_problem();
+    auto problem = this->dpi_->get_problem();
     auto dim = problem->get_dimension();
     expect_true(dim == 2_D, "'RZSymmetry' can be used only with 2D problems.");
-    expect_true(this->axis.size() == 2, "'axis' parameter must provide 2 components.");
-    expect_true(this->pt.size() == 2, "'point' parameter must provide 2 components.");
+    expect_true(this->axis_.size() == 2, "'axis' parameter must provide 2 components.");
+    expect_true(this->pt_.size() == 2, "'point' parameter must provide 2 components.");
 }
 
 Real
@@ -45,7 +45,7 @@ RZSymmetry::get_value(Real /* time */, const DenseVector<Real, 2> & x)
 {
     CALL_STACK_MSG();
 
-    std::vector<Real> a({ x(0) - this->pt[0], x(1) - this->pt[1] });
+    std::vector<Real> a({ x(0) - this->pt_[0], x(1) - this->pt_[1] });
 
     constexpr Int dim = 2;
     Real a_sqr = 0.;
@@ -54,11 +54,11 @@ RZSymmetry::get_value(Real /* time */, const DenseVector<Real, 2> & x)
 
     Real dot = 0.;
     for (Int i = 0; i < dim; ++i)
-        dot += a[i] * this->axis[i];
+        dot += a[i] * this->axis_[i];
 
     Real b_sqr = 0.;
     for (Int i = 0; i < dim; ++i)
-        b_sqr += this->axis[i] * this->axis[i];
+        b_sqr += this->axis_[i] * this->axis_[i];
 
     return std::sqrt(a_sqr - dot * dot / b_sqr);
 }

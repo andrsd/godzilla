@@ -17,42 +17,42 @@ void
 Section::create(mpi::Communicator comm)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSectionCreate(comm, &this->obj));
+    PETSC_CHECK(PetscSectionCreate(comm, &this->obj_));
 }
 
 void
 Section::reset()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSectionReset(this->obj));
+    PETSC_CHECK(PetscSectionReset(this->obj_));
 }
 
 void
 Section::view(PetscViewer viewer) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSectionView(this->obj, viewer));
+    PETSC_CHECK(PetscSectionView(this->obj_, viewer));
 }
 
 void
 Section::set_chart(Int start, Int end)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSectionSetChart(this->obj, start, end));
+    PETSC_CHECK(PetscSectionSetChart(this->obj_, start, end));
 }
 
 void
 Section::set_chart(const Range & range)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSectionSetChart(this->obj, range.first(), range.last()));
+    PETSC_CHECK(PetscSectionSetChart(this->obj_, range.first(), range.last()));
 }
 
 void
 Section::get_chart(Int & start, Int & end) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSectionGetChart(this->obj, &start, &end));
+    PETSC_CHECK(PetscSectionGetChart(this->obj_, &start, &end));
 }
 
 Range
@@ -60,7 +60,7 @@ Section::get_chart() const
 {
     CALL_STACK_MSG();
     Int start, end;
-    PETSC_CHECK(PetscSectionGetChart(this->obj, &start, &end));
+    PETSC_CHECK(PetscSectionGetChart(this->obj_, &start, &end));
     return { start, end };
 }
 
@@ -68,14 +68,14 @@ void
 Section::set_up()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSectionSetUp(this->obj));
+    PETSC_CHECK(PetscSectionSetUp(this->obj_));
 }
 
 void
 Section::set_point_major(bool pm)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSectionSetPointMajor(this->obj, pm ? PETSC_TRUE : PETSC_FALSE));
+    PETSC_CHECK(PetscSectionSetPointMajor(this->obj_, pm ? PETSC_TRUE : PETSC_FALSE));
 }
 
 bool
@@ -83,7 +83,7 @@ Section::get_point_major() const
 {
     CALL_STACK_MSG();
     PetscBool pm;
-    PETSC_CHECK(PetscSectionGetPointMajor(this->obj, &pm));
+    PETSC_CHECK(PetscSectionGetPointMajor(this->obj_, &pm));
     return pm == PETSC_TRUE;
 }
 
@@ -92,7 +92,7 @@ Section::get_max_dof() const
 {
     CALL_STACK_MSG();
     Int max_dof;
-    PETSC_CHECK(PetscSectionGetMaxDof(this->obj, &max_dof));
+    PETSC_CHECK(PetscSectionGetMaxDof(this->obj_, &max_dof));
     return max_dof;
 }
 
@@ -100,7 +100,7 @@ void
 Section::set_num_fields(Int n_fields)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSectionSetNumFields(this->obj, n_fields));
+    PETSC_CHECK(PetscSectionSetNumFields(this->obj_, n_fields));
 }
 
 Int
@@ -108,7 +108,7 @@ Section::get_num_fields() const
 {
     CALL_STACK_MSG();
     Int n_fields;
-    PETSC_CHECK(PetscSectionGetNumFields(this->obj, &n_fields));
+    PETSC_CHECK(PetscSectionGetNumFields(this->obj_, &n_fields));
     return n_fields;
 }
 
@@ -116,14 +116,14 @@ void
 Section::add_dof(Int point, Int n_dofs)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSectionAddDof(this->obj, point, n_dofs));
+    PETSC_CHECK(PetscSectionAddDof(this->obj_, point, n_dofs));
 }
 
 void
 Section::set_dof(Int point, Int n_dofs)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSectionSetDof(this->obj, point, n_dofs));
+    PETSC_CHECK(PetscSectionSetDof(this->obj_, point, n_dofs));
 }
 
 Int
@@ -131,7 +131,7 @@ Section::get_dof(Int point) const
 {
     CALL_STACK_MSG();
     Int n_dof;
-    PETSC_CHECK(PetscSectionGetDof(this->obj, point, &n_dof));
+    PETSC_CHECK(PetscSectionGetDof(this->obj_, point, &n_dof));
     return n_dof;
 }
 
@@ -140,7 +140,7 @@ Section::get_field(Int field) const
 {
     CALL_STACK_MSG();
     Section s;
-    PETSC_CHECK(PetscSectionGetField(this->obj, field, s));
+    PETSC_CHECK(PetscSectionGetField(this->obj_, field, s));
     s.inc_reference();
     return s;
 }
@@ -149,7 +149,7 @@ void
 Section::set_num_field_components(Int field, Int n_comps)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSectionSetFieldComponents(this->obj, field, n_comps));
+    PETSC_CHECK(PetscSectionSetFieldComponents(this->obj_, field, n_comps));
 }
 
 Int
@@ -157,7 +157,7 @@ Section::get_num_field_components(Int field) const
 {
     CALL_STACK_MSG();
     Int n_comps;
-    PETSC_CHECK(PetscSectionGetFieldComponents(this->obj, field, &n_comps));
+    PETSC_CHECK(PetscSectionGetFieldComponents(this->obj_, field, &n_comps));
     return n_comps;
 }
 
@@ -165,14 +165,14 @@ void
 Section::add_field_constraint_dof(Int point, Int field, Int n_dofs)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSectionAddFieldConstraintDof(this->obj, point, field, n_dofs));
+    PETSC_CHECK(PetscSectionAddFieldConstraintDof(this->obj_, point, field, n_dofs));
 }
 
 void
 Section::set_field_constraint_dof(Int point, Int field, Int n_dofs)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSectionSetFieldConstraintDof(this->obj, point, field, n_dofs));
+    PETSC_CHECK(PetscSectionSetFieldConstraintDof(this->obj_, point, field, n_dofs));
 }
 
 Int
@@ -180,7 +180,7 @@ Section::get_field_constraint_dof(Int point, Int field) const
 {
     CALL_STACK_MSG();
     Int n_dofs;
-    PETSC_CHECK(PetscSectionGetFieldConstraintDof(this->obj, point, field, &n_dofs));
+    PETSC_CHECK(PetscSectionGetFieldConstraintDof(this->obj_, point, field, &n_dofs));
     return n_dofs;
 }
 
@@ -188,14 +188,14 @@ void
 Section::add_field_dof(Int point, Int field, Int n_dofs)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSectionAddFieldDof(this->obj, point, field, n_dofs));
+    PETSC_CHECK(PetscSectionAddFieldDof(this->obj_, point, field, n_dofs));
 }
 
 void
 Section::set_field_dof(Int point, Int field, Int n_dofs)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSectionSetFieldDof(this->obj, point, field, n_dofs));
+    PETSC_CHECK(PetscSectionSetFieldDof(this->obj_, point, field, n_dofs));
 }
 
 Int
@@ -203,7 +203,7 @@ Section::get_field_dof(Int point, Int field) const
 {
     CALL_STACK_MSG();
     Int n_dofs;
-    PETSC_CHECK(PetscSectionGetFieldDof(this->obj, point, field, &n_dofs));
+    PETSC_CHECK(PetscSectionGetFieldDof(this->obj_, point, field, &n_dofs));
     return n_dofs;
 }
 
@@ -211,7 +211,7 @@ void
 Section::set_field_name(Int field, String name)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSectionSetFieldName(this->obj, field, name.c_str()));
+    PETSC_CHECK(PetscSectionSetFieldName(this->obj_, field, name.c_str()));
 }
 
 String
@@ -219,7 +219,7 @@ Section::get_field_name(Int field) const
 {
     CALL_STACK_MSG();
     const char * name;
-    PETSC_CHECK(PetscSectionGetFieldName(this->obj, field, &name));
+    PETSC_CHECK(PetscSectionGetFieldName(this->obj_, field, &name));
     return { name };
 }
 
@@ -228,7 +228,7 @@ Section::get_offset(Int point) const
 {
     CALL_STACK_MSG();
     Int offset;
-    PETSC_CHECK(PetscSectionGetOffset(this->obj, point, &offset));
+    PETSC_CHECK(PetscSectionGetOffset(this->obj_, point, &offset));
     return offset;
 }
 
@@ -236,7 +236,7 @@ void
 Section::get_offset_range(Int & start, Int & end) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSectionGetOffsetRange(this->obj, &start, &end));
+    PETSC_CHECK(PetscSectionGetOffsetRange(this->obj_, &start, &end));
 }
 
 Int
@@ -244,7 +244,7 @@ Section::get_field_offset(Int point, Int field) const
 {
     CALL_STACK_MSG();
     Int offset;
-    PETSC_CHECK(PetscSectionGetFieldOffset(this->obj, point, field, &offset));
+    PETSC_CHECK(PetscSectionGetFieldOffset(this->obj_, point, field, &offset));
     return offset;
 }
 
@@ -253,7 +253,7 @@ Section::get_field_point_offset(Int point, Int field) const
 {
     CALL_STACK_MSG();
     Int offset;
-    PETSC_CHECK(PetscSectionGetFieldPointOffset(this->obj, point, field, &offset));
+    PETSC_CHECK(PetscSectionGetFieldPointOffset(this->obj_, point, field, &offset));
     return offset;
 }
 
@@ -262,7 +262,7 @@ Section::get_storage_size() const
 {
     CALL_STACK_MSG();
     Int sz;
-    PetscSectionGetStorageSize(this->obj, &sz);
+    PetscSectionGetStorageSize(this->obj_, &sz);
     return sz;
 }
 
@@ -271,7 +271,7 @@ Section::get_constrained_storage_size() const
 {
     CALL_STACK_MSG();
     Int sz;
-    PETSC_CHECK(PetscSectionGetConstrainedStorageSize(this->obj, &sz));
+    PETSC_CHECK(PetscSectionGetConstrainedStorageSize(this->obj_, &sz));
     return sz;
 }
 
@@ -280,7 +280,7 @@ Section::has_constraints() const
 {
     CALL_STACK_MSG();
     PetscBool hc;
-    PETSC_CHECK(PetscSectionHasConstraints(this->obj, &hc));
+    PETSC_CHECK(PetscSectionHasConstraints(this->obj_, &hc));
     return hc == PETSC_TRUE;
 }
 
@@ -288,7 +288,7 @@ void
 Section::set_component_name(Int field, Int comp, String name)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSectionSetComponentName(this->obj, field, comp, name.c_str()));
+    PETSC_CHECK(PetscSectionSetComponentName(this->obj_, field, comp, name.c_str()));
 }
 
 String
@@ -296,7 +296,7 @@ Section::get_component_name(Int field, Int comp) const
 {
     CALL_STACK_MSG();
     const char * name;
-    PETSC_CHECK(PetscSectionGetComponentName(this->obj, field, comp, &name));
+    PETSC_CHECK(PetscSectionGetComponentName(this->obj_, field, comp, &name));
     return { name };
 }
 
@@ -304,14 +304,14 @@ void
 Section::add_constraint_dof(Int point, Int n_dofs)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSectionAddConstraintDof(this->obj, point, n_dofs));
+    PETSC_CHECK(PetscSectionAddConstraintDof(this->obj_, point, n_dofs));
 }
 
 void
 Section::set_constraint_dof(Int point, Int n_dofs)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSectionSetConstraintDof(this->obj, point, n_dofs));
+    PETSC_CHECK(PetscSectionSetConstraintDof(this->obj_, point, n_dofs));
 }
 
 Int
@@ -319,7 +319,7 @@ Section::get_constraint_dof(Int point) const
 {
     CALL_STACK_MSG();
     Int n_dofs;
-    PETSC_CHECK(PetscSectionGetConstraintDof(this->obj, point, &n_dofs));
+    PETSC_CHECK(PetscSectionGetConstraintDof(this->obj_, point, &n_dofs));
     return n_dofs;
 }
 
@@ -327,14 +327,14 @@ void
 Section::set_constraint_indices(Int point, Span<Int> indices)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSectionSetConstraintIndices(this->obj, point, indices.data()));
+    PETSC_CHECK(PetscSectionSetConstraintIndices(this->obj_, point, indices.data()));
 }
 
 void
 Section::set_constraint_indices(Int point, std::initializer_list<Int> indices)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSectionSetConstraintIndices(this->obj, point, std::data(indices)));
+    PETSC_CHECK(PetscSectionSetConstraintIndices(this->obj_, point, std::data(indices)));
 }
 
 const Int *
@@ -342,7 +342,7 @@ Section::get_constraint_indices(Int point) const
 {
     CALL_STACK_MSG();
     const Int * indices;
-    PETSC_CHECK(PetscSectionGetConstraintIndices(this->obj, point, &indices));
+    PETSC_CHECK(PetscSectionGetConstraintIndices(this->obj_, point, &indices));
     return indices;
 }
 
@@ -350,14 +350,14 @@ void
 Section::set_field_constraint_indices(Int point, Int field, Span<Int> indices)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSectionSetFieldConstraintIndices(this->obj, point, field, indices.data()));
+    PETSC_CHECK(PetscSectionSetFieldConstraintIndices(this->obj_, point, field, indices.data()));
 }
 
 void
 Section::set_field_constraint_indices(Int point, Int field, std::initializer_list<Int> indices)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSectionSetFieldConstraintIndices(this->obj, point, field, std::data(indices)));
+    PETSC_CHECK(PetscSectionSetFieldConstraintIndices(this->obj_, point, field, std::data(indices)));
 }
 
 const Int *
@@ -365,7 +365,7 @@ Section::get_field_constraint_indices(Int point, Int field) const
 {
     CALL_STACK_MSG();
     const Int * indices;
-    PETSC_CHECK(PetscSectionGetFieldConstraintIndices(this->obj, point, field, &indices));
+    PETSC_CHECK(PetscSectionGetFieldConstraintIndices(this->obj_, point, field, &indices));
     return indices;
 }
 

@@ -112,7 +112,7 @@ StructuredMesh::get_corners<1_D>() const
 {
     CALL_STACK_MSG();
     Corners<1_D> c;
-    PETSC_CHECK(DMDAGetCorners(this->obj, &c.index[0], NULL, NULL, &c.width[0], NULL, NULL));
+    PETSC_CHECK(DMDAGetCorners(this->obj_, &c.index[0], NULL, NULL, &c.width[0], NULL, NULL));
     return c;
 }
 
@@ -123,7 +123,7 @@ StructuredMesh::get_corners<2_D>() const
     CALL_STACK_MSG();
     Corners<2_D> c;
     PETSC_CHECK(
-        DMDAGetCorners(this->obj, &c.index[0], &c.index[1], NULL, &c.width[0], &c.width[1], NULL));
+        DMDAGetCorners(this->obj_, &c.index[0], &c.index[1], NULL, &c.width[0], &c.width[1], NULL));
     return c;
 }
 
@@ -133,7 +133,7 @@ StructuredMesh::get_corners<3_D>() const
 {
     CALL_STACK_MSG();
     Corners<3_D> c;
-    PETSC_CHECK(DMDAGetCorners(this->obj,
+    PETSC_CHECK(DMDAGetCorners(this->obj_,
                                &c.index[0],
                                &c.index[1],
                                &c.index[2],

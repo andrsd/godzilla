@@ -54,10 +54,10 @@ LinearProblem::parameters()
 LinearProblem::LinearProblem(const Parameters & pars) :
     Problem(pars),
     RestartInterface(),
-    ksp_type(pars.get<String>("ksp_type")),
-    lin_rel_tol(pars.get<Real>("lin_rel_tol")),
-    lin_abs_tol(pars.get<Real>("lin_abs_tol")),
-    lin_max_iter(pars.get<Int>("lin_max_iter"))
+    ksp_type_(pars.get<String>("ksp_type")),
+    lin_rel_tol_(pars.get<Real>("lin_rel_tol")),
+    lin_abs_tol_(pars.get<Real>("lin_abs_tol")),
+    lin_max_iter_(pars.get<Int>("lin_max_iter"))
 {
     CALL_STACK_MSG();
 }
@@ -66,7 +66,7 @@ String
 LinearProblem::get_ksp_type() const
 {
     CALL_STACK_MSG();
-    return this->ksp_type;
+    return this->ksp_type_;
 }
 
 void
@@ -74,17 +74,17 @@ LinearProblem::create()
 {
     CALL_STACK_MSG();
     set_up_types();
-    this->ks = create_krylov_solver();
+    this->ks_ = create_krylov_solver();
     init();
     allocate_objects();
     set_up_matrix_properties();
-    this->pcond = create_preconditioner(this->ks.get_pc());
-    this->pcond.inc_reference();
+    this->pcond_ = create_preconditioner(this->ks_.get_pc());
+    this->pcond_.inc_reference();
     set_up_solver_parameters();
     set_up_monitors();
     set_up_callbacks();
     Problem::create();
-    this->ks.set_from_options();
+    this->ks_.set_from_options();
 }
 
 KrylovSolver
@@ -93,7 +93,7 @@ LinearProblem::create_krylov_solver()
     CALL_STACK_MSG();
     KrylovSolver krylov_solver;
     krylov_solver.create(get_comm());
-    krylov_solver.set_type(this->ksp_type);
+    krylov_solver.set_type(this->ksp_type_);
     krylov_solver.set_dm(get_dm());
     PETSC_CHECK(DMSetApplicationContext(get_dm(), this));
     return krylov_solver;
@@ -103,14 +103,14 @@ const KrylovSolver &
 LinearProblem::get_ksp() const
 {
     CALL_STACK_MSG();
-    return this->ks;
+    return this->ks_;
 }
 
 KrylovSolver &
 LinearProblem::get_ksp()
 {
     CALL_STACK_MSG();
-    return this->ks;
+    return this->ks_;
 }
 
 void
@@ -136,18 +136,18 @@ void
 LinearProblem::set_up_monitors()
 {
     CALL_STACK_MSG();
-    this->ks.monitor_set(ref(*this), &LinearProblem::monitor);
-    this->ks.converged_reason_view_set(ref(*this), &LinearProblem::converged_reason_view);
+    this->ks_.monitor_set(ref(*this), &LinearProblem::monitor);
+    this->ks_.converged_reason_view_set(ref(*this), &LinearProblem::converged_reason_view);
 }
 
 void
 LinearProblem::set_up_solver_parameters()
 {
     CALL_STACK_MSG();
-    this->ks.set_tolerances(this->lin_rel_tol,
-                            this->lin_abs_tol,
-                            PETSC_DEFAULT,
-                            this->lin_max_iter);
+    this->ks_.set_tolerances(this->lin_rel_tol_,
+                             this->lin_abs_tol_,
+                             PETSC_DEFAULT,
+                             this->lin_max_iter_);
 }
 
 void
@@ -162,14 +162,14 @@ LinearProblem::solve()
 {
     CALL_STACK_MSG();
     lprintln(9, "Solving");
-    this->ks.solve(get_solution_vector());
+    this->ks_.solve(get_solution_vector());
 }
 
 bool
 LinearProblem::converged()
 {
     CALL_STACK_MSG();
-    return this->ks.get_converged_reason() > 0;
+    return this->ks_.get_converged_reason() > 0;
 }
 
 void

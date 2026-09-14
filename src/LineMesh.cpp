@@ -22,43 +22,43 @@ LineMesh::parameters()
 
 LineMesh::LineMesh(const Parameters & pars) :
     Object(pars),
-    xmin(pars.get<Real>("xmin")),
-    xmax(pars.get<Real>("xmax")),
-    nx(pars.get<Int>("nx")),
-    interpolate(true)
+    xmin_(pars.get<Real>("xmin")),
+    xmax_(pars.get<Real>("xmax")),
+    nx_(pars.get<Int>("nx")),
+    interpolate_(true)
 {
     CALL_STACK_MSG();
-    expect_true(this->xmax > this->xmin, "Parameter 'xmax' must be larger than 'xmin'.");
+    expect_true(this->xmax_ > this->xmin_, "Parameter 'xmax' must be larger than 'xmin'.");
 }
 
 Real
 LineMesh::get_x_min() const
 {
     CALL_STACK_MSG();
-    return this->xmin;
+    return this->xmin_;
 }
 
 Real
 LineMesh::get_x_max() const
 {
     CALL_STACK_MSG();
-    return this->xmax;
+    return this->xmax_;
 }
 
 Int
 LineMesh::get_nx() const
 {
     CALL_STACK_MSG();
-    return this->nx;
+    return this->nx_;
 }
 
 Qtr<UnstructuredMesh>
 LineMesh::create_mesh()
 {
     CALL_STACK_MSG();
-    std::array<Real, 1> lower = { this->xmin };
-    std::array<Real, 1> upper = { this->xmax };
-    std::array<Int, 1> faces = { this->nx };
+    std::array<Real, 1> lower = { this->xmin_ };
+    std::array<Real, 1> upper = { this->xmax_ };
+    std::array<Int, 1> faces = { this->nx_ };
     std::array<DMBoundaryType, 1> periodicity = { DM_BOUNDARY_GHOSTED };
 
     DM dm;
@@ -70,7 +70,7 @@ LineMesh::create_mesh()
                                     lower.data(),
                                     upper.data(),
                                     periodicity.data(),
-                                    this->interpolate ? PETSC_TRUE : PETSC_FALSE,
+                                    this->interpolate_ ? PETSC_TRUE : PETSC_FALSE,
                                     0,
                                     PETSC_FALSE,
                                     &dm));

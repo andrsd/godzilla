@@ -48,33 +48,33 @@ private:
     void output_step(const DiscreteProblemInterface & dpi);
     void output_step(const DGProblemInterface & dpi);
 
-    Ref<DiscreteProblemInterface> dpi;
+    Ref<DiscreteProblemInterface> dpi_;
     /// Unstructured mesh
-    Ref<UnstructuredMesh> mesh;
+    Ref<UnstructuredMesh> mesh_;
     /// `true` is appending into the ExodusII file
-    bool append;
+    bool append_;
     /// Variable names to be stored
-    std::vector<String> variable_names;
+    std::vector<String> variable_names_;
     /// ExodusII file
-    Qtr<exodusIIcpp::File> exo;
+    Qtr<exodusIIcpp::File> exo_;
     /// Step number
-    int step_num;
+    int step_num_;
     /// Flag indicating if we need to store mesh during `output_step`
-    bool mesh_stored;
+    bool mesh_stored_;
     /// List of field variable names to output
-    std::vector<String> field_var_names;
+    std::vector<String> field_var_names_;
     /// List of auxiliary field variable names to output
-    std::vector<String> aux_field_var_names;
+    std::vector<String> aux_field_var_names_;
     /// List of global variable names to output
-    std::vector<std::string> global_var_names;
+    std::vector<std::string> global_var_names_;
     /// List of nodal variable field IDs
-    std::vector<std::pair<FieldID, int>> nodal_var_fids;
+    std::vector<std::pair<FieldID, int>> nodal_var_fids_;
     /// List of nodal auxiliary variable field IDs
-    std::vector<std::pair<FieldID, int>> nodal_aux_var_fids;
+    std::vector<std::pair<FieldID, int>> nodal_aux_var_fids_;
     /// List of elemental variable field IDs
-    std::vector<std::pair<FieldID, int>> elem_var_fids;
+    std::vector<std::pair<FieldID, int>> elem_var_fids_;
     /// List of elemental auxiliary variable field IDs
-    std::vector<std::pair<FieldID, int>> elem_aux_var_fids;
+    std::vector<std::pair<FieldID, int>> elem_aux_var_fids_;
 
 public:
     static Parameters parameters();

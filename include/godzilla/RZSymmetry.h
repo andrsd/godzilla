@@ -20,11 +20,11 @@ public:
 
 private:
     /// Discrete problem this object is part of
-    Ref<DiscreteProblemInterface> dpi;
+    Ref<DiscreteProblemInterface> dpi_;
     /// Axis vector
-    const std::vector<Real> axis;
+    const std::vector<Real> axis_;
     /// Axis point
-    const std::vector<Real> pt;
+    const std::vector<Real> pt_;
 
 public:
     static Parameters parameters();

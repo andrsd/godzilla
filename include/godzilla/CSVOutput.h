@@ -24,7 +24,7 @@ public:
     const std::vector<String> &
     get_pps_names() const
     {
-        return pps_names;
+        return this->pps_names_;
     }
 
 protected:
@@ -37,13 +37,13 @@ private:
     String get_file_ext() const override;
 
     /// Output file
-    std::FILE * f;
+    std::FILE * f_;
 
     /// Flag indicating if header was written
-    bool has_header;
+    bool has_header_;
 
     /// Names of postprocessors to store
-    std::vector<String> pps_names;
+    std::vector<String> pps_names_;
 
 public:
     static Parameters parameters();

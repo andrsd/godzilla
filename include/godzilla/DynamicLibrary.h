@@ -41,9 +41,9 @@ public:
         invoke(ARGS... args) const -> RET
         {
             CALL_STACK_MSG();
-            if (this->stub == nullptr)
+            if (this->stub_ == nullptr)
                 throw Exception("Bad delegate call");
-            return (*this->stub)(args...);
+            return (*this->stub_)(args...);
         }
 
         /// Bind this delegate to a C function
@@ -55,13 +55,13 @@ public:
         bind(SIGNATURE * fn) -> void
         {
             CALL_STACK_MSG();
-            this->stub = fn;
+            this->stub_ = fn;
         }
 
     private:
         using StubFunction = RET (*)(ARGS...);
         /// A pointer to the function to invoke
-        StubFunction stub = nullptr;
+        StubFunction stub_ = nullptr;
     };
 
     /// Construct a dynamic library instance
@@ -95,12 +95,12 @@ public:
     {
         CALL_STACK_MSG();
         SIGNATURE * smbl;
-        *(void **) (&smbl) = dlsym(this->handle, symbol_name);
+        *(void **) (&smbl) = dlsym(this->handle_, symbol_name);
         auto error = dlerror();
         if (error != nullptr || smbl == nullptr)
             throw Exception(fmt::format("Unable to locate '{}' in {}: {}",
                                         symbol_name,
-                                        this->file_name.string(),
+                                        this->file_name_.string(),
                                         error));
 
         Delegate<SIGNATURE> d;
@@ -125,12 +125,12 @@ private:
     fs::path get_ext_file_path() const;
 
     /// Extension file name
-    fs::path file_name;
+    fs::path file_name_;
     /// Extension handle
-    void * handle;
+    void * handle_;
 
     /// List of paths to search for the extension
-    static std::vector<std::filesystem::path> search_paths;
+    static std::vector<std::filesystem::path> search_paths_;
 };
 
 } // namespace godzilla

@@ -5,12 +5,12 @@
 
 namespace godzilla {
 
-Extension::Extension(String extension_name) : name(extension_name) {}
+Extension::Extension(String extension_name) : name_(extension_name) {}
 
 String
 Extension::get_name() const
 {
-    return this->name;
+    return this->name_;
 }
 
 } // namespace godzilla

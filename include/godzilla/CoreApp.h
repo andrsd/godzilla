@@ -131,19 +131,19 @@ protected:
 
 private:
     /// Application name
-    String name;
+    String name_;
     /// MPI communicator
-    mpi::Communicator mpi_comm;
+    mpi::Communicator mpi_comm_;
     /// Registry
-    Registry & registry;
+    Registry & registry_;
     /// Log with errors and/or warnings
-    Qtr<Logger> logger;
+    Qtr<Logger> logger_;
     /// Verbosity level
-    unsigned int verbosity_level;
+    unsigned int verbosity_level_;
     /// Restart file name
-    fs::path restart_file_name;
+    fs::path restart_file_name_;
     /// Performance log file name
-    fs::path perf_log_file_name;
+    fs::path perf_log_file_name_;
     /// File stream for redirected stdout.
     std::ofstream stdout_file_;
     /// Stream buffer for redirected stdout.

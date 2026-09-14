@@ -32,11 +32,11 @@ FVProblemInterface::compute_flux(Int /* dim */,
     method->invoke(x, n, u_l, u_r, flux);
 }
 
-const String FVProblemInterface::empty_name;
+const String FVProblemInterface::empty_name_;
 
 FVProblemInterface::FVProblemInterface(Problem & problem, const Parameters & pars) :
     DiscreteProblemInterface(problem, pars),
-    fvm(nullptr)
+    fvm_(nullptr)
 {
     CALL_STACK_MSG();
 }
@@ -44,9 +44,9 @@ FVProblemInterface::FVProblemInterface(Problem & problem, const Parameters & par
 FVProblemInterface::~FVProblemInterface()
 {
     CALL_STACK_MSG();
-    for (auto & [_, fe] : this->aux_fe)
+    for (auto & [_, fe] : this->aux_fe_)
         PetscFEDestroy(&fe);
-    PETSC_CHECK(PetscFVDestroy(&this->fvm));
+    PETSC_CHECK(PetscFVDestroy(&this->fvm_));
 }
 
 void
@@ -58,14 +58,14 @@ FVProblemInterface::init()
     auto comm = get_mesh()->get_comm();
     auto dim = get_problem()->get_dimension();
     PetscBool is_simplex = get_mesh()->is_simplex() ? PETSC_TRUE : PETSC_FALSE;
-    for (auto & [_, info] : this->aux_fields)
+    for (auto & [_, info] : this->aux_fields_)
         PETSC_CHECK(PetscFECreateLagrange(comm,
                                           dim,
                                           info.nc,
                                           is_simplex,
                                           info.k.value(),
                                           PETSC_DETERMINE,
-                                          &this->aux_fe.at(info.id)));
+                                          &this->aux_fe_.at(info.id)));
 
     auto dm = get_mesh()->get_dm();
     DM cdm = dm;
@@ -92,7 +92,7 @@ FVProblemInterface::get_field_names() const
 {
     CALL_STACK_MSG();
     std::vector<String> infos;
-    infos.push_back(empty_name);
+    infos.push_back(empty_name_);
     return infos;
 }
 
@@ -101,10 +101,10 @@ FVProblemInterface::get_field_name(FieldID fid) const
 {
     CALL_STACK_MSG();
     if (fid == FieldID(0)) {
-        if (this->fields.size() == 1)
-            return this->fields.at(FieldID(0)).name;
+        if (this->fields_.size() == 1)
+            return this->fields_.at(FieldID(0)).name;
         else
-            return empty_name;
+            return empty_name_;
     }
     else
         return Unexpected(ErrorCode::NotFound);
@@ -116,7 +116,7 @@ FVProblemInterface::get_field_num_components(FieldID fid) const
     CALL_STACK_MSG();
     if (fid == FieldID(0)) {
         Int n_comps = 0;
-        for (auto & [_, info] : this->fields)
+        for (auto & [_, info] : this->fields_)
             n_comps += info.nc;
         return n_comps;
     }
@@ -145,8 +145,8 @@ bool
 FVProblemInterface::has_field_by_name(String name) const
 {
     CALL_STACK_MSG();
-    const auto & it = this->fields_by_name.find(name);
-    return it != this->fields_by_name.end();
+    const auto & it = this->fields_by_name_.find(name);
+    return it != this->fields_by_name_.end();
 }
 
 Expected<Order, ErrorCode>
@@ -165,7 +165,7 @@ FVProblemInterface::get_field_component_name(FieldID fid, Int component) const
     CALL_STACK_MSG();
     if (fid == FieldID(0)) {
         const char * name;
-        PETSC_CHECK(PetscFVGetComponentName(this->fvm, component, &name));
+        PETSC_CHECK(PetscFVGetComponentName(this->fvm_, component, &name));
         return { name };
     }
     else
@@ -176,8 +176,8 @@ void
 FVProblemInterface::set_field_component_name(FieldID fid, Int component, String name)
 {
     CALL_STACK_MSG();
-    const auto & it = this->fields.find(fid);
-    if (it != this->fields.end()) {
+    const auto & it = this->fields_.find(fid);
+    if (it != this->fields_.end()) {
         if (it->second.nc > 1) {
             expect_true(component < it->second.nc &&
                             std::cmp_less(component, it->second.component_names.size()),
@@ -195,7 +195,7 @@ Int
 FVProblemInterface::get_num_aux_fields() const
 {
     CALL_STACK_MSG();
-    return (Int) this->aux_fields.size();
+    return (Int) this->aux_fields_.size();
 }
 
 std::vector<String>
@@ -203,8 +203,8 @@ FVProblemInterface::get_aux_field_names() const
 {
     CALL_STACK_MSG();
     std::vector<String> names;
-    names.reserve(this->aux_fields.size());
-    for (const auto & [_, info] : this->aux_fields)
+    names.reserve(this->aux_fields_.size());
+    for (const auto & [_, info] : this->aux_fields_)
         names.push_back(info.name);
     return names;
 }
@@ -213,8 +213,8 @@ Expected<String, ErrorCode>
 FVProblemInterface::get_aux_field_name(FieldID fid) const
 {
     CALL_STACK_MSG();
-    const auto & it = this->aux_fields.find(fid);
-    if (it != this->aux_fields.end())
+    const auto & it = this->aux_fields_.find(fid);
+    if (it != this->aux_fields_.end())
         return it->second.name;
     else
         return Unexpected(ErrorCode::NotFound);
@@ -224,8 +224,8 @@ Expected<Int, ErrorCode>
 FVProblemInterface::get_aux_field_num_components(FieldID fid) const
 {
     CALL_STACK_MSG();
-    const auto & it = this->aux_fields.find(fid);
-    if (it != this->aux_fields.end())
+    const auto & it = this->aux_fields_.find(fid);
+    if (it != this->aux_fields_.end())
         return it->second.nc;
     else
         return Unexpected(ErrorCode::NotFound);
@@ -235,8 +235,8 @@ Expected<FieldID, ErrorCode>
 FVProblemInterface::get_aux_field_id(String name) const
 {
     CALL_STACK_MSG();
-    const auto & it = this->aux_fields_by_name.find(name);
-    if (it != this->aux_fields_by_name.end())
+    const auto & it = this->aux_fields_by_name_.find(name);
+    if (it != this->aux_fields_by_name_.end())
         return it->second;
     else
         return Unexpected(ErrorCode::NotFound);
@@ -246,24 +246,24 @@ bool
 FVProblemInterface::has_aux_field_by_id(FieldID fid) const
 {
     CALL_STACK_MSG();
-    const auto & it = this->aux_fields.find(fid);
-    return it != this->aux_fields.end();
+    const auto & it = this->aux_fields_.find(fid);
+    return it != this->aux_fields_.end();
 }
 
 bool
 FVProblemInterface::has_aux_field_by_name(String name) const
 {
     CALL_STACK_MSG();
-    const auto & it = this->aux_fields_by_name.find(name);
-    return it != this->aux_fields_by_name.end();
+    const auto & it = this->aux_fields_by_name_.find(name);
+    return it != this->aux_fields_by_name_.end();
 }
 
 Expected<Order, ErrorCode>
 FVProblemInterface::get_aux_field_order(FieldID fid) const
 {
     CALL_STACK_MSG();
-    const auto & it = this->aux_fields.find(fid);
-    if (it != this->aux_fields.end())
+    const auto & it = this->aux_fields_.find(fid);
+    if (it != this->aux_fields_.end())
         return it->second.k;
     else
         return Unexpected(ErrorCode::NotFound);
@@ -273,8 +273,8 @@ Expected<String, ErrorCode>
 FVProblemInterface::get_aux_field_component_name(FieldID fid, Int component) const
 {
     CALL_STACK_MSG();
-    const auto & it = this->aux_fields.find(fid);
-    if (it != this->aux_fields.end()) {
+    const auto & it = this->aux_fields_.find(fid);
+    if (it != this->aux_fields_.end()) {
         const FieldInfo & fi = it->second;
         if (fi.nc == 1)
             return { "" };
@@ -293,8 +293,8 @@ void
 FVProblemInterface::set_aux_field_component_name(FieldID fid, Int component, String name)
 {
     CALL_STACK_MSG();
-    const auto & it = this->aux_fields.find(fid);
-    if (it != this->aux_fields.end()) {
+    const auto & it = this->aux_fields_.find(fid);
+    if (it != this->aux_fields_.end()) {
         if (it->second.nc > 1) {
             expect_true(component < it->second.nc &&
                             std::cmp_less(component, it->second.component_names.size()),
@@ -312,16 +312,16 @@ void
 FVProblemInterface::add_field(FieldID id, String name, Int nc, const Label & block)
 {
     CALL_STACK_MSG();
-    auto it = this->fields.find(id);
-    if (it == this->fields.end()) {
+    auto it = this->fields_.find(id);
+    if (it == this->fields_.end()) {
         FieldInfo fi(name, id, nc, Order(0), block);
         if (nc > 1) {
             fi.component_names.resize(nc);
             for (Int i = 0; i < nc; ++i)
                 fi.component_names[i] = fmt::format("{:d}", i);
         }
-        this->fields.emplace(id, fi);
-        this->fields_by_name.emplace(name, id);
+        this->fields_.emplace(id, fi);
+        this->fields_by_name_.emplace(name, id);
     }
     else
         throw Exception(
@@ -332,7 +332,7 @@ FieldID
 FVProblemInterface::add_aux_field(String name, Int nc, Order k, const Label & block)
 {
     CALL_STACK_MSG();
-    auto keys = utils::map_keys(this->aux_fields);
+    auto keys = utils::map_keys(this->aux_fields_);
     auto id = get_next_id(keys);
     set_aux_field(id, name, nc, k, block);
     return id;
@@ -342,17 +342,17 @@ void
 FVProblemInterface::set_aux_field(FieldID id, String name, Int nc, Order k, const Label & block)
 {
     CALL_STACK_MSG();
-    auto it = this->aux_fields.find(id);
-    if (it == this->aux_fields.end()) {
+    auto it = this->aux_fields_.find(id);
+    if (it == this->aux_fields_.end()) {
         FieldInfo fi(name, id, nc, k, block);
         if (nc > 1) {
             fi.component_names.resize(nc);
             for (unsigned int i = 0; i < nc; ++i)
                 fi.component_names[i] = fmt::format("{:d}", i);
         }
-        this->aux_fields.emplace(id, fi);
-        this->aux_fields_by_name.emplace(name, id);
-        this->aux_fe[id] = nullptr;
+        this->aux_fields_.emplace(id, fi);
+        this->aux_fields_by_name_.emplace(name, id);
+        this->aux_fe_[id] = nullptr;
     }
     else
         throw Exception(
@@ -382,32 +382,32 @@ FVProblemInterface::set_up_ds()
     CALL_STACK_MSG();
     auto comm = get_mesh()->get_comm();
 
-    PETSC_CHECK(PetscFVCreate(comm, &this->fvm));
-    PETSC_CHECK(PetscFVSetType(this->fvm, PETSCFVUPWIND));
+    PETSC_CHECK(PetscFVCreate(comm, &this->fvm_));
+    PETSC_CHECK(PetscFVSetType(this->fvm_, PETSCFVUPWIND));
 
     Int n_comps = 0;
-    for (auto & [_, info] : this->fields)
+    for (auto & [_, info] : this->fields_)
         n_comps += info.nc;
-    PETSC_CHECK(PetscFVSetNumComponents(this->fvm, n_comps));
+    PETSC_CHECK(PetscFVSetNumComponents(this->fvm_, n_comps));
 
-    PETSC_CHECK(PetscFVSetSpatialDimension(this->fvm, get_mesh()->get_dimension()));
+    PETSC_CHECK(PetscFVSetSpatialDimension(this->fvm_, get_mesh()->get_dimension()));
 
-    for (std::size_t id = 0, c = 0; id < this->fields.size(); ++id) {
-        const FieldInfo & fi = this->fields.at(FieldID(id));
+    for (std::size_t id = 0, c = 0; id < this->fields_.size(); ++id) {
+        const FieldInfo & fi = this->fields_.at(FieldID(id));
         if (fi.nc == 1) {
-            PETSC_CHECK(PetscFVSetComponentName(this->fvm, c, fi.name.c_str()));
+            PETSC_CHECK(PetscFVSetComponentName(this->fvm_, c, fi.name.c_str()));
         }
         else {
             for (Int i = 0; i < fi.nc; ++i) {
                 String name = fmt::format("{}_{}", fi.name, fi.component_names[i]);
-                PETSC_CHECK(PetscFVSetComponentName(this->fvm, c + i, name.c_str()));
+                PETSC_CHECK(PetscFVSetComponentName(this->fvm_, c + i, name.c_str()));
             }
         }
         c += fi.nc;
     }
 
     auto dm = get_mesh()->get_dm();
-    PETSC_CHECK(DMAddField(dm, nullptr, (PetscObject) this->fvm));
+    PETSC_CHECK(DMAddField(dm, nullptr, (PetscObject) this->fvm_));
     create_ds();
 
     set_up_weak_form();
@@ -418,9 +418,9 @@ FVProblemInterface::create_aux_fields()
 {
     CALL_STACK_MSG();
     auto dm_aux = get_dm_aux();
-    for (auto & [id, fi] : this->aux_fields)
+    for (auto & [id, fi] : this->aux_fields_)
         PETSC_CHECK(
-            DMSetField(dm_aux, fi.id.value(), fi.block, (PetscObject) this->aux_fe.at(fi.id)));
+            DMSetField(dm_aux, fi.id.value(), fi.block, (PetscObject) this->aux_fe_.at(fi.id)));
 }
 
 } // namespace godzilla

@@ -288,7 +288,7 @@ Vector::set_values(const DenseVector<Int, N> & ix,
                    InsertMode mode)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecSetValues(this->obj, N, ix.data(), y.data(), mode));
+    PETSC_CHECK(VecSetValues(this->obj_, N, ix.data(), y.data(), mode));
 }
 
 template <Int N>
@@ -298,7 +298,7 @@ Vector::set_values_local(const DenseVector<Int, N> & ix,
                          InsertMode mode)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecSetValuesLocal(this->obj, N, ix.data(), y.data(), mode));
+    PETSC_CHECK(VecSetValuesLocal(this->obj_, N, ix.data(), y.data(), mode));
 }
 
 //

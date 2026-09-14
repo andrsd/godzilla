@@ -12,13 +12,13 @@ template <typename T>
 class Array2D {
 public:
     /// Create empty array
-    Array2D() : n_rows(-1), n_cols(-1), data(nullptr) {}
+    Array2D() : n_rows_(-1), n_cols_(-1), data_(nullptr) {}
 
     /// Create an array with `rows` rows and `cols` columns
     ///
     /// @param rows Number of rows
     /// @param cols Number of columns
-    Array2D(Int rows, Int cols) : n_rows(rows), n_cols(cols), data(new T[rows * cols]) {}
+    Array2D(Int rows, Int cols) : n_rows_(rows), n_cols_(cols), data_(new T[rows * cols]) {}
 
     /// Get number of rows
     ///
@@ -26,7 +26,7 @@ public:
     Int
     get_num_rows()
     {
-        return this->n_rows;
+        return this->n_rows_;
     }
 
     /// Get number of columns
@@ -35,7 +35,7 @@ public:
     Int
     get_num_cols()
     {
-        return this->n_cols;
+        return this->n_cols_;
     }
 
     /// Allocate memory for the array
@@ -45,9 +45,9 @@ public:
     void
     create(Int rows, Int cols)
     {
-        this->n_rows = rows;
-        this->n_cols = cols;
-        this->data = new T[rows * cols];
+        this->n_rows_ = rows;
+        this->n_cols_ = cols;
+        this->data_ = new T[rows * cols];
     }
 
     /// Set all entiries to zero
@@ -55,18 +55,18 @@ public:
     zero()
     {
         GODZILLA_ASSERT_TRUE(this->data != nullptr, "Internal data storage is not allocated");
-        for (Int i = 0; i < this->n_rows * this->n_cols; ++i)
-            this->data[i] = 0;
+        for (Int i = 0; i < this->n_rows_ * this->n_cols_; ++i)
+            this->data_[i] = 0;
     }
 
     /// Free memory allocated by the array
     void
     destroy()
     {
-        this->n_rows = -1;
-        this->n_cols = -1;
-        delete[] this->data;
-        this->data = nullptr;
+        this->n_rows_ = -1;
+        this->n_cols_ = -1;
+        delete[] this->data_;
+        this->data_ = nullptr;
     }
 
     /// Get entry at specified location for reading
@@ -80,7 +80,7 @@ public:
         GODZILLA_ASSERT_TRUE(this->data != nullptr, "Internal data storage is not allocated");
         GODZILLA_ASSERT_TRUE((row >= 0) && (row < this->n_rows), "Row index out of bounds");
         GODZILLA_ASSERT_TRUE((col >= 0) && (col < this->n_cols), "Column index out of bounds");
-        return this->data[idx(row, col)];
+        return this->data_[idx(row, col)];
     }
 
     /// Assign a value into all entries
@@ -90,8 +90,8 @@ public:
     set(const T & val)
     {
         GODZILLA_ASSERT_TRUE(this->data != nullptr, "Internal data storage is not allocated");
-        for (Int i = 0; i < this->n_rows * this->n_cols; ++i)
-            this->data[i] = val;
+        for (Int i = 0; i < this->n_rows_ * this->n_cols_; ++i)
+            this->data_[i] = val;
     }
 
     /// Get entry at specified location for writing
@@ -105,7 +105,7 @@ public:
         GODZILLA_ASSERT_TRUE(this->data != nullptr, "Internal data storage is not allocated");
         GODZILLA_ASSERT_TRUE((row >= 0) && (row < this->n_rows), "Row index out of bounds");
         GODZILLA_ASSERT_TRUE((col >= 0) && (col < this->n_cols), "Column index out of bounds");
-        return this->data[idx(row, col)];
+        return this->data_[idx(row, col)];
     }
 
     /// Get an entry from a location for reading
@@ -140,15 +140,15 @@ private:
     Int
     idx(Int row, Int col) const
     {
-        return row * this->n_cols + col;
+        return row * this->n_cols_ + col;
     }
 
     /// Number of rows
-    Int n_rows;
+    Int n_rows_;
     /// Number of columns
-    Int n_cols;
+    Int n_cols_;
     /// Array elements
-    T * data;
+    T * data_;
 };
 
 } // namespace godzilla

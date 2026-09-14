@@ -53,95 +53,95 @@ class String {
     void
     detach()
     {
-        if (!this->rep || this->rep->refcount.load(std::memory_order_relaxed) == 1)
+        if (!this->rep_ || this->rep_->refcount.load(std::memory_order_relaxed) == 1)
             return;
 
-        Rep * fresh = Rep::create(this->rep->capacity);
-        fresh->size = this->rep->size;
-        std::memcpy(fresh->data, this->rep->data, this->rep->size + 1);
+        Rep * fresh = Rep::create(this->rep_->capacity);
+        fresh->size = this->rep_->size;
+        std::memcpy(fresh->data, this->rep_->data, this->rep_->size + 1);
 
-        this->rep->release();
-        this->rep = fresh;
+        this->rep_->release();
+        this->rep_ = fresh;
     }
 
     void
     ensure_capacity(uint32_t new_cap)
     {
-        if (new_cap <= this->rep->capacity)
+        if (new_cap <= this->rep_->capacity)
             return;
 
         Rep * fresh = Rep::create(new_cap);
-        fresh->size = this->rep->size;
-        std::memcpy(fresh->data, this->rep->data, this->rep->size + 1);
+        fresh->size = this->rep_->size;
+        std::memcpy(fresh->data, this->rep_->data, this->rep_->size + 1);
 
-        this->rep->release();
-        this->rep = fresh;
+        this->rep_->release();
+        this->rep_ = fresh;
     }
 
-    Rep * rep { nullptr };
+    Rep * rep_ { nullptr };
 
 public:
-    String() : rep(Rep::create(15)) {}
+    String() : rep_(Rep::create(15)) {}
 
     String(const char * s)
     {
         uint32_t n = std::strlen(s);
-        this->rep = Rep::create(n);
-        this->rep->size = n;
-        std::memcpy(this->rep->data, s, n + 1);
+        this->rep_ = Rep::create(n);
+        this->rep_->size = n;
+        std::memcpy(this->rep_->data, s, n + 1);
     }
 
     String(const std::string & str)
     {
         uint32_t n = str.length();
-        this->rep = Rep::create(n);
-        this->rep->size = n;
-        std::memcpy(this->rep->data, str.c_str(), n + 1);
+        this->rep_ = Rep::create(n);
+        this->rep_->size = n;
+        std::memcpy(this->rep_->data, str.c_str(), n + 1);
     }
 
     // copy
 
-    String(const String & other) noexcept : rep(other.rep)
+    String(const String & other) noexcept : rep_(other.rep_)
     {
-        if (this->rep)
-            this->rep->retain();
+        if (this->rep_)
+            this->rep_->retain();
     }
 
     String &
     operator=(const String & other) noexcept
     {
-        if (other.rep)
-            other.rep->retain();
-        if (this->rep)
-            this->rep->release();
-        this->rep = other.rep;
+        if (other.rep_)
+            other.rep_->retain();
+        if (this->rep_)
+            this->rep_->release();
+        this->rep_ = other.rep_;
         return *this;
     }
 
     // move
 
-    String(String && other) noexcept : rep(other.rep) { other.rep = nullptr; }
+    String(String && other) noexcept : rep_(other.rep_) { other.rep_ = nullptr; }
 
     String &
     operator=(String && other) noexcept
     {
-        if (this->rep)
-            this->rep->release();
-        this->rep = other.rep;
-        other.rep = nullptr;
+        if (this->rep_)
+            this->rep_->release();
+        this->rep_ = other.rep_;
+        other.rep_ = nullptr;
         return *this;
     }
 
     ~String()
     {
-        if (this->rep)
-            this->rep->release();
+        if (this->rep_)
+            this->rep_->release();
     }
 
     uint32_t
     length() const
     {
-        return this->rep->size;
+        return this->rep_->size;
     }
 
     /// Convert supplied string to upper case.
@@ -151,8 +151,8 @@ public:
     to_upper() const
     {
         String upper(*this);
-        for (uint32_t i = 0; i < this->rep->size; ++i)
-            this->rep->data[i] = std::toupper(this->rep->data[i]);
+        for (uint32_t i = 0; i < this->rep_->size; ++i)
+            this->rep_->data[i] = std::toupper(this->rep_->data[i]);
         return upper;
     }
 
@@ -163,8 +163,8 @@ public:
     to_lower() const
     {
         String lower(*this);
-        for (uint32_t i = 0; i < this->rep->size; ++i)
-            this->rep->data[i] = std::tolower(this->rep->data[i]);
+        for (uint32_t i = 0; i < this->rep_->size; ++i)
+            this->rep_->data[i] = std::tolower(this->rep_->data[i]);
         return lower;
     }
 
@@ -190,7 +190,7 @@ public:
     int32_t
     compare(const String s) const
     {
-        return std::strcmp(this->rep->data, s.rep->data);
+        return std::strcmp(this->rep_->data, s.rep_->data);
     }
 
     int32_t
@@ -198,7 +198,7 @@ public:
     {
         assert(count <= s.rep->size);
         assert(pos + count <= this->rep->size);
-        return std::strncmp(this->rep->data + pos, s.rep->data, count);
+        return std::strncmp(this->rep_->data + pos, s.rep_->data, count);
     }
 
     void
@@ -208,20 +208,20 @@ public:
             return;
 
         detach();
-        ensure_capacity(this->rep->size + other.rep->size);
+        ensure_capacity(this->rep_->size + other.rep_->size);
 
-        std::memcpy(this->rep->data + this->rep->size, other.rep->data, other.rep->size + 1);
+        std::memcpy(this->rep_->data + this->rep_->size, other.rep_->data, other.rep_->size + 1);
 
-        this->rep->size += other.rep->size;
+        this->rep_->size += other.rep_->size;
     }
 
     String
     substr(uint32_t start) const
     {
-        if (start < this->rep->size) {
-            auto n = this->rep->size - start;
+        if (start < this->rep_->size) {
+            auto n = this->rep_->size - start;
             Rep * sub_rep = Rep::create(n);
-            std::strncpy(sub_rep->data, this->rep->data + start, n);
+            std::strncpy(sub_rep->data, this->rep_->data + start, n);
             sub_rep->data[n] = '\0';
             sub_rep->size = n;
             return String(sub_rep);
@@ -234,9 +234,9 @@ public:
     String
     substr(uint32_t start, uint32_t len) const
     {
-        if (start + len < this->rep->size) {
+        if (start + len < this->rep_->size) {
             Rep * sub_rep = Rep::create(len);
-            std::strncpy(sub_rep->data, this->rep->data + start, len);
+            std::strncpy(sub_rep->data, this->rep_->data + start, len);
             sub_rep->data[len] = '\0';
             sub_rep->size = len;
             return String(sub_rep);
@@ -249,10 +249,10 @@ public:
     Optional<uint32_t>
     find(const char * s, uint32_t pos = 0) const
     {
-        if (pos < this->rep->size) {
-            auto res = std::strstr(this->rep->data + pos, s);
+        if (pos < this->rep_->size) {
+            auto res = std::strstr(this->rep_->data + pos, s);
             if (res != nullptr)
-                return res - this->rep->data;
+                return res - this->rep_->data;
             else
                 return std::nullopt;
         }
@@ -276,10 +276,10 @@ public:
             detach();
             ensure_capacity(new_len);
 
-            std::memcpy(this->rep->data + pos + str.length(),
-                        this->rep->data + pos + count,
+            std::memcpy(this->rep_->data + pos + str.length(),
+                        this->rep_->data + pos + count,
                         len_end + 1);
-            std::memcpy(this->rep->data + pos, str.rep->data, str.length());
+            std::memcpy(this->rep_->data + pos, str.rep_->data, str.length());
 
             return *this;
         }
@@ -290,40 +290,40 @@ public:
     const char *
     c_str() const
     {
-        return this->rep->data;
+        return this->rep_->data;
     }
 
     bool
     operator==(const String other) const
     {
-        return std::strcmp(this->rep->data, other.rep->data) == 0;
+        return std::strcmp(this->rep_->data, other.rep_->data) == 0;
     }
 
     bool
     operator==(const char * other) const
     {
-        return std::strcmp(this->rep->data, other) == 0;
+        return std::strcmp(this->rep_->data, other) == 0;
     }
 
     bool
     operator<(const String other) const
     {
-        return std::strcmp(this->rep->data, other.rep->data) < 0;
+        return std::strcmp(this->rep_->data, other.rep_->data) < 0;
     }
 
     char
     operator[](uint32_t idx) const
     {
         assert(idx <= this->rep->size);
-        return this->rep->data[idx];
+        return this->rep_->data[idx];
     }
 
-    operator std::string() const { return std::string(this->rep->data); }
+    operator std::string() const { return std::string(this->rep_->data); }
 
     const char *
     data() const
     {
-        return this->rep->data;
+        return this->rep_->data;
     }
 
     char *
@@ -331,19 +331,19 @@ public:
     {
         detach();
         ensure_capacity(capacity_needed);
-        return rep->data;
+        return rep_->data;
     }
 
     void
     commit(uint32_t new_size)
     {
         assert(new_size <= rep->capacity);
-        rep->size = new_size;
-        rep->data[new_size] = '\0';
+        rep_->size = new_size;
+        rep_->data[new_size] = '\0';
     }
 
 private:
-    String(Rep * rep) : rep(rep) {}
+    String(Rep * rep) : rep_(rep) {}
 };
 
 inline std::ostream &

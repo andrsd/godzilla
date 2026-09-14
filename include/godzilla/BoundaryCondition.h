@@ -45,10 +45,10 @@ protected:
 
 private:
     /// Discrete problem this object is part of
-    Ref<DiscreteProblemInterface> dpi;
+    Ref<DiscreteProblemInterface> dpi_;
 
     /// List of boundary names
-    const std::vector<String> boundary;
+    const std::vector<String> boundary_;
 
 public:
     /// Method for building Parameters for this class

@@ -14,13 +14,13 @@ namespace godzilla {
 ///
 class LoggingInterface {
 public:
-    explicit LoggingInterface(Ref<Logger> logger) : log(logger) {}
+    explicit LoggingInterface(Ref<Logger> logger) : log_(logger) {}
 
     template <typename... ARGS>
     void
     info(fmt::format_string<ARGS...> fmt, ARGS &&... args) const
     {
-        this->log->spdlgr->info(fmt, std::forward<ARGS>(args)...);
+        this->log_->spdlgr_->info(fmt, std::forward<ARGS>(args)...);
     }
 
     template <typename... ARGS>
@@ -28,14 +28,14 @@ public:
     warning(fmt::format_string<ARGS...> fmt, ARGS &&... args) const
     {
         internal::warning(fmt, std::forward<ARGS>(args)...);
-        this->log->spdlgr->warn(fmt, std::forward<ARGS>(args)...);
+        this->log_->spdlgr_->warn(fmt, std::forward<ARGS>(args)...);
     }
 
     template <typename... ARGS>
     void
     error(fmt::format_string<ARGS...> fmt, ARGS &&... args) const
     {
-        this->log->spdlgr->error(fmt, std::forward<ARGS>(args)...);
+        this->log_->spdlgr_->error(fmt, std::forward<ARGS>(args)...);
         internal::error(fmt, std::forward<ARGS>(args)...);
     }
 
@@ -43,7 +43,7 @@ public:
     void
     critical(fmt::format_string<ARGS...> fmt, ARGS &&... args) const
     {
-        this->log->spdlgr->critical(fmt, std::forward<ARGS>(args)...);
+        this->log_->spdlgr_->critical(fmt, std::forward<ARGS>(args)...);
         internal::error(fmt, std::forward<ARGS>(args)...);
     }
 
@@ -51,18 +51,18 @@ public:
     void
     debug(fmt::format_string<ARGS...> fmt, ARGS &&... args) const
     {
-        this->log->spdlgr->debug(fmt, std::forward<ARGS>(args)...);
+        this->log_->spdlgr_->debug(fmt, std::forward<ARGS>(args)...);
     }
 
     template <typename... ARGS>
     void
     trace(fmt::format_string<ARGS...> fmt, ARGS &&... args) const
     {
-        this->log->spdlgr->trace(fmt, std::forward<ARGS>(args)...);
+        this->log_->spdlgr_->trace(fmt, std::forward<ARGS>(args)...);
     }
 
 private:
-    Ref<Logger> log;
+    Ref<Logger> log_;
 };
 
 } // namespace godzilla

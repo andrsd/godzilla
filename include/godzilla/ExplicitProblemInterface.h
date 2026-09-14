@@ -55,11 +55,11 @@ private:
     void compute_rhs_function(Real time, const Vector & x, Vector & F);
 
     /// Nonlinear problem
-    Ref<NonlinearProblem> nl_problem;
+    Ref<NonlinearProblem> nl_problem_;
     /// Mass matrix
-    Matrix M;
+    Matrix M_;
     /// Inverse of the lumped mass matrix
-    Vector M_lumped_inv;
+    Vector M_lumped_inv_;
 
 public:
     static Parameters parameters();

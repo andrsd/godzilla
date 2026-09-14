@@ -8,55 +8,55 @@
 
 namespace godzilla {
 
-Logger::Logger() : logger_name("file_logger")
+Logger::Logger() : logger_name_("file_logger")
 {
     CALL_STACK_MSG();
-    this->spdlgr = spdlog::null_logger_mt(this->logger_name);
+    this->spdlgr_ = spdlog::null_logger_mt(this->logger_name_);
 }
 
-Logger::Logger(String name) : logger_name(fmt::format("file_logger:{}", name))
+Logger::Logger(String name) : logger_name_(fmt::format("file_logger:{}", name))
 {
     CALL_STACK_MSG();
-    this->spdlgr = spdlog::null_logger_mt(logger_name);
+    this->spdlgr_ = spdlog::null_logger_mt(logger_name_);
 }
 
 Logger::~Logger()
 {
-    spdlog::drop(this->logger_name);
+    spdlog::drop(this->logger_name_);
 }
 
 void
 Logger::set_log_file_name(fs::path file_name)
 {
     CALL_STACK_MSG();
-    spdlog::drop(this->logger_name);
-    this->spdlgr = spdlog::basic_logger_mt(this->logger_name, file_name, true);
-    this->spdlgr->set_pattern("[%Y %b %d %H:%M:%S.%e] [%l] %v");
+    spdlog::drop(this->logger_name_);
+    this->spdlgr_ = spdlog::basic_logger_mt(this->logger_name_, file_name, true);
+    this->spdlgr_->set_pattern("[%Y %b %d %H:%M:%S.%e] [%l] %v");
 }
 
 void
 Logger::set_format_string(std::string pattern, spdlog::pattern_time_type time_type)
 {
     CALL_STACK_MSG();
-    this->spdlgr->set_pattern(pattern, time_type);
+    this->spdlgr_->set_pattern(pattern, time_type);
 }
 
 spdlog::level::level_enum
 Logger::get_level()
 {
-    return this->spdlgr->level();
+    return this->spdlgr_->level();
 }
 
 void
 Logger::set_level(spdlog::level::level_enum log_level)
 {
-    this->spdlgr->set_level(log_level);
+    this->spdlgr_->set_level(log_level);
 }
 
 void
 Logger::flush_on(spdlog::level::level_enum log_level)
 {
-    this->spdlgr->flush_on(log_level);
+    this->spdlgr_->flush_on(log_level);
 }
 
 } // namespace godzilla

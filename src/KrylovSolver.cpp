@@ -73,28 +73,28 @@ void
 KrylovSolver::create(mpi::Communicator comm)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(KSPCreate(comm, &this->obj));
+    PETSC_CHECK(KSPCreate(comm, &this->obj_));
 }
 
 void
 KrylovSolver::set_dm(DM dm)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(KSPSetDM(this->obj, dm));
+    PETSC_CHECK(KSPSetDM(this->obj_, dm));
 }
 
 void
 KrylovSolver::set_operators(const Matrix & A, const Matrix & B) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(KSPSetOperators(this->obj, A, B));
+    PETSC_CHECK(KSPSetOperators(this->obj_, A, B));
 }
 
 void
 KrylovSolver::set_operator(const Matrix & A) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(KSPSetOperators(this->obj, A, A));
+    PETSC_CHECK(KSPSetOperators(this->obj_, A, A));
 }
 
 Matrix
@@ -102,7 +102,7 @@ KrylovSolver::get_operator() const
 {
     CALL_STACK_MSG();
     Matrix A;
-    PETSC_CHECK(KSPGetOperators(this->obj, A, nullptr));
+    PETSC_CHECK(KSPGetOperators(this->obj_, A, nullptr));
     A.inc_reference();
     return A;
 }
@@ -112,7 +112,7 @@ KrylovSolver::get_operators() const
 {
     CALL_STACK_MSG();
     Matrix A, B;
-    PETSC_CHECK(KSPGetOperators(this->obj, A, B));
+    PETSC_CHECK(KSPGetOperators(this->obj_, A, B));
     A.inc_reference();
     B.inc_reference();
     return { A, B };
@@ -122,21 +122,21 @@ void
 KrylovSolver::set_from_options()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(KSPSetFromOptions(this->obj));
+    PETSC_CHECK(KSPSetFromOptions(this->obj_));
 }
 
 void
 KrylovSolver::set_tolerances(Real rel_tol, Real abs_tol, Real div_tol, Int max_its)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(KSPSetTolerances(this->obj, rel_tol, abs_tol, div_tol, max_its));
+    PETSC_CHECK(KSPSetTolerances(this->obj_, rel_tol, abs_tol, div_tol, max_its));
 }
 
 void
 KrylovSolver::get_tolerances(Real * rel_tol, Real * abs_tol, Real * div_tol, Int * max_its) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(KSPGetTolerances(this->obj, rel_tol, abs_tol, div_tol, max_its));
+    PETSC_CHECK(KSPGetTolerances(this->obj_, rel_tol, abs_tol, div_tol, max_its));
 }
 
 std::tuple<Real, Real, Real, Int>
@@ -145,7 +145,7 @@ KrylovSolver::get_tolerances() const
     CALL_STACK_MSG();
     Real rel_tol, abs_tol, div_tol;
     Int max_its;
-    PETSC_CHECK(KSPGetTolerances(this->obj, &rel_tol, &abs_tol, &div_tol, &max_its));
+    PETSC_CHECK(KSPGetTolerances(this->obj_, &rel_tol, &abs_tol, &div_tol, &max_its));
     return std::make_tuple(rel_tol, abs_tol, div_tol, max_its);
 }
 
@@ -153,14 +153,14 @@ void
 KrylovSolver::solve(Vector & x) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(KSPSolve(this->obj, x, x));
+    PETSC_CHECK(KSPSolve(this->obj_, x, x));
 }
 
 void
 KrylovSolver::solve(const Vector & b, Vector & x) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(KSPSolve(this->obj, b, x));
+    PETSC_CHECK(KSPSolve(this->obj_, b, x));
 }
 
 KrylovSolver::ConvergedReason
@@ -168,7 +168,7 @@ KrylovSolver::get_converged_reason() const
 {
     CALL_STACK_MSG();
     KSPConvergedReason reason;
-    PETSC_CHECK(KSPGetConvergedReason(this->obj, &reason));
+    PETSC_CHECK(KSPGetConvergedReason(this->obj_, &reason));
     return static_cast<ConvergedReason>(reason);
 }
 
@@ -177,7 +177,7 @@ KrylovSolver::get_iteration_number() const
 {
     CALL_STACK_MSG();
     Int iter;
-    PETSC_CHECK(KSPGetIterationNumber(this->obj, &iter));
+    PETSC_CHECK(KSPGetIterationNumber(this->obj_, &iter));
     return iter;
 }
 
@@ -186,7 +186,7 @@ KrylovSolver::get_total_iterations() const
 {
     CALL_STACK_MSG();
     Int its;
-    PETSC_CHECK(KSPGetTotalIterations(this->obj, &its));
+    PETSC_CHECK(KSPGetTotalIterations(this->obj_, &its));
     return its;
 }
 
@@ -195,7 +195,7 @@ KrylovSolver::get_pc() const
 {
     CALL_STACK_MSG();
     PC pc;
-    PETSC_CHECK(KSPGetPC(this->obj, &pc));
+    PETSC_CHECK(KSPGetPC(this->obj_, &pc));
     return pc;
 }
 
@@ -203,35 +203,35 @@ void
 KrylovSolver::set_initial_guess_nonzero(bool flag)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(KSPSetInitialGuessNonzero(this->obj, flag ? PETSC_TRUE : PETSC_FALSE));
+    PETSC_CHECK(KSPSetInitialGuessNonzero(this->obj_, flag ? PETSC_TRUE : PETSC_FALSE));
 }
 
 void
 KrylovSolver::set_up()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(KSPSetUp(this->obj));
+    PETSC_CHECK(KSPSetUp(this->obj_));
 }
 
 void
 KrylovSolver::set_type(const char * type)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(KSPSetType(this->obj, type));
+    PETSC_CHECK(KSPSetType(this->obj_, type));
 }
 
 void
 KrylovSolver::set_type(String type)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(KSPSetType(this->obj, type.c_str()));
+    PETSC_CHECK(KSPSetType(this->obj_, type.c_str()));
 }
 
 void
 KrylovSolver::set_pc_side(PCSide side)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(KSPSetPCSide(this->obj, side));
+    PETSC_CHECK(KSPSetPCSide(this->obj_, side));
 }
 
 Vector
@@ -239,7 +239,7 @@ KrylovSolver::get_rhs() const
 {
     CALL_STACK_MSG();
     Vector rhs;
-    PETSC_CHECK(KSPGetRhs(this->obj, rhs));
+    PETSC_CHECK(KSPGetRhs(this->obj_, rhs));
     rhs.inc_reference();
     return rhs;
 }
@@ -248,7 +248,7 @@ void
 KrylovSolver::view(PetscViewer viewer) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(KSPView(this->obj, viewer));
+    PETSC_CHECK(KSPView(this->obj_, viewer));
 }
 
 void

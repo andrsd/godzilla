@@ -21,8 +21,8 @@ BoundaryCondition::parameters()
 BoundaryCondition::BoundaryCondition(const Parameters & pars) :
     Object(pars),
     PrintInterface(this),
-    dpi(pars.get<Ref<DiscreteProblemInterface>>("_dpi")),
-    boundary(pars.get<std::vector<String>>("boundary"))
+    dpi_(pars.get<Ref<DiscreteProblemInterface>>("_dpi")),
+    boundary_(pars.get<std::vector<String>>("boundary"))
 {
     CALL_STACK_MSG();
 }
@@ -31,7 +31,7 @@ Ref<Problem>
 BoundaryCondition::get_problem() const
 {
     CALL_STACK_MSG();
-    return this->dpi->get_problem();
+    return this->dpi_->get_problem();
 }
 
 Dimension
@@ -45,14 +45,14 @@ Span<const String>
 BoundaryCondition::get_boundary() const
 {
     CALL_STACK_MSG();
-    return this->boundary;
+    return this->boundary_;
 }
 
 Ref<DiscreteProblemInterface>
 BoundaryCondition::get_discrete_problem_interface() const
 {
     CALL_STACK_MSG();
-    return this->dpi;
+    return this->dpi_;
 }
 
 } // namespace godzilla

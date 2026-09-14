@@ -256,7 +256,7 @@ public:
     void
     set_output_monitor(Ref<T> instance, void (T::*method)(String) const)
     {
-        this->output_monitor_delegate.bind(instance, method);
+        this->output_monitor_delegate_.bind(instance, method);
     }
 
     /// Set the flags for determining variable influence
@@ -334,29 +334,29 @@ private:
     virtual void output_with(FileOutput & out);
 
     /// Mesh
-    Optional<Ref<Mesh>> mesh;
+    Optional<Ref<Mesh>> mesh_;
 
     /// Mesh partitioner
-    Partitioner partitioner;
+    Partitioner partitioner_;
 
     /// Partition overlap for mesh partitioning
-    Int partition_overlap;
+    Int partition_overlap_;
 
     /// The solution vector
-    Vector x;
+    Vector x_;
 
     /// List of output objects
-    std::vector<Qtr<Output>> outputs;
-    std::vector<FileOutput *> file_outputs;
+    std::vector<Qtr<Output>> outputs_;
+    std::vector<FileOutput *> file_outputs_;
 
     /// List of postprocessor objects
-    std::map<String, Qtr<Postprocessor>> pps;
+    std::map<String, Qtr<Postprocessor>> pps_;
 
     /// List of postprocessor names
-    std::vector<String> pps_names;
+    std::vector<String> pps_names_;
 
     /// Output monitor
-    Delegate<void(String)> output_monitor_delegate;
+    Delegate<void(String)> output_monitor_delegate_;
 
 public:
     static Parameters parameters();
@@ -376,8 +376,8 @@ Problem::add_output(Parameters & pars, std::source_location loc)
     auto output = obj.get();
     auto fo = dynamic_cast<FileOutput *>(output);
     if (fo)
-        this->file_outputs.push_back(fo);
-    this->outputs.push_back(std::move(obj));
+        this->file_outputs_.push_back(fo);
+    this->outputs_.push_back(std::move(obj));
     return Ref<T>(*output);
 }
 
@@ -394,11 +394,11 @@ Problem::add_postprocessor(Parameters & pars, std::source_location loc)
     auto obj = Qtr<T>::alloc(pars);
     auto pp = obj.get();
     auto name = pp->get_name();
-    expect_true(this->pps.count(name) == 0,
+    expect_true(this->pps_.count(name) == 0,
                 fmt::format("Postprocessors with name '{}' already exists.", name),
                 loc);
-    this->pps_names.push_back(name);
-    this->pps[name] = std::move(obj);
+    this->pps_names_.push_back(name);
+    this->pps_[name] = std::move(obj);
     return Ref<T>(*pp);
 }
 

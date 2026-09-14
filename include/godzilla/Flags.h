@@ -35,14 +35,14 @@ class Flags {
 public:
     using UnderlyingType = std::underlying_type_t<ENUM>;
 
-    constexpr inline Flags() noexcept : mask(0) {}
+    constexpr inline Flags() noexcept : mask_(0) {}
 
-    constexpr inline Flags(ENUM flag) noexcept : mask((unsigned int) (flag)) {}
+    constexpr inline Flags(ENUM flag) noexcept : mask_((unsigned int) (flag)) {}
 
-    constexpr inline Flags(unsigned int flags) noexcept : mask(flags) {}
+    constexpr inline Flags(unsigned int flags) noexcept : mask_(flags) {}
 
     constexpr inline Flags(std::initializer_list<ENUM> flags) noexcept :
-        mask(initializer_list_helper(flags.begin(), flags.end()))
+        mask_(initializer_list_helper(flags.begin(), flags.end()))
     {
     }
 
@@ -52,7 +52,7 @@ public:
     constexpr bool
     has_flags() const noexcept
     {
-        return this->mask != 0;
+        return this->mask_ != 0;
     }
 
     /// Set a flag
@@ -62,7 +62,7 @@ public:
     constexpr Flags &
     operator|=(ENUM rhs) noexcept
     {
-        this->mask |= static_cast<UnderlyingType>(rhs);
+        this->mask_ |= static_cast<UnderlyingType>(rhs);
         return *this;
     }
 
@@ -73,7 +73,7 @@ public:
     constexpr Flags &
     operator|=(Flags rhs)
     {
-        this->mask |= rhs.mask;
+        this->mask_ |= rhs.mask_;
         return *this;
     }
 
@@ -84,10 +84,7 @@ public:
     constexpr Flags
     operator|(ENUM rhs) const noexcept
     {
-        return Flags(this->mask | static_cast<UnderlyingType>(rhs));
-        //   Flags<ENUM> flags(this->mask);
-        // flags |= rhs;
-        // return flags;
+        return Flags(this->mask_ | static_cast<UnderlyingType>(rhs));
     }
 
     /// Add flags
@@ -97,7 +94,7 @@ public:
     constexpr Flags
     operator|(Flags rhs) const
     {
-        return Flags(this->mask | rhs.mask);
+        return Flags(this->mask_ | rhs.mask_);
     }
 
     /// Test if a flag is set
@@ -107,13 +104,13 @@ public:
     constexpr bool
     operator&(ENUM flag) const noexcept
     {
-        return (this->mask & static_cast<UnderlyingType>(flag)) != 0;
+        return (this->mask_ & static_cast<UnderlyingType>(flag)) != 0;
     }
 
     [[nodiscard]] constexpr UnderlyingType
     get_mask() const noexcept
     {
-        return mask;
+        return this->mask_;
     }
 
 private:
@@ -126,7 +123,7 @@ private:
     }
 
     /// Bit mask with flags
-    UnderlyingType mask;
+    UnderlyingType mask_;
 };
 
 template <IsEnum ENUM>

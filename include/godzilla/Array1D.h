@@ -38,19 +38,19 @@ public:
         using pointer = T *;
         using reference = T &;
 
-        explicit Iterator(const Array1D * arr, Int idx) : arr(arr), idx(idx) {}
+        explicit Iterator(const Array1D * arr, Int idx) : arr_(arr), idx_(idx) {}
 
         value_type &
         operator*() const
         {
-            return *(this->arr->data + this->idx);
+            return *(this->arr_->data_ + this->idx_);
         }
 
         /// Prefix increment
         Iterator &
         operator++()
         {
-            ++this->idx;
+            ++this->idx_;
             return *this;
         }
 
@@ -66,20 +66,20 @@ public:
         friend bool
         operator==(const Iterator & a, const Iterator & b)
         {
-            return (a.arr == b.arr) && (a.idx == b.idx);
+            return (a.arr_ == b.arr_) && (a.idx_ == b.idx_);
         };
 
         friend bool
         operator!=(const Iterator & a, const Iterator & b)
         {
-            return (a.arr != b.arr) || (a.idx != b.idx);
+            return (a.arr_ != b.arr_) || (a.idx_ != b.idx_);
         };
 
     private:
         /// Array to iterate over
-        const Array1D * arr;
+        const Array1D * arr_;
         /// Index pointing into the array
-        Int idx;
+        Int idx_;
     };
 
     struct ConstIterator {
@@ -88,19 +88,19 @@ public:
         using pointer = const T *;
         using reference = const T &;
 
-        explicit ConstIterator(const Array1D * arr, Int idx) : arr(arr), idx(idx) {}
+        explicit ConstIterator(const Array1D * arr, Int idx) : arr_(arr), idx_(idx) {}
 
         const value_type &
         operator*() const
         {
-            return *(this->arr->data + this->idx);
+            return *(this->arr_->data_ + this->idx_);
         }
 
         /// Prefix increment
         ConstIterator &
         operator++()
         {
-            ++this->idx;
+            ++this->idx_;
             return *this;
         }
 
@@ -116,51 +116,57 @@ public:
         friend bool
         operator==(const ConstIterator & a, const ConstIterator & b)
         {
-            return (a.arr == b.arr) && (a.idx == b.idx);
+            return (a.arr_ == b.arr_) && (a.idx_ == b.idx_);
         };
 
         friend bool
         operator!=(const ConstIterator & a, const ConstIterator & b)
         {
-            return (a.arr != b.arr) || (a.idx != b.idx);
+            return (a.arr_ != b.arr_) || (a.idx_ != b.idx_);
         };
 
     private:
         /// Array to iterate over
-        const Array1D * arr;
+        const Array1D * arr_;
         /// Index pointing into the array
-        Int idx;
+        Int idx_;
     };
 
     /// Create an empty array
-    Array1D() : ctrl(nullptr), first(0), data(nullptr) {}
+    Array1D() : ctrl_(nullptr), first_(0), data_(nullptr) {}
 
     /// Create an empty array
-    explicit Array1D(mpi::Communicator comm) : comm(comm), ctrl(nullptr), first(0), data(nullptr) {}
+    explicit Array1D(mpi::Communicator comm) :
+        comm_(comm),
+        ctrl_(nullptr),
+        first_(0),
+        data_(nullptr)
+    {
+    }
 
     explicit Array1D(mpi::Communicator comm, Int size) :
-        comm(comm),
-        ctrl(new ControlBlock { 1, size }),
-        first(0),
-        data(new T[size])
+        comm_(comm),
+        ctrl_(new ControlBlock { 1, size }),
+        first_(0),
+        data_(new T[size])
     {
     }
 
     explicit Array1D(mpi::Communicator comm, const Range & rng) :
-        comm(comm),
-        ctrl(new ControlBlock { 1, rng.size() }),
-        first(rng.first()),
-        data(new T[rng.size()])
+        comm_(comm),
+        ctrl_(new ControlBlock { 1, rng.size() }),
+        first_(rng.first()),
+        data_(new T[rng.size()])
     {
     }
 
     ~Array1D() { release(); }
 
     // Copy constructor
-    Array1D(const Array1D & other) : ctrl(other.ctrl), first(other.first), data(other.data)
+    Array1D(const Array1D & other) : ctrl_(other.ctrl_), first_(other.first_), data_(other.data_)
     {
-        if (this->ctrl)
-            ++this->ctrl->ref_count;
+        if (this->ctrl_)
+            ++this->ctrl_->ref_count;
     }
 
     // Copy assignment
@@ -169,20 +175,20 @@ public:
     {
         if (this != &other) {
             release();
-            this->ctrl = other.ctrl;
-            this->first = other.first;
-            this->data = other.data;
-            if (this->ctrl)
-                ++this->ctrl->ref_count;
+            this->ctrl_ = other.ctrl_;
+            this->first_ = other.first_;
+            this->data_ = other.data_;
+            if (this->ctrl_)
+                ++this->ctrl_->ref_count;
         }
         return *this;
     }
 
     // Move constructor
     Array1D(Array1D && other) noexcept :
-        ctrl(std::exchange(other.ctrl, nullptr)),
-        first(std::exchange(other.first, 0)),
-        data(std::exchange(other.data, nullptr))
+        ctrl_(std::exchange(other.ctrl_, nullptr)),
+        first_(std::exchange(other.first_, 0)),
+        data_(std::exchange(other.data_, nullptr))
     {
     }
 
@@ -192,9 +198,9 @@ public:
     {
         if (this != &other) {
             release();
-            this->ctrl = std::exchange(other.ctrl, nullptr);
-            this->first = std::exchange(other.first, 0);
-            this->data = std::exchange(other.data, nullptr);
+            this->ctrl_ = std::exchange(other.ctrl_, nullptr);
+            this->first_ = std::exchange(other.first_, 0);
+            this->data_ = std::exchange(other.data_, nullptr);
         }
         return *this;
     }
@@ -202,13 +208,13 @@ public:
     explicit
     operator bool() const
     {
-        return this->data != nullptr;
+        return this->data_ != nullptr;
     }
 
     mpi::Communicator
     get_comm() const
     {
-        return this->comm;
+        return this->comm_;
     }
 
     /// Get number of entries in the array
@@ -217,7 +223,7 @@ public:
     Int
     size() const
     {
-        return this->ctrl ? this->ctrl->n : 0;
+        return this->ctrl_ ? this->ctrl_->n : 0;
     }
 
     /// Set all entries in the array to zero
@@ -225,8 +231,8 @@ public:
     zero()
     {
         GODZILLA_ASSERT_TRUE(this->data != nullptr, "Internal storage is not allocated");
-        for (Int i = 0; i < this->ctrl->n; ++i)
-            this->data[i].zero();
+        for (Int i = 0; i < this->ctrl_->n; ++i)
+            this->data_[i].zero();
     }
 
     /// Assign a value into all vector entries, i.e. `vec[i] = val`
@@ -236,8 +242,8 @@ public:
     set(const T & val)
     {
         GODZILLA_ASSERT_TRUE(this->data != nullptr, "Internal storage is not allocated");
-        for (Int i = 0; i < this->ctrl->n; ++i)
-            this->data[i] = val;
+        for (Int i = 0; i < this->ctrl_->n; ++i)
+            this->data_[i] = val;
     }
 
     // operators
@@ -252,8 +258,8 @@ public:
         GODZILLA_ASSERT_TRUE(this->data != nullptr, "Internal storage is not allocated");
         GODZILLA_ASSERT_TRUE((i >= this->first) && (i < this->first + this->ctrl->n),
                              "Index out of bounds");
-        auto idx = i - this->first;
-        return this->data[idx];
+        auto idx = i - this->first_;
+        return this->data_[idx];
     }
 
     /// Get the entry at a specified location for writing
@@ -266,8 +272,8 @@ public:
         GODZILLA_ASSERT_TRUE(this->data != nullptr, "Internal storage is not allocated");
         GODZILLA_ASSERT_TRUE((i >= this->first) && (i < this->first + this->ctrl->n),
                              "Index out of bounds");
-        auto idx = i - this->first;
-        return this->data[idx];
+        auto idx = i - this->first_;
+        return this->data_[idx];
     }
 
     //
@@ -276,13 +282,13 @@ public:
     T *
     get_data()
     {
-        return this->data;
+        return this->data_;
     }
 
     const T *
     get_data() const
     {
-        return this->data;
+        return this->data_;
     }
 
     Iterator
@@ -294,7 +300,7 @@ public:
     Iterator
     end()
     {
-        return Iterator(this, this->ctrl->n);
+        return Iterator(this, this->ctrl_->n);
     }
 
     ConstIterator
@@ -306,26 +312,26 @@ public:
     ConstIterator
     end() const
     {
-        return ConstIterator(this, this->ctrl->n);
+        return ConstIterator(this, this->ctrl_->n);
     }
 
 private:
     void
     release()
     {
-        if (this->ctrl && --this->ctrl->ref_count == 0) {
-            delete this->ctrl;
-            delete[] this->data;
+        if (this->ctrl_ && --this->ctrl_->ref_count == 0) {
+            delete this->ctrl_;
+            delete[] this->data_;
         }
     }
 
-    mpi::Communicator comm;
+    mpi::Communicator comm_;
     /// Control block
-    ControlBlock * ctrl;
+    ControlBlock * ctrl_;
     /// First index
-    Int first;
+    Int first_;
     /// Array containing the values
-    T * data;
+    T * data_;
 
     template <FloatingPoint U>
     friend U norm(Array1D<U> & vector, NormType type);
@@ -344,8 +350,8 @@ inline void
 Array1D<Real>::zero()
 {
     GODZILLA_ASSERT_TRUE(this->data != nullptr, "Internal storage is not allocated");
-    for (Int i = 0; i < this->ctrl->n; ++i)
-        this->data[i] = 0.;
+    for (Int i = 0; i < this->ctrl_->n; ++i)
+        this->data_[i] = 0.;
 }
 
 // Output
@@ -485,19 +491,19 @@ norm(Array1D<T> & vector, NormType type)
     case NORM_1:
         for (const auto & val : vector)
             norm += std::abs(val);
-        vector.comm.all_reduce(norm, mpi::op::sum<T>());
+        vector.comm_.all_reduce(norm, mpi::op::sum<T>());
         return norm;
 
     case NORM_2:
         for (const auto & val : vector)
             norm += val * val;
-        vector.comm.all_reduce(norm, mpi::op::sum<T>());
+        vector.comm_.all_reduce(norm, mpi::op::sum<T>());
         return std::sqrt(norm);
 
     case NORM_INFINITY:
         for (const auto & val : vector)
             norm = std::max(norm, std::abs(val));
-        vector.comm.all_reduce(norm, mpi::op::max<T>());
+        vector.comm_.all_reduce(norm, mpi::op::max<T>());
         return norm;
 
     default:
@@ -518,8 +524,8 @@ pointwise_min(Array1D<T> & w, const Array1D<T> & x, const Array1D<T> & y)
 {
     GODZILLA_ASSERT_TRUE(w.size() == x.size(), "The size of 'w' does not match the size 'x'");
     GODZILLA_ASSERT_TRUE(w.size() == y.size(), "The size of 'w' does not match the size 'y'");
-    for (Int i = 0; i < w.ctrl->n; ++i)
-        w.data[i] = math::min(x.data[i], y.data[i]);
+    for (Int i = 0; i < w.ctrl_->n; ++i)
+        w.data_[i] = math::min(x.data_[i], y.data_[i]);
 }
 
 /// Compute pointwise maximum
@@ -534,8 +540,8 @@ pointwise_max(Array1D<T> & w, const Array1D<T> & x, const Array1D<T> & y)
 {
     GODZILLA_ASSERT_TRUE(w.size() == x.size(), "The size of 'w' does not match the size 'x'");
     GODZILLA_ASSERT_TRUE(w.size() == y.size(), "The size of 'w' does not match the size 'y'");
-    for (Int i = 0; i < w.ctrl->n; ++i)
-        w.data[i] = math::max(x.data[i], y.data[i]);
+    for (Int i = 0; i < w.ctrl_->n; ++i)
+        w.data_[i] = math::max(x.data_[i], y.data_[i]);
 }
 
 /// Compute pointwise multiplication of elements
@@ -550,8 +556,8 @@ pointwise_mult(Array1D<T> & w, const Array1D<T> & x, const Array1D<T> & y)
 {
     GODZILLA_ASSERT_TRUE(w.size() == x.size(), "The size of 'w' does not match the size 'x'");
     GODZILLA_ASSERT_TRUE(w.size() == y.size(), "The size of 'w' does not match the size 'y'");
-    for (Int i = 0; i < w.ctrl->n; ++i)
-        w.data[i] = x.data[i] * y.data[i];
+    for (Int i = 0; i < w.ctrl_->n; ++i)
+        w.data_[i] = x.data_[i] * y.data_[i];
 }
 
 /// Compute pointwise division of elements
@@ -566,8 +572,8 @@ pointwise_divide(Array1D<T> & w, const Array1D<T> & x, const Array1D<T> & y)
 {
     GODZILLA_ASSERT_TRUE(w.size() == x.size(), "The size of 'w' does not match the size 'x'");
     GODZILLA_ASSERT_TRUE(w.size() == y.size(), "The size of 'w' does not match the size 'y'");
-    for (Int i = 0; i < w.ctrl->n; ++i)
-        w.data[i] = x.data[i] / y.data[i];
+    for (Int i = 0; i < w.ctrl_->n; ++i)
+        w.data_[i] = x.data_[i] / y.data_[i];
 }
 
 } // namespace godzilla

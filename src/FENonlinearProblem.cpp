@@ -181,7 +181,7 @@ FENonlinearProblem::parameters()
 FENonlinearProblem::FENonlinearProblem(const Parameters & pars) :
     NonlinearProblem(pars),
     FEProblemInterface(*this, pars),
-    state(INITIAL)
+    state_(INITIAL)
 {
     CALL_STACK_MSG();
 }
@@ -1263,7 +1263,7 @@ void
 FENonlinearProblem::on_initial()
 {
     CALL_STACK_MSG();
-    this->state = INITIAL;
+    this->state_ = INITIAL;
     compute_solution_vector_local();
     NonlinearProblem::on_initial();
     compute_aux_fields();
@@ -1274,7 +1274,7 @@ FENonlinearProblem::on_final()
 {
     CALL_STACK_MSG();
     compute_solution_vector_local();
-    this->state = FINAL;
+    this->state_ = FINAL;
     NonlinearProblem::on_final();
 }
 
@@ -1282,7 +1282,7 @@ Real
 FENonlinearProblem::get_time() const
 {
     CALL_STACK_MSG();
-    if (this->state == INITIAL)
+    if (this->state_ == INITIAL)
         return 0.;
     else
         return 1.;
@@ -1294,7 +1294,7 @@ FENonlinearProblem::compute_solution_vector_local()
     CALL_STACK_MSG();
     auto & loc_sln = get_solution_vector_local();
     global_to_local(get_solution_vector(), INSERT_VALUES, loc_sln);
-    this->compute_boundary_delegate.invoke(loc_sln);
+    this->compute_boundary_delegate_.invoke(loc_sln);
 }
 
 } // namespace godzilla

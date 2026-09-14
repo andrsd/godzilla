@@ -14,19 +14,19 @@ public:
         using iterator_category = std::forward_iterator_tag;
         using value_type = Int;
 
-        explicit Iterator(Int idx) : idx(idx) {}
+        explicit Iterator(Int idx) : idx_(idx) {}
 
         const value_type &
         operator*() const
         {
-            return this->idx;
+            return this->idx_;
         }
 
         /// Prefix increment
         Iterator &
         operator++()
         {
-            ++this->idx;
+            ++this->idx_;
             return *this;
         }
 
@@ -42,70 +42,70 @@ public:
         Iterator
         operator+(Int n) const
         {
-            return Iterator(this->idx + n);
+            return Iterator(this->idx_ + n);
         }
 
         Iterator &
         operator+=(Int n)
         {
-            this->idx += n;
+            this->idx_ += n;
             return *this;
         }
 
         friend bool
         operator==(const Iterator & a, const Iterator & b)
         {
-            return a.idx == b.idx;
+            return a.idx_ == b.idx_;
         };
 
         friend bool
         operator!=(const Iterator & a, const Iterator & b)
         {
-            return a.idx != b.idx;
+            return a.idx_ != b.idx_;
         };
 
         Int
         operator-(const Iterator & other) const
         {
-            return this->idx - other.idx;
+            return this->idx_ - other.idx_;
         }
 
         Iterator
         operator-(Int n) const
         {
-            return Iterator(this->idx - n);
+            return Iterator(this->idx_ - n);
         }
 
         bool
         operator<(const Iterator & other) const
         {
-            return this->idx < other.idx;
+            return this->idx_ < other.idx_;
         }
 
     private:
-        Int idx;
+        Int idx_;
     };
 
-    Range() : first_idx(-1), last_idx(-1) {}
-    Range(Int first, Int last) : first_idx(first), last_idx(last) {}
+    Range() : first_idx_(-1), last_idx_(-1) {}
+    Range(Int first, Int last) : first_idx_(first), last_idx_(last) {}
 
     Iterator
     begin() const
     {
-        return Iterator(this->first_idx);
+        return Iterator(this->first_idx_);
     }
 
     Iterator
     end() const
     {
-        return Iterator(this->last_idx);
+        return Iterator(this->last_idx_);
     }
 
     /// Get the number of indices in the range
     Int
     size() const
     {
-        return last_idx - first_idx;
+        return last_idx_ - first_idx_;
     }
 
     /// Get the first index in the range
@@ -114,7 +114,7 @@ public:
     Int
     first() const
     {
-        return first_idx;
+        return first_idx_;
     }
 
     /// Get the last index (not included) in the range
@@ -123,7 +123,7 @@ public:
     Int
     last() const
     {
-        return last_idx;
+        return last_idx_;
     }
 
     /// Test if the range contains a given number
@@ -136,14 +136,14 @@ public:
         if (size() == 0)
             return false;
         else
-            return (this->first_idx <= x) && (x < this->last_idx);
+            return (this->first_idx_ <= x) && (x < this->last_idx_);
     }
 
 private:
     /// First index
-    Int first_idx;
+    Int first_idx_;
     /// Last index (not included in the range)
-    Int last_idx;
+    Int last_idx_;
 };
 
 /// Create a range from `start` to `end`

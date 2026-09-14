@@ -49,11 +49,11 @@ public:
 
 private:
     /// Problem this object is part of
-    Ref<Problem> problem;
+    Ref<Problem> problem_;
     /// Bitwise mask for determining when this output object should output its content
-    ExecuteOnFlags on_mask;
+    ExecuteOnFlags on_mask_;
     /// Last simulation time when execute happened
-    Real last_execute_time;
+    Real last_execute_time_;
 
 public:
     static Parameters parameters();

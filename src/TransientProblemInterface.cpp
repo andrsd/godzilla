@@ -193,31 +193,31 @@ TransientProblemInterface::parameters()
 }
 
 TransientProblemInterface::TransientProblemInterface(Problem & problem, const Parameters & pars) :
-    ts(nullptr),
-    problem(problem),
-    start_time(pars.get<Real>("start_time")),
-    end_time(pars.get<Optional<Real>>("end_time")),
-    num_steps(pars.get<Optional<Int>>("num_steps")),
-    dt_initial(pars.get<Real>("dt")),
-    step_num(0)
+    ts_(nullptr),
+    problem_(problem),
+    start_time_(pars.get<Real>("start_time")),
+    end_time_(pars.get<Optional<Real>>("end_time")),
+    num_steps_(pars.get<Optional<Int>>("num_steps")),
+    dt_initial_(pars.get<Real>("dt")),
+    step_num_(0)
 {
     CALL_STACK_MSG();
 
-    PETSC_CHECK(TSCreate(this->problem->get_comm(), &this->ts));
-    PETSC_CHECK(TSSetApplicationContext(this->ts, this));
-    this->time_step_adapt = TimeStepAdapt::from_ts(this->ts);
+    PETSC_CHECK(TSCreate(this->problem_->get_comm(), &this->ts_));
+    PETSC_CHECK(TSSetApplicationContext(this->ts_, this));
+    this->time_step_adapt_ = TimeStepAdapt::from_ts(this->ts_);
 
-    if (this->end_time.has_value() && this->num_steps.has_value())
-        this->problem->error(
+    if (this->end_time_.has_value() && this->num_steps_.has_value())
+        this->problem_->error(
             "Cannot provide 'end_time' and 'num_steps' together. Specify one or the other.");
-    if (!this->end_time.has_value() && !this->num_steps.has_value())
-        this->problem->error("You must provide either 'end_time' or 'num_steps' parameter.");
+    if (!this->end_time_.has_value() && !this->num_steps_.has_value())
+        this->problem_->error("You must provide either 'end_time' or 'num_steps' parameter.");
 }
 
 TransientProblemInterface::~TransientProblemInterface()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(TSDestroy(&this->ts));
+    PETSC_CHECK(TSDestroy(&this->ts_));
 }
 
 SNESolver
@@ -225,7 +225,7 @@ TransientProblemInterface::get_snes() const
 {
     CALL_STACK_MSG();
     SNESolver snes;
-    PETSC_CHECK(TSGetSNES(this->ts, snes));
+    PETSC_CHECK(TSGetSNES(this->ts_, snes));
     snes.inc_reference();
     return snes;
 }
@@ -234,7 +234,7 @@ TS
 TransientProblemInterface::get_ts() const
 {
     CALL_STACK_MSG();
-    return this->ts;
+    return this->ts_;
 }
 
 Vector
@@ -242,7 +242,7 @@ TransientProblemInterface::get_solution() const
 {
     CALL_STACK_MSG();
     Vector sln;
-    PETSC_CHECK(TSGetSolution(this->ts, sln));
+    PETSC_CHECK(TSGetSolution(this->ts_, sln));
     sln.inc_reference();
     return sln;
 }
@@ -252,7 +252,7 @@ TransientProblemInterface::get_time_step() const
 {
     CALL_STACK_MSG();
     Real dt;
-    PETSC_CHECK(TSGetTimeStep(this->ts, &dt));
+    PETSC_CHECK(TSGetTimeStep(this->ts_, &dt));
     return dt;
 }
 
@@ -260,14 +260,14 @@ void
 TransientProblemInterface::set_time_step(Real dt) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(TSSetTimeStep(this->ts, dt));
+    PETSC_CHECK(TSSetTimeStep(this->ts_, dt));
 }
 
 void
 TransientProblemInterface::set_max_time(Real time)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(TSSetMaxTime(this->ts, time));
+    PETSC_CHECK(TSSetMaxTime(this->ts_, time));
 }
 
 Real
@@ -275,7 +275,7 @@ TransientProblemInterface::get_max_time() const
 {
     CALL_STACK_MSG();
     Real time;
-    PETSC_CHECK(TSGetMaxTime(this->ts, &time));
+    PETSC_CHECK(TSGetMaxTime(this->ts_, &time));
     return time;
 }
 
@@ -284,7 +284,7 @@ TransientProblemInterface::get_time() const
 {
     CALL_STACK_MSG();
     Real time;
-    PETSC_CHECK(TSGetTime(this->ts, &time));
+    PETSC_CHECK(TSGetTime(this->ts_, &time));
     return time;
 }
 
@@ -292,28 +292,28 @@ Int
 TransientProblemInterface::get_step_number() const
 {
     CALL_STACK_MSG();
-    return this->step_num;
+    return this->step_num_;
 }
 
 const TimeStepAdapt &
 TransientProblemInterface::get_time_step_adapt() const
 {
     CALL_STACK_MSG();
-    return this->time_step_adapt;
+    return this->time_step_adapt_;
 }
 
 TimeStepAdapt &
 TransientProblemInterface::get_time_step_adapt()
 {
     CALL_STACK_MSG();
-    return this->time_step_adapt;
+    return this->time_step_adapt_;
 }
 
 void
 TransientProblemInterface::init()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(TSSetDM(this->ts, this->problem->get_dm()));
+    PETSC_CHECK(TSSetDM(this->ts_, this->problem_->get_dm()));
 }
 
 void
@@ -321,22 +321,22 @@ TransientProblemInterface::create()
 {
     CALL_STACK_MSG();
     set_up_time_scheme();
-    set_time(this->start_time);
-    if (this->end_time.has_value())
-        set_max_time(this->end_time.value());
-    if (this->num_steps.has_value())
-        PETSC_CHECK(TSSetMaxSteps(this->ts, this->num_steps.value()));
-    set_time_step(this->dt_initial);
-    PETSC_CHECK(TSSetStepNumber(this->ts, this->step_num));
-    PETSC_CHECK(TSSetExactFinalTime(this->ts, TS_EXACTFINALTIME_MATCHSTEP));
+    set_time(this->start_time_);
+    if (this->end_time_.has_value())
+        set_max_time(this->end_time_.value());
+    if (this->num_steps_.has_value())
+        PETSC_CHECK(TSSetMaxSteps(this->ts_, this->num_steps_.value()));
+    set_time_step(this->dt_initial_);
+    PETSC_CHECK(TSSetStepNumber(this->ts_, this->step_num_));
+    PETSC_CHECK(TSSetExactFinalTime(this->ts_, TS_EXACTFINALTIME_MATCHSTEP));
 }
 
 void
 TransientProblemInterface::set_up_callbacks()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(TSSetPreStep(this->ts, invoke_pre_step));
-    PETSC_CHECK(TSSetPostStep(this->ts, invoke_post_step));
+    PETSC_CHECK(TSSetPreStep(this->ts_, invoke_pre_step));
+    PETSC_CHECK(TSSetPostStep(this->ts_, invoke_post_step));
 }
 
 void
@@ -356,9 +356,9 @@ void
 TransientProblemInterface::post_step()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(TSGetStepNumber(this->ts, &this->step_num));
+    PETSC_CHECK(TSGetStepNumber(this->ts_, &this->step_num_));
     Vector sln = get_solution();
-    PETSC_CHECK(VecCopy(sln, this->problem->get_solution_vector()));
+    PETSC_CHECK(VecCopy(sln, this->problem_->get_solution_vector()));
 }
 
 void
@@ -366,14 +366,14 @@ TransientProblemInterface::monitor(Int stepi, Real time, const Vector & /* x */)
 {
     CALL_STACK_MSG();
     Real dt = get_time_step();
-    this->problem->lprintln(6, "{} Time {:f} dt = {:f}", stepi, time, dt);
+    this->problem_->lprintln(6, "{} Time {:f} dt = {:f}", stepi, time, dt);
 }
 
 void
 TransientProblemInterface::solve(Vector & x)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(TSSolve(this->ts, x));
+    PETSC_CHECK(TSSolve(this->ts_, x));
 }
 
 TransientProblemInterface::ConvergedReason
@@ -381,7 +381,7 @@ TransientProblemInterface::get_converged_reason() const
 {
     CALL_STACK_MSG();
     TSConvergedReason reason;
-    PETSC_CHECK(TSGetConvergedReason(this->ts, &reason));
+    PETSC_CHECK(TSGetConvergedReason(this->ts_, &reason));
     return static_cast<ConvergedReason>(reason);
 }
 
@@ -389,7 +389,7 @@ void
 TransientProblemInterface::set_time(Real t)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(TSSetTime(this->ts, t));
+    PETSC_CHECK(TSSetTime(this->ts_, t));
 }
 
 auto
@@ -397,14 +397,14 @@ TransientProblemInterface::get_problem_type() const -> ProblemType
 {
     CALL_STACK_MSG();
     TSProblemType tpt;
-    PETSC_CHECK(TSGetProblemType(this->ts, &tpt));
+    PETSC_CHECK(TSGetProblemType(this->ts_, &tpt));
     return static_cast<ProblemType>(tpt);
 }
 
 void
 TransientProblemInterface::set_problem_type(ProblemType type)
 {
-    PETSC_CHECK(TSSetProblemType(this->ts, static_cast<TSProblemType>(type)));
+    PETSC_CHECK(TSSetProblemType(this->ts_, static_cast<TSProblemType>(type)));
 }
 
 void
@@ -423,32 +423,32 @@ void
 TransientProblemInterface::compute_rhs(Real time, const Vector & x, Vector & F)
 {
     CALL_STACK_MSG();
-    if (this->compute_rhs_function_method)
-        this->compute_rhs_function_method(time, x, F);
+    if (this->compute_rhs_function_method_)
+        this->compute_rhs_function_method_(time, x, F);
 }
 
 void
 TransientProblemInterface::set_converged_reason(ConvergedReason reason)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(TSSetConvergedReason(this->ts, static_cast<TSConvergedReason>(reason)));
+    PETSC_CHECK(TSSetConvergedReason(this->ts_, static_cast<TSConvergedReason>(reason)));
 }
 
 void
 TransientProblemInterface::set_scheme(String scheme_name)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(TSSetType(this->ts, scheme_name.c_str()));
+    PETSC_CHECK(TSSetType(this->ts_, scheme_name.c_str()));
 }
 
 void
 TransientProblemInterface::set_scheme(String scheme_name, String sub_name)
 {
-    PETSC_CHECK(TSSetType(this->ts, scheme_name.c_str()));
+    PETSC_CHECK(TSSetType(this->ts_, scheme_name.c_str()));
     if (scheme_name == TSSSP)
-        PETSC_CHECK(TSSSPSetType(this->ts, sub_name.c_str()));
+        PETSC_CHECK(TSSSPSetType(this->ts_, sub_name.c_str()));
     else if (scheme_name == TSRK)
-        PETSC_CHECK(TSRKSetType(this->ts, sub_name.c_str()));
+        PETSC_CHECK(TSRKSetType(this->ts_, sub_name.c_str()));
 }
 
 String
@@ -456,7 +456,7 @@ TransientProblemInterface::get_scheme() const
 {
     CALL_STACK_MSG();
     TSType type;
-    TSGetType(this->ts, &type);
+    TSGetType(this->ts_, &type);
     return { type };
 }
 
@@ -464,8 +464,8 @@ void
 TransientProblemInterface::monitor_cancel()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(TSMonitorCancel(this->ts));
-    this->monitor_method.reset();
+    PETSC_CHECK(TSMonitorCancel(this->ts_));
+    this->monitor_method_.reset();
 }
 
 bool
@@ -473,7 +473,7 @@ TransientProblemInterface::function_domain_error(Real stage_time, const Vector &
 {
     CALL_STACK_MSG();
     PetscBool ok;
-    PETSC_CHECK(TSFunctionDomainError(this->ts, stage_time, Y, &ok));
+    PETSC_CHECK(TSFunctionDomainError(this->ts_, stage_time, Y, &ok));
     return ok == PETSC_TRUE ? true : false;
 }
 

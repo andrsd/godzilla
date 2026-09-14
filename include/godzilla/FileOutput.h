@@ -46,9 +46,9 @@ private:
     virtual fs::path create_file_name() const;
 
     /// The file base of the output file
-    fs::path file_base;
+    fs::path file_base_;
     /// The file name of the output file
-    fs::path file_name;
+    fs::path file_name_;
 
 public:
     static Parameters parameters();

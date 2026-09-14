@@ -48,8 +48,8 @@ public:
     get_problem() const
     {
         CALL_STACK_MSG();
-        if (this->problem)
-            return dynamic_ref_cast<T>(ref(*this->problem));
+        if (this->problem_)
+            return dynamic_ref_cast<T>(ref(*this->problem_));
         else
             throw Exception("Bad cast");
     }
@@ -76,7 +76,7 @@ public:
 
         auto obj = Qtr<T>::alloc(pars);
         auto problem = obj.get();
-        this->problem = std::move(obj);
+        this->problem_ = std::move(obj);
         return ref(*problem);
     }
 
@@ -86,7 +86,7 @@ protected:
 
 private:
     /// Pointer to `Problem`
-    Qtr<Problem> problem;
+    Qtr<Problem> problem_;
 
 public:
     static void register_objects(Registry & registry);

@@ -28,110 +28,110 @@ BoxMesh::parameters()
 
 BoxMesh::BoxMesh(const Parameters & pars) :
     Object(pars),
-    xmin(pars.get<Real>("xmin")),
-    xmax(pars.get<Real>("xmax")),
-    ymin(pars.get<Real>("ymin")),
-    ymax(pars.get<Real>("ymax")),
-    zmin(pars.get<Real>("zmin")),
-    zmax(pars.get<Real>("zmax")),
-    nx(pars.get<Int>("nx")),
-    ny(pars.get<Int>("ny")),
-    nz(pars.get<Int>("nz")),
-    simplex(pars.get<bool>("simplex")),
-    interpolate(true)
+    xmin_(pars.get<Real>("xmin")),
+    xmax_(pars.get<Real>("xmax")),
+    ymin_(pars.get<Real>("ymin")),
+    ymax_(pars.get<Real>("ymax")),
+    zmin_(pars.get<Real>("zmin")),
+    zmax_(pars.get<Real>("zmax")),
+    nx_(pars.get<Int>("nx")),
+    ny_(pars.get<Int>("ny")),
+    nz_(pars.get<Int>("nz")),
+    simplex_(pars.get<bool>("simplex")),
+    interpolate_(true)
 {
     CALL_STACK_MSG();
-    expect_true(this->xmax > this->xmin, "Parameter 'xmax' must be larger than 'xmin'.");
-    expect_true(this->ymax > this->ymin, "Parameter 'ymax' must be larger than 'ymin'.");
-    expect_true(this->zmax > this->zmin, "Parameter 'zmax' must be larger than 'zmin'.");
+    expect_true(this->xmax_ > this->xmin_, "Parameter 'xmax' must be larger than 'xmin'.");
+    expect_true(this->ymax_ > this->ymin_, "Parameter 'ymax' must be larger than 'ymin'.");
+    expect_true(this->zmax_ > this->zmin_, "Parameter 'zmax' must be larger than 'zmin'.");
 }
 
 Real
 BoxMesh::get_x_min() const
 {
     CALL_STACK_MSG();
-    return this->xmin;
+    return this->xmin_;
 }
 
 Real
 BoxMesh::get_x_max() const
 {
     CALL_STACK_MSG();
-    return this->xmax;
+    return this->xmax_;
 }
 
 Int
 BoxMesh::get_nx() const
 {
     CALL_STACK_MSG();
-    return this->nx;
+    return this->nx_;
 }
 
 Real
 BoxMesh::get_y_min() const
 {
     CALL_STACK_MSG();
-    return this->ymin;
+    return this->ymin_;
 }
 
 Real
 BoxMesh::get_y_max() const
 {
     CALL_STACK_MSG();
-    return this->ymax;
+    return this->ymax_;
 }
 
 Int
 BoxMesh::get_ny() const
 {
     CALL_STACK_MSG();
-    return this->ny;
+    return this->ny_;
 }
 
 Real
 BoxMesh::get_z_min() const
 {
     CALL_STACK_MSG();
-    return this->zmin;
+    return this->zmin_;
 }
 
 Real
 BoxMesh::get_z_max() const
 {
     CALL_STACK_MSG();
-    return this->zmax;
+    return this->zmax_;
 }
 
 Int
 BoxMesh::get_nz() const
 {
     CALL_STACK_MSG();
-    return this->nz;
+    return this->nz_;
 }
 
 Qtr<UnstructuredMesh>
 BoxMesh::create_mesh()
 {
     CALL_STACK_MSG();
-    std::array<Real, 3> lower = { this->xmin, this->ymin, this->zmin };
-    std::array<Real, 3> upper = { this->xmax, this->ymax, this->zmax };
-    std::array<Int, 3> faces = { this->nx, this->ny, this->nz };
+    std::array<Real, 3> lower = { this->xmin_, this->ymin_, this->zmin_ };
+    std::array<Real, 3> upper = { this->xmax_, this->ymax_, this->zmax_ };
+    std::array<Int, 3> faces = { this->nx_, this->ny_, this->nz_ };
     std::array<DMBoundaryType, 3> periodicity = {
-        this->simplex ? DM_BOUNDARY_NONE : DM_BOUNDARY_GHOSTED,
-        this->simplex ? DM_BOUNDARY_NONE : DM_BOUNDARY_GHOSTED,
-        this->simplex ? DM_BOUNDARY_NONE : DM_BOUNDARY_GHOSTED
+        this->simplex_ ? DM_BOUNDARY_NONE : DM_BOUNDARY_GHOSTED,
+        this->simplex_ ? DM_BOUNDARY_NONE : DM_BOUNDARY_GHOSTED,
+        this->simplex_ ? DM_BOUNDARY_NONE : DM_BOUNDARY_GHOSTED
     };
 
     DM dm;
 #if PETSC_VERSION_GE(3, 22, 0)
     PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
                                     3,
-                                    this->simplex ? PETSC_TRUE : PETSC_FALSE,
+                                    this->simplex_ ? PETSC_TRUE : PETSC_FALSE,
                                     faces.data(),
                                     lower.data(),
                                     upper.data(),
                                     periodicity.data(),
-                                    this->interpolate ? PETSC_TRUE : PETSC_FALSE,
+                                    this->interpolate_ ? PETSC_TRUE : PETSC_FALSE,
                                     0,
                                     PETSC_FALSE,
                                     &dm));

@@ -28,7 +28,7 @@ public:
 
 private:
     /// Computed L_2 error
-    Real l2_diff;
+    Real l2_diff_;
 
 public:
     static Parameters parameters();

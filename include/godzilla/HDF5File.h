@@ -505,8 +505,8 @@ public:
     T read_attribute(String name) const;
 
 private:
-    hid_t id;
-    fs::path file_name;
+    hid_t id_;
+    fs::path file_name_;
 };
 
 // Group
@@ -942,19 +942,19 @@ HDF5File::Attribute::write(const String & data)
 inline HDF5File::Group
 HDF5File::create_group(String name) const
 {
-    return Group::create(this->id, name);
+    return Group::create(this->id_, name);
 }
 
 inline HDF5File::Group
 HDF5File::open_group(String name) const
 {
-    return Group::open(this->id, name);
+    return Group::open(this->id_, name);
 }
 
 inline bool
 HDF5File::has_attribute(String name) const
 {
-    auto res = H5Aexists(this->id, name.c_str());
+    auto res = H5Aexists(this->id_, name.c_str());
     if (res < 0)
         throw Exception("Failed to check attribute");
     return res > 0;
@@ -963,7 +963,7 @@ HDF5File::has_attribute(String name) const
 inline bool
 HDF5File::has_dataset(String name) const
 {
-    auto res = H5Lexists(this->id, name.c_str(), H5P_DEFAULT);
+    auto res = H5Lexists(this->id_, name.c_str(), H5P_DEFAULT);
     if (res < 0)
         throw Exception("Failed to check dataset");
     return res > 0;
@@ -973,7 +973,7 @@ template <typename T>
 inline void
 HDF5File::write_dataset(String name, const T & data)
 {
-    auto g = Group::open(this->id, hdf5::ROOT_GROUP);
+    auto g = Group::open(this->id_, hdf5::ROOT_GROUP);
     g.template write_dataset<T>(name, data);
 }
 
@@ -981,7 +981,7 @@ template <typename T>
 inline void
 HDF5File::write_dataset(String name, Int n, const T data[])
 {
-    auto g = Group::open(this->id, hdf5::ROOT_GROUP);
+    auto g = Group::open(this->id_, hdf5::ROOT_GROUP);
     g.template write_dataset<T>(name, n, data);
 }
 
@@ -989,7 +989,7 @@ template <typename T>
 inline T
 HDF5File::read_dataset(String name) const
 {
-    auto g = Group::open(this->id, hdf5::ROOT_GROUP);
+    auto g = Group::open(this->id_, hdf5::ROOT_GROUP);
     return g.template read_dataset<T>(name);
 }
 
@@ -997,7 +997,7 @@ template <typename T>
 inline void
 HDF5File::read_dataset(String name, Int n, T data[]) const
 {
-    auto g = Group::open(this->id, hdf5::ROOT_GROUP);
+    auto g = Group::open(this->id_, hdf5::ROOT_GROUP);
     g.template read_dataset<T>(name, n, data);
 }
 
@@ -1005,7 +1005,7 @@ template <typename T>
 inline void
 HDF5File::write_attribute(String name, const T & value)
 {
-    auto g = Group::open(this->id, hdf5::ROOT_GROUP);
+    auto g = Group::open(this->id_, hdf5::ROOT_GROUP);
     g.template write_attribute<T>(name, value);
 }
 
@@ -1013,7 +1013,7 @@ template <typename T>
 inline T
 HDF5File::read_attribute(String name) const
 {
-    auto g = Group::open(this->id, hdf5::ROOT_GROUP);
+    auto g = Group::open(this->id_, hdf5::ROOT_GROUP);
     return g.template read_attribute<T>(name);
 }
 

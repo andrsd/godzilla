@@ -84,7 +84,7 @@ public:
 
 private:
     /// Event ID
-    StageID id;
+    StageID id_;
 };
 
 class EventInfo {
@@ -120,7 +120,7 @@ public:
 
 private:
     /// Event information collected by PETSc
-    PetscEventPerfInfo info;
+    PetscEventPerfInfo info_;
 };
 
 /// Get event information
@@ -179,7 +179,7 @@ private:
     EventID id_from_name(const char * name);
 
     /// Event ID
-    EventID id;
+    EventID id_;
 };
 
 /// Scoped event for performance logging

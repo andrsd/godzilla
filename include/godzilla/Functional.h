@@ -31,8 +31,8 @@ public:
     String
     get_value_name(const String val_name) const
     {
-        return this->region.length() == 0 ? val_name
-                                          : String(fmt::format("{}@{}", val_name, this->region));
+        return this->region_.length() == 0 ? val_name
+                                           : String(fmt::format("{}@{}", val_name, this->region_));
     }
 
 protected:
@@ -85,17 +85,17 @@ protected:
     {
         CALL_STACK_MSG();
         auto val_name = get_value_name(name);
-        this->depends_on.insert(val_name);
+        this->depends_on_.insert(val_name);
         return get_fe_problem()->get_value<T>(val_name);
     }
 
 private:
     /// FEProblemInterface this functional is part of
-    Ref<FEProblemInterface> fepi;
+    Ref<FEProblemInterface> fepi_;
     /// region where this functional is defined
-    String region;
+    String region_;
     /// Value names this functional depends on
-    std::set<String> depends_on;
+    std::set<String> depends_on_;
 };
 
 } // namespace godzilla

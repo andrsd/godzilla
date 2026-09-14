@@ -230,16 +230,16 @@ public:
 
 private:
     /// All residual forms
-    std::array<std::map<Key, std::vector<ResidualFunc *>>, PETSC_NUM_WF> res_forms;
+    std::array<std::map<Key, std::vector<ResidualFunc *>>, PETSC_NUM_WF> res_forms_;
 
     /// Empty array for residual forms
-    std::vector<ResidualFunc *> empty_res_forms;
+    std::vector<ResidualFunc *> empty_res_forms_;
 
     /// All Jacobian forms
-    std::array<std::map<Key, std::vector<JacobianFunc *>>, PETSC_NUM_WF> jac_forms;
+    std::array<std::map<Key, std::vector<JacobianFunc *>>, PETSC_NUM_WF> jac_forms_;
 
     /// Empty array for Jacobian forms
-    std::vector<JacobianFunc *> empty_jac_forms;
+    std::vector<JacobianFunc *> empty_jac_forms_;
 };
 
 } // namespace godzilla

@@ -23,7 +23,7 @@ private:
     std::vector<Int> create_components() override;
 
     /// Constant values -- one for each component
-    const std::vector<Real> values;
+    const std::vector<Real> values_;
 
 public:
     static Parameters parameters();

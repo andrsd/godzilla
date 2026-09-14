@@ -37,10 +37,10 @@ protected:
     void
     set_boundary_local(Ref<T> instance, void (T::*method)(Vector &))
     {
-        this->compute_boundary_delegate.bind(instance, method);
+        this->compute_boundary_delegate_.bind(instance, method);
         PETSC_CHECK(DMSNESSetBoundaryLocal(get_dm(),
                                            invoke_compute_boundary_delegate,
-                                           &this->compute_boundary_delegate));
+                                           &this->compute_boundary_delegate_));
     }
 
     /// Set a local residual evaluation function. This function is called with local vector
@@ -49,10 +49,10 @@ protected:
     void
     set_function_local(Ref<T> instance, void (T::*method)(const Vector &, Vector &))
     {
-        this->compute_residual_delegate.bind(instance, method);
+        this->compute_residual_delegate_.bind(instance, method);
         PETSC_CHECK(DMSNESSetFunctionLocal(get_dm(),
                                            invoke_compute_residual_delegate,
-                                           &this->compute_residual_delegate));
+                                           &this->compute_residual_delegate_));
     }
 
     /// Set a local Jacobian evaluation function
@@ -60,10 +60,10 @@ protected:
     void
     set_jacobian_local(Ref<T> instance, void (T::*method)(const Vector &, Matrix &, Matrix &))
     {
-        this->compute_jacobian_delegate.bind(instance, method);
+        this->compute_jacobian_delegate_.bind(instance, method);
         PETSC_CHECK(DMSNESSetJacobianLocal(get_dm(),
                                            invoke_compute_jacobian_delegate,
-                                           &this->compute_jacobian_delegate));
+                                           &this->compute_jacobian_delegate_));
     }
 
     void compute_residual_internal(DM dm,
@@ -119,13 +119,16 @@ private:
     void compute_jacobian_local(const Vector & x, Matrix & J, Matrix & Jp);
     void compute_boundary_local(Vector & x);
 
-    enum State { INITIAL, FINAL } state;
+    enum State {
+        INITIAL,
+        FINAL,
+    } state_;
     /// Delegate for compute_boundary
-    Delegate<void(Vector &)> compute_boundary_delegate;
+    Delegate<void(Vector &)> compute_boundary_delegate_;
     /// Delegate for compute_residual
-    Delegate<void(const Vector &, Vector &)> compute_residual_delegate;
+    Delegate<void(const Vector &, Vector &)> compute_residual_delegate_;
     /// Delegate for compute_jacobian
-    Delegate<void(const Vector & x, Matrix & J, Matrix & Jp)> compute_jacobian_delegate;
+    Delegate<void(const Vector & x, Matrix & J, Matrix & Jp)> compute_jacobian_delegate_;
 
 public:
     static Parameters parameters();

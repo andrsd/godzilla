@@ -8,14 +8,14 @@
 
 namespace godzilla {
 
-App::App(mpi::Communicator comm, String name) : CoreApp(comm, name), problem(nullptr)
+App::App(mpi::Communicator comm, String name) : CoreApp(comm, name), problem_(nullptr)
 {
     CALL_STACK_MSG();
 }
 
 App::App(mpi::Communicator comm, Registry & registry, String name) :
     CoreApp(comm, registry, name),
-    problem(nullptr)
+    problem_(nullptr)
 {
     CALL_STACK_MSG();
 }
@@ -24,8 +24,8 @@ Ref<Problem>
 App::get_problem() const
 {
     CALL_STACK_MSG();
-    expect_true(this->problem != nullptr, "Problem is null");
-    return ref(*this->problem);
+    expect_true(this->problem_ != nullptr, "Problem is null");
+    return ref(*this->problem_);
 }
 
 int
@@ -47,11 +47,11 @@ void
 App::run_problem()
 {
     CALL_STACK_MSG();
-    expect_true(this->problem != nullptr, "Problem is null");
-    this->problem->create();
+    expect_true(this->problem_ != nullptr, "Problem is null");
+    this->problem_->create();
 
     lprintln(9, "Running");
-    this->problem->run();
+    this->problem_->run();
 }
 
 } // namespace godzilla

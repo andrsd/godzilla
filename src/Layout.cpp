@@ -5,19 +5,19 @@
 
 namespace godzilla {
 
-Layout::Layout() : obj(nullptr) {}
+Layout::Layout() : obj_(nullptr) {}
 
-Layout::Layout(PetscLayout lo) : obj(lo)
+Layout::Layout(PetscLayout lo) : obj_(lo)
 {
-    this->obj->refcnt++;
+    this->obj_->refcnt++;
 }
 
 Layout::~Layout()
 {
-    if (this->obj != nullptr) {
-        this->obj->refcnt--;
-        if (this->obj->refcnt == 0) {
-            PETSC_CHECK(PetscLayoutDestroy(&this->obj));
+    if (this->obj_ != nullptr) {
+        this->obj_->refcnt--;
+        if (this->obj_->refcnt == 0) {
+            PETSC_CHECK(PetscLayoutDestroy(&this->obj_));
         }
     }
 }
@@ -26,8 +26,8 @@ void
 Layout::create(mpi::Communicator comm)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscLayoutCreate(comm, &this->obj));
-    this->obj->refcnt++;
+    PETSC_CHECK(PetscLayoutCreate(comm, &this->obj_));
+    this->obj_->refcnt++;
 }
 
 Layout
@@ -35,7 +35,7 @@ Layout::duplicate() const
 {
     CALL_STACK_MSG();
     PetscLayout dup;
-    PETSC_CHECK(PetscLayoutDuplicate(this->obj, &dup));
+    PETSC_CHECK(PetscLayoutDuplicate(this->obj_, &dup));
     return { dup };
 }
 
@@ -44,7 +44,7 @@ Layout::find_owner(Int idx) const
 {
     CALL_STACK_MSG();
     int rank;
-    PETSC_CHECK(PetscLayoutFindOwner(this->obj, idx, &rank));
+    PETSC_CHECK(PetscLayoutFindOwner(this->obj_, idx, &rank));
     return rank;
 }
 
@@ -54,7 +54,7 @@ Layout::find_owner_index(Int idx) const
     CALL_STACK_MSG();
     int rank;
     Int lidx;
-    PETSC_CHECK(PetscLayoutFindOwnerIndex(this->obj, idx, &rank, &lidx));
+    PETSC_CHECK(PetscLayoutFindOwnerIndex(this->obj_, idx, &rank, &lidx));
     return { rank, lidx };
 }
 
@@ -63,7 +63,7 @@ Layout::get_block_size() const
 {
     CALL_STACK_MSG();
     Int bs;
-    PETSC_CHECK(PetscLayoutGetBlockSize(this->obj, &bs));
+    PETSC_CHECK(PetscLayoutGetBlockSize(this->obj_, &bs));
     return bs;
 }
 
@@ -72,7 +72,7 @@ Layout::get_local_size() const
 {
     CALL_STACK_MSG();
     Int sz;
-    PETSC_CHECK(PetscLayoutGetLocalSize(this->obj, &sz));
+    PETSC_CHECK(PetscLayoutGetLocalSize(this->obj_, &sz));
     return sz;
 }
 
@@ -82,7 +82,7 @@ Layout::get_range() const
     CALL_STACK_MSG();
     Int rstart;
     Int rend;
-    PETSC_CHECK(PetscLayoutGetRange(this->obj, &rstart, &rend));
+    PETSC_CHECK(PetscLayoutGetRange(this->obj_, &rstart, &rend));
     return { rstart, rend };
 }
 
@@ -91,7 +91,7 @@ Layout::get_size() const
 {
     CALL_STACK_MSG();
     Int n;
-    PETSC_CHECK(PetscLayoutGetSize(this->obj, &n));
+    PETSC_CHECK(PetscLayoutGetSize(this->obj_, &n));
     return n;
 }
 
@@ -99,28 +99,28 @@ void
 Layout::set_block_size(Int size)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscLayoutSetBlockSize(this->obj, size));
+    PETSC_CHECK(PetscLayoutSetBlockSize(this->obj_, size));
 }
 
 void
 Layout::set_local_size(Int size)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscLayoutSetLocalSize(this->obj, size));
+    PETSC_CHECK(PetscLayoutSetLocalSize(this->obj_, size));
 }
 
 void
 Layout::set_size(Int size)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscLayoutSetSize(this->obj, size));
+    PETSC_CHECK(PetscLayoutSetSize(this->obj_, size));
 }
 
 void
 Layout::set_up()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscLayoutSetUp(this->obj));
+    PETSC_CHECK(PetscLayoutSetUp(this->obj_));
 }
 
 bool
@@ -128,7 +128,7 @@ Layout::compare(const Layout & other) const
 {
     CALL_STACK_MSG();
     PetscBool congruent;
-    PETSC_CHECK(PetscLayoutCompare(this->obj, other.obj, &congruent));
+    PETSC_CHECK(PetscLayoutCompare(this->obj_, other.obj_, &congruent));
     return congruent == PETSC_TRUE;
 }
 

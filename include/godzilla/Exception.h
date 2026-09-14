@@ -36,13 +36,13 @@ private:
     void store_call_stack();
 
     /// Rank of the process that threw the exception
-    int mpi_rank = -1;
+    int mpi_rank_ = -1;
     /// Error message
-    std::string msg;
+    std::string msg_;
     /// Location where the exception occured
-    std::source_location loc;
+    std::source_location loc_;
     /// Call stack at the time exception occured
-    std::vector<CallStack::Frame> call_stack;
+    std::vector<CallStack::Frame> call_stack_;
 };
 
 /// Exception for internal errors

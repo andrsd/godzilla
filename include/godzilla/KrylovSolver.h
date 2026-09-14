@@ -137,9 +137,9 @@ public:
     void
     set_compute_rhs(Ref<T> instance, void (T::*method)(Vector &))
     {
-        this->compute_rhs_method.bind(instance, method);
+        this->compute_rhs_method_.bind(instance, method);
         PETSC_CHECK(
-            KSPSetComputeRHS(this->obj, invoke_compute_rhs_delegate, &this->compute_rhs_method));
+            KSPSetComputeRHS(this->obj_, invoke_compute_rhs_delegate, &this->compute_rhs_method_));
     }
 
     /// Set member function to compute operators of the linear system
@@ -151,10 +151,10 @@ public:
     void
     set_compute_operators(Ref<T> instance, void (T::*method)(Matrix &, Matrix &))
     {
-        this->compute_operators_method.bind(instance, method);
-        PETSC_CHECK(KSPSetComputeOperators(this->obj,
+        this->compute_operators_method_.bind(instance, method);
+        PETSC_CHECK(KSPSetComputeOperators(this->obj_,
                                            invoke_compute_operators_delegate,
-                                           &this->compute_operators_method));
+                                           &this->compute_operators_method_));
     }
 
     /// Sets an *additional* member function to be called at every iteration to monitor the
@@ -167,19 +167,19 @@ public:
     void
     monitor_set(Ref<T> instance, void (T::*method)(Int, Real))
     {
-        this->monitor_method.bind(instance, method);
+        this->monitor_method_.bind(instance, method);
         PETSC_CHECK(
-            KSPMonitorSet(this->obj, invoke_monitor_delegate, &this->monitor_method, nullptr));
+            KSPMonitorSet(this->obj_, invoke_monitor_delegate, &this->monitor_method_, nullptr));
     }
 
     template <class T>
     void
     set_convergence_test(Ref<T> instance, ConvergedReason (T::*method)(Int, Real))
     {
-        this->convergence_test_method.bind(instance, method);
-        PETSC_CHECK(KSPSetConvergenceTest(this->obj,
+        this->convergence_test_method_.bind(instance, method);
+        PETSC_CHECK(KSPSetConvergenceTest(this->obj_,
                                           invoke_convergence_test_delegate,
-                                          &this->convergence_test_method,
+                                          &this->convergence_test_method_,
                                           nullptr));
     }
 
@@ -187,10 +187,10 @@ public:
     void
     converged_reason_view_set(Ref<T> instance, void (T::*method)())
     {
-        this->convergence_reason_view_method.bind(instance, method);
-        PETSC_CHECK(KSPConvergedReasonViewSet(this->obj,
+        this->convergence_reason_view_method_.bind(instance, method);
+        PETSC_CHECK(KSPConvergedReasonViewSet(this->obj_,
                                               invoke_converged_reason_view_delegate,
-                                              &this->convergence_reason_view_method,
+                                              &this->convergence_reason_view_method_,
                                               nullptr));
     }
 
@@ -265,15 +265,15 @@ public:
 
 private:
     /// Method for monitoring the solve
-    Delegate<void(Int it, Real rnorm)> monitor_method;
+    Delegate<void(Int it, Real rnorm)> monitor_method_;
     /// Method for computing RHS
-    Delegate<void(Vector & b)> compute_rhs_method;
+    Delegate<void(Vector & b)> compute_rhs_method_;
     /// Method for computing operators
-    Delegate<void(Matrix & A, Matrix & B)> compute_operators_method;
+    Delegate<void(Matrix & A, Matrix & B)> compute_operators_method_;
     /// Method for determining covergence
-    Delegate<ConvergedReason(Int it, Real rnorm)> convergence_test_method;
+    Delegate<ConvergedReason(Int it, Real rnorm)> convergence_test_method_;
     /// Method for printing coverged reason
-    Delegate<void(void)> convergence_reason_view_method;
+    Delegate<void(void)> convergence_reason_view_method_;
 
 public:
     static PetscErrorCode invoke_compute_operators_delegate(KSP, Mat A, Mat B, void * ctx);

@@ -19,13 +19,13 @@ public:
     template <typename T>
     Delegate(T * t, R (T::*method)(ARGS...))
     {
-        this->fn = [=](ARGS... args) {
+        this->fn_ = [=](ARGS... args) {
             return (t->*method)(args...);
         };
     }
 
     template <typename F>
-    Delegate(F && f) : fn(std::forward<F>(f))
+    Delegate(F && f) : fn_(std::forward<F>(f))
     {
     }
 
@@ -33,7 +33,7 @@ public:
     void
     bind(Ref<T> t, R (T::*method)(ARGS...))
     {
-        this->fn = [=](ARGS... args) {
+        this->fn_ = [=](ARGS... args) {
             return (*t.*method)(args...);
         };
     }
@@ -42,7 +42,7 @@ public:
     void
     bind(Ref<T> t, R (T::*method)(ARGS...) const)
     {
-        this->fn = [=](ARGS... args) {
+        this->fn_ = [=](ARGS... args) {
             return (*t.*method)(args...);
         };
     }
@@ -51,33 +51,33 @@ public:
     void
     bind(F && f)
     {
-        fn = std::forward<F>(f);
+        this->fn_ = std::forward<F>(f);
     }
 
     R
     operator()(ARGS... args)
     {
-        return this->fn(args...);
+        return this->fn_(args...);
     }
 
     R
     invoke(ARGS... args)
     {
-        return this->fn(args...);
+        return this->fn_(args...);
     }
 
     void
     reset()
     {
-        this->fn = nullptr;
+        this->fn_ = nullptr;
     }
 
     /// Check whether delegates is callable
-    operator bool() const { return static_cast<bool>(this->fn); }
-    operator bool() { return static_cast<bool>(this->fn); }
+    operator bool() const { return static_cast<bool>(this->fn_); }
+    operator bool() { return static_cast<bool>(this->fn_); }
 
 private:
-    std::function<R(ARGS...)> fn;
+    std::function<R(ARGS...)> fn_;
 };
 
 } // namespace godzilla

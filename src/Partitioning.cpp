@@ -22,7 +22,7 @@ void
 Partitioning::create(mpi::Communicator comm)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(MatPartitioningCreate(comm, &this->obj));
+    PETSC_CHECK(MatPartitioningCreate(comm, &this->obj_));
 }
 
 String
@@ -30,7 +30,7 @@ Partitioning::get_type() const
 {
     CALL_STACK_MSG();
     MatPartitioningType type;
-    PETSC_CHECK(MatPartitioningGetType(this->obj, &type));
+    PETSC_CHECK(MatPartitioningGetType(this->obj_, &type));
     return { type };
 }
 
@@ -38,14 +38,14 @@ void
 Partitioning::set_type(String type) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(MatPartitioningSetType(this->obj, type.c_str()));
+    PETSC_CHECK(MatPartitioningSetType(this->obj_, type.c_str()));
 }
 
 void
 Partitioning::set_n_parts(Int n)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(MatPartitioningSetNParts(this->obj, n));
+    PETSC_CHECK(MatPartitioningSetNParts(this->obj_, n));
 }
 
 bool
@@ -53,7 +53,7 @@ Partitioning::get_use_edge_weights() const
 {
     CALL_STACK_MSG();
     PetscBool flag;
-    PETSC_CHECK(MatPartitioningGetUseEdgeWeights(this->obj, &flag));
+    PETSC_CHECK(MatPartitioningGetUseEdgeWeights(this->obj_, &flag));
     return flag == PETSC_TRUE;
 }
 
@@ -61,7 +61,7 @@ void
 Partitioning::set_use_edge_weights(bool flag)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(MatPartitioningSetUseEdgeWeights(this->obj, flag ? PETSC_TRUE : PETSC_FALSE));
+    PETSC_CHECK(MatPartitioningSetUseEdgeWeights(this->obj_, flag ? PETSC_TRUE : PETSC_FALSE));
 }
 
 IndexSet
@@ -69,7 +69,7 @@ Partitioning::apply()
 {
     CALL_STACK_MSG();
     IS is;
-    PETSC_CHECK(MatPartitioningApply(this->obj, &is));
+    PETSC_CHECK(MatPartitioningApply(this->obj_, &is));
     return IndexSet(is);
 }
 
@@ -77,21 +77,21 @@ void
 Partitioning::improve(IndexSet & partitioning)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(MatPartitioningImprove(this->obj, partitioning));
+    PETSC_CHECK(MatPartitioningImprove(this->obj_, partitioning));
 }
 
 void
 Partitioning::set_adjacency(const Matrix & adj)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(MatPartitioningSetAdjacency(this->obj, adj));
+    PETSC_CHECK(MatPartitioningSetAdjacency(this->obj_, adj));
 }
 
 void
 Partitioning::set_number_vertex_weights(Int n)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(MatPartitioningSetNumberVertexWeights(this->obj, n));
+    PETSC_CHECK(MatPartitioningSetNumberVertexWeights(this->obj_, n));
 }
 
 void
@@ -102,7 +102,7 @@ Partitioning::set_vertex_weights(Span<Int> weights)
     Int * wts;
     PetscMalloc(sizeof(Int) * weights.size(), &wts);
     std::memcpy(wts, std::data(weights), weights.size() * sizeof(Int));
-    PETSC_CHECK(MatPartitioningSetVertexWeights(this->obj, wts));
+    PETSC_CHECK(MatPartitioningSetVertexWeights(this->obj_, wts));
 }
 
 void
@@ -113,14 +113,14 @@ Partitioning::set_partition_weights(Span<Real> weights)
     Real * wts;
     PetscMalloc(sizeof(Real) * weights.size(), &wts);
     std::memcpy(wts, std::data(weights), weights.size() * sizeof(Real));
-    PETSC_CHECK(MatPartitioningSetPartitionWeights(this->obj, wts));
+    PETSC_CHECK(MatPartitioningSetPartitionWeights(this->obj_, wts));
 }
 
 void
 Partitioning::view(PetscViewer viewer) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(MatPartitioningView(this->obj, viewer));
+    PETSC_CHECK(MatPartitioningView(this->obj_, viewer));
 }
 
 } // namespace godzilla

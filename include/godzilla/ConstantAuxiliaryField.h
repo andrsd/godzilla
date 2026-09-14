@@ -19,7 +19,7 @@ public:
 
 private:
     /// Values (one per component)
-    const std::vector<Real> values;
+    const std::vector<Real> values_;
 
 public:
     static Parameters parameters();

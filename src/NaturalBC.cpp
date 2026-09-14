@@ -22,9 +22,9 @@ NaturalBC::parameters()
 
 NaturalBC::NaturalBC(const Parameters & pars) :
     BoundaryCondition(pars),
-    fid(FieldID::INVALID),
-    field_name(pars.get<Optional<String>>("field")),
-    fepi(dynamic_ref_cast<FEProblemInterface>(get_discrete_problem_interface()))
+    fid_(FieldID::INVALID),
+    field_name_(pars.get<Optional<String>>("field")),
+    fepi_(dynamic_ref_cast<FEProblemInterface>(get_discrete_problem_interface()))
 {
     CALL_STACK_MSG();
 }
@@ -37,32 +37,32 @@ NaturalBC::create()
 
     auto field_names = dpi->get_field_names();
     if (field_names.size() == 1) {
-        this->fid = dpi->get_field_id(field_names[0]).value();
+        this->fid_ = dpi->get_field_id(field_names[0]).value();
     }
     else if (field_names.size() > 1) {
-        expect_true(this->field_name.has_value(),
+        expect_true(this->field_name_.has_value(),
                     "Use the 'field' parameter to assign this boundary condition to an existing "
                     "field.");
-        auto id = dpi->get_field_id(this->field_name.value());
+        auto id = dpi->get_field_id(this->field_name_.value());
         expect_true(id.has_value(),
-                    fmt::format("Field '{}' does not exist. Typo?", field_name.value()));
-        this->fid = id.value();
+                    fmt::format("Field '{}' does not exist. Typo?", field_name_.value()));
+        this->fid_ = id.value();
     }
-    this->components = create_components();
+    this->components_ = create_components();
 }
 
 FieldID
 NaturalBC::get_field_id() const
 {
     CALL_STACK_MSG();
-    return this->fid;
+    return this->fid_;
 }
 
 Span<const Int>
 NaturalBC::get_components() const
 {
     CALL_STACK_MSG();
-    return this->components;
+    return this->components_;
 }
 
 void
@@ -72,15 +72,15 @@ NaturalBC::set_up()
     auto dpi = get_discrete_problem_interface();
     auto mesh = dpi->get_mesh();
     for (auto & boundary : get_boundary()) {
-        if (this->fid != FieldID::INVALID) {
+        if (this->fid_ != FieldID::INVALID) {
             auto label = mesh->get_face_set_label(boundary);
             auto ids = label.get_values();
             dpi->add_boundary(DM_BC_NATURAL,
                               get_name(),
                               label,
                               ids,
-                              this->fid,
-                              this->components,
+                              this->fid_,
+                              this->components_,
                               nullptr,
                               nullptr,
                               nullptr);
@@ -93,8 +93,8 @@ NaturalBC::create_components()
 {
     CALL_STACK_MSG();
     auto dpi = get_discrete_problem_interface();
-    auto n_comps = dpi->get_field_num_components(this->fid);
-    expect_true(n_comps.has_value(), fmt::format("Field {} not found", this->fid));
+    auto n_comps = dpi->get_field_num_components(this->fid_);
+    expect_true(n_comps.has_value(), fmt::format("Field {} not found", this->fid_));
     std::vector<Int> comps(n_comps.value());
     std::iota(comps.begin(), comps.end(), 0);
     return comps;
@@ -105,7 +105,7 @@ NaturalBC::add_residual_block(BndResidualFunc * f0, BndResidualFunc * f1)
 {
     CALL_STACK_MSG();
     for (auto & bnd : get_boundary())
-        this->fepi->add_boundary_residual_block(this->fid, f0, f1, bnd);
+        this->fepi_->add_boundary_residual_block(this->fid_, f0, f1, bnd);
 }
 
 void
@@ -117,7 +117,7 @@ NaturalBC::add_jacobian_block(FieldID gid,
 {
     CALL_STACK_MSG();
     for (auto & bnd : get_boundary())
-        this->fepi->add_boundary_jacobian_block(this->fid, gid, g0, g1, g2, g3, bnd);
+        this->fepi_->add_boundary_jacobian_block(this->fid_, gid, g0, g1, g2, g3, bnd);
 }
 
 } // namespace godzilla

@@ -78,7 +78,7 @@ protected:
     String normalize_path(String path) const;
 
 private:
-    HDF5File h5f;
+    HDF5File h5f_;
 };
 
 template <typename T>
@@ -87,14 +87,14 @@ RestartFile::write(String path, String name, const T & data)
 {
     auto norm_path = normalize_path(path);
     try {
-        auto group = this->h5f.create_group(norm_path);
+        auto group = this->h5f_.create_group(norm_path);
         group.template write_dataset<T>(name, data);
     }
     catch (std::exception & e) {
         throw Exception(fmt::format("Error writing '{}' to {}: {}",
-                        norm_path,
-                        this->file_name().string(),
-                        e.what()));
+                                    norm_path,
+                                    this->file_name().string(),
+                                    e.what()));
     }
 }
 
@@ -111,14 +111,14 @@ RestartFile::read(String path, String name, T & data) const
 {
     auto norm_path = normalize_path(path);
     try {
-        auto group = this->h5f.open_group(norm_path);
+        auto group = this->h5f_.open_group(norm_path);
         group.template read_dataset<T>(name, data);
     }
     catch (std::exception & e) {
         throw Exception(fmt::format("Error reading '{}' from {}: {}",
-                        norm_path,
-                        this->file_name().string(),
-                        e.what()));
+                                    norm_path,
+                                    this->file_name().string(),
+                                    e.what()));
     }
 }
 

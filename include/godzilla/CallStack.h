@@ -75,9 +75,9 @@ public:
 
 private:
     /// The object storing call stack objects
-    std::array<Frame *, MAX_SIZE> stack;
+    std::array<Frame *, MAX_SIZE> stack_;
     /// Actual size of the stack
-    std::size_t size;
+    std::size_t size_;
 
 public:
     /// Initialize the call stack capability

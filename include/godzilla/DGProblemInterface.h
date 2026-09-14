@@ -112,13 +112,13 @@ protected:
 
 private:
     /// Local section
-    Section section;
+    Section section_;
 
     /// Local section for auxiliary fields
-    Section section_aux;
+    Section section_aux_;
 
     /// Quadrature order
-    Int qorder;
+    Int qorder_;
 
     /// Field information
     struct FieldInfo {
@@ -153,20 +153,20 @@ private:
     void create_fe(FieldInfo & fi);
 
     /// Fields in the problem
-    std::map<FieldID, FieldInfo> fields;
+    std::map<FieldID, FieldInfo> fields_;
 
     /// Map from field name to field ID
-    std::map<String, FieldID> fields_by_name;
+    std::map<String, FieldID> fields_by_name_;
 
     /// Auxiliary fields in the problem
-    std::map<FieldID, FieldInfo> aux_fields;
+    std::map<FieldID, FieldInfo> aux_fields_;
 
     /// Map from auxiliary field name to auxiliary field ID
-    std::map<String, FieldID> aux_fields_by_name;
+    std::map<String, FieldID> aux_fields_by_name_;
 
-    std::map<FieldID, PetscFE> aux_fe;
+    std::map<FieldID, PetscFE> aux_fe_;
 
-    static const String empty_name;
+    static const String empty_name_;
 };
 
 } // namespace godzilla

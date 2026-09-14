@@ -47,7 +47,7 @@ private:
     Qtr<UnstructuredMesh> create_from_gmsh();
 
     /// File name with the mesh
-    fs::path file_name;
+    fs::path file_name_;
 
 public:
     static Parameters parameters();

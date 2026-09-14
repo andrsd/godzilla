@@ -18,7 +18,7 @@ ConstantInitialCondition::parameters()
 
 ConstantInitialCondition::ConstantInitialCondition(const Parameters & pars) :
     InitialCondition(pars),
-    values(pars.get<std::vector<Real>>("value"))
+    values_(pars.get<std::vector<Real>>("value"))
 {
     CALL_STACK_MSG();
 }
@@ -27,7 +27,7 @@ std::vector<Int>
 ConstantInitialCondition::create_components()
 {
     CALL_STACK_MSG();
-    std::vector<Int> comps(this->values.size());
+    std::vector<Int> comps(this->values_.size());
     std::iota(comps.begin(), comps.end(), 0);
     return comps;
 }
@@ -36,8 +36,8 @@ void
 ConstantInitialCondition::evaluate(Real, const Real[], Scalar u[])
 {
     CALL_STACK_MSG();
-    for (std::size_t i = 0; i < this->values.size(); ++i)
-        u[i] = this->values[i];
+    for (std::size_t i = 0; i < this->values_.size(); ++i)
+        u[i] = this->values_[i];
 }
 
 } // namespace godzilla

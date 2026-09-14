@@ -9,15 +9,15 @@ namespace godzilla {
 bool
 Registry::exists(String class_name) const
 {
-    auto it = this->classes.find(class_name);
-    return it != this->classes.end();
+    auto it = this->classes_.find(class_name);
+    return it != this->classes_.end();
 }
 
 const Registry::Entry &
 Registry::get(String class_name) const
 {
-    auto it = this->classes.find(class_name);
-    if (it == this->classes.end())
+    auto it = this->classes_.find(class_name);
+    if (it == this->classes_.end())
         throw Exception(fmt::format("Class '{}' is not registered.", class_name));
     return it->second;
 }
@@ -26,7 +26,7 @@ std::vector<Registry::ObjectDescription>
 Registry::get_object_description() const
 {
     std::vector<Registry::ObjectDescription> objs;
-    for (const auto & [class_name, entry] : this->classes) {
+    for (const auto & [class_name, entry] : this->classes_) {
         Registry::ObjectDescription descr;
         descr.name = class_name;
 

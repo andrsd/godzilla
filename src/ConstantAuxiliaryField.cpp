@@ -17,25 +17,25 @@ ConstantAuxiliaryField::parameters()
 
 ConstantAuxiliaryField::ConstantAuxiliaryField(const Parameters & pars) :
     AuxiliaryField(pars),
-    values(pars.get<std::vector<Real>>("value"))
+    values_(pars.get<std::vector<Real>>("value"))
 {
     CALL_STACK_MSG();
-    expect_true(!this->values.empty(), "No values provided");
+    expect_true(!this->values_.empty(), "No values provided");
 }
 
 Int
 ConstantAuxiliaryField::get_num_components() const
 {
     CALL_STACK_MSG();
-    return this->values.size();
+    return this->values_.size();
 }
 
 void
 ConstantAuxiliaryField::evaluate(Real, const Real[], Scalar u[])
 {
     CALL_STACK_MSG();
-    for (std::size_t c = 0; c < this->values.size(); ++c)
-        u[c] = this->values[c];
+    for (std::size_t c = 0; c < this->values_.size(); ++c)
+        u[c] = this->values_[c];
 }
 
 } // namespace godzilla

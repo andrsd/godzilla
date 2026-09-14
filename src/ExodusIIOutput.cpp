@@ -31,12 +31,12 @@ ExodusIIOutput::parameters()
 
 ExodusIIOutput::ExodusIIOutput(const Parameters & pars) :
     FileOutput(pars),
-    dpi(dynamic_ref_cast<DiscreteProblemInterface>(pars.get<Ref<Problem>>("_problem"))),
-    mesh(dpi->get_mesh()),
-    append(pars.get<bool>("append")),
-    variable_names(pars.get<std::vector<String>>("variables"), {}),
-    step_num(1),
-    mesh_stored(false)
+    dpi_(dynamic_ref_cast<DiscreteProblemInterface>(pars.get<Ref<Problem>>("_problem"))),
+    mesh_(dpi_->get_mesh()),
+    append_(pars.get<bool>("append")),
+    variable_names_(pars.get<std::vector<String>>("variables"), {}),
+    step_num_(1),
+    mesh_stored_(false)
 {
     CALL_STACK_MSG();
 }
@@ -44,8 +44,8 @@ ExodusIIOutput::ExodusIIOutput(const Parameters & pars) :
 ExodusIIOutput::~ExodusIIOutput()
 {
     CALL_STACK_MSG();
-    if (this->exo)
-        this->exo->close();
+    if (this->exo_)
+        this->exo_->close();
 }
 
 String
@@ -61,28 +61,28 @@ ExodusIIOutput::create()
     CALL_STACK_MSG();
     FileOutput::create();
 
-    auto flds = this->dpi->get_field_names();
-    auto aux_flds = this->dpi->get_aux_field_names();
+    auto flds = this->dpi_->get_field_names();
+    auto aux_flds = this->dpi_->get_aux_field_names();
     auto & pps = get_problem()->get_postprocessor_names();
 
-    if (this->variable_names.empty()) {
-        this->field_var_names = flds;
-        this->aux_field_var_names = aux_flds;
+    if (this->variable_names_.empty()) {
+        this->field_var_names_ = flds;
+        this->aux_field_var_names_ = aux_flds;
         for (auto & name : pps)
-            this->global_var_names.push_back(name);
+            this->global_var_names_.push_back(name);
     }
     else {
         std::set<String> field_names(flds.begin(), flds.end());
         std::set<String> aux_field_names(aux_flds.begin(), aux_flds.end());
         std::set<String> pp_names(pps.begin(), pps.end());
 
-        for (auto & name : this->variable_names) {
+        for (auto & name : this->variable_names_) {
             if (field_names.count(name) == 1)
-                this->field_var_names.push_back(name);
+                this->field_var_names_.push_back(name);
             else if (aux_field_names.count(name) == 1)
-                this->aux_field_var_names.push_back(name);
+                this->aux_field_var_names_.push_back(name);
             else if (pp_names.count(name) == 1)
-                this->global_var_names.push_back(name);
+                this->global_var_names_.push_back(name);
             else
                 error("Variable '{}' specified in 'variables' parameter does not exist. Typo?",
                       name);
@@ -91,29 +91,29 @@ ExodusIIOutput::create()
 
     int n_nodal_var_names = 1;
     int n_elem_var_names = 1;
-    for (auto & name : this->field_var_names) {
-        auto fid = this->dpi->get_field_id(name).value();
-        auto order = this->dpi->get_field_order(fid).value();
-        auto nc = this->dpi->get_field_num_components(fid).value();
+    for (auto & name : this->field_var_names_) {
+        auto fid = this->dpi_->get_field_id(name).value();
+        auto order = this->dpi_->get_field_order(fid).value();
+        auto nc = this->dpi_->get_field_num_components(fid).value();
         if (order == 0) {
-            this->elem_var_fids.push_back({ fid, n_elem_var_names });
+            this->elem_var_fids_.push_back({ fid, n_elem_var_names });
             n_elem_var_names += nc;
         }
         else {
-            this->nodal_var_fids.push_back({ fid, n_nodal_var_names });
+            this->nodal_var_fids_.push_back({ fid, n_nodal_var_names });
             n_nodal_var_names += nc;
         }
     }
-    for (auto & name : this->aux_field_var_names) {
-        auto fid = this->dpi->get_aux_field_id(name).value();
-        auto order = this->dpi->get_aux_field_order(fid).value();
-        auto nc = this->dpi->get_aux_field_num_components(fid).value();
+    for (auto & name : this->aux_field_var_names_) {
+        auto fid = this->dpi_->get_aux_field_id(name).value();
+        auto order = this->dpi_->get_aux_field_order(fid).value();
+        auto nc = this->dpi_->get_aux_field_num_components(fid).value();
         if (order == 0) {
-            this->elem_aux_var_fids.push_back({ fid, n_elem_var_names });
+            this->elem_aux_var_fids_.push_back({ fid, n_elem_var_names });
             n_elem_var_names += nc;
         }
         else {
-            this->nodal_aux_var_fids.push_back({ fid, n_nodal_var_names });
+            this->nodal_aux_var_fids_.push_back({ fid, n_nodal_var_names });
             n_nodal_var_names += nc;
         }
     }
@@ -123,13 +123,13 @@ void
 ExodusIIOutput::output_mesh()
 {
     CALL_STACK_MSG();
-    if (this->exo == nullptr)
+    if (this->exo_ == nullptr)
         open_file();
 
-    if (!this->mesh_stored) {
+    if (!this->mesh_stored_) {
         write_info();
         // TODO: should we you call `write_mesh` for DG problems?
-        io::write_mesh(*this->exo, *this->mesh);
+        io::write_mesh(*this->exo_, *this->mesh_);
     }
 }
 void
@@ -141,7 +141,7 @@ ExodusIIOutput::output_step()
         output_step(*dgpi.value());
     }
     else {
-        output_step(*this->dpi);
+        output_step(*this->dpi_);
     }
 }
 
@@ -149,64 +149,64 @@ void
 ExodusIIOutput::output_step(const DiscreteProblemInterface & iface)
 {
     CALL_STACK_MSG();
-    if (this->exo == nullptr)
+    if (this->exo_ == nullptr)
         open_file();
 
-    if (!this->mesh_stored) {
-        this->mesh_stored = true;
+    if (!this->mesh_stored_) {
+        this->mesh_stored_ = true;
         write_info();
-        io::write_mesh(*this->exo, *this->mesh);
+        io::write_mesh(*this->exo_, *this->mesh_);
         write_all_variable_names();
     }
 
     Real time = get_problem()->get_time();
-    this->exo->write_time(this->step_num, time);
+    this->exo_->write_time(this->step_num_, time);
 
-    for (auto [fid, exo_var_id] : this->nodal_var_fids) {
-        io::write_field_values(*this->exo, iface, this->step_num, time, fid, exo_var_id);
+    for (auto [fid, exo_var_id] : this->nodal_var_fids_) {
+        io::write_field_values(*this->exo_, iface, this->step_num_, time, fid, exo_var_id);
     }
-    for (auto [fid, exo_var_id] : this->nodal_aux_var_fids) {
-        io::write_aux_field_values(*this->exo, iface, this->step_num, time, fid, exo_var_id);
+    for (auto [fid, exo_var_id] : this->nodal_aux_var_fids_) {
+        io::write_aux_field_values(*this->exo_, iface, this->step_num_, time, fid, exo_var_id);
     }
 
     write_elem_variables();
     write_global_variables();
 
-    this->exo->update();
+    this->exo_->update();
 
-    ++this->step_num;
+    ++this->step_num_;
 }
 
 void
 ExodusIIOutput::output_step(const DGProblemInterface & dgpi)
 {
     CALL_STACK_MSG();
-    if (this->exo == nullptr)
+    if (this->exo_ == nullptr)
         open_file();
 
-    if (!this->mesh_stored) {
-        this->mesh_stored = true;
+    if (!this->mesh_stored_) {
+        this->mesh_stored_ = true;
         write_info();
-        io::write_mesh_discontinuous(*this->exo, *this->mesh);
+        io::write_mesh_discontinuous(*this->exo_, *this->mesh_);
         write_all_variable_names();
     }
 
     Real time = get_problem()->get_time();
-    this->exo->write_time(this->step_num, time);
+    this->exo_->write_time(this->step_num_, time);
 
-    for (auto [fid, exo_var_id] : this->nodal_var_fids) {
-        io::write_field_values(*this->exo, dgpi, this->step_num, time, fid, exo_var_id);
+    for (auto [fid, exo_var_id] : this->nodal_var_fids_) {
+        io::write_field_values(*this->exo_, dgpi, this->step_num_, time, fid, exo_var_id);
     }
-    for (auto [fid, exo_var_id] : this->nodal_aux_var_fids) {
-        io::write_aux_field_values(*this->exo, dgpi, this->step_num, time, fid, exo_var_id);
+    for (auto [fid, exo_var_id] : this->nodal_aux_var_fids_) {
+        io::write_aux_field_values(*this->exo_, dgpi, this->step_num_, time, fid, exo_var_id);
     }
 
     write_elem_variables();
     write_global_variables();
 
-    this->exo->update();
+    this->exo_->update();
 
-    ++this->step_num;
+    ++this->step_num_;
 }
 
 void
@@ -214,7 +214,7 @@ ExodusIIOutput::open_file()
 {
     CALL_STACK_MSG();
     // clang-format off
-    auto file_access = this->append ?
+    auto file_access = this->append_ ?
         exodusIIcpp::FileAccess::APPEND :
         exodusIIcpp::FileAccess::WRITE;
     // clang-format on
@@ -223,14 +223,14 @@ ExodusIIOutput::open_file()
     if (not fs::exists(file_name))
         file_access = exodusIIcpp::FileAccess::WRITE;
 
-    this->exo = Qtr<exodusIIcpp::File>::alloc(file_name, file_access);
-    if (!this->exo->is_opened())
+    this->exo_ = Qtr<exodusIIcpp::File>::alloc(file_name, file_access);
+    if (!this->exo_->is_opened())
         throw Exception(fmt::format("Could not open file '{}' for writing.", file_name));
 
     if (file_access == exodusIIcpp::FileAccess::APPEND) {
-        this->exo->read_times();
-        this->step_num = this->exo->get_num_times() + 1;
-        this->mesh_stored = true;
+        this->exo_->read_times();
+        this->step_num_ = this->exo_->get_num_times() + 1;
+        this->mesh_stored_ = true;
     }
 }
 
@@ -241,33 +241,33 @@ ExodusIIOutput::write_all_variable_names()
 
     std::vector<std::string> nodal_var_names;
     std::vector<std::string> elem_var_names;
-    for (auto & name : this->field_var_names) {
-        auto fid = this->dpi->get_field_id(name).value();
-        auto order = this->dpi->get_field_order(fid).value();
+    for (auto & name : this->field_var_names_) {
+        auto fid = this->dpi_->get_field_id(name).value();
+        auto order = this->dpi_->get_field_order(fid).value();
         if (order == 0) {
-            auto names = io::get_var_names(*this->dpi, fid);
+            auto names = io::get_var_names(*this->dpi_, fid);
             elem_var_names.insert(elem_var_names.end(), names.begin(), names.end());
         }
         else {
-            auto names = io::get_var_names(*this->dpi, fid);
+            auto names = io::get_var_names(*this->dpi_, fid);
             nodal_var_names.insert(nodal_var_names.end(), names.begin(), names.end());
         }
     }
-    for (auto & name : this->aux_field_var_names) {
-        auto fid = this->dpi->get_aux_field_id(name).value();
-        auto order = this->dpi->get_aux_field_order(fid).value();
+    for (auto & name : this->aux_field_var_names_) {
+        auto fid = this->dpi_->get_aux_field_id(name).value();
+        auto order = this->dpi_->get_aux_field_order(fid).value();
         if (order == 0) {
-            auto names = io::get_aux_var_names(*this->dpi, fid);
+            auto names = io::get_aux_var_names(*this->dpi_, fid);
             elem_var_names.insert(elem_var_names.end(), names.begin(), names.end());
         }
         else {
-            auto names = io::get_aux_var_names(*this->dpi, fid);
+            auto names = io::get_aux_var_names(*this->dpi_, fid);
             nodal_var_names.insert(nodal_var_names.end(), names.begin(), names.end());
         }
     }
-    this->exo->write_nodal_var_names(nodal_var_names);
-    this->exo->write_elem_var_names(elem_var_names);
-    this->exo->write_global_var_names(this->global_var_names);
+    this->exo_->write_nodal_var_names(nodal_var_names);
+    this->exo_->write_elem_var_names(elem_var_names);
+    this->exo_->write_global_var_names(this->global_var_names_);
 }
 
 void
@@ -276,20 +276,20 @@ ExodusIIOutput::write_elem_variables()
     CALL_STACK_MSG();
 
     Real time = get_problem()->get_time();
-    this->exo->write_time(this->step_num, time);
+    this->exo_->write_time(this->step_num_, time);
 
-    for (auto [fid, exo_var_id] : this->elem_var_fids) {
-        io::write_elemental_field_values(*this->exo,
-                                         *this->dpi,
-                                         this->step_num,
+    for (auto [fid, exo_var_id] : this->elem_var_fids_) {
+        io::write_elemental_field_values(*this->exo_,
+                                         *this->dpi_,
+                                         this->step_num_,
                                          time,
                                          fid,
                                          exo_var_id);
     }
-    for (auto [fid, exo_var_id] : this->elem_aux_var_fids) {
-        io::write_aux_elemental_field_values(*this->exo,
-                                             *this->dpi,
-                                             this->step_num,
+    for (auto [fid, exo_var_id] : this->elem_aux_var_fids_) {
+        io::write_aux_elemental_field_values(*this->exo_,
+                                             *this->dpi_,
+                                             this->step_num_,
                                              time,
                                              fid,
                                              exo_var_id);
@@ -302,11 +302,11 @@ ExodusIIOutput::write_global_variables()
     CALL_STACK_MSG();
 
     int exo_var_id = 1;
-    for (auto & name : this->global_var_names) {
+    for (auto & name : this->global_var_names_) {
         auto pp = get_problem()->get_postprocessor(name).value();
         auto vals = pp->get_value();
         // FIXME: store all components
-        this->exo->write_global_var(this->step_num, exo_var_id, vals[0]);
+        this->exo_->write_global_var(this->step_num_, exo_var_id, vals[0]);
         ++exo_var_id;
     }
 }
@@ -323,7 +323,7 @@ ExodusIIOutput::write_info()
 
     std::vector<std::string> info;
     info.push_back(created_by);
-    this->exo->write_info(info);
+    this->exo_->write_info(info);
 }
 
 } // namespace godzilla

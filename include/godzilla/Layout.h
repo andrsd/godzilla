@@ -72,17 +72,17 @@ public:
     is_null() const
     {
         CALL_STACK_MSG();
-        return this->obj == nullptr;
+        return this->obj_ == nullptr;
     }
 
     PetscLayout
     get() const
     {
-        return this->obj;
+        return this->obj_;
     }
 
 private:
-    PetscLayout obj;
+    PetscLayout obj_;
 
 public:
     /// Allocates Layout object and sets the layout sizes, and sets the layout up.

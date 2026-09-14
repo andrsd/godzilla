@@ -65,12 +65,12 @@ check_app_name(String name, std::source_location loc)
 Registry registry;
 
 CoreApp::CoreApp(mpi::Communicator comm, String name) :
-    PrintInterface(comm, cref(*this), this->verbosity_level, name),
-    name(check_app_name(name, std::source_location::current())),
-    mpi_comm(comm),
-    registry(godzilla::registry),
-    logger(Qtr<Logger>::alloc()),
-    verbosity_level(1),
+    PrintInterface(comm, cref(*this), this->verbosity_level_, name),
+    name_(check_app_name(name, std::source_location::current())),
+    mpi_comm_(comm),
+    registry_(godzilla::registry),
+    logger_(Qtr<Logger>::alloc()),
+    verbosity_level_(1),
     cout_buf_(nullptr),
     cerr_buf_(nullptr)
 {
@@ -78,12 +78,12 @@ CoreApp::CoreApp(mpi::Communicator comm, String name) :
 }
 
 CoreApp::CoreApp(mpi::Communicator comm, Registry & registry, String name) :
-    PrintInterface(comm, cref(*this), this->verbosity_level, name),
-    name(check_app_name(name, std::source_location::current())),
-    mpi_comm(comm),
-    registry(registry),
-    logger(Qtr<Logger>::alloc(name)),
-    verbosity_level(1),
+    PrintInterface(comm, cref(*this), this->verbosity_level_, name),
+    name_(check_app_name(name, std::source_location::current())),
+    mpi_comm_(comm),
+    registry_(registry),
+    logger_(Qtr<Logger>::alloc(name)),
+    verbosity_level_(1),
     cout_buf_(nullptr),
     cerr_buf_(nullptr)
 {
@@ -93,7 +93,7 @@ CoreApp::CoreApp(mpi::Communicator comm, Registry & registry, String name) :
 CoreApp::~CoreApp()
 {
     CALL_STACK_MSG();
-    unique_app_names.erase(this->name);
+    unique_app_names.erase(this->name_);
 
     if (this->cout_buf_ != nullptr) {
         std::cout.rdbuf(this->cout_buf_);
@@ -109,7 +109,7 @@ String
 CoreApp::get_name() const
 {
     CALL_STACK_MSG();
-    return this->name;
+    return this->name_;
 }
 
 String
@@ -124,57 +124,57 @@ Ref<Logger>
 CoreApp::get_logger()
 {
     CALL_STACK_MSG();
-    expect_true(this->logger != nullptr, "Logger is null");
-    return ref(*this->logger);
+    expect_true(this->logger_ != nullptr, "Logger is null");
+    return ref(*this->logger_);
 }
 
 const unsigned int &
 CoreApp::get_verbosity_level() const
 {
     CALL_STACK_MSG();
-    return this->verbosity_level;
+    return this->verbosity_level_;
 }
 
 void
 CoreApp::set_verbosity_level(unsigned int level)
 {
     CALL_STACK_MSG();
-    this->verbosity_level = level;
+    this->verbosity_level_ = level;
 }
 
 fs::path
 CoreApp::get_restart_file_name() const
 {
     CALL_STACK_MSG();
-    return this->restart_file_name;
+    return this->restart_file_name_;
 }
 
 void
 CoreApp::set_restart_file_name(fs::path file_name)
 {
     CALL_STACK_MSG();
-    this->restart_file_name = std::move(file_name);
+    this->restart_file_name_ = std::move(file_name);
 }
 
 void
 CoreApp::set_perf_log_file_name(fs::path file_name)
 {
     CALL_STACK_MSG();
-    this->perf_log_file_name = std::move(file_name);
+    this->perf_log_file_name_ = std::move(file_name);
 }
 
 mpi::Communicator
 CoreApp::get_comm() const
 {
     CALL_STACK_MSG();
-    return this->mpi_comm;
+    return this->mpi_comm_;
 }
 
 void
 CoreApp::export_parameters_yaml() const
 {
     CALL_STACK_MSG();
-    auto objs = this->registry.get_object_description();
+    auto objs = this->registry_.get_object_description();
     YAML::Emitter yaml;
     yaml << YAML::BeginMap;
     yaml << YAML::Key << "classes" << YAML::Value << YAML::BeginSeq;
@@ -188,14 +188,14 @@ CoreApp::export_parameters_yaml() const
 Registry &
 CoreApp::get_registry()
 {
-    return this->registry;
+    return this->registry_;
 }
 
 void
 CoreApp::write_perf_log(std::chrono::duration<double> run_time) const
 {
     CALL_STACK_MSG();
-    if (this->perf_log_file_name.empty())
+    if (this->perf_log_file_name_.empty())
         return;
 
     auto comm = get_comm();
@@ -293,13 +293,13 @@ CoreApp::write_perf_log(std::chrono::duration<double> run_time) const
         if (!yaml.good())
             throw Exception(fmt::format("YAML Emitter error: {}", yaml.GetLastError()));
 
-        std::ofstream fout(this->perf_log_file_name.c_str());
+        std::ofstream fout(this->perf_log_file_name_.c_str());
         fout << yaml.c_str();
         fout << std::endl;
         fout.close();
     }
 
-    lprintln(9, "Performance log written into: {}", this->perf_log_file_name);
+    lprintln(9, "Performance log written into: {}", this->perf_log_file_name_);
 }
 
 void

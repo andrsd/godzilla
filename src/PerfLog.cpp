@@ -139,35 +139,35 @@ get_event_info(EventID event_id, StageID stage_id)
 
 // Event
 
-Event::Event(const char * name) : id(id_from_name(name)) {}
+Event::Event(const char * name) : id_(id_from_name(name)) {}
 
-Event::Event(String name) : id(id_from_name(name.c_str())) {}
+Event::Event(String name) : id_(id_from_name(name.c_str())) {}
 
-Event::Event(EventID id) : id(id) {}
+Event::Event(EventID id) : id_(id) {}
 
 void
 Event::begin()
 {
-    PetscLogEventBegin(this->id, 0, 0, 0, 0);
+    PetscLogEventBegin(this->id_, 0, 0, 0, 0);
 }
 
 void
 Event::end()
 {
-    PetscLogEventEnd(this->id, 0, 0, 0, 0);
+    PetscLogEventEnd(this->id_, 0, 0, 0, 0);
 }
 
 EventID
 Event::get_id() const
 {
-    return this->id;
+    return this->id_;
 }
 
 String
 Event::name() const
 {
     const char * nm;
-    PETSC_CHECK(PetscLogEventGetName(id, &nm));
+    PETSC_CHECK(PetscLogEventGetName(id_, &nm));
     return String(nm);
 }
 
@@ -183,25 +183,25 @@ Event::id_from_name(const char * name)
 EventInfo
 Event::info() const
 {
-    EventInfo info(this->id, PETSC_DETERMINE);
+    EventInfo info(this->id_, PETSC_DETERMINE);
     return info;
 }
 
 // Stage
 
-Stage::Stage(const char * name) : id(get_stage_id(name))
+Stage::Stage(const char * name) : id_(get_stage_id(name))
 {
-    PetscLogStagePush(this->id);
+    PetscLogStagePush(this->id_);
 }
 
-Stage::Stage(String name) : id(get_stage_id(name))
+Stage::Stage(String name) : id_(get_stage_id(name))
 {
-    PetscLogStagePush(this->id);
+    PetscLogStagePush(this->id_);
 }
 
-Stage::Stage(EventID id) : id(id)
+Stage::Stage(EventID id) : id_(id)
 {
-    PetscLogStagePush(this->id);
+    PetscLogStagePush(this->id_);
 }
 
 Stage::~Stage()
@@ -212,56 +212,56 @@ Stage::~Stage()
 StageID
 Stage::get_id() const
 {
-    return this->id;
+    return this->id_;
 }
 
 // Event info
 
-EventInfo::EventInfo(EventID event_id, StageID stage_id) : info()
+EventInfo::EventInfo(EventID event_id, StageID stage_id) : info_()
 {
-    PetscLogEventGetPerfInfo(stage_id, event_id, &this->info);
+    PetscLogEventGetPerfInfo(stage_id, event_id, &this->info_);
 }
 
 bool
 EventInfo::visible() const
 {
-    return this->info.visible == PETSC_TRUE;
+    return this->info_.visible == PETSC_TRUE;
 }
 
 LogDouble
 EventInfo::flops() const
 {
-    return this->info.flops;
+    return this->info_.flops;
 }
 
 LogDouble
 EventInfo::time() const
 {
-    return this->info.time;
+    return this->info_.time;
 }
 
 int
 EventInfo::num_calls() const
 {
-    return this->info.count;
+    return this->info_.count;
 }
 
 LogDouble
 EventInfo::num_messages() const
 {
-    return this->info.numMessages;
+    return this->info_.numMessages;
 }
 
 LogDouble
 EventInfo::messages_length() const
 {
-    return this->info.messageLength;
+    return this->info_.messageLength;
 }
 
 LogDouble
 EventInfo::num_reductions() const
 {
-    return this->info.numReductions;
+    return this->info_.numReductions;
 }
 
 // ScopedEvent

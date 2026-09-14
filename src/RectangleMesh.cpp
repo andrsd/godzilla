@@ -25,84 +25,84 @@ RectangleMesh::parameters()
 
 RectangleMesh::RectangleMesh(const Parameters & pars) :
     Object(pars),
-    xmin(pars.get<Real>("xmin")),
-    xmax(pars.get<Real>("xmax")),
-    ymin(pars.get<Real>("ymin")),
-    ymax(pars.get<Real>("ymax")),
-    nx(pars.get<Int>("nx")),
-    ny(pars.get<Int>("ny")),
-    simplex(pars.get<bool>("simplex")),
-    interpolate(true)
+    xmin_(pars.get<Real>("xmin")),
+    xmax_(pars.get<Real>("xmax")),
+    ymin_(pars.get<Real>("ymin")),
+    ymax_(pars.get<Real>("ymax")),
+    nx_(pars.get<Int>("nx")),
+    ny_(pars.get<Int>("ny")),
+    simplex_(pars.get<bool>("simplex")),
+    interpolate_(true)
 {
     CALL_STACK_MSG();
-    expect_true(this->xmax > this->xmin, "Parameter 'xmax' must be larger than 'xmin'.");
-    expect_true(this->ymax > this->ymin, "Parameter 'ymax' must be larger than 'ymin'.");
+    expect_true(this->xmax_ > this->xmin_, "Parameter 'xmax' must be larger than 'xmin'.");
+    expect_true(this->ymax_ > this->ymin_, "Parameter 'ymax' must be larger than 'ymin'.");
 }
 
 Real
 RectangleMesh::get_x_min() const
 {
     CALL_STACK_MSG();
-    return this->xmin;
+    return this->xmin_;
 }
 
 Real
 RectangleMesh::get_x_max() const
 {
     CALL_STACK_MSG();
-    return this->xmax;
+    return this->xmax_;
 }
 
 Int
 RectangleMesh::get_nx() const
 {
     CALL_STACK_MSG();
-    return this->nx;
+    return this->nx_;
 }
 
 Real
 RectangleMesh::get_y_min() const
 {
     CALL_STACK_MSG();
-    return this->ymin;
+    return this->ymin_;
 }
 
 Real
 RectangleMesh::get_y_max() const
 {
     CALL_STACK_MSG();
-    return this->ymax;
+    return this->ymax_;
 }
 
 Int
 RectangleMesh::get_ny() const
 {
     CALL_STACK_MSG();
-    return this->ny;
+    return this->ny_;
 }
 
 Qtr<UnstructuredMesh>
 RectangleMesh::create_mesh()
 {
     CALL_STACK_MSG();
-    std::array<Real, 2> lower = { this->xmin, this->ymin };
-    std::array<Real, 2> upper = { this->xmax, this->ymax };
-    std::array<Int, 2> faces = { this->nx, this->ny };
+    std::array<Real, 2> lower = { this->xmin_, this->ymin_ };
+    std::array<Real, 2> upper = { this->xmax_, this->ymax_ };
+    std::array<Int, 2> faces = { this->nx_, this->ny_ };
     std::array<DMBoundaryType, 2> periodicity = {
-        this->simplex ? DM_BOUNDARY_NONE : DM_BOUNDARY_GHOSTED,
-        this->simplex ? DM_BOUNDARY_NONE : DM_BOUNDARY_GHOSTED
+        this->simplex_ ? DM_BOUNDARY_NONE : DM_BOUNDARY_GHOSTED,
+        this->simplex_ ? DM_BOUNDARY_NONE : DM_BOUNDARY_GHOSTED
     };
 
     DM dm;
 #if PETSC_VERSION_GE(3, 22, 0)
     PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
                                     2,
-                                    this->simplex ? PETSC_TRUE : PETSC_FALSE,
+                                    this->simplex_ ? PETSC_TRUE : PETSC_FALSE,
                                     faces.data(),
                                     lower.data(),
                                     upper.data(),
                                     periodicity.data(),
-                                    this->interpolate ? PETSC_TRUE : PETSC_FALSE,
+                                    this->interpolate_ ? PETSC_TRUE : PETSC_FALSE,
                                     0,
                                     PETSC_FALSE,
                                     &dm));

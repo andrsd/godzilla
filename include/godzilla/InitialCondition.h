@@ -52,13 +52,13 @@ private:
     virtual std::vector<Int> create_components();
 
     /// Discrete problem this object is part of
-    Ref<DiscreteProblemInterface> dpi;
+    Ref<DiscreteProblemInterface> dpi_;
     /// Field name this initial condition is attached to
-    Optional<String> field_name;
+    Optional<String> field_name_;
     /// Field ID this initial condition is attached to
-    FieldID fid;
+    FieldID fid_;
     /// Components
-    std::vector<Int> components;
+    std::vector<Int> components_;
 
 public:
     static Parameters parameters();

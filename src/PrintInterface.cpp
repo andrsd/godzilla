@@ -29,22 +29,22 @@ PrintInterface::TimedEvent::TimedEvent(Ref<const PrintInterface> pi,
                                        unsigned int level,
                                        String event_name,
                                        String text) :
-    pi(pi),
-    level(level),
-    event(create_event(pi, pi->pi_app->get_name(), event_name)),
-    text(text)
+    pi_(pi),
+    level_(level),
+    event_(create_event(pi, pi->pi_app_->get_name(), event_name)),
+    text_(text)
 {
-    this->event.begin();
-    this->start_time = this->event.info().time();
-    if (level <= this->pi->verbosity_level && this->pi->proc_id == 0) {
+    this->event_.begin();
+    this->start_time_ = this->event_.info().time();
+    if (level <= this->pi_->verbosity_level_ && this->pi_->proc_id_ == 0) {
         fmt::print("{}...", text);
 
-        this->running = true;
-        this->thread = std::thread([this] {
+        this->running_ = true;
+        this->thread_ = std::thread([this] {
             const String frames[] = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" };
             std::size_t i = 0;
-            while (this->running) {
-                fmt::print("\r{}{} {}...", Terminal::erase_line, frames[i++ % 10], this->text);
+            while (this->running_) {
+                fmt::print("\r{}{} {}...", Terminal::erase_line, frames[i++ % 10], this->text_);
                 std::this_thread::sleep_for(std::chrono::milliseconds(150));
             }
         });
@@ -53,34 +53,34 @@ PrintInterface::TimedEvent::TimedEvent(Ref<const PrintInterface> pi,
 
 PrintInterface::TimedEvent::~TimedEvent()
 {
-    this->event.end();
+    this->event_.end();
 
-    this->running = false;
-    if (this->thread.joinable())
-        this->thread.join();
+    this->running_ = false;
+    if (this->thread_.joinable())
+        this->thread_.join();
 
-    if (level <= this->pi->verbosity_level && this->pi->proc_id == 0) {
-        auto event_id = this->event.get_id();
+    if (level_ <= this->pi_->verbosity_level_ && this->pi_->proc_id_ == 0) {
+        auto event_id = this->event_.get_id();
         auto info = perf_log::get_event_info(event_id);
         fmt::print("\r{}{}... took {}\n",
                    Terminal::erase_line,
-                   this->text,
-                   utils::human_time(info.time() - this->start_time));
+                   this->text_,
+                   utils::human_time(info.time() - this->start_time_));
     }
 }
 
 PrintInterface::PrintInterface(const Object * obj) :
-    pi_app(obj->get_app()),
-    proc_id(obj->get_processor_id()),
-    verbosity_level(obj->get_app()->get_verbosity_level())
+    pi_app_(obj->get_app()),
+    proc_id_(obj->get_processor_id()),
+    verbosity_level_(obj->get_app()->get_verbosity_level())
 {
     CALL_STACK_MSG();
 }
 
 PrintInterface::PrintInterface(Ref<const CoreApp> app) :
-    pi_app(app),
-    proc_id(app->get_comm().rank()),
-    verbosity_level(app->get_verbosity_level())
+    pi_app_(app),
+    proc_id_(app->get_comm().rank()),
+    verbosity_level_(app->get_verbosity_level())
 {
     CALL_STACK_MSG();
 }
@@ -89,9 +89,9 @@ PrintInterface::PrintInterface(mpi::Communicator comm,
                                Ref<const CoreApp> app,
                                const unsigned int & verbosity_level,
                                String /* prefix */) :
-    pi_app(app),
-    proc_id(comm.rank()),
-    verbosity_level(verbosity_level)
+    pi_app_(app),
+    proc_id_(comm.rank()),
+    verbosity_level_(verbosity_level)
 {
     CALL_STACK_MSG();
 }

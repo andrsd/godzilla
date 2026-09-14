@@ -18,7 +18,7 @@ PCShell::invoke_apply_delegate(PC pc, Vec in_vec, Vec out_vec)
     in.inc_reference();
     Vector out(out_vec);
     out.inc_reference();
-    pcs->apply_method.invoke(in, out);
+    pcs->apply_method_.invoke(in, out);
     return 0;
 }
 
@@ -34,7 +34,7 @@ PCShell::invoke_apply_ba_delegate(PC pc, PCSide side, Vec in_vec, Vec out_vec, V
     out.inc_reference();
     Vector x(x_vec);
     x.inc_reference();
-    pcs->apply_ba_method.invoke(side, in, out, x);
+    pcs->apply_ba_method_.invoke(side, in, out, x);
     return 0;
 }
 
@@ -48,7 +48,7 @@ PCShell::invoke_apply_transpose_delegate(PC pc, Vec in_vec, Vec out_vec)
     in.inc_reference();
     Vector out(out_vec);
     out.inc_reference();
-    pcs->apply_transpose_method.invoke(in, out);
+    pcs->apply_transpose_method_.invoke(in, out);
     return 0;
 }
 
@@ -58,7 +58,7 @@ PCShell::invoke_set_up_delegate(PC pc)
     CALL_STACK_MSG();
     PCShell * pcs;
     PETSC_CHECK(PCShellGetContext(pc, &pcs));
-    pcs->set_up_method.invoke();
+    pcs->set_up_method_.invoke();
     return 0;
 }
 
@@ -68,7 +68,7 @@ PCShell::invoke_destroy_delegate(PC pc)
     CALL_STACK_MSG();
     PCShell * pcs;
     PETSC_CHECK(PCShellGetContext(pc, &pcs));
-    pcs->destroy_method.invoke();
+    pcs->destroy_method_.invoke();
     return 0;
 }
 
@@ -86,14 +86,14 @@ PCShell::PCShell(PC pc) : Preconditioner(pc)
 
 PCShell::PCShell(const PCShell & other) :
     Preconditioner(other),
-    apply_method(other.apply_method),
-    apply_ba_method(other.apply_ba_method),
-    apply_transpose_method(other.apply_transpose_method),
-    set_up_method(other.set_up_method),
-    destroy_method(other.destroy_method)
+    apply_method_(other.apply_method_),
+    apply_ba_method_(other.apply_ba_method_),
+    apply_transpose_method_(other.apply_transpose_method_),
+    set_up_method_(other.set_up_method_),
+    destroy_method_(other.destroy_method_)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCShellSetContext(this->obj, this));
+    PETSC_CHECK(PCShellSetContext(this->obj_, this));
 }
 
 PCShell &
@@ -101,12 +101,12 @@ PCShell::operator=(const PCShell & other)
 {
     CALL_STACK_MSG();
     Preconditioner::operator=(other);
-    this->apply_method = other.apply_method;
-    this->apply_ba_method = other.apply_ba_method;
-    this->apply_transpose_method = other.apply_transpose_method;
-    this->set_up_method = other.set_up_method;
-    this->destroy_method = other.destroy_method;
-    PETSC_CHECK(PCShellSetContext(this->obj, this));
+    this->apply_method_ = other.apply_method_;
+    this->apply_ba_method_ = other.apply_ba_method_;
+    this->apply_transpose_method_ = other.apply_transpose_method_;
+    this->set_up_method_ = other.set_up_method_;
+    this->destroy_method_ = other.destroy_method_;
+    PETSC_CHECK(PCShellSetContext(this->obj_, this));
     return *this;
 }
 
@@ -115,7 +115,7 @@ PCShell::get_name() const
 {
     CALL_STACK_MSG();
     const char * name;
-    PETSC_CHECK(PCShellGetName(this->obj, &name));
+    PETSC_CHECK(PCShellGetName(this->obj_, &name));
     return String(name);
 }
 
@@ -123,7 +123,7 @@ void
 PCShell::set_name(String name)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCShellSetName(this->obj, name.c_str()));
+    PETSC_CHECK(PCShellSetName(this->obj_, name.c_str()));
 }
 
 } // namespace godzilla

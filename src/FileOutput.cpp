@@ -21,10 +21,10 @@ FileOutput::parameters()
 
 FileOutput::FileOutput(const Parameters & pars) :
     Output(pars),
-    file_base(pars.get<fs::path>("file"))
+    file_base_(pars.get<fs::path>("file"))
 {
     CALL_STACK_MSG();
-    expect_true(!this->file_base.empty(), "The 'file' parameter cannot be empty");
+    expect_true(!this->file_base_.empty(), "The 'file' parameter cannot be empty");
 }
 
 void
@@ -32,14 +32,14 @@ FileOutput::create()
 {
     CALL_STACK_MSG();
     Output::create();
-    this->file_name = create_file_name();
+    this->file_name_ = create_file_name();
 }
 
 fs::path
 FileOutput::get_file_name() const
 {
     CALL_STACK_MSG();
-    return this->file_name;
+    return this->file_name_;
 }
 
 fs::path
@@ -47,31 +47,31 @@ FileOutput::create_file_name() const
 {
     CALL_STACK_MSG();
     if (get_comm().size() == 1)
-        return fmt::format("{}.{}", this->file_base, this->get_file_ext());
+        return fmt::format("{}.{}", this->file_base_, this->get_file_ext());
     else
-        return fmt::format("{}.{}.{}", this->file_base, get_processor_id(), this->get_file_ext());
+        return fmt::format("{}.{}.{}", this->file_base_, get_processor_id(), this->get_file_ext());
 }
 
 void
 FileOutput::set_file_base(fs::path file_base)
 {
     CALL_STACK_MSG();
-    this->file_base = file_base;
+    this->file_base_ = file_base;
 }
 
 fs::path
 FileOutput::get_file_base() const
 {
     CALL_STACK_MSG();
-    return this->file_base;
+    return this->file_base_;
 }
 
 void
 FileOutput::set_sequence_file_base(unsigned int stepi)
 {
     CALL_STACK_MSG();
-    this->file_base = fmt::format("{}.{}", this->file_base, stepi);
-    this->file_name = create_file_name();
+    this->file_base_ = fmt::format("{}.{}", this->file_base_, stepi);
+    this->file_name_ = create_file_name();
 }
 
 } // namespace godzilla

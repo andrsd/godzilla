@@ -374,58 +374,58 @@ private:
     virtual void set_up_ds() = 0;
 
     /// Problem this interface is part of
-    Ref<Problem> problem;
+    Ref<Problem> problem_;
 
     /// Unstructured mesh
-    Ref<UnstructuredMesh> unstr_mesh;
+    Ref<UnstructuredMesh> unstr_mesh_;
 
     /// Object that manages a discrete system
-    PetscDS ds;
+    PetscDS ds_;
 
     /// All initial condition objects
-    std::vector<Qtr<InitialCondition>> all_ics;
+    std::vector<Qtr<InitialCondition>> all_ics_;
 
     /// Initial conditions for primary fields
-    std::vector<Ref<InitialCondition>> ics;
+    std::vector<Ref<InitialCondition>> ics_;
 
     /// Initial conditions for auxiliary fields
-    std::vector<Ref<InitialCondition>> ics_aux;
+    std::vector<Ref<InitialCondition>> ics_aux_;
 
     /// Map from aux object name to the aux object
-    std::map<String, Ref<InitialCondition>> ics_by_name;
+    std::map<String, Ref<InitialCondition>> ics_by_name_;
 
     /// List of all boundary conditions
-    std::vector<Qtr<BoundaryCondition>> bcs;
+    std::vector<Qtr<BoundaryCondition>> bcs_;
 
     /// List of essential boundary conditions
-    std::vector<Ref<EssentialBC>> essential_bcs;
+    std::vector<Ref<EssentialBC>> essential_bcs_;
 
     /// List of natural boundary conditions
-    std::vector<Ref<NaturalBC>> natural_bcs;
+    std::vector<Ref<NaturalBC>> natural_bcs_;
 
     /// List of auxiliary field objects
-    std::vector<Qtr<AuxiliaryField>> auxs;
+    std::vector<Qtr<AuxiliaryField>> auxs_;
 
     /// Map from aux object name to the aux object
-    std::map<String, Ref<AuxiliaryField>> auxs_by_name;
+    std::map<String, Ref<AuxiliaryField>> auxs_by_name_;
 
     /// Map from region to list of auxiliary field objects
-    std::map<String, std::vector<Ref<AuxiliaryField>>> auxs_by_region;
+    std::map<String, std::vector<Ref<AuxiliaryField>>> auxs_by_region_;
 
     /// Local solution vector
-    Vector sln;
+    Vector sln_;
 
     /// DM for auxiliary fields
-    DM dm_aux;
+    DM dm_aux_;
 
     /// Auxiliary section
-    Section section_aux;
+    Section section_aux_;
 
     /// Object that manages a discrete system for aux variables
-    PetscDS ds_aux;
+    PetscDS ds_aux_;
 
     /// Vector for auxiliary fields
-    Vector a;
+    Vector a_;
 };
 
 template <Int N>
@@ -435,8 +435,8 @@ DiscreteProblemInterface::set_closure(const Vector & v,
                                       const DenseVector<Real, N> & vec,
                                       InsertMode mode) const
 {
-    auto dm = this->unstr_mesh->get_dm();
-    auto local_section = this->problem->get_local_section();
+    auto dm = this->unstr_mesh_->get_dm();
+    auto local_section = this->problem_->get_local_section();
     PETSC_CHECK(DMPlexVecSetClosure(dm, local_section, v, point, vec.data(), mode));
 }
 
@@ -447,9 +447,9 @@ DiscreteProblemInterface::set_closure(const Matrix & A,
                                       const DenseMatrix<Real, N> & mat,
                                       InsertMode mode) const
 {
-    auto dm = this->unstr_mesh->get_dm();
-    auto global_section = this->problem->get_global_section();
-    auto local_section = this->problem->get_local_section();
+    auto dm = this->unstr_mesh_->get_dm();
+    auto global_section = this->problem_->get_global_section();
+    auto local_section = this->problem_->get_local_section();
     PETSC_CHECK(DMPlexMatSetClosure(dm, local_section, global_section, A, point, mat.data(), mode));
 }
 
@@ -460,9 +460,9 @@ DiscreteProblemInterface::set_closure(const Matrix & A,
                                       const DenseMatrixSymm<Real, N> & mat,
                                       InsertMode mode) const
 {
-    auto dm = this->unstr_mesh->get_dm();
-    auto global_section = this->problem->get_global_section();
-    auto local_section = this->problem->get_local_section();
+    auto dm = this->unstr_mesh_->get_dm();
+    auto global_section = this->problem_->get_global_section();
+    auto local_section = this->problem_->get_local_section();
     DenseMatrix<Real, N> m = mat;
     PETSC_CHECK(DMPlexMatSetClosure(dm, local_section, global_section, A, point, m.data(), mode));
 }
@@ -471,11 +471,11 @@ template <Int N>
 DenseVector<Real, N>
 DiscreteProblemInterface::get_closure(const Vector & v, Int point) const
 {
-    auto dm = this->unstr_mesh->get_dm();
+    auto dm = this->unstr_mesh_->get_dm();
     Int sz = N;
     DenseVector<Real, N> vec;
     Real * data = vec.data();
-    auto local_section = this->problem->get_local_section();
+    auto local_section = this->problem_->get_local_section();
     PETSC_CHECK(DMPlexVecGetClosure(dm, local_section, v, point, &sz, &data));
     return vec;
 }
@@ -487,7 +487,7 @@ DiscreteProblemInterface::get_aux_closure(const Vector & v, Int point) const
     Int sz = N;
     DenseVector<Real, N> vec;
     Real * data = vec.data();
-    PETSC_CHECK(DMPlexVecGetClosure(this->dm_aux, this->section_aux, v, point, &sz, &data));
+    PETSC_CHECK(DMPlexVecGetClosure(this->dm_aux_, this->section_aux_, v, point, &sz, &data));
     return vec;
 }
 
@@ -498,14 +498,14 @@ DiscreteProblemInterface::set_aux_closure(const Vector & v,
                                           const DenseVector<Real, N> & vec,
                                           InsertMode mode) const
 {
-    PETSC_CHECK(DMPlexVecSetClosure(this->dm_aux, this->section_aux, v, point, vec.data(), mode));
+    PETSC_CHECK(DMPlexVecSetClosure(this->dm_aux_, this->section_aux_, v, point, vec.data(), mode));
 }
 
 template <typename T>
 T
 DiscreteProblemInterface::get_point_local_field_ref(Int point, FieldID field, Scalar * array) const
 {
-    auto dm = this->unstr_mesh->get_dm();
+    auto dm = this->unstr_mesh_->get_dm();
     T var;
     PETSC_CHECK(DMPlexPointLocalFieldRef(dm, point, field, array, &var));
     return var;
@@ -520,10 +520,10 @@ DiscreteProblemInterface::add_boundary_condition(Parameters & pars, std::source_
     auto obj = Qtr<T>::alloc(pars);
     auto ptr = obj.get();
     if (auto essbc = dynamic_cast<EssentialBC *>(ptr))
-        this->essential_bcs.push_back(Ref<EssentialBC>(*essbc));
+        this->essential_bcs_.push_back(Ref<EssentialBC>(*essbc));
     else if (auto natbc = dynamic_cast<NaturalBC *>(ptr))
-        this->natural_bcs.push_back(Ref<NaturalBC>(*natbc));
-    this->bcs.push_back(std::move(obj));
+        this->natural_bcs_.push_back(Ref<NaturalBC>(*natbc));
+    this->bcs_.push_back(std::move(obj));
     return Ref<T> { *ptr };
 }
 
@@ -535,13 +535,13 @@ DiscreteProblemInterface::add_initial_condition(Parameters & pars, std::source_l
     pars.set<Ref<DiscreteProblemInterface>>("_dpi", ref(*this));
     auto obj = Qtr<T>::alloc(pars);
     auto name = obj->get_name();
-    auto it = this->ics_by_name.find(name);
-    expect_true(it == this->ics_by_name.end(),
+    auto it = this->ics_by_name_.find(name);
+    expect_true(it == this->ics_by_name_.end(),
                 fmt::format("Cannot add initial condition object '{}'. Name already taken.", name),
                 loc);
     auto ic = obj.get();
-    this->ics_by_name.emplace(name, Ref<InitialCondition>(*ic));
-    this->all_ics.push_back(std::move(obj));
+    this->ics_by_name_.emplace(name, Ref<InitialCondition>(*ic));
+    this->all_ics_.push_back(std::move(obj));
     return Ref<T> { *ic };
 }
 
@@ -553,13 +553,13 @@ DiscreteProblemInterface::add_auxiliary_field(Parameters & pars, std::source_loc
     pars.set<Ref<DiscreteProblemInterface>>("_dpi", ref(*this));
     auto obj = Qtr<T>::alloc(pars);
     auto name = obj->get_name();
-    auto it = this->auxs_by_name.find(name);
-    expect_true(it == this->auxs_by_name.end(),
+    auto it = this->auxs_by_name_.find(name);
+    expect_true(it == this->auxs_by_name_.end(),
                 fmt::format("Cannot add auxiliary object '{}'. Name already taken.", name),
                 loc);
     auto aux = obj.get();
-    this->auxs_by_name.emplace(name, Ref<AuxiliaryField>(*aux));
-    this->auxs.push_back(std::move(obj));
+    this->auxs_by_name_.emplace(name, Ref<AuxiliaryField>(*aux));
+    this->auxs_.push_back(std::move(obj));
     return Ref<T> { *aux };
 }
 

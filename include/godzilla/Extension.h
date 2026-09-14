@@ -24,7 +24,7 @@ public:
 
 private:
     /// Extension name
-    const String name;
+    const String name_;
 };
 
 } // namespace godzilla
