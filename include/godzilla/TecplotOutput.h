@@ -39,32 +39,32 @@ private:
     String get_file_ext() const override;
 
 #ifdef GODZILLA_WITH_TECIOCPP
-    Ref<DiscreteProblemInterface> dpi;
+    Ref<DiscreteProblemInterface> dpi_;
     /// Unstructured mesh
-    Ref<UnstructuredMesh> mesh;
+    Ref<UnstructuredMesh> mesh_;
     /// File to write into
-    Qtr<teciocpp::File> file;
+    Qtr<teciocpp::File> file_;
     /// Variable value locations
-    std::vector<teciocpp::ValueLocation> value_locations;
+    std::vector<teciocpp::ValueLocation> value_locations_;
     /// Shared variables
-    std::vector<bool> shared_vars;
+    std::vector<bool> shared_vars_;
     /// Number of zones
-    Int n_zones;
+    Int n_zones_;
 #endif
     /// Variable names to be stored
-    const std::vector<String> variable_names;
+    const std::vector<String> variable_names_;
     /// List of field variable names to output
-    std::vector<String> field_var_names;
+    std::vector<String> field_var_names_;
     /// List of nodal variable field IDs
-    std::vector<FieldID> nodal_var_fids;
+    std::vector<FieldID> nodal_var_fids_;
     /// List of variable indices
-    std::vector<int32_t> nodal_var_idxs;
+    std::vector<int32_t> nodal_var_idxs_;
     /// List of auxiliary field variable names to output
-    std::vector<String> aux_field_var_names;
+    std::vector<String> aux_field_var_names_;
     /// List of nodal auxiliary variable field IDs
-    std::vector<FieldID> nodal_aux_var_fids;
+    std::vector<FieldID> nodal_aux_var_fids_;
     /// List of auxiliary variable indices
-    std::vector<int32_t> nodal_aux_var_idxs;
+    std::vector<int32_t> nodal_aux_var_idxs_;
 
 public:
     static Parameters parameters();
