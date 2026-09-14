@@ -70,7 +70,7 @@ public:
     add(String class_name)
     {
         Entry entry = { &build_obj<T>, &call_parameters<T> };
-        this->classes[class_name] = entry;
+        this->classes_[class_name] = entry;
     }
 
     /// Check if class is registered
@@ -93,7 +93,7 @@ public:
 
 private:
     /// All registered classes that we can build
-    std::map<String, Entry> classes;
+    std::map<String, Entry> classes_;
 };
 
 } // namespace godzilla
