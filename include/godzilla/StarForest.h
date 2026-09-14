@@ -79,8 +79,8 @@ public:
     Graph get_graph() const;
 
     /// Set a parallel star forest
-    void set_graph(Int n_roots, Span<Int> ilocal, Span<Node> iremote) const;
-    void set_graph(Int n_roots, Span<Node> iremote) const;
+    void set_graph(Int n_roots, Span<Int> ilocal, Span<Node> iremote, CopyMode copy_mode) const;
+    void set_graph(Int n_roots, Span<Node> iremote, CopyMode copy_mode) const;
 
     /// Begin pointwise broadcast with root value being reduced to leaf value, to be concluded with
     /// call to `broadcast_end`

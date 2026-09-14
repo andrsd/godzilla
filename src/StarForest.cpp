@@ -123,7 +123,7 @@ StarForest::get_graph() const
 }
 
 void
-StarForest::set_graph(Int n_roots, Span<Int> ilocal, Span<Node> iremote) const
+StarForest::set_graph(Int n_roots, Span<Int> ilocal, Span<Node> iremote, CopyMode copy_mode) const
 {
     CALL_STACK_MSG();
     expect_true(ilocal.size() == iremote.size(),
@@ -135,13 +135,13 @@ StarForest::set_graph(Int n_roots, Span<Int> ilocal, Span<Node> iremote) const
                                 n_roots,
                                 n_leaves,
                                 ilocal.data(),
-                                PETSC_COPY_VALUES,
+                                static_cast<PetscCopyMode>(copy_mode),
                                 iremote.data(),
-                                PETSC_COPY_VALUES));
+                                static_cast<PetscCopyMode>(copy_mode)));
 }
 
 void
-StarForest::set_graph(Int n_roots, Span<Node> iremote) const
+StarForest::set_graph(Int n_roots, Span<Node> iremote, CopyMode copy_mode) const
 {
     CALL_STACK_MSG();
     PETSC_CHECK(PetscSFSetGraph(this->obj,
@@ -150,7 +150,7 @@ StarForest::set_graph(Int n_roots, Span<Node> iremote) const
                                 NULL,
                                 PETSC_USE_POINTER,
                                 iremote.data(),
-                                PETSC_COPY_VALUES));
+                                static_cast<PetscCopyMode>(copy_mode)));
 }
 
 StarForest
