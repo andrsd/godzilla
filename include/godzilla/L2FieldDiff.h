@@ -25,20 +25,20 @@ protected:
     void
     set_function(FieldID fid, Ref<T> instance, void (T::*method)(Real time, const Real[], Scalar[]))
     {
-        this->delegates[fid.value()].bind(instance, method);
+        this->delegates_[fid.value()].bind(instance, method);
     }
 
 private:
     virtual void set_up_callbacks() = 0;
 
     /// FE problem
-    Optional<Ref<const FEProblemInterface>> fepi;
+    Optional<Ref<const FEProblemInterface>> fepi_;
     /// Number of fields
-    Int n_fields;
+    Int n_fields_;
     /// Computed L_2 errors
-    std::vector<Real> l2_diff;
+    std::vector<Real> l2_diff_;
     /// Delegates: [field id] -> function
-    std::map<Int, FunctionDelegate> delegates;
+    std::map<Int, FunctionDelegate> delegates_;
 
 public:
     static Parameters parameters();

@@ -18,20 +18,20 @@ L2FieldDiff::parameters()
 
 L2FieldDiff::L2FieldDiff(const Parameters & pars) :
     Postprocessor(pars),
-    fepi(try_dynamic_ref_cast<const FEProblemInterface>(get_problem())),
-    n_fields(0)
+    fepi_(try_dynamic_ref_cast<const FEProblemInterface>(get_problem())),
+    n_fields_(0)
 {
     CALL_STACK_MSG();
-    expect_true(this->fepi.has_value(), "FEProblemInterface is null");
+    expect_true(this->fepi_.has_value(), "FEProblemInterface is null");
 }
 
 void
 L2FieldDiff::create()
 {
     CALL_STACK_MSG();
-    auto fpi = this->fepi.value();
-    this->n_fields = fpi->get_num_fields();
-    this->l2_diff.resize(this->n_fields, 0.);
+    auto fpi = this->fepi_.value();
+    this->n_fields_ = fpi->get_num_fields();
+    this->l2_diff_.resize(this->n_fields_, 0.);
     set_up_callbacks();
 }
 
@@ -42,9 +42,9 @@ L2FieldDiff::compute()
     GODZILLA_ASSERT_TRUE(this->n_fields > 0, "No fields to evaluate");
     GODZILLA_ASSERT_TRUE(this->delegates.size() > 0, "No evaluation function(s) set");
 
-    std::vector<PetscFunc *> funcs(this->n_fields, nullptr);
-    std::vector<void *> contexts(this->n_fields, nullptr);
-    for (auto & [fid, d] : this->delegates) {
+    std::vector<PetscFunc *> funcs(this->n_fields_, nullptr);
+    std::vector<void *> contexts(this->n_fields_, nullptr);
+    for (auto & [fid, d] : this->delegates_) {
         if (d) {
             GODZILLA_ASSERT_TRUE(
                 fid >= 0 && fid < this->n_fields,
@@ -59,14 +59,14 @@ L2FieldDiff::compute()
                                      funcs.data(),
                                      contexts.data(),
                                      problem->get_solution_vector(),
-                                     this->l2_diff.data()));
+                                     this->l2_diff_.data()));
 }
 
 std::vector<Real>
 L2FieldDiff::get_value()
 {
     CALL_STACK_MSG();
-    return this->l2_diff;
+    return this->l2_diff_;
 }
 
 } // namespace godzilla
