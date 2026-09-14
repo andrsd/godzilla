@@ -161,6 +161,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem15local_to_globalERK6Vector10InsertModeR6Vector"><code class="docutils literal notranslate"><span class="pre">Problem::local_to_global()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem15global_to_localERK6Vector10InsertModeR6Vector"><code class="docutils literal notranslate"><span class="pre">Problem::global_to_local()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla7Problem25set_matrix_structure_onlyEb"><code class="docutils literal notranslate"><span class="pre">Problem::set_matrix_structure_only()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla7Problem10on_initialEv"><code class="docutils literal notranslate"><span class="pre">Problem::on_initial()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla7Problem8on_finalEv"><code class="docutils literal notranslate"><span class="pre">Problem::on_final()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla7Problem18FieldDecompositionE"><code class="docutils literal notranslate"><span class="pre">Problem::FieldDecomposition</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv4N8godzilla7Problem18FieldDecomposition10field_nameE"><code class="docutils literal notranslate"><span class="pre">Problem::FieldDecomposition::field_name</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv4N8godzilla7Problem18FieldDecomposition2isE"><code class="docutils literal notranslate"><span class="pre">Problem::FieldDecomposition::is</span></code></a></li>
@@ -688,6 +690,18 @@
 <dd class="field-odd"><p><strong>only</strong> – <code class="docutils literal notranslate"><span class="pre">true</span></code> if you only want matrix structure </p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla7Problem10on_initialEv">
+<span id="_CPPv3N8godzilla7Problem10on_initialEv"></span><span id="_CPPv2N8godzilla7Problem10on_initialEv"></span><span id="godzilla::Problem::on_initial"></span><span class="target" id="classgodzilla_1_1_problem_1ac2ec35082533bd215bc7ca8c093009e4"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">on_initial</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla7Problem10on_initialEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Called before solving starts. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla7Problem8on_finalEv">
+<span id="_CPPv3N8godzilla7Problem8on_finalEv"></span><span id="_CPPv2N8godzilla7Problem8on_finalEv"></span><span id="godzilla::Problem::on_final"></span><span class="target" id="classgodzilla_1_1_problem_1abc2c8bab2086c621322095d99f188889"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">on_final</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla7Problem8on_finalEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Called after solve has successfully finished. </p>
 </dd></dl>
 
 </div>
