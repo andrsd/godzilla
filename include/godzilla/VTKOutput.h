@@ -30,7 +30,7 @@ private:
     String get_file_ext() const override;
 
     /// Viewer for the output
-    PetscViewer viewer;
+    PetscViewer viewer_;
 
 public:
     static Parameters parameters();
