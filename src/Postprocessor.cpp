@@ -20,15 +20,15 @@ Postprocessor::parameters()
 Postprocessor::Postprocessor(const Parameters & pars) :
     Object(pars),
     PrintInterface(this),
-    problem(pars.get<Ref<Problem>>("_problem")),
-    on_mask(pars.get<ExecuteOnFlags>("on")),
-    last_execute_time(std::nan(""))
+    problem_(pars.get<Ref<Problem>>("_problem")),
+    on_mask_(pars.get<ExecuteOnFlags>("on")),
+    last_execute_time_(std::nan(""))
 {
     CALL_STACK_MSG();
     expect_true(get_name().length() > 0, "Postprocessor must set the 'name' parameter");
 
-    if (this->on_mask.has_flags()) {
-        if (none_with_flags(this->on_mask))
+    if (this->on_mask_.has_flags()) {
+        if (none_with_flags(this->on_mask_))
             error("The 'none' execution flag can be used only by itself.");
     }
     else
@@ -40,25 +40,25 @@ ExecuteOnFlags
 Postprocessor::execute_on() const
 {
     CALL_STACK_MSG();
-    return this->on_mask;
+    return this->on_mask_;
 }
 
 Ref<Problem>
 Postprocessor::get_problem() const
 {
     CALL_STACK_MSG();
-    return this->problem;
+    return this->problem_;
 }
 
 bool
 Postprocessor::should_execute(ExecuteOn flag)
 {
     CALL_STACK_MSG();
-    if (this->on_mask & flag) {
+    if (this->on_mask_ & flag) {
         constexpr Real TIME_TOL = 1e-12;
-        if ((std::isnan(this->last_execute_time) ||
-             math::abs(this->last_execute_time - this->problem->get_time()) > TIME_TOL)) {
-            this->last_execute_time = this->problem->get_time();
+        if ((std::isnan(this->last_execute_time_) ||
+             math::abs(this->last_execute_time_ - this->problem_->get_time()) > TIME_TOL)) {
+            this->last_execute_time_ = this->problem_->get_time();
             return true;
         }
         else
