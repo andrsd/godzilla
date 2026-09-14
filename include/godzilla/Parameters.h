@@ -107,8 +107,8 @@ public:
     has(String name) const
     {
         CALL_STACK_MSG();
-        auto it = this->params.find(name);
-        if (it == this->params.end())
+        auto it = this->params_.find(name);
+        if (it == this->params_.end())
             return false;
         if (dynamic_cast<const Parameter<T> *>(it->second.get()) == nullptr)
             return false;
@@ -121,8 +121,8 @@ public:
     get(String name, std::source_location loc = std::source_location::current()) const
     {
         using V = typename T::value_type;
-        auto it = this->params.find(name);
-        expect_true(it != this->params.end(),
+        auto it = this->params_.find(name);
+        expect_true(it != this->params_.end(),
                     fmt::format("Parameter '{}' not found.{}", name, suggestion(name)),
                     loc);
 
@@ -144,8 +144,8 @@ public:
     {
         using U = typename R::element_type;
 
-        auto it = this->params.find(name);
-        expect_true(it != this->params.end(),
+        auto it = this->params_.find(name);
+        expect_true(it != this->params_.end(),
                     fmt::format("Parameter '{}' not found.{}", name, suggestion(name)),
                     loc);
 
@@ -163,8 +163,8 @@ public:
     inline T
     get(String name, std::source_location loc = std::source_location::current()) const
     {
-        auto it = this->params.find(name);
-        expect_true(it != this->params.end(),
+        auto it = this->params_.find(name);
+        expect_true(it != this->params_.end(),
                     fmt::format("Parameter '{}' not found.{}", name, suggestion(name)),
                     loc);
 
@@ -183,8 +183,8 @@ public:
         T default_value,
         std::source_location loc = std::source_location::current()) const
     {
-        auto it = this->params.find(name);
-        expect_true(it != this->params.end(),
+        auto it = this->params_.find(name);
+        expect_true(it != this->params_.end(),
                     fmt::format("Parameter '{}' not found.{}", name, suggestion(name)),
                     loc);
 
@@ -205,8 +205,8 @@ public:
     inline Parameters &
     set(String name, T value, std::source_location loc = std::source_location::current())
     {
-        auto it = this->params.find(name);
-        expect_true(it != this->params.end(),
+        auto it = this->params_.find(name);
+        expect_true(it != this->params_.end(),
                     fmt::format("Parameter '{}' not found.{}", name, suggestion(name)),
                     loc);
 
@@ -226,8 +226,8 @@ public:
     inline Parameters &
     set(String name, R value, std::source_location loc = std::source_location::current())
     {
-        auto it = this->params.find(name);
-        expect_true(it != this->params.end(),
+        auto it = this->params_.find(name);
+        expect_true(it != this->params_.end(),
                     fmt::format("Parameter '{}' not found.{}", name, suggestion(name)),
                     loc);
 
@@ -253,7 +253,7 @@ public:
                        String doc_string,
                        std::source_location loc = std::source_location::current())
     {
-        expect_true(this->params.find(name) == this->params.end(),
+        expect_true(this->params_.find(name) == this->params_.end(),
                     fmt::format("Parameter '{}' already exists", name),
                     loc);
         auto param = Qtr<Parameter<T>>::alloc();
@@ -261,7 +261,7 @@ public:
         param->is_private = false;
         param->doc_string = doc_string;
         param->valid = false;
-        this->params[name] = std::move(param);
+        this->params_[name] = std::move(param);
         return *this;
     }
 
@@ -277,7 +277,7 @@ public:
               String doc_string,
               std::source_location loc = std::source_location::current())
     {
-        expect_true(this->params.find(name) == this->params.end(),
+        expect_true(this->params_.find(name) == this->params_.end(),
                     fmt::format("Parameter '{}' already exists", name),
                     loc);
         auto param = Qtr<Parameter<T>>::alloc();
@@ -286,7 +286,7 @@ public:
         param->is_private = false;
         param->doc_string = doc_string;
         param->valid = true;
-        this->params[name] = std::move(param);
+        this->params_[name] = std::move(param);
         return *this;
     }
 
@@ -296,7 +296,7 @@ public:
               String doc_string,
               std::source_location loc = std::source_location::current())
     {
-        expect_true(this->params.find(name) == this->params.end(),
+        expect_true(this->params_.find(name) == this->params_.end(),
                     fmt::format("Parameter '{}' already exists", name),
                     loc);
         auto param = Qtr<Parameter<T>>::alloc();
@@ -304,7 +304,7 @@ public:
         param->is_private = false;
         param->doc_string = doc_string;
         param->valid = false;
-        this->params[name] = std::move(param);
+        this->params_[name] = std::move(param);
         return *this;
     }
     ///@}
@@ -320,7 +320,7 @@ public:
                       const T & value,
                       std::source_location loc = std::source_location::current())
     {
-        expect_true(this->params.find(name) == this->params.end(),
+        expect_true(this->params_.find(name) == this->params_.end(),
                     fmt::format("Parameter '{}' already exists", name),
                     loc);
         auto param = Qtr<Parameter<T>>::alloc();
@@ -328,7 +328,7 @@ public:
         param->required = false;
         param->is_private = true;
         param->valid = true;
-        this->params[name] = std::move(param);
+        this->params_[name] = std::move(param);
         return *this;
     }
 
@@ -336,7 +336,7 @@ public:
     Parameters &
     add_private_param(String name, std::source_location loc = std::source_location::current())
     {
-        expect_true(this->params.find(name) == this->params.end(),
+        expect_true(this->params_.find(name) == this->params_.end(),
                     fmt::format("Parameter '{}' already exists", name),
                     loc);
         auto param = Qtr<Parameter<T>>::alloc();
@@ -344,7 +344,7 @@ public:
         param->required = true;
         param->is_private = true;
         param->valid = false;
-        this->params[name] = std::move(param);
+        this->params_[name] = std::move(param);
         return *this;
     }
 
@@ -353,8 +353,8 @@ public:
     inline void
     make_param_required(String name, std::source_location loc = std::source_location::current())
     {
-        auto it = this->params.find(name);
-        expect_true(it != this->params.end(),
+        auto it = this->params_.find(name);
+        expect_true(it != this->params_.end(),
                     fmt::format("Parameter '{}' not found.{}", name, suggestion(name)),
                     loc);
         auto par = it->second.get();
@@ -408,7 +408,7 @@ private:
 
     /// The actual parameter data. Each Metadata object contains attributes for the corresponding
     /// parameter.
-    std::map<String, Qtr<Value>> params;
+    std::map<String, Qtr<Value>> params_;
 };
 
 template <typename T>

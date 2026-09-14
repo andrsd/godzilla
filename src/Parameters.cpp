@@ -15,14 +15,14 @@ Parameters::~Parameters()
 Parameters::Parameters(const Parameters & other)
 {
     CALL_STACK_MSG();
-    for (const auto & [key, val] : other.params)
-        params[key] = Qtr<Value>(val->copy());
+    for (const auto & [key, val] : other.params_)
+        params_[key] = Qtr<Value>(val->copy());
 }
 
-Parameters::Parameters(Parameters && other) noexcept : params(std::move(other.params))
+Parameters::Parameters(Parameters && other) noexcept : params_(std::move(other.params_))
 {
     CALL_STACK_MSG();
-    other.params.clear();
+    other.params_.clear();
 }
 
 Parameters &
@@ -31,8 +31,8 @@ Parameters::operator=(const Parameters & other)
     CALL_STACK_MSG();
     if (this != &other) {
         clear();
-        for (const auto & [key, val] : other.params)
-            params[key] = Qtr<Value>(val->copy());
+        for (const auto & [key, val] : other.params_)
+            params_[key] = Qtr<Value>(val->copy());
     }
     return *this;
 }
@@ -43,8 +43,8 @@ Parameters::operator=(Parameters && other) noexcept
     CALL_STACK_MSG();
     if (this != &other) {
         clear();
-        params = std::move(other.params);
-        other.params.clear();
+        params_ = std::move(other.params_);
+        other.params_.clear();
     }
     return *this;
 }
@@ -54,7 +54,7 @@ Parameters::operator+=(const Parameters & rhs)
 {
     CALL_STACK_MSG();
     for (const auto & [name, value] : rhs)
-        this->params[name] = Qtr<Value>(value->copy());
+        this->params_[name] = Qtr<Value>(value->copy());
     return *this;
 }
 
@@ -62,29 +62,29 @@ bool
 Parameters::is_param_required(String name) const
 {
     CALL_STACK_MSG();
-    return this->params.count(name) > 0 && this->params.at(name)->required;
+    return this->params_.count(name) > 0 && this->params_.at(name)->required;
 }
 
 bool
 Parameters::is_param_valid(String name) const
 {
     CALL_STACK_MSG();
-    return this->params.count(name) > 0 && this->params.at(name)->valid;
+    return this->params_.count(name) > 0 && this->params_.at(name)->valid;
 }
 
 bool
 Parameters::is_param_private(String name) const
 {
     CALL_STACK_MSG();
-    return this->params.count(name) > 0 && this->params.at(name)->is_private;
+    return this->params_.count(name) > 0 && this->params_.at(name)->is_private;
 }
 
 String
 Parameters::get_doc_string(String name) const
 {
     CALL_STACK_MSG();
-    auto it = this->params.find(name);
-    if (it != this->params.end())
+    auto it = this->params_.find(name);
+    if (it != this->params_.end())
         return it->second->doc_string;
     else
         return {};
@@ -94,8 +94,8 @@ Expected<std::source_location, ErrorCode>
 Parameters::get_source_location(String name) const
 {
     CALL_STACK_MSG();
-    auto it = this->params.find(name);
-    if (it != this->params.end()) {
+    auto it = this->params_.find(name);
+    if (it != this->params_.end()) {
         if (it->second->src_loc.has_value())
             return it->second->src_loc.value();
         else
@@ -109,35 +109,35 @@ Parameters::iterator
 Parameters::begin()
 {
     CALL_STACK_MSG();
-    return this->params.begin();
+    return this->params_.begin();
 }
 
 Parameters::const_iterator
 Parameters::begin() const
 {
     CALL_STACK_MSG();
-    return this->params.begin();
+    return this->params_.begin();
 }
 
 Parameters::iterator
 Parameters ::end()
 {
     CALL_STACK_MSG();
-    return this->params.end();
+    return this->params_.end();
 }
 
 Parameters::const_iterator
 Parameters::end() const
 {
     CALL_STACK_MSG();
-    return this->params.end();
+    return this->params_.end();
 }
 
 void
 Parameters::clear()
 {
     CALL_STACK_MSG();
-    this->params.clear();
+    this->params_.clear();
 }
 
 std::string
@@ -146,7 +146,7 @@ Parameters::suggestion(String name) const
     auto best_dist = std::numeric_limits<uint32_t>::max();
     Optional<String> best;
 
-    for (const auto & [key, _] : this->params) {
+    for (const auto & [key, _] : this->params_) {
         auto d = levenshtein_distance(name, key);
         // small bonus if we are matching a prefix of 2 letters
         if ((name.length() >= 2) && key.starts_with(name.substr(0, 2)))
