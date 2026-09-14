@@ -44,13 +44,13 @@ public:
         }
 
     private:
-        Ref<const PrintInterface> pi;
-        unsigned int level;
-        perf_log::Event event;
-        PetscLogDouble start_time;
-        String text;
-        std::atomic<bool> running;
-        std::thread thread;
+        Ref<const PrintInterface> pi_;
+        unsigned int level_;
+        perf_log::Event event_;
+        PetscLogDouble start_time_;
+        String text_;
+        std::atomic<bool> running_;
+        std::thread thread_;
     };
 
 public:
@@ -71,7 +71,7 @@ public:
     void
     lprint(unsigned int level, fmt::format_string<T...> format, T... args) const
     {
-        if (level <= this->verbosity_level && this->proc_id == 0)
+        if (level <= this->verbosity_level_ && this->proc_id_ == 0)
             print_msg(stdout, format, std::forward<T>(args)...);
     }
 
@@ -85,7 +85,7 @@ public:
     void
     lprintln(unsigned int level, fmt::format_string<T...> format, T... args) const
     {
-        if (level <= this->verbosity_level && this->proc_id == 0) {
+        if (level <= this->verbosity_level_ && this->proc_id_ == 0) {
             print_msg(stdout, format, std::forward<T>(args)...);
             fmt::print(stdout, "\n");
         }
@@ -105,7 +105,7 @@ public:
              fmt::format_string<T...> format,
              T... args) const
     {
-        if (level <= this->verbosity_level && this->proc_id == 0) {
+        if (level <= this->verbosity_level_ && this->proc_id_ == 0) {
             fmt::print(stdout, "{}", clr);
             print_msg(stdout, format, std::forward<T>(args)...);
             fmt::print(stdout, "{}", Terminal::normal);
@@ -122,11 +122,11 @@ private:
     }
 
     /// Application
-    Ref<const CoreApp> pi_app;
+    Ref<const CoreApp> pi_app_;
     /// Processor ID
-    int proc_id;
+    int proc_id_;
     /// Verbosity level
-    const unsigned int & verbosity_level;
+    const unsigned int & verbosity_level_;
 };
 
 #define TIMED_EVENT(level, event_name, ...) \
