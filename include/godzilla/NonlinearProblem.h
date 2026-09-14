@@ -106,7 +106,7 @@ protected:
     void
     set_function(Ref<T> instance, void (T::*method)(const Vector &, Vector &))
     {
-        this->snes.set_function(this->r, instance, method);
+        this->snes_.set_function(this->r_, instance, method);
     }
 
     /// Set Jacobian evaluation function
@@ -118,7 +118,7 @@ protected:
     void
     set_jacobian(Ref<T> instance, void (T::*method)(const Vector &, Matrix &, Matrix &))
     {
-        this->snes.set_jacobian(this->J, this->J, instance, method);
+        this->snes_.set_jacobian(this->J_, this->J_, instance, method);
     }
 
     ExecuteOnFlags
@@ -150,31 +150,31 @@ private:
     virtual void set_up_matrix_properties();
 
     /// Nonlinear solver
-    SNESolver snes;
+    SNESolver snes_;
     /// Linear solver
-    KrylovSolver ksp;
+    KrylovSolver ksp_;
     /// Residual vector
-    Vector r;
+    Vector r_;
     /// Jacobian matrix
-    Matrix J;
+    Matrix J_;
     /// Preconditioner
-    Preconditioner pcond;
+    Preconditioner pcond_;
     /// The type of line search to be used
-    String line_search_type;
+    String line_search_type_;
     /// Relative convergence tolerance for the non-linear solver
-    Real nl_rel_tol;
+    Real nl_rel_tol_;
     /// Absolute convergence tolerance for the non-linear solver
-    Real nl_abs_tol;
+    Real nl_abs_tol_;
     /// Convergence tolerance in terms of the norm of the change in the solution between steps
-    Real nl_step_tol;
+    Real nl_step_tol_;
     /// Maximum number of iterations for the non-linear solver
-    Int nl_max_iter;
+    Int nl_max_iter_;
     /// Relative convergence tolerance for the linear solver
-    Real lin_rel_tol;
+    Real lin_rel_tol_;
     /// Absolute convergence tolerance for the linear solver
-    Real lin_abs_tol;
+    Real lin_abs_tol_;
     /// Maximum number of iterations for the linear solver
-    Int lin_max_iter;
+    Int lin_max_iter_;
 
 public:
     static Parameters parameters();
