@@ -14,18 +14,18 @@ WeakForm::WeakForm() {}
 WeakForm::~WeakForm()
 {
     CALL_STACK_MSG();
-    for (auto & m : this->res_forms)
+    for (auto & m : this->res_forms_)
         for (auto & [k, forms] : m)
             for (auto & f : forms)
                 delete f;
-    for (auto & f : this->empty_res_forms)
+    for (auto & f : this->empty_res_forms_)
         delete f;
 
-    for (auto & m : this->jac_forms)
+    for (auto & m : this->jac_forms_)
         for (auto & [k, forms] : m)
             for (auto & f : forms)
                 delete f;
-    for (auto & f : this->empty_jac_forms)
+    for (auto & f : this->empty_jac_forms_)
         delete f;
 }
 
@@ -36,7 +36,7 @@ WeakForm::get_residual_regions() const
     std::set<Region> unique;
     std::array<ResidualKind, 2> res_kind = { F0, F1 };
     for (const auto & r : res_kind) {
-        const auto & forms = this->res_forms[r];
+        const auto & forms = this->res_forms_[r];
         for (const auto & [key, _] : forms) {
             Region region(key.label, key.value, key.part);
             unique.emplace(region);
@@ -55,7 +55,7 @@ WeakForm::get_jacobian_regions() const
     std::set<Region> unique;
     std::array<JacobianKind, 8> jacmap = { G0, G1, G2, G3, GP0, GP1, GP2, GP3 };
     for (const auto & r : jacmap) {
-        const auto & forms = this->jac_forms[r];
+        const auto & forms = this->jac_forms_[r];
         for (const auto & [key, _] : forms) {
             Region region(key.label, key.value, key.part);
             unique.emplace(region);
@@ -72,11 +72,11 @@ WeakForm::get(ResidualKind kind, const Label & label, Int val, FieldID f, Int pa
 {
     CALL_STACK_MSG();
     Key key(label, val, f.value(), part);
-    const auto & it = this->res_forms[kind].find(key);
-    if (it != this->res_forms[kind].end())
+    const auto & it = this->res_forms_[kind].find(key);
+    if (it != this->res_forms_[kind].end())
         return it->second;
     else
-        return this->empty_res_forms;
+        return this->empty_res_forms_;
 }
 
 const std::vector<JacobianFunc *> &
@@ -84,11 +84,11 @@ WeakForm::get(JacobianKind kind, const Label & label, Int val, FieldID f, FieldI
 {
     CALL_STACK_MSG();
     Key key(label, val, f.value(), g.value(), part);
-    const auto & it = this->jac_forms[kind].find(key);
-    if (it != this->jac_forms[kind].end())
+    const auto & it = this->jac_forms_[kind].find(key);
+    if (it != this->jac_forms_[kind].end())
         return it->second;
     else
-        return this->empty_jac_forms;
+        return this->empty_jac_forms_;
 }
 
 void
@@ -102,7 +102,7 @@ WeakForm::add(ResidualKind kind,
     CALL_STACK_MSG();
     if (func != nullptr) {
         Key key(label, value, f.value(), part);
-        this->res_forms[kind][key].push_back(func);
+        this->res_forms_[kind][key].push_back(func);
     }
 }
 
@@ -118,7 +118,7 @@ WeakForm::add(JacobianKind kind,
     CALL_STACK_MSG();
     if (func != nullptr) {
         Key key(label, val, f.value(), g.value(), part);
-        this->jac_forms[kind][key].push_back(func);
+        this->jac_forms_[kind][key].push_back(func);
     }
 }
 
@@ -126,10 +126,10 @@ bool
 WeakForm::has_jacobian() const
 {
     CALL_STACK_MSG();
-    auto n0 = this->jac_forms[WeakForm::G0].size();
-    auto n1 = this->jac_forms[WeakForm::G1].size();
-    auto n2 = this->jac_forms[WeakForm::G2].size();
-    auto n3 = this->jac_forms[WeakForm::G3].size();
+    auto n0 = this->jac_forms_[WeakForm::G0].size();
+    auto n1 = this->jac_forms_[WeakForm::G1].size();
+    auto n2 = this->jac_forms_[WeakForm::G2].size();
+    auto n3 = this->jac_forms_[WeakForm::G3].size();
     return (n0 + n1 + n2 + n3) > 0;
 }
 
@@ -137,10 +137,10 @@ bool
 WeakForm::has_jacobian_preconditioner() const
 {
     CALL_STACK_MSG();
-    auto n0 = this->jac_forms[WeakForm::GP0].size();
-    auto n1 = this->jac_forms[WeakForm::GP1].size();
-    auto n2 = this->jac_forms[WeakForm::GP2].size();
-    auto n3 = this->jac_forms[WeakForm::GP3].size();
+    auto n0 = this->jac_forms_[WeakForm::GP0].size();
+    auto n1 = this->jac_forms_[WeakForm::GP1].size();
+    auto n2 = this->jac_forms_[WeakForm::GP2].size();
+    auto n3 = this->jac_forms_[WeakForm::GP3].size();
     return (n0 + n1 + n2 + n3) > 0;
 }
 
