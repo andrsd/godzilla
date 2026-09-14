@@ -23,16 +23,16 @@ FileMesh::parameters()
 FileMesh::FileMesh(const Parameters & pars) :
     Object(pars),
     file_format(UNKNOWN),
-    file_name(pars.get<fs::path>("file"))
+    file_name_(pars.get<fs::path>("file"))
 
 {
     CALL_STACK_MSG();
 
     expect_true(
-        fs::exists(this->file_name),
+        fs::exists(this->file_name_),
         fmt::format(
             "Unable to open '{}' for reading. Make sure it exists and you have read permissions.",
-            this->file_name));
+            this->file_name_));
     detect_file_format();
 }
 
@@ -40,7 +40,7 @@ fs::path
 FileMesh::get_file_name() const
 {
     CALL_STACK_MSG();
-    return this->file_name;
+    return this->file_name_;
 }
 
 FileMesh::FileFormat
@@ -86,9 +86,9 @@ void
 FileMesh::detect_file_format()
 {
     CALL_STACK_MSG();
-    if (this->file_name.extension() == ".exo" || this->file_name.extension() == ".e")
+    if (this->file_name_.extension() == ".exo" || this->file_name_.extension() == ".e")
         this->file_format = EXODUSII;
-    else if (this->file_name.extension() == ".msh")
+    else if (this->file_name_.extension() == ".msh")
         this->file_format = GMSH;
 }
 
