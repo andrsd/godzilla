@@ -12,22 +12,22 @@ namespace fs = std::filesystem;
 namespace godzilla {
 
 RestartFile::RestartFile(mpi::Communicator comm, fs::path file_name, FileAccess faccess) :
-    h5f(comm, file_name, faccess)
+    h5f_(comm, file_name, faccess)
 {
 }
 
-RestartFile::RestartFile(fs::path file_name, FileAccess faccess) : h5f(file_name, faccess) {}
+RestartFile::RestartFile(fs::path file_name, FileAccess faccess) : h5f_(file_name, faccess) {}
 
 fs::path
 RestartFile::file_name() const
 {
-    return this->h5f.get_file_name();
+    return this->h5f_.get_file_name();
 }
 
 fs::path
 RestartFile::file_path() const
 {
-    return this->h5f.get_file_path();
+    return this->h5f_.get_file_path();
 }
 
 String
@@ -54,7 +54,7 @@ RestartFile::write<Vector>(String path, String name, const Vector & data)
 {
     auto norm_path = normalize_path(path);
     try {
-        auto group = this->h5f.create_group(norm_path);
+        auto group = this->h5f_.create_group(norm_path);
         auto vals = data.borrow_array_read();
         auto len = data.get_local_size();
         group.write_dataset(name, len, vals.data());
@@ -78,7 +78,7 @@ RestartFile::write_global_vector(String path, String name, const Vector & data)
 {
     auto norm_path = normalize_path(path);
     try {
-        auto group = this->h5f.create_group(norm_path);
+        auto group = this->h5f_.create_group(norm_path);
         group.write_global_vector(name, data);
     }
     catch (std::exception & e) {
@@ -95,7 +95,7 @@ RestartFile::read<Vector>(String path, String name, Vector & data) const
 {
     auto norm_path = normalize_path(path);
     try {
-        auto group = this->h5f.open_group(norm_path);
+        auto group = this->h5f_.open_group(norm_path);
         auto vals = data.borrow_array();
         auto len = data.get_local_size();
         group.read_dataset(name, len, vals.data());
@@ -113,7 +113,7 @@ RestartFile::read_global_vector(String path, String name, Vector & data) const
 {
     auto norm_path = normalize_path(path);
     try {
-        auto group = this->h5f.open_group(norm_path);
+        auto group = this->h5f_.open_group(norm_path);
         group.read_global_vector(name, data);
     }
     catch (std::exception & e) {
