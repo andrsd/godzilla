@@ -41,9 +41,9 @@ private:
     virtual std::vector<Int> create_components();
 
     /// Field ID this boundary condition is attached to
-    FieldID fid;
+    FieldID fid_;
     ///
-    std::vector<Int> components;
+    std::vector<Int> components_;
 
 public:
     static Parameters parameters();

@@ -32,7 +32,7 @@ NaturalRiemannBC::parameters()
 
 NaturalRiemannBC::NaturalRiemannBC(const Parameters & pars) :
     BoundaryCondition(pars),
-    fid(FieldID::INVALID)
+    fid_(FieldID::INVALID)
 {
     CALL_STACK_MSG();
 }
@@ -45,23 +45,23 @@ NaturalRiemannBC::create()
 
     auto field_names = dpi->get_field_names();
     if (field_names.size() == 1)
-        this->fid = dpi->get_field_id(field_names[0]).value();
+        this->fid_ = dpi->get_field_id(field_names[0]).value();
 
-    this->components = create_components();
+    this->components_ = create_components();
 }
 
 FieldID
 NaturalRiemannBC::get_field_id() const
 {
     CALL_STACK_MSG();
-    return this->fid;
+    return this->fid_;
 }
 
 Span<const Int>
 NaturalRiemannBC::get_components() const
 {
     CALL_STACK_MSG();
-    return this->components;
+    return this->components_;
 }
 
 std::vector<Int>
@@ -69,8 +69,8 @@ NaturalRiemannBC::create_components()
 {
     CALL_STACK_MSG();
     auto dpi = get_discrete_problem_interface();
-    auto n_comps = dpi->get_field_num_components(this->fid);
-    expect_true(n_comps.has_value(), fmt::format("Field {} not found", this->fid));
+    auto n_comps = dpi->get_field_num_components(this->fid_);
+    expect_true(n_comps.has_value(), fmt::format("Field {} not found", this->fid_));
     std::vector<Int> comps(n_comps.value());
     std::iota(comps.begin(), comps.end(), 0);
     return comps;
@@ -89,8 +89,8 @@ NaturalRiemannBC::set_up()
                           get_name(),
                           label,
                           ids,
-                          this->fid,
-                          this->components,
+                          this->fid_,
+                          this->components_,
                           reinterpret_cast<void (*)()>(invoke_delegate),
                           nullptr,
                           this);
