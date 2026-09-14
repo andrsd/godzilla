@@ -105,22 +105,23 @@ ExplicitFELinearProblem::solve()
     TransientProblemInterface::solve(get_solution_vector());
 }
 
-void
-ExplicitFELinearProblem::run()
-{
-    CALL_STACK_MSG();
-    pre_solve();
-    solve();
-    post_solve();
-    if (converged())
-        on_final();
-}
-
 bool
 ExplicitFELinearProblem::converged()
 {
     CALL_STACK_MSG();
     return TransientProblemInterface::get_converged_reason() > 0;
+}
+
+void
+ExplicitFELinearProblem::run()
+{
+    CALL_STACK_MSG();
+    set_initial_guess();
+    on_initial();
+
+    solve();
+    if (converged())
+        on_final();
 }
 
 void

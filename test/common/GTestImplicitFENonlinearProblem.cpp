@@ -93,12 +93,6 @@ GTestImplicitFENonlinearProblem::GTestImplicitFENonlinearProblem(const Parameter
 }
 
 void
-GTestImplicitFENonlinearProblem::set_up_initial_guess()
-{
-    ImplicitFENonlinearProblem::set_up_initial_guess();
-}
-
-void
 GTestImplicitFENonlinearProblem::set_up_fields()
 {
     CALL_STACK_MSG();

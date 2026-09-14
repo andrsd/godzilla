@@ -20,7 +20,12 @@ public:
     explicit NonlinearProblem(const Parameters & pars);
 
     void create() override;
+
+    /// Set initial guess
+    void set_initial_guess();
+
     void run() override;
+
     void write_restart_file(RestartFile & file) const override;
     void read_restart_file(const RestartFile & file) override;
 
@@ -51,14 +56,8 @@ public:
     /// @param mf use matrix-free for both the A and P matrices
     void set_use_matrix_free(bool mf_operator, bool mf);
 
-    /// Called before the solve
-    virtual void pre_solve();
-
     /// Solve the problem
     void solve();
-
-    /// Called after the solve
-    virtual void post_solve();
 
 protected:
     /// Set residual vector
@@ -69,9 +68,6 @@ protected:
 
     /// Initialize the problem
     virtual void init();
-
-    /// Set up initial guess
-    virtual void set_up_initial_guess();
 
     /// Allocate Jacobian/residual objects
     void allocate_objects() override;

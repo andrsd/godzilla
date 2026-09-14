@@ -286,18 +286,18 @@ public:
     /// @param only `true` if you only want matrix structure
     void set_matrix_structure_only(bool only);
 
+    /// Called before solving starts
+    void on_initial();
+
+    /// Called after solve has successfully finished
+    void on_final();
+
 protected:
     /// Set vector/matrix types
     virtual void set_up_types();
 
     /// Allocate objects
     virtual void allocate_objects();
-
-    /// Called before solving starts
-    virtual void on_initial();
-
-    /// Called after solve has successfully finished
-    virtual void on_final();
 
     /// Set solution vector
     void set_solution_vector(const Vector & x);

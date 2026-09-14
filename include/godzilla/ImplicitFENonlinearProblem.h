@@ -15,11 +15,12 @@ public:
 
     void create() override;
     void solve();
-    void run() override;
     bool converged();
     Real get_time() const override;
     Int get_step_num() const override;
     void compute_solution_vector_local() override;
+
+    void run() override;
 
 protected:
     void init() override;

@@ -66,12 +66,6 @@ GTestFENonlinearProblem::GTestFENonlinearProblem(const Parameters & pars) :
 {
 }
 
-void
-GTestFENonlinearProblem::set_up_initial_guess()
-{
-    FENonlinearProblem::set_up_initial_guess();
-}
-
 PetscDS
 GTestFENonlinearProblem::get_ds()
 {

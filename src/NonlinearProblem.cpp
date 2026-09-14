@@ -170,7 +170,7 @@ NonlinearProblem::set_use_matrix_free(bool mf_operator, bool mf)
 }
 
 void
-NonlinearProblem::set_up_initial_guess()
+NonlinearProblem::set_initial_guess()
 {
     CALL_STACK_MSG();
     TIMED_EVENT(9, "InitialGuess", "Setting initial guess");
@@ -330,9 +330,10 @@ void
 NonlinearProblem::run()
 {
     CALL_STACK_MSG();
-    pre_solve();
+    set_initial_guess();
+    on_initial();
+
     solve();
-    post_solve();
     if (converged())
         on_final();
 }
@@ -348,20 +349,6 @@ NonlinearProblem::create_preconditioner(PC pc)
 {
     CALL_STACK_MSG();
     return Preconditioner(pc);
-}
-
-void
-NonlinearProblem::pre_solve()
-{
-    CALL_STACK_MSG();
-    set_up_initial_guess();
-    on_initial();
-}
-
-void
-NonlinearProblem::post_solve()
-{
-    CALL_STACK_MSG();
 }
 
 void

@@ -8,7 +8,6 @@ public:
     explicit GTestFENonlinearProblem(const godzilla::Parameters & pars);
 
     PetscDS get_ds();
-    void set_up_initial_guess() override;
 
     std::vector<godzilla::Ref<godzilla::BoundaryCondition>>
     get_boundary_conditions() const

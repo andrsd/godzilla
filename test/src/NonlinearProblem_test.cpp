@@ -18,7 +18,6 @@ public:
     explicit G1DTestNonlinearProblem(const Parameters & pars);
     ~G1DTestNonlinearProblem() override;
     void create() override;
-    void call_initial_guess();
 
 protected:
     void set_up_callbacks() override;
@@ -51,12 +50,6 @@ G1DTestNonlinearProblem::create()
     DMPlexCreateSection(dm, nullptr, nc, n_dofs, 0, nullptr, nullptr, nullptr, nullptr, &this->s);
     DMSetLocalSection(dm, this->s);
     NonlinearProblem::create();
-}
-
-void
-G1DTestNonlinearProblem::call_initial_guess()
-{
-    NonlinearProblem::set_up_initial_guess();
 }
 
 void
@@ -98,7 +91,7 @@ TEST(NonlinearProblemTest, initial_guess)
     prob_pars.set<Ref<Mesh>>("mesh", ref(*mesh));
     G1DTestNonlinearProblem prob(prob_pars);
     prob.create();
-    prob.call_initial_guess();
+    prob.set_initial_guess();
 
     auto x = prob.get_solution_vector();
     Real l2_norm = 0;
@@ -141,9 +134,6 @@ TEST(NonlinearProblemTest, run)
     public:
         explicit MockNonlinearProblem(const Parameters & pars) : NonlinearProblem(pars) {}
 
-        MOCK_METHOD(void, set_up_initial_guess, ());
-        MOCK_METHOD(void, on_initial, ());
-
         void
         compute_residual(const Vector &, Vector & f)
         {
@@ -179,8 +169,6 @@ TEST(NonlinearProblemTest, run)
     MockNonlinearProblem prob(prob_pars);
     prob.create();
 
-    EXPECT_CALL(prob, set_up_initial_guess).Times(1);
-    EXPECT_CALL(prob, on_initial).Times(1);
     prob.run();
     EXPECT_TRUE(prob.compute_residual_called);
     EXPECT_FALSE(prob.compute_jacobian_called);

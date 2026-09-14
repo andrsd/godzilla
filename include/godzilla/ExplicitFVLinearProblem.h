@@ -17,7 +17,7 @@ public:
     explicit ExplicitFVLinearProblem(const Parameters & pars);
 
     void create() override;
-    void run() override;
+    void set_initial_guess();
     void solve();
     bool converged();
     Real get_time() const override;
@@ -28,7 +28,6 @@ protected:
     void init() override;
     void allocate_objects() override;
     void set_up_callbacks() override;
-    void set_up_initial_guess() override;
     void set_up_monitors() override;
     void post_step() override;
 

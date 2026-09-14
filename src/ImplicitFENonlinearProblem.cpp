@@ -105,9 +105,10 @@ void
 ImplicitFENonlinearProblem::run()
 {
     CALL_STACK_MSG();
-    pre_solve();
+    set_initial_guess();
+    on_initial();
+
     solve();
-    post_solve();
     if (converged())
         on_final();
 }
