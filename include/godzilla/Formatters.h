@@ -137,7 +137,7 @@ struct fmt::formatter<godzilla::PolytopeType> {
         case godzilla::PolytopeType::INTERIOR_GHOST:
             return fmt::format_to(ctx.out(), "INTERIOR_GHOST");
         default:
-            return fmt::format_to(ctx.out(), "Unknow");
+            return fmt::format_to(ctx.out(), "Unknown");
         }
         godzilla::utils::unreachable();
     }
