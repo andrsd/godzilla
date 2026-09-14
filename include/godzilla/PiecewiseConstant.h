@@ -40,11 +40,11 @@ private:
     Real eval_right_cont(Real x);
     Real eval_left_cont(Real x);
 
-    Continuity continuity;
+    Continuity continuity_;
     /// Independent values
-    std::vector<Real> x;
+    std::vector<Real> x_;
     /// Dependent values
-    std::vector<Real> y;
+    std::vector<Real> y_;
 };
 
 } // namespace godzilla
