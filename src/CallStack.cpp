@@ -59,7 +59,7 @@ get_callstack()
     return internal::call_stack;
 }
 
-CallStack::CallStack() : size(0) {}
+CallStack::CallStack() : size_(0) {}
 
 void
 CallStack::dump()
@@ -68,7 +68,7 @@ CallStack::dump()
     if (this->size > 0) {
         PetscFPrintf(PETSC_COMM_WORLD, PETSC_STDERR, "Call stack:\n");
         for (int n = 0, i = this->size - 1; i >= 0; --i, ++n) {
-            auto * m = this->stack[i];
+            auto * m = this->stack_[i];
             PetscFPrintf(PETSC_COMM_WORLD,
                          PETSC_STDERR,
                          "  #%d: %s (%s:%d)\n",
@@ -87,9 +87,9 @@ void
 CallStack::add(Frame * frame)
 {
     // add this object to the call stack
-    if (this->size < CallStack::MAX_SIZE) {
-        this->stack[this->size] = frame;
-        ++this->size;
+    if (this->size_ < CallStack::MAX_SIZE) {
+        this->stack_[this->size_] = frame;
+        ++this->size_;
     }
 }
 
@@ -97,22 +97,22 @@ void
 CallStack::remove(Frame * msg)
 {
     // remove the object only if it is on the top of the call stack
-    if (this->size > 0 && this->stack[this->size - 1] == msg) {
-        --this->size;
-        this->stack[this->size] = nullptr;
+    if (this->size_ > 0 && this->stack_[this->size_ - 1] == msg) {
+        --this->size_;
+        this->stack_[this->size_] = nullptr;
     }
 }
 
 std::size_t
 CallStack::get_size() const
 {
-    return this->size;
+    return this->size_;
 }
 
 CallStack::Frame *
 CallStack::operator[](std::size_t idx) const
 {
-    return this->stack[idx];
+    return this->stack_[idx];
 }
 
 void
