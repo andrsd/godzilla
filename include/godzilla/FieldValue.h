@@ -14,18 +14,18 @@ namespace godzilla {
 template <typename T>
 class LateBindArray {
 public:
-    LateBindArray(Int size) : size(size), data(nullptr) {}
+    LateBindArray(Int size) : size_(size), data_(nullptr) {}
 
     void
     set(T * new_data)
     {
-        this->data = new_data;
+        this->data_ = new_data;
     }
 
     T *
     get() const
     {
-        return this->data;
+        return this->data_;
     }
 
     T
@@ -33,14 +33,14 @@ public:
     {
         GODZILLA_ASSERT_TRUE(this->data != nullptr, "Array is not bound to data");
         GODZILLA_ASSERT_TRUE(idx < this->size, "Index out of bounds");
-        return this->data[idx];
+        return this->data_[idx];
     }
 
 private:
     /// Number of elements stored in `data`
-    Int size;
+    Int size_;
     /// The elements of the array
-    T * data;
+    T * data_;
 };
 
 /// Used for field values during assembling
