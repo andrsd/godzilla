@@ -37,9 +37,9 @@ InitialCondition::parameters()
 InitialCondition::InitialCondition(const Parameters & pars) :
     Object(pars),
     PrintInterface(this),
-    dpi(pars.get<Ref<DiscreteProblemInterface>>("_dpi")),
-    field_name(pars.get<Optional<String>>("field")),
-    fid(FieldID::INVALID)
+    dpi_(pars.get<Ref<DiscreteProblemInterface>>("_dpi")),
+    field_name_(pars.get<Optional<String>>("field")),
+    fid_(FieldID::INVALID)
 {
     CALL_STACK_MSG();
 }
@@ -48,69 +48,69 @@ void
 InitialCondition::create()
 {
     CALL_STACK_MSG();
-    if (this->field_name.has_value()) {
-        auto fld_name = this->field_name.value();
-        if (auto id = this->dpi->get_field_id(fld_name); id.has_value())
-            this->fid = id.value();
-        else if (auto id = this->dpi->get_aux_field_id(fld_name); id.has_value())
-            this->fid = id.value();
+    if (this->field_name_.has_value()) {
+        auto fld_name = this->field_name_.value();
+        if (auto id = this->dpi_->get_field_id(fld_name); id.has_value())
+            this->fid_ = id.value();
+        else if (auto id = this->dpi_->get_aux_field_id(fld_name); id.has_value())
+            this->fid_ = id.value();
         else
             error("Field '{}' does not exist. Typo?", fld_name);
     }
     else {
-        auto field_names = this->dpi->get_field_names();
-        auto aux_field_names = this->dpi->get_aux_field_names();
+        auto field_names = this->dpi_->get_field_names();
+        auto aux_field_names = this->dpi_->get_aux_field_names();
         if ((field_names.size() == 1) && (aux_field_names.empty())) {
-            this->fid = this->dpi->get_field_id(field_names[0]).value();
-            this->field_name = this->dpi->get_field_name(this->fid).value();
+            this->fid_ = this->dpi_->get_field_id(field_names[0]).value();
+            this->field_name_ = this->dpi_->get_field_name(this->fid_).value();
         }
         else
             throw Exception(
                 "Use the 'field' parameter to assign this initial condition to an existing field.");
     }
 
-    this->components = create_components();
+    this->components_ = create_components();
 }
 
 String
 InitialCondition::get_field_name() const
 {
     CALL_STACK_MSG();
-    expect_true(this->field_name.has_value(), "Field name not set");
-    return this->field_name.value();
+    expect_true(this->field_name_.has_value(), "Field name not set");
+    return this->field_name_.value();
 }
 
 FieldID
 InitialCondition::get_field_id() const
 {
     CALL_STACK_MSG();
-    return this->fid;
+    return this->fid_;
 }
 
 Int
 InitialCondition::get_num_components() const
 {
     CALL_STACK_MSG();
-    return this->components.size();
+    return this->components_.size();
 }
 
 Dimension
 InitialCondition::get_dimension() const
 {
     CALL_STACK_MSG();
-    return this->dpi->get_problem()->get_dimension();
+    return this->dpi_->get_problem()->get_dimension();
 }
 
 std::vector<Int>
 InitialCondition::create_components()
 {
     CALL_STACK_MSG();
-    auto fld = this->field_name.value();
+    auto fld = this->field_name_.value();
     Int n_comps = 0;
-    if (this->dpi->has_field_by_name(fld))
-        n_comps = this->dpi->get_field_num_components(this->fid).value();
-    else if (this->dpi->has_aux_field_by_name(fld))
-        n_comps = this->dpi->get_aux_field_num_components(this->fid).value();
+    if (this->dpi_->has_field_by_name(fld))
+        n_comps = this->dpi_->get_field_num_components(this->fid_).value();
+    else if (this->dpi_->has_aux_field_by_name(fld))
+        n_comps = this->dpi_->get_aux_field_num_components(this->fid_).value();
 
     std::vector<Int> comps(n_comps);
     std::iota(comps.begin(), comps.end(), 0);
