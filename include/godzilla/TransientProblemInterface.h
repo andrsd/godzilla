@@ -148,7 +148,7 @@ public:
     get_time_stepper()
     {
         CALL_STACK_MSG();
-        return const_cast<T &>(*static_cast<T *>(this->ts->data));
+        return const_cast<T &>(*static_cast<T *>(this->ts_->data));
     }
 
     /// Get a reference to the time stepper
@@ -159,7 +159,7 @@ public:
     get_time_stepper()
     {
         CALL_STACK_MSG();
-        return *static_cast<TSAbstract *>(this->ts->data);
+        return *static_cast<TSAbstract *>(this->ts_->data);
     }
 
     /// Get time step adaptivity
@@ -214,9 +214,9 @@ protected:
     void
     monitor_set(Ref<T> instance, void (T::*method)(Int, Real, const Vector &))
     {
-        this->monitor_method.bind(instance, method);
+        this->monitor_method_.bind(instance, method);
         PETSC_CHECK(
-            TSMonitorSet(this->ts, invoke_monitor_delegate, &this->monitor_method, nullptr));
+            TSMonitorSet(this->ts_, invoke_monitor_delegate, &this->monitor_method_, nullptr));
     }
 
     template <class T>
@@ -225,11 +225,11 @@ protected:
                      Ref<T> instance,
                      void (T::*method)(Real time, const Vector & x, Vector & F))
     {
-        this->compute_rhs_function_method.bind(instance, method);
-        PETSC_CHECK(TSSetRHSFunction(this->ts,
+        this->compute_rhs_function_method_.bind(instance, method);
+        PETSC_CHECK(TSSetRHSFunction(this->ts_,
                                      r,
                                      invoke_compute_rhs_function_delegate,
-                                     &this->compute_rhs_function_method));
+                                     &this->compute_rhs_function_method_));
     }
 
     template <class T>
@@ -239,12 +239,12 @@ protected:
                      Ref<T> instance,
                      void (T::*method)(Real, const Vector &, Matrix &, Matrix &))
     {
-        this->compute_rhs_jacobian_method.bind(instance, method);
-        PETSC_CHECK(TSSetRHSJacobian(this->ts,
+        this->compute_rhs_jacobian_method_.bind(instance, method);
+        PETSC_CHECK(TSSetRHSJacobian(this->ts_,
                                      J,
                                      Jp,
                                      invoke_compute_rhs_jacobian_delegate,
-                                     &this->compute_rhs_jacobian_method));
+                                     &this->compute_rhs_jacobian_method_));
     }
 
     /// Set the function to compute F(t,U,U_t) where F() = 0 is the DAE to be solved.
@@ -259,11 +259,11 @@ protected:
                   Ref<T> instance,
                   void (T::*method)(Real, const Vector &, const Vector &, Vector &))
     {
-        this->compute_ifunction_local_method.bind(instance, method);
-        PETSC_CHECK(TSSetIFunction(this->ts,
+        this->compute_ifunction_local_method_.bind(instance, method);
+        PETSC_CHECK(TSSetIFunction(this->ts_,
                                    r,
                                    invoke_compute_ifunction_delegate,
-                                   &this->compute_ifunction_local_method));
+                                   &this->compute_ifunction_local_method_));
     }
 
     /// Set the function to compute the matrix dF/dU + a*dF/dU_t where F(t,U,U_t)
@@ -280,12 +280,12 @@ protected:
                   Ref<T> instance,
                   void (T::*method)(Real, const Vector &, const Vector &, Real, Matrix &, Matrix &))
     {
-        this->compute_ijacobian_local_method.bind(instance, method);
-        PETSC_CHECK(TSSetIJacobian(this->ts,
+        this->compute_ijacobian_local_method_.bind(instance, method);
+        PETSC_CHECK(TSSetIJacobian(this->ts_,
                                    J,
                                    Jp,
                                    invoke_compute_ijacobian_delegate,
-                                   &this->compute_ijacobian_local_method));
+                                   &this->compute_ijacobian_local_method_));
     }
 
     /// Sets the routine for evaluating the function, where U_t = G(t,u).
@@ -297,22 +297,22 @@ protected:
     void
     set_rhs_function(Ref<T> instance, void (T::*method)(Real time, const Vector & x, Vector & F))
     {
-        this->compute_rhs_function_method.bind(instance, method);
-        auto dm = this->problem->get_dm();
+        this->compute_rhs_function_method_.bind(instance, method);
+        auto dm = this->problem_->get_dm();
         PETSC_CHECK(DMTSSetRHSFunction(dm,
                                        invoke_compute_rhs_function_delegate,
-                                       &this->compute_rhs_function_method));
+                                       &this->compute_rhs_function_method_));
     }
 
     template <class T>
     void
     set_rhs_jacobian(Ref<T> instance, void (T::*method)(Real, const Vector &, Matrix &, Matrix &))
     {
-        this->compute_rhs_jacobian_method.bind(instance, method);
-        auto dm = this->problem->get_dm();
+        this->compute_rhs_jacobian_method_.bind(instance, method);
+        auto dm = this->problem_->get_dm();
         PETSC_CHECK(DMTSSetRHSJacobian(dm,
                                        invoke_compute_rhs_jacobian_delegate,
-                                       &this->compute_rhs_jacobian_method));
+                                       &this->compute_rhs_jacobian_method_));
     }
 
     template <class T>
@@ -321,11 +321,11 @@ protected:
         Ref<T> instance,
         void (T::*method)(Real time, const Vector & x, const Vector & x_t, Vector & F))
     {
-        this->compute_ifunction_local_method.bind(instance, method);
-        auto dm = this->problem->get_dm();
+        this->compute_ifunction_local_method_.bind(instance, method);
+        auto dm = this->problem_->get_dm();
         PETSC_CHECK(DMTSSetIFunctionLocal(dm,
                                           invoke_compute_ifunction_delegate,
-                                          &this->compute_ifunction_local_method));
+                                          &this->compute_ifunction_local_method_));
     }
 
     template <class T>
@@ -334,11 +334,11 @@ protected:
         Ref<T> instance,
         void (T::*method)(Real, const Vector &, const Vector &, Real, Matrix &, Matrix &))
     {
-        this->compute_ijacobian_local_method.bind(instance, method);
-        auto dm = this->problem->get_dm();
+        this->compute_ijacobian_local_method_.bind(instance, method);
+        auto dm = this->problem_->get_dm();
         PETSC_CHECK(DMTSSetIJacobianLocal(dm,
                                           invoke_compute_ijacobian_delegate,
-                                          &this->compute_ijacobian_local_method));
+                                          &this->compute_ijacobian_local_method_));
     }
 
     /// Clears all the monitors that have been set on a time-stepping object.
@@ -352,18 +352,18 @@ private:
     virtual void set_up_time_scheme() = 0;
 
     /// PETSc TS object
-    TS ts;
+    TS ts_;
     /// Time step adapt object
-    TimeStepAdapt time_step_adapt;
+    TimeStepAdapt time_step_adapt_;
     /// Method for monitoring the solve
-    Delegate<void(Int it, Real rnorm, const Vector & x)> monitor_method;
+    Delegate<void(Int it, Real rnorm, const Vector & x)> monitor_method_;
     /// Method for computing right-hand side
-    Delegate<void(Real time, const Vector & x, Vector & F)> compute_rhs_function_method;
+    Delegate<void(Real time, const Vector & x, Vector & F)> compute_rhs_function_method_;
     ///
-    Delegate<void(Real, const Vector &, Matrix &, Matrix &)> compute_rhs_jacobian_method;
+    Delegate<void(Real, const Vector &, Matrix &, Matrix &)> compute_rhs_jacobian_method_;
     /// Method for computing F(t,U,U_t) where F() = 0
     Delegate<void(Real time, const Vector & x, const Vector & x_t, Vector & F)>
-        compute_ifunction_local_method;
+        compute_ifunction_local_method_;
     /// Method to compute the matrix dF/dU + a*dF/dU_t where F(t,U,U_t) is the function provided by
     /// `compute_ijacobian_local`
     Delegate<void(Real time,
@@ -372,19 +372,19 @@ private:
                   Real x_t_shift,
                   Matrix & J,
                   Matrix & Jp)>
-        compute_ijacobian_local_method;
+        compute_ijacobian_local_method_;
     /// Problem this interface is part of
-    Ref<Problem> problem;
+    Ref<Problem> problem_;
     /// Simulation start time
-    Real start_time;
+    Real start_time_;
     /// Simulation end time
-    Optional<Real> end_time;
+    Optional<Real> end_time_;
     /// Number of steps
-    Optional<Int> num_steps;
+    Optional<Int> num_steps_;
     /// Initial time step size
-    Real dt_initial;
+    Real dt_initial_;
     /// Time step number
-    Int step_num;
+    Int step_num_;
 
 public:
     static Parameters parameters();
