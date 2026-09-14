@@ -48,27 +48,27 @@ public:
 
 private:
     /// Minimum in the x direction
-    Real xmin;
+    Real xmin_;
     /// Maximum in the x direction
-    Real xmax;
+    Real xmax_;
     /// Minimum in the y direction
-    Real ymin;
+    Real ymin_;
     /// Maximum in the y direction
-    Real ymax;
+    Real ymax_;
     /// Minimum in the z direction
-    Real zmin;
+    Real zmin_;
     /// Maximum in the z direction
-    Real zmax;
+    Real zmax_;
     /// Number of mesh point in the x direction
-    Int nx;
+    Int nx_;
     /// Number of mesh point in the y direction
-    Int ny;
+    Int ny_;
     /// Number of mesh point in the z direction
-    Int nz;
+    Int nz_;
     /// True for simplices, False for tensor cells
-    bool simplex;
+    bool simplex_;
     /// create intermediate mesh pieces (edges, faces)
-    bool interpolate;
+    bool interpolate_;
 
 public:
     /// Method for building Parameters for this class
