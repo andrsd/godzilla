@@ -158,8 +158,8 @@ public:
 private:
     TimeStepAdapt(TS ts, TSAdapt tsadapt);
 
-    TS ts;
-    TSAdapt tsadapt;
+    TS ts_;
+    TSAdapt tsadapt_;
 
 public:
     static TimeStepAdapt from_ts(TS ts);

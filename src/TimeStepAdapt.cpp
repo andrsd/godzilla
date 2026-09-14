@@ -8,22 +8,22 @@
 
 namespace godzilla {
 
-TimeStepAdapt::TimeStepAdapt() : tsadapt(nullptr) {}
+TimeStepAdapt::TimeStepAdapt() : tsadapt_(nullptr) {}
 
-TimeStepAdapt::TimeStepAdapt(TS ts, TSAdapt tsadapt) : ts(ts), tsadapt(tsadapt) {}
+TimeStepAdapt::TimeStepAdapt(TS ts, TSAdapt tsadapt) : ts_(ts), tsadapt_(tsadapt) {}
 
 TS
 TimeStepAdapt::get_ts() const
 {
     CALL_STACK_MSG();
-    return this->ts;
+    return this->ts_;
 }
 
 TSAdapt
 TimeStepAdapt::get_ts_adapt() const
 {
     CALL_STACK_MSG();
-    return this->tsadapt;
+    return this->tsadapt_;
 }
 
 void
@@ -35,7 +35,7 @@ TimeStepAdapt::add_candidate(String name,
                              bool inuse)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(TSAdaptCandidateAdd(this->tsadapt,
+    PETSC_CHECK(TSAdaptCandidateAdd(this->tsadapt_,
                                     name.c_str(),
                                     order,
                                     stage_order,
@@ -48,7 +48,7 @@ void
 TimeStepAdapt::clear_candidates()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(TSAdaptCandidatesClear(this->tsadapt));
+    PETSC_CHECK(TSAdaptCandidatesClear(this->tsadapt_));
 }
 
 std::vector<TimeStepAdapt::Candidate>
@@ -60,7 +60,7 @@ TimeStepAdapt::get_candidates() const
     const Int * stage_order;
     const Real * ccfl;
     const Real * cost;
-    PETSC_CHECK(TSAdaptCandidatesGet(this->tsadapt, &n, &order, &stage_order, &ccfl, &cost));
+    PETSC_CHECK(TSAdaptCandidatesGet(this->tsadapt_, &n, &order, &stage_order, &ccfl, &cost));
     std::vector<TimeStepAdapt::Candidate> candidates(n);
     for (Int i = 0; i < n; ++i) {
         candidates[i].order = order[i];
@@ -76,7 +76,7 @@ TimeStepAdapt::check_stage(Real t, const Vector & Y) const
 {
     CALL_STACK_MSG();
     PetscBool accept;
-    PETSC_CHECK(TSAdaptCheckStage(this->tsadapt, this->ts, t, Y, &accept));
+    PETSC_CHECK(TSAdaptCheckStage(this->tsadapt_, this->ts_, t, Y, &accept));
     return accept == PETSC_TRUE;
 }
 
@@ -87,7 +87,7 @@ TimeStepAdapt::choose(Real h)
     Int next_sc;
     Real next_h;
     PetscBool accept;
-    PETSC_CHECK(TSAdaptChoose(this->tsadapt, this->ts, h, &next_sc, &next_h, &accept));
+    PETSC_CHECK(TSAdaptChoose(this->tsadapt_, this->ts_, h, &next_sc, &next_h, &accept));
     return { next_sc, next_h, accept == PETSC_TRUE };
 }
 
@@ -96,7 +96,7 @@ TimeStepAdapt::get_clip() const
 {
     CALL_STACK_MSG();
     Real low, high;
-    PETSC_CHECK(TSAdaptGetClip(this->tsadapt, &low, &high));
+    PETSC_CHECK(TSAdaptGetClip(this->tsadapt_, &low, &high));
     return { low, high };
 }
 
@@ -105,7 +105,7 @@ TimeStepAdapt::get_max_ignore() const
 {
     CALL_STACK_MSG();
     Real max_ignore;
-    PETSC_CHECK(TSAdaptGetMaxIgnore(this->tsadapt, &max_ignore));
+    PETSC_CHECK(TSAdaptGetMaxIgnore(this->tsadapt_, &max_ignore));
     return max_ignore;
 }
 
@@ -114,7 +114,7 @@ TimeStepAdapt::get_safety() const
 {
     CALL_STACK_MSG();
     Real safety, reject_safety;
-    PETSC_CHECK(TSAdaptGetSafety(this->tsadapt, &safety, &reject_safety));
+    PETSC_CHECK(TSAdaptGetSafety(this->tsadapt_, &safety, &reject_safety));
     return { safety, reject_safety };
 }
 
@@ -123,7 +123,7 @@ TimeStepAdapt::get_scale_solve_failed() const
 {
     CALL_STACK_MSG();
     Real scale;
-    PETSC_CHECK(TSAdaptGetScaleSolveFailed(this->tsadapt, &scale));
+    PETSC_CHECK(TSAdaptGetScaleSolveFailed(this->tsadapt_, &scale));
     return scale;
 }
 
@@ -132,7 +132,7 @@ TimeStepAdapt::get_step_limits() const
 {
     CALL_STACK_MSG();
     Real hmin, hmax;
-    PETSC_CHECK(TSAdaptGetStepLimits(this->tsadapt, &hmin, &hmax));
+    PETSC_CHECK(TSAdaptGetStepLimits(this->tsadapt_, &hmin, &hmax));
     return { hmin, hmax };
 }
 
@@ -141,7 +141,7 @@ TimeStepAdapt::get_type() const
 {
     CALL_STACK_MSG();
     TSAdaptType type;
-    PETSC_CHECK(TSAdaptGetType(this->tsadapt, &type));
+    PETSC_CHECK(TSAdaptGetType(this->tsadapt_, &type));
     return { type };
 }
 
@@ -149,56 +149,56 @@ void
 TimeStepAdapt::reset()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(TSAdaptReset(this->tsadapt));
+    PETSC_CHECK(TSAdaptReset(this->tsadapt_));
 }
 
 void
 TimeStepAdapt::set_always_accept(bool flag)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(TSAdaptSetAlwaysAccept(this->tsadapt, flag ? PETSC_TRUE : PETSC_FALSE));
+    PETSC_CHECK(TSAdaptSetAlwaysAccept(this->tsadapt_, flag ? PETSC_TRUE : PETSC_FALSE));
 }
 
 void
 TimeStepAdapt::set_clip(Real low, Real high)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(TSAdaptSetClip(this->tsadapt, low, high));
+    PETSC_CHECK(TSAdaptSetClip(this->tsadapt_, low, high));
 }
 
 void
 TimeStepAdapt::set_max_ignore(Real max_ignore)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(TSAdaptSetMaxIgnore(this->tsadapt, max_ignore));
+    PETSC_CHECK(TSAdaptSetMaxIgnore(this->tsadapt_, max_ignore));
 }
 
 void
 TimeStepAdapt::set_safety(Real safety, Real reject_safety)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(TSAdaptSetSafety(this->tsadapt, safety, reject_safety));
+    PETSC_CHECK(TSAdaptSetSafety(this->tsadapt_, safety, reject_safety));
 }
 
 void
 TimeStepAdapt::set_scale_solve_failed(Real scale)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(TSAdaptSetScaleSolveFailed(this->tsadapt, scale));
+    PETSC_CHECK(TSAdaptSetScaleSolveFailed(this->tsadapt_, scale));
 }
 
 void
 TimeStepAdapt::set_step_limits(Real hmin, Real hmax)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(TSAdaptSetStepLimits(this->tsadapt, hmin, hmax));
+    PETSC_CHECK(TSAdaptSetStepLimits(this->tsadapt_, hmin, hmax));
 }
 
 void
 TimeStepAdapt::set_type(String type)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(TSAdaptSetType(this->tsadapt, type.c_str()));
+    PETSC_CHECK(TSAdaptSetType(this->tsadapt_, type.c_str()));
 }
 
 void
