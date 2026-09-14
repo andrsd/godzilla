@@ -8,7 +8,7 @@
 
 namespace godzilla {
 
-SNESolver::LineSearch::LineSearch(SNESLineSearch ls) : ls(ls) {}
+SNESolver::LineSearch::LineSearch(SNESLineSearch ls) : ls_(ls) {}
 
 void
 SNESolver::LineSearch::set_type(LineSearchType type)
@@ -16,37 +16,37 @@ SNESolver::LineSearch::set_type(LineSearchType type)
     CALL_STACK_MSG();
     switch (type) {
     case LineSearchType::BASIC:
-        PETSC_CHECK(SNESLineSearchSetType(this->ls, SNESLINESEARCHBASIC));
+        PETSC_CHECK(SNESLineSearchSetType(this->ls_, SNESLINESEARCHBASIC));
         return;
 
 #if PETSC_VERSION_GE(3, 24, 0)
     case LineSearchType::SECANT:
-        PETSC_CHECK(SNESLineSearchSetType(this->ls, SNESLINESEARCHSECANT));
+        PETSC_CHECK(SNESLineSearchSetType(this->ls_, SNESLINESEARCHSECANT));
         return;
 #endif
 
     case LineSearchType::L2:
 #if PETSC_VERSION_GE(3, 24, 0)
-        PETSC_CHECK(SNESLineSearchSetType(this->ls, SNESLINESEARCHSECANT));
+        PETSC_CHECK(SNESLineSearchSetType(this->ls_, SNESLINESEARCHSECANT));
 #else
         PETSC_CHECK(SNESLineSearchSetType(this->ls, SNESLINESEARCHL2));
 #endif
         return;
 
     case LineSearchType::CP:
-        PETSC_CHECK(SNESLineSearchSetType(this->ls, SNESLINESEARCHCP));
+        PETSC_CHECK(SNESLineSearchSetType(this->ls_, SNESLINESEARCHCP));
         return;
 
     case LineSearchType::NLEQERR:
-        PETSC_CHECK(SNESLineSearchSetType(this->ls, SNESLINESEARCHNLEQERR));
+        PETSC_CHECK(SNESLineSearchSetType(this->ls_, SNESLINESEARCHNLEQERR));
         return;
 
     case LineSearchType::SHELL:
-        PETSC_CHECK(SNESLineSearchSetType(this->ls, SNESLINESEARCHSHELL));
+        PETSC_CHECK(SNESLineSearchSetType(this->ls_, SNESLINESEARCHSHELL));
         return;
 
     case LineSearchType::BT:
-        PETSC_CHECK(SNESLineSearchSetType(this->ls, SNESLINESEARCHBT));
+        PETSC_CHECK(SNESLineSearchSetType(this->ls_, SNESLINESEARCHBT));
         return;
     }
 }
@@ -55,13 +55,13 @@ void
 SNESolver::LineSearch::set_from_options()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(SNESLineSearchSetFromOptions(this->ls));
+    PETSC_CHECK(SNESLineSearchSetFromOptions(this->ls_));
 }
 
 SNESolver::LineSearch::operator SNESLineSearch() const
 {
     CALL_STACK_MSG();
-    return this->ls;
+    return this->ls_;
 }
 
 //

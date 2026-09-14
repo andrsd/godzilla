@@ -62,7 +62,7 @@ public:
         operator SNESLineSearch() const;
 
     private:
-        SNESLineSearch ls;
+        SNESLineSearch ls_;
     };
 
     /// Construct empty non-linear solver
@@ -110,11 +110,11 @@ public:
     void
     set_function(Vector & r, Ref<T> instance, void (T::*method)(const Vector &, Vector &))
     {
-        this->compute_residual_method.bind(instance, method);
+        this->compute_residual_method_.bind(instance, method);
         PETSC_CHECK(SNESSetFunction(this->obj_,
                                     r,
                                     invoke_compute_residual_delegate,
-                                    &this->compute_residual_method));
+                                    &this->compute_residual_method_));
     }
 
     /// Sets the function to compute Jacobian as well as the location to store the matrix.
@@ -131,12 +131,12 @@ public:
                  Ref<T> instance,
                  void (T::*method)(const Vector &, Matrix &, Matrix &))
     {
-        this->compute_jacobian_method.bind(instance, method);
+        this->compute_jacobian_method_.bind(instance, method);
         PETSC_CHECK(SNESSetJacobian(this->obj_,
                                     J,
                                     Jp,
                                     invoke_compute_jacobian_delegate,
-                                    &this->compute_jacobian_method));
+                                    &this->compute_jacobian_method_));
     }
 
     /// Indicates that the solver should use matrix-free finite difference matrix-vector products to
@@ -170,9 +170,9 @@ public:
     void
     monitor_set(Ref<T> instance, void (T::*method)(Int, Real))
     {
-        this->monitor_method.bind(instance, method);
+        this->monitor_method_.bind(instance, method);
         PETSC_CHECK(
-            SNESMonitorSet(this->obj_, invoke_monitor_delegate, &this->monitor_method, nullptr));
+            SNESMonitorSet(this->obj_, invoke_monitor_delegate, &this->monitor_method_, nullptr));
     }
 
     /// Sets an ADDITIONAL function that is to be used at the end of the nonlinear solver to display
@@ -185,10 +185,10 @@ public:
     void
     converged_reason_view_set(Ref<T> instance, void (T::*method)())
     {
-        this->converged_reason_view_method.bind(instance, method);
+        this->converged_reason_view_method_.bind(instance, method);
         PETSC_CHECK(SNESConvergedReasonViewSet(this->obj_,
                                                invoke_converged_view_delegate,
-                                               &this->converged_reason_view_method,
+                                               &this->converged_reason_view_method_,
                                                nullptr));
     }
 
@@ -222,13 +222,13 @@ public:
 
 private:
     /// Method for monitoring the solve
-    Delegate<void(Int it, Real rnorm)> monitor_method;
+    Delegate<void(Int it, Real rnorm)> monitor_method_;
     /// Method for computing residual
-    Delegate<void(const Vector & x, Vector & f)> compute_residual_method;
+    Delegate<void(const Vector & x, Vector & f)> compute_residual_method_;
     /// Method for computing Jacobian
-    Delegate<void(const Vector & x, Matrix & J, Matrix & Jp)> compute_jacobian_method;
+    Delegate<void(const Vector & x, Matrix & J, Matrix & Jp)> compute_jacobian_method_;
     /// Method for converged reason view
-    Delegate<void()> converged_reason_view_method;
+    Delegate<void()> converged_reason_view_method_;
 
 public:
     static PetscErrorCode invoke_compute_residual_delegate(SNES, Vec, Vec, void *);
