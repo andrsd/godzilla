@@ -32,7 +32,7 @@ L2Diff::parameters()
     return params;
 }
 
-L2Diff::L2Diff(const Parameters & pars) : Postprocessor(pars), l2_diff(0.) {}
+L2Diff::L2Diff(const Parameters & pars) : Postprocessor(pars), l2_diff_(0.) {}
 
 void
 L2Diff::create()
@@ -55,14 +55,14 @@ L2Diff::compute()
                                          funcs.data(),
                                          ctxs.data(),
                                          dpi->get_solution_vector_local(),
-                                         &this->l2_diff));
+                                         &this->l2_diff_));
 }
 
 std::vector<Real>
 L2Diff::get_value()
 {
     CALL_STACK_MSG();
-    return { this->l2_diff };
+    return { this->l2_diff_ };
 }
 
 } // namespace godzilla
