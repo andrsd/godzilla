@@ -33,7 +33,7 @@ public:
     void
     set_apply(Ref<T> instance, void (T::*method)(const Vector &, Vector &))
     {
-        this->apply_method.bind(instance, method);
+        this->apply_method_.bind(instance, method);
         PETSC_CHECK(PCShellSetApply(*this, invoke_apply_delegate));
     }
 
@@ -42,7 +42,7 @@ public:
     void
     set_apply_ba(Ref<T> instance, void (T::*method)(PCSide, const Vector &, Vector &, Vector &))
     {
-        this->apply_ba_method.bind(instance, method);
+        this->apply_ba_method_.bind(instance, method);
         PETSC_CHECK(PCShellSetApplyBA(*this, invoke_apply_ba_delegate));
     }
 
@@ -51,7 +51,7 @@ public:
     void
     set_apply_transpose(Ref<T> instance, void (T::*method)(const Vector &, Vector &))
     {
-        this->apply_transpose_method.bind(instance, method);
+        this->apply_transpose_method_.bind(instance, method);
         PETSC_CHECK(PCShellSetApplyTranspose(*this, invoke_apply_transpose_delegate));
     }
 
@@ -60,7 +60,7 @@ public:
     void
     set_set_up(Ref<T> instance, void (T::*method)(void))
     {
-        this->set_up_method.bind(instance, method);
+        this->set_up_method_.bind(instance, method);
         PETSC_CHECK(PCShellSetSetUp(*this, invoke_set_up_delegate));
     }
 
@@ -69,7 +69,7 @@ public:
     void
     set_destroy(Ref<T> instance, void (T::*method)(void))
     {
-        this->destroy_method.bind(instance, method);
+        this->destroy_method_.bind(instance, method);
         PETSC_CHECK(PCShellSetDestroy(*this, invoke_destroy_delegate));
     }
 
@@ -77,15 +77,15 @@ public:
 
 private:
     /// Method for the apply function
-    Delegate<void(const Vector &, Vector &)> apply_method;
+    Delegate<void(const Vector &, Vector &)> apply_method_;
     /// Method for the apply_ba function
-    Delegate<void(PCSide, const Vector &, Vector &, Vector &)> apply_ba_method;
+    Delegate<void(PCSide, const Vector &, Vector &, Vector &)> apply_ba_method_;
     /// Method for the apply_transpose function
-    Delegate<void(const Vector &, Vector &)> apply_transpose_method;
+    Delegate<void(const Vector &, Vector &)> apply_transpose_method_;
     /// Method for the set_up function
-    Delegate<void(void)> set_up_method;
+    Delegate<void(void)> set_up_method_;
     /// Method for the destroy function
-    Delegate<void(void)> destroy_method;
+    Delegate<void(void)> destroy_method_;
 
 public:
     static PetscErrorCode invoke_apply_delegate(PC, Vec, Vec);
