@@ -43,13 +43,13 @@ public:
 
 private:
     /// The application owning this object
-    Ref<CoreApp> app;
+    Ref<CoreApp> app_;
     ///
-    mpi::Communicator comm;
+    mpi::Communicator comm_;
     /// The type of this object
-    const String type;
+    const String type_;
     /// The name of this object
-    const String name;
+    const String name_;
 
 public:
     /// Method for building Parameters for this class

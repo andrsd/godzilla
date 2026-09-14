@@ -20,10 +20,10 @@ Object::parameters()
 
 Object::Object(const Parameters & pars) :
     LoggingInterface(pars.get<Ref<CoreApp>>("app")->get_logger()),
-    app(pars.get<Ref<CoreApp>>("app")),
-    comm(pars.get<mpi::Communicator>("comm", this->app->get_comm())),
-    type(pars.get<String>("_type")),
-    name(pars.get<String>("name", ""))
+    app_(pars.get<Ref<CoreApp>>("app")),
+    comm_(pars.get<mpi::Communicator>("comm", this->app_->get_comm())),
+    type_(pars.get<String>("_type")),
+    name_(pars.get<String>("name", ""))
 {
     CALL_STACK_MSG();
 }
@@ -32,35 +32,35 @@ String
 Object::get_type() const
 {
     CALL_STACK_MSG();
-    return this->type;
+    return this->type_;
 }
 
 String
 Object::get_name() const
 {
     CALL_STACK_MSG();
-    return this->name;
+    return this->name_;
 }
 
 Ref<CoreApp>
 Object::get_app() const
 {
     CALL_STACK_MSG();
-    return this->app;
+    return this->app_;
 }
 
 mpi::Communicator
 Object::get_comm() const
 {
     CALL_STACK_MSG();
-    return this->comm;
+    return this->comm_;
 }
 
 int
 Object::get_processor_id() const
 {
     CALL_STACK_MSG();
-    return this->comm.rank();
+    return this->comm_.rank();
 }
 
 void
