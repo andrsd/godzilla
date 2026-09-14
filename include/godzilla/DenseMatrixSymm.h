@@ -54,7 +54,7 @@ public:
     {
         GODZILLA_ASSERT_TRUE((row >= 0) && (row < DIM), "Row index out of bounds");
         GODZILLA_ASSERT_TRUE((col >= 0) && (col < DIM), "Column index out of bounds");
-        return this->values[idx(row, col)];
+        return this->values_[idx(row, col)];
     }
 
     T &
@@ -62,7 +62,7 @@ public:
     {
         GODZILLA_ASSERT_TRUE((row >= 0) && (row < DIM), "Row index out of bounds");
         GODZILLA_ASSERT_TRUE((col >= 0) && (col < DIM), "Column index out of bounds");
-        return this->values[idx(row, col)];
+        return this->values_[idx(row, col)];
     }
 
     void
@@ -70,7 +70,7 @@ public:
     {
         GODZILLA_ASSERT_TRUE((row >= 0) && (row < DIM), "Row index out of bounds");
         GODZILLA_ASSERT_TRUE((col >= 0) && (col < DIM), "Column index out of bounds");
-        this->values[idx(row, col)] = val;
+        this->values_[idx(row, col)] = val;
     }
 
     /// Set all matrix entries to zero, i.e. mat[i,j] = 0.
@@ -87,7 +87,7 @@ public:
     set_values(const T & alpha)
     {
         for (Int i = 0; i < N; ++i)
-            this->values[i] = alpha;
+            this->values_[i] = alpha;
     }
 
     /// Set matrix entries from provided values
@@ -101,7 +101,7 @@ public:
             "Number of values to be assigned does not match the number of etires in the "
             "symmetric matrix");
         for (Int i = 0; i < N; ++i)
-            this->values[i] = vals[i];
+            this->values_[i] = vals[i];
     }
 
     /// Multiply all entries by a scalar value
@@ -111,7 +111,7 @@ public:
     scale(Real alpha)
     {
         for (Int i = 0; i < N; ++i)
-            this->values[i] *= alpha;
+            this->values_[i] *= alpha;
     }
 
     /// Add matrix `x` to this matrix
@@ -121,7 +121,7 @@ public:
     add(const DenseMatrixSymm<T, DIM> & x)
     {
         for (Int i = 0; i < N; ++i)
-            this->values[i] += x.values[i];
+            this->values_[i] += x.values_[i];
     }
 
     /// Subtract matrix `x` from this matrix
@@ -131,7 +131,7 @@ public:
     subtract(const DenseMatrixSymm<T, DIM> & x)
     {
         for (Int i = 0; i < N; ++i)
-            this->values[i] -= x.values[i];
+            this->values_[i] -= x.values_[i];
     }
 
     /// Multiply the matrix by a vector
@@ -222,7 +222,7 @@ public:
     {
         DenseMatrixSymm<T, DIM> res;
         for (Int i = 0; i < N; ++i)
-            res.values[i] = -this->values[i];
+            res.values_[i] = -this->values_[i];
         return res;
     }
 
@@ -235,7 +235,7 @@ public:
     {
         DenseMatrixSymm<T, DIM> res;
         for (Int i = 0; i < N; ++i)
-            res.values[i] = this->values[i] + a.values[i];
+            res.values_[i] = this->values_[i] + a.values_[i];
         return res;
     }
 
@@ -262,7 +262,7 @@ public:
     {
         DenseMatrixSymm<T, DIM> res;
         for (Int i = 0; i < N; ++i)
-            res.values[i] = this->values[i] - a.values[i];
+            res.values_[i] = this->values_[i] - a.values_[i];
         return res;
     }
 
@@ -314,13 +314,13 @@ public:
     T *
     data()
     {
-        return &this->values[0];
+        return &this->values_[0];
     }
 
     const T *
     data() const
     {
-        return &this->values[0];
+        return &this->values_[0];
     }
 
     static DenseMatrixSymm<T, DIM>
@@ -344,7 +344,7 @@ protected:
     zero_impl(std::false_type)
     {
         for (Int i = 0; i < N; ++i)
-            this->values[i].zero();
+            this->values_[i].zero();
     }
 
 private:
@@ -358,7 +358,7 @@ private:
     }
 
     /// Matrix entries
-    T values[N];
+    T values_[N];
 };
 
 // Determinant computation for small matrices
