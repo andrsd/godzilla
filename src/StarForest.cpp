@@ -140,6 +140,19 @@ StarForest::set_graph(Int n_roots, Span<Int> ilocal, Span<Node> iremote) const
                                 PETSC_COPY_VALUES));
 }
 
+void
+StarForest::set_graph(Int n_roots, Span<Node> iremote) const
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(PetscSFSetGraph(this->obj,
+                                n_roots,
+                                iremote.size(),
+                                NULL,
+                                PETSC_USE_POINTER,
+                                iremote.data(),
+                                PETSC_COPY_VALUES));
+}
+
 StarForest
 StarForest::create_inverse() const
 {
