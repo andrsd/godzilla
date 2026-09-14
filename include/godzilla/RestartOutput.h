@@ -20,9 +20,9 @@ private:
     fs::path create_file_name() const override;
 
     /// Restart interface
-    Optional<Ref<RestartInterface>> ri;
+    Optional<Ref<RestartInterface>> ri_;
     /// The file base of the output file
-    fs::path file_base;
+    fs::path file_base_;
 
 public:
     static Parameters parameters();
