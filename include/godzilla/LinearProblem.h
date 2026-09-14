@@ -83,19 +83,20 @@ protected:
     void
     set_compute_operators(Ref<T> instance, void (T::*method)(Matrix &, Matrix &))
     {
-        this->compute_operators_delegate.bind(instance, method);
+        this->compute_operators_delegate_.bind(instance, method);
         PETSC_CHECK(DMKSPSetComputeOperators(get_dm(),
                                              invoke_compute_operators_delegate,
-                                             &this->compute_operators_delegate));
+                                             &this->compute_operators_delegate_));
     }
 
     template <class T>
     void
     set_compute_rhs(Ref<T> instance, void (T::*method)(Vector &))
     {
-        this->compute_rhs_delegate.bind(instance, method);
-        PETSC_CHECK(
-            DMKSPSetComputeRHS(get_dm(), invoke_compute_rhs_delegate, &this->compute_rhs_delegate));
+        this->compute_rhs_delegate_.bind(instance, method);
+        PETSC_CHECK(DMKSPSetComputeRHS(get_dm(),
+                                       invoke_compute_rhs_delegate,
+                                       &this->compute_rhs_delegate_));
     }
 
     ExecuteOnFlags
@@ -112,21 +113,21 @@ protected:
 
 private:
     /// KSP object
-    KrylovSolver ks;
+    KrylovSolver ks_;
     /// Preconditioner
-    Preconditioner pcond;
+    Preconditioner pcond_;
     /// KSP type
-    String ksp_type;
+    String ksp_type_;
     /// Relative convergence tolerance for the linear solver
-    Real lin_rel_tol;
+    Real lin_rel_tol_;
     /// Absolute convergence tolerance for the linear solver
-    Real lin_abs_tol;
+    Real lin_abs_tol_;
     /// Maximum number of iterations for the linear solver
-    Int lin_max_iter;
+    Int lin_max_iter_;
     /// Delegate for the compute_operators method
-    Delegate<void(Matrix &, Matrix &)> compute_operators_delegate;
+    Delegate<void(Matrix &, Matrix &)> compute_operators_delegate_;
     /// Delegate for the compute_operators method
-    Delegate<void(Vector &)> compute_rhs_delegate;
+    Delegate<void(Vector &)> compute_rhs_delegate_;
 
 public:
     static Parameters parameters();
