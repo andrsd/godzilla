@@ -36,9 +36,9 @@ public:
 
 private:
     /// Independent values
-    std::vector<Real> x;
+    std::vector<Real> x_;
     /// Dependent values
-    std::vector<Real> y;
+    std::vector<Real> y_;
 };
 
 } // namespace godzilla
