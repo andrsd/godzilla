@@ -45,19 +45,19 @@ public:
     void
     flush_every(std::chrono::duration<Rep, Period> interval)
     {
-        std::lock_guard<std::mutex> lock(this->flusher_mutex);
+        std::lock_guard<std::mutex> lock(this->flusher_mutex_);
         auto clbk = [this]() {
-            this->spdlgr->flush();
+            this->spdlgr_->flush();
         };
-        this->periodic_flusher =
+        this->periodic_flusher_ =
             spdlog::details::make_unique<spdlog::details::periodic_worker>(clbk, interval);
     }
 
 private:
-    std::string logger_name;
-    std::shared_ptr<spdlog::logger> spdlgr;
-    std::mutex flusher_mutex;
-    std::unique_ptr<spdlog::details::periodic_worker> periodic_flusher;
+    std::string logger_name_;
+    std::shared_ptr<spdlog::logger> spdlgr_;
+    std::mutex flusher_mutex_;
+    std::unique_ptr<spdlog::details::periodic_worker> periodic_flusher_;
 
     friend class LoggingInterface;
 };
