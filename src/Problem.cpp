@@ -33,33 +33,33 @@ Problem::parameters()
 Problem::Problem(const Parameters & pars) :
     Object(pars),
     PrintInterface(this),
-    mesh(pars.is_param_valid("mesh") ? pars.get<Ref<Mesh>>("mesh")
-                                     : Optional<Ref<Mesh>>(std::nullopt)),
-    partitioner(nullptr),
-    partition_overlap(0)
+    mesh_(pars.is_param_valid("mesh") ? pars.get<Ref<Mesh>>("mesh")
+                                      : Optional<Ref<Mesh>>(std::nullopt)),
+    partitioner_(nullptr),
+    partition_overlap_(0)
 {
     set_output_monitor(ref(*this), &Problem::output_monitor);
-    this->partitioner.create(get_comm());
+    this->partitioner_.create(get_comm());
 }
 
 DM
 Problem::get_dm() const
 {
     CALL_STACK_MSG();
-    return this->mesh.value()->get_dm();
+    return this->mesh_.value()->get_dm();
 }
 
 const Vector &
 Problem::get_solution_vector() const
 {
     CALL_STACK_MSG();
-    return this->x;
+    return this->x_;
 }
 
 Vector &
 Problem::get_solution_vector()
 {
-    return this->x;
+    return this->x_;
 }
 
 String
@@ -82,9 +82,9 @@ void
 Problem::create()
 {
     CALL_STACK_MSG();
-    for (auto & [_, pp] : this->pps)
+    for (auto & [_, pp] : this->pps_)
         pp->create();
-    for (auto & out : this->outputs)
+    for (auto & out : this->outputs_)
         out->create();
 }
 
@@ -129,7 +129,7 @@ void
 Problem::compute_postprocessors()
 {
     CALL_STACK_MSG();
-    for (auto & [_, pp] : this->pps)
+    for (auto & [_, pp] : this->pps_)
         pp->compute();
 }
 
@@ -137,7 +137,7 @@ void
 Problem::compute_postprocessors(ExecuteOn flag)
 {
     CALL_STACK_MSG();
-    for (auto & [_, pp] : this->pps)
+    for (auto & [_, pp] : this->pps_)
         if (pp->should_execute(flag)) {
             pp->compute();
         }
@@ -147,8 +147,8 @@ Expected<Ref<Postprocessor>, ErrorCode>
 Problem::get_postprocessor(String name) const
 {
     CALL_STACK_MSG();
-    const auto & it = this->pps.find(name);
-    if (it != this->pps.end())
+    const auto & it = this->pps_.find(name);
+    if (it != this->pps_.end())
         return Ref<Postprocessor>(*it->second.get());
     else
         return Unexpected(ErrorCode::NotFound);
@@ -158,17 +158,17 @@ const std::vector<String> &
 Problem::get_postprocessor_names() const
 {
     CALL_STACK_MSG();
-    return this->pps_names;
+    return this->pps_names_;
 }
 
 void
 Problem::output(ExecuteOn flag)
 {
     CALL_STACK_MSG();
-    for (auto & out : this->file_outputs)
+    for (auto & out : this->file_outputs_)
         if (out->should_output(flag)) {
-            if (this->output_monitor_delegate)
-                this->output_monitor_delegate(out->get_file_name().string());
+            if (this->output_monitor_delegate_)
+                this->output_monitor_delegate_(out->get_file_name().string());
             output_with(*out);
         }
 }
@@ -193,8 +193,8 @@ void
 Problem::set_solution_vector(const Vector & x)
 {
     CALL_STACK_MSG();
-    this->x = x;
-    this->x.set_name("sln");
+    this->x_ = x;
+    this->x_.set_name("sln");
 }
 
 Vector
@@ -331,28 +331,28 @@ const Partitioner &
 Problem::get_partitioner()
 {
     CALL_STACK_MSG();
-    return this->partitioner;
+    return this->partitioner_;
 }
 
 void
 Problem::set_partitioner_type(String type)
 {
     CALL_STACK_MSG();
-    this->partitioner.set_type(type);
+    this->partitioner_.set_type(type);
 }
 
 Int
 Problem::get_partition_overlap()
 {
     CALL_STACK_MSG();
-    return this->partition_overlap;
+    return this->partition_overlap_;
 }
 
 void
 Problem::set_partition_overlap(Int overlap)
 {
     CALL_STACK_MSG();
-    this->partition_overlap = overlap;
+    this->partition_overlap_ = overlap;
 }
 
 Int
