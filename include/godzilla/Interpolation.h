@@ -87,7 +87,7 @@ public:
     void evaluate(DM dm, const Vector & x, Vector & values);
 
 private:
-    DMInterpolationInfo info;
+    DMInterpolationInfo info_;
 };
 
 } // namespace godzilla
