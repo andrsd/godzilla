@@ -323,7 +323,7 @@ protected:
 
 private:
     /// Quadrature order
-    Int qorder;
+    Int qorder_;
 
     /// Field information
     struct FieldInfo {
@@ -365,19 +365,19 @@ private:
     };
 
     /// Fields in the problem
-    std::map<FieldID, FieldInfo> fields;
+    std::map<FieldID, FieldInfo> fields_;
 
     /// Map from field name to field ID
-    std::map<String, FieldID> fields_by_name;
+    std::map<String, FieldID> fields_by_name_;
 
     /// Auxiliary fields in the problem
-    std::map<FieldID, FieldInfo> aux_fields;
+    std::map<FieldID, FieldInfo> aux_fields_;
 
     /// Map from auxiliary field name to auxiliary field ID
-    std::map<String, FieldID> aux_fields_by_name;
+    std::map<String, FieldID> aux_fields_by_name_;
 
     /// Weak formulation
-    WeakForm wf;
+    WeakForm wf_;
 
     /// Data used during assembling procedure
     struct AssemblyData {
@@ -404,14 +404,14 @@ private:
 
         explicit AssemblyData(Dimension dim);
     };
-    Qtr<AssemblyData> asmbl;
+    Qtr<AssemblyData> asmbl_;
 
     /// Functionals that must be evaluated before the weak form residual functionals
     /// associated with the WeakForm::Key are evaluated
-    std::map<WeakForm::Key, std::vector<const ValueFunctional *>> sorted_res_functionals;
+    std::map<WeakForm::Key, std::vector<const ValueFunctional *>> sorted_res_functionals_;
     /// Functionals that must be evaluated before the weak form Jacobian functionals
     /// associated with the WeakForm::Key are evaluated
-    std::map<WeakForm::Key, std::vector<const ValueFunctional *>> sorted_jac_functionals;
+    std::map<WeakForm::Key, std::vector<const ValueFunctional *>> sorted_jac_functionals_;
 };
 
 } // namespace godzilla

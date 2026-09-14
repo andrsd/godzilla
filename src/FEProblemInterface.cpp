@@ -58,7 +58,7 @@ FEProblemInterface::AssemblyData::AssemblyData(Dimension dim) :
 FEProblemInterface::FEProblemInterface(Problem & problem, const Parameters & pars) :
     DiscreteProblemInterface(problem, pars),
     DependencyEvaluator(),
-    qorder(PETSC_DETERMINE)
+    qorder_(PETSC_DETERMINE)
 {
     CALL_STACK_MSG();
 }
@@ -66,9 +66,9 @@ FEProblemInterface::FEProblemInterface(Problem & problem, const Parameters & par
 FEProblemInterface::~FEProblemInterface()
 {
     CALL_STACK_MSG();
-    for (auto & [_, info] : this->fields)
+    for (auto & [_, info] : this->fields_)
         PetscFEDestroy(&info.fe);
-    for (auto & [_, info] : this->aux_fields)
+    for (auto & [_, info] : this->aux_fields_)
         PetscFEDestroy(&info.fe);
 }
 
@@ -76,7 +76,7 @@ const std::map<FieldID, FEProblemInterface::FieldInfo> &
 FEProblemInterface::get_fields() const
 {
     CALL_STACK_MSG();
-    return this->fields;
+    return this->fields_;
 }
 
 void
@@ -84,7 +84,7 @@ FEProblemInterface::create()
 {
     CALL_STACK_MSG();
     auto dim = get_problem()->get_dimension();
-    this->asmbl = Qtr<AssemblyData>::alloc(dim);
+    this->asmbl_ = Qtr<AssemblyData>::alloc(dim);
     set_up_fields();
     DiscreteProblemInterface::create();
     get_mesh()->localize_coordinates();
@@ -94,9 +94,9 @@ void
 FEProblemInterface::init()
 {
     CALL_STACK_MSG();
-    for (auto & [_, info] : this->fields)
+    for (auto & [_, info] : this->fields_)
         create_fe(info);
-    for (auto & [_, info] : this->aux_fields)
+    for (auto & [_, info] : this->aux_fields_)
         create_fe(info);
 
     set_up_quadrature();
@@ -127,7 +127,7 @@ Int
 FEProblemInterface::get_num_fields() const
 {
     CALL_STACK_MSG();
-    return (Int) this->fields.size();
+    return (Int) this->fields_.size();
 }
 
 std::vector<String>
@@ -135,8 +135,8 @@ FEProblemInterface::get_field_names() const
 {
     CALL_STACK_MSG();
     std::vector<String> infos;
-    infos.reserve(this->fields.size());
-    for (const auto & [_, info] : this->fields)
+    infos.reserve(this->fields_.size());
+    for (const auto & [_, info] : this->fields_)
         infos.push_back(info.name);
 
     return infos;
@@ -146,8 +146,8 @@ Expected<String, ErrorCode>
 FEProblemInterface::get_field_name(FieldID fid) const
 {
     CALL_STACK_MSG();
-    const auto & it = this->fields.find(fid);
-    if (it != this->fields.end())
+    const auto & it = this->fields_.find(fid);
+    if (it != this->fields_.end())
         return it->second.name;
     else
         return Unexpected(ErrorCode::NotFound);
@@ -157,8 +157,8 @@ Expected<Order, ErrorCode>
 FEProblemInterface::get_field_order(FieldID fid) const
 {
     CALL_STACK_MSG();
-    const auto & it = this->fields.find(fid);
-    if (it != this->fields.end())
+    const auto & it = this->fields_.find(fid);
+    if (it != this->fields_.end())
         return it->second.k;
     else
         return Unexpected(ErrorCode::NotFound);
@@ -168,8 +168,8 @@ Expected<Int, ErrorCode>
 FEProblemInterface::get_field_num_components(FieldID fid) const
 {
     CALL_STACK_MSG();
-    const auto & it = this->fields.find(fid);
-    if (it != this->fields.end())
+    const auto & it = this->fields_.find(fid);
+    if (it != this->fields_.end())
         return it->second.nc;
     else
         return Unexpected(ErrorCode::NotFound);
@@ -179,8 +179,8 @@ Expected<FieldID, ErrorCode>
 FEProblemInterface::get_field_id(String name) const
 {
     CALL_STACK_MSG();
-    const auto & it = this->fields_by_name.find(name);
-    if (it != this->fields_by_name.end())
+    const auto & it = this->fields_by_name_.find(name);
+    if (it != this->fields_by_name_.end())
         return it->second;
     else
         return Unexpected(ErrorCode::NotFound);
@@ -190,30 +190,30 @@ const WeakForm &
 FEProblemInterface::get_weak_form() const
 {
     CALL_STACK_MSG();
-    return this->wf;
+    return this->wf_;
 }
 
 bool
 FEProblemInterface::has_field_by_id(FieldID fid) const
 {
     CALL_STACK_MSG();
-    const auto & it = this->fields.find(fid);
-    return it != this->fields.end();
+    const auto & it = this->fields_.find(fid);
+    return it != this->fields_.end();
 }
 
 bool
 FEProblemInterface::has_field_by_name(String name) const
 {
     CALL_STACK_MSG();
-    const auto & it = this->fields_by_name.find(name);
-    return it != this->fields_by_name.end();
+    const auto & it = this->fields_by_name_.find(name);
+    return it != this->fields_by_name_.end();
 }
 
 Expected<PetscFE, ErrorCode>
 FEProblemInterface::get_fe(FieldID fid) const
 {
-    const auto & it = this->fields.find(fid);
-    if (it != this->fields.end()) {
+    const auto & it = this->fields_.find(fid);
+    if (it != this->fields_.end()) {
         const FieldInfo & fi = it->second;
         return fi.fe;
     }
@@ -225,8 +225,8 @@ Expected<String, ErrorCode>
 FEProblemInterface::get_field_component_name(FieldID fid, Int component) const
 {
     CALL_STACK_MSG();
-    const auto & it = this->fields.find(fid);
-    if (it != this->fields.end()) {
+    const auto & it = this->fields_.find(fid);
+    if (it != this->fields_.end()) {
         const FieldInfo & fi = it->second;
         if (fi.nc == 1)
             return { "" };
@@ -245,8 +245,8 @@ void
 FEProblemInterface::set_field_component_name(FieldID fid, Int component, String name)
 {
     CALL_STACK_MSG();
-    const auto & it = this->fields.find(fid);
-    if (it != this->fields.end()) {
+    const auto & it = this->fields_.find(fid);
+    if (it != this->fields_.end()) {
         if (it->second.nc > 1) {
             expect_true(component < it->second.nc &&
                             std::cmp_less(component, it->second.component_names.size()),
@@ -264,7 +264,7 @@ Int
 FEProblemInterface::get_num_aux_fields() const
 {
     CALL_STACK_MSG();
-    return (Int) this->aux_fields.size();
+    return (Int) this->aux_fields_.size();
 }
 
 std::vector<String>
@@ -272,8 +272,8 @@ FEProblemInterface::get_aux_field_names() const
 {
     CALL_STACK_MSG();
     std::vector<String> names;
-    names.reserve(this->aux_fields.size());
-    for (const auto & [_, info] : this->aux_fields)
+    names.reserve(this->aux_fields_.size());
+    for (const auto & [_, info] : this->aux_fields_)
         names.push_back(info.name);
     return names;
 }
@@ -282,8 +282,8 @@ Expected<String, ErrorCode>
 FEProblemInterface::get_aux_field_name(FieldID fid) const
 {
     CALL_STACK_MSG();
-    const auto & it = this->aux_fields.find(fid);
-    if (it != this->aux_fields.end())
+    const auto & it = this->aux_fields_.find(fid);
+    if (it != this->aux_fields_.end())
         return it->second.name;
     else
         return Unexpected(ErrorCode::NotFound);
@@ -293,8 +293,8 @@ Expected<Int, ErrorCode>
 FEProblemInterface::get_aux_field_num_components(FieldID fid) const
 {
     CALL_STACK_MSG();
-    const auto & it = this->aux_fields.find(fid);
-    if (it != this->aux_fields.end())
+    const auto & it = this->aux_fields_.find(fid);
+    if (it != this->aux_fields_.end())
         return it->second.nc;
     else
         return Unexpected(ErrorCode::NotFound);
@@ -304,8 +304,8 @@ Expected<FieldID, ErrorCode>
 FEProblemInterface::get_aux_field_id(String name) const
 {
     CALL_STACK_MSG();
-    const auto & it = this->aux_fields_by_name.find(name);
-    if (it != this->aux_fields_by_name.end())
+    const auto & it = this->aux_fields_by_name_.find(name);
+    if (it != this->aux_fields_by_name_.end())
         return it->second;
     else
         return Unexpected(ErrorCode::NotFound);
@@ -315,24 +315,24 @@ bool
 FEProblemInterface::has_aux_field_by_id(FieldID fid) const
 {
     CALL_STACK_MSG();
-    const auto & it = this->aux_fields.find(fid);
-    return it != this->aux_fields.end();
+    const auto & it = this->aux_fields_.find(fid);
+    return it != this->aux_fields_.end();
 }
 
 bool
 FEProblemInterface::has_aux_field_by_name(String name) const
 {
     CALL_STACK_MSG();
-    const auto & it = this->aux_fields_by_name.find(name);
-    return it != this->aux_fields_by_name.end();
+    const auto & it = this->aux_fields_by_name_.find(name);
+    return it != this->aux_fields_by_name_.end();
 }
 
 Expected<Order, ErrorCode>
 FEProblemInterface::get_aux_field_order(FieldID fid) const
 {
     CALL_STACK_MSG();
-    const auto & it = this->aux_fields.find(fid);
-    if (it != this->aux_fields.end())
+    const auto & it = this->aux_fields_.find(fid);
+    if (it != this->aux_fields_.end())
         return it->second.k;
     else
         return Unexpected(ErrorCode::NotFound);
@@ -342,8 +342,8 @@ Expected<String, ErrorCode>
 FEProblemInterface::get_aux_field_component_name(FieldID fid, Int component) const
 {
     CALL_STACK_MSG();
-    const auto & it = this->aux_fields.find(fid);
-    if (it != this->aux_fields.end()) {
+    const auto & it = this->aux_fields_.find(fid);
+    if (it != this->aux_fields_.end()) {
         const FieldInfo & fi = it->second;
         if (fi.nc == 1)
             return { "" };
@@ -362,8 +362,8 @@ void
 FEProblemInterface::set_aux_field_component_name(FieldID fid, Int component, String name)
 {
     CALL_STACK_MSG();
-    const auto & it = this->aux_fields.find(fid);
-    if (it != this->aux_fields.end()) {
+    const auto & it = this->aux_fields_.find(fid);
+    if (it != this->aux_fields_.end()) {
         if (it->second.nc > 1) {
             expect_true(component < it->second.nc &&
                             std::cmp_less(component, it->second.component_names.size()),
@@ -381,7 +381,7 @@ FieldID
 FEProblemInterface::add_field(String name, Int nc, Order k, const Label & block)
 {
     CALL_STACK_MSG();
-    auto keys = utils::map_keys(this->fields);
+    auto keys = utils::map_keys(this->fields_);
     auto id = get_next_id(keys);
     set_field(id, name, nc, k, block);
     return id;
@@ -391,8 +391,8 @@ void
 FEProblemInterface::set_field(FieldID id, String name, Int nc, Order k, const Label & block)
 {
     CALL_STACK_MSG();
-    auto it = this->fields.find(id);
-    if (it == this->fields.end()) {
+    auto it = this->fields_.find(id);
+    if (it == this->fields_.end()) {
         auto dim = get_problem()->get_dimension();
         FieldInfo fi(name, id, nc, k, dim, block);
         if (nc > 1) {
@@ -400,8 +400,8 @@ FEProblemInterface::set_field(FieldID id, String name, Int nc, Order k, const La
             for (unsigned int i = 0; i < nc; ++i)
                 fi.component_names[i] = fmt::format("{:d}", i);
         }
-        this->fields.emplace(id, fi);
-        this->fields_by_name.emplace(name, id);
+        this->fields_.emplace(id, fi);
+        this->fields_by_name_.emplace(name, id);
     }
     else
         throw Exception(
@@ -412,7 +412,7 @@ FieldID
 FEProblemInterface::add_aux_field(String name, Int nc, Order k, const Label & block)
 {
     CALL_STACK_MSG();
-    auto keys = utils::map_keys(this->aux_fields);
+    auto keys = utils::map_keys(this->aux_fields_);
     auto id = get_next_id(keys);
     set_aux_field(id, name, nc, k, block);
     return id;
@@ -422,8 +422,8 @@ void
 FEProblemInterface::set_aux_field(FieldID id, String name, Int nc, Order k, const Label & block)
 {
     CALL_STACK_MSG();
-    auto it = this->aux_fields.find(id);
-    if (it == this->aux_fields.end()) {
+    auto it = this->aux_fields_.find(id);
+    if (it == this->aux_fields_.end()) {
         auto dim = get_problem()->get_dimension();
         FieldInfo fi(name, id, nc, k, dim, block);
         if (nc > 1) {
@@ -431,8 +431,8 @@ FEProblemInterface::set_aux_field(FieldID id, String name, Int nc, Order k, cons
             for (unsigned int i = 0; i < nc; ++i)
                 fi.component_names[i] = fmt::format("{:d}", i);
         }
-        this->aux_fields.emplace(id, fi);
-        this->aux_fields_by_name.emplace(name, id);
+        this->aux_fields_.emplace(id, fi);
+        this->aux_fields_by_name_.emplace(name, id);
     }
     else
         throw Exception(
@@ -455,7 +455,7 @@ FEProblemInterface::create_fe(FieldInfo & fi)
     auto dim = get_problem()->get_dimension();
     PetscBool is_simplex = get_mesh()->is_simplex() ? PETSC_TRUE : PETSC_FALSE;
     PETSC_CHECK(
-        PetscFECreateLagrange(comm, dim, fi.nc, is_simplex, fi.k.value(), this->qorder, &fi.fe));
+        PetscFECreateLagrange(comm, dim, fi.nc, is_simplex, fi.k.value(), this->qorder_, &fi.fe));
 }
 
 void
@@ -463,11 +463,11 @@ FEProblemInterface::set_up_ds()
 {
     CALL_STACK_MSG();
     auto dm = get_mesh()->get_dm();
-    for (auto & [_, info] : this->fields)
+    for (auto & [_, info] : this->fields_)
         PETSC_CHECK(DMSetField(dm, info.id.value(), info.block, (PetscObject) info.fe));
     create_ds();
     auto ds = get_ds();
-    for (auto & [_, info] : this->fields)
+    for (auto & [_, info] : this->fields_)
         PETSC_CHECK(PetscDSSetContext(ds, info.id.value(), this));
 
     set_up_assembly_data();
@@ -479,32 +479,32 @@ FEProblemInterface::set_up_assembly_data()
     CALL_STACK_MSG();
     auto ds = get_ds();
     PETSC_CHECK(
-        PetscDSGetEvaluationArrays(ds, &this->asmbl->u, &this->asmbl->u_t, &this->asmbl->u_x));
+        PetscDSGetEvaluationArrays(ds, &this->asmbl_->u, &this->asmbl_->u_t, &this->asmbl_->u_x));
     Int *u_offset, *u_offset_x;
     PETSC_CHECK(PetscDSGetComponentOffsets(ds, &u_offset));
     PETSC_CHECK(PetscDSGetComponentDerivativeOffsets(ds, &u_offset_x));
-    for (auto & [_, info] : this->fields) {
-        info.values.set(this->asmbl->u + u_offset[info.id.value()]);
-        info.derivs.set(this->asmbl->u_x + u_offset_x[info.id.value()]);
-        info.dots.set(this->asmbl->u_t + u_offset[info.id.value()]);
+    for (auto & [_, info] : this->fields_) {
+        info.values.set(this->asmbl_->u + u_offset[info.id.value()]);
+        info.derivs.set(this->asmbl_->u_x + u_offset_x[info.id.value()]);
+        info.dots.set(this->asmbl_->u_t + u_offset[info.id.value()]);
     }
     Real * coord;
     PETSC_CHECK(PetscDSGetWorkspace(ds, &coord, nullptr, nullptr, nullptr, nullptr));
-    this->asmbl->xyz.set(coord);
+    this->asmbl_->xyz.set(coord);
 }
 
 void
 FEProblemInterface::set_up_quadrature()
 {
     CALL_STACK_MSG();
-    expect_true(!this->fields.empty(), "No field specified");
-    auto first = this->fields.begin();
+    expect_true(!this->fields_.empty(), "No field specified");
+    auto first = this->fields_.begin();
     FieldInfo & first_fi = first->second;
-    for (auto it = ++first; it != this->fields.end(); ++it) {
+    for (auto it = ++first; it != this->fields_.end(); ++it) {
         FieldInfo & fi = it->second;
         PETSC_CHECK(PetscFECopyQuadrature(first_fi.fe, fi.fe));
     }
-    for (auto & [id, fi] : this->aux_fields)
+    for (auto & [id, fi] : this->aux_fields_)
         PETSC_CHECK(PetscFECopyQuadrature(first_fi.fe, fi.fe));
 }
 
@@ -513,7 +513,7 @@ FEProblemInterface::create_aux_fields()
 {
     CALL_STACK_MSG();
     auto dm_aux = get_dm_aux();
-    for (auto & [_, fi] : this->aux_fields)
+    for (auto & [_, fi] : this->aux_fields_)
         PETSC_CHECK(DMSetField(dm_aux, fi.id.value(), fi.block, (PetscObject) fi.fe));
 }
 
@@ -524,14 +524,14 @@ FEProblemInterface::set_up_assembly_data_aux()
     auto ds_aux = get_ds_aux();
     if (ds_aux) {
         PETSC_CHECK(
-            PetscDSGetEvaluationArrays(ds_aux, &this->asmbl->a, nullptr, &this->asmbl->a_x));
+            PetscDSGetEvaluationArrays(ds_aux, &this->asmbl_->a, nullptr, &this->asmbl_->a_x));
         Int *a_offset, *a_offset_x;
         PETSC_CHECK(PetscDSGetComponentOffsets(ds_aux, &a_offset));
         PETSC_CHECK(PetscDSGetComponentDerivativeOffsets(ds_aux, &a_offset_x));
 
-        for (auto & [id, fi] : this->aux_fields) {
-            fi.values.set(this->asmbl->a + a_offset[fi.id.value()]);
-            fi.derivs.set(this->asmbl->a_x + a_offset_x[fi.id.value()]);
+        for (auto & [id, fi] : this->aux_fields_) {
+            fi.values.set(this->asmbl_->a + a_offset[fi.id.value()]);
+            fi.derivs.set(this->asmbl_->a_x + a_offset_x[fi.id.value()]);
         }
     }
 }
@@ -540,7 +540,7 @@ const Dimension &
 FEProblemInterface::get_spatial_dimension() const
 {
     CALL_STACK_MSG();
-    return this->asmbl->dim;
+    return this->asmbl_->dim;
 }
 
 const FieldValue &
@@ -548,10 +548,10 @@ FEProblemInterface::get_field_value(String field_name) const
 {
     CALL_STACK_MSG();
     if (auto fid = get_field_id(field_name); fid.has_value()) {
-        return this->fields.at(fid.value()).values;
+        return this->fields_.at(fid.value()).values;
     }
     else if (auto fid = get_aux_field_id(field_name); fid.has_value()) {
-        return this->aux_fields.at(fid.value()).values;
+        return this->aux_fields_.at(fid.value()).values;
     }
     else
         throw Exception(fmt::format("Field '{}' does not exist. Typo?", field_name));
@@ -562,10 +562,10 @@ FEProblemInterface::get_field_gradient(String field_name) const
 {
     CALL_STACK_MSG();
     if (auto fid = get_field_id(field_name); fid.has_value()) {
-        return this->fields.at(fid.value()).derivs;
+        return this->fields_.at(fid.value()).derivs;
     }
     else if (auto fid = get_aux_field_id(field_name); fid.has_value()) {
-        return this->aux_fields.at(fid.value()).derivs;
+        return this->aux_fields_.at(fid.value()).derivs;
     }
     else
         throw Exception(fmt::format("Field '{}' does not exist. Typo?", field_name));
@@ -576,10 +576,10 @@ FEProblemInterface::get_field_dot(String field_name) const
 {
     CALL_STACK_MSG();
     if (auto fid = get_field_id(field_name); fid.has_value()) {
-        return this->fields.at(fid.value()).dots;
+        return this->fields_.at(fid.value()).dots;
     }
     else if (auto fid = get_aux_field_id(field_name); fid.has_value()) {
-        return this->aux_fields.at(fid.value()).dots;
+        return this->aux_fields_.at(fid.value()).dots;
     }
     else
         throw Exception(fmt::format("Field '{}' does not exist. Typo?", field_name));
@@ -589,28 +589,28 @@ const Real &
 FEProblemInterface::get_time_shift() const
 {
     CALL_STACK_MSG();
-    return this->asmbl->u_t_shift;
+    return this->asmbl_->u_t_shift;
 }
 
 const Real &
 FEProblemInterface::get_assembly_time() const
 {
     CALL_STACK_MSG();
-    return this->asmbl->time;
+    return this->asmbl_->time;
 }
 
 const Normal &
 FEProblemInterface::get_normal() const
 {
     CALL_STACK_MSG();
-    return this->asmbl->normals;
+    return this->asmbl_->normals;
 }
 
 const Point &
 FEProblemInterface::get_xyz() const
 {
     CALL_STACK_MSG();
-    return this->asmbl->xyz;
+    return this->asmbl_->xyz;
 }
 
 void
@@ -619,12 +619,12 @@ FEProblemInterface::sort_residual_functionals(
 {
     CALL_STACK_MSG();
     auto graph = build_dependecy_graph(suppliers);
-    this->sorted_res_functionals.clear();
-    for (auto & region : this->wf.get_residual_regions()) {
+    this->sorted_res_functionals_.clear();
+    for (auto & region : this->wf_.get_residual_regions()) {
         for (Int f = 0; f < get_num_fields(); ++f) {
             FieldID fid(f);
-            auto f0_fnls = this->wf.get(WeakForm::F0, region.label, region.value, fid, 0);
-            auto f1_fnls = this->wf.get(WeakForm::F1, region.label, region.value, fid, 0);
+            auto f0_fnls = this->wf_.get(WeakForm::F0, region.label, region.value, fid, 0);
+            auto f1_fnls = this->wf_.get(WeakForm::F1, region.label, region.value, fid, 0);
 
             add_functionals<ResidualFunc *>(graph, suppliers, f0_fnls);
             add_functionals<ResidualFunc *>(graph, suppliers, f1_fnls);
@@ -640,7 +640,7 @@ FEProblemInterface::sort_residual_functionals(
             for (auto it = sv.rbegin(); it != sv.rend(); ++it) {
                 auto ofnl = dynamic_cast<const ValueFunctional *>(*it);
                 if (ofnl)
-                    this->sorted_res_functionals[key].push_back(ofnl);
+                    this->sorted_res_functionals_[key].push_back(ofnl);
             }
         }
     }
@@ -652,16 +652,16 @@ FEProblemInterface::sort_jacobian_functionals(
 {
     CALL_STACK_MSG();
     auto graph = build_dependecy_graph(suppliers);
-    this->sorted_jac_functionals.clear();
-    for (auto & region : this->wf.get_jacobian_regions()) {
+    this->sorted_jac_functionals_.clear();
+    for (auto & region : this->wf_.get_jacobian_regions()) {
         for (Int f = 0; f < get_num_fields(); ++f) {
             FieldID fid(f);
             for (Int g = 0; g < get_num_fields(); ++g) {
                 FieldID gid(g);
-                auto g0_fnls = this->wf.get(WeakForm::G0, region.label, region.value, fid, gid, 0);
-                auto g1_fnls = this->wf.get(WeakForm::G1, region.label, region.value, fid, gid, 0);
-                auto g2_fnls = this->wf.get(WeakForm::G2, region.label, region.value, fid, gid, 0);
-                auto g3_fnls = this->wf.get(WeakForm::G3, region.label, region.value, fid, gid, 0);
+                auto g0_fnls = this->wf_.get(WeakForm::G0, region.label, region.value, fid, gid, 0);
+                auto g1_fnls = this->wf_.get(WeakForm::G1, region.label, region.value, fid, gid, 0);
+                auto g2_fnls = this->wf_.get(WeakForm::G2, region.label, region.value, fid, gid, 0);
+                auto g3_fnls = this->wf_.get(WeakForm::G3, region.label, region.value, fid, gid, 0);
 
                 add_functionals<JacobianFunc *>(graph, suppliers, g0_fnls);
                 add_functionals<JacobianFunc *>(graph, suppliers, g1_fnls);
@@ -681,7 +681,7 @@ FEProblemInterface::sort_jacobian_functionals(
                 for (auto it = sv.rbegin(); it != sv.rend(); ++it) {
                     auto ofnl = dynamic_cast<const ValueFunctional *>(*it);
                     if (ofnl)
-                        this->sorted_jac_functionals[key].push_back(ofnl);
+                        this->sorted_jac_functionals_[key].push_back(ofnl);
                 }
             }
         }
@@ -822,7 +822,7 @@ FEProblemInterface::add_weak_form_residual_block(WeakForm::ResidualKind kind,
                                                  Int part)
 {
     CALL_STACK_MSG();
-    this->wf.add(kind, label, val, fid, part, f);
+    this->wf_.add(kind, label, val, fid, part, f);
 }
 
 void
@@ -835,7 +835,7 @@ FEProblemInterface::add_weak_form_jacobian_block(WeakForm::JacobianKind kind,
                                                  Int part)
 {
     CALL_STACK_MSG();
-    this->wf.add(kind, label, val, fid, gid, part, g);
+    this->wf_.add(kind, label, val, fid, gid, part, g);
 }
 
 void
@@ -853,17 +853,17 @@ FEProblemInterface::integrate_residual(PetscDS ds,
     CALL_STACK_MSG();
     Int field = key.field;
     FieldID fid(field);
-    const auto & f0_res_fns = this->wf.get(WeakForm::F0, key.label, key.value, fid, key.part);
-    const auto & f1_res_fns = this->wf.get(WeakForm::F1, key.label, key.value, fid, key.part);
+    const auto & f0_res_fns = this->wf_.get(WeakForm::F0, key.label, key.value, fid, key.part);
+    const auto & f1_res_fns = this->wf_.get(WeakForm::F1, key.label, key.value, fid, key.part);
     if (f0_res_fns.empty() && f1_res_fns.empty())
         return;
 
-    PetscFE & fe = this->fields.at(fid).fe;
+    PetscFE & fe = this->fields_.at(fid).fe;
 
     Int fe_dim;
     PETSC_CHECK(PetscFEGetSpatialDimension(fe, &fe_dim));
-    this->asmbl->dim = Dimension::from_int(fe_dim);
-    this->asmbl->time = t;
+    this->asmbl_->dim = Dimension::from_int(fe_dim);
+    this->asmbl_->time = t;
 
     Scalar *basis_real, *basis_der_real;
     PETSC_CHECK(PetscDSGetWorkspace(ds, nullptr, &basis_real, &basis_der_real, nullptr, nullptr));
@@ -909,7 +909,7 @@ FEProblemInterface::integrate_residual(PetscDS ds,
     for (Int e = 0; e < n_elems; ++e) {
         PetscFEGeom fe_geom;
 
-        fe_geom.v = this->asmbl->xyz.get(); /* workspace */
+        fe_geom.v = this->asmbl_->xyz.get(); /* workspace */
 
         PETSC_CHECK(PetscArrayzero(f0, q_n_pts * T[field]->Nc));
         PETSC_CHECK(PetscArrayzero(f1, q_n_pts * T[field]->Nc * dim_embed));
@@ -917,7 +917,7 @@ FEProblemInterface::integrate_residual(PetscDS ds,
         for (Int q = 0; q < q_n_pts; ++q) {
             PETSC_CHECK(
                 PetscFEGeomGetPoint(cell_geom, e, q, &q_points[q * cell_geom->dim], &fe_geom));
-            this->asmbl->xyz.set(fe_geom.v);
+            this->asmbl_->xyz.set(fe_geom.v);
             Real w = fe_geom.detJ[0] * q_weights[q];
 
             evaluate_field_jets(ds,
@@ -928,9 +928,9 @@ FEProblemInterface::integrate_residual(PetscDS ds,
                                 &fe_geom,
                                 &coefficients[c_offset],
                                 coefficients_t ? &coefficients_t[c_offset] : nullptr,
-                                this->asmbl->u,
-                                this->asmbl->u_x,
-                                coefficients_t ? this->asmbl->u_t : nullptr);
+                                this->asmbl_->u,
+                                this->asmbl_->u_x,
+                                coefficients_t ? this->asmbl_->u_t : nullptr);
             if (ds_aux)
                 evaluate_field_jets(ds_aux,
                                     n_fields_aux,
@@ -940,20 +940,20 @@ FEProblemInterface::integrate_residual(PetscDS ds,
                                     &fe_geom,
                                     &coefficients_aux[c_offset_aux],
                                     nullptr,
-                                    this->asmbl->a,
-                                    this->asmbl->a_x,
+                                    this->asmbl_->a,
+                                    this->asmbl_->a_x,
                                     nullptr);
-            for (auto & f : this->sorted_res_functionals[key])
+            for (auto & f : this->sorted_res_functionals_[key])
                 f->evaluate();
             for (auto & func : f0_res_fns)
                 func->evaluate(&f0[q * T[field]->Nc]);
             for (Int c = 0; c < T[field]->Nc; ++c)
                 f0[q * T[field]->Nc + c] *= w;
             for (auto & func : f1_res_fns)
-                func->evaluate(&f1[q * T[field]->Nc * this->asmbl->dim]);
+                func->evaluate(&f1[q * T[field]->Nc * this->asmbl_->dim]);
             for (Int c = 0; c < T[field]->Nc; ++c)
-                for (Int d = 0; d < this->asmbl->dim; ++d)
-                    f1[(q * T[field]->Nc + c) * this->asmbl->dim + d] *= w;
+                for (Int d = 0; d < this->asmbl_->dim; ++d)
+                    f1[(q * T[field]->Nc + c) * this->asmbl_->dim + d] *= w;
         }
 
         update_element_vec(fe,
@@ -987,17 +987,17 @@ FEProblemInterface::integrate_bnd_residual(PetscDS ds,
     CALL_STACK_MSG();
     Int field = key.field;
     FieldID fid(field);
-    const auto & f0_res_fns = this->wf.get(WeakForm::BND_F0, key.label, key.value, fid, key.part);
-    const auto & f1_res_fns = this->wf.get(WeakForm::BND_F1, key.label, key.value, fid, key.part);
+    const auto & f0_res_fns = this->wf_.get(WeakForm::BND_F0, key.label, key.value, fid, key.part);
+    const auto & f1_res_fns = this->wf_.get(WeakForm::BND_F1, key.label, key.value, fid, key.part);
     if (f0_res_fns.empty() && f1_res_fns.empty())
         return;
 
-    PetscFE & fe = this->fields.at(fid).fe;
+    PetscFE & fe = this->fields_.at(fid).fe;
 
     Int fe_dim;
     PETSC_CHECK(PetscFEGetSpatialDimension(fe, &fe_dim));
-    this->asmbl->dim = Dimension::from_int(fe_dim);
-    this->asmbl->time = t;
+    this->asmbl_->dim = Dimension::from_int(fe_dim);
+    this->asmbl_->time = t;
 
     Scalar *basis_real, *basis_der_real;
     PETSC_CHECK(PetscDSGetWorkspace(ds, nullptr, &basis_real, &basis_der_real, nullptr, nullptr));
@@ -1018,7 +1018,7 @@ FEProblemInterface::integrate_bnd_residual(PetscDS ds,
         PETSC_CHECK(PetscDSGetSpatialDimension(ds_aux, &dim_aux));
         PETSC_CHECK(PetscDSGetTotalDimension(ds_aux, &tot_dim_aux));
 
-        aux_on_bnd = dim_aux < this->asmbl->dim ? PETSC_TRUE : PETSC_FALSE;
+        aux_on_bnd = dim_aux < this->asmbl_->dim ? PETSC_TRUE : PETSC_FALSE;
         if (aux_on_bnd)
             PETSC_CHECK(PetscDSGetTabulation(ds_aux, &T_face_aux));
         else
@@ -1045,7 +1045,7 @@ FEProblemInterface::integrate_bnd_residual(PetscDS ds,
 
     Int dim_embed = face_geom->dimEmbed;
     /* TODO FIX THIS */
-    face_geom->dim = this->asmbl->dim - 1;
+    face_geom->dim = this->asmbl_->dim - 1;
 
     expect_true(face_geom->dim == q_dim,
                 fmt::format("FEGeom dim {} != {} quadrature dim", face_geom->dim, q_dim));
@@ -1058,16 +1058,16 @@ FEProblemInterface::integrate_bnd_residual(PetscDS ds,
         PetscFEGeom fe_geom, cell_geom;
         const Int face = face_geom->face[e][0];
 
-        fe_geom.v = this->asmbl->xyz.get(); /* Workspace */
+        fe_geom.v = this->asmbl_->xyz.get(); /* Workspace */
         PETSC_CHECK(PetscArrayzero(f0, q_n_pts * n_comp_i));
         PETSC_CHECK(PetscArrayzero(f1, q_n_pts * n_comp_i * dim_embed));
         for (Int q = 0; q < q_n_pts; ++q) {
             PETSC_CHECK(
                 PetscFEGeomGetPoint(face_geom, e, q, &q_points[q * face_geom->dim], &fe_geom));
-            this->asmbl->xyz.set(fe_geom.v);
+            this->asmbl_->xyz.set(fe_geom.v);
             PETSC_CHECK(PetscFEGeomGetCellPoint(face_geom, e, q, &cell_geom));
             Real w = fe_geom.detJ[0] * q_weights[q];
-            this->asmbl->normals.set(fe_geom.n);
+            this->asmbl_->normals.set(fe_geom.n);
             evaluate_field_jets(ds,
                                 n_fields,
                                 face,
@@ -1076,9 +1076,9 @@ FEProblemInterface::integrate_bnd_residual(PetscDS ds,
                                 &cell_geom,
                                 &coefficients[c_offset],
                                 coefficients_t ? &coefficients_t[c_offset] : nullptr,
-                                this->asmbl->u,
-                                this->asmbl->u_x,
-                                coefficients_t ? this->asmbl->u_t : nullptr);
+                                this->asmbl_->u,
+                                this->asmbl_->u_x,
+                                coefficients_t ? this->asmbl_->u_t : nullptr);
             if (ds_aux)
                 evaluate_field_jets(ds_aux,
                                     n_fields_aux,
@@ -1088,20 +1088,20 @@ FEProblemInterface::integrate_bnd_residual(PetscDS ds,
                                     &cell_geom,
                                     &coefficients_aux[c_offset_aux],
                                     nullptr,
-                                    this->asmbl->a,
-                                    this->asmbl->a_x,
+                                    this->asmbl_->a,
+                                    this->asmbl_->a_x,
                                     nullptr);
-            for (auto & f : this->sorted_res_functionals[key])
+            for (auto & f : this->sorted_res_functionals_[key])
                 f->evaluate();
             for (auto & func : f0_res_fns)
                 func->evaluate(&f0[q * n_comp_i]);
             for (Int c = 0; c < n_comp_i; ++c)
                 f0[q * n_comp_i + c] *= w;
             for (auto & func : f1_res_fns)
-                func->evaluate(&f1[q * n_comp_i * this->asmbl->dim]);
+                func->evaluate(&f1[q * n_comp_i * this->asmbl_->dim]);
             for (Int c = 0; c < n_comp_i; ++c)
-                for (Int d = 0; d < this->asmbl->dim; ++d)
-                    f1[(q * n_comp_i + c) * this->asmbl->dim + d] *= w;
+                for (Int d = 0; d < this->asmbl_->dim; ++d)
+                    f1[(q * n_comp_i + c) * this->asmbl_->dim + d] *= w;
         }
         update_element_vec(fe,
                            T_face[field],
@@ -1164,21 +1164,21 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
         break;
     }
 
-    const auto & g0_jac_fns = this->wf.get(kind0, key.label, key.value, fid_i, fid_j, key.part);
-    const auto & g1_jac_fns = this->wf.get(kind1, key.label, key.value, fid_i, fid_j, key.part);
-    const auto & g2_jac_fns = this->wf.get(kind2, key.label, key.value, fid_i, fid_j, key.part);
-    const auto & g3_jac_fns = this->wf.get(kind3, key.label, key.value, fid_i, fid_j, key.part);
+    const auto & g0_jac_fns = this->wf_.get(kind0, key.label, key.value, fid_i, fid_j, key.part);
+    const auto & g1_jac_fns = this->wf_.get(kind1, key.label, key.value, fid_i, fid_j, key.part);
+    const auto & g2_jac_fns = this->wf_.get(kind2, key.label, key.value, fid_i, fid_j, key.part);
+    const auto & g3_jac_fns = this->wf_.get(kind3, key.label, key.value, fid_i, fid_j, key.part);
     if (g0_jac_fns.empty() && g1_jac_fns.empty() && g2_jac_fns.empty() && g3_jac_fns.empty())
         return;
 
-    PetscFE & fe_i = this->fields.at(fid_i).fe;
-    PetscFE & fe_j = this->fields.at(fid_j).fe;
+    PetscFE & fe_i = this->fields_.at(fid_i).fe;
+    PetscFE & fe_j = this->fields_.at(fid_j).fe;
 
     Int fe_dim;
     PETSC_CHECK(PetscFEGetSpatialDimension(fe_i, &fe_dim));
-    this->asmbl->dim = Dimension::from_int(fe_dim);
-    this->asmbl->time = t;
-    this->asmbl->u_t_shift = u_tshift;
+    this->asmbl_->dim = Dimension::from_int(fe_dim);
+    this->asmbl_->time = t;
+    this->asmbl_->u_t_shift = u_tshift;
 
     Scalar *basis_real, *basis_der_real, *test_real, *test_der_real;
     PETSC_CHECK(
@@ -1240,7 +1240,7 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
         fe_geom.dim = cell_geom->dim;
         fe_geom.dimEmbed = cell_geom->dimEmbed;
         if (is_affine) {
-            fe_geom.v = this->asmbl->xyz.get();
+            fe_geom.v = this->asmbl_->xyz.get();
             fe_geom.xi = cell_geom->xi;
             fe_geom.J = &cell_geom->J[e * n_pts * dim_embed * dim_embed];
             fe_geom.invJ = &cell_geom->invJ[e * n_pts * dim_embed * dim_embed];
@@ -1249,16 +1249,16 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
         for (Int q = 0; q < q_n_points; ++q) {
             if (is_affine) {
                 CoordinatesRefToReal(dim_embed,
-                                     this->asmbl->dim,
+                                     this->asmbl_->dim,
                                      fe_geom.xi,
                                      &cell_geom->v[e * n_pts * dim_embed],
                                      fe_geom.J,
-                                     &q_points[q * this->asmbl->dim],
-                                     this->asmbl->xyz.get());
+                                     &q_points[q * this->asmbl_->dim],
+                                     this->asmbl_->xyz.get());
             }
             else {
-                this->asmbl->xyz.set(&cell_geom->v[(e * n_pts + q) * dim_embed]);
-                fe_geom.v = this->asmbl->xyz.get();
+                this->asmbl_->xyz.set(&cell_geom->v[(e * n_pts + q) * dim_embed]);
+                fe_geom.v = this->asmbl_->xyz.get();
                 fe_geom.J = &cell_geom->J[(e * n_pts + q) * dim_embed * dim_embed];
                 fe_geom.invJ = &cell_geom->invJ[(e * n_pts + q) * dim_embed * dim_embed];
                 fe_geom.detJ = &cell_geom->detJ[e * n_pts + q];
@@ -1273,9 +1273,9 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
                                     &fe_geom,
                                     &coefficients[c_offset],
                                     coefficients_t ? &coefficients_t[c_offset] : nullptr,
-                                    this->asmbl->u,
-                                    this->asmbl->u_x,
-                                    coefficients_t ? this->asmbl->u_t : nullptr);
+                                    this->asmbl_->u,
+                                    this->asmbl_->u_x,
+                                    coefficients_t ? this->asmbl_->u_t : nullptr);
             if (ds_aux)
                 evaluate_field_jets(ds_aux,
                                     n_fields_aux,
@@ -1285,10 +1285,10 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
                                     &fe_geom,
                                     &coefficients_aux[c_offset_aux],
                                     nullptr,
-                                    this->asmbl->a,
-                                    this->asmbl->a_x,
+                                    this->asmbl_->a,
+                                    this->asmbl_->a_x,
                                     nullptr);
-            for (auto & f : this->sorted_jac_functionals[key])
+            for (auto & f : this->sorted_jac_functionals_[key])
                 f->evaluate();
             if (!g0_jac_fns.empty()) {
                 PETSC_CHECK(PetscArrayzero(g0, n_comp_i * n_comp_j));
@@ -1301,21 +1301,22 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
                 PETSC_CHECK(PetscArrayzero(g1, n_comp_i * n_comp_j * dim_embed));
                 for (auto & func : g1_jac_fns)
                     func->evaluate(g1);
-                for (Int c = 0; c < n_comp_i * n_comp_j * this->asmbl->dim; ++c)
+                for (Int c = 0; c < n_comp_i * n_comp_j * this->asmbl_->dim; ++c)
                     g1[c] *= w;
             }
             if (!g2_jac_fns.empty()) {
                 PETSC_CHECK(PetscArrayzero(g2, n_comp_i * n_comp_j * dim_embed));
                 for (auto & func : g2_jac_fns)
                     func->evaluate(g2);
-                for (Int c = 0; c < n_comp_i * n_comp_j * this->asmbl->dim; ++c)
+                for (Int c = 0; c < n_comp_i * n_comp_j * this->asmbl_->dim; ++c)
                     g2[c] *= w;
             }
             if (!g3_jac_fns.empty()) {
                 PETSC_CHECK(PetscArrayzero(g3, n_comp_i * n_comp_j * dim_embed * dim_embed));
                 for (auto & func : g3_jac_fns)
                     func->evaluate(g3);
-                for (Int c = 0; c < n_comp_i * n_comp_j * this->asmbl->dim * this->asmbl->dim; ++c)
+                for (Int c = 0; c < n_comp_i * n_comp_j * this->asmbl_->dim * this->asmbl_->dim;
+                     ++c)
                     g3[c] *= w;
             }
 
@@ -1369,24 +1370,24 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
     FieldID fid_j(field_j);
 
     const auto & g0_jac_fns =
-        this->wf.get(WeakForm::BND_G0, key.label, key.value, fid_i, fid_j, key.part);
+        this->wf_.get(WeakForm::BND_G0, key.label, key.value, fid_i, fid_j, key.part);
     const auto & g1_jac_fns =
-        this->wf.get(WeakForm::BND_G1, key.label, key.value, fid_i, fid_j, key.part);
+        this->wf_.get(WeakForm::BND_G1, key.label, key.value, fid_i, fid_j, key.part);
     const auto & g2_jac_fns =
-        this->wf.get(WeakForm::BND_G2, key.label, key.value, fid_i, fid_j, key.part);
+        this->wf_.get(WeakForm::BND_G2, key.label, key.value, fid_i, fid_j, key.part);
     const auto & g3_jac_fns =
-        this->wf.get(WeakForm::BND_G3, key.label, key.value, fid_i, fid_j, key.part);
+        this->wf_.get(WeakForm::BND_G3, key.label, key.value, fid_i, fid_j, key.part);
     if (g0_jac_fns.empty() && g1_jac_fns.empty() && g2_jac_fns.empty() && g3_jac_fns.empty())
         return;
 
-    PetscFE & fe_i = this->fields.at(fid_i).fe;
-    PetscFE & fe_j = this->fields.at(fid_j).fe;
+    PetscFE & fe_i = this->fields_.at(fid_i).fe;
+    PetscFE & fe_j = this->fields_.at(fid_j).fe;
 
     Int fe_dim;
     PETSC_CHECK(PetscFEGetSpatialDimension(fe_i, &fe_dim));
-    this->asmbl->dim = Dimension::from_int(fe_dim);
-    this->asmbl->time = t;
-    this->asmbl->u_t_shift = u_tshift;
+    this->asmbl_->dim = Dimension::from_int(fe_dim);
+    this->asmbl_->time = t;
+    this->asmbl_->u_t_shift = u_tshift;
 
     Scalar *basis_real, *basis_der_real, *test_real, *test_der_real;
     PETSC_CHECK(
@@ -1450,7 +1451,7 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
         cell_geom.dim = face_geom->dim;
         cell_geom.dimEmbed = face_geom->dimEmbed;
         if (is_affine) {
-            fe_geom.v = this->asmbl->xyz.get();
+            fe_geom.v = this->asmbl_->xyz.get();
             fe_geom.xi = face_geom->xi;
             fe_geom.J = &face_geom->J[e * n_pts * dim_embed * dim_embed];
             fe_geom.invJ = &face_geom->invJ[e * n_pts * dim_embed * dim_embed];
@@ -1464,16 +1465,16 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
         for (Int q = 0; q < q_n_points; ++q) {
             if (is_affine) {
                 CoordinatesRefToReal(dim_embed,
-                                     this->asmbl->dim - 1,
+                                     this->asmbl_->dim - 1,
                                      fe_geom.xi,
                                      &face_geom->v[e * n_pts * dim_embed],
                                      fe_geom.J,
-                                     &q_points[q * (this->asmbl->dim - 1)],
-                                     this->asmbl->xyz.get());
+                                     &q_points[q * (this->asmbl_->dim - 1)],
+                                     this->asmbl_->xyz.get());
             }
             else {
-                this->asmbl->xyz.set(&face_geom->v[(e * n_pts + q) * dim_embed]);
-                fe_geom.v = this->asmbl->xyz.get();
+                this->asmbl_->xyz.set(&face_geom->v[(e * n_pts + q) * dim_embed]);
+                fe_geom.v = this->asmbl_->xyz.get();
                 fe_geom.J = &face_geom->J[(e * n_pts + q) * dim_embed * dim_embed];
                 fe_geom.invJ = &face_geom->invJ[(e * n_pts + q) * dim_embed * dim_embed];
                 fe_geom.detJ = &face_geom->detJ[e * n_pts + q];
@@ -1483,7 +1484,7 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
                 cell_geom.invJ = &face_geom->suppInvJ[0][(e * n_pts + q) * dim_embed * dim_embed];
                 cell_geom.detJ = &face_geom->suppDetJ[0][e * n_pts + q];
             }
-            this->asmbl->normals.set(fe_geom.n);
+            this->asmbl_->normals.set(fe_geom.n);
             Real w = fe_geom.detJ[0] * q_weights[q];
             if (coefficients)
                 evaluate_field_jets(ds,
@@ -1494,9 +1495,9 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
                                     &cell_geom,
                                     &coefficients[c_offset],
                                     coefficients_t ? &coefficients_t[c_offset] : nullptr,
-                                    this->asmbl->u,
-                                    this->asmbl->u_x,
-                                    coefficients_t ? this->asmbl->u_t : nullptr);
+                                    this->asmbl_->u,
+                                    this->asmbl_->u_x,
+                                    coefficients_t ? this->asmbl_->u_t : nullptr);
             if (ds_aux)
                 evaluate_field_jets(ds_aux,
                                     n_fields_aux,
@@ -1506,11 +1507,11 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
                                     &cell_geom,
                                     &coefficients_aux[c_offset_aux],
                                     nullptr,
-                                    this->asmbl->a,
-                                    this->asmbl->a_x,
+                                    this->asmbl_->a,
+                                    this->asmbl_->a_x,
                                     nullptr);
 
-            for (auto & f : this->sorted_jac_functionals[key])
+            for (auto & f : this->sorted_jac_functionals_[key])
                 f->evaluate();
             if (!g0_jac_fns.empty()) {
                 PETSC_CHECK(PetscArrayzero(g0, n_comp_i * n_comp_j));
@@ -1523,21 +1524,22 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
                 PETSC_CHECK(PetscArrayzero(g1, n_comp_i * n_comp_j * dim_embed));
                 for (auto & func : g1_jac_fns)
                     func->evaluate(g1);
-                for (Int c = 0; c < n_comp_i * n_comp_j * this->asmbl->dim; ++c)
+                for (Int c = 0; c < n_comp_i * n_comp_j * this->asmbl_->dim; ++c)
                     g1[c] *= w;
             }
             if (!g2_jac_fns.empty()) {
                 PETSC_CHECK(PetscArrayzero(g2, n_comp_i * n_comp_j * dim_embed));
                 for (auto & func : g2_jac_fns)
                     func->evaluate(g2);
-                for (Int c = 0; c < n_comp_i * n_comp_j * this->asmbl->dim; ++c)
+                for (Int c = 0; c < n_comp_i * n_comp_j * this->asmbl_->dim; ++c)
                     g2[c] *= w;
             }
             if (!g3_jac_fns.empty()) {
                 PETSC_CHECK(PetscArrayzero(g3, n_comp_i * n_comp_j * dim_embed * dim_embed));
                 for (auto & func : g3_jac_fns)
                     func->evaluate(g3);
-                for (Int c = 0; c < n_comp_i * n_comp_j * this->asmbl->dim * this->asmbl->dim; ++c)
+                for (Int c = 0; c < n_comp_i * n_comp_j * this->asmbl_->dim * this->asmbl_->dim;
+                     ++c)
                     g3[c] *= w;
             }
 
