@@ -8,7 +8,7 @@ namespace godzilla {
 
 ValueFunctional::ValueFunctional(Ref<FEProblemInterface> fepi, String region) :
     Functional(fepi, region),
-    evalr(fepi)
+    evalr_(fepi)
 {
 }
 
@@ -16,7 +16,7 @@ const std::set<String> &
 ValueFunctional::get_provided_values() const
 {
     CALL_STACK_MSG();
-    return this->provides;
+    return this->provides_;
 }
 
 } // namespace godzilla
