@@ -50,16 +50,16 @@ protected:
 
 private:
     /// Problem to get data from
-    Ref<Problem> problem;
+    Ref<Problem> problem_;
 
     /// Bitwise mask for determining when this output object should output its content
-    ExecuteOnFlags on_mask;
+    ExecuteOnFlags on_mask_;
 
     ///
-    Int interval;
+    Int interval_;
 
     /// Last simulation time when output happened
-    Real last_output_time;
+    Real last_output_time_;
 
 public:
     static Parameters parameters();
