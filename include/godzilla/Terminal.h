@@ -23,7 +23,7 @@ public:
         operator const char *() const; // NOLINT(google-explicit-constructor)
 
     private:
-        String str;
+        String str_;
     };
 
     /// Terminal color is a special code
@@ -33,7 +33,7 @@ public:
 
 private:
     /// Number of colors supported by the terminal
-    static unsigned int num_colors;
+    static unsigned int num_colors_;
 
 public:
     /// Query if terminal has colors

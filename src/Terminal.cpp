@@ -20,16 +20,16 @@ Terminal::Code Terminal::erase_line("\033[2K");
 Terminal::Code Terminal::erase_ln_to_cursor("\033[1K");
 Terminal::Code Terminal::erase_ln_from_cursor("\033[0K");
 
-Terminal::Code::Code(const char * code) : str(code) {}
+Terminal::Code::Code(const char * code) : str_(code) {}
 
 Terminal::Code::operator String() const
 {
-    return this->str;
+    return this->str_;
 }
 
 Terminal::Code::operator const char *() const
 {
-    return this->str.c_str();
+    return this->str_.c_str();
 }
 
 Terminal::Color::Color(const char * code) : Code(code) {}
@@ -39,19 +39,19 @@ Terminal::Color::Color(const char * code) : Code(code) {}
 bool
 Terminal::has_colors()
 {
-    return num_colors > 1;
+    return num_colors_ > 1;
 }
 
 void
 Terminal::set_colors(bool state)
 {
     if (state)
-        num_colors = 256;
+        num_colors_ = 256;
     else
-        num_colors = 1;
+        num_colors_ = 1;
 }
 
-unsigned int Terminal::num_colors = 256;
+unsigned int Terminal::num_colors_ = 256;
 
 } // namespace godzilla
 
