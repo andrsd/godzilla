@@ -399,19 +399,19 @@ public:
 
 private:
     /// Cell set names
-    std::map<Int, String> cell_set_names;
+    std::map<Int, String> cell_set_names_;
     /// Cell set IDs
-    std::map<String, Int> cell_set_ids;
+    std::map<String, Int> cell_set_ids_;
 
     /// Face set names
-    std::map<Int, String> face_set_names;
+    std::map<Int, String> face_set_names_;
     /// Face set IDs
-    std::map<String, Int> face_set_ids;
+    std::map<String, Int> face_set_ids_;
 
     /// Vertex set names
-    std::map<Int, String> vertex_set_names;
+    std::map<Int, String> vertex_set_names_;
     /// Vertex set IDs
-    std::map<String, Int> vertex_set_ids;
+    std::map<String, Int> vertex_set_ids_;
 
 public:
     static int get_num_cell_nodes(PolytopeType cell_type);

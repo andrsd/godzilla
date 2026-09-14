@@ -396,24 +396,24 @@ void
 UnstructuredMesh::set_face_set_name(Int id, String name)
 {
     CALL_STACK_MSG();
-    this->face_set_names[id] = name;
-    this->face_set_ids[name] = id;
+    this->face_set_names_[id] = name;
+    this->face_set_ids_[name] = id;
 }
 
 bool
 UnstructuredMesh::has_face_set(String name) const
 {
     CALL_STACK_MSG();
-    const auto & it = this->face_set_ids.find(name);
-    return it != this->face_set_ids.end();
+    const auto & it = this->face_set_ids_.find(name);
+    return it != this->face_set_ids_.end();
 }
 
 Label
 UnstructuredMesh::get_face_set_label(String name) const
 {
     CALL_STACK_MSG();
-    const auto & it = this->face_set_ids.find(name);
-    if (it != this->face_set_ids.end())
+    const auto & it = this->face_set_ids_.find(name);
+    if (it != this->face_set_ids_.end())
         return get_label(name);
     else
         return Label();
@@ -423,8 +423,8 @@ Expected<String, ErrorCode>
 UnstructuredMesh::get_face_set_name(Int id) const
 {
     CALL_STACK_MSG();
-    const auto & it = this->face_set_names.find(id);
-    if (it != this->face_set_names.end())
+    const auto & it = this->face_set_names_.find(id);
+    if (it != this->face_set_names_.end())
         return it->second;
     else
         return Unexpected(ErrorCode::NotFound);
@@ -446,8 +446,8 @@ void
 UnstructuredMesh::set_cell_set_name(Int id, String name)
 {
     CALL_STACK_MSG();
-    this->cell_set_names[id] = name;
-    this->cell_set_ids[name] = id;
+    this->cell_set_names_[id] = name;
+    this->cell_set_ids_[name] = id;
 }
 
 void
@@ -461,8 +461,8 @@ Expected<String, ErrorCode>
 UnstructuredMesh::get_cell_set_name(Int id) const
 {
     CALL_STACK_MSG();
-    const auto & it = this->cell_set_names.find(id);
-    if (it != this->cell_set_names.end())
+    const auto & it = this->cell_set_names_.find(id);
+    if (it != this->cell_set_names_.end())
         return it->second;
     else
         return Unexpected(ErrorCode::NotFound);
@@ -472,8 +472,8 @@ Expected<Int, ErrorCode>
 UnstructuredMesh::get_cell_set_id(String name) const
 {
     CALL_STACK_MSG();
-    const auto & it = this->cell_set_ids.find(name);
-    if (it != this->cell_set_ids.end())
+    const auto & it = this->cell_set_ids_.find(name);
+    if (it != this->cell_set_ids_.end())
         return it->second;
     else
         return Unexpected(ErrorCode::NotFound);
@@ -492,7 +492,7 @@ const std::map<Int, String> &
 UnstructuredMesh::get_cell_sets() const
 {
     CALL_STACK_MSG();
-    return this->cell_set_names;
+    return this->cell_set_names_;
 }
 
 Int
@@ -508,15 +508,15 @@ const std::map<Int, String> &
 UnstructuredMesh::get_face_sets() const
 {
     CALL_STACK_MSG();
-    return this->face_set_names;
+    return this->face_set_names_;
 }
 
 Expected<String, ErrorCode>
 UnstructuredMesh::get_vertex_set_name(Int id) const
 {
     CALL_STACK_MSG();
-    const auto & it = this->vertex_set_names.find(id);
-    if (it != this->vertex_set_names.end())
+    const auto & it = this->vertex_set_names_.find(id);
+    if (it != this->vertex_set_names_.end())
         return it->second;
     else
         return Unexpected(ErrorCode::NotFound);
@@ -535,23 +535,23 @@ const std::map<Int, String> &
 UnstructuredMesh::get_vertex_sets() const
 {
     CALL_STACK_MSG();
-    return this->vertex_set_names;
+    return this->vertex_set_names_;
 }
 
 bool
 UnstructuredMesh::has_vertex_set(String name) const
 {
     CALL_STACK_MSG();
-    const auto & it = this->vertex_set_ids.find(name);
-    return it != this->vertex_set_ids.end();
+    const auto & it = this->vertex_set_ids_.find(name);
+    return it != this->vertex_set_ids_.end();
 }
 
 Label
 UnstructuredMesh::get_vertex_set_label(String name) const
 {
     CALL_STACK_MSG();
-    const auto & it = this->vertex_set_ids.find(name);
-    if (it != this->vertex_set_ids.end())
+    const auto & it = this->vertex_set_ids_.find(name);
+    if (it != this->vertex_set_ids_.end())
         return get_label(name);
     else
         return Label();
@@ -590,8 +590,8 @@ void
 UnstructuredMesh::set_vertex_set_name(Int id, String name)
 {
     CALL_STACK_MSG();
-    this->vertex_set_names[id] = name;
-    this->vertex_set_ids[name] = id;
+    this->vertex_set_names_[id] = name;
+    this->vertex_set_ids_[name] = id;
 }
 
 void
