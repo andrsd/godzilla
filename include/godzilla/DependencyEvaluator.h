@@ -22,24 +22,24 @@ class DependencyEvaluator {
     /// Base class for values provided by functionals
     class ValueBase {
     public:
-        ValueBase() : declared(false) {}
+        ValueBase() : declared_(false) {}
         virtual ~ValueBase() = default;
 
         /// Mark this value as declared
         void
         set_declared()
         {
-            this->declared = true;
+            this->declared_ = true;
         }
 
         bool
         is_declared() const
         {
-            return this->declared;
+            return this->declared_;
         }
 
     private:
-        bool declared;
+        bool declared_;
     };
 
     /// Class for concrete values provided by functionals
@@ -50,7 +50,7 @@ class DependencyEvaluator {
         const T &
         get() const
         {
-            return this->value;
+            return this->value_;
         }
 
         /// Get a write reference to the value
@@ -58,11 +58,11 @@ class DependencyEvaluator {
         set()
         {
             set_declared();
-            return this->value;
+            return this->value_;
         }
 
     private:
-        T value;
+        T value_;
     };
 
 public:
@@ -111,9 +111,9 @@ public:
 
 private:
     /// All created functionals
-    std::map<String, const ValueFunctional *> functionals;
+    std::map<String, const ValueFunctional *> functionals_;
     /// Values computed by functionals
-    std::map<String, const ValueBase *> values;
+    std::map<String, const ValueBase *> values_;
 };
 
 template <typename T>
@@ -121,10 +121,10 @@ T &
 DependencyEvaluator::declare_value(String val_name)
 {
     CALL_STACK_MSG();
-    auto it = this->values.find(val_name);
-    if (it == this->values.end()) {
+    auto it = this->values_.find(val_name);
+    if (it == this->values_.end()) {
         auto * new_val = new Value<T>();
-        this->values[val_name] = new_val;
+        this->values_[val_name] = new_val;
         return new_val->set();
     }
     else {
@@ -140,14 +140,14 @@ const T &
 DependencyEvaluator::get_value(String val_name)
 {
     CALL_STACK_MSG();
-    auto it = this->values.find(val_name);
-    if (it != this->values.end()) {
+    auto it = this->values_.find(val_name);
+    if (it != this->values_.end()) {
         auto val = dynamic_cast<const Value<T> *>(it->second);
         return val->get();
     }
     else {
         auto * new_val = new Value<T>();
-        this->values[val_name] = new_val;
+        this->values_[val_name] = new_val;
         return new_val->get();
     }
 }
@@ -157,11 +157,11 @@ void
 DependencyEvaluator::create_functional(String name, const Parameters & pars)
 {
     CALL_STACK_MSG();
-    const auto & it = this->functionals.find(name);
-    expect_true(it == this->functionals.end(),
+    const auto & it = this->functionals_.find(name);
+    expect_true(it == this->functionals_.end(),
                 fmt::format("Functional with name '{}' already exists.", name));
     auto * fnl = new Fn(pars);
-    this->functionals[name] = fnl;
+    this->functionals_[name] = fnl;
 }
 
 } // namespace godzilla
