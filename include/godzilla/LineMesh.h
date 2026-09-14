@@ -36,13 +36,13 @@ public:
 
 private:
     /// Minimum in the x direction
-    Real xmin;
+    Real xmin_;
     /// Maximum in the x direction
-    Real xmax;
+    Real xmax_;
     /// Number of mesh point in the x direction
-    Int nx;
+    Int nx_;
     /// create intermediate mesh pieces (edges, faces)
-    bool interpolate;
+    bool interpolate_;
 
 public:
     static Parameters parameters();
