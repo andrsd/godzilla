@@ -58,13 +58,13 @@ private:
     virtual std::vector<Int> create_components();
 
     /// Field ID this boundary condition is attached to
-    FieldID fid;
+    FieldID fid_;
     /// Components
-    std::vector<Int> components;
+    std::vector<Int> components_;
     ///
-    Optional<String> field_name;
+    Optional<String> field_name_;
     /// Finite element problem this object is part of
-    Ref<FEProblemInterface> fepi;
+    Ref<FEProblemInterface> fepi_;
 
 public:
     static Parameters parameters();
