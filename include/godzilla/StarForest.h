@@ -348,6 +348,13 @@ public:
         scatter_begin(root_vals.data(), leaf_vals.data());
     }
 
+    void
+    scatter_begin(Span<const Scalar> root, Span<Scalar> leaf) const
+    {
+        CALL_STACK_MSG();
+        scatter_begin(root.data(), leaf.data());
+    }
+
     /// Ends pointwise scatter operation that was started with `scatter_begin`
     ///
     /// @param root Root buffer to send to each leaf, one unit of data per leaf
@@ -375,6 +382,13 @@ public:
         auto root_vals = root.borrow_array_read();
         auto leaf_vals = leaf.borrow_array();
         scatter_end(root_vals.data(), leaf_vals.data());
+    }
+
+    void
+    scatter_end(Span<const Scalar> root, Span<Scalar> leaf) const
+    {
+        CALL_STACK_MSG();
+        scatter_end(root.data(), leaf.data());
     }
 
     /// Creates the inverse map (all roots have must have degree 1 - exactly one leaf)
