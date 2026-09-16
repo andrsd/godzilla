@@ -374,6 +374,12 @@ public:
         return this->data_;
     }
 
+    Int
+    size() const noexcept
+    {
+        return this->size_;
+    }
+
 private:
     Vec vec_;
     Scalar * data_ = nullptr;
@@ -433,6 +439,12 @@ public:
     data() const noexcept
     {
         return this->data_;
+    }
+
+    Int
+    size() const noexcept
+    {
+        return this->size_;
     }
 
 private:
