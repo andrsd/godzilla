@@ -396,7 +396,7 @@ Vector::create_seq(mpi::Communicator comm, Int bs, Int n, const Scalar array[])
 }
 
 Vector
-Vector::create_seq(mpi::Communicator comm, Int bs, const std::vector<Scalar> & data)
+Vector::create_seq(mpi::Communicator comm, Int bs, Span<const Scalar> data)
 {
     CALL_STACK_MSG();
     Vector v;
@@ -423,7 +423,7 @@ Vector::create_mpi(mpi::Communicator comm, Int bs, Int n, Int N, const Scalar ar
 }
 
 Vector
-Vector::create_mpi(mpi::Communicator comm, Int bs, const std::vector<Scalar> & data, Int N)
+Vector::create_mpi(mpi::Communicator comm, Int bs, Span<const Scalar> data, Int N)
 {
     CALL_STACK_MSG();
     Vector v;

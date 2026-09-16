@@ -243,7 +243,7 @@ public:
     /// @param comm MPI communicator
     /// @param bs Block size
     /// @param array Memory where the vector elements are to be stored.
-    static Vector create_seq(mpi::Communicator comm, Int bs, const std::vector<Scalar> & data);
+    static Vector create_seq(mpi::Communicator comm, Int bs, Span<const Scalar> data);
 
     /// Creates a parallel vector.
     ///
@@ -269,10 +269,8 @@ public:
     /// @param bs Block size
     /// @param data The user-provided array to store the vector values
     /// @param N Global vector length (or PETSC_DETERMINE to have it calculated)
-    static Vector create_mpi(mpi::Communicator comm,
-                             Int bs,
-                             const std::vector<Scalar> & data,
-                             Int N = PETSC_DETERMINE);
+    static Vector
+    create_mpi(mpi::Communicator comm, Int bs, Span<const Scalar> data, Int N = PETSC_DETERMINE);
 
     /// Creates a new vector containing several nested subvectors, each stored separately
     ///
