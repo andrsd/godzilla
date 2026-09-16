@@ -343,6 +343,7 @@ public:
     void
     scatter_begin(const Vector & root, Vector & leaf) const
     {
+        CALL_STACK_MSG();
         auto root_vals = root.borrow_array_read();
         auto leaf_vals = leaf.borrow_array();
         scatter_begin(root_vals.data(), leaf_vals.data());
@@ -372,6 +373,7 @@ public:
     void
     scatter_end(const Vector & root, Vector & leaf) const
     {
+        CALL_STACK_MSG();
         auto root_vals = root.borrow_array_read();
         auto leaf_vals = leaf.borrow_array();
         scatter_end(root_vals.data(), leaf_vals.data());
