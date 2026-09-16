@@ -289,6 +289,12 @@ public:
         gather_begin(root_vals.data(), leaf_vals.data());
     }
 
+    void
+    gather_begin(Span<const Scalar> root, Span<Scalar> leaf) const
+    {
+        gather_begin(root.data(), leaf.data());
+    }
+
     /// End pointwise gather operation that was started with `gather_begin
     ///
     /// @param leaf Leaf data to gather to roots
@@ -316,6 +322,12 @@ public:
         auto root_vals = root.borrow_array_read();
         auto leaf_vals = leaf.borrow_array();
         gather_end(root_vals.data(), leaf_vals.data());
+    }
+
+    void
+    gather_end(Span<const Scalar> root, Span<Scalar> leaf) const
+    {
+        gather_end(root.data(), leaf.data());
     }
 
     /// Begin pointwise scatter operation from multi-roots to leaves, to be completed with
