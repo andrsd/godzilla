@@ -493,6 +493,7 @@ void
 local_to_global(DM dm, const Vector & l, InsertMode mode, Vector & g)
 {
     CALL_STACK_MSG();
+    GODZILLA_ASSERT_TRUE(dm != null, "DM is null");
     PETSC_CHECK(DMLocalToGlobal(dm, l, mode, g));
 }
 
@@ -500,6 +501,7 @@ void
 global_to_local(DM dm, const Vector & g, InsertMode mode, Vector & l)
 {
     CALL_STACK_MSG();
+    GODZILLA_ASSERT_TRUE(dm != null, "DM is null");
     PETSC_CHECK(DMGlobalToLocal(dm, g, mode, l));
 }
 
@@ -507,6 +509,7 @@ BorrowedLocalVector
 borrow_local_vector(DM dm)
 {
     CALL_STACK_MSG();
+    GODZILLA_ASSERT_TRUE(dm != null, "DM is null");
     return BorrowedLocalVector(dm);
 }
 
@@ -514,6 +517,7 @@ Vector
 get_local_vector(DM dm)
 {
     CALL_STACK_MSG();
+    GODZILLA_ASSERT_TRUE(dm != null, "DM is null");
     Vector v;
     PETSC_CHECK(DMGetLocalVector(dm, v));
     v.inc_reference();
@@ -524,6 +528,7 @@ void
 restore_local_vector(DM dm, const Vector & g)
 {
     CALL_STACK_MSG();
+    GODZILLA_ASSERT_TRUE(dm != null, "DM is null");
     Vec glob = g;
     PETSC_CHECK(DMRestoreLocalVector(dm, &glob));
 }
@@ -532,6 +537,7 @@ BorrowedGlobalVector
 borrow_global_vector(DM dm)
 {
     CALL_STACK_MSG();
+    GODZILLA_ASSERT_TRUE(dm != null, "DM is null");
     return BorrowedGlobalVector(dm);
 }
 
@@ -539,6 +545,7 @@ Vector
 get_global_vector(DM dm)
 {
     CALL_STACK_MSG();
+    GODZILLA_ASSERT_TRUE(dm != null, "DM is null");
     Vector glob;
     PETSC_CHECK(DMGetGlobalVector(dm, glob));
     glob.inc_reference();
@@ -549,6 +556,7 @@ void
 restore_global_vector(DM dm, const Vector & g)
 {
     CALL_STACK_MSG();
+    GODZILLA_ASSERT_TRUE(dm != null, "DM is null");
     Vec glob = g;
     PETSC_CHECK(DMRestoreGlobalVector(dm, &glob));
 }
@@ -557,6 +565,7 @@ Vector
 create_local_vector(DM dm)
 {
     CALL_STACK_MSG();
+    GODZILLA_ASSERT_TRUE(dm != null, "DM is null");
     Vector v;
     PETSC_CHECK(DMCreateLocalVector(dm, v));
     return v;
@@ -566,6 +575,7 @@ Vector
 create_global_vector(DM dm)
 {
     CALL_STACK_MSG();
+    GODZILLA_ASSERT_TRUE(dm != null, "DM is null");
     Vector v;
     PETSC_CHECK(DMCreateGlobalVector(dm, v));
     return v;
@@ -574,6 +584,8 @@ create_global_vector(DM dm)
 Section
 get_local_section(DM dm)
 {
+    CALL_STACK_MSG();
+    GODZILLA_ASSERT_TRUE(dm != null, "DM is null");
     Section section;
     PETSC_CHECK(DMGetLocalSection(dm, section));
     section.inc_reference();
@@ -583,6 +595,8 @@ get_local_section(DM dm)
 Section
 get_global_section(DM dm)
 {
+    CALL_STACK_MSG();
+    GODZILLA_ASSERT_TRUE(dm != null, "DM is null");
     Section section;
     PETSC_CHECK(DMGetGlobalSection(dm, section));
     section.inc_reference();
@@ -592,6 +606,8 @@ get_global_section(DM dm)
 StarForest
 get_section_star_forest(DM dm)
 {
+    CALL_STACK_MSG()
+    GODZILLA_ASSERT_TRUE(dm != null, "DM is null");
     StarForest sf;
     PETSC_CHECK(DMGetSectionSF(dm, sf));
     sf.inc_reference();
@@ -602,6 +618,7 @@ DM
 clone(DM dm)
 {
     CALL_STACK_MSG();
+    GODZILLA_ASSERT_TRUE(dm != null, "DM is null");
     DM cln;
     PETSC_CHECK(DMClone(dm, &cln));
     return cln;
