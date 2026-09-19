@@ -15,23 +15,9 @@ namespace {
 class TestEssentialBoundary1D : public fe::EssentialBoundaryInfo<EDGE2, 1_D, 2> {
 public:
     TestEssentialBoundary1D(Ref<UnstructuredMesh> mesh, const IndexSet & vertices) :
-        fe::EssentialBoundaryInfo<EDGE2, 1_D, 2>(mesh, vertices)
+        fe::EssentialBoundaryInfo<EDGE2, 1_D, 2>(mesh, vertices),
+        vals(get_mesh()->get_comm(), this->num_vertices())
     {
-    }
-
-    void
-    create() override
-    {
-        CALL_STACK_MSG();
-        EssentialBoundaryInfo::create();
-        this->vals = Array1D<Int>(get_mesh()->get_comm(), this->num_vertices());
-    }
-
-    void
-    destroy() override
-    {
-        CALL_STACK_MSG();
-        EssentialBoundaryInfo::destroy();
     }
 
     void
@@ -48,28 +34,15 @@ public:
     TestNaturalBoundary1D(Ref<UnstructuredMesh> mesh,
                           Array1D<DenseMatrix<Real, 1, 2>> grad_phi,
                           const IndexSet & facets) :
-        fe::NaturalBoundaryInfo<EDGE2, 1_D, 2>(mesh, grad_phi, facets)
+        fe::NaturalBoundaryInfo<EDGE2, 1_D, 2>(mesh, grad_phi, facets),
+        vals(get_mesh()->get_comm(), num_facets())
     {
     }
 
     TestNaturalBoundary1D(Ref<UnstructuredMesh> mesh, const IndexSet & facets) :
-        fe::NaturalBoundaryInfo<EDGE2, 1_D, 2>(mesh, facets)
+        fe::NaturalBoundaryInfo<EDGE2, 1_D, 2>(mesh, facets),
+        vals(get_mesh()->get_comm(), num_facets())
     {
-    }
-
-    void
-    create() override
-    {
-        CALL_STACK_MSG();
-        NaturalBoundaryInfo::create();
-        this->vals = Array1D<Int>(get_mesh()->get_comm(), this->num_facets());
-    }
-
-    void
-    destroy() override
-    {
-        CALL_STACK_MSG();
-        NaturalBoundaryInfo::destroy();
     }
 
     void
@@ -100,18 +73,14 @@ TEST(FEBoundaryTest, test_1d)
         vertices.sort_remove_dups();
 
         TestEssentialBoundary1D bnd(ref(*mesh), vertices);
-        bnd.create();
         bnd.compute();
         EXPECT_EQ(bnd.vals[0], 2);
-        bnd.destroy();
     }
 
     {
         IndexSet bnd_facets = points_from_label(mesh->get_label("right"));
         TestNaturalBoundary1D bnd(ref(*mesh), bnd_facets);
-        bnd.create();
         bnd.compute();
         EXPECT_DOUBLE_EQ(bnd.normal(0)(0), 1);
-        bnd.destroy();
     }
 }

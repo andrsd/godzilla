@@ -47,19 +47,17 @@ TEST(EssentialBoundaryTest, test_1d)
     {
         auto bnd_facets = points_from_label(mesh->get_label("left"));
         TestBoundary1D bnd(ref(*mesh), bnd_facets);
-        bnd.create();
         EXPECT_DOUBLE_EQ(bnd.num_vertices(), 1);
-        EXPECT_DOUBLE_EQ(bnd.vertex(0), 2);
-        bnd.destroy();
+        auto vertices = bnd.vertices().borrow_indices();
+        EXPECT_DOUBLE_EQ(vertices[0], 2);
     }
 
     {
         auto bnd_facets = points_from_label(mesh->get_label("right"));
         TestBoundary1D bnd(ref(*mesh), bnd_facets);
-        bnd.create();
         EXPECT_DOUBLE_EQ(bnd.num_vertices(), 1);
-        EXPECT_DOUBLE_EQ(bnd.vertex(0), 4);
-        bnd.destroy();
+        auto vertices = bnd.vertices().borrow_indices();
+        EXPECT_DOUBLE_EQ(vertices[0], 4);
     }
 }
 
@@ -74,22 +72,20 @@ TEST(EssentialBoundaryTest, test_2d)
         auto bnd_facets = points_from_label(mesh->get_label("left"));
         auto vtxs = boundary_vertices(*mesh, bnd_facets);
         TestBoundary2D bnd(ref(*mesh), vtxs);
-        bnd.create();
         EXPECT_DOUBLE_EQ(bnd.num_vertices(), 2);
-        EXPECT_DOUBLE_EQ(bnd.vertex(0), 2);
-        EXPECT_DOUBLE_EQ(bnd.vertex(1), 4);
-        bnd.destroy();
+        auto vertices = bnd.vertices().borrow_indices();
+        EXPECT_DOUBLE_EQ(vertices[0], 2);
+        EXPECT_DOUBLE_EQ(vertices[1], 4);
     }
 
     {
         auto bnd_facets = points_from_label(mesh->get_label("bottom"));
         auto vtxs = boundary_vertices(*mesh, bnd_facets);
         TestBoundary2D bnd(ref(*mesh), vtxs);
-        bnd.create();
         EXPECT_DOUBLE_EQ(bnd.num_vertices(), 2);
-        EXPECT_DOUBLE_EQ(bnd.vertex(0), 2);
-        EXPECT_DOUBLE_EQ(bnd.vertex(1), 3);
-        bnd.destroy();
+        auto vertices = bnd.vertices().borrow_indices();
+        EXPECT_DOUBLE_EQ(vertices[0], 2);
+        EXPECT_DOUBLE_EQ(vertices[1], 3);
     }
 }
 
@@ -105,11 +101,10 @@ TEST(EssentialBoundaryTest, test_3d)
         auto bnd_facets = points_from_label(label);
         auto vtxs = boundary_vertices(*mesh, bnd_facets);
         TestBoundary3D bnd(ref(*mesh), vtxs);
-        bnd.create();
         EXPECT_DOUBLE_EQ(bnd.num_vertices(), 3);
-        EXPECT_DOUBLE_EQ(bnd.vertex(0), 1);
-        EXPECT_DOUBLE_EQ(bnd.vertex(1), 3);
-        EXPECT_DOUBLE_EQ(bnd.vertex(2), 4);
-        bnd.destroy();
+        auto vertices = bnd.vertices().borrow_indices();
+        EXPECT_DOUBLE_EQ(vertices[0], 1);
+        EXPECT_DOUBLE_EQ(vertices[1], 3);
+        EXPECT_DOUBLE_EQ(vertices[2], 4);
     }
 }
