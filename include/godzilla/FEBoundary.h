@@ -63,18 +63,6 @@ public:
             return 0;
     }
 
-    /// Iterate over all boundary vertices
-    template <BoundaryFunction Func>
-    void
-    for_each_vertex(Func fn)
-    {
-        auto vtx_idxs = this->vertices_.borrow_indices();
-        for (auto & ibn : make_range(this->num_vertices())) {
-            auto vertex_idx = vtx_idxs[ibn];
-            fn(ibn, vertex_idx);
-        }
-    }
-
 private:
     /// Mesh
     Ref<UnstructuredMesh> mesh_;
@@ -180,18 +168,6 @@ public:
     {
         CALL_STACK_MSG();
         return this->lengths_[ibf];
-    }
-
-    /// Iterate over all boundary facets
-    template <BoundaryFunction Func>
-    void
-    for_each_facet(Func fn)
-    {
-        auto facet_idxs = this->facets_.borrow_indices();
-        for (auto & ibf : make_range(this->num_facets())) {
-            auto facet = facet_idxs[ibf];
-            fn(ibf, facet);
-        }
     }
 
 private:

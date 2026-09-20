@@ -24,7 +24,7 @@ public:
     void
     compute()
     {
-        for_each_vertex([&](Int idx, Int vtx) { this->vals[idx] = vtx; });
+        for_each(vertices(), [&](Int idx, Int vtx) { this->vals[idx] = vtx; });
     }
 
     Array1D<Int> vals;
@@ -43,7 +43,7 @@ public:
     void
     compute()
     {
-        for_each_facet([&](Int idx, Int facet) { this->vals[idx] = facet; });
+        for_each(facets(), [&](Int idx, Int facet) { this->vals[idx] = facet; });
     }
 
     Array1D<Int> vals;
