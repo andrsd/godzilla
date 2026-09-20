@@ -358,6 +358,16 @@ private:
     Int size_ = 0;
 };
 
+template <typename Func>
+void
+for_each(IndexSet is, Func && fn)
+{
+    auto idxs = is.borrow_indices();
+    for (Int i = 0; i < idxs.size(); ++i) {
+        fn(i, idxs[i]);
+    }
+}
+
 /// Convert index set indices into std::vector
 ///
 /// @return std::vector containing the indices

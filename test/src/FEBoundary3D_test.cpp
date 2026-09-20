@@ -18,29 +18,15 @@ namespace {
 class TestEssentialBoundary3D : public fe::EssentialBoundaryInfo<TET4, 3_D, 4> {
 public:
     TestEssentialBoundary3D(Ref<UnstructuredMesh> mesh, const IndexSet & facets) :
-        fe::EssentialBoundaryInfo<TET4, 3_D, 4>(mesh, facets)
+        fe::EssentialBoundaryInfo<TET4, 3_D, 4>(mesh, facets),
+        vals(get_mesh()->get_comm(), num_vertices())
     {
-    }
-
-    void
-    create() override
-    {
-        CALL_STACK_MSG();
-        EssentialBoundaryInfo::create();
-        this->vals = Array1D<Int>(get_mesh()->get_comm(), this->num_vertices());
-    }
-
-    void
-    destroy() override
-    {
-        CALL_STACK_MSG();
-        EssentialBoundaryInfo::destroy();
     }
 
     void
     compute()
     {
-        for_each_vertex([&](Int idx, Int vtx) { this->vals[idx] = vtx; });
+        for_each(vertices(), [&](Int idx, Int vtx) { this->vals[idx] = vtx; });
     }
 
     Array1D<Int> vals;
@@ -51,29 +37,15 @@ public:
     TestNaturalBoundary3D(Ref<UnstructuredMesh> mesh,
                           Array1D<DenseMatrix<Real, 3, 4>> grad_phi,
                           const IndexSet & facets) :
-        fe::NaturalBoundaryInfo<TET4, 3_D, 4>(mesh, grad_phi, facets)
+        fe::NaturalBoundaryInfo<TET4, 3_D, 4>(mesh, grad_phi, facets),
+        vals(get_mesh()->get_comm(), num_facets())
     {
-    }
-
-    void
-    create() override
-    {
-        CALL_STACK_MSG();
-        NaturalBoundaryInfo::create();
-        this->vals = Array1D<Int>(get_mesh()->get_comm(), this->num_facets());
-    }
-
-    void
-    destroy() override
-    {
-        CALL_STACK_MSG();
-        NaturalBoundaryInfo::destroy();
     }
 
     void
     compute()
     {
-        for_each_facet([&](Int idx, Int facet) { this->vals[idx] = facet; });
+        for_each(facets(), [&](Int idx, Int facet) { this->vals[idx] = facet; });
     }
 
     Array1D<Int> vals;
@@ -100,20 +72,16 @@ TEST(FEBoundaryTest, test_3d)
         vertices.sort_remove_dups();
 
         TestEssentialBoundary3D bnd(ref(*mesh), vertices);
-        bnd.create();
         bnd.compute();
 
         EXPECT_EQ(bnd.num_vertices(), 3);
 
         EXPECT_EQ(bnd.vals[0], 1);
-
-        bnd.destroy();
     }
     {
         auto label = mesh->get_label("left");
         auto bnd_facets = points_from_label(label);
         TestNaturalBoundary3D bnd(ref(*mesh), grad_phi, bnd_facets);
-        bnd.create();
         bnd.compute();
 
         EXPECT_EQ(bnd.num_facets(), 1);
@@ -125,14 +93,11 @@ TEST(FEBoundaryTest, test_3d)
         EXPECT_DOUBLE_EQ(bnd.facet_area(0), 0.5);
 
         EXPECT_EQ(bnd.vals[0], 8);
-
-        bnd.destroy();
     }
     {
         auto label = mesh->get_label("front");
         auto bnd_facets = points_from_label(label);
         TestNaturalBoundary3D bnd(ref(*mesh), grad_phi, bnd_facets);
-        bnd.create();
         bnd.compute();
 
         EXPECT_EQ(bnd.num_facets(), 1);
@@ -144,14 +109,11 @@ TEST(FEBoundaryTest, test_3d)
         EXPECT_DOUBLE_EQ(bnd.facet_area(0), 0.5);
 
         EXPECT_EQ(bnd.vals[0], 6);
-
-        bnd.destroy();
     }
     {
         auto label = mesh->get_label("bottom");
         auto bnd_facets = points_from_label(label);
         TestNaturalBoundary3D bnd(ref(*mesh), grad_phi, bnd_facets);
-        bnd.create();
         bnd.compute();
 
         EXPECT_EQ(bnd.num_facets(), 1);
@@ -163,14 +125,11 @@ TEST(FEBoundaryTest, test_3d)
         EXPECT_DOUBLE_EQ(bnd.facet_area(0), 0.5);
 
         EXPECT_EQ(bnd.vals[0], 5);
-
-        bnd.destroy();
     }
     {
         auto label = mesh->get_label("slanted");
         auto bnd_facets = points_from_label(label);
         TestNaturalBoundary3D bnd(ref(*mesh), grad_phi, bnd_facets);
-        bnd.create();
         bnd.compute();
 
         EXPECT_EQ(bnd.num_facets(), 1);
@@ -182,7 +141,5 @@ TEST(FEBoundaryTest, test_3d)
         EXPECT_DOUBLE_EQ(bnd.facet_area(0), 0.5 * std::sqrt(3));
 
         EXPECT_EQ(bnd.vals[0], 7);
-
-        bnd.destroy();
     }
 }

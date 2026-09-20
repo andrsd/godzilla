@@ -165,6 +165,15 @@ make_range(Int end)
     return Range(0, end);
 }
 
+template <typename Func>
+void
+for_each(godzilla::Range range, Func && fn)
+{
+    for (auto i : range) {
+        fn(i);
+    }
+}
+
 inline std::ostream &
 operator<<(std::ostream & os, const Range & obj)
 {

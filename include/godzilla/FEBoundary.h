@@ -23,21 +23,10 @@ namespace fe {
 template <typename F>
 concept BoundaryFunction = std::is_invocable_r_v<void, F, Int, Int>;
 
-class AbstractBoundaryInfo {
-public:
-    virtual ~AbstractBoundaryInfo() = default;
-
-    /// Create boundary info
-    virtual void create() = 0;
-
-    /// Destroy boundary info
-    virtual void destroy() = 0;
-};
-
 /// Essential boundary info
 
 template <ElementType ELEM_TYPE, Dimension DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
-class EssentialBoundaryInfo : public AbstractBoundaryInfo {
+class EssentialBoundaryInfo {
 public:
     EssentialBoundaryInfo(Ref<UnstructuredMesh> mesh, IndexSet vertices) :
         mesh_(mesh),
@@ -53,28 +42,12 @@ public:
         return this->mesh_;
     }
 
-    void
-    create() override
+    /// Get vertex index set (all vertices this boundary info operates on)
+    IndexSet
+    vertices()
     {
         CALL_STACK_MSG();
-        if (this->vertices_)
-            this->vtx_idxs_ = this->vertices_.borrow_indices();
-    }
-
-    void
-    destroy() override
-    {
-    }
-
-    /// Get vertex index
-    ///
-    /// @param idx Boundary vertex index (local)
-    /// @return Global vertex index
-    Int
-    vertex(Int ibn) const
-    {
-        CALL_STACK_MSG();
-        return this->vtx_idxs_[ibn];
+        return this->vertices_;
     }
 
     /// Get the number of boundary vertices
@@ -90,64 +63,52 @@ public:
             return 0;
     }
 
-    /// Iterate over all boundary vertices
-    template <BoundaryFunction Func>
-    void
-    for_each_vertex(Func fn)
-    {
-        for (auto & ibn : make_range(this->num_vertices())) {
-            auto vertex_idx = this->vtx_idxs_[ibn];
-            fn(ibn, vertex_idx);
-        }
-    }
-
 private:
     /// Mesh
     Ref<UnstructuredMesh> mesh_;
     /// IndexSet with boundary vertices
     IndexSet vertices_;
-    /// Vertex indices
-    IndexSetBorrowedIndices vtx_idxs_;
 };
 
 /// Natural boundary information
 
 template <ElementType ELEM_TYPE, Dimension DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
-class NaturalBoundaryInfo : public AbstractBoundaryInfo {
+class NaturalBoundaryInfo {
 public:
     NaturalBoundaryInfo(Ref<UnstructuredMesh> mesh,
                         Array1D<DenseMatrix<Real, DIM, N_ELEM_NODES>> grad_phi,
                         IndexSet facets) :
         mesh_(mesh),
-        grad_phi_(grad_phi),
         facets_(facets)
     {
         CALL_STACK_MSG();
         expect_true(mesh->get_dimension() == DIM, "Mesh dimension mismatch");
-        if (!this->facets_.is_null())
+        if (!this->facets_.is_null()) {
             this->facets_.sort();
+
+            Int n = this->facets_.get_local_size();
+            this->lengths_ = Array1D<Real>(this->mesh_->get_comm(), n);
+            this->normals_ = Array1D<DenseVector<Real, DIM>>(this->mesh_->get_comm(), n);
+
+            calc_facet_lengths();
+            calc_facet_normals(&grad_phi);
+        }
     }
 
     NaturalBoundaryInfo(Ref<UnstructuredMesh> mesh, IndexSet facets) : mesh_(mesh), facets_(facets)
     {
         CALL_STACK_MSG();
         expect_true(mesh->get_dimension() == DIM, "Mesh dimension mismatch");
-        if (!this->facets_.is_null())
+        if (!this->facets_.is_null()) {
             this->facets_.sort();
-    }
 
-    void
-    create() override
-    {
-        CALL_STACK_MSG();
-        this->compute_face_normals();
-    }
+            Int n = this->facets_.get_local_size();
+            this->lengths_ = Array1D<Real>(this->mesh_->get_comm(), n);
+            this->normals_ = Array1D<DenseVector<Real, DIM>>(this->mesh_->get_comm(), n);
 
-    void
-    destroy() override
-    {
-        CALL_STACK_MSG();
-        this->free();
+            calc_facet_lengths();
+            calc_facet_normals();
+        }
     }
 
     Ref<UnstructuredMesh>
@@ -169,15 +130,11 @@ public:
             return 0;
     }
 
-    /// Get facet index for a given local boundary facet index
-    ///
-    /// @param ibf Local boundary facet index
-    /// @return Global facet index
-    Int
-    facet(Int ibf) const
+    IndexSet
+    facets()
     {
         CALL_STACK_MSG();
-        return this->facet_idxs_[ibf];
+        return this->facets_;
     }
 
     /// Get face normal for a given local boundary facet index
@@ -213,73 +170,43 @@ public:
         return this->lengths_[ibf];
     }
 
-    /// Iterate over all boundary facets
-    template <BoundaryFunction Func>
-    void
-    for_each_facet(Func fn)
-    {
-        for (auto & ibf : make_range(this->num_facets())) {
-            auto facet = this->facet_idxs_[ibf];
-            fn(ibf, facet);
-        }
-    }
-
-protected:
-    void
-    compute_face_normals()
-    {
-        CALL_STACK_MSG();
-        if (this->facets_) {
-            this->facet_idxs_ = this->facets_.borrow_indices();
-            Int n = this->facets_.get_local_size();
-            this->lengths_ = Array1D<Real>(mesh_->get_comm(), n);
-            this->normals_ = Array1D<DenseVector<Real, DIM>>(mesh_->get_comm(), n);
-
-            calc_facet_lengths();
-            calc_facet_normals();
-        }
-    }
-
-    void
-    free()
-    {
-        CALL_STACK_MSG();
-    }
-
 private:
     inline DenseMatrix<Real, DIM, N_ELEM_NODES>
     calc_grad_shape(Int cell, Real volume) const
     {
-        if (this->grad_phi_)
-            return this->grad_phi_[cell];
-        else {
-            auto dm = this->mesh_->get_coordinate_dm();
-            auto vec = this->mesh_->get_coordinates_local();
-            auto section = this->mesh_->get_coordinate_section();
-            DenseMatrix<Real, N_ELEM_NODES, DIM> elem_coord;
-            Int sz = DIM * N_ELEM_NODES;
-            Real * data = elem_coord.data();
-            PETSC_CHECK(DMPlexVecGetClosure(dm, section, vec, cell, &sz, &data));
-            return fe::grad_shape<ELEM_TYPE, DIM>(elem_coord, volume);
-        }
+        auto dm = this->mesh_->get_coordinate_dm();
+        auto vec = this->mesh_->get_coordinates_local();
+        auto section = this->mesh_->get_coordinate_section();
+        DenseMatrix<Real, N_ELEM_NODES, DIM> elem_coord;
+        Int sz = DIM * N_ELEM_NODES;
+        Real * data = elem_coord.data();
+        PETSC_CHECK(DMPlexVecGetClosure(dm, section, vec, cell, &sz, &data));
+        return fe::grad_shape<ELEM_TYPE, DIM>(elem_coord, volume);
     }
 
     /// Compute facet normals
     void
-    calc_facet_normals()
+    calc_facet_normals(const Array1D<DenseMatrix<Real, DIM, N_ELEM_NODES>> * grad_phi = nullptr)
     {
         CALL_STACK_MSG();
+        auto facet_idxs = this->facets_.borrow_indices();
         for (Int i = 0; i < this->facets_.get_local_size(); ++i) {
-            auto facet = this->facet_idxs_[i];
+            auto facet = facet_idxs[i];
             auto face_conn = this->mesh_->get_connectivity(facet);
             auto support = this->mesh_->get_support(facet);
-            Int ie = support[0];
-            auto cone = this->mesh_->get_cone(ie);
+            Int cell = support[0];
+            auto cone = this->mesh_->get_cone(cell);
             auto local_face_idx = utils::index_of(cone, facet);
             auto grad_fn_idx = fe::get_grad_fn_index<ELEM_TYPE, DIM, N_ELEM_NODES>(local_face_idx);
-            auto volume = this->mesh_->compute_cell_volume(ie);
+            auto volume = this->mesh_->compute_cell_volume(cell);
             auto edge_length = this->lengths_[i];
-            DenseVector<Real, DIM> grad(calc_grad_shape(ie, volume).column(grad_fn_idx));
+            DenseVector<Real, DIM> grad;
+            if (grad_phi == nullptr) {
+                grad = calc_grad_shape(cell, volume).column(grad_fn_idx);
+            }
+            else {
+                grad = (*grad_phi)[cell].column(grad_fn_idx);
+            }
             this->normals_[i] = fe::normal<ELEM_TYPE>(volume, edge_length, grad);
         }
     }
@@ -289,19 +216,16 @@ private:
     calc_facet_lengths()
     {
         CALL_STACK_MSG();
+        auto facet_idxs = this->facets_.borrow_indices();
         for (Int i = 0; i < this->facets_.get_local_size(); ++i)
-            this->lengths_[i] = this->mesh_->compute_cell_volume(this->facet_idxs_[i]);
+            this->lengths_[i] = this->mesh_->compute_cell_volume(facet_idxs[i]);
     }
 
 private:
     /// Mesh
     Ref<UnstructuredMesh> mesh_;
-    /// Gradients of shape functions
-    Array1D<DenseMatrix<Real, DIM, N_ELEM_NODES>> grad_phi_;
     /// IndexSet with boundary facets
     IndexSet facets_;
-    /// Facet indices
-    IndexSetBorrowedIndices facet_idxs_;
     /// Boundary facet length
     Array1D<Real> lengths_;
     /// Boundary facet unit outward normal

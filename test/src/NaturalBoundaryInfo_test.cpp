@@ -48,23 +48,21 @@ TEST(NaturalBoundaryTest, test_1d)
     {
         auto bnd_facets = points_from_label(mesh->get_label("left"));
         TestBoundary1D bnd(ref(*mesh), bnd_facets);
-        bnd.create();
         EXPECT_DOUBLE_EQ(bnd.num_facets(), 1);
-        EXPECT_DOUBLE_EQ(bnd.facet(0), 2);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(0), -1);
         EXPECT_DOUBLE_EQ(bnd.facet_length(0), 1.);
-        bnd.destroy();
+        auto facets = bnd.facets().borrow_indices();
+        EXPECT_DOUBLE_EQ(facets[0], 2);
     }
 
     {
         auto bnd_facets = points_from_label(mesh->get_label("right"));
         TestBoundary1D bnd(ref(*mesh), bnd_facets);
-        bnd.create();
         EXPECT_DOUBLE_EQ(bnd.num_facets(), 1);
-        EXPECT_DOUBLE_EQ(bnd.facet(0), 4);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(0), 1);
         EXPECT_DOUBLE_EQ(bnd.facet_length(0), 1.);
-        bnd.destroy();
+        auto facets = bnd.facets().borrow_indices();
+        EXPECT_DOUBLE_EQ(facets[0], 4);
     }
 }
 
@@ -79,25 +77,23 @@ TEST(NaturalBoundaryTest, test_2d)
     {
         auto bnd_facets = points_from_label(mesh->get_label("left"));
         TestBoundary2D bnd(ref(*mesh), bnd_facets);
-        bnd.create();
         EXPECT_DOUBLE_EQ(bnd.num_facets(), 1);
-        EXPECT_DOUBLE_EQ(bnd.facet(0), 8);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(0), -1);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(1), 0);
         EXPECT_DOUBLE_EQ(bnd.facet_length(0), 1.);
-        bnd.destroy();
+        auto facets = bnd.facets().borrow_indices();
+        EXPECT_DOUBLE_EQ(facets[0], 8);
     }
 
     {
         auto bnd_facets = points_from_label(mesh->get_label("bottom"));
         TestBoundary2D bnd(ref(*mesh), bnd_facets);
-        bnd.create();
         EXPECT_DOUBLE_EQ(bnd.num_facets(), 1);
-        EXPECT_DOUBLE_EQ(bnd.facet(0), 6);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(0), 0);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(1), -1);
         EXPECT_DOUBLE_EQ(bnd.facet_length(0), 1.);
-        bnd.destroy();
+        auto facets = bnd.facets().borrow_indices();
+        EXPECT_DOUBLE_EQ(facets[0], 6);
     }
 }
 
@@ -113,55 +109,51 @@ TEST(NaturalBoundaryTest, test_3d)
         auto label = mesh->get_label("left");
         auto bnd_facets = points_from_label(label);
         TestBoundary3D bnd(ref(*mesh), bnd_facets);
-        bnd.create();
         EXPECT_DOUBLE_EQ(bnd.num_facets(), 1);
-        EXPECT_DOUBLE_EQ(bnd.facet(0), 8);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(0), -1);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(1), 0);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(2), 0);
         EXPECT_DOUBLE_EQ(bnd.facet_length(0), 0.5);
-        bnd.destroy();
+        auto facets = bnd.facets().borrow_indices();
+        EXPECT_DOUBLE_EQ(facets[0], 8);
     }
 
     {
         auto label = mesh->get_label("bottom");
         auto bnd_facets = points_from_label(label);
         TestBoundary3D bnd(ref(*mesh), bnd_facets);
-        bnd.create();
         EXPECT_DOUBLE_EQ(bnd.num_facets(), 1);
-        EXPECT_DOUBLE_EQ(bnd.facet(0), 5);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(0), 0);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(1), 0);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(2), -1);
         EXPECT_DOUBLE_EQ(bnd.facet_length(0), 0.5);
-        bnd.destroy();
+        auto facets = bnd.facets().borrow_indices();
+        EXPECT_DOUBLE_EQ(facets[0], 5);
     }
 
     {
         auto label = mesh->get_label("front");
         auto bnd_facets = points_from_label(label);
         TestBoundary3D bnd(ref(*mesh), bnd_facets);
-        bnd.create();
         EXPECT_DOUBLE_EQ(bnd.num_facets(), 1);
-        EXPECT_DOUBLE_EQ(bnd.facet(0), 6);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(0), 0);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(1), -1);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(2), 0);
         EXPECT_DOUBLE_EQ(bnd.facet_length(0), 0.5);
-        bnd.destroy();
+        auto facets = bnd.facets().borrow_indices();
+        EXPECT_DOUBLE_EQ(facets[0], 6);
     }
 
     {
         auto label = mesh->get_label("slanted");
         auto bnd_facets = points_from_label(label);
         TestBoundary3D bnd(ref(*mesh), bnd_facets);
-        bnd.create();
         EXPECT_DOUBLE_EQ(bnd.num_facets(), 1);
-        EXPECT_DOUBLE_EQ(bnd.facet(0), 7);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(0), 0.57735026918962584);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(1), 0.57735026918962584);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(2), 0.57735026918962584);
         EXPECT_DOUBLE_EQ(bnd.facet_length(0), 0.5 * std::sqrt(3));
-        bnd.destroy();
+        auto facets = bnd.facets().borrow_indices();
+        EXPECT_DOUBLE_EQ(facets[0], 7);
     }
 }
