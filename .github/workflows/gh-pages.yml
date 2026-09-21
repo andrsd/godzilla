@@ -33,7 +33,7 @@ jobs:
             cmake \
             make \
             mpich-mpicxx \
-            mpicpp-lite=3 \
+            mpicpp-lite=3.0 \
             spdlog=1.16 \
             doxygen \
             sphinx \
