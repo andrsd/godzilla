@@ -69,7 +69,7 @@ public:
     bool equal_unsorted(const IndexSet & other) const;
 
     /// Borrow the indices from this index set
-    IndexSetBorrowedIndices borrow_indices();
+    IndexSetBorrowedIndices borrow_indices() const;
 
     /// Gets the index set type name
     ///
@@ -286,7 +286,7 @@ public:
 
     IndexSetBorrowedIndices() = default;
 
-    explicit IndexSetBorrowedIndices(IndexSet & is) : is_(is)
+    explicit IndexSetBorrowedIndices(const IndexSet & is) : is_(is)
     {
         CALL_STACK_MSG();
         PETSC_CHECK(ISGetLocalSize(this->is_, &this->size_));
