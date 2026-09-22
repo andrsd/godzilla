@@ -4,12 +4,16 @@
 #pragma once
 
 #include "godzilla/Assert.h"
+#include "godzilla/Types.h"
 #include <sys/types.h>
 #include <initializer_list>
 #include <vector>
 #include <type_traits>
 
 namespace godzilla {
+
+class UnstructuredMesh;
+
 namespace validation {
 
 /// Check that `value` is equal to one of the `options`
@@ -64,4 +68,14 @@ in_range(T value, std::initializer_list<U> range)
 }
 
 } // namespace validation
+
+/// Check that all elements have expected type
+///
+/// @param mesh Unstructured mesh
+/// @param expected_type Expected element type
+/// @return `true` if all elements have expected type, otherwise `false`. Second parameter
+///         is the cell ID if check failed.
+std::tuple<bool, Int> check_element_type(Ref<const UnstructuredMesh> mesh,
+                                         PolytopeType expected_type);
+
 } // namespace godzilla
