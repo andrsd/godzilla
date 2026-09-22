@@ -271,7 +271,7 @@ IndexSet::get_min_max() const
 }
 
 IndexSetBorrowedIndices
-IndexSet::borrow_indices()
+IndexSet::borrow_indices() const
 {
     CALL_STACK_MSG();
     if (this->obj_)
