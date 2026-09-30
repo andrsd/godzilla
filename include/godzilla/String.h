@@ -194,7 +194,7 @@ public:
     }
 
     int32_t
-    compare(int32_t pos, int32_t count, const String s) const
+    compare(uint32_t pos, uint32_t count, const String s) const
     {
         assert(count <= s.rep_->size);
         assert(pos + count <= this->rep_->size);
@@ -278,8 +278,9 @@ public:
 
             std::memcpy(this->rep_->data + pos + str.length(),
                         this->rep_->data + pos + count,
-                        len_end + 1);
+                        len_end);
             std::memcpy(this->rep_->data + pos, str.rep_->data, str.length());
+            this->rep_->data[new_len] = '\0';
 
             return *this;
         }

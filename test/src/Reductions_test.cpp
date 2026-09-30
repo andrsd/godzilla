@@ -14,7 +14,7 @@ TEST(ReductionsTest, for_each_index_set)
 
     Int total;
     auto sumr = reduction(total, 3, mpi::op::sum<Int>());
-    for_each(comm, is, sumr, [&](Int i, Int val, auto & reducer) {
+    for_each(comm, is, sumr, [&](Int, Int val, auto & reducer) {
         //
         reducer.combine(val);
     });
