@@ -1330,8 +1330,8 @@ public:
                 for (Int j = 0; j < this->cols_; ++j, ++idx)
                     this->data(idx) += a.data(idx);
 #else
-            for (Int i = 0; i < this->rows; ++i)
-                for (Int j = 0; j < this->cols; ++j)
+            for (Int i = 0; i < this->rows_; ++i)
+                for (Int j = 0; j < this->cols_; ++j)
                     set(i, j) += a.get(i, j);
 #endif
             return *this;
@@ -1359,8 +1359,8 @@ public:
                 for (Int j = 0; j < this->cols_; ++j, ++idx)
                     res.data(idx) = this->data(idx) - a.data(idx);
 #else
-            for (Int i = 0; i < this->rows; ++i)
-                for (Int j = 0; j < this->cols; ++j)
+            for (Int i = 0; i < this->rows_; ++i)
+                for (Int j = 0; j < this->cols_; ++j)
                     res(i, j) = this->get(i, j) - a.get(i, j);
 #endif
             return res;

@@ -58,28 +58,28 @@ public:
     constexpr T &
     value() &
     {
-        assert(this->has);
+        assert(this->has_);
         return this->storage_.value;
     }
 
     constexpr const T &
     value() const &
     {
-        assert(this->has);
+        assert(this->has_);
         return this->storage_.value;
     }
 
     constexpr E &
     error() &
     {
-        assert(!this->has);
+        assert(!this->has_);
         return this->storage_.error;
     }
 
     constexpr const E &
     error() const &
     {
-        assert(!this->has);
+        assert(!this->has_);
         return this->storage_.error;
     }
 

@@ -54,7 +54,7 @@ public:
         GODZILLA_ASSERT_TRUE(
             x.size() == D,
             fmt::format("Point dimension ({}) does not match bounding box dimension ({})",
-                        s.size(),
+                        x.size(),
                         D));
 
         for (Int d = 0; d < D; d++) {

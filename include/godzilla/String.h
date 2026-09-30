@@ -196,8 +196,8 @@ public:
     int32_t
     compare(int32_t pos, int32_t count, const String s) const
     {
-        assert(count <= s.rep->size);
-        assert(pos + count <= this->rep->size);
+        assert(count <= s.rep_->size);
+        assert(pos + count <= this->rep_->size);
         return std::strncmp(this->rep_->data + pos, s.rep_->data, count);
     }
 
@@ -314,7 +314,7 @@ public:
     char
     operator[](uint32_t idx) const
     {
-        assert(idx <= this->rep->size);
+        assert(idx <= this->rep_->size);
         return this->rep_->data[idx];
     }
 
@@ -331,15 +331,15 @@ public:
     {
         detach();
         ensure_capacity(capacity_needed);
-        return rep_->data;
+        return this->rep_->data;
     }
 
     void
     commit(uint32_t new_size)
     {
-        assert(new_size <= rep->capacity);
-        rep_->size = new_size;
-        rep_->data[new_size] = '\0';
+        assert(new_size <= this->rep_->capacity);
+        this->rep_->size = new_size;
+        this->rep_->data[new_size] = '\0';
     }
 
 private:
