@@ -471,7 +471,7 @@ template <typename T>
 void
 assign(Array1D<T> & data, const std::vector<T> & vals)
 {
-    GODZILLA_ASSERT_TRUE(data.size() == vals.size(),
+    GODZILLA_ASSERT_TRUE(data.size() == static_cast<Int>(vals.size()),
                          "Number of values to be assigned does not match the size the array");
     for (Int i = 0; i < data.size(); ++i)
         data[i] = vals[i];
