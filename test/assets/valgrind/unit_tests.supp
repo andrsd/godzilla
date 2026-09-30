@@ -31,3 +31,11 @@
    fun:DMPlexCreateBoxMesh
    ...
 }
+{
+   dlopen_doit
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:dlopen_doit
+   ...
+}
