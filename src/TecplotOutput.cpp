@@ -283,6 +283,8 @@ TecplotOutput::write_created_by(int32_t zone)
     auto created_by =
         fmt::format("Created by {} {}, on {}", app->get_name(), app->get_version(), datetime);
     this->file_->add_aux_data(zone, "created_by", created_by);
+#else
+    (void) zone;
 #endif
 }
 
@@ -304,6 +306,8 @@ TecplotOutput::write_coordinates(int32_t zone)
         }
         this->file_->zone_var_write(zone, d + 1, rank, xyz);
     }
+#else
+    (void) zone;
 #endif
 }
 
@@ -324,6 +328,8 @@ TecplotOutput::write_connectivity(int32_t zone)
             connectivity.push_back(cell_connect[ordering[k]] - n_all_elems + 1);
     }
     this->file_->zone_node_map_write(zone, rank, connectivity);
+#else
+    (void) zone;
 #endif
 }
 
@@ -333,6 +339,8 @@ TecplotOutput::write_field_variable_values(int32_t zone)
     CALL_STACK_MSG();
 #ifdef GODZILLA_WITH_TECIOCPP
     write_nodal_field_variable_values(zone);
+#else
+    (void) zone;
 #endif
 }
 
@@ -376,6 +384,8 @@ TecplotOutput::write_nodal_field_variable_values(int32_t zone)
         }
         aux_sln.restore_array_read(aux_sln_vals);
     }
+#else
+    (void) zone;
 #endif
 }
 

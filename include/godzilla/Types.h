@@ -57,6 +57,8 @@ get_num_element_nodes(ElementType type)
         return 4;
     case HEX8:
         return 8;
+    default:
+        return -1;
     }
 }
 

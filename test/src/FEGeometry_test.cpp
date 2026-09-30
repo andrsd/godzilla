@@ -117,7 +117,7 @@ TEST(FEGeometryTest, normal_tri3)
 
 TEST(FEGeometryTest, normal_hex8)
 {
-    DenseVector<Real, 10> grad;
+    DenseVector<Real, 10> grad({ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 });
     EXPECT_THROW_MSG(
         (fe::normal<EDGE2, 10>(1., 1., grad)),
         "Computation of a normal for element 'EDGE2' in 10 dimensions is not implemented");
