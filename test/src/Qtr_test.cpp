@@ -11,6 +11,8 @@ struct Data {
     double d;
 
     Data(int j, double e) : i(j), d(e) {}
+
+    virtual ~Data() = default;
 };
 
 struct BigData : public Data {
