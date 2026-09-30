@@ -32,7 +32,7 @@ void
 IndexSet::get_point_range(Int & start, Int & end, const Int *& points) const
 {
     CALL_STACK_MSG();
-    GODZILLA_ASSERT_TRUE(this->obj != nullptr, "IndexSet is null");
+    GODZILLA_ASSERT_TRUE(this->obj_ != nullptr, "IndexSet is null");
     PETSC_CHECK(ISGetPointRange(this->obj_, &start, &end, &points));
 }
 
@@ -40,7 +40,7 @@ void
 IndexSet::restore_point_range(Int start, Int end, const Int * points) const
 {
     CALL_STACK_MSG();
-    GODZILLA_ASSERT_TRUE(this->obj != nullptr, "IndexSet is null");
+    GODZILLA_ASSERT_TRUE(this->obj_ != nullptr, "IndexSet is null");
     PETSC_CHECK(ISRestorePointRange(this->obj_, &start, &end, &points));
 }
 
@@ -48,7 +48,7 @@ void
 IndexSet::get_point_subrange(Int start, Int end, const Int * points) const
 {
     CALL_STACK_MSG();
-    GODZILLA_ASSERT_TRUE(this->obj != nullptr, "IndexSet is null");
+    GODZILLA_ASSERT_TRUE(this->obj_ != nullptr, "IndexSet is null");
     PETSC_CHECK(ISGetPointSubrange(this->obj_, start, end, points));
 }
 
@@ -56,7 +56,7 @@ Int
 IndexSet::get_size() const
 {
     CALL_STACK_MSG();
-    GODZILLA_ASSERT_TRUE(this->obj != nullptr, "IndexSet is null");
+    GODZILLA_ASSERT_TRUE(this->obj_ != nullptr, "IndexSet is null");
     Int n;
     PETSC_CHECK(ISGetSize(this->obj_, &n));
     return n;
@@ -66,7 +66,7 @@ Int
 IndexSet::get_local_size() const
 {
     CALL_STACK_MSG();
-    GODZILLA_ASSERT_TRUE(this->obj != nullptr, "IndexSet is null");
+    GODZILLA_ASSERT_TRUE(this->obj_ != nullptr, "IndexSet is null");
     Int n;
     PETSC_CHECK(ISGetLocalSize(this->obj_, &n));
     return n;
@@ -112,7 +112,7 @@ bool
 IndexSet::sorted() const
 {
     CALL_STACK_MSG();
-    GODZILLA_ASSERT_TRUE(this->obj != nullptr, "IndexSet is null");
+    GODZILLA_ASSERT_TRUE(this->obj_ != nullptr, "IndexSet is null");
     PetscBool res;
     PETSC_CHECK(ISSorted(this->obj_, &res));
     return res == PETSC_TRUE;
@@ -122,7 +122,7 @@ void
 IndexSet::sort() const
 {
     CALL_STACK_MSG();
-    GODZILLA_ASSERT_TRUE(this->obj != nullptr, "IndexSet is null");
+    GODZILLA_ASSERT_TRUE(this->obj_ != nullptr, "IndexSet is null");
     PETSC_CHECK(ISSort(this->obj_));
 }
 
@@ -130,7 +130,7 @@ void
 IndexSet::sort_remove_dups() const
 {
     CALL_STACK_MSG();
-    GODZILLA_ASSERT_TRUE(this->obj != nullptr, "IndexSet is null");
+    GODZILLA_ASSERT_TRUE(this->obj_ != nullptr, "IndexSet is null");
     PETSC_CHECK(ISSortRemoveDups(this->obj_));
 }
 
@@ -138,7 +138,7 @@ void
 IndexSet::view(PetscViewer viewer) const
 {
     CALL_STACK_MSG();
-    GODZILLA_ASSERT_TRUE(this->obj != nullptr, "IndexSet is null");
+    GODZILLA_ASSERT_TRUE(this->obj_ != nullptr, "IndexSet is null");
     PETSC_CHECK(ISView(this->obj_, viewer));
 }
 
@@ -146,7 +146,7 @@ bool
 IndexSet::is_empty() const
 {
     CALL_STACK_MSG();
-    GODZILLA_ASSERT_TRUE(this->obj != nullptr, "IndexSet is null");
+    GODZILLA_ASSERT_TRUE(this->obj_ != nullptr, "IndexSet is null");
     return get_size() == 0;
 }
 
