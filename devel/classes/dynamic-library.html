@@ -204,7 +204,7 @@
 <dd><p>Get symbol as a function delegate. </p>
 <p>Usage: <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DynamicLibrary</span> <span class="n">dll</span><span class="p">(</span><span class="o">&lt;</span><span class="n">name</span><span class="o">&gt;</span><span class="p">);</span>
 <span class="n">dll</span><span class="o">.</span><span class="n">load</span><span class="p">();</span>
-<span class="n">auto</span> <span class="n">add</span> <span class="o">=</span> <span class="n">dll</span><span class="o">.</span><span class="n">get_symbol</span><span class="o">&lt;</span><span class="n">double</span><span class="p">(</span><span class="n">double</span><span class="p">,</span> <span class="n">double</span><span class="p">)</span><span class="o">&gt;</span><span class="p">(</span><span class="s2">&quot;add&quot;</span><span class="p">);</span>
+<span class="n">auto</span> <span class="n">add</span> <span class="o">=</span> <span class="n">dll</span><span class="o">.</span><span class="n">get_symbol</span><span class="o">&lt;</span><span class="n">double</span><span class="p">(</span><span class="n">double</span><span class="p">,</span> <span class="n">double</span><span class="p">)</span><span class="o">&gt;</span><span class="p">(</span><span class="s2">"add"</span><span class="p">);</span>
 <span class="n">double</span> <span class="n">res</span> <span class="o">=</span> <span class="n">add</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">);</span>
 </pre></div>
 </div>
