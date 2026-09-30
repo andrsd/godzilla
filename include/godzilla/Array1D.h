@@ -230,7 +230,7 @@ public:
     void
     zero()
     {
-        GODZILLA_ASSERT_TRUE(this->data != nullptr, "Internal storage is not allocated");
+        GODZILLA_ASSERT_TRUE(this->data_ != nullptr, "Internal storage is not allocated");
         for (Int i = 0; i < this->ctrl_->n; ++i)
             this->data_[i].zero();
     }
@@ -241,7 +241,7 @@ public:
     void
     set(const T & val)
     {
-        GODZILLA_ASSERT_TRUE(this->data != nullptr, "Internal storage is not allocated");
+        GODZILLA_ASSERT_TRUE(this->data_ != nullptr, "Internal storage is not allocated");
         for (Int i = 0; i < this->ctrl_->n; ++i)
             this->data_[i] = val;
     }
@@ -255,8 +255,8 @@ public:
     const T &
     operator[](Int i) const
     {
-        GODZILLA_ASSERT_TRUE(this->data != nullptr, "Internal storage is not allocated");
-        GODZILLA_ASSERT_TRUE((i >= this->first) && (i < this->first + this->ctrl->n),
+        GODZILLA_ASSERT_TRUE(this->data_ != nullptr, "Internal storage is not allocated");
+        GODZILLA_ASSERT_TRUE((i >= this->first_) && (i < this->first_ + this->ctrl_->n),
                              "Index out of bounds");
         auto idx = i - this->first_;
         return this->data_[idx];
@@ -269,8 +269,8 @@ public:
     T &
     operator[](Int i)
     {
-        GODZILLA_ASSERT_TRUE(this->data != nullptr, "Internal storage is not allocated");
-        GODZILLA_ASSERT_TRUE((i >= this->first) && (i < this->first + this->ctrl->n),
+        GODZILLA_ASSERT_TRUE(this->data_ != nullptr, "Internal storage is not allocated");
+        GODZILLA_ASSERT_TRUE((i >= this->first_) && (i < this->first_ + this->ctrl_->n),
                              "Index out of bounds");
         auto idx = i - this->first_;
         return this->data_[idx];
@@ -349,7 +349,7 @@ template <>
 inline void
 Array1D<Real>::zero()
 {
-    GODZILLA_ASSERT_TRUE(this->data != nullptr, "Internal storage is not allocated");
+    GODZILLA_ASSERT_TRUE(this->data_ != nullptr, "Internal storage is not allocated");
     for (Int i = 0; i < this->ctrl_->n; ++i)
         this->data_[i] = 0.;
 }

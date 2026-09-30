@@ -65,9 +65,9 @@ void
 CallStack::dump()
 {
 #ifndef NDEBUG
-    if (this->size > 0) {
+    if (this->size_ > 0) {
         PetscFPrintf(PETSC_COMM_WORLD, PETSC_STDERR, "Call stack:\n");
-        for (int n = 0, i = this->size - 1; i >= 0; --i, ++n) {
+        for (int n = 0, i = this->size_ - 1; i >= 0; --i, ++n) {
             auto * m = this->stack_[i];
             PetscFPrintf(PETSC_COMM_WORLD,
                          PETSC_STDERR,

@@ -54,7 +54,7 @@ public:
     void
     zero()
     {
-        GODZILLA_ASSERT_TRUE(this->data != nullptr, "Internal data storage is not allocated");
+        GODZILLA_ASSERT_TRUE(this->data_ != nullptr, "Internal data storage is not allocated");
         for (Int i = 0; i < this->n_rows_ * this->n_cols_; ++i)
             this->data_[i] = 0;
     }
@@ -77,9 +77,9 @@ public:
     const T &
     get(Int row, Int col) const
     {
-        GODZILLA_ASSERT_TRUE(this->data != nullptr, "Internal data storage is not allocated");
-        GODZILLA_ASSERT_TRUE((row >= 0) && (row < this->n_rows), "Row index out of bounds");
-        GODZILLA_ASSERT_TRUE((col >= 0) && (col < this->n_cols), "Column index out of bounds");
+        GODZILLA_ASSERT_TRUE(this->data_ != nullptr, "Internal data storage is not allocated");
+        GODZILLA_ASSERT_TRUE((row >= 0) && (row < this->n_rows_), "Row index out of bounds");
+        GODZILLA_ASSERT_TRUE((col >= 0) && (col < this->n_cols_), "Column index out of bounds");
         return this->data_[idx(row, col)];
     }
 
@@ -89,7 +89,7 @@ public:
     void
     set(const T & val)
     {
-        GODZILLA_ASSERT_TRUE(this->data != nullptr, "Internal data storage is not allocated");
+        GODZILLA_ASSERT_TRUE(this->data_ != nullptr, "Internal data storage is not allocated");
         for (Int i = 0; i < this->n_rows_ * this->n_cols_; ++i)
             this->data_[i] = val;
     }
@@ -102,9 +102,9 @@ public:
     T &
     set(Int row, Int col)
     {
-        GODZILLA_ASSERT_TRUE(this->data != nullptr, "Internal data storage is not allocated");
-        GODZILLA_ASSERT_TRUE((row >= 0) && (row < this->n_rows), "Row index out of bounds");
-        GODZILLA_ASSERT_TRUE((col >= 0) && (col < this->n_cols), "Column index out of bounds");
+        GODZILLA_ASSERT_TRUE(this->data_ != nullptr, "Internal data storage is not allocated");
+        GODZILLA_ASSERT_TRUE((row >= 0) && (row < this->n_rows_), "Row index out of bounds");
+        GODZILLA_ASSERT_TRUE((col >= 0) && (col < this->n_cols_), "Column index out of bounds");
         return this->data_[idx(row, col)];
     }
 

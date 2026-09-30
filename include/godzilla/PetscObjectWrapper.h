@@ -108,7 +108,7 @@ public:
     get_id() const
     {
         CALL_STACK_MSG();
-        GODZILLA_ASSERT_TRUE(this->obj != nullptr, "PETSc object is null");
+        GODZILLA_ASSERT_TRUE(this->obj_ != nullptr, "PETSc object is null");
         PetscObjectId id;
         PETSC_CHECK(PetscObjectGetId((PetscObject) this->obj_, &id));
         return id;
