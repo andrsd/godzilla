@@ -59,7 +59,6 @@ if (PETSC_FOUND AND NOT TARGET PETSc::petsc)
     set_target_properties(PETSc::petsc
         PROPERTIES
             IMPORTED_LOCATION "${PETSC_LIBRARY}"
-            INTERFACE_COMPILE_OPTIONS "${PC_PETSC_CFLAGS_OTHER}"
             INTERFACE_INCLUDE_DIRECTORIES "${PETSC_INCLUDE_DIR}"
     )
 endif()
