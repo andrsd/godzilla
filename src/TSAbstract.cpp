@@ -28,8 +28,7 @@ TSAbstract::TSAbstract(TS ts) :
     void * ctx;
     PETSC_CHECK(TSGetApplicationContext(this->ts_, &ctx));
     this->tpi_ = static_cast<TransientProblemInterface *>(ctx);
-    if (this->tpi_ == nullptr)
-        throw InternalError("TS context is nullptr");
+    expect_true(this->tpi_ != nullptr, fmt::format("TS context is nullptr"));
 }
 
 void
