@@ -241,7 +241,7 @@ NonlinearProblem::set_up_solver_parameters()
                                this->nl_rel_tol_,
                                this->nl_step_tol_,
                                this->nl_max_iter_,
-                               -1);
+                               PETSC_UNLIMITED);
     this->snes_.set_from_options();
 
     this->ksp_.set_tolerances(this->lin_rel_tol_,
