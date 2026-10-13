@@ -32,6 +32,8 @@ CommandLineInterface::default_command_line_options()
                           "");
     cmdln_opts
         .add_option("", "", "log-file", "Save into a log file", cxxopts::value<std::string>(), "");
+    cmdln_opts.add_option("", "", "redirect-stdout", "Redirect stdout", cxxopts::value<bool>(), "");
+    cmdln_opts.add_option("", "", "redirect-stderr", "Redirect stderr", cxxopts::value<bool>(), "");
     return cmdln_opts;
 }
 
