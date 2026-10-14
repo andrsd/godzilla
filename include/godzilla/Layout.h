@@ -5,6 +5,7 @@
 
 #include "godzilla/Span.h"
 #include "godzilla/Range.h"
+#include "godzilla/CallStack.h"
 #include "mpicpp-lite/mpicpp-lite.h"
 #include "petscis.h"
 

@@ -7,6 +7,7 @@
 #include "godzilla/CallStack.h"
 #include "godzilla/Types.h"
 #include "godzilla/Assert.h"
+#include "godzilla/String.h"
 #include "mpicpp-lite/mpicpp-lite.h"
 #include <type_traits>
 

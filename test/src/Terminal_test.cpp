@@ -44,16 +44,10 @@ TEST(TerminalTest, ostream_operator_wo_colors_code)
     EXPECT_STREQ(oss.str().c_str(), Terminal::erase_line);
 }
 
-TEST(TerminalTest, string_operator)
-{
-    String r = Terminal::red;
-    EXPECT_EQ(r, "\33[31m");
-}
-
 TEST(TerminalTest, fmt_formatter)
 {
-    String s = fmt::format("{}", Terminal::red);
-    EXPECT_STREQ(s.c_str(), Terminal::red);
+    auto s = fmt::format("{}", Terminal::red);
+    EXPECT_EQ(s, Terminal::red);
 }
 
 TEST(TerminalTest, color_codes)

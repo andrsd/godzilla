@@ -368,7 +368,7 @@ inline T
 determinant(const DenseMatrixSymm<T, N> & /* mat */)
 {
     throw NotImplementedException(
-        format("Determinant is not implemented for {}x{} matrices, yet", N, N));
+        fmt::format("Determinant is not implemented for {}x{} matrices, yet", N, N));
 }
 
 template <typename T>

@@ -658,7 +658,7 @@ inline T
 determinant(const DenseMatrix<T, N, N> & /* mat */)
 {
     throw NotImplementedException(
-        format("Determinant is not implemented for {}x{} matrices, yet", N, N));
+        fmt::format("Determinant is not implemented for {}x{} matrices, yet", N, N));
 }
 
 template <typename T>
@@ -997,9 +997,9 @@ public:
             }
             else
                 throw Exception(
-                    format("Number of values ({}) must match the number of columns ({})",
-                           vals.get_num_cols(),
-                           this->cols_));
+                    fmt::format("Number of values ({}) must match the number of columns ({})",
+                                vals.get_num_cols(),
+                                this->cols_));
         }
         else
             throw Exception(fmt::format("Row matrix must have just one row"));
@@ -1112,11 +1112,11 @@ public:
         }
         else
             throw Exception(
-                format("Matrix dimensions ({}, {}) must match the operand dimensions({}, {})",
-                       this->rows_,
-                       this->cols_,
-                       x.rows_,
-                       x.cols_));
+                fmt::format("Matrix dimensions ({}, {}) must match the operand dimensions({}, {})",
+                            this->rows_,
+                            this->cols_,
+                            x.rows_,
+                            x.cols_));
     }
 
     /// Subtract matrix `x` from this matrix
@@ -1138,11 +1138,11 @@ public:
         }
         else
             throw Exception(
-                format("Matrix dimensions ({}, {}) must match the operand dimensions({}, {})",
-                       this->rows_,
-                       this->cols_,
-                       x.rows_,
-                       x.cols_));
+                fmt::format("Matrix dimensions ({}, {}) must match the operand dimensions({}, {})",
+                            this->rows_,
+                            this->cols_,
+                            x.rows_,
+                            x.cols_));
     }
 
     /// Multiply the matrix by a vector
@@ -1172,9 +1172,9 @@ public:
 #endif
             return res;
         }
-        throw Exception(format("Number of columns ({}) must match the vector size ({})",
-                               this->cols_,
-                               x.size()));
+        throw Exception(fmt::format("Number of columns ({}) must match the vector size ({})",
+                                    this->cols_,
+                                    x.size()));
     }
 
     DynDenseMatrix<T>
@@ -1310,11 +1310,11 @@ public:
         }
         else
             throw Exception(
-                format("Number of rows and columns must match (rows: {} != {}, cols {} != {})",
-                       this->rows_,
-                       a.rows_,
-                       this->cols_,
-                       a.cols_));
+                fmt::format("Number of rows and columns must match (rows: {} != {}, cols {} != {})",
+                            this->rows_,
+                            a.rows_,
+                            this->cols_,
+                            a.cols_));
     }
 
     /// Add matrix to this matrix
@@ -1338,11 +1338,11 @@ public:
         }
         else
             throw Exception(
-                format("Number of rows and columns must match (rows: {} != {}, cols {} != {})",
-                       this->rows_,
-                       a.rows_,
-                       this->cols_,
-                       a.cols_));
+                fmt::format("Number of rows and columns must match (rows: {} != {}, cols {} != {})",
+                            this->rows_,
+                            a.rows_,
+                            this->cols_,
+                            a.cols_));
     }
 
     /// Subtract matrix `a` from this matrix and return the result
@@ -1367,11 +1367,11 @@ public:
         }
         else
             throw Exception(
-                format("Number of rows and columns must match (rows: {} != {}, cols {} != {})",
-                       this->rows_,
-                       a.rows_,
-                       this->cols_,
-                       a.cols_));
+                fmt::format("Number of rows and columns must match (rows: {} != {}, cols {} != {})",
+                            this->rows_,
+                            a.rows_,
+                            this->cols_,
+                            a.cols_));
     }
 
     /// Multiply this matrix with a scalar value
