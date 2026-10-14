@@ -47,7 +47,7 @@ TEST(TerminalTest, ostream_operator_wo_colors_code)
 TEST(TerminalTest, fmt_formatter)
 {
     auto s = fmt::format("{}", Terminal::red);
-    EXPECT_EQ(s, Terminal::red);
+    EXPECT_STREQ(s.c_str(), Terminal::red);
 }
 
 TEST(TerminalTest, color_codes)

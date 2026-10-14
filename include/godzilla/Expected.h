@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "godzilla/Assert.h"
 #include <utility>
 #include <cassert>
 
@@ -58,28 +59,28 @@ public:
     constexpr T &
     value() &
     {
-        assert(this->has_);
+        GODZILLA_ASSERT_TRUE(this->has_, "Expected type does not have a value");
         return this->storage_.value;
     }
 
     constexpr const T &
     value() const &
     {
-        assert(this->has_);
+        GODZILLA_ASSERT_TRUE(this->has_, "Expected type does not have a value");
         return this->storage_.value;
     }
 
     constexpr E &
     error() &
     {
-        assert(!this->has_);
+        GODZILLA_ASSERT_TRUE(!this->has_, "Expected type does not have an error");
         return this->storage_.error;
     }
 
     constexpr const E &
     error() const &
     {
-        assert(!this->has_);
+        GODZILLA_ASSERT_TRUE(!this->has_, "Expected type does not have an error");
         return this->storage_.error;
     }
 
