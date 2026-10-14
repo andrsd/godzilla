@@ -1,4 +1,12 @@
 {
+   PetscInitialize
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:PetscInitialize
+   ...
+}
+{
    LineMesh::create_mesh
    Memcheck:Leak
    match-leak-kinds: definite
