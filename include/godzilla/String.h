@@ -197,7 +197,7 @@ public:
     compare(int32_t pos, int32_t count, const String s) const
     {
         assert(count <= static_cast<int32_t>(s.rep_->size));
-        assert(pos + count <= static_cast<int32_t>(s.rep_->size));
+        assert(pos + count <= static_cast<int32_t>(this->rep_->size));
         return std::strncmp(this->rep_->data + pos, s.rep_->data, count);
     }
 
