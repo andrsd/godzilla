@@ -7,6 +7,14 @@
    ...
 }
 {
+   kh_resize_HMapFunc
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:kh_resize_HMapFunc
+   ...
+}
+{
    LineMesh::create_mesh
    Memcheck:Leak
    match-leak-kinds: definite
