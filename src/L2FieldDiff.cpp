@@ -63,7 +63,7 @@ L2FieldDiff::compute()
 }
 
 std::vector<Real>
-L2FieldDiff::get_value()
+L2FieldDiff::get_value() const
 {
     CALL_STACK_MSG();
     return this->l2_diff_;

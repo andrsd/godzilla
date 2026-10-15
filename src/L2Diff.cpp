@@ -59,7 +59,7 @@ L2Diff::compute()
 }
 
 std::vector<Real>
-L2Diff::get_value()
+L2Diff::get_value() const
 {
     CALL_STACK_MSG();
     return { this->l2_diff_ };
