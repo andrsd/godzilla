@@ -143,7 +143,7 @@ Problem::compute_postprocessors(ExecuteOn flag)
         }
 }
 
-Expected<Ref<Postprocessor>, ErrorCode>
+Optional<Ref<Postprocessor>>
 Problem::get_postprocessor(String name) const
 {
     CALL_STACK_MSG();
@@ -151,7 +151,7 @@ Problem::get_postprocessor(String name) const
     if (it != this->pps_.end())
         return Ref<Postprocessor>(*it->second.get());
     else
-        return Unexpected(ErrorCode::NotFound);
+        return std::nullopt;
 }
 
 const std::vector<String> &

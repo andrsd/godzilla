@@ -303,8 +303,9 @@ ExodusIIOutput::write_global_variables()
 
     int exo_var_id = 1;
     for (auto & name : this->global_var_names_) {
-        auto pp = get_problem()->get_postprocessor(name).value();
-        auto vals = pp->get_value();
+        auto pp = get_problem()->get_postprocessor(name);
+        expect_true(pp.has_value(), fmt::format("Postprocessor {} not found", name));
+        auto vals = pp.value()->get_value();
         // FIXME: store all components
         this->exo_->write_global_var(this->step_num_, exo_var_id, vals[0]);
         ++exo_var_id;

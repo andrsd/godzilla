@@ -94,7 +94,7 @@ public:
     ///
     /// @param name The name of the postprocessor
     /// @return Pointer to the postprocessor with name 'name' if it exists, otherwise `nullptr`
-    Expected<Ref<Postprocessor>, ErrorCode> get_postprocessor(String name) const;
+    Optional<Ref<Postprocessor>> get_postprocessor(String name) const;
 
     /// Get postprocessor by name
     ///
