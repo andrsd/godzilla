@@ -56,7 +56,7 @@ TEST(ProblemTest, add_pp)
         }
 
         std::vector<Real>
-        get_value() override
+        get_value() const override
         {
             return { 0. };
         }

@@ -34,7 +34,7 @@ public:
     /// Get the computed value
     ///
     /// @return The value computed by the postprocessor
-    virtual std::vector<Real> get_value() = 0;
+    virtual std::vector<Real> get_value() const = 0;
 
     /// Should execute happen at a specified occasion
     ///

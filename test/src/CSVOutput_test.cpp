@@ -61,7 +61,7 @@ TEST_F(CSVOutputTest, output)
         void compute() override {};
 
         std::vector<Real>
-        get_value() override
+        get_value() const override
         {
             return { 1. };
         }

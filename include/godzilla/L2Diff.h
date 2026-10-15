@@ -17,7 +17,7 @@ public:
     void create() override;
     void compute() override;
 
-    std::vector<Real> get_value() override;
+    std::vector<Real> get_value() const override;
 
     /// Evaluate the function 'u'
     ///
