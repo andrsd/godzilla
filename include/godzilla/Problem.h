@@ -96,6 +96,13 @@ public:
     /// @return Pointer to the postprocessor with name 'name' if it exists, otherwise `nullptr`
     Expected<Ref<Postprocessor>, ErrorCode> get_postprocessor(String name) const;
 
+    /// Get postprocessor by name
+    ///
+    /// @param name The name of the postprocessor
+    /// @return Pointer to the postprocessor with name 'name' if it exists, otherwise `nullptr`
+    template <PostprocessorDerived T>
+    Optional<Ref<const T>> get_postprocessor(String name) const;
+
     /// Get postprocessor names
     ///
     /// @return List of postprocessor names
@@ -400,6 +407,18 @@ Problem::add_postprocessor(Parameters & pars, std::source_location loc)
     this->pps_names_.push_back(name);
     this->pps_[name] = std::move(obj);
     return Ref<T>(*pp);
+}
+
+template <PostprocessorDerived T>
+Optional<Ref<const T>>
+Problem::get_postprocessor(String name) const
+{
+    CALL_STACK_MSG();
+    const auto & it = this->pps_.find(name);
+    if (it != this->pps_.end())
+        return dynamic_ref_cast<const T>(cref(*it->second));
+    else
+        return std::nullopt;
 }
 
 /// Move values from a local vector to a global one

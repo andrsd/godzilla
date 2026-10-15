@@ -126,3 +126,21 @@ TEST_F(PostprocessorTest, default_execute_on_mask)
     EXPECT_TRUE(pp->execute_on() & ExecuteOn::INITIAL);
     EXPECT_TRUE(pp->execute_on() & ExecuteOn::TIMESTEP);
 }
+
+TEST_F(PostprocessorTest, get_postprocessor)
+{
+    auto prob = this->app->get_problem<GTestImplicitFENonlinearProblem>();
+
+    {
+        auto pars = this->app->make_parameters<MockPostprocessor>();
+        pars.set<Ref<Problem>>("_problem", prob);
+        pars.set<String>("name", "pps");
+        prob->add_postprocessor<MockPostprocessor>(pars);
+    }
+
+    auto pp = prob->get_postprocessor<MockPostprocessor>("pps");
+    ASSERT_TRUE(pp.has_value());
+    EXPECT_FALSE(pp.value()->execute_on() & ExecuteOn::FINAL);
+    EXPECT_TRUE(pp.value()->execute_on() & ExecuteOn::INITIAL);
+    EXPECT_TRUE(pp.value()->execute_on() & ExecuteOn::TIMESTEP);
+}
