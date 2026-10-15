@@ -5,6 +5,7 @@
 
 #include "godzilla/Types.h"
 #include "godzilla/Span.h"
+#include "godzilla/CallStack.h"
 #include "godzilla/Formatters.h"
 #include <array>
 

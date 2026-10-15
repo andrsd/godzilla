@@ -508,7 +508,7 @@ norm(Array1D<T> & vector, NormType type)
 
     default:
         throw NotImplementedException(
-            format("`norm` not implemented for type {}", static_cast<int>(type)));
+            fmt::format("`norm` not implemented for type {}", static_cast<int>(type)));
     }
 }
 

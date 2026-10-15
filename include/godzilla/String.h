@@ -4,13 +4,13 @@
 #pragma once
 
 #include "godzilla/Optional.h"
+#include "godzilla/Assert.h"
 #include "mpicpp-lite/mpicpp-lite.h"
 #include <cstdint>
 #include <cstring>
 #include <optional>
 #include <stdexcept>
 #include <string>
-#include <cassert>
 #include <yaml-cpp/yaml.h>
 #include <fmt/core.h>
 
@@ -196,8 +196,10 @@ public:
     int32_t
     compare(uint32_t pos, uint32_t count, const String s) const
     {
-        assert(count <= s.rep_->size);
-        assert(pos + count <= this->rep_->size);
+        GODZILLA_ASSERT_TRUE(count <= s.rep_->size,
+                             "Number of characters to compare is greater than compare string size");
+        GODZILLA_ASSERT_TRUE(pos + count <= this->rep_->size,
+                             "Comparison would cross the size of string");
         return std::strncmp(this->rep_->data + pos, s.rep_->data, count);
     }
 
@@ -315,7 +317,7 @@ public:
     char
     operator[](uint32_t idx) const
     {
-        assert(idx <= this->rep_->size);
+        GODZILLA_ASSERT_TRUE(idx <= this->rep_->size, "Index out of bounds");
         return this->rep_->data[idx];
     }
 
@@ -338,7 +340,7 @@ public:
     void
     commit(uint32_t new_size)
     {
-        assert(new_size <= this->rep_->capacity);
+        GODZILLA_ASSERT_TRUE(new_size <= this->rep_->capacity, "New size is greater than capacity");
         this->rep_->size = new_size;
         this->rep_->data[new_size] = '\0';
     }

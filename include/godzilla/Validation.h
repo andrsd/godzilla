@@ -5,6 +5,7 @@
 
 #include "godzilla/Assert.h"
 #include "godzilla/Types.h"
+#include "godzilla/String.h"
 #include <sys/types.h>
 #include <initializer_list>
 #include <vector>

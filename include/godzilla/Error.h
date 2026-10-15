@@ -6,7 +6,6 @@
 #include "godzilla/Terminal.h"
 #include "fmt/core.h"
 #include <mutex>
-#include <source_location>
 #include <ranges>
 
 namespace godzilla {

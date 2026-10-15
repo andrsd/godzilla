@@ -22,14 +22,14 @@ Terminal::Code Terminal::erase_ln_from_cursor("\033[0K");
 
 Terminal::Code::Code(const char * code) : str_(code) {}
 
-Terminal::Code::operator String() const
-{
-    return this->str_;
-}
+// Terminal::Code::operator String() const
+// {
+//     return this->str_;
+// }
 
 Terminal::Code::operator const char *() const
 {
-    return this->str_.c_str();
+    return this->str_;
 }
 
 Terminal::Color::Color(const char * code) : Code(code) {}
