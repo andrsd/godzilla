@@ -5,6 +5,7 @@
 #include "godzilla/CallStack.h"
 #include "godzilla/Problem.h"
 #include "godzilla/Postprocessor.h"
+#include "godzilla/Assert.h"
 #include "fmt/printf.h"
 #include <cstring>
 #include <cerrno>
@@ -85,8 +86,9 @@ CSVOutput::write_values(Real time)
     CALL_STACK_MSG();
     fmt::print(this->f_, "{:g}", time);
     for (auto & name : this->pps_names_) {
-        auto pps = get_problem()->get_postprocessor(name).value();
-        auto vals = pps->get_value();
+        auto pp = get_problem()->get_postprocessor(name);
+        expect_true(pp.has_value(), fmt::format("Postprocessor {} not found", name));
+        auto vals = pp.value()->get_value();
         // FIXME: store all components
         fmt::print(this->f_, ",{:g}", vals[0]);
     }
