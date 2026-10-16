@@ -8,7 +8,7 @@ using namespace godzilla;
 TEST(Exception, ctor)
 {
     Exception e(fmt::format("number={}, str={}", 1, "str"));
-    EXPECT_EQ(e.rank(), -1);
+    EXPECT_EQ(e.rank(), 0);
     EXPECT_STREQ(e.what(), "number=1, str=str");
 }
 
@@ -62,15 +62,16 @@ TEST(Exception, print)
 {
     testing::internal::CaptureStderr();
 
+    mpi::Communicator comm;
     try {
         fn5();
     }
     catch (Exception & e) {
-        print(e);
+        print(comm, e);
     }
 
     auto output = testing::internal::GetCapturedStderr();
-    EXPECT_THAT(output, testing::HasSubstr("Something bad happend"));
+    EXPECT_THAT(output, testing::HasSubstr("[0] Something bad happend"));
 #ifndef NDEBUG
     EXPECT_THAT(output, testing::HasSubstr("fn5"));
     EXPECT_THAT(output, testing::HasSubstr("fn4"));
@@ -84,12 +85,14 @@ TEST(Exception, print_w_rank)
 {
     testing::internal::CaptureStderr();
 
+    mpi::Communicator comm;
+
     Exception e(2, "Something bad happend");
-    print(e);
+    print(comm, e);
 
     auto output = testing::internal::GetCapturedStderr();
-    EXPECT_THAT(output, testing::HasSubstr("[2] Something bad happend"));
-    EXPECT_THAT(output, testing::HasSubstr("print_w_rank_Test::TestBody()"));
+    EXPECT_THAT(output, Not(testing::HasSubstr("[2] Something bad happend")));
+    EXPECT_THAT(output, Not(testing::HasSubstr("print_w_rank_Test::TestBody()")));
 }
 
 //

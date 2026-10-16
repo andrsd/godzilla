@@ -4,8 +4,11 @@
 #pragma once
 
 #include "godzilla/CallStack.h"
+#include "mpicpp-lite/mpicpp-lite.h"
 #include <exception>
 #include <vector>
+
+namespace mpi = mpicpp_lite;
 
 namespace godzilla {
 
@@ -27,7 +30,7 @@ public:
     const std::source_location location() const;
 
     /// Print the call stack from the time the exception occured
-    void print_stack() const;
+    void print_stack(mpi::Communicator comm) const;
 
     int rank() const;
 
@@ -36,7 +39,7 @@ private:
     void store_call_stack();
 
     /// Rank of the process that threw the exception
-    int mpi_rank_ = -1;
+    int mpi_rank_ = 0;
     /// Error message
     std::string msg_;
     /// Location where the exception occured
@@ -71,8 +74,8 @@ public:
 };
 
 /// Print an exception to the console
-void print(Exception & e);
-void print(InternalError & e);
-void print(NotImplementedException & e);
+void print(mpi::Communicator comm, Exception & e);
+void print(mpi::Communicator comm, InternalError & e);
+void print(mpi::Communicator comm, NotImplementedException & e);
 
 } // namespace godzilla

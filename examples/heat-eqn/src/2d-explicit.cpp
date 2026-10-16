@@ -46,13 +46,13 @@ public:
 int
 main(int argc, char * argv[])
 {
+    mpi::Communicator comm;
+    Init init(argc, argv);
+
+    App app(comm, "heat-eqn");
+    app.set_verbosity_level(9);
+
     try {
-        mpi::Communicator comm;
-        Init init(argc, argv);
-
-        App app(comm, "heat-eqn");
-        app.set_verbosity_level(9);
-
         auto mesh_pars = app.make_parameters<RectangleMesh>();
         mesh_pars.set<Int>("nx", 4);
         mesh_pars.set<Int>("ny", 4);
@@ -72,8 +72,7 @@ main(int argc, char * argv[])
         prob->add_auxiliary_field<ConstantAuxiliaryField>(aux_ffn_pars);
 
         auto ic_pars = app.make_parameters<TempIC>();
-        ic_pars.set<String>("name", "all")
-            .set<String>("field", "temp");
+        ic_pars.set<String>("name", "all").set<String>("field", "temp");
         prob->add_initial_condition<TempIC>(ic_pars);
 
         auto bc_all_pars = app.make_parameters<DirichletBC>();
@@ -92,7 +91,7 @@ main(int argc, char * argv[])
         return 0;
     }
     catch (Exception & e) {
-        print(e);
+        print(app.get_comm(), e);
         return -1;
     }
     catch (...) {

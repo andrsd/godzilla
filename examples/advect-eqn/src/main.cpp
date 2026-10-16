@@ -12,12 +12,12 @@
 int
 main(int argc, char * argv[])
 {
+    mpi::Communicator comm;
+    godzilla::Init init(argc, argv);
+
+    godzilla::App app(comm, "advect-eqn");
+
     try {
-        mpi::Communicator comm;
-        godzilla::Init init(argc, argv);
-
-        godzilla::App app(comm, "advect-eqn");
-
         auto mesh_pars = app.make_parameters<LineMesh>();
         mesh_pars.set<Int>("nx", 5);
         mesh_pars.set<Real>("xmin", 0);
@@ -48,7 +48,7 @@ main(int argc, char * argv[])
         return 0;
     }
     catch (Exception & e) {
-        print(e);
+        print(app.get_comm(), e);
         return -1;
     }
     catch (...) {
