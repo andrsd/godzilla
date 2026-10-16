@@ -51,6 +51,17 @@ sighandler(int signo)
     exit(-2);
 }
 
+static void
+sighandler_int(int)
+{
+    fmt::println(stderr, "");
+    fmt::print(stderr, "{}", Terminal::red);
+    fmt::println(stderr, "Caught terminate");
+    print_call_stack();
+    fmt::print(stderr, "{}", Terminal::normal);
+    exit(-3);
+}
+
 // Call Stack
 
 CallStack &
@@ -101,6 +112,8 @@ CallStack::initialize()
     signal(SIGABRT, sighandler);
     signal(SIGBUS, sighandler);
     signal(SIGILL, sighandler);
+
+    signal(SIGINT, sighandler_int);
 }
 
 void
