@@ -53,42 +53,44 @@ Exception::rank() const
 }
 
 void
-Exception::print_stack() const
+Exception::print_stack(mpi::Communicator comm) const
 {
-    fmt::println(stderr, "  at {} ({}:{})", loc_.function_name(), loc_.file_name(), loc_.line());
-    for (auto & m : this->call_stack_ | std::views::reverse)
-        if (loc_.function_name() != m.function)
-            fmt::println(stderr, "  at {} ({}:{})", m.function, m.file, m.line);
+    auto rank = comm.rank();
+    if (rank == this->rank()) {
+        fmt::println(stderr,
+                     "[{}]  at {} ({}:{})",
+                     rank,
+                     loc_.function_name(),
+                     loc_.file_name(),
+                     loc_.line());
+        for (auto & m : this->call_stack_ | std::views::reverse)
+            if (loc_.function_name() != m.function)
+                fmt::println(stderr, "[{}]  at {} ({}:{})", rank, m.function, m.file, m.line);
+    }
 }
 
 void
-print(Exception & e)
+print(mpi::Communicator comm, Exception & e)
 {
-    if (e.rank() != -1)
+    if (comm.rank() == e.rank())
         fmt::println(stderr, "[{}] {}", e.rank(), e.what());
-    else
-        fmt::println(stderr, "{}", e.what());
-    e.print_stack();
+    e.print_stack(comm);
 }
 
 void
-print(InternalError & e)
+print(mpi::Communicator comm, InternalError & e)
 {
-    if (e.rank() != -1)
+    if (comm.rank() == e.rank())
         fmt::println(stderr, "[{}] InternalError: {}", e.rank(), e.what());
-    else
-        fmt::println(stderr, "InternalError: {}", e.what());
-    e.print_stack();
+    e.print_stack(comm);
 }
 
 void
-print(NotImplementedException & e)
+print(mpi::Communicator comm, NotImplementedException & e)
 {
-    if (e.rank() != -1)
+    if (comm.rank() == e.rank())
         fmt::println(stderr, "[{}] NotImplementedException: {}", e.rank(), e.what());
-    else
-        fmt::println(stderr, "NotImplementedException: {}", e.what());
-    e.print_stack();
+    e.print_stack(comm);
 }
 
 } // namespace godzilla
