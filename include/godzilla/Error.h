@@ -5,6 +5,7 @@
 
 #include "godzilla/Terminal.h"
 #include "fmt/core.h"
+#include <source_location>
 #include <mutex>
 #include <ranges>
 
@@ -15,9 +16,10 @@ namespace godzilla {
 
 namespace internal {
 
-void mem_check(int line, const char * func, const char * file, void * var);
+void mem_check(void * var, const std::source_location location = std::source_location::current());
 
-void check_petsc_error(int ierr, const char * file, int line);
+void check_petsc_error(int ierr,
+                       const std::source_location location = std::source_location::current());
 
 template <typename... T>
 void
@@ -56,11 +58,11 @@ warning(fmt::format_string<T...> format, T &&... args)
 
 /// Check that memory allocation was ok. If not, report an error (also dump call stack) and
 /// terminate
-#define MEM_CHECK(var) godzilla::internal::mem_check(__LINE__, __PRETTY_FUNCTION__, __FILE__, var)
+#define MEM_CHECK(var) godzilla::internal::mem_check(var)
 
 /// Check that PETSc call was successful . If not, report an error (also dump call stack) and
 /// terminate
-#define PETSC_CHECK(ierr) godzilla::internal::check_petsc_error(ierr, __FILE__, __LINE__)
+#define PETSC_CHECK(ierr) godzilla::internal::check_petsc_error(ierr)
 
 enum class ErrorCode {
     ///

@@ -19,6 +19,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS ${BuildValues})
 
+option(GODZILLA_WITH_STACKTRACE "Build with stack trace support" NO)
 option(GODZILLA_WITH_TECIOCPP "Build with teciocpp support" NO)
 option(GODZILLA_BUILD_EXAMPLES "Build examples" NO)
 option(GODZILLA_BUILD_TESTS "Build tests" NO)

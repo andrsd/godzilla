@@ -21,7 +21,7 @@ namespace godzilla {
 ///  ...your code here...
 /// }
 /// @endcode
-#ifndef NDEBUG
+#ifdef GODZILLA_WITH_STACKTRACE
 // clang-format off
     #define CALL_STACK_MSG() \
         godzilla::CallStack::Frame _CALL_STK_MSG_NAME(__call_stack_msg, __COUNTER__)
@@ -49,17 +49,14 @@ public:
 
         ~Frame();
 
-        const std::string file;
+        const char * file;
         int line;
-        const std::string function;
+        const char * function;
     };
 
 public:
     /// Build the call stack object with defined size
     CallStack();
-
-    /// Dump the call stack objects to standard error
-    void dump();
 
     /// Add a message to a stack
     void add(Frame * msg);
