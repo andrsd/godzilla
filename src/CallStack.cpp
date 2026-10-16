@@ -3,9 +3,12 @@
 
 #include "godzilla/CallStack.h"
 #include "godzilla/Utils.h"
+#include "mpicpp-lite/mpicpp-lite.h"
 #include "petscsys.h"
 #include <csignal>
 #include <fmt/core.h>
+
+namespace mpi = mpicpp_lite;
 
 namespace godzilla {
 namespace internal {
@@ -54,11 +57,22 @@ sighandler(int signo)
 static void
 sighandler_int(int)
 {
+    mpi::Communicator comm = PETSC_COMM_WORLD;
+    auto rank = comm.rank();
+    constexpr mpi::Tag tag(123456789);
+    if (rank > 0) {
+        comm.recv(rank - 1, tag);
+    }
     fmt::println(stderr, "");
     fmt::print(stderr, "{}", Terminal::red);
-    fmt::println(stderr, "Caught terminate");
+    fmt::println(stderr, "[{}] Caught terminate", rank);
     print_call_stack();
     fmt::print(stderr, "{}", Terminal::normal);
+    std::fflush(stderr);
+    if (rank < comm.size() - 1) {
+        comm.send(rank + 1, tag);
+    }
+    comm.barrier();
     exit(-3);
 }
 
