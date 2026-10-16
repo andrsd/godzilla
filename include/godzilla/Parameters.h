@@ -129,7 +129,10 @@ public:
         auto par = it->second.get();
         auto tpar = dynamic_cast<Parameter<V> *>(par);
         expect_true(tpar != nullptr,
-                    fmt::format("Parameter '{}' has unexpected type ({})", name, par->type()),
+                    fmt::format("Type mismatch for parameter '{}'. Expected '{}', got '{}'.",
+                                name,
+                                par->type(),
+                                utils::demangle(typeid(T).name())),
                     loc);
         if (tpar->valid)
             return tpar->get();
@@ -152,7 +155,10 @@ public:
         auto par = it->second.get();
         auto tpar = dynamic_cast<Parameter<LateRef<U>> *>(par);
         expect_true(tpar != nullptr,
-                    fmt::format("Parameter '{}' has unexpected type ({})", name, par->type()),
+                    fmt::format("Type mismatch for parameter '{}'. Expected '{}', got '{}'.",
+                                name,
+                                par->type(),
+                                utils::demangle(typeid(U).name())),
                     loc);
         expect_true(tpar->valid, fmt::format("Parameter '{}' is not initialized", name), loc);
         return tpar->get().get();
@@ -171,7 +177,10 @@ public:
         auto par = it->second.get();
         auto tpar = dynamic_cast<Parameter<T> *>(par);
         expect_true(tpar != nullptr,
-                    fmt::format("Parameter '{}' has unexpected type ({})", name, par->type()),
+                    fmt::format("Type mismatch for parameter '{}'. Expected '{}', got '{}'.",
+                                name,
+                                par->type(),
+                                utils::demangle(typeid(T).name())),
                     loc);
         expect_true(tpar->valid, fmt::format("Parameter '{}' is not initialized", name), loc);
         return tpar->get();
@@ -191,7 +200,10 @@ public:
         auto par = it->second.get();
         auto tpar = dynamic_cast<Parameter<T> *>(par);
         expect_true(tpar != nullptr,
-                    fmt::format("Parameter '{}' has unexpected type ({})", name, par->type()),
+                    fmt::format("Type mismatch for parameter '{}'. Expected '{}', got '{}'.",
+                                name,
+                                par->type(),
+                                utils::demangle(typeid(T).name())),
                     loc);
         if (tpar->valid)
             return tpar->get();
@@ -215,7 +227,10 @@ public:
         par->src_loc = loc;
         auto tpar = dynamic_cast<Parameter<T> *>(par.get());
         expect_true(tpar != nullptr,
-                    fmt::format("Parameter '{}' has unexpected type ({})", name, par->type()),
+                    fmt::format("Type mismatch for parameter '{}'. Expected '{}', got '{}'.",
+                                name,
+                                par->type(),
+                                utils::demangle(typeid(T).name())),
                     loc);
         tpar->set(value);
         return *this;
@@ -238,7 +253,10 @@ public:
         par->src_loc = loc;
         auto tpar = dynamic_cast<Parameter<LateRef<U>> *>(par.get());
         expect_true(tpar != nullptr,
-                    fmt::format("Parameter '{}' has unexpected type ({})", name, par->type()),
+                    fmt::format("Type mismatch for parameter '{}'. Expected '{}', got '{}'.",
+                                name,
+                                par->type(),
+                                utils::demangle(typeid(U).name())),
                     loc);
         tpar->set(LateRef<U>::from_ref(value));
         return *this;

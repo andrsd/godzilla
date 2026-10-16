@@ -39,7 +39,8 @@ TEST(ParametersTest, get_param_with_incorrect_type)
     auto params = Object::parameters();
     params.add_param<double>("param", "doco");
 
-    EXPECT_DEATH(params.get<int>("param"), "Parameter 'param' has unexpected type \\(double\\)");
+    EXPECT_DEATH(params.get<int>("param"),
+                 "Type mismatch for parameter 'param'. Expected 'double', got 'int'");
 }
 
 TEST(ParametersTest, param_value)
@@ -187,7 +188,7 @@ TEST(ParametersTest, get_optional_param_using_incorrect_type)
     params.set<int>("int", 1);
 
     EXPECT_DEATH(params.get<Optional<double>>("int"),
-                 "Parameter 'int' has unexpected type \\(int\\)");
+                 "Type mismatch for parameter 'int'. Expected 'int', got '.+optional<double>'");
 }
 
 TEST(ParametersTest, make_param_required)
