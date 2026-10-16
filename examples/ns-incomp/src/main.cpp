@@ -94,13 +94,13 @@ public:
 int
 main(int argc, char * argv[])
 {
+    mpi::Communicator comm;
+    Init init(argc, argv);
+
+    App app(comm, "ns-incomp");
+    app.set_verbosity_level(9);
+
     try {
-        mpi::Communicator comm;
-        Init init(argc, argv);
-
-        App app(comm, "ns-incomp");
-        app.set_verbosity_level(9);
-
         auto mesh_pars = app.make_parameters<RectangleMesh>();
         mesh_pars.set<Int>("nx", 2)
             .set<Int>("ny", 2)
@@ -148,7 +148,7 @@ main(int argc, char * argv[])
         return 0;
     }
     catch (Exception & e) {
-        print(e);
+        print(app.get_comm(), e);
         return -1;
     }
     catch (...) {

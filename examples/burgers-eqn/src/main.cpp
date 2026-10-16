@@ -39,13 +39,13 @@ VelocityBC::parameters()
 int
 main(int argc, char * argv[])
 {
+    mpi::Communicator comm;
+    godzilla::Init init(argc, argv);
+
+    godzilla::App app(comm, "burgers-eqn");
+    app.set_verbosity_level(9);
+
     try {
-        mpi::Communicator comm;
-        godzilla::Init init(argc, argv);
-
-        godzilla::App app(comm, "burgers-eqn");
-        app.set_verbosity_level(9);
-
         auto mesh_pars = app.make_parameters<LineMesh>();
         mesh_pars.set<Int>("nx", 100);
         mesh_pars.set<Real>("xmin", 0);
@@ -85,7 +85,7 @@ main(int argc, char * argv[])
         return 0;
     }
     catch (Exception & e) {
-        print(e);
+        print(app.get_comm(), e);
         return -1;
     }
     catch (...) {

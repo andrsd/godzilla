@@ -5,16 +5,17 @@
 int
 main(int argc, char * argv[])
 {
-    try {
-        mpi::Communicator comm;
-        godzilla::Init init(argc, argv);
+    mpi::Communicator comm;
+    godzilla::Init init(argc, argv);
 
-        PoissonApp app(comm, "poisson", argc, argv);
-        app.set_verbosity_level(9);
+    PoissonApp app(comm, "poisson", argc, argv);
+    app.set_verbosity_level(9);
+
+    try {
         return app.run();
     }
     catch (godzilla::Exception & e) {
-        print(e);
+        print(app.get_comm(), e);
         return -1;
     }
     catch (...) {
