@@ -35,7 +35,7 @@ error_print(int rank, fmt::format_string<T...> format, T... args)
 }
 
 void
-mem_check(int line, const char *, const char * file, void * var)
+mem_check(void * var, const std::source_location location)
 {
     mpi::Communicator comm = PETSC_COMM_WORLD;
 
@@ -44,7 +44,7 @@ mem_check(int line, const char *, const char * file, void * var)
         if (rank == 0) {
             error_print(rank, "Out of memory");
             fmt::print(stderr, "{}", Terminal::red);
-            fmt::println(stderr, "  at {}:{}", file, line);
+            fmt::println(stderr, "  at {}:{}", location.file_name(), location.line());
             godzilla::print_call_stack();
             fmt::print(stderr, "{}", Terminal::normal);
         }
@@ -53,7 +53,7 @@ mem_check(int line, const char *, const char * file, void * var)
 }
 
 void
-check_petsc_error(int ierr, const char * file, int line)
+check_petsc_error(int ierr, const std::source_location location)
 {
     mpi::Communicator comm = PETSC_COMM_WORLD;
 
@@ -62,7 +62,7 @@ check_petsc_error(int ierr, const char * file, int line)
         if (rank == 0) {
             error_print(rank, "PETSc error: {}", ierr);
             fmt::print(stderr, "{}", Terminal::red);
-            fmt::println(stderr, "  at {}:{}", file, line);
+            fmt::println(stderr, "  at {}:{}", location.file_name(), location.line());
             godzilla::print_call_stack();
             fmt::print(stderr, "{}", Terminal::normal);
         }
