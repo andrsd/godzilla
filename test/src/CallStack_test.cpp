@@ -27,10 +27,16 @@ TEST(CallStackTest, new_callstack_is_empty)
 namespace unit_test {
 
 void
+fn4()
+{
+    godzilla::print_call_stack();
+}
+
+void
 fn3()
 {
     CALL_STACK_MSG();
-    godzilla::get_callstack().dump();
+    fn4();
 }
 
 void
@@ -51,14 +57,19 @@ fn1(int, godzilla::String)
 
 TEST(CallStackTest, dump)
 {
-#ifndef NDEBUG
+#ifdef GODZILLA_WITH_STACKTRACE
     testing::internal::CaptureStderr();
     unit_test::fn1(1, "string");
 
     auto err = testing::internal::GetCapturedStderr();
-    EXPECT_THAT(err, testing::StartsWith("Call stack:"));
-    EXPECT_THAT(err, testing::HasSubstr("  #0: void unit_test::fn3()"));
-    EXPECT_THAT(err, testing::HasSubstr("  #1: void unit_test::fn2()"));
-    EXPECT_THAT(err, testing::HasSubstr("  #2: void unit_test::fn1("));
+    EXPECT_THAT(err, testing::HasSubstr("  at void unit_test::fn3()"));
+    EXPECT_THAT(err, testing::HasSubstr("  at void unit_test::fn2()"));
+    EXPECT_THAT(err, testing::HasSubstr("  at void unit_test::fn1("));
+#else
+    testing::internal::CaptureStderr();
+    unit_test::fn1(1, "string");
+
+    auto err = testing::internal::GetCapturedStderr();
+    EXPECT_THAT(err, testing::StartsWith("No call stack available."));
 #endif
 }

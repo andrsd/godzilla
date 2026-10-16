@@ -47,7 +47,7 @@ sighandler(int signo)
                  "Caught signal %d (%s)\n\n",
                  signo,
                  sig_name[signo]);
-    internal::call_stack.dump();
+    print_call_stack();
     exit(-2);
 }
 
@@ -60,28 +60,6 @@ get_callstack()
 }
 
 CallStack::CallStack() : size_(0) {}
-
-void
-CallStack::dump()
-{
-#ifndef NDEBUG
-    if (this->size_ > 0) {
-        PetscFPrintf(PETSC_COMM_WORLD, PETSC_STDERR, "Call stack:\n");
-        for (int n = 0, i = this->size_ - 1; i >= 0; --i, ++n) {
-            auto * m = this->stack_[i];
-            PetscFPrintf(PETSC_COMM_WORLD,
-                         PETSC_STDERR,
-                         "  #%d: %s (%s:%d)\n",
-                         n,
-                         m->function.c_str(),
-                         m->file.c_str(),
-                         m->line);
-        }
-    }
-    else
-        PetscFPrintf(PETSC_COMM_WORLD, PETSC_STDERR, "No call stack available.\n");
-#endif
-}
 
 void
 CallStack::add(Frame * frame)
@@ -128,10 +106,15 @@ CallStack::initialize()
 void
 print_call_stack(const std::source_location loc)
 {
-    for (int i = internal::call_stack.get_size() - 1; i >= 0; i--) {
-        const auto & frame = internal::call_stack[i];
-        if (loc.function_name() != frame->function)
-            fmt::println(stderr, "  at {} ({}:{})", frame->function, frame->file, frame->line);
+    if (internal::call_stack.get_size() > 0) {
+        for (int i = internal::call_stack.get_size() - 1; i >= 0; i--) {
+            const auto & frame = internal::call_stack[i];
+            if (loc.function_name() != frame->function)
+                fmt::println(stderr, "  at {} ({}:{})", frame->function, frame->file, frame->line);
+        }
+    }
+    else {
+        fmt::println(stderr, "No call stack available.");
     }
 }
 

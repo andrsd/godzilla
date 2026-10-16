@@ -72,7 +72,7 @@ TEST(Exception, print)
 
     auto output = testing::internal::GetCapturedStderr();
     EXPECT_THAT(output, testing::HasSubstr("[0] Something bad happend"));
-#ifndef NDEBUG
+#ifdef GODZILLA_WITH_STACKTRACE
     EXPECT_THAT(output, testing::HasSubstr("fn5"));
     EXPECT_THAT(output, testing::HasSubstr("fn4"));
     EXPECT_THAT(output, testing::HasSubstr("fn3"));
