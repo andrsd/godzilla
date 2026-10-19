@@ -24,9 +24,11 @@ target_compile_definitions(${PROJECT_NAME}
     PRIVATE
         HAVE_CXXABI_H
         GODZILLA_VERSION="${PROJECT_VERSION}"
-    PUBLIC
-        GODZILLA_WITH_STACKTRACE
 )
+
+if (GODZILLA_WITH_STACKTRACE)
+    target_compile_definitions(${PROJECT_NAME} PUBLIC GODZILLA_WITH_STACKTRACE)
+endif()
 
 if (PETSC_HAVE_HYPRE)
     target_compile_definitions(${PROJECT_NAME} PRIVATE -DPETSC_HAVE_HYPRE)
