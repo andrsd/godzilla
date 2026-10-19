@@ -20,6 +20,10 @@ Terminal::Code Terminal::erase_line("\033[2K");
 Terminal::Code Terminal::erase_ln_to_cursor("\033[1K");
 Terminal::Code Terminal::erase_ln_from_cursor("\033[0K");
 
+Terminal::Code Terminal::move_next_line("\x1B[1E");
+Terminal::Code Terminal::move_previous_line("\x1B[1F");
+Terminal::Code Terminal::move_line_begin("\x1B[1G");
+
 Terminal::Code::Code(const char * code) : str_(code) {}
 
 // Terminal::Code::operator String() const
