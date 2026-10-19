@@ -60,6 +60,10 @@ public:
     static Code erase_line;
     static Code erase_ln_to_cursor;
     static Code erase_ln_from_cursor;
+    //
+    static Code move_next_line;
+    static Code move_previous_line;
+    static Code move_line_begin;
 };
 
 } // namespace godzilla
