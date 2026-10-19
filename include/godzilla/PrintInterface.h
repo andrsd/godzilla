@@ -61,6 +61,13 @@ public:
                    const unsigned int & verbosity_level,
                    String prefix);
 
+    /// Get verbosity level
+    unsigned int
+    verbosity_level() const
+    {
+        return this->verbosity_level_;
+    }
+
     /// Print a message on a terminal
     ///
     /// @param level Verbosity level. If application verbose level is higher than this number, the
