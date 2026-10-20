@@ -3,7 +3,6 @@
 
 #pragma once
 
-// #include "godzilla/String.h"
 #include <iostream>
 #include <fmt/format.h>
 
@@ -19,7 +18,6 @@ public:
     /// We can detect that this is being put into a stream and potentially strip it
     struct Code {
         explicit Code(const char * code);
-        // operator String() const; // NOLINT(google-explicit-constructor)
         operator const char *() const; // NOLINT(google-explicit-constructor)
 
     private:

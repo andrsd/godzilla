@@ -26,11 +26,6 @@ Terminal::Code Terminal::move_line_begin("\x1B[1G");
 
 Terminal::Code::Code(const char * code) : str_(code) {}
 
-// Terminal::Code::operator String() const
-// {
-//     return this->str_;
-// }
-
 Terminal::Code::operator const char *() const
 {
     return this->str_;
