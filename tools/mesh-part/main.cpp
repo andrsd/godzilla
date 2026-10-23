@@ -232,22 +232,14 @@ MeshPartApp::create_command_line_options()
 {
     cxxopts::Options opts(get_app_name());
 
+    // clang-format off
     opts.add_option("", "h", "help", "Show this help page", cxxopts::value<bool>(), "");
     opts.add_option("", "v", "version", "Show the version", cxxopts::value<bool>(), "");
-    opts.add_option("",
-                    "p",
-                    "partitioner",
-                    "Name of the partitioner",
-                    cxxopts::value<std::string>(),
-                    "");
-    opts.add_option("",
-                    "o",
-                    "output",
-                    "Base name for output files",
-                    cxxopts::value<std::string>()->default_value("out"),
-                    "");
+    opts.add_option("", "p", "partitioner", "Name of the partitioner", cxxopts::value<std::string>(), "");
+    opts.add_option("", "o", "output", "Base name for output files", cxxopts::value<std::string>()->default_value("out"), "");
     opts.add_option("", "", "mesh-file", "The mesh file name", cxxopts::value<std::string>(), "");
     opts.positional_help("<mesh-file>");
+    // clang-format on
     return opts;
 }
 
