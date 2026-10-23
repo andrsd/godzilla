@@ -30,13 +30,6 @@ const String version = "1.0";
 
 mpi::Communicator comm_world;
 
-#define EXODUS_CHECK(call)                                                                      \
-    do {                                                                                        \
-        int ierr = (call);                                                                      \
-        if (ierr < 0)                                                                           \
-            throw Exception(fmt::format("Exodus error {} at {}:{}", ierr, __FILE__, __LINE__)); \
-    } while (0)
-
 struct GlobalExodusInfo {
     std::string title;
     int dim = 0;
@@ -49,54 +42,42 @@ struct GlobalExodusInfo {
     std::vector<std::string> coord_names;
 
     // Element blocks
-    std::vector<int64_t> el_blk_ids;
-    std::vector<int64_t> el_blk_cnts;
+    std::vector<int> el_blk_ids;
+    std::vector<int> el_blk_cnts;
     std::vector<std::string> el_blk_elem_types;
     std::vector<int64_t> el_blk_nodes_per_elem;
     std::vector<std::string> el_blk_names;
 
     // Node sets
-    std::vector<int64_t> ns_ids;
-    std::vector<int64_t> ns_cnts;
-    std::vector<int64_t> ns_df_cnts;
+    std::vector<int> ns_ids;
+    std::vector<int> ns_cnts;
+    std::vector<int> ns_df_cnts;
     std::vector<std::string> ns_names;
 
     // Side sets
-    std::vector<int64_t> ss_ids;
-    std::vector<int64_t> ss_cnts;
-    std::vector<int64_t> ss_df_cnts;
+    std::vector<int> ss_ids;
+    std::vector<int> ss_cnts;
+    std::vector<int> ss_df_cnts;
     std::vector<std::string> ss_names;
 };
 
 static void
 read_global_exodus_info(const std::string & file_name,
                         GlobalExodusInfo & info,
-                        std::vector<int64_t> & elem_map,
-                        std::vector<int64_t> & node_map)
+                        std::vector<int> & elem_map,
+                        std::vector<int> & node_map)
 {
-    int cpu_ws = sizeof(double);
-    int io_ws = 0;
-    float ver = 0.0f;
-    int exoid = ex_open(file_name.c_str(), EX_READ, &cpu_ws, &io_ws, &ver);
-    if (exoid < 0)
-        throw Exception(fmt::format("Unable to open Exodus file: {}", file_name));
+    exodusIIcpp::File exo(file_name, exodusIIcpp::FileAccess::READ);
 
-    ex_set_int64_status(exoid, EX_ALL_INT64_API);
+    exo.init();
+    auto num_dim = exo.get_dim();
+    auto num_nodes = exo.get_num_nodes();
+    auto num_elem = exo.get_num_elements();
+    auto num_elem_blk = exo.get_num_element_blocks();
+    auto num_node_sets = exo.get_num_node_sets();
+    auto num_side_sets = exo.get_num_side_sets();
 
-    char title[MAX_LINE_LENGTH + 1] = { 0 };
-    int64_t num_dim = 0, num_nodes = 0, num_elem = 0, num_elem_blk = 0;
-    int64_t num_node_sets = 0, num_side_sets = 0;
-
-    EXODUS_CHECK(ex_get_init(exoid,
-                             title,
-                             &num_dim,
-                             &num_nodes,
-                             &num_elem,
-                             &num_elem_blk,
-                             &num_node_sets,
-                             &num_side_sets));
-
-    info.title = title;
+    info.title = exo.get_title();
     info.dim = static_cast<int>(num_dim);
     info.num_nodes_g = num_nodes;
     info.num_elems_g = num_elem;
@@ -105,14 +86,8 @@ read_global_exodus_info(const std::string & file_name,
     info.num_side_sets_g = num_side_sets;
 
     // Coordinate names
-    info.coord_names.resize(num_dim);
-    std::vector<char *> cnames(num_dim);
-    std::vector<std::vector<char>> cname_bufs(num_dim, std::vector<char>(MAX_STR_LENGTH + 1, 0));
-    for (int i = 0; i < num_dim; ++i)
-        cnames[i] = cname_bufs[i].data();
-    EXODUS_CHECK(ex_get_coord_names(exoid, cnames.data()));
-    for (int i = 0; i < num_dim; ++i)
-        info.coord_names[i] = cnames[i];
+    exo.read_coord_names();
+    info.coord_names = exo.get_coord_names();
 
     // Element blocks
     info.el_blk_ids.resize(num_elem_blk);
@@ -122,31 +97,14 @@ read_global_exodus_info(const std::string & file_name,
     info.el_blk_names.resize(num_elem_blk);
 
     if (num_elem_blk > 0) {
-        EXODUS_CHECK(ex_get_ids(exoid, EX_ELEM_BLOCK, info.el_blk_ids.data()));
-
-        std::vector<char *> bnames(num_elem_blk);
-        std::vector<std::vector<char>> bname_bufs(num_elem_blk,
-                                                  std::vector<char>(MAX_STR_LENGTH + 1, 0));
-        for (int i = 0; i < num_elem_blk; ++i)
-            bnames[i] = bname_bufs[i].data();
-        EXODUS_CHECK(ex_get_names(exoid, EX_ELEM_BLOCK, bnames.data()));
-
+        exo.read_blocks();
         for (int i = 0; i < num_elem_blk; ++i) {
-            info.el_blk_names[i] = bnames[i];
-            char elem_type[MAX_STR_LENGTH + 1] = { 0 };
-            int64_t n_elem_this_blk = 0, n_nodes_per_elem = 0, n_edges = 0, n_faces = 0, n_attr = 0;
-            EXODUS_CHECK(ex_get_block(exoid,
-                                      EX_ELEM_BLOCK,
-                                      info.el_blk_ids[i],
-                                      elem_type,
-                                      &n_elem_this_blk,
-                                      &n_nodes_per_elem,
-                                      &n_edges,
-                                      &n_faces,
-                                      &n_attr));
-            info.el_blk_cnts[i] = n_elem_this_blk;
-            info.el_blk_elem_types[i] = elem_type;
-            info.el_blk_nodes_per_elem[i] = n_nodes_per_elem;
+            const auto & eb = exo.get_element_block(i);
+            info.el_blk_ids[i] = eb.get_id();
+            info.el_blk_names[i] = eb.get_name();
+            info.el_blk_cnts[i] = eb.get_num_elements();
+            info.el_blk_elem_types[i] = eb.get_element_type();
+            info.el_blk_nodes_per_elem[i] = eb.get_num_nodes_per_element();
         }
     }
 
@@ -157,25 +115,13 @@ read_global_exodus_info(const std::string & file_name,
         info.ns_df_cnts.resize(num_node_sets, 0);
         info.ns_names.resize(num_node_sets);
 
-        EXODUS_CHECK(ex_get_ids(exoid, EX_NODE_SET, info.ns_ids.data()));
-
-        std::vector<char *> ns_names_ptrs(num_node_sets);
-        std::vector<std::vector<char>> ns_name_bufs(num_node_sets,
-                                                    std::vector<char>(MAX_STR_LENGTH + 1, 0));
-        for (int i = 0; i < num_node_sets; ++i)
-            ns_names_ptrs[i] = ns_name_bufs[i].data();
-        EXODUS_CHECK(ex_get_names(exoid, EX_NODE_SET, ns_names_ptrs.data()));
-
+        exo.read_node_sets();
         for (int i = 0; i < num_node_sets; ++i) {
-            info.ns_names[i] = ns_names_ptrs[i];
-            int64_t n_nodes_in_set = 0, n_df_in_set = 0;
-            EXODUS_CHECK(ex_get_set_param(exoid,
-                                          EX_NODE_SET,
-                                          info.ns_ids[i],
-                                          &n_nodes_in_set,
-                                          &n_df_in_set));
-            info.ns_cnts[i] = n_nodes_in_set;
-            info.ns_df_cnts[i] = n_df_in_set;
+            const auto & ns = exo.get_node_sets()[i];
+            info.ns_ids[i] = ns.id;
+            info.ns_names[i] = ns.name;
+            info.ns_cnts[i] = ns.node_ids.size();
+            info.ns_df_cnts[i] = ns.n_distance_factors;
         }
     }
 
@@ -186,36 +132,22 @@ read_global_exodus_info(const std::string & file_name,
         info.ss_df_cnts.resize(num_side_sets, 0);
         info.ss_names.resize(num_side_sets);
 
-        EXODUS_CHECK(ex_get_ids(exoid, EX_SIDE_SET, info.ss_ids.data()));
-
-        std::vector<char *> ss_names_ptrs(num_side_sets);
-        std::vector<std::vector<char>> ss_name_bufs(num_side_sets,
-                                                    std::vector<char>(MAX_STR_LENGTH + 1, 0));
-        for (int i = 0; i < num_side_sets; ++i)
-            ss_names_ptrs[i] = ss_name_bufs[i].data();
-        EXODUS_CHECK(ex_get_names(exoid, EX_SIDE_SET, ss_names_ptrs.data()));
-
+        exo.read_side_sets();
         for (int i = 0; i < num_side_sets; ++i) {
-            info.ss_names[i] = ss_names_ptrs[i];
-            int64_t n_sides_in_set = 0, n_df_in_set = 0;
-            EXODUS_CHECK(ex_get_set_param(exoid,
-                                          EX_SIDE_SET,
-                                          info.ss_ids[i],
-                                          &n_sides_in_set,
-                                          &n_df_in_set));
-            info.ss_cnts[i] = n_sides_in_set;
-            info.ss_df_cnts[i] = n_df_in_set;
+            const auto & ss = exo.get_side_sets()[i];
+            info.ss_ids[i] = ss.id;
+            info.ss_names[i] = ss.name;
+            info.ss_cnts[i] = ss.elem_ids.size();
+            info.ss_df_cnts[i] = ss.n_distance_factors;
         }
     }
 
     // Maps
-    elem_map.resize(num_elem);
-    EXODUS_CHECK(ex_get_id_map(exoid, EX_ELEM_MAP, elem_map.data()));
+    exo.read_elem_map();
+    elem_map = exo.get_elem_map();
 
-    node_map.resize(num_nodes);
-    EXODUS_CHECK(ex_get_id_map(exoid, EX_NODE_MAP, node_map.data()));
-
-    EXODUS_CHECK(ex_close(exoid));
+    exo.read_node_map();
+    node_map = exo.get_node_map();
 }
 
 static void
@@ -368,8 +300,8 @@ MeshPartApp::partition_mesh_file(const std::string & mesh_file_name, const std::
     auto n_procs = comm.size();
 
     GlobalExodusInfo global_info;
-    std::vector<int64_t> global_elem_map;
-    std::vector<int64_t> global_node_map;
+    std::vector<int> global_elem_map;
+    std::vector<int> global_node_map;
 
     if (rank == 0)
         read_global_exodus_info(mesh_file_name, global_info, global_elem_map, global_node_map);
@@ -531,10 +463,10 @@ MeshPartApp::partition_mesh_file(const std::string & mesh_file_name, const std::
     int64_t num_bor_nodes = border_vertices.size();
     int64_t num_nodes_local = num_int_nodes + num_bor_nodes;
 
-    std::unordered_map<Int, int64_t> local_node_id;
-    std::vector<int64_t> node_mapi(num_int_nodes);
-    std::vector<int64_t> node_mapb(num_bor_nodes);
-    std::vector<int64_t> exo_node_id_map(num_nodes_local);
+    std::unordered_map<Int, int> local_node_id;
+    std::vector<int> node_mapi(num_int_nodes);
+    std::vector<int> node_mapb(num_bor_nodes);
+    std::vector<int> exo_node_id_map(num_nodes_local);
 
     for (int64_t i = 0; i < num_int_nodes; ++i) {
         Int v = internal_vertices[i];
@@ -579,9 +511,9 @@ MeshPartApp::partition_mesh_file(const std::string & mesh_file_name, const std::
             z[idx] = data[2];
     }
 
-    std::vector<int64_t> elem_mapi;
-    std::vector<int64_t> elem_mapb;
-    std::vector<int64_t> exo_elem_id_map;
+    std::vector<int> elem_mapi;
+    std::vector<int> elem_mapb;
+    std::vector<int> exo_elem_id_map;
     std::unordered_map<Int, int64_t> local_elem_id;
 
     struct LocalBlockInfo {
@@ -589,7 +521,7 @@ MeshPartApp::partition_mesh_file(const std::string & mesh_file_name, const std::
         int64_t num_elems = 0;
         int64_t nodes_per_elem = 0;
         std::string elem_type;
-        std::vector<int64_t> conn;
+        std::vector<int> conn;
     };
     std::vector<LocalBlockInfo> local_blocks;
 
@@ -664,7 +596,7 @@ MeshPartApp::partition_mesh_file(const std::string & mesh_file_name, const std::
     int64_t num_elems_local = num_int_elems + num_bor_elems;
 
     // Communication maps
-    std::map<int, std::vector<int64_t>> cmap_nodes_by_neighbor;
+    std::map<int, std::vector<int>> cmap_nodes_by_neighbor;
     for (Int v : border_vertices) {
         Int g = dist_ids[v - pStart_dist];
         int64_t loc_nid = local_node_id[v];
@@ -674,8 +606,8 @@ MeshPartApp::partition_mesh_file(const std::string & mesh_file_name, const std::
     }
 
     int64_t num_node_cmaps = cmap_nodes_by_neighbor.size();
-    std::vector<int64_t> node_cmap_ids;
-    std::vector<int64_t> node_cmap_cnts;
+    std::vector<int> node_cmap_ids;
+    std::vector<int> node_cmap_cnts;
     for (const auto & [neighbor_q, nodes] : cmap_nodes_by_neighbor) {
         node_cmap_ids.push_back(neighbor_q);
         node_cmap_cnts.push_back(nodes.size());
@@ -684,13 +616,13 @@ MeshPartApp::partition_mesh_file(const std::string & mesh_file_name, const std::
     // Node sets
     struct LocalNodeSetInfo {
         int64_t id = 0;
-        std::vector<int64_t> nodes;
+        std::vector<int> nodes;
     };
     std::vector<LocalNodeSetInfo> local_node_sets;
 
     if (global_info.num_node_sets_g > 0) {
         auto vertex_sets_label = mesh->get_label("Vertex Sets");
-        for (int64_t ns_id : global_info.ns_ids) {
+        for (auto ns_id : global_info.ns_ids) {
             LocalNodeSetInfo lns;
             lns.id = ns_id;
             if (vertex_sets_label) {
@@ -710,14 +642,14 @@ MeshPartApp::partition_mesh_file(const std::string & mesh_file_name, const std::
     // Side sets
     struct LocalSideSetInfo {
         int64_t id = 0;
-        std::vector<int64_t> elems;
-        std::vector<int64_t> sides;
+        std::vector<int> elems;
+        std::vector<int> sides;
     };
     std::vector<LocalSideSetInfo> local_side_sets;
 
     if (global_info.num_side_sets_g > 0) {
         auto face_sets_label = mesh->get_label("Face Sets");
-        for (int64_t ss_id : global_info.ss_ids) {
+        for (auto ss_id : global_info.ss_ids) {
             LocalSideSetInfo lss;
             lss.id = ss_id;
             if (face_sets_label) {
@@ -769,162 +701,102 @@ MeshPartApp::partition_mesh_file(const std::string & mesh_file_name, const std::
     // Write Exodus file
     auto out_file_name = fmt::format("{}.{}.exo", base_name, rank);
 
-    int cpu_ws = sizeof(double);
-    int io_ws = sizeof(double);
-    int cmode = EX_CLOBBER | EX_ALL_INT64_API | EX_ALL_INT64_DB;
-    int exoid = ex_create(out_file_name.c_str(), cmode, &cpu_ws, &io_ws);
-    if (exoid < 0)
-        throw Exception(fmt::format("Unable to create Exodus file: {}", out_file_name));
-
-    ex_set_int64_status(exoid, EX_ALL_INT64_API);
+    exodusIIcpp::File exo(out_file_name, exodusIIcpp::FileAccess::WRITE);
 
     // 1. Local init
-    EXODUS_CHECK(ex_put_init(exoid,
-                             global_info.title.c_str(),
-                             global_info.dim,
-                             num_nodes_local,
-                             num_elems_local,
-                             global_info.num_elem_blks_g,
-                             global_info.num_node_sets_g,
-                             global_info.num_side_sets_g));
+    exo.init(global_info.title.c_str(),
+             global_info.dim,
+             num_nodes_local,
+             num_elems_local,
+             global_info.num_elem_blks_g,
+             global_info.num_node_sets_g,
+             global_info.num_side_sets_g);
 
     // 2. Global metadata definitions
-    EXODUS_CHECK(ex_put_init_info(exoid, static_cast<int>(n_procs), 1, "P"));
-    EXODUS_CHECK(ex_put_init_global(exoid,
-                                    global_info.num_nodes_g,
-                                    global_info.num_elems_g,
-                                    global_info.num_elem_blks_g,
-                                    global_info.num_node_sets_g,
-                                    global_info.num_side_sets_g));
+    exo.init_info(n_procs, 1, "P");
+    exo.init_global(global_info.num_nodes_g,
+                    global_info.num_elems_g,
+                    global_info.num_elem_blks_g,
+                    global_info.num_node_sets_g,
+                    global_info.num_side_sets_g);
 
     // 3. Global block/set parameters
-    EXODUS_CHECK(ex_put_eb_info_global(exoid,
-                                       global_info.el_blk_ids.data(),
-                                       global_info.el_blk_cnts.data()));
+    exo.write_elem_block_info_global(global_info.el_blk_ids, global_info.el_blk_cnts);
 
     if (global_info.num_node_sets_g > 0) {
-        EXODUS_CHECK(ex_put_ns_param_global(exoid,
-                                            global_info.ns_ids.data(),
-                                            global_info.ns_cnts.data(),
-                                            global_info.ns_df_cnts.data()));
+        exo.write_node_set_param_global(global_info.ns_ids,
+                                        global_info.ns_cnts,
+                                        global_info.ns_df_cnts);
     }
     if (global_info.num_side_sets_g > 0) {
-        EXODUS_CHECK(ex_put_ss_param_global(exoid,
-                                            global_info.ss_ids.data(),
-                                            global_info.ss_cnts.data(),
-                                            global_info.ss_df_cnts.data()));
+        exo.write_side_set_param_global(global_info.ss_ids,
+                                        global_info.ss_cnts,
+                                        global_info.ss_df_cnts);
     }
 
     // 4. Load balance & Communication parameters
-    EXODUS_CHECK(ex_put_loadbal_param(exoid,
-                                      num_int_nodes,
-                                      num_bor_nodes,
-                                      0,
-                                      num_int_elems,
-                                      num_bor_elems,
-                                      num_node_cmaps,
-                                      0,
-                                      0));
+    exo.write_loadbal_param(num_int_nodes,
+                            num_bor_nodes,
+                            0,
+                            num_int_elems,
+                            num_bor_elems,
+                            num_node_cmaps,
+                            0,
+                            0);
 
     if (num_node_cmaps > 0) {
-        EXODUS_CHECK(ex_put_cmap_params(exoid,
-                                        node_cmap_ids.data(),
-                                        node_cmap_cnts.data(),
-                                        nullptr,
-                                        nullptr,
-                                        0));
+        exo.write_cmap_params(node_cmap_ids, node_cmap_cnts, {}, {}, 0);
         for (const auto & [neighbor_q, nodes] : cmap_nodes_by_neighbor) {
-            std::vector<int64_t> proc_ids(nodes.size(), neighbor_q);
-            EXODUS_CHECK(ex_put_node_cmap(exoid, neighbor_q, nodes.data(), proc_ids.data(), 0));
+            std::vector<int> proc_ids(nodes.size(), neighbor_q);
+            exo.write_node_cmap(neighbor_q, nodes, proc_ids, 0);
         }
     }
 
-    EXODUS_CHECK(ex_put_processor_node_maps(exoid,
-                                            num_int_nodes > 0 ? node_mapi.data() : nullptr,
-                                            num_bor_nodes > 0 ? node_mapb.data() : nullptr,
-                                            nullptr,
-                                            0));
+    exo.write_processor_node_maps(node_mapi, node_mapb, {}, 0);
 
-    EXODUS_CHECK(ex_put_processor_elem_maps(exoid,
-                                            num_int_elems > 0 ? elem_mapi.data() : nullptr,
-                                            num_bor_elems > 0 ? elem_mapb.data() : nullptr,
-                                            0));
+    exo.write_processor_elem_maps(elem_mapi, elem_mapb, 0);
 
     // 5. Bulk data: Coordinates
-    std::vector<char *> cnames(global_info.dim);
-    for (int i = 0; i < global_info.dim; ++i)
-        cnames[i] = const_cast<char *>(global_info.coord_names[i].c_str());
-    EXODUS_CHECK(ex_put_coord_names(exoid, cnames.data()));
+    exo.write_coord_names(global_info.coord_names);
 
-    EXODUS_CHECK(ex_put_coord(exoid, x.data(), y.data(), z.data()));
+    exo.write_coords(x, y, z);
 
     // 6. Bulk data: Element Blocks
-    std::vector<char *> bnames(global_info.num_elem_blks_g);
     for (size_t i = 0; i < local_blocks.size(); ++i) {
         const auto & lb = local_blocks[i];
-        bnames[i] = const_cast<char *>(global_info.el_blk_names[i].c_str());
-        if (lb.num_elems == 0) {
-            EXODUS_CHECK(
-                ex_put_block(exoid, EX_ELEM_BLOCK, lb.blk_id, lb.elem_type.c_str(), 0, 0, 0, 0, 0));
-        }
-        else {
-            EXODUS_CHECK(ex_put_block(exoid,
-                                      EX_ELEM_BLOCK,
-                                      lb.blk_id,
-                                      lb.elem_type.c_str(),
-                                      lb.num_elems,
-                                      lb.nodes_per_elem,
-                                      0,
-                                      0,
-                                      0));
-            EXODUS_CHECK(
-                ex_put_conn(exoid, EX_ELEM_BLOCK, lb.blk_id, lb.conn.data(), nullptr, nullptr));
-        }
+        exo.write_block(lb.blk_id, lb.elem_type.c_str(), lb.num_elems, lb.conn);
     }
-    EXODUS_CHECK(ex_put_names(exoid, EX_ELEM_BLOCK, bnames.data()));
+    exo.write_block_names(global_info.el_blk_names);
 
     // 7. Bulk data: Node Sets
     if (global_info.num_node_sets_g > 0) {
-        std::vector<char *> ns_names(global_info.num_node_sets_g);
         for (size_t i = 0; i < local_node_sets.size(); ++i) {
             const auto & lns = local_node_sets[i];
-            ns_names[i] = const_cast<char *>(global_info.ns_names[i].c_str());
-            if (lns.nodes.empty()) {
-                EXODUS_CHECK(ex_put_set_param(exoid, EX_NODE_SET, lns.id, 0, 0));
-            }
-            else {
-                EXODUS_CHECK(ex_put_set_param(exoid, EX_NODE_SET, lns.id, lns.nodes.size(), 0));
-                EXODUS_CHECK(ex_put_set(exoid, EX_NODE_SET, lns.id, lns.nodes.data(), nullptr));
-            }
+            if (lns.nodes.empty())
+                exo.write_node_set(lns.id, {});
+            else
+                exo.write_node_set(lns.id, lns.nodes);
         }
-        EXODUS_CHECK(ex_put_names(exoid, EX_NODE_SET, ns_names.data()));
+        exo.write_node_set_names(global_info.ns_names);
     }
 
     // 8. Bulk data: Side Sets
     if (global_info.num_side_sets_g > 0) {
-        std::vector<char *> ss_names(global_info.num_side_sets_g);
         for (size_t i = 0; i < local_side_sets.size(); ++i) {
             const auto & lss = local_side_sets[i];
-            ss_names[i] = const_cast<char *>(global_info.ss_names[i].c_str());
-            if (lss.elems.empty()) {
-                EXODUS_CHECK(ex_put_set_param(exoid, EX_SIDE_SET, lss.id, 0, 0));
-            }
-            else {
-                EXODUS_CHECK(ex_put_set_param(exoid, EX_SIDE_SET, lss.id, lss.elems.size(), 0));
-                EXODUS_CHECK(
-                    ex_put_set(exoid, EX_SIDE_SET, lss.id, lss.elems.data(), lss.sides.data()));
-            }
+            if (lss.elems.empty())
+                exo.write_side_set(lss.id, {}, {});
+            else
+                exo.write_side_set(lss.id, lss.elems, lss.sides);
         }
-        EXODUS_CHECK(ex_put_names(exoid, EX_SIDE_SET, ss_names.data()));
+        exo.write_side_set_names(global_info.ss_names);
     }
 
     // 9. Global Exodus ID maps
     if (num_nodes_local > 0)
-        EXODUS_CHECK(ex_put_id_map(exoid, EX_NODE_MAP, exo_node_id_map.data()));
+        exo.write_node_map(exo_node_id_map);
     if (num_elems_local > 0)
-        EXODUS_CHECK(ex_put_id_map(exoid, EX_ELEM_MAP, exo_elem_id_map.data()));
-
-    EXODUS_CHECK(ex_close(exoid));
+        exo.write_elem_map(exo_elem_id_map);
 }
 
 // ---
@@ -938,7 +810,7 @@ main(int argc, char * argv[])
         app.run();
         return 0;
     }
-    catch (Exception & e) {
+    catch (std::exception & e) {
         fmt::println("{}", e.what());
         return -1;
     }
