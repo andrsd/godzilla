@@ -254,12 +254,10 @@ int
 MeshPartApp::run()
 {
     if (this->cli_result.count("help")) {
-        if (get_comm().rank() == 0)
-            fmt::print("{}", this->cli_opts.help());
+        lprint(0, "{}", this->cli_opts.help());
     }
     else if (this->cli_result.count("version")) {
-        if (get_comm().rank() == 0)
-            fmt::print("{}, version {}\n", get_name(), get_version());
+        lprintln(0, "{}, version {}", get_name(), get_version());
     }
     else if (this->cli_result.count("mesh-file")) {
         std::string base_name = "out";
@@ -268,8 +266,7 @@ MeshPartApp::run()
         partition_mesh_file(this->cli_result["mesh-file"].as<std::string>(), base_name);
     }
     else {
-        if (get_comm().rank() == 0)
-            fmt::print("{}", this->cli_opts.help());
+        lprint(0, "{}", this->cli_opts.help());
     }
     return 0;
 }
