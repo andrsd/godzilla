@@ -39,7 +39,6 @@ struct ContinousPolicy {
                 const Int * cells)
     {
         CALL_STACK_MSG();
-        auto dm = mesh.get_dm();
         Int n_all_elems = mesh.get_num_all_cells();
         auto elem_type = get_elem_type(polytope_type);
         int n_nodes_per_elem = UnstructuredMesh::get_num_cell_nodes(polytope_type);
@@ -47,16 +46,11 @@ struct ContinousPolicy {
         std::vector<int> connect((std::size_t) n_elems_in_block * n_nodes_per_elem);
         for (Int i = 0, j = 0; i < n_elems_in_block; ++i) {
             Int elem_id = cells[i];
-            Int closure_size;
-            Int * closure = nullptr;
-            PETSC_CHECK(
-                DMPlexGetTransitiveClosure(dm, elem_id, PETSC_TRUE, &closure_size, &closure));
+            auto closure = mesh.get_transitive_closure(elem_id, true);
             for (Int k = 0; k < n_nodes_per_elem; ++k, ++j) {
-                Int l = 2 * (closure_size - n_nodes_per_elem + ordering[k]);
+                Int l = 2 * (closure.size() - n_nodes_per_elem + ordering[k]);
                 connect[j] = (int) (closure[l] - n_all_elems + 1);
             }
-            PETSC_CHECK(
-                DMPlexRestoreTransitiveClosure(dm, elem_id, PETSC_TRUE, &closure_size, &closure));
         }
         f.write_block(blk_id, elem_type, n_elems_in_block, connect);
     }
@@ -455,7 +449,6 @@ write_face_sets(exodusIIcpp::File & f, const UnstructuredMesh & mesh)
     if (!mesh.has_label("Face Sets"))
         return;
 
-    auto dm = mesh.get_dm();
     std::vector<std::string> fs_names;
 
     auto face_sets_label = mesh.get_label("Face Sets");
@@ -473,31 +466,20 @@ write_face_sets(exodusIIcpp::File & f, const UnstructuredMesh & mesh)
         std::vector<int> side_list(face_set_size);
         for (Int i = 0; i < face_set_size; ++i) {
             // Element
-            Int num_points;
-            Int * points = nullptr;
-            PETSC_CHECK(
-                DMPlexGetTransitiveClosure(dm, faces[i], PETSC_FALSE, &num_points, &points));
-
+            auto points = mesh.get_transitive_closure(faces[i], false);
             Int el = points[2];
             auto polytope_type = mesh.get_cell_type(el);
             auto side_ordering = get_elem_side_ordering(polytope_type);
             elem_list[i] = (int) (el + 1);
 
-            PETSC_CHECK(
-                DMPlexRestoreTransitiveClosure(dm, faces[i], PETSC_FALSE, &num_points, &points));
-
             // Side
-            points = nullptr;
-            PETSC_CHECK(DMPlexGetTransitiveClosure(dm, el, PETSC_TRUE, &num_points, &points));
-
-            for (Int j = 1; j < num_points; ++j) {
-                if (points[j * 2] == faces[i]) {
+            auto face_points = mesh.get_transitive_closure(el, true);
+            for (Int j = 1; j < face_points.size(); ++j) {
+                if (face_points[j * 2] == faces[i]) {
                     side_list[i] = (int) side_ordering[j - 1];
                     break;
                 }
             }
-
-            PETSC_CHECK(DMPlexRestoreTransitiveClosure(dm, el, PETSC_TRUE, &num_points, &points));
         }
         f.write_side_set(face_set_idx[fs], elem_list, side_list);
 

@@ -28,6 +28,27 @@ common_cells_by_vertex(const UnstructuredMesh & mesh)
     return data;
 }
 
+UnstructuredMesh::TransitiveClosure::TransitiveClosure(DM dm, Int point, bool use_cone) :
+    dm_(dm),
+    point_(point),
+    use_cone_(use_cone ? PETSC_TRUE : PETSC_FALSE),
+    closure_(nullptr),
+    size_(0)
+{
+    std::cerr << "UnstructuredMesh::TransitiveClosure::TransitiveClosure" << std::endl;
+    PETSC_CHECK(DMPlexGetTransitiveClosure(dm, point, use_cone, &this->size_, &this->closure_));
+}
+
+UnstructuredMesh::TransitiveClosure::~TransitiveClosure()
+{
+    std::cerr << "UnstructuredMesh::TransitiveClosure::~TransitiveClosure" << std::endl;
+    PETSC_CHECK(DMPlexRestoreTransitiveClosure(this->dm_,
+                                               this->point_,
+                                               this->use_cone_,
+                                               &this->size_,
+                                               &this->closure_));
+}
+
 UnstructuredMesh::UnstructuredMesh(mpi::Communicator comm) : Mesh(nullptr)
 {
     DM dm;
@@ -235,25 +256,26 @@ UnstructuredMesh::create_closure_index(const Section & section)
     PETSC_CHECK(DMPlexCreateClosureIndex(get_dm(), section));
 }
 
+UnstructuredMesh::TransitiveClosure
+UnstructuredMesh::get_transitive_closure(Int point, bool use_cone) const
+{
+    CALL_STACK_MSG();
+    return TransitiveClosure(get_dm(), point, use_cone);
+}
+
 std::vector<Int>
 UnstructuredMesh::get_connectivity(Int point) const
 {
     CALL_STACK_MSG();
-    Int closure_size;
-    Int * closure = nullptr;
-    PETSC_CHECK(DMPlexGetTransitiveClosure(get_dm(), point, PETSC_TRUE, &closure_size, &closure));
+    TransitiveClosure closure(get_dm(), point, true);
     auto polytope_type = get_cell_type(point);
     Int n_elem_nodes = UnstructuredMesh::get_num_cell_nodes(polytope_type);
     std::vector<Int> elem_connect;
     elem_connect.resize(n_elem_nodes);
     for (Int k = 0; k < n_elem_nodes; ++k) {
-        Int l = 2 * (closure_size - n_elem_nodes + k);
+        Int l = 2 * (closure.size() - n_elem_nodes + k);
         elem_connect[k] = closure[l];
     }
-
-    PETSC_CHECK(
-        DMPlexRestoreTransitiveClosure(get_dm(), point, PETSC_TRUE, &closure_size, &closure));
-
     return elem_connect;
 }
 
