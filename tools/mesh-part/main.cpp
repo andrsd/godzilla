@@ -305,52 +305,44 @@ MeshPartApp::partition_mesh_file(const std::string & mesh_file_name, const std::
         mesh->set_partitioner(part);
     }
 
-    Int pStart = 0, pEnd = 0;
+    Range pt_range;
     if (rank == 0)
-        PETSC_CHECK(DMPlexGetChart(mesh->get_dm(), &pStart, &pEnd));
+        pt_range = mesh->get_chart();
 
     std::vector<Int> orig_ids;
     if (rank == 0) {
-        orig_ids.resize(pEnd - pStart, -1);
+        orig_ids.resize(pt_range.size(), -1);
         for (int64_t c = 0; c < global_info.num_elems_g; ++c)
-            orig_ids[c - pStart] = global_elem_map[c];
+            orig_ids[c - pt_range.first()] = global_elem_map[c];
         for (int64_t v = 0; v < global_info.num_nodes_g; ++v)
-            orig_ids[global_info.num_elems_g + v - pStart] = global_node_map[v];
+            orig_ids[global_info.num_elems_g + v - pt_range.first()] = global_node_map[v];
     }
 
     DM dm_dist = nullptr;
-    PetscSF migration_sf = nullptr;
-    PETSC_CHECK(DMPlexDistribute(mesh->get_dm(), 0, &migration_sf, &dm_dist));
+    StarForest migration_sf;
+    PETSC_CHECK(DMPlexDistribute(mesh->get_dm(), 0, migration_sf, &dm_dist));
     if (dm_dist)
         mesh = Qtr<UnstructuredMesh>::alloc(dm_dist);
 
-    Int pStart_dist = 0, pEnd_dist = 0;
-    PETSC_CHECK(DMPlexGetChart(mesh->get_dm(), &pStart_dist, &pEnd_dist));
-    std::vector<Int> dist_ids(pEnd_dist - pStart_dist, -1);
+    auto dist_pt_range = mesh->get_chart();
+    std::vector<Int> dist_ids(dist_pt_range.size(), -1);
 
     if (migration_sf) {
-        PETSC_CHECK(PetscSFBcastBegin(migration_sf,
-                                      MPIU_INT,
-                                      orig_ids.data(),
-                                      dist_ids.data(),
-                                      MPI_REPLACE));
-        PETSC_CHECK(
-            PetscSFBcastEnd(migration_sf, MPIU_INT, orig_ids.data(), dist_ids.data(), MPI_REPLACE));
-        PETSC_CHECK(PetscSFDestroy(&migration_sf));
+        migration_sf.broadcast_begin(orig_ids, dist_ids, mpi::op::replace<>());
+        migration_sf.broadcast_end(orig_ids, dist_ids, mpi::op::replace<>());
     }
     else {
         dist_ids = orig_ids;
     }
 
-    Int vStart = 0, vEnd = 0;
-    PETSC_CHECK(DMPlexGetDepthStratum(mesh->get_dm(), 0, &vStart, &vEnd));
+    auto v_range = mesh->get_depth_stratum(0);
 
     std::unordered_map<Int, std::vector<int>> node_neighbors;
     if (n_procs > 1) {
         std::vector<std::vector<Int>> send_g(n_procs);
-        for (Int v = vStart; v < vEnd; ++v) {
-            Int g = dist_ids[v - pStart_dist];
-            int target = static_cast<int>((g - 1) % n_procs);
+        for (const auto v : v_range) {
+            auto g = dist_ids[v - dist_pt_range.first()];
+            auto target = static_cast<int>((g - 1) % n_procs);
             send_g[target].push_back(g);
         }
 
@@ -440,8 +432,8 @@ MeshPartApp::partition_mesh_file(const std::string & mesh_file_name, const std::
 
     std::vector<Int> internal_vertices;
     std::vector<Int> border_vertices;
-    for (Int v = vStart; v < vEnd; ++v) {
-        Int g = dist_ids[v - pStart_dist];
+    for (const auto v : v_range) {
+        auto g = dist_ids[v - dist_pt_range.first()];
         if (node_neighbors[g].empty())
             internal_vertices.push_back(v);
         else
@@ -460,13 +452,13 @@ MeshPartApp::partition_mesh_file(const std::string & mesh_file_name, const std::
     for (int64_t i = 0; i < num_int_nodes; ++i) {
         Int v = internal_vertices[i];
         local_node_id[v] = i + 1;
-        node_mapi[i] = dist_ids[v - pStart_dist];
+        node_mapi[i] = dist_ids[v - dist_pt_range.first()];
         exo_node_id_map[i] = node_mapi[i];
     }
     for (int64_t i = 0; i < num_bor_nodes; ++i) {
         Int v = border_vertices[i];
         local_node_id[v] = num_int_nodes + i + 1;
-        node_mapb[i] = dist_ids[v - pStart_dist];
+        node_mapb[i] = dist_ids[v - dist_pt_range.first()];
         exo_node_id_map[num_int_nodes + i] = node_mapb[i];
     }
 
@@ -515,7 +507,6 @@ MeshPartApp::partition_mesh_file(const std::string & mesh_file_name, const std::
     std::vector<LocalBlockInfo> local_blocks;
 
     int64_t cur_local_elem = 0;
-    auto dm = mesh->get_dm();
     auto cell_sets_label = mesh->get_label("Cell Sets");
 
     for (size_t b = 0; b < global_info.el_blk_ids.size(); ++b) {
@@ -537,22 +528,19 @@ MeshPartApp::partition_mesh_file(const std::string & mesh_file_name, const std::
             }
         }
         else {
-            Int cStart = 0, cEnd = 0;
-            PETSC_CHECK(DMPlexGetHeightStratum(dm, 0, &cStart, &cEnd));
-            for (Int c = cStart; c < cEnd; ++c)
+            auto c_range = mesh->get_height_stratum(0);
+            for (const auto c : c_range)
                 blk_cells.push_back(c);
         }
 
         lbi.num_elems = blk_cells.size();
         for (Int c : blk_cells) {
-            Int gid = dist_ids[c - pStart_dist];
+            Int gid = dist_ids[c - dist_pt_range.first()];
             cur_local_elem++;
             local_elem_id[c] = cur_local_elem;
             exo_elem_id_map.push_back(gid);
 
-            Int closure_size = 0;
-            Int * closure = nullptr;
-            PETSC_CHECK(DMPlexGetTransitiveClosure(dm, c, PETSC_TRUE, &closure_size, &closure));
+            auto closure = mesh->get_transitive_closure(c, true);
             auto polytope_type = mesh->get_cell_type(c);
             auto ordering = io::get_elem_node_ordering(polytope_type);
             int n_nodes_per_elem = UnstructuredMesh::get_num_cell_nodes(polytope_type);
@@ -560,14 +548,13 @@ MeshPartApp::partition_mesh_file(const std::string & mesh_file_name, const std::
             bool is_border_elem = false;
             std::vector<int64_t> elem_conn(n_nodes_per_elem);
             for (int k = 0; k < n_nodes_per_elem; ++k) {
-                Int l = 2 * (closure_size - n_nodes_per_elem + ordering[k]);
+                Int l = 2 * (closure.size() - n_nodes_per_elem + ordering[k]);
                 Int v = closure[l];
                 int64_t nid = local_node_id[v];
                 elem_conn[k] = nid;
                 if (nid > num_int_nodes)
                     is_border_elem = true;
             }
-            PETSC_CHECK(DMPlexRestoreTransitiveClosure(dm, c, PETSC_TRUE, &closure_size, &closure));
 
             if (is_border_elem)
                 elem_mapb.push_back(gid);
@@ -587,7 +574,7 @@ MeshPartApp::partition_mesh_file(const std::string & mesh_file_name, const std::
     // Communication maps
     std::map<int, std::vector<int>> cmap_nodes_by_neighbor;
     for (Int v : border_vertices) {
-        Int g = dist_ids[v - pStart_dist];
+        Int g = dist_ids[v - dist_pt_range.first()];
         int64_t loc_nid = local_node_id[v];
         for (int q : node_neighbors[g]) {
             cmap_nodes_by_neighbor[q].push_back(loc_nid);
@@ -646,39 +633,21 @@ MeshPartApp::partition_mesh_file(const std::string & mesh_file_name, const std::
                 if (stratum) {
                     auto faces = stratum.borrow_indices();
                     for (Int f : faces) {
-                        Int num_points = 0;
-                        Int * points = nullptr;
-                        PETSC_CHECK(
-                            DMPlexGetTransitiveClosure(dm, f, PETSC_FALSE, &num_points, &points));
+                        auto points = mesh->get_transitive_closure(f, false);
                         Int el = points[2];
-                        PETSC_CHECK(DMPlexRestoreTransitiveClosure(dm,
-                                                                   f,
-                                                                   PETSC_FALSE,
-                                                                   &num_points,
-                                                                   &points));
 
                         if (local_elem_id.count(el) > 0) {
                             int64_t loc_el = local_elem_id[el];
-                            points = nullptr;
-                            PETSC_CHECK(DMPlexGetTransitiveClosure(dm,
-                                                                   el,
-                                                                   PETSC_TRUE,
-                                                                   &num_points,
-                                                                   &points));
+                            auto points = mesh->get_transitive_closure(el, true);
                             auto ct = mesh->get_cell_type(el);
                             auto side_ordering = io::get_elem_side_ordering(ct);
-                            for (Int j = 1; j < num_points; ++j) {
+                            for (Int j = 1; j < points.size(); ++j) {
                                 if (points[j * 2] == f) {
                                     lss.elems.push_back(loc_el);
                                     lss.sides.push_back(side_ordering[j - 1]);
                                     break;
                                 }
                             }
-                            PETSC_CHECK(DMPlexRestoreTransitiveClosure(dm,
-                                                                       el,
-                                                                       PETSC_TRUE,
-                                                                       &num_points,
-                                                                       &points));
                         }
                     }
                 }
