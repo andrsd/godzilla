@@ -107,6 +107,13 @@ public:
 
     template <typename T, typename Op>
     void
+    broadcast_begin(const std::vector<T> & root, std::vector<T> & leaf, Op op) const
+    {
+        broadcast_begin(root.data(), leaf.data(), op);
+    }
+
+    template <typename T, typename Op>
+    void
     broadcast_begin(Span<const T> root, Span<T> leaf, Op op) const
     {
         broadcast_begin(root.data(), leaf.data(), op);
@@ -153,6 +160,13 @@ public:
 
     template <typename T, typename Op>
     void
+    broadcast_end(const std::vector<T> & root, std::vector<T> & leaf, Op op) const
+    {
+        broadcast_end(root.data(), leaf.data(), op);
+    }
+
+    template <typename T, typename Op>
+    void
     broadcast_end(Span<const T> root, Span<T> leaf, Op op) const
     {
         broadcast_end(root.data(), leaf.data(), op);
@@ -190,6 +204,14 @@ public:
     {
         CALL_STACK_MSG();
         reduce_begin(&leaf, &root, op);
+    }
+
+    template <typename T, typename Op>
+    void
+    reduce_begin(const std::vector<T> & leaf, std::vector<T> & root, Op op) const
+    {
+        CALL_STACK_MSG();
+        reduce_begin(leaf.data(), root.data(), op);
     }
 
     template <typename T, typename Op>
@@ -237,6 +259,14 @@ public:
 
     template <typename T, typename Op>
     void
+    reduce_end(const std::vector<T> & leaf, std::vector<T> & root, Op op) const
+    {
+        CALL_STACK_MSG();
+        reduce_end(leaf.data(), root.data(), op);
+    }
+
+    template <typename T, typename Op>
+    void
     reduce_end(Span<const T> leaf, Span<T> root, Op op) const
     {
         CALL_STACK_MSG();
@@ -275,6 +305,14 @@ public:
 
     template <typename T>
     void
+    gather_begin(const std::vector<T> & leaf, std::vector<T> & root) const
+    {
+        CALL_STACK_MSG();
+        gather_begin(leaf.data(), root.data());
+    }
+
+    template <typename T>
+    void
     gather_begin(const Array1D<T> & leaf, Array1D<T> & root) const
     {
         CALL_STACK_MSG();
@@ -306,6 +344,14 @@ public:
         CALL_STACK_MSG();
         auto dtype = mpicpp_lite::mpi_datatype<T>();
         PETSC_CHECK(PetscSFGatherEnd(this->obj_, dtype, leaf, root));
+    }
+
+    template <typename T>
+    void
+    gather_end(const std::vector<T> & leaf, std::vector<T> & root) const
+    {
+        CALL_STACK_MSG();
+        gather_end(leaf.data(), root.data());
     }
 
     template <typename T>
@@ -346,6 +392,14 @@ public:
 
     template <typename T>
     void
+    scatter_begin(const std::vector<T> & root, std::vector<T> & leaf) const
+    {
+        CALL_STACK_MSG();
+        scatter_begin(root.data(), leaf.data());
+    }
+
+    template <typename T>
+    void
     scatter_begin(const Array1D<T> & root, Array1D<T> & leaf) const
     {
         CALL_STACK_MSG();
@@ -378,6 +432,14 @@ public:
         CALL_STACK_MSG();
         auto dtype = mpicpp_lite::mpi_datatype<T>();
         PETSC_CHECK(PetscSFScatterEnd(this->obj_, dtype, root, leaf));
+    }
+
+    template <typename T>
+    void
+    scatter_end(const std::vector<T> & root, std::vector<T> & leaf) const
+    {
+        CALL_STACK_MSG();
+        scatter_end(root.data(), leaf.data());
     }
 
     template <typename T>
