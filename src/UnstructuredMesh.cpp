@@ -35,13 +35,11 @@ UnstructuredMesh::TransitiveClosure::TransitiveClosure(DM dm, Int point, bool us
     closure_(nullptr),
     size_(0)
 {
-    std::cerr << "UnstructuredMesh::TransitiveClosure::TransitiveClosure" << std::endl;
     PETSC_CHECK(DMPlexGetTransitiveClosure(dm, point, use_cone, &this->size_, &this->closure_));
 }
 
 UnstructuredMesh::TransitiveClosure::~TransitiveClosure()
 {
-    std::cerr << "UnstructuredMesh::TransitiveClosure::~TransitiveClosure" << std::endl;
     PETSC_CHECK(DMPlexRestoreTransitiveClosure(this->dm_,
                                                this->point_,
                                                this->use_cone_,
