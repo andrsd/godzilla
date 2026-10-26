@@ -328,6 +328,15 @@ UnstructuredMesh::get_depth_stratum(Int depth) const
     return { start, end };
 }
 
+Range
+UnstructuredMesh::get_height_stratum(Int height) const
+{
+    CALL_STACK_MSG();
+    Int start = 0, end = 0;
+    PETSC_CHECK(DMPlexGetHeightStratum(get_dm(), height, &start, &end));
+    return { start, end };
+}
+
 Int
 UnstructuredMesh::get_point_depth(Int point) const
 {
