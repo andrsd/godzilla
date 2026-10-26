@@ -151,6 +151,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh13set_cone_sizeE3Int3Int"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::set_cone_size()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh8set_coneE3Int4SpanI3IntE"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::set_cone()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh17get_depth_stratumE3Int"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_depth_stratum()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh18get_height_stratumE3Int"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_height_stratum()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh15get_point_depthE3Int"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_point_depth()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh10is_simplexEv"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::is_simplex()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh17get_cell_set_nameE3Int"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_cell_set_name()</span></code></a></li>
@@ -553,6 +554,20 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>depth</strong> – The requested depth </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>[start, end) range </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla16UnstructuredMesh18get_height_stratumE3Int">
+<span id="_CPPv3NK8godzilla16UnstructuredMesh18get_height_stratumE3Int"></span><span id="_CPPv2NK8godzilla16UnstructuredMesh18get_height_stratumE3Int"></span><span id="godzilla::UnstructuredMesh::get_height_stratum__IntC"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1a2a447afe98449a4d0b3a531dffc15ead"></span><span class="n"><span class="pre">Range</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_height_stratum</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">height</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla16UnstructuredMesh18get_height_stratumE3Int" title="Link to this definition"></a><br /></dt>
+<dd><p>Get the bounds [start, end) for all points at a certain height. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>height</strong> – The requested height </p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>[start, end) range </p>
