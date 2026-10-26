@@ -23,6 +23,36 @@ class Partitioner;
 /// Unstructured mesh (wrapper around DMPLEX + extra stuff)
 ///
 class UnstructuredMesh : public Mesh {
+    class TransitiveClosure {
+    public:
+        TransitiveClosure(DM dm, Int point, bool use_cone);
+        ~TransitiveClosure();
+
+        TransitiveClosure(const TransitiveClosure &) = delete;
+        TransitiveClosure & operator=(const TransitiveClosure &) = delete;
+
+        Int
+        operator[](Int idx) const
+        {
+            GODZILLA_ASSERT_TRUE(idx >= 0 && idx < 2 * this->size_,
+                                 "Out of bound access into closure");
+            return this->closure_[idx];
+        }
+
+        Int
+        size() const
+        {
+            return this->size_;
+        }
+
+    private:
+        DM dm_;
+        Int point_;
+        PetscBool use_cone_;
+        Int * closure_;
+        Int size_;
+    };
+
 public:
     explicit UnstructuredMesh(mpi::Communicator comm);
     explicit UnstructuredMesh(DM dm);
@@ -119,6 +149,14 @@ public:
     ///
     /// @param section The section describing the layout in the local vector
     void create_closure_index(const Section & section);
+
+    /// Return the points on the transitive closure of the in-edges or out-edges for this point in
+    /// the DAG
+    ///
+    /// @param point The mesh point
+    /// @param useCone `true` for the closure, otherwise return the support
+    /// @return Transitive closure
+    TransitiveClosure get_transitive_closure(Int point, bool use_cone) const;
 
     /// Get connectivity
     ///
