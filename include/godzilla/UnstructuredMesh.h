@@ -170,6 +170,12 @@ public:
     /// @param cone An array of points which are on the in-edges for point `p`
     void set_cone(Int point, Span<Int> cone);
 
+    /// Get the bounds [start, end) for all points at a certain depth.
+    ///
+    /// @param depth The requested depth
+    /// @return [start, end) range
+    Range get_depth_stratum(Int depth) const;
+
     /// Get the depth of a given point
     ///
     /// @param point The point

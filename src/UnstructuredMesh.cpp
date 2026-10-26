@@ -319,6 +319,15 @@ UnstructuredMesh::set_cone(Int point, Span<Int> cone)
     PETSC_CHECK(DMPlexSetCone(get_dm(), point, cone.data()));
 }
 
+Range
+UnstructuredMesh::get_depth_stratum(Int depth) const
+{
+    CALL_STACK_MSG();
+    Int start, end;
+    PETSC_CHECK(DMPlexGetDepthStratum(get_dm(), depth, &start, &end));
+    return { start, end };
+}
+
 Int
 UnstructuredMesh::get_point_depth(Int point) const
 {
