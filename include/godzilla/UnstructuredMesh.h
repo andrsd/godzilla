@@ -176,6 +176,12 @@ public:
     /// @return [start, end) range
     Range get_depth_stratum(Int depth) const;
 
+    /// Get the bounds [start, end) for all points at a certain height.
+    ///
+    /// @param height The requested height
+    /// @return [start, end) range
+    Range get_height_stratum(Int height) const;
+
     /// Get the depth of a given point
     ///
     /// @param point The point
