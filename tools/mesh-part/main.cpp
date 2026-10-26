@@ -350,8 +350,7 @@ MeshPartApp::partition_mesh_file(const std::string & mesh_file_name, const std::
         for (int i = 0; i < n_procs; ++i)
             send_counts[i] = static_cast<int>(send_g[i].size());
 
-        PETSC_CHECK(
-            MPI_Alltoall(send_counts.data(), 1, MPI_INT, recv_counts.data(), 1, MPI_INT, comm));
+        comm.all_to_all(send_counts, recv_counts);
 
         std::vector<int> send_displs(n_procs, 0), recv_displs(n_procs, 0);
         for (int i = 1; i < n_procs; ++i) {
@@ -364,15 +363,12 @@ MeshPartApp::partition_mesh_file(const std::string & mesh_file_name, const std::
             std::copy(send_g[i].begin(), send_g[i].end(), flat_send_g.begin() + send_displs[i]);
 
         std::vector<Int> flat_recv_g(recv_displs.back() + recv_counts.back());
-        PETSC_CHECK(MPI_Alltoallv(flat_send_g.data(),
-                                  send_counts.data(),
-                                  send_displs.data(),
-                                  MPIU_INT,
-                                  flat_recv_g.data(),
-                                  recv_counts.data(),
-                                  recv_displs.data(),
-                                  MPIU_INT,
-                                  comm));
+        comm.all_to_all(flat_send_g,
+                        send_counts,
+                        send_displs,
+                        flat_recv_g,
+                        recv_counts,
+                        recv_displs);
 
         std::unordered_map<Int, std::vector<int>> sharing;
         for (int p = 0; p < n_procs; ++p) {
@@ -398,8 +394,7 @@ MeshPartApp::partition_mesh_file(const std::string & mesh_file_name, const std::
         for (int p = 0; p < n_procs; ++p)
             send_counts[p] = static_cast<int>(reply_to_rank[p].size());
 
-        PETSC_CHECK(
-            MPI_Alltoall(send_counts.data(), 1, MPI_INT, recv_counts.data(), 1, MPI_INT, comm));
+        comm.all_to_all(send_counts, recv_counts);
 
         for (int i = 1; i < n_procs; ++i) {
             send_displs[i] = send_displs[i - 1] + send_counts[i - 1];
@@ -413,15 +408,12 @@ MeshPartApp::partition_mesh_file(const std::string & mesh_file_name, const std::
                       flat_send_reply.begin() + send_displs[i]);
 
         std::vector<Int> flat_recv_reply(recv_displs.back() + recv_counts.back());
-        PETSC_CHECK(MPI_Alltoallv(flat_send_reply.data(),
-                                  send_counts.data(),
-                                  send_displs.data(),
-                                  MPIU_INT,
-                                  flat_recv_reply.data(),
-                                  recv_counts.data(),
-                                  recv_displs.data(),
-                                  MPIU_INT,
-                                  comm));
+        comm.all_to_all(flat_send_reply,
+                        send_counts,
+                        send_displs,
+                        flat_recv_reply,
+                        recv_counts,
+                        recv_displs);
 
         for (size_t idx = 0; idx < flat_recv_reply.size(); idx += 2) {
             Int g = flat_recv_reply[idx];
