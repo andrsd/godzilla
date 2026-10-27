@@ -237,6 +237,7 @@ MeshPartApp::create_command_line_options()
     opts.add_option("", "v", "version", "Show the version", cxxopts::value<bool>(), "");
     opts.add_option("", "p", "partitioner", "Name of the partitioner", cxxopts::value<std::string>(), "");
     opts.add_option("", "o", "output", "Base name for output files", cxxopts::value<std::string>()->default_value("out"), "");
+    opts.add_option("", "", "verbose", "Verbosity level (0-3)", cxxopts::value<unsigned int>()->default_value("0"), "<level>");
     opts.add_option("", "", "mesh-file", "The mesh file name", cxxopts::value<std::string>(), "");
     opts.positional_help("<mesh-file>");
     // clang-format on
@@ -253,6 +254,8 @@ MeshPartApp::parse(cxxopts::Options & opts)
 int
 MeshPartApp::run()
 {
+    set_verbosity_level(this->cli_result["verbose"].as<unsigned int>());
+
     if (this->cli_result.count("help")) {
         lprint(0, "{}", this->cli_opts.help());
     }
@@ -288,6 +291,9 @@ MeshPartApp::partition_mesh_file(const std::string & mesh_file_name, const std::
     auto rank = comm.rank();
     auto n_procs = comm.size();
 
+    lprintln(1, "Partitioning mesh '{}' into {} partitions...", mesh_file_name, n_procs);
+    lprintln(2, "Reading global Exodus info from '{}'...", mesh_file_name);
+
     GlobalExodusInfo global_info;
     std::vector<int> global_elem_map;
     std::vector<int> global_node_map;
@@ -296,13 +302,37 @@ MeshPartApp::partition_mesh_file(const std::string & mesh_file_name, const std::
         read_global_exodus_info(mesh_file_name, global_info, global_elem_map, global_node_map);
     broadcast_global_info(comm, global_info);
 
+    lprintln(2,
+             "Global mesh: dim = {}, elements = {}, nodes = {}, blocks = {}, node sets = {}, side "
+             "sets = {}",
+             global_info.dim,
+             utils::human_number(global_info.num_elems_g),
+             utils::human_number(global_info.num_nodes_g),
+             utils::human_number(global_info.num_elem_blks_g),
+             utils::human_number(global_info.num_node_sets_g),
+             utils::human_number(global_info.num_side_sets_g));
+    for (size_t b = 0; b < global_info.el_blk_ids.size(); ++b) {
+        lprintln(3,
+                 "  Block ID {}: name = '{}', type = '{}', elements = {}, nodes/elem = {}",
+                 global_info.el_blk_ids[b],
+                 global_info.el_blk_names[b],
+                 global_info.el_blk_elem_types[b],
+                 utils::human_number(global_info.el_blk_cnts[b]),
+                 utils::human_number(global_info.el_blk_nodes_per_elem[b]));
+    }
+
+    lprintln(2, "Loading mesh into DMPlex...");
     auto mesh = load_mesh(mesh_file_name);
 
     if (this->cli_result.count("partitioner")) {
         auto part_name = this->cli_result["partitioner"].as<std::string>();
+        lprintln(2, "Using partitioner: '{}'", part_name);
         Partitioner part(comm);
         part.set_type(part_name);
         mesh->set_partitioner(part);
+    }
+    else {
+        lprintln(3, "Using default partitioner");
     }
 
     Range pt_range;
@@ -318,16 +348,21 @@ MeshPartApp::partition_mesh_file(const std::string & mesh_file_name, const std::
             orig_ids[global_info.num_elems_g + v - pt_range.first()] = global_node_map[v];
     }
 
+    lprintln(1, "Distributing mesh across {} ranks...", n_procs);
+
     DM dm_dist = nullptr;
     StarForest migration_sf;
     PETSC_CHECK(DMPlexDistribute(mesh->get_dm(), 0, migration_sf, &dm_dist));
     if (dm_dist)
         mesh = Qtr<UnstructuredMesh>::alloc(dm_dist);
 
+    lprintln(2, "Mesh distributed successfully.");
+
     auto dist_pt_range = mesh->get_chart();
     std::vector<Int> dist_ids(dist_pt_range.size(), -1);
 
     if (migration_sf) {
+        lprintln(3, "Migrating global IDs via StarForest...");
         migration_sf.broadcast_begin(orig_ids, dist_ids, mpi::op::replace<>());
         migration_sf.broadcast_end(orig_ids, dist_ids, mpi::op::replace<>());
     }
@@ -337,8 +372,10 @@ MeshPartApp::partition_mesh_file(const std::string & mesh_file_name, const std::
 
     auto v_range = mesh->get_depth_stratum(0);
 
+    lprintln(1, "Computing partition boundaries and communication maps...");
     std::unordered_map<Int, std::vector<int>> node_neighbors;
     if (n_procs > 1) {
+        lprintln(3, "Exchanging node sharing data across ranks via rendezvous...");
         std::vector<std::vector<Int>> send_g(n_procs);
         for (const auto v : v_range) {
             auto g = dist_ids[v - dist_pt_range.first()];
@@ -581,6 +618,23 @@ MeshPartApp::partition_mesh_file(const std::string & mesh_file_name, const std::
         node_cmap_cnts.push_back(nodes.size());
     }
 
+    lprintln(2,
+             "Rank 0: {} local elements ({} internal, {} border), {} local nodes ({} internal, {} "
+             "border)",
+             utils::human_number(num_elems_local),
+             utils::human_number(num_int_elems),
+             utils::human_number(num_bor_elems),
+             utils::human_number(num_nodes_local),
+             utils::human_number(num_int_nodes),
+             utils::human_number(num_bor_nodes));
+    lprintln(3, "Rank 0: {} nodal communication map(s)", utils::human_number(num_node_cmaps));
+    for (const auto & [neighbor_q, nodes] : cmap_nodes_by_neighbor) {
+        lprintln(3,
+                 "  Neighbor rank {}: {} shared boundary node(s)",
+                 utils::human_number(neighbor_q),
+                 utils::human_number(nodes.size()));
+    }
+
     // Node sets
     struct LocalNodeSetInfo {
         int64_t id = 0;
@@ -649,7 +703,9 @@ MeshPartApp::partition_mesh_file(const std::string & mesh_file_name, const std::
     }
 
     // Write Exodus file
+    lprintln(1, "Writing partitioned Exodus II files ('{}.<rank>.exo')...", base_name);
     auto out_file_name = fmt::format("{}.{}.exo", base_name, rank);
+    lprintln(2, "Writing Exodus II file for rank 0: '{}'...", out_file_name);
 
     exodusIIcpp::File exo(out_file_name, exodusIIcpp::FileAccess::WRITE);
 
@@ -747,6 +803,8 @@ MeshPartApp::partition_mesh_file(const std::string & mesh_file_name, const std::
         exo.write_node_map(exo_node_id_map);
     if (num_elems_local > 0)
         exo.write_elem_map(exo_elem_id_map);
+
+    lprintln(1, "Partitioning complete.");
 }
 
 // ---
