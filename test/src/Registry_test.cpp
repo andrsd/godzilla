@@ -74,9 +74,11 @@ TEST(RegistryTest, get_object_description)
     auto & o1 = objs[1];
     EXPECT_EQ(o1.name, "LineMesh");
     auto & p1 = o1.parameters;
-    EXPECT_EQ(p1.size(), 6);
+    EXPECT_EQ(p1.size(), 7);
     names.clear();
     for (auto & par : p1)
         names.push_back(par.name);
-    EXPECT_THAT(names, testing::UnorderedElementsAre("app", "name", "nx", "xmax", "xmin", "comm"));
+    EXPECT_THAT(
+        names,
+        testing::UnorderedElementsAre("app", "name", "nx", "xmax", "xmin", "comm", "interpolate"));
 }

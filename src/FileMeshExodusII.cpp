@@ -153,7 +153,8 @@ FileMesh::create_from_exodus()
 
         m->symmetrize();
         m->stratify();
-        m->interpolate();
+        if (this->interpolate_)
+            m->interpolate();
 
         // create vertex sets
         std::map<Int, String> node_set_names;
@@ -226,7 +227,7 @@ FileMesh::create_from_exodus()
 
         // Create side set labels
         std::map<Int, String> side_set_names;
-        if ((rank == 0) && (n_side_sets > 0)) {
+        if ((rank == 0) && (n_side_sets > 0) && this->interpolate_) {
             auto face_sets = m->get_label("Face Sets");
 
             f.read_side_sets();
