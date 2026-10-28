@@ -16,7 +16,8 @@ LineMesh::parameters()
     auto params = Object::parameters();
     params.add_param<Real>("xmin", 0., "Minimum in the x direction")
         .add_param<Real>("xmax", 1., "Maximum in the x direction")
-        .add_required_param<Int>("nx", "Number of mesh points in the x direction");
+        .add_required_param<Int>("nx", "Number of mesh points in the x direction")
+        .add_param<bool>("interpolate", true, "Interpolate the mesh");
     return params;
 }
 
@@ -25,7 +26,7 @@ LineMesh::LineMesh(const Parameters & pars) :
     xmin_(pars.get<Real>("xmin")),
     xmax_(pars.get<Real>("xmax")),
     nx_(pars.get<Int>("nx")),
-    interpolate_(true)
+    interpolate_(pars.get<bool>("interpolate"))
 {
     CALL_STACK_MSG();
     expect_true(this->xmax_ > this->xmin_, "Parameter 'xmax' must be larger than 'xmin'.");

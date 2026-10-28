@@ -19,7 +19,8 @@ RectangleMesh::parameters()
         .add_param<Real>("ymax", 1., "Maximum in the y direction")
         .add_required_param<Int>("nx", "Number of mesh points in the x direction")
         .add_required_param<Int>("ny", "Number of mesh points in the y direction")
-        .add_param<bool>("simplex", false, "Generate simplex elements");
+        .add_param<bool>("simplex", false, "Generate simplex elements")
+        .add_param<bool>("interpolate", true, "Interpolate the mesh");
     return params;
 }
 
@@ -32,7 +33,7 @@ RectangleMesh::RectangleMesh(const Parameters & pars) :
     nx_(pars.get<Int>("nx")),
     ny_(pars.get<Int>("ny")),
     simplex_(pars.get<bool>("simplex")),
-    interpolate_(true)
+    interpolate_(pars.get<bool>("interpolate"))
 {
     CALL_STACK_MSG();
     expect_true(this->xmax_ > this->xmin_, "Parameter 'xmax' must be larger than 'xmin'.");

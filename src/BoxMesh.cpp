@@ -22,7 +22,8 @@ BoxMesh::parameters()
         .add_required_param<Int>("nx", "Number of mesh points in the x direction")
         .add_required_param<Int>("ny", "Number of mesh points in the y direction")
         .add_required_param<Int>("nz", "Number of mesh points in the z direction")
-        .add_param<bool>("simplex", false, "Generate simplex elements");
+        .add_param<bool>("simplex", false, "Generate simplex elements")
+        .add_param<bool>("interpolate", true, "Interpolate the mesh");
     return params;
 }
 
@@ -38,7 +39,7 @@ BoxMesh::BoxMesh(const Parameters & pars) :
     ny_(pars.get<Int>("ny")),
     nz_(pars.get<Int>("nz")),
     simplex_(pars.get<bool>("simplex")),
-    interpolate_(true)
+    interpolate_(pars.get<bool>("interpolate"))
 {
     CALL_STACK_MSG();
     expect_true(this->xmax_ > this->xmin_, "Parameter 'xmax' must be larger than 'xmin'.");
