@@ -15,16 +15,17 @@ namespace godzilla {
 Parameters
 FileMesh::parameters()
 {
-    auto params = Object::parameters();
-    params.add_required_param<fs::path>("file", "The name of the file.");
-    return params;
+    auto pars = Object::parameters();
+    pars.add_required_param<fs::path>("file", "The name of the file.")
+        .add_param<bool>("interpolate", true, "Interpolate the mesh");
+    return pars;
 }
 
 FileMesh::FileMesh(const Parameters & pars) :
     Object(pars),
     file_format(UNKNOWN),
-    file_name_(pars.get<fs::path>("file"))
-
+    file_name_(pars.get<fs::path>("file")),
+    interpolate_(pars.get<bool>("interpolate"))
 {
     CALL_STACK_MSG();
 
@@ -70,7 +71,10 @@ FileMesh::create_from_gmsh()
     CALL_STACK_MSG();
     PetscOptionsSetValue(nullptr, "-dm_plex_gmsh_use_regions", nullptr);
     DM dm;
-    PETSC_CHECK(DMPlexCreateGmshFromFile(get_comm(), get_file_name().c_str(), PETSC_TRUE, &dm));
+    PETSC_CHECK(DMPlexCreateGmshFromFile(get_comm(),
+                                         get_file_name().c_str(),
+                                         this->interpolate_ ? PETSC_TRUE : PETSC_FALSE,
+                                         &dm));
     auto m = Qtr<UnstructuredMesh>::alloc(dm);
     return m;
 }

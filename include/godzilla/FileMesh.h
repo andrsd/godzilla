@@ -48,6 +48,8 @@ private:
 
     /// File name with the mesh
     fs::path file_name_;
+    /// Interpolate the mesh
+    bool interpolate_;
 
 public:
     static Parameters parameters();
