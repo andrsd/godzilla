@@ -298,8 +298,17 @@ MeshPartApp::partition_mesh_file(const std::string & mesh_file_name, const std::
     std::vector<int> global_elem_map;
     std::vector<int> global_node_map;
 
-    if (rank == 0)
-        read_global_exodus_info(mesh_file_name, global_info, global_elem_map, global_node_map);
+    mpi::CollectiveExceptionHandler handler(comm);
+    try {
+        if (rank == 0)
+            read_global_exodus_info(mesh_file_name, global_info, global_elem_map, global_node_map);
+        handler.sync();
+    }
+    catch (std::exception & exc) {
+        auto par_exc = handler.sync(exc);
+        par_exc.broadcast(comm);
+        throw Exception(exc.what());
+    }
     broadcast_global_info(comm, global_info);
 
     lprintln(2,
