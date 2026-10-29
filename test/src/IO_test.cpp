@@ -47,6 +47,12 @@ TEST(IOTest, get_elem_type_hex)
     EXPECT_STREQ(type, "HEX8");
 }
 
+TEST(IOTest, get_elem_type_pyramid)
+{
+    auto type = io::get_elem_type(PolytopeType::PYRAMID);
+    EXPECT_STREQ(type, "PYR5");
+}
+
 TEST(IOTest, get_elem_node_ordering_segment)
 {
     auto ordering = io::get_elem_node_ordering(PolytopeType::SEGMENT);
@@ -62,6 +68,16 @@ TEST(IOTest, get_elem_node_ordering_triangle)
     EXPECT_EQ(ordering[2], 2);
 }
 
+TEST(IOTest, get_elem_node_ordering_pyramid)
+{
+    auto ordering = io::get_elem_node_ordering(PolytopeType::PYRAMID);
+    EXPECT_EQ(ordering[0], 0);
+    EXPECT_EQ(ordering[1], 3);
+    EXPECT_EQ(ordering[2], 2);
+    EXPECT_EQ(ordering[3], 1);
+    EXPECT_EQ(ordering[4], 4);
+}
+
 TEST(IOTest, get_elem_side_ordering_segment)
 {
     auto ordering = io::get_elem_side_ordering(PolytopeType::SEGMENT);
@@ -75,6 +91,16 @@ TEST(IOTest, get_elem_side_ordering_triangle)
     EXPECT_EQ(ordering[0], 1);
     EXPECT_EQ(ordering[1], 2);
     EXPECT_EQ(ordering[2], 3);
+}
+
+TEST(IOTest, get_elem_side_ordering_pyramid)
+{
+    auto ordering = io::get_elem_side_ordering(PolytopeType::PYRAMID);
+    EXPECT_EQ(ordering[0], 5);
+    EXPECT_EQ(ordering[1], 1);
+    EXPECT_EQ(ordering[2], 4);
+    EXPECT_EQ(ordering[3], 3);
+    EXPECT_EQ(ordering[4], 2);
 }
 
 // 1-D CG mesh write tests
