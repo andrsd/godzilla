@@ -27,7 +27,7 @@ get_cell_type_ex2(String elem_type)
         return PolytopeType::TETRAHEDRON;
     else if (elem_type == "PYRAMID" || elem_type == "PYRAMID5" || elem_type == "PYR5")
         return PolytopeType::PYRAMID;
-    else if (elem_type == "WEDGE")
+    else if (elem_type == "WEDGE" || elem_type == "WEDGE6" || elem_type == "WEDG6")
         return PolytopeType::TRI_PRISM;
     else if (elem_type == "HEX" || elem_type == "HEX8" || elem_type == "HEXAHEDRON")
         return PolytopeType::HEXAHEDRON;
