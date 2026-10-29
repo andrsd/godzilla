@@ -171,6 +171,8 @@ get_elem_type(PolytopeType elem_type)
         return "QUAD4";
     case PolytopeType::TETRAHEDRON:
         return "TET4";
+    case PolytopeType::PYRAMID:
+        return "PYR5";
     case PolytopeType::HEXAHEDRON:
         return "HEX8";
     default:
@@ -187,6 +189,7 @@ get_elem_node_ordering(PolytopeType elem_type)
     static const Int quad_ordering[] = { 0, 1, 2, 3 };
     static const Int tet_ordering[] = { 1, 0, 2, 3 };
     static const Int hex_ordering[] = { 0, 3, 2, 1, 4, 5, 6, 7, 8 };
+    static const Int pyr_ordering[] = { 0, 3, 2, 1, 4 };
 
     switch (elem_type) {
     case PolytopeType::SEGMENT:
@@ -197,6 +200,8 @@ get_elem_node_ordering(PolytopeType elem_type)
         return quad_ordering;
     case PolytopeType::TETRAHEDRON:
         return tet_ordering;
+    case PolytopeType::PYRAMID:
+        return pyr_ordering;
     case PolytopeType::HEXAHEDRON:
         return hex_ordering;
     default:
@@ -213,6 +218,7 @@ get_elem_side_ordering(PolytopeType elem_type)
     static const Int quad_ordering[] = { 1, 2, 3, 4 };
     static const Int tet_ordering[] = { 4, 1, 2, 3 };
     static const Int hex_ordering[] = { 5, 6, 1, 3, 2, 4 };
+    static const Int pyr_ordering[] = { 5, 1, 4, 3, 2 };
 
     switch (elem_type) {
     case PolytopeType::SEGMENT:
@@ -223,6 +229,8 @@ get_elem_side_ordering(PolytopeType elem_type)
         return quad_ordering;
     case PolytopeType::TETRAHEDRON:
         return tet_ordering;
+    case PolytopeType::PYRAMID:
+        return pyr_ordering;
     case PolytopeType::HEXAHEDRON:
         return hex_ordering;
     default:

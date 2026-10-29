@@ -671,6 +671,8 @@ UnstructuredMesh::get_num_cell_nodes(PolytopeType elem_type)
     case PolytopeType::QUADRILATERAL:
     case PolytopeType::TETRAHEDRON:
         return 4;
+    case PolytopeType::PYRAMID:
+        return 5;
     case PolytopeType::HEXAHEDRON:
         return 8;
     default:
