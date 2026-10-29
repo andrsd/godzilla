@@ -59,6 +59,8 @@ struct GlobalExodusInfo {
     std::vector<int> ss_cnts;
     std::vector<int> ss_df_cnts;
     std::vector<std::string> ss_names;
+    std::vector<std::vector<int>> ss_elem_ids;
+    std::vector<std::vector<int>> ss_side_ids;
 };
 
 static void
@@ -131,6 +133,8 @@ read_global_exodus_info(const std::string & file_name,
         info.ss_cnts.resize(num_side_sets);
         info.ss_df_cnts.resize(num_side_sets, 0);
         info.ss_names.resize(num_side_sets);
+        info.ss_elem_ids.resize(num_side_sets);
+        info.ss_side_ids.resize(num_side_sets);
 
         exo.read_side_sets();
         for (int i = 0; i < num_side_sets; ++i) {
@@ -139,6 +143,8 @@ read_global_exodus_info(const std::string & file_name,
             info.ss_names[i] = ss.name;
             info.ss_cnts[i] = ss.elem_ids.size();
             info.ss_df_cnts[i] = ss.n_distance_factors;
+            info.ss_elem_ids[i] = ss.elem_ids;
+            info.ss_side_ids[i] = ss.side_ids;
         }
     }
 
@@ -194,6 +200,13 @@ broadcast_global_info(const mpi::Communicator & comm, GlobalExodusInfo & info)
         info.ss_names.resize(info.num_side_sets_g);
         for (int i = 0; i < info.num_side_sets_g; ++i)
             comm.broadcast(info.ss_names[i], 0);
+
+        info.ss_elem_ids.resize(info.num_side_sets_g);
+        info.ss_side_ids.resize(info.num_side_sets_g);
+        for (int i = 0; i < info.num_side_sets_g; ++i) {
+            comm.broadcast(info.ss_elem_ids[i], 0);
+            comm.broadcast(info.ss_side_ids[i], 0);
+        }
     }
 }
 
@@ -279,6 +292,7 @@ MeshPartApp::load_mesh(const std::string & file_name)
 {
     auto pars = make_parameters<FileMesh>();
     pars.set<fs::path>("file", file_name);
+    pars.set<bool>("interpolate", false);
     return MeshFactory::create<FileMesh>(pars);
 }
 
@@ -534,6 +548,7 @@ MeshPartApp::partition_mesh_file(const std::string & mesh_file_name, const std::
     std::vector<int> elem_mapb;
     std::vector<int> exo_elem_id_map;
     std::unordered_map<Int, int64_t> local_elem_id;
+    std::unordered_map<int, int> global_to_local_elem_id;
 
     struct LocalBlockInfo {
         int64_t blk_id = 0;
@@ -576,6 +591,7 @@ MeshPartApp::partition_mesh_file(const std::string & mesh_file_name, const std::
             Int gid = dist_ids[c - dist_pt_range.first()];
             cur_local_elem++;
             local_elem_id[c] = cur_local_elem;
+            global_to_local_elem_id[gid] = cur_local_elem;
             exo_elem_id_map.push_back(gid);
 
             auto closure = mesh->get_transitive_closure(c, true);
@@ -679,32 +695,20 @@ MeshPartApp::partition_mesh_file(const std::string & mesh_file_name, const std::
     std::vector<LocalSideSetInfo> local_side_sets;
 
     if (global_info.num_side_sets_g > 0) {
-        auto face_sets_label = mesh->get_label("Face Sets");
-        for (auto ss_id : global_info.ss_ids) {
+        for (size_t i = 0; i < global_info.ss_ids.size(); ++i) {
             LocalSideSetInfo lss;
-            lss.id = ss_id;
-            if (face_sets_label) {
-                auto stratum = face_sets_label.get_stratum(ss_id);
-                if (stratum) {
-                    auto faces = stratum.borrow_indices();
-                    for (Int f : faces) {
-                        auto points = mesh->get_transitive_closure(f, false);
-                        Int el = points[2];
+            lss.id = global_info.ss_ids[i];
+            const auto & ss_elems = global_info.ss_elem_ids[i];
+            const auto & ss_sides = global_info.ss_side_ids[i];
 
-                        if (local_elem_id.count(el) > 0) {
-                            int64_t loc_el = local_elem_id[el];
-                            auto points = mesh->get_transitive_closure(el, true);
-                            auto ct = mesh->get_cell_type(el);
-                            auto side_ordering = io::get_elem_side_ordering(ct);
-                            for (Int j = 1; j < points.size(); ++j) {
-                                if (points[j * 2] == f) {
-                                    lss.elems.push_back(loc_el);
-                                    lss.sides.push_back(side_ordering[j - 1]);
-                                    break;
-                                }
-                            }
-                        }
-                    }
+            for (size_t j = 0; j < ss_elems.size(); ++j) {
+                int elem = ss_elems[j];
+                int side = ss_sides[j];
+
+                auto it = global_to_local_elem_id.find(elem);
+                if (it != global_to_local_elem_id.end()) {
+                    lss.elems.push_back(it->second);
+                    lss.sides.push_back(side);
                 }
             }
             local_side_sets.push_back(std::move(lss));
