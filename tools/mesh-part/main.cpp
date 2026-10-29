@@ -127,6 +127,13 @@ read_global_exodus_info(const std::string & file_name,
         }
     }
 
+    // Maps
+    exo.read_elem_map();
+    elem_map = exo.get_elem_map();
+
+    exo.read_node_map();
+    node_map = exo.get_node_map();
+
     // Side sets
     if (num_side_sets > 0) {
         info.ss_ids.resize(num_side_sets);
@@ -143,17 +150,17 @@ read_global_exodus_info(const std::string & file_name,
             info.ss_names[i] = ss.name;
             info.ss_cnts[i] = ss.elem_ids.size();
             info.ss_df_cnts[i] = ss.n_distance_factors;
-            info.ss_elem_ids[i] = ss.elem_ids;
+            info.ss_elem_ids[i].resize(ss.elem_ids.size());
+            for (size_t j = 0; j < ss.elem_ids.size(); ++j) {
+                int elem = ss.elem_ids[j];
+                if (elem >= 1 && elem <= static_cast<int>(elem_map.size()))
+                    info.ss_elem_ids[i][j] = elem_map[elem - 1];
+                else
+                    info.ss_elem_ids[i][j] = elem;
+            }
             info.ss_side_ids[i] = ss.side_ids;
         }
     }
-
-    // Maps
-    exo.read_elem_map();
-    elem_map = exo.get_elem_map();
-
-    exo.read_node_map();
-    node_map = exo.get_node_map();
 }
 
 static void
@@ -366,9 +373,10 @@ MeshPartApp::partition_mesh_file(const std::string & mesh_file_name, const std::
     if (rank == 0) {
         orig_ids.resize(pt_range.size(), -1);
         for (int64_t c = 0; c < global_info.num_elems_g; ++c)
-            orig_ids[c - pt_range.first()] = global_elem_map[c];
+            orig_ids[c - pt_range.first()] = global_elem_map.empty() ? (c + 1) : global_elem_map[c];
         for (int64_t v = 0; v < global_info.num_nodes_g; ++v)
-            orig_ids[global_info.num_elems_g + v - pt_range.first()] = global_node_map[v];
+            orig_ids[global_info.num_elems_g + v - pt_range.first()] =
+                global_node_map.empty() ? (v + 1) : global_node_map[v];
     }
 
     lprintln(1, "Distributing mesh across {} ranks...", n_procs);
