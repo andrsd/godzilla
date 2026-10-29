@@ -53,6 +53,12 @@ TEST(IOTest, get_elem_type_pyramid)
     EXPECT_STREQ(type, "PYR5");
 }
 
+TEST(IOTest, get_elem_type_wedge)
+{
+    auto type = io::get_elem_type(PolytopeType::TRI_PRISM);
+    EXPECT_STREQ(type, "WEDGE6");
+}
+
 TEST(IOTest, get_elem_node_ordering_segment)
 {
     auto ordering = io::get_elem_node_ordering(PolytopeType::SEGMENT);
@@ -78,6 +84,17 @@ TEST(IOTest, get_elem_node_ordering_pyramid)
     EXPECT_EQ(ordering[4], 4);
 }
 
+TEST(IOTest, get_elem_node_ordering_wedge)
+{
+    auto ordering = io::get_elem_node_ordering(PolytopeType::TRI_PRISM);
+    EXPECT_EQ(ordering[0], 0);
+    EXPECT_EQ(ordering[1], 2);
+    EXPECT_EQ(ordering[2], 1);
+    EXPECT_EQ(ordering[3], 3);
+    EXPECT_EQ(ordering[4], 5);
+    EXPECT_EQ(ordering[5], 4);
+}
+
 TEST(IOTest, get_elem_side_ordering_segment)
 {
     auto ordering = io::get_elem_side_ordering(PolytopeType::SEGMENT);
@@ -101,6 +118,16 @@ TEST(IOTest, get_elem_side_ordering_pyramid)
     EXPECT_EQ(ordering[2], 4);
     EXPECT_EQ(ordering[3], 3);
     EXPECT_EQ(ordering[4], 2);
+}
+
+TEST(IOTest, get_elem_side_ordering_wedge)
+{
+    auto ordering = io::get_elem_side_ordering(PolytopeType::TRI_PRISM);
+    EXPECT_EQ(ordering[0], 4);
+    EXPECT_EQ(ordering[1], 5);
+    EXPECT_EQ(ordering[2], 3);
+    EXPECT_EQ(ordering[3], 2);
+    EXPECT_EQ(ordering[4], 1);
 }
 
 // 1-D CG mesh write tests

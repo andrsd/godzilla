@@ -268,6 +268,7 @@ TEST(UnstructuredMeshTest, get_num_cell_nodes)
     EXPECT_EQ(UnstructuredMesh::get_num_cell_nodes(PolytopeType::TETRAHEDRON), 4);
     EXPECT_EQ(UnstructuredMesh::get_num_cell_nodes(PolytopeType::HEXAHEDRON), 8);
     EXPECT_EQ(UnstructuredMesh::get_num_cell_nodes(PolytopeType::PYRAMID), 5);
+    EXPECT_EQ(UnstructuredMesh::get_num_cell_nodes(PolytopeType::TRI_PRISM), 6);
 }
 
 TEST(UnstructuredMeshTest, ranges)
