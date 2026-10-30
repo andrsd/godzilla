@@ -139,6 +139,9 @@ void
 DiscreteProblemInterface::distribute()
 {
     CALL_STACK_MSG();
+    if (this->unstr_mesh_->is_distributed())
+        return;
+
     auto part = this->problem_->get_partitioner();
     part.set_up();
 
