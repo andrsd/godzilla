@@ -227,18 +227,55 @@ StarForest::create_by_matching_indices(const Layout & layout,
                                        Span<const Int> root_indices,
                                        Span<const Int> leaf_indices)
 {
+    return create_by_matching_indices(layout, root_indices, 0, leaf_indices, 0);
+}
+
+StarForest
+StarForest::create_by_matching_indices(const Layout & layout,
+                                       Span<const Int> root_indices,
+                                       Int root_local_offset,
+                                       Span<const Int> leaf_indices,
+                                       Int leaf_local_offset)
+{
+    CALL_STACK_MSG();
     PetscSF sf;
     PETSC_CHECK(PetscSFCreateByMatchingIndices(layout.get(),
                                                root_indices.size(),
                                                root_indices.data(),
                                                NULL,
-                                               0,
+                                               root_local_offset,
                                                leaf_indices.size(),
                                                leaf_indices.data(),
                                                NULL,
-                                               0,
+                                               leaf_local_offset,
                                                NULL,
                                                &sf));
+    return StarForest(sf);
+}
+
+StarForest
+StarForest::create_by_matching_indices(const Layout & layout,
+                                       Span<const Int> root_indices,
+                                       Span<const Int> root_local_indices,
+                                       Int root_local_offset,
+                                       Span<const Int> leaf_indices,
+                                       Span<const Int> leaf_local_indices,
+                                       Int leaf_local_offset)
+{
+    CALL_STACK_MSG();
+    PetscSF sf;
+    PETSC_CHECK(PetscSFCreateByMatchingIndices(
+        layout.get(),
+        root_indices.size(),
+        root_indices.data(),
+        root_local_indices.size() == 0 ? NULL : root_local_indices.data(),
+        root_local_offset,
+        leaf_indices.size(),
+        leaf_indices.data(),
+        leaf_local_indices.size() == 0 ? NULL : leaf_local_indices.data(),
+        leaf_local_offset,
+        NULL,
+        &sf));
     return StarForest(sf);
 }
 

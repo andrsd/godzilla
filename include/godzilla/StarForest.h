@@ -518,6 +518,42 @@ public:
     static StarForest create_by_matching_indices(const Layout & layout,
                                                  Span<const Int> root_indices,
                                                  Span<const Int> leaf_indices);
+
+    /// Create StarForest by matching root and leaf indices with local offsets
+    ///
+    /// @param layout Layout defining the global index space and the MPI rank that brokers each
+    ///               index
+    /// @param root_indices Array of global indices of which this process requests ownership
+    /// @param root_local_offset Offset added to root local indices
+    /// @param leaf_indices Array of global indices with which this process requires data associated
+    /// @param leaf_local_offset Offset added to leaf local indices
+    /// @return Star forest representing the communication pattern from the root space to the leaf
+    ///         space
+    static StarForest create_by_matching_indices(const Layout & layout,
+                                                 Span<const Int> root_indices,
+                                                 Int root_local_offset,
+                                                 Span<const Int> leaf_indices,
+                                                 Int leaf_local_offset);
+
+    /// Create StarForest by matching root and leaf indices with local index arrays and offsets
+    ///
+    /// @param layout Layout defining the global index space and the MPI rank that brokers each
+    ///               index
+    /// @param root_indices Array of global indices of which this process requests ownership
+    /// @param root_local_indices Array of local indices (can be empty)
+    /// @param root_local_offset Offset added to root local indices
+    /// @param leaf_indices Array of global indices with which this process requires data associated
+    /// @param leaf_local_indices Array of local indices (can be empty)
+    /// @param leaf_local_offset Offset added to leaf local indices
+    /// @return Star forest representing the communication pattern from the root space to the leaf
+    ///         space
+    static StarForest create_by_matching_indices(const Layout & layout,
+                                                 Span<const Int> root_indices,
+                                                 Span<const Int> root_local_indices,
+                                                 Int root_local_offset,
+                                                 Span<const Int> leaf_indices,
+                                                 Span<const Int> leaf_local_indices,
+                                                 Int leaf_local_offset);
 };
 
 } // namespace godzilla
