@@ -256,7 +256,7 @@ MeshPartApp::create_command_line_options()
     opts.add_option("", "h", "help", "Show this help page", cxxopts::value<bool>(), "");
     opts.add_option("", "v", "version", "Show the version", cxxopts::value<bool>(), "");
     opts.add_option("", "p", "partitioner", "Name of the partitioner", cxxopts::value<std::string>(), "");
-    opts.add_option("", "o", "output", "Base name for output files", cxxopts::value<std::string>()->default_value("out"), "");
+    opts.add_option("", "o", "output", "Base name for output files", cxxopts::value<std::string>(), "");
     opts.add_option("", "", "verbose", "Verbosity level (0-3)", cxxopts::value<unsigned int>()->default_value("0"), "<level>");
     opts.add_option("", "", "mesh-file", "The mesh file name", cxxopts::value<std::string>(), "");
     opts.positional_help("<mesh-file>");
@@ -283,10 +283,19 @@ MeshPartApp::run()
         lprintln(0, "{}, version {}", get_name(), get_version());
     }
     else if (this->cli_result.count("mesh-file")) {
-        std::string base_name = "out";
-        if (this->cli_result.count("output"))
+        auto mesh_file_name = this->cli_result["mesh-file"].as<std::string>();
+        fs::path mesh_path(mesh_file_name);
+        std::string base_name;
+        if (this->cli_result.count("output")) {
             base_name = this->cli_result["output"].as<std::string>();
-        partition_mesh_file(this->cli_result["mesh-file"].as<std::string>(), base_name);
+        }
+        else {
+            if (mesh_path.has_parent_path())
+                base_name = (mesh_path.parent_path() / mesh_path.stem()).string();
+            else
+                base_name = mesh_path.stem().string();
+        }
+        partition_mesh_file(mesh_file_name, base_name);
     }
     else {
         lprint(0, "{}", this->cli_opts.help());
