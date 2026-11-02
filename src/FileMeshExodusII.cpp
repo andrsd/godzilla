@@ -4,6 +4,8 @@
 #include "godzilla/FileMesh.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Types.h"
+#include "godzilla/Layout.h"
+#include "godzilla/StarForest.h"
 #include "exodusIIcpp/exodusIIcpp.h"
 #include "petscdm.h"
 #include "petsc/private/dmimpl.h"
@@ -59,7 +61,17 @@ FileMesh::create_from_exodus()
         std::map<Int, String> cell_set_names;
 
         exodusIIcpp::File f;
-        if (rank == 0) {
+        if (this->distributed_) {
+            auto local_f_name = get_distributed_file_name(rank);
+            f.open(local_f_name);
+            f.init();
+            dim_embed = f.get_dim();
+            n_cells = f.get_num_elements();
+            n_vertices = f.get_num_nodes();
+            n_side_sets = f.get_num_side_sets();
+            n_node_sets = f.get_num_node_sets();
+        }
+        else if (rank == 0) {
             f.open(get_file_name());
             f.init();
             dim_embed = f.get_dim();
@@ -76,7 +88,7 @@ FileMesh::create_from_exodus()
         m->create_label("Face Sets");
         m->create_label("Vertex Sets");
 
-        if (rank == 0) {
+        if (this->distributed_ || rank == 0) {
             f.read_blocks();
             int n_elem_blocks = f.get_num_element_blocks();
             std::vector<int> cs_order(n_elem_blocks);
@@ -155,12 +167,37 @@ FileMesh::create_from_exodus()
 
         m->symmetrize();
         m->stratify();
+
+        if (this->distributed_) {
+            f.read_node_map();
+            auto node_map = f.get_node_map();
+
+            Int max_node_id = 0;
+            for (auto id : node_map)
+                max_node_id = std::max(max_node_id, static_cast<Int>(id));
+
+            Int global_num_nodes = 0;
+            comm.all_reduce(max_node_id, global_num_nodes, mpi::op::max<Int>());
+
+            auto layout = Layout::create_from_sizes(comm, PETSC_DECIDE, global_num_nodes);
+            std::vector<Int> root_indices(n_vertices);
+            for (Int i = 0; i < n_vertices; ++i)
+                root_indices[i] = node_map[i] - 1;
+
+            auto sf = StarForest::create_by_matching_indices(layout,
+                                                             root_indices,
+                                                             n_cells,
+                                                             root_indices,
+                                                             n_cells);
+            m->set_point_star_forest(sf);
+        }
+
         if (this->interpolate_)
             m->interpolate();
 
         // create vertex sets
         std::map<Int, String> node_set_names;
-        if (rank == 0 && (n_node_sets > 0)) {
+        if ((this->distributed_ || rank == 0) && (n_node_sets > 0)) {
             auto vertex_sets = m->get_label("Vertex Sets");
             f.read_node_sets();
             for (auto & node_set : f.get_node_sets()) {
@@ -205,7 +242,7 @@ FileMesh::create_from_exodus()
             coordinates.set_block_size(dim_embed);
             coordinates.set_type(VECSTANDARD);
             Scalar * coords = coordinates.get_array();
-            if (rank == 0) {
+            if (this->distributed_ || rank == 0) {
                 f.read_coords();
                 if (dim_embed > 0) {
                     auto & x = f.get_x_coords();
@@ -229,7 +266,7 @@ FileMesh::create_from_exodus()
 
         // Create side set labels
         std::map<Int, String> side_set_names;
-        if ((rank == 0) && (n_side_sets > 0) && this->interpolate_) {
+        if ((this->distributed_ || rank == 0) && (n_side_sets > 0) && this->interpolate_) {
             auto face_sets = m->get_label("Face Sets");
 
             f.read_side_sets();

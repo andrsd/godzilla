@@ -28,10 +28,21 @@ public:
     /// @return Name of the file
     fs::path get_file_name() const;
 
+    /// Return distributed file name for given rank
+    ///
+    /// @param rank MPI rank
+    /// @return Name of the distributed file for rank
+    fs::path get_distributed_file_name(int rank) const;
+
     /// Get mesh file format
     ///
     /// @return Mesh file format
     FileFormat get_file_format() const;
+
+    /// Is the mesh pre-distributed
+    ///
+    /// @return true if the mesh is distributed, false otherwise
+    bool is_distributed() const;
 
     /// Create UnstructuredMesh object
     ///
@@ -50,6 +61,8 @@ private:
     fs::path file_name_;
     /// Interpolate the mesh
     bool interpolate_;
+    /// Is the mesh pre-distributed
+    bool distributed_;
 
 public:
     static Parameters parameters();
