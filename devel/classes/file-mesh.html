@@ -88,7 +88,9 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla8FileMeshE"><code class="docutils literal notranslate"><span class="pre">FileMesh</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv4N8godzilla8FileMesh8FileMeshERK10Parameters"><code class="docutils literal notranslate"><span class="pre">FileMesh::FileMesh()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv4NK8godzilla8FileMesh13get_file_nameEv"><code class="docutils literal notranslate"><span class="pre">FileMesh::get_file_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4NK8godzilla8FileMesh25get_distributed_file_nameEi"><code class="docutils literal notranslate"><span class="pre">FileMesh::get_distributed_file_name()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv4NK8godzilla8FileMesh15get_file_formatEv"><code class="docutils literal notranslate"><span class="pre">FileMesh::get_file_format()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4NK8godzilla8FileMesh14is_distributedEv"><code class="docutils literal notranslate"><span class="pre">FileMesh::is_distributed()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv4N8godzilla8FileMesh11create_meshEv"><code class="docutils literal notranslate"><span class="pre">FileMesh::create_mesh()</span></code></a></li>
 </ul>
 </li>
@@ -173,6 +175,7 @@
 </li>
 <li><strong>Optional:</strong><ul class="simple">
 <li><p><strong>comm (mpicpp_lite::Communicator) - </strong>MPI communicator</p></li>
+<li><p><strong>distributed (Boolean) - </strong>Is the mesh pre-distributed?</p></li>
 <li><p><strong>interpolate (Boolean) - </strong>Interpolate the mesh</p></li>
 <li><p><strong>name (godzilla::String) - </strong>Name of the object</p></li>
 </ul>
@@ -207,12 +210,37 @@
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla8FileMesh25get_distributed_file_nameEi">
+<span id="_CPPv3NK8godzilla8FileMesh25get_distributed_file_nameEi"></span><span id="_CPPv2NK8godzilla8FileMesh25get_distributed_file_nameEi"></span><span id="godzilla::FileMesh::get_distributed_file_name__iC"></span><span class="target" id="classgodzilla_1_1_file_mesh_1a71147eb8211b8575fa37242620318143"></span><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_distributed_file_name</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rank</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla8FileMesh25get_distributed_file_nameEi" title="Link to this definition"></a><br /></dt>
+<dd><p>Return distributed file name for given rank. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>rank</strong> – MPI rank </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Name of the distributed file for rank </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8godzilla8FileMesh15get_file_formatEv">
 <span id="_CPPv3NK8godzilla8FileMesh15get_file_formatEv"></span><span id="_CPPv2NK8godzilla8FileMesh15get_file_formatEv"></span><span id="godzilla::FileMesh::get_file_formatC"></span><span class="target" id="classgodzilla_1_1_file_mesh_1a115376e4bef0cd64a2f1d4e35a695d04"></span><span class="n"><span class="pre">FileFormat</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_file_format</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla8FileMesh15get_file_formatEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Get mesh file format. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="mesh.html#classgodzilla_1_1_mesh"><span class="std std-ref">Mesh</span></a> file format </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla8FileMesh14is_distributedEv">
+<span id="_CPPv3NK8godzilla8FileMesh14is_distributedEv"></span><span id="_CPPv2NK8godzilla8FileMesh14is_distributedEv"></span><span id="godzilla::FileMesh::is_distributedC"></span><span class="target" id="classgodzilla_1_1_file_mesh_1a5920e8cccc735089b4c933bd91acad15"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_distributed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla8FileMesh14is_distributedEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Is the mesh pre-distributed. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>true if the mesh is distributed, false otherwise </p>
 </dd>
 </dl>
 </dd></dl>
