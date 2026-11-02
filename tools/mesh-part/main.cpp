@@ -26,7 +26,7 @@
 
 using namespace godzilla;
 
-const String version = "1.0";
+const String version = "1.1";
 
 mpi::Communicator comm_world;
 
