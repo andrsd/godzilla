@@ -20,9 +20,9 @@ PiecewiseConstant::PiecewiseConstant(Continuity cont,
 {
     CALL_STACK_MSG();
     expect_true(this->x_.size() + 1 == this->y_.size(),
-                fmt::format("'x' (size={}) must have one more entry than 'y' (size={})",
-                            this->x_.size(),
-                            this->y_.size()));
+                fmt::format("'y' (size={}) must have one more entry than 'x' (size={})",
+                            this->y_.size(),
+                            this->x_.size()));
 
     expect_true(!this->x_.empty(),
                 fmt::format("Size of 'x' is {}. It must be 1 or more", this->x_.size()));
