@@ -3,7 +3,7 @@
 
 #include "godzilla/PiecewiseLinear.h"
 #include "godzilla/CallStack.h"
-#include "godzilla/Exception.h"
+#include "godzilla/Validation.h"
 #include "godzilla/Assert.h"
 #include "fmt/format.h"
 
@@ -21,11 +21,10 @@ PiecewiseLinear::PiecewiseLinear(const std::vector<Real> & x, const std::vector<
     expect_true(this->x_.size() >= 2,
                 fmt::format("Size of 'x' is {}. It must be 2 or more", this->x_.size()));
 
-    // check monotonicity
-    for (std::size_t i = 0; i < this->x_.size() - 1; ++i) {
-        if (this->x_[i] >= this->x_[i + 1])
-            throw Exception(
-                fmt::format("Values in 'x' must be increasing. Failed at index '{}'", i + 1));
+    {
+        auto [monotonic, index] = validation::check_monotonicity(this->x_);
+        expect_true(monotonic,
+                    fmt::format("Values in 'x' must be increasing - failed at index '{}'", index));
     }
 }
 
