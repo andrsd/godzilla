@@ -37,8 +37,8 @@ TEST(PiecewiseConstantTest, right_cont_eval)
 
 TEST(PiecewiseConstantTest, err_incorrect_point_count)
 {
-    EXPECT_DEATH(PiecewiseConstant(PiecewiseConstant::RIGHT, { 1., 2. }, { 3., 1. }),
-                 "'x' \\(size=2\\) must have one more entry than 'y' \\(size=2\\)");
+    EXPECT_DEATH(PiecewiseConstant(PiecewiseConstant::RIGHT, { 1., 2., 3. }, { 3., 1. }),
+                 "'y' \\(size=2\\) must have one more entry than 'x' \\(size=3\\)");
 }
 
 TEST(PiecewiseConstantTest, err_no_points)
