@@ -20,24 +20,6 @@ TEST(PiecewiseLinearTest, sample)
     EXPECT_EQ(lipol.evaluate(4.0), 2.);
 }
 
-TEST(PiecewiseLinearTest, ctor_empty)
-{
-    PiecewiseLinear lipol;
-    std::vector<Real> x = { 1, 2, 3, 4 };
-    std::vector<Real> y = { 0, 4, 2, 3 };
-    lipol.create(x, y);
-
-    EXPECT_EQ(lipol.evaluate(0.0), 0.);
-    EXPECT_EQ(lipol.evaluate(1.0), 0.);
-    EXPECT_EQ(lipol.evaluate(1.5), 2.);
-    EXPECT_EQ(lipol.evaluate(2.0), 4.);
-    EXPECT_EQ(lipol.evaluate(2.5), 3.);
-    EXPECT_EQ(lipol.evaluate(3.0), 2.);
-    EXPECT_EQ(lipol.evaluate(3.5), 2.5);
-    EXPECT_EQ(lipol.evaluate(4.0), 3.);
-    EXPECT_EQ(lipol.evaluate(4.5), 3.);
-}
-
 TEST(PiecewiseLinearTest, single_interval)
 {
     std::vector<Real> x = { 1, 2 };
@@ -69,14 +51,32 @@ TEST(PiecewiseLinearTest, non_increasing)
         testing::ThrowsMessage<Exception>("Values in 'x' must be increasing. Failed at index '2'"));
 }
 
+TEST(PiecewiseLinearTest, check_x_for_nans)
+{
+    std::vector<double> x = { 1.0, 2.5, std::numeric_limits<double>::quiet_NaN(), 4.2 };
+    EXPECT_DEATH(PiecewiseLinear ipol(x, { 0., 2., 3., 4. }), "Parameter 'x' contains a NaN");
+}
+
+TEST(PiecewiseLinearTest, check_y_for_nans)
+{
+    std::vector<double> y = { 1.0, 2.5, std::numeric_limits<double>::quiet_NaN(), 4.2 };
+    EXPECT_DEATH(PiecewiseLinear ipol({ 0., 2., 3., 4. }, y), "Parameter 'y' contains a NaN");
+}
+
+TEST(PiecewiseLinearTest, eval_uninitialized_object)
+{
+    PiecewiseLinear fn;
+    EXPECT_DEATH(fn.evaluate(0.), "PiecewiseLinear is not initialized");
+}
+
 TEST(PiecewiseLinearTest, pass_into_parameters)
 {
     Parameters params;
-    params.add_param<PiecewiseLinear>("fn", "");
+    params.add_param<PiecewiseLinear<Real>>("fn", "");
 
     PiecewiseLinear fn({ 1, 2 }, { -1, 3 });
-    params.set<PiecewiseLinear>("fn", fn);
+    params.set<PiecewiseLinear<Real>>("fn", fn);
 
-    auto par_fn = params.get<PiecewiseLinear>("fn");
+    auto par_fn = params.get<PiecewiseLinear<Real>>("fn");
     EXPECT_NEAR(par_fn.evaluate(1.5), 1., 1e-15);
 }
