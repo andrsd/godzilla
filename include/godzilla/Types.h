@@ -295,7 +295,17 @@ constexpr Int N_NODES = SimplexSelector<D>::N_NODES;
 
 } // namespace fe
 
+// This allows client to code to bring their own float-like type
 template <typename T>
-concept FloatingPoint = std::is_floating_point_v<T>;
+inline constexpr bool enable_float_like = std::is_floating_point_v<T>;
+
+template <typename T>
+concept FloatingPoint = enable_float_like<T>;
+
+/// Continuty type for functions
+enum class Continuity {
+    LEFT,
+    RIGHT,
+};
 
 } // namespace godzilla
