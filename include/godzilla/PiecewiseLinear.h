@@ -38,11 +38,8 @@ public:
         expect_true(this->x_.size() >= 2,
                     fmt::format("Size of 'x' is {}. It must be 2 or more", this->x_.size()));
 
-        // check for NaNs
-        expect_true(std::ranges::none_of(this->x_, [](Real x) { return std::isnan(x); }),
-                    "Parameter 'x' contains a NaN");
-        expect_true(std::ranges::none_of(this->y_, [](const Y & y) { return isnan(y); }),
-                    "Parameter 'y' contains a NaN");
+        expect_true(not validation::contains_nan<Real>(this->x_), "Parameter 'x' contains a NaN");
+        expect_true(not validation::contains_nan<Y>(this->y_), "Parameter 'y' contains a NaN");
 
         {
             auto [monotonic, index] = validation::check_monotonicity<Real>(this->x_);

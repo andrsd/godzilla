@@ -12,6 +12,8 @@
 #include <initializer_list>
 #include <vector>
 #include <type_traits>
+#include <algorithm>
+#include <cmath>
 
 namespace godzilla {
 
@@ -68,6 +70,21 @@ in_range(T value, std::initializer_list<U> range)
     U lo = *it;
     U hi = *(++it);
     return value >= lo && value <= hi;
+}
+
+/// Check if `data` contains a NaN
+///
+/// @param data Data to check
+/// @return `true` if `data contains a NaN, `false` otherwise
+template <typename T>
+    requires FloatingPoint<T>
+inline bool
+contains_nan(Span<const T> data)
+{
+    return std::ranges::any_of(data, [](auto x) {
+        //
+        return isnan(x);
+    });
 }
 
 /// Check that `data` is monotone

@@ -73,3 +73,15 @@ TEST(ValidationTest, check_monotonicity)
         EXPECT_EQ(idx, 1);
     }
 }
+
+TEST(ValidationTest, contains_nan)
+{
+    {
+        std::vector<double> x = { 1.0, 2.5, 4.2 };
+        EXPECT_FALSE(validation::contains_nan<double>(x));
+    }
+    {
+        std::vector<double> x = { 1.0, 2.5, std::numeric_limits<double>::quiet_NaN(), 4.2 };
+        EXPECT_TRUE(validation::contains_nan<double>(x));
+    }
+}
