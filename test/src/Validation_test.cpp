@@ -48,3 +48,40 @@ TEST(ValidationTest, check_element_type_pass)
     EXPECT_TRUE(pass);
     EXPECT_LT(cell, 0);
 }
+
+TEST(ValidationTest, check_monotonicity)
+{
+    {
+        std::vector<Real> a = {};
+        auto [mono, idx] = validation::check_monotonicity<Real>(a);
+        EXPECT_TRUE(mono);
+    }
+    {
+        std::vector<Real> a = { 1. };
+        auto [mono, idx] = validation::check_monotonicity<Real>(a);
+        EXPECT_TRUE(mono);
+    }
+    {
+        std::vector<Real> a = { 1., 2., 3. };
+        auto [mono, idx] = validation::check_monotonicity<Real>(a);
+        EXPECT_TRUE(mono);
+    }
+    {
+        std::vector<Real> a = { 2., 1., 2. };
+        auto [mono, idx] = validation::check_monotonicity<Real>(a);
+        EXPECT_FALSE(mono);
+        EXPECT_EQ(idx, 1);
+    }
+}
+
+TEST(ValidationTest, contains_nan)
+{
+    {
+        std::vector<double> x = { 1.0, 2.5, 4.2 };
+        EXPECT_FALSE(validation::contains_nan<double>(x));
+    }
+    {
+        std::vector<double> x = { 1.0, 2.5, std::numeric_limits<double>::quiet_NaN(), 4.2 };
+        EXPECT_TRUE(validation::contains_nan<double>(x));
+    }
+}

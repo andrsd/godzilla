@@ -46,9 +46,8 @@ TEST(PiecewiseLinearTest, unequal_sizes)
 
 TEST(PiecewiseLinearTest, non_increasing)
 {
-    EXPECT_THAT(
-        []() { PiecewiseLinear ipol({ 1, 2, 1 }, { 0, 2, 3 }); },
-        testing::ThrowsMessage<Exception>("Values in 'x' must be increasing. Failed at index '2'"));
+    EXPECT_DEATH(PiecewiseLinear({ 1, 2, 1 }, { 0, 2, 3 }),
+                 "Values in 'x' must be increasing. Failed at index '2'");
 }
 
 TEST(PiecewiseLinearTest, check_x_for_nans)
