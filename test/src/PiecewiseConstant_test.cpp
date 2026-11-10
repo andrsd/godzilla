@@ -49,8 +49,8 @@ TEST(PiecewiseConstantTest, err_no_points)
 
 TEST(PiecewiseConstantTest, err_not_monotonic)
 {
-    EXPECT_THROW_MSG(PiecewiseConstant(Continuity::RIGHT, { 1., 0. }, { 1., 2., 3. }),
-                     "Values in 'x' must be increasing - failed at index '1'");
+    EXPECT_DEATH(PiecewiseConstant(Continuity::RIGHT, { 1., 0. }, { 1., 2., 3. }),
+                 "Values in 'x' must be increasing. Failed at index '1'");
 }
 
 TEST(PiecewiseConstantTest, check_x_for_nans)

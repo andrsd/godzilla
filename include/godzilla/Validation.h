@@ -6,6 +6,8 @@
 #include "godzilla/Assert.h"
 #include "godzilla/Types.h"
 #include "godzilla/String.h"
+#include "godzilla/Span.h"
+#include "godzilla/Range.h"
 #include <sys/types.h>
 #include <initializer_list>
 #include <vector>
@@ -66,6 +68,29 @@ in_range(T value, std::initializer_list<U> range)
     U lo = *it;
     U hi = *(++it);
     return value >= lo && value <= hi;
+}
+
+/// Check that `data` is monotone
+///
+/// @param data Data to check
+/// @return tuple with [success, index]:
+///     success:
+///       - `true` if monotonic,
+///       - `false` otherwise, then `index` has the position where monotonicity failed
+///     index: valid only if `success` was `false`
+template <typename T>
+    requires std::is_arithmetic_v<T>
+inline std::tuple<bool, std::size_t>
+check_monotonicity(Span<const T> data)
+{
+    if (data.size() < 2)
+        return { true, 0 };
+
+    for (const auto i : make_range(data.size() - 1)) {
+        if (data[i] >= data[i + 1])
+            return { false, i + 1 };
+    }
+    return { true, 0 };
 }
 
 } // namespace validation
