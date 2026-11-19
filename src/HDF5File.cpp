@@ -25,15 +25,15 @@ HDF5File::HDF5File(mpi::Communicator comm, fs::path file_name, FileAccess facces
     std::call_once(hdf5_init, disable_hdf5_output);
 
     MPI_Info info = MPI_INFO_NULL;
-    auto fapl = H5Pcreate(H5P_FILE_ACCESS);
-    H5Pset_fapl_mpio(fapl, comm, info);
+    auto fapl = PropertyList::create_file_access();
+    fapl.set_fapl_mpio(comm, info);
 
     if (faccess == FileAccess::READ)
-        this->id_ = H5Fopen(this->file_name_.c_str(), H5F_ACC_RDONLY, fapl);
+        this->id_ = H5Fopen(this->file_name_.c_str(), H5F_ACC_RDONLY, fapl.id);
     else if (faccess == FileAccess::WRITE)
-        this->id_ = H5Fopen(this->file_name_.c_str(), H5F_ACC_RDWR, fapl);
+        this->id_ = H5Fopen(this->file_name_.c_str(), H5F_ACC_RDWR, fapl.id);
     else if (faccess == FileAccess::CREATE)
-        this->id_ = H5Fcreate(this->file_name_.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, fapl);
+        this->id_ = H5Fcreate(this->file_name_.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, fapl.id);
     else
         throw Exception("Unsupported file access");
 
