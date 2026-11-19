@@ -86,4 +86,6 @@ TEST(HDF5FileTest, write_read)
         EXPECT_EQ(my_data.read_dataset<unsigned int>("uint"), 12);
         EXPECT_EQ(my_data.read_dataset<double>("double"), 987.69);
     }
+
+    fs::remove("file.h5");
 }

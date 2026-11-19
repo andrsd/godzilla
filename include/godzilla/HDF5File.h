@@ -164,6 +164,117 @@ get_datatype<String>()
 
 /// Class for interaction with HDF5 files
 class HDF5File {
+    class PropertyList {
+    public:
+        PropertyList() : id(H5I_INVALID_HID) {}
+
+        explicit PropertyList(hid_t id) : id(id) {}
+
+        ~PropertyList() { close(); }
+
+        PropertyList(const PropertyList &) = delete;
+        PropertyList & operator=(const PropertyList &) = delete;
+
+        PropertyList(PropertyList && other) noexcept : id(other.id) { other.id = H5I_INVALID_HID; }
+
+        PropertyList &
+        operator=(PropertyList && other) noexcept
+        {
+            if (this != &other) {
+                close();
+                this->id = other.id;
+                other.id = H5I_INVALID_HID;
+            }
+            return *this;
+        }
+
+        void
+        close()
+        {
+            if (this->id != H5I_INVALID_HID && this->id != H5P_DEFAULT) {
+                H5Pclose(this->id);
+                this->id = H5I_INVALID_HID;
+            }
+        }
+
+        operator hid_t() const { return this->id; }
+
+        void
+        set_create_intermediate_group(bool enable = true)
+        {
+            auto status = H5Pset_create_intermediate_group(this->id, enable ? 1 : 0);
+            if (status < 0)
+                throw Exception("Failed to set intermediate group creation property");
+        }
+
+        bool
+        get_create_intermediate_group() const
+        {
+            unsigned crt_intmd = 0;
+            auto status = H5Pget_create_intermediate_group(this->id, &crt_intmd);
+            if (status < 0)
+                throw Exception("Failed to get intermediate group creation property");
+            return crt_intmd > 0;
+        }
+
+        void
+        set_dxpl_mpio(H5FD_mpio_xfer_t xfer_mode)
+        {
+            auto status = H5Pset_dxpl_mpio(this->id, xfer_mode);
+            if (status < 0)
+                throw Exception(
+                    "Failed to set MPIO transfer mode on dataset transfer property list");
+        }
+
+        H5FD_mpio_xfer_t
+        get_dxpl_mpio() const
+        {
+            H5FD_mpio_xfer_t xfer_mode;
+            auto status = H5Pget_dxpl_mpio(this->id, &xfer_mode);
+            if (status < 0)
+                throw Exception(
+                    "Failed to get MPIO transfer mode on dataset transfer property list");
+            return xfer_mode;
+        }
+
+        void
+        set_fapl_mpio(MPI_Comm comm, MPI_Info info = MPI_INFO_NULL)
+        {
+            auto status = H5Pset_fapl_mpio(this->id, comm, info);
+            if (status < 0)
+                throw Exception("Failed to set MPIO driver on file access property list");
+        }
+
+        hid_t id;
+
+        static PropertyList
+        create(hid_t cls_id)
+        {
+            auto id = H5Pcreate(cls_id);
+            if (id < 0)
+                throw Exception("Failed to create property list");
+            return PropertyList(id);
+        }
+
+        static PropertyList
+        create_link()
+        {
+            return create(H5P_LINK_CREATE);
+        }
+
+        static PropertyList
+        create_dataset_xfer()
+        {
+            return create(H5P_DATASET_XFER);
+        }
+
+        static PropertyList
+        create_file_access()
+        {
+            return create(H5P_FILE_ACCESS);
+        }
+    };
+
     class Dataset;
     class Attribute;
 
@@ -246,14 +357,11 @@ class HDF5File {
                 return Group::open(parent_id, name);
             }
             else {
-                auto lcpl_id = H5Pcreate(H5P_LINK_CREATE);
-                auto status = H5Pset_create_intermediate_group(lcpl_id, 1);
-                if (status < 0)
-                    throw Exception("Failed to create property");
-                auto id = H5Gcreate(parent_id, name.c_str(), lcpl_id, H5P_DEFAULT, H5P_DEFAULT);
+                auto lcpl = PropertyList::create_link();
+                lcpl.set_create_intermediate_group(true);
+                auto id = H5Gcreate(parent_id, name.c_str(), lcpl.id, H5P_DEFAULT, H5P_DEFAULT);
                 if (id < 0)
                     throw Exception(fmt::format("Failed to create group '{}'", name));
-                H5Pclose(lcpl_id);
                 return Group(id);
             }
         }
@@ -772,13 +880,10 @@ template <typename T>
 inline void
 HDF5File::Dataset::read(const Dataspace & memspace, const Dataspace & filespace, T data[])
 {
-    auto dxpl = H5Pcreate(H5P_DATASET_XFER);
-    H5Pset_dxpl_mpio(dxpl, H5FD_MPIO_COLLECTIVE);
+    auto dxpl = PropertyList::create_dataset_xfer();
+    dxpl.set_dxpl_mpio(H5FD_MPIO_COLLECTIVE);
 
-    auto res = H5Dread(this->id, hdf5::get_datatype<T>(), memspace.id, filespace.id, dxpl, data);
-
-    H5Pclose(dxpl);
-
+    auto res = H5Dread(this->id, hdf5::get_datatype<T>(), memspace.id, filespace.id, dxpl.id, data);
     if (res < 0)
         throw Exception("Error reading dataset");
 }
@@ -846,13 +951,11 @@ template <typename T>
 inline void
 HDF5File::Dataset::write(const Dataspace & memspace, const Dataspace & filespace, const T data[])
 {
-    auto dxpl = H5Pcreate(H5P_DATASET_XFER);
-    H5Pset_dxpl_mpio(dxpl, H5FD_MPIO_COLLECTIVE);
+    auto dxpl = PropertyList::create_dataset_xfer();
+    dxpl.set_dxpl_mpio(H5FD_MPIO_COLLECTIVE);
 
-    auto res = H5Dwrite(this->id, hdf5::get_datatype<T>(), memspace.id, filespace.id, dxpl, data);
-
-    H5Pclose(dxpl);
-
+    auto res =
+        H5Dwrite(this->id, hdf5::get_datatype<T>(), memspace.id, filespace.id, dxpl.id, data);
     if (res < 0)
         throw Exception("Error writing dataset");
 }
